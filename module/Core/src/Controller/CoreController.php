@@ -5,15 +5,15 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace Application\Controller;
+namespace Core\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use Core\RestApi\ApiController;
 use Zend\View\Model\ViewModel;
 
-class IndexController extends AbstractActionController
+class CoreController extends ApiController
 {
     public function indexAction()
     {
-        return new ViewModel();
+        return $this->createResponse();
     }
 }
