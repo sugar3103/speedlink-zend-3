@@ -1,24 +1,24 @@
 <?php
-use Zend\Mvc\Application;
+use Zend\Mvc\Core;
 ?>
 <h1>A 404 error occurred</h1>
 <h2><?= $this->message ?></h2>
 
 <?php if (! empty($this->reason)) :
     switch ($this->reason) {
-        case Application::ERROR_CONTROLLER_CANNOT_DISPATCH:
+        case Core::ERROR_CONTROLLER_CANNOT_DISPATCH:
             $reasonMessage = 'The requested controller was unable to dispatch the request.';
             break;
-        case Application::ERROR_MIDDLEWARE_CANNOT_DISPATCH:
+        case Core::ERROR_MIDDLEWARE_CANNOT_DISPATCH:
             $reasonMessage = 'The requested middleware was unable to dispatch the request.';
             break;
-        case Application::ERROR_CONTROLLER_NOT_FOUND:
+        case Core::ERROR_CONTROLLER_NOT_FOUND:
             $reasonMessage = 'The requested controller could not be mapped to an existing controller class.';
             break;
-        case Application::ERROR_CONTROLLER_INVALID:
+        case Core::ERROR_CONTROLLER_INVALID:
             $reasonMessage = 'The requested controller was not dispatchable.';
             break;
-        case Application::ERROR_ROUTER_NO_MATCH:
+        case Core::ERROR_ROUTER_NO_MATCH:
             $reasonMessage = 'The requested URL could not be matched by routing.';
             break;
         default:

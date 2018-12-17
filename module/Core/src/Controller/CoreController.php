@@ -8,7 +8,7 @@
 namespace Core\Controller;
 
 use Core\RestApi\ApiController;
-use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 
 class CoreController extends ApiController
 {

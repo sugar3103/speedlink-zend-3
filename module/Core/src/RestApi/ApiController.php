@@ -147,10 +147,11 @@ class ApiController extends AbstractRestfulController
      */
     public function createResponse()
     {
+        
         $config = $this->getEvent()->getParam('config', false);
         $event = $this->getEvent();
         $response = $event->getResponse();
-
+        
         if (is_array($this->apiResponse)) {
             $response->setStatusCode($this->httpStatusCode);
         } else {
@@ -167,6 +168,7 @@ class ApiController extends AbstractRestfulController
             $sendResponse[$statusKey] = $config['ApiRequest']['responseFormat']['statusNokText'];
         }
         $sendResponse[$config['ApiRequest']['responseFormat']['resultKey']] = $this->apiResponse;
+        
         return new JsonModel($sendResponse);
     }
 }

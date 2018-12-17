@@ -2,8 +2,6 @@
 
 namespace Core\RestApi;
 
-use Core\RestApi\ApiController;
-
 class RouteNotFoundController extends ApiController
 {
 
