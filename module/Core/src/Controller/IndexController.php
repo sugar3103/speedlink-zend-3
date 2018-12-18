@@ -7,13 +7,13 @@
 
 namespace Core\Controller;
 
-use Core\RestApi\ApiController;
+use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-class CoreController extends ApiController
+class IndexController extends AbstractActionController
 {
     public function indexAction()
     {
-        return $this->createResponse();
+        return new ViewModel();
     }
 }

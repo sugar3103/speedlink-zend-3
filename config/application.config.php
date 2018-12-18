@@ -7,7 +7,7 @@
  */
 return [
     // Retrieve list of modules used in this application.
-    'modules' => require __DIR__ . '/modules.config.php',
+    'modules' => require __DIR__ . '/ecos_config/modules.config.php',
 
     // These are various options for the listeners attached to the ModuleManager
     'module_listener_options' => [
@@ -25,6 +25,7 @@ return [
         // provided by modules themselves. Paths may use GLOB_BRACE notation.
         'config_glob_paths' => [
             realpath(__DIR__) . '/autoload/{{,*.}global,{,*.}local}.php',
+            realpath(__DIR__) . '/ecos_config/{{,*.}global,{,*.}local}.php',
         ],
 
         // Whether or not to enable a configuration cache.
