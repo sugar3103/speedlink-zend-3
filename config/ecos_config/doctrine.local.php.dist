@@ -1,0 +1,79 @@
+<?php
+/**
+ * Local Configuration Override
+ *
+ * This configuration override file is for overriding environment-specific and
+ * security-sensitive configuration information. Copy this file without the
+ * .dist extension at the end and populate values as needed.
+ *
+ * @NOTE: This file is ignored from Git by default with the .gitignore included
+ * in ZendSkeletonApplication. This is a good practice, as it prevents sensitive
+ * credentials from accidentally being committed into version control.
+ */
+
+return [
+    'doctrine' => [
+        'connection' => [
+            // default connection name
+            'orm_default' => [
+                'driverClass' => \Doctrine\DBAL\Driver\PDOMySql\Driver::class,
+                'params' => [
+                    'host' => 'localhost',
+                    'port' => '3306',
+                    'user' => 'root',
+                    'password' => '',
+                    'dbname' => 'ecos_system',
+                    'charset' => 'utf8',
+                ],
+
+            ],
+            'orm_read_only' => [
+                'driverClass' => \Doctrine\DBAL\Driver\PDOMySql\Driver::class,
+                'params' => [
+                    'host' => 'localhost',
+                    'port' => '3306',
+                    'user' => 'root',
+                    'password' => '',
+                    'dbname' => 'ecos_system',
+                    'charset' => 'utf8',
+                ],
+
+            ],
+            'orm_report' => [
+                'driverClass' => \Doctrine\DBAL\Driver\PDOMySql\Driver::class,
+                'params' => [
+                    'host' => 'localhost',
+                    'port' => '3306',
+                    'user' => 'root',
+                    'password' => '',
+                    'dbname' => 'ecos_system',
+                    'charset' => 'utf8',
+                ],
+
+            ]
+        ],
+        'entitymanager' => [           
+            'orm_read_only' => [
+                'connection' => 'orm_read_only',
+                'configuration' => 'orm_read_only',
+            ],
+            'orm_report' => [
+                'connection' => 'orm_report',
+                'configuration' => 'orm_report',
+            ]
+        ],
+        // migrations configuration
+        'migrations_configuration' => [
+            'orm_default' => [
+                'name' => 'ECos-System Doctrine Database Migrations',
+                'namespace' => 'Migration',
+                'table' => 'migration',
+                'column_name' => 'version',
+                'column_length' => 255,
+                'executed_at_column_name' => 'executed_at',
+                'directory' => __DIR__ . '/../../data/migrations',
+                'all_or_nothing' => true,
+            ],
+        ],
+    ]
+];
