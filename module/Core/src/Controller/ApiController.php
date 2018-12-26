@@ -30,7 +30,7 @@ class ApiController extends AbstractRestfulController
      *
      * @var type string 
      */
-    public $error_code;
+    public $error_code = 0;
 
     /**
      *
@@ -176,12 +176,13 @@ class ApiController extends AbstractRestfulController
 
         $sendResponse[$errorKey] = $this->error_code;
         
-        if(count($this->apiResponse) == 1) {
-            $sendResponse[$config['ApiRequest']['responseFormat']['messageKey']] = array_shift($this->apiResponse);
-        } else {
-            $sendResponse = array_merge($sendResponse, $this->apiResponse);
+        if($this->apiResponse) {
+            if( count($this->apiResponse) == 1) {
+                $sendResponse[$config['ApiRequest']['responseFormat']['messageKey']] = array_shift($this->apiResponse);
+            } else {
+                $sendResponse = array_merge($sendResponse, $this->apiResponse);
+            }
         }
-        
 
         return new JsonModel($sendResponse);
     }

@@ -9,7 +9,7 @@ return [
         'responseFormat' => [
             'statusKey' => 'status',
             'statusOkText' => 'OK',
-            'statusNokText' => 'NOK',
+            'statusNokText' => 'NOKs',
             'resultKey' => 'result',
             'messageKey' => 'message',
             'defaultMessageText' => 'Empty response!',
