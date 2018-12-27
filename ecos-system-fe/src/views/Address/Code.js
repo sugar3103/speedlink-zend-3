@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import config from '../../config';
+import { authHeader } from '../../_helpers/auth-header';
+
 import {
     Button,
     Form,
@@ -19,7 +21,9 @@ $.DataTable = require("datatables.net")
 class Code extends Component {
     componentDidMount() {
         this.$el = $(this.el);
-        this.$el.DataTable(
+        this.$el.on('preXhr.dt', function ( e, settings, data ) {
+            data.Authorization = "Basic ";
+        }).DataTable(
             {
                 responsive: !0,
                 dom: '<"top"<"row" <"col-sm-12 col-md-5" i><"col-sm-12 col-md-7 text-right" l>><"clear">>rt<"bottom" p>',
@@ -35,9 +39,9 @@ class Code extends Component {
                 searchDelay: 500,
                 processing: !0,
                 serverSide: !0,
-                ajax: {
+                ajax: {                    
                     url: config.apiUrl + '/address',
-                    type: "POST"
+                    type: "POST",                    
                 },
                 columns: [
                     { data: "code" },
