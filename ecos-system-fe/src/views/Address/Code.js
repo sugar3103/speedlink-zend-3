@@ -40,6 +40,9 @@ class Code extends Component {
                 processing: !0,
                 serverSide: !0,
                 ajax: {                    
+                    headers: {
+                        "Authorization": "Bearer: ......"
+                    },
                     url: config.apiUrl + '/address',
                     type: "POST",                    
                 },

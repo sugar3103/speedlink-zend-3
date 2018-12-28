@@ -71,7 +71,10 @@ class AddressController extends CoreController {
             ];
             
             $this->apiResponse = $result;
+        } else {
+            $this->apiResponse['message'] = ['Address Code Manager'];
         }
+        
         return $this->createResponse();
     }
 }
