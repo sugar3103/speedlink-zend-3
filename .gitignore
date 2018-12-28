@@ -10,6 +10,7 @@ module/Address
 # Composer files
 composer.phar
 vendor/
+data/DoctrineORMModule/*
 
 # Local configs
 config/*
