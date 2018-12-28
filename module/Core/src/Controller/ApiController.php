@@ -98,7 +98,6 @@ class ApiController extends AbstractRestfulController
     {
         
         $jwtToken = $request->getHeaders("Authorization") ? $request->getHeaders("Authorization")->getFieldValue() : '';
-        var_dump($jwtToken);die;
         if ($jwtToken) {
             $jwtToken = trim(trim($jwtToken, "Bearer"), " ");
             return $jwtToken;

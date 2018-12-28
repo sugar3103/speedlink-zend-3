@@ -104,6 +104,7 @@ final class Version20181222034539 extends AbstractMigration
             'query' => 'create table',
             'columns'    => array(
                 'address_code_id' => 'int(10) auto_increment primary key',
+                'code' => 'varchar(50) CHARACTER SET utf8 NOT NULL',
                 'country_id' => 'int(10) not null',
                 'city_id' => 'int(10) not null',
                 'district_id' => 'int(10) not null',

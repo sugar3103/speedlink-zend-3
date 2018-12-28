@@ -52,8 +52,8 @@ final class Version20181108064727 extends AbstractMigration
               id          int(10) auto_increment
                 primary key,
               name        varchar(100)                            not null,
-              created_at  timestamp default \'0000-00-00 00:00:00\' not null,
-              updated_at  timestamp default \'0000-00-00 00:00:00\' not null,
+              created_at  timestamp  not null,
+              updated_at  timestamp  not null,
               description text                                    null,
               constraint role_name_uindex
               unique (name)
@@ -90,8 +90,8 @@ final class Version20181108064727 extends AbstractMigration
               name        varchar(100)                            not null,
               model       text                                    null,
               description text                                    null,
-              created_at  timestamp default \'0000-00-00 00:00:00\' not null,
-              updated_at  timestamp default \'0000-00-00 00:00:00\' not null,
+              created_at  timestamp  not null,
+              updated_at  timestamp  not null,
               deleted_at  timestamp default current_timestamp()   not null
             )
               collate = utf8_unicode_ci');
