@@ -117,8 +117,17 @@ class AuthController extends CoreController {
                     ];
                     
                     $token = $this->generateJwtToken($payload);
+                    $user_info = [
+                        'id'            => $_user->getId(),
+                        'username'      => $_user->getUsername(),
+                        'first_name'    => $_user->getFirstName(),
+                        'last_name'    => $_user->getLastname(),
+                        'email'         => $_user->getEmail()
+                    ];
 
                     $this->apiResponse['token'] = $token;
+                    $this->apiResponse['user'] = $user_info;
+
                     // begin transaction
                     $this->entityManager->beginTransaction();
                     try {
