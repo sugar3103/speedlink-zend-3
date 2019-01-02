@@ -30,6 +30,31 @@ $router = [
             ],
             'may_terminate' => true,
             'child_routes'  => [
+                'country' => [
+                    'type'  => Segment::class,
+                    'options' => [
+                        'route' => '/country',
+                        'defaults' => [
+                            'controller' => Controller\CountryController::class,
+                            'action' => 'list',
+                            'isAuthorizationRequired' => true
+                        ]
+                    ],
+                    'may_terminate' => true,
+                    'child_routes'  => [
+                        'list' => [
+                            'type'  => Segment::class,
+                            'options' => [
+                                'route' => '/add',
+                                'defaults' => [
+                                    'controller' => Controller\CountryController::class,
+                                    'action' => 'add',
+                                    'isAuthorizationRequired' => true
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
                 'city' => [
                     'type'  => Segment::class,
                     'options' => [
@@ -75,6 +100,7 @@ $view_manager = [
 
 $service_manager = [
     'factories' => [
+        Service\CountryManager::class => Factory\CountryManagerFactory::class,
         Service\CityManager::class => Factory\CityManagerFactory::class,
         Service\AddressCodeManager::class => Factory\AddressCodeManagerFactory::class
     ]

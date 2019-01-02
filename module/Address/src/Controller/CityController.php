@@ -68,16 +68,11 @@ class CityController extends CoreController {
                 $currentPage, $limit, $sortField, $sortDirection,$filters);
             
             $result = [
-                "meta" => [
-                    "page" => $currentPage,
-                    "pages" => $totalPages,
-                    "perpage"=> $limit,
-                    "total" => $dataCity['totalCity'],//total all records number available in the server
-                ],
+                "totalRecords" => $dataCity['totalCity'],
                 "data" => ($dataCity['listCity']) ? $dataCity['listCity'] : []           
             ];
             
-            $this->apiResponse['result'] = $result;
+            $this->apiResponse = $result;
             return $this->createResponse();
         } else {
             $this->apiResponse['message'] = 'City List';

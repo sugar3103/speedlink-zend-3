@@ -32,13 +32,13 @@ class CityRepository extends EntityRepository {
         try {
             $queryBuilder = $this->buildCityQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select(
-                "c.city_id,
+                "c.cityId,
                  c.name,
                  c.description,
                  c.status,
-                 c.created_by,
-                 c.created_at"                 
-            )->groupBy('c.city_id')
+                 c.createdBy,
+                 c.createdAt"                 
+            )->groupBy('c.cityId')
             ->setMaxResults($limit)
             ->setFirstResult($offset);
             return $queryBuilder;
@@ -64,7 +64,7 @@ class CityRepository extends EntityRepository {
 
         $operatorsMap = [
             'country_id' => [
-                'alias' => 'c.country_id',
+                'alias' => 'c.countryId',
                 'operator' => 'eq'
             ],
             
@@ -74,7 +74,7 @@ class CityRepository extends EntityRepository {
             ],
 
             'created_at' => [
-                'alias' => 'c.created_at',
+                'alias' => 'c.createdAt',
                 'operator' => 'contains'
             ],
             'status' => [

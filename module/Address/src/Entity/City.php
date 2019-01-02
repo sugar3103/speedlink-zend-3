@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class City
 {
+    const ACTIVE = 1;
+    const INACTIVE = 0;
     /**
      * @var int
      *
@@ -92,4 +94,33 @@ class City
     private $refAsBy;
 
 
+     /**
+     * Returns user status as string.
+     * @return string
+     */
+    public function getIsActiveAsString()
+    {
+        $list = self::getIsActiveList();
+        if (isset($list[$this->isActive]))
+            return $list[$this->isActive];
+
+        return 'Unknown';
+    }
+
+    /**
+     * Returns possible statuses as array.
+     * @return array
+     */
+    public static function getIsActiveList($value = null)
+    {
+        $status = [
+            self::ACTIVE => 'Active',
+            self::INACTIVE => 'Inactive'
+        ];
+
+        if(!empty($value) && isset($status[$value])) {
+            return $status[$value];
+        }
+        return $status;
+    }
 }

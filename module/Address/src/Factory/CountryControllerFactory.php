@@ -4,6 +4,7 @@ namespace Address\Factory;
 use Address\Controller\CountryController;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
+use Address\Service\CountryManager;
 
 class CountryControllerFactory implements FactoryInterface {
     /**
@@ -17,7 +18,7 @@ class CountryControllerFactory implements FactoryInterface {
     {
         // Get doctrine entity manager for Service Manager.
         $entityManager = $container->get('doctrine.entitymanager.orm_default');        
-        
-        return new CountryController($entityManager);
+        $countryManager = $container->get(CountryManager::class);
+        return new CountryController($entityManager, $countryManager);
     }
 }

@@ -102,7 +102,7 @@ class CityManager  {
                 $city['status'] = City::getIsActiveList($city['status']);
 
                 //set created_at
-                $city['created_at'] =  ($city['created_at']) ? $this->checkDateFormat($city['created_at'],'d/m/Y') : '';
+                $city['createdAt'] =  ($city['createdAt']) ? $this->checkDateFormat($city['createdAt'],'d/m/Y') : '';
 
                 $countRow++;
             }
@@ -150,12 +150,14 @@ class CityManager  {
 
         if (isset($params['query']) && !empty($params['query'])){
           
-            foreach ($fieldsMap as $field)
-            {
-                
-                if(isset($params['query'][$field]) && $params['query'][$field] != -1)
-                    $filters [$field] = trim($params['query'][$field]);
-            }
+            if (isset($params['query']) && !empty($params['query'])){
+                foreach ($params['query'] as $key => $column) {
+                    if(isset($fieldsMap[$key]) && !empty($column)) {
+                        $filters[$key] = $column;
+                    }
+                }
+                 
+              }
         }
        
         return $filters;
