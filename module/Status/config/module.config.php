@@ -22,8 +22,8 @@ $router = [
                 'route' => '/status',
                 'defaults' => [
                     'controller' => Controller\StatusController::class,
-                    'action' => 'index',
-                    'isAuthorizationRequired' => false
+                    'action' => 'list',
+                    'isAuthorizationRequired' => true
                 ],
             ],
             'may_terminate' => true,

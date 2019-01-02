@@ -30,3 +30,6 @@ ecos-system-fe/node_module
 ecos-system-fe/package-lock.json
 ecos-system-fe/src/config.js
 
+#React-Redux
+fe-ecos/node_modules
+fe-ecos/package-lock.json
