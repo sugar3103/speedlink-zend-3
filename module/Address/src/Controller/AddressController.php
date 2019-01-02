@@ -32,16 +32,18 @@ class AddressController extends CoreController {
     public function indexAction()
     {
         if ($this->getRequest()->isPost()) {
-            $params = $this->params()->fromPost();
+            $payload = file_get_contents('php://input');
+            $params = json_decode($payload, true);
+            
           
             //the current page number.
-            $offset = $params['start'];
+            $offset = isset($params['start']) ? $params['start'] : 0;
             
             //total number of pages available in the server.
             $totalPages = 1;
  
             //set limit
-            $limit  = $params['length'];
+            $limit  = isset($params['length']) ? $params['length'] : 10;
 
             // get the filters
             $fieldsMap = [
@@ -57,17 +59,16 @@ class AddressController extends CoreController {
             $filters = $this->addressCodeManager->getValueFiltersSearch($params,$fieldsMap);
             
             //get and set sortField,sortDirection
-            $sortField = trim($params['columns'][trim($params['order'][0]['column'])]['data']);
-            $sortDirection = trim($params['order'][0]['dir']);
+            $sortField = isset($params['sort']) ? $params['sort'] : $fieldsMap[0];
+            $sortDirection = isset($params['order']) ? $params['order'] : 'ASC';
             
             //get list code by condition
             $dataCode = $this->addressCodeManager->getListCodeByCondition(
                 $offset, $limit, $sortField, $sortDirection,$filters);
                 
             $result = [
-                "iTotalRecords" => $dataCode['totalCode'],
-                "iTotalDisplayRecords" => $dataCode['totalCode'],
-                "aaData" => ($dataCode['listCode']) ? $dataCode['listCode'] : []           
+                "totalRecords" => $dataCode['totalCode'],
+                "data" => ($dataCode['listCode']) ? $dataCode['listCode'] : []           
             ];
             
             $this->apiResponse = $result;

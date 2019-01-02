@@ -1,236 +1,95 @@
 <?php
+
 namespace Address\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity()
+ * Ward
+ *
  * @ORM\Table(name="ward")
  * @ORM\Entity(repositoryClass="\Address\Repository\WardRepository")
  */
-class Ward {
-
-    const ACTIVE = 1;
-    const INACTIVE = 0;
-
+class Ward
+{
     /**
-     * @ORM\Id()
-     * @ORM\Column(name="ward_id")
-     * @ORM\GeneratedValue()
-     */
-    protected $ward_id;
-
-    /**
-     * @ORM\Column(name="city_id", type="integer", unique=true)
-     */
-    protected $city_id;
-
-    /**
-     * @ORM\Column(name="name", type="string", unique=true)
-     */
-    protected $name;
-
-    /**
-     * @ORM\Column(name="description", type="string")
-     */
-    protected $description;
-
-    /**
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    protected $created_at;
-
-    /**
-     * @ORM\Column(name="created_by", type="integer")
-     */
-    protected $created_by;
-
-    /**
-     * @ORM\Column(name="updated_at", type="datetime")
-     */
-    protected $updated_at;
-
-    /**
-     * @ORM\Column(type="integer", name="status")
-     */
-    protected $status;
-    
-    /**
-     * @ORM\Column(type="text", name="zip_code")
-     */
-    protected $zip_code;
-
-    /**
-     * Role constructor.
-     */
-    public function __construct()
-    {
-    }
-
-    /**
-     * Returns role Id.
+     * @var int
      *
-     * @return integer
+     * @ORM\Column(name="ward_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    public function getId() {
-        return $this->ward_id;
-    }
+    private $wardId;
 
     /**
-     * Set Role Id.
+     * @var int
      *
-     * @param $id
+     * @ORM\Column(name="district_id", type="integer", nullable=false)
      */
-    public function setId($id) {
-        $this->ward_id = $id;
-    }
+    private $districtId;
 
     /**
-     * Get Role Name.
+     * @var string
      *
-     * @return mixed
+     * @ORM\Column(name="name", type="string", length=50, nullable=false)
      */
-    public function getName() {
-        return $this->name;
-    }
+    private $name;
 
     /**
-     * Set Role Name.
+     * @var string|null
      *
-     * @param $name
+     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
-    public function setName($name) {
-        $this->name = $name;
-    }
+    private $description;
 
     /**
-     * Get Role Description.
+     * @var string|null
      *
-     * @return mixed
+     * @ORM\Column(name="postal_code", type="string", length=20, nullable=true)
      */
-    public function getDescription() {
-        return $this->description;
-    }
+    private $postalCode;
 
     /**
-     * Set Role Description.
+     * @var int
      *
-     * @param $description
+     * @ORM\Column(name="status", type="integer", nullable=false)
      */
-    public function setDescription($description) {
-        $this->description = $description;
-    }
+    private $status;
 
     /**
-     * Get Role Created Date.
+     * @var int
      *
-     * @return mixed
+     * @ORM\Column(name="created_by", type="integer", nullable=false)
      */
-    public function getCreatedAt() {
-        return $this->created_at;
-    }
+    private $createdBy;
 
     /**
-     * Set Role Created Date.
+     * @var \DateTime
      *
-     * @param $created_at
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    public function setCreatedAt($created_at) {
-        $this->created_at = $created_at;
-    }
+    private $createdAt;
 
     /**
-     * Get Role Created Date.
+     * @var int|null
      *
-     * @return mixed
+     * @ORM\Column(name="update_by", type="integer", nullable=true)
      */
-    public function getCreatedBy() {
-        return $this->created_by;
-    }
+    private $updateBy;
 
     /**
-     * Set Role Created Date.
+     * @var \DateTime|null
      *
-     * @param $created_at
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    public function setCreatedBy($created_by) {
-        $this->created_by = $created_by;
-    }
+    private $updatedAt;
 
     /**
-     * Get Role Updated Date.
+     * @var int|null
      *
-     * @return mixed
+     * @ORM\Column(name="ref_as_by", type="integer", nullable=true)
      */
-    public function getUpdatedAt() {
-        return $this->updated_at;
-    }
+    private $refAsBy;
 
-    /**
-     * Set Role Updated Date.
-     *
-     * @param $updated_at
-     */
-    public function setUpdatedAt($updated_at) {
-        $this->updated_at = $updated_at;
-    }
 
-    
-    /**
-     * Get Is Active
-     *
-     * @return mixed
-     */
-    public function getStatus() {
-        return $this->status;
-    }
-
-    /**
-     * Set Is Active.
-     *
-     * @param $status
-     */
-    public function setStatus($status) {
-        $this->status = $status;
-    }
-
-     /**
-     * Returns possible statuses as array.
-     * @return array
-     */
-    public static function getIsActiveList($value = null)
-    {
-        $status = [
-            self::ACTIVE => 'Active',
-            self::INACTIVE => 'Inactive'
-        ];
-
-        if(!empty($value) && isset($status[$value])) {
-            return $status[$value];
-        }
-        return $status;
-    }
-
-    /**
-     * Set City Id
-     * 
-     * @param $city_id
-     */
-    public function setCityId($city_id)
-    {
-        $this->city_id = $city_id;
-    }
-
-    /**
-     * Get City Id
-     * 
-     * @return integer
-     */
-    public function getCityId()
-    {
-        return $this->city_id;
-    }
-
-    
 }
