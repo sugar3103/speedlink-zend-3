@@ -1,10 +1,10 @@
 <?php
 namespace Address\Service;
 
-use Address\Entity\City;
+use Address\Entity\District;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-class CityManager  {
+class DistrictManager  {
     
     /**
      * @var EntityManager
@@ -17,41 +17,41 @@ class CityManager  {
     }
 
      /**
-     * Add City
+     * Add District
      *
      * @param $data
-     * @return City|bool
+     * @return District|bool
      * @throws \Exception
      */
-    public function addCity($data,$user) {
+    public function addDistrict($data,$user) {
 
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
 
-            $city = new City();
-            $city->setName($data['name']);
-            $city->setDescription($data['description']);
-            $city->setStatus($data['status']);
-            $city->setZipCode($data['zip_code']);
-            $city->setCountryId($data['country_id']);
+            $district = new District();
+            $district->setName($data['name']);
+            $district->setDescription($data['description']);
+            $district->setStatus($data['status']);
+            $district->setZipCode($data['zip_code']);
+            $district->setCountryId($data['country_id']);
 
             $currentDate = date('Y-m-d H:i:s');
-            $city->setCreatedAt($currentDate);
-            $city->setCreatedBy($user->id);
+            $district->setCreatedAt($currentDate);
+            $district->setCreatedBy($user->id);
 
-            $city->setCreatedAt($currentDate);
-            $city->setCreatedBy($user->id);
+            $district->setCreatedAt($currentDate);
+            $district->setCreatedBy($user->id);
            
             // add the entity to the entity manager.
-            $this->entityManager->persist($city);
+            $this->entityManager->persist($district);
 
             // apply changes to database.
             $this->entityManager->flush();
 
             $this->entityManager->commit();
 
-            return $city;
+            return $district;
         }
         catch (ORMException $e) {
 
@@ -62,7 +62,7 @@ class CityManager  {
     }
 
     /**
-     * Get list city by condition
+     * Get list district by condition
      *
      * @param $currentPage
      * @param $limit
@@ -72,49 +72,48 @@ class CityManager  {
      * @return array
      * @throws ORMException
      */
-    public function getListCityByCondition(
+    public function getListDistrictByCondition(
         $offset,
         $limit,
-        $sortField = 'c.name',
+        $sortField = 'd.name',
         $sortDirection = 'ASC',
         $filters = []
     ){
 
         $cities     = [];
-        $totalCity = 0;
-        
-        //get orm city
-        $ormCity = $this->entityManager->getRepository(City::class)
-            ->getListCityByCondition($sortField, $sortDirection, $filters,$offset,$limit);
+        $totalDistrict = 0;        
+        //get orm district
+        $ormDistrict = $this->entityManager->getRepository(District::class)
+            ->getListDistrictByCondition($sortField, $sortDirection, $filters,$offset,$limit);
 
-        if($ormCity){
-            $ormPaginator = new ORMPaginator($ormCity, true);
+        if($ormDistrict){
+            $ormPaginator = new ORMPaginator($ormDistrict, true);
             $ormPaginator->setUseOutputWalkers(false);
-            $totalCity = $ormPaginator->count();
+            $totalDistrict = $ormPaginator->count();
 
             // $adapter = new DoctrineAdapter($ormPaginator);  
             $cities = $ormPaginator->getIterator()->getArrayCopy();
             //set countRow default
             $countRow = 1;
             
-            foreach ($cities as &$city) {//loop
+            foreach ($cities as &$district) {//loop
                 //set status
-                $city['status'] = City::getIsActiveList($city['status']);
+                $district['status'] = District::getIsActiveList($district['status']);
 
                 //set created_at
-                $city['createdAt'] =  ($city['createdAt']) ? $this->checkDateFormat($city['createdAt'],'d/m/Y') : '';
+                $district['createdAt'] =  ($district['createdAt']) ? $this->checkDateFormat($district['createdAt'],'d/m/Y') : '';
 
                 $countRow++;
             }
            
         }
 
-        //set data city
-        $dataCity = [
-            'listCity' => $cities,
-            'totalCity' => $totalCity,
+        //set data district
+        $dataDistrict = [
+            'listDistrict' => $cities,
+            'totalDistrict' => $totalDistrict,
         ];
-        return $dataCity;
+        return $dataDistrict;
     }
     
     /**

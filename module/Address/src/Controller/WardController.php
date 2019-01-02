@@ -5,10 +5,10 @@ use Core\Controller\CoreController;
 use Doctrine\ORM\EntityManager;
 use Zend\Cache\Storage\StorageInterface;
 use Zend\View\Model\ViewModel;
-use Address\Entity\City;
-use Address\Form\CityForm;
+use Address\Entity\Ward;
+use Address\Form\WardForm;
 
-class CityController extends CoreController {
+class WardController extends CoreController {
     /**
      * EntityManager.
      * @var EntityManager
@@ -16,20 +16,20 @@ class CityController extends CoreController {
     protected $entityManager;
     
       /**
-     * City Manager.
-     * @var CityManager
+     * Ward Manager.
+     * @var WardManager
      */
-    protected $cityManager;
+    protected $wardManager;
 
-    public function __construct($entityManager, $cityManager) {
+    public function __construct($entityManager, $wardManager) {
             
         $this->entityManager = $entityManager;
-        $this->cityManager = $cityManager;
+        $this->wardManager = $wardManager;
     }
 
     public function indexAction()
     {
-        $this->apiResponse['message'] = 'City';
+        $this->apiResponse['message'] = 'Ward';
 
         return $this->createResponse();
     }
@@ -53,29 +53,30 @@ class CityController extends CoreController {
             // get the filters
             $fieldsMap = [
                 0 => 'name',
-                1 => 'country',
+                1 => 'district',
                 2 => 'status'
             ];
 
-            $filters = $this->cityManager->getValueFiltersSearch($params,$fieldsMap);
+            $filters = $this->wardManager->getValueFiltersSearch($params,$fieldsMap);
 
             //get and set sortField,sortDirection
             $sortField = isset($params['sort']) ? $params['sort'] : $fieldsMap[0];
             $sortDirection = isset($params['order']) ? $params['order'] : 'ASC';
             
-            //get list city by condition
-            $dataCity = $this->cityManager->getListCityByCondition(
+            
+            //get list ward by condition
+            $dataWard = $this->wardManager->getListWardByCondition(
                 $currentPage, $limit, $sortField, $sortDirection,$filters);
             
             $result = [
-                "totalRecords" => $dataCity['totalCity'],
-                "data" => ($dataCity['listCity']) ? $dataCity['listCity'] : []           
+                "totalRecords" => $dataWard['totalWard'],
+                "data" => ($dataWard['listWard']) ? $dataWard['listWard'] : []           
             ];
             
             $this->apiResponse = $result;
             return $this->createResponse();
         } else {
-            $this->apiResponse['message'] = 'City List';
+            $this->apiResponse['message'] = 'Ward List';
 
             return $this->createResponse();
         }
@@ -84,10 +85,10 @@ class CityController extends CoreController {
     public function addAction()
     {   
         $user = $this->tokenPayload;
-        //Create New Form City
-        $form = new CityForm('create', $this->entityManager);
+        //Create New Form Ward
+        $form = new WardForm('create', $this->entityManager);
 
-        // check if city  has submitted the form
+        // check if ward  has submitted the form
         if ($this->getRequest()->isPost()) {
             $data = file_get_contents('php://input');
             $data = json_decode($data, true);
@@ -99,7 +100,7 @@ class CityController extends CoreController {
                 // get filtered and validated data
                 $data = $form->getData();
                 // add user.
-                $city = $this->cityManager->addCity($data,$user);
+                $ward = $this->wardManager->addWard($data,$user);
 
                 $this->error_code = 1;
                 $this->apiResponse['message'] = "Success: You have modified Cities!";

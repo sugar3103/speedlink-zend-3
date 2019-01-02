@@ -88,6 +88,8 @@ $controllers = [
     'factories' => [
         Controller\CountryController::class => Factory\CountryControllerFactory::class,
         Controller\CityController::class => Factory\CityControllerFactory::class,
+        Controller\DistrictController::class => Factory\DistrictControllerFactory::class,
+        Controller\WardController::class => Factory\WardControllerFactory::class,
         Controller\AddressController::class => Factory\AddressControllerFactory::class,
     ]
 ];
@@ -102,6 +104,8 @@ $service_manager = [
     'factories' => [
         Service\CountryManager::class => Factory\CountryManagerFactory::class,
         Service\CityManager::class => Factory\CityManagerFactory::class,
+        Service\DistrictManager::class => Factory\DistrictManagerFactory::class,
+        Service\WardManager::class => Factory\WardManagerFactory::class,
         Service\AddressCodeManager::class => Factory\AddressCodeManagerFactory::class
     ]
 ];
