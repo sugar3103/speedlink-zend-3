@@ -9,16 +9,19 @@ class PaginationTable extends Component {
       itemsCountPerPage: 1,
       totalItemsCount: 1,
       activePage: 1,
-      total: 1
+      from: 1,
+      to: 1,
     };
   }
 
   componentDidMount() {
     const { pagination } = this.props;
     this.setState({
-      itemsCountPerPage: pagination.per_page,
+      itemsCountPerPage: pagination.perpage,
       totalItemsCount: pagination.total,
-      activePage: pagination.page
+      activePage: pagination.page,
+      from: pagination.from,
+      to: pagination.to
     });
   }
   
@@ -28,11 +31,11 @@ class PaginationTable extends Component {
   }
 
   render() {
-    const { itemsCountPerPage, totalItemsCount, activePage, total } = this.state;
+    const { itemsCountPerPage, totalItemsCount, activePage, from , to } = this.state;
     return (
       <React.Fragment>
         <div className="col-sm-12 col-md-5">
-          <div className="dataTables_info" id="datatable_info" role="status" aria-live="polite">{`Showing 1 to 10 of ${total} entries`}</div>
+          <div className="dataTables_info" id="datatable_info" role="status" aria-live="polite">{`Showing ${from} to ${to} of ${totalItemsCount} entries`}</div>
         </div>
         <div className="col-sm-12 col-md-7">
           <div className="dataTables_paginate" id="datatable_paginate">

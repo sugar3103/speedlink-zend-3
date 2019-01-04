@@ -133,7 +133,7 @@ class StatusManager {
      *
      * @param $currentPage
      * @param $limit
-     * @param string $sortField
+     * @param string $sort
      * @param array $filters
      * @return array
      * @throws ORMException
@@ -141,7 +141,7 @@ class StatusManager {
     public function getListStatusByCondition(
         $currentPage,
         $limit,
-        $sortField = 's.name',
+        $sort = [],
         $filters = []
     ){
 
@@ -150,7 +150,7 @@ class StatusManager {
         $offset = ($currentPage * $limit) - $limit;
         //get orm status
         $ormStatus = $this->entityManager->getRepository(Status::class)
-            ->getListStatusByCondition($sortField, $filters,$offset,$limit);
+            ->getListStatusByCondition($sort, $filters,$offset,$limit);
 
         if($ormStatus){
             $ormPaginator = new ORMPaginator($ormStatus, true);

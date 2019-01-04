@@ -9,7 +9,7 @@ class DataTable extends Component {
         var className = th.className ? th.className : '';
         var style = th.style ? th.style : '';
         return (
-          <th key={index} className={className} style={style}>{th.value}</th>
+          <th key={index} className={`text-center ${className}`} style={style}>{th.value}</th>
         )
       });
     }

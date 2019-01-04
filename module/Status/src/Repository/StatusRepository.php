@@ -52,12 +52,12 @@ class StatusRepository extends EntityRepository {
     /**
      * Build query builder
      *
-     * @param string $sortField
+     * @param $sort
      * @param $filters
      * @return QueryBuilder
      * @throws QueryException
      */
-    public function buildStatusQueryBuilder($sortField = 's.name', $filters)
+    public function buildStatusQueryBuilder($sort, $filters)
     {
 
         $operatorsMap = [
@@ -79,8 +79,10 @@ class StatusRepository extends EntityRepository {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(Status::class, 's');
 
-        if ($sortField != NULL)
-            $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
+        if ($sort != NULL)
+        {
+            $queryBuilder->orderBy($operatorsMap[$sort['field']]['alias'], $sort['direction']);
+        }
         else
             $queryBuilder->orderBy('s.name', 'ASC');
 
