@@ -29,6 +29,7 @@ class StatusController extends CoreController {
 
     public function __construct($entityManager, $statusManager) 
     {
+        parent::__construct($entityManager);
         $this->entityManager = $entityManager;
         $this->statusManager = $statusManager;
     }
@@ -44,7 +45,7 @@ class StatusController extends CoreController {
         if ($this->getRequest()->isPost()) {
             $params = file_get_contents('php://input');
             $params = json_decode($params, true);
-            
+
             //the current page number.
             $currentPage = isset( $params['pagination']) ? (int) $params['pagination']['page'] : 1;
 
@@ -53,7 +54,7 @@ class StatusController extends CoreController {
  
             //set limit
             $limit  = !empty($params['pagination']['perpage'])
-                         && $params['pagination']['perpage'] > 10 ? $params['pagination']['perpage'] : 10;
+                         && $params['pagination']['perpage'] > 3 ? $params['pagination']['perpage'] : 3;
 
             // get the filters
             $fieldsMap = [
@@ -63,17 +64,19 @@ class StatusController extends CoreController {
 
             $filters = $this->statusManager->getValueFiltersSearch($params,$fieldsMap);
 
-            //get and set sortField
-            $sortField = isset($params['sort']['field']) ? $params['sort']['field'] : '';
+            //get and set sort
+            $sort = isset($params['sort']) ? $params['sort'] : '';
             
             //get list status by condition
             $dataStatus = $this->statusManager->getListStatusByCondition(
-                $currentPage, $limit, $sortField, $filters);
+                $currentPage, $limit, $sort, $filters);
             
             $result = [
                 "meta" => [
                     "page" => $currentPage,
                     "pages" => $totalPages,
+                    "from" => ($currentPage - 1) * $limit + 1,
+                    "to" => ($currentPage * $limit) > $dataStatus['totalStatus'] ? $dataStatus['totalStatus'] : ($currentPage * $limit),
                     "perpage"=> $limit,
                     "total" => $dataStatus['totalStatus'],
                 ],

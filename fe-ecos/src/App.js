@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { Switch, Route, Router, Redirect } from 'react-router-dom';
 import { history } from './helpers';
-import HomePage from './components/HomePage';
+import routes from './routes';
+import HomePage from './components/Layout';
 import AuthPage from './components/AuthPage';
 import NotFoundPage from './components/NotFoundPage';
-import DashboardPage from './pages/DashboardPage';
-import StatusPage from './pages/MasterData/StatusPage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import PwResetPage from './pages/PwResetPage';
+import Login from './pages/Auth/Login';
+import Register from './pages/Auth/Register';
+import PwReset from './pages/Auth/PwReset';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (
@@ -27,15 +26,32 @@ const PublicRoute = ({component: Component, ...rest}) => (
 );
 
 class App extends Component {
+
+  showRoute = (routes) => {
+    var result = null;
+    if (routes.length > 0) {
+      result = routes.map((route, index) => {
+        return (
+          <PrivateRoute 
+            key={index}
+            path={route.path}
+            exact={route.exact}
+            component={route.main}
+          />
+        );
+      });
+    }
+    return result;
+  }
+
   render() {
     return (
       <Router history={history}>
         <Switch>
-          <PrivateRoute exact path="/" component={DashboardPage} />
-          <PrivateRoute path="/status" component={StatusPage} />
-          <PublicRoute path="/login" component={LoginPage} />
-          <PublicRoute path="/register" component={RegisterPage} />
-          <PublicRoute path="/password_reset" component={PwResetPage} />
+          {this.showRoute(routes)}
+          <PublicRoute path="/login" component={Login} />
+          <PublicRoute path="/register" component={Register} />
+          <PublicRoute path="/password_reset" component={PwReset} />
           <Route path="*" component={NotFoundPage} />
         </Switch>
       </Router>

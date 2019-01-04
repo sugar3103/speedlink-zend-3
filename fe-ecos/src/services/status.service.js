@@ -1,19 +1,26 @@
 import callAPI from '../utils/apiCaller';
 import { authHeader } from '../helpers';
 
-function getList(pageNumber) {
+function getList(pageNumber, limit, paramSearch) {
+  
   const requestOptions = {
-      url: `status`,
-      method: 'POST',
-      headers: authHeader()
+    url: `status`,
+    method: 'POST',
+    headers: authHeader(),
+    body: JSON.stringify({
+      "pagination": {
+        "page": parseInt(pageNumber, 10),
+        "perpage": parseInt(limit, 10)
+      },
+      "query": {
+        "name": paramSearch.name,
+        "status": paramSearch.status
+      }
+    })
   };
 
-  console.log(requestOptions);
-  
-
   return callAPI(requestOptions).then(res => {
-    console.log(res);
-    
+    return res.data;
   });
 }
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-class PwResetPage extends Component {
+class PwReset extends Component {
   render() {
     return (
       <React.Fragment>
@@ -31,4 +31,4 @@ class PwResetPage extends Component {
   }
 }
 
-export default PwResetPage;
+export default PwReset;

@@ -23,8 +23,9 @@ class AddressController extends CoreController {
      */
     protected $codeManager;
 
-    public function __construct($entityManager, $addressCodeManager) {
-            
+    public function __construct($entityManager, $addressCodeManager) {   
+        parent::__construct($entityManager);    
+         
         $this->entityManager = $entityManager;
         $this->addressCodeManager = $addressCodeManager;
     }

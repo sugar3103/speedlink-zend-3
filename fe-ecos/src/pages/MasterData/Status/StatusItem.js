@@ -8,13 +8,12 @@ class StatusItem extends Component {
 
     return (
       <tr role="row" className={index%2 === 0 ? 'odd' : 'even'}>
-        <td>{status.id}</td>
-        <td>{status.first_name}</td>
-        <td>{status.last_name}</td>
-        <td>{status.avatar}</td>
+        <td>{status.name}</td>
+        <td>{status.description}</td>
+        <td>{status.status}</td>
         <td className="text-center">
           <Link
-            to={`/product/edit/${status.id}`}
+            to={`/product/edit/${status.status_id}`}
             type="button" 
             className="btn btn-sm btn-success waves-light waves-effect"
           >
@@ -23,7 +22,7 @@ class StatusItem extends Component {
           <button 
             type="button" 
             className="btn btn-sm btn-danger waves-light waves-effect" 
-            onClick={() => this.onDelete(status.id)}
+            onClick={() => this.onDelete(status.status_id)}
           >
             Delete
           </button>

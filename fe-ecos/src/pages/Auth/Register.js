@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-class RegisterPage extends Component {
+class Register extends Component {
   render() {
     return (
       <React.Fragment>
@@ -50,4 +50,4 @@ class RegisterPage extends Component {
   }
 }
 
-export default RegisterPage;
+export default Register;

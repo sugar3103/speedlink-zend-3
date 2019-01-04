@@ -45,9 +45,9 @@ return [
     
     'controllers' => [
         'factories' => [
-            Controller\CoreController::class => InvokableFactory::class,
-            Controller\ApiController::class => InvokableFactory::class,
-            Controller\RouteNotFoundController::class => InvokableFactory::class,
+            Controller\CoreController::class => Factory\CoreControllerFactory::class,
+            Controller\ApiController::class => Factory\ApiControllerFactory::class,
+            Controller\RouteNotFoundController::class => Factory\RouteNotFoundControllerFactory::class,
         ],
     ],
 

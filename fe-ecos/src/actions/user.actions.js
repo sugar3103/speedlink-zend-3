@@ -44,7 +44,7 @@ const login = (username, password, remember_me) => {
         case errorCodeConstants.FAILURE:
           dispatch(failure(res.message));
           break;
-        case errorCodeConstants.FAILURE_IDENTITY_NOT_FOUND:
+        case errorCodeConstants.FAILURE_CREDENTIAL_INVALID:
           const error = res.message;
           dispatch(failure(error.toString()));
           dispatch(alertActions.error(error.toString()));
