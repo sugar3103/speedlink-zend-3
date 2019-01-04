@@ -40,7 +40,17 @@ $router = [
                             'action' => 'login'
                         ]
                     ]
-                ]
+                ],
+                'vertify' => [
+                    'type'  => Segment::class,
+                    'options' => [
+                        'route' => '/vertify',
+                        'defaults' => [
+                            'controller' => Controller\AuthController::class,
+                            'action' => 'vertify'
+                        ]
+                    ]
+                ],
             ]
         ],
     ]

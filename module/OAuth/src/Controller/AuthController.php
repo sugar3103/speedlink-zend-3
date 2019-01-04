@@ -113,7 +113,7 @@ class AuthController extends CoreController {
                         'email'         => $_user->getEmail(),
                         'isActive'      => $_user->getIsActive(),
                         'isAdmin'       => $_user->getIsAdmin(),
-                        'createAt'      => date('s')
+                        'createAt'      => date('Y-m-d H:i:s')
                     ];
                     
                     $token = $this->generateJwtToken($payload);
@@ -155,5 +155,10 @@ class AuthController extends CoreController {
             
         }
         return $this->createResponse();
+    }
+
+    public function vertifyAction()
+    {
+        return $this->createResponse();    
     }
 }
