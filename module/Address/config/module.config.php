@@ -25,7 +25,7 @@ $router = [
                 'defaults' => [
                     'controller' => Controller\AddressController::class,
                     'action' => 'index',
-                    // 'isAuthorizationRequired' => true
+                    'isAuthorizationRequired' => true
                 ],
             ],
             'may_terminate' => true,

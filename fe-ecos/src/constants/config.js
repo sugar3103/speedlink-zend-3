@@ -1,1 +1,1 @@
-export const API_URL = 'http://speedlink.local';
+export const API_URL = 'http://localhost';
