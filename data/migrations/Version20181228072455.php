@@ -13,7 +13,7 @@ final class Version20181228072455 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("CREATE TABLE m_service
+        $this->addSql("CREATE TABLE service
             (
                 id                INT(11) AUTO_INCREMENT PRIMARY KEY,
                 service_name_vn   VARCHAR(50) NULL,
@@ -29,7 +29,7 @@ final class Version20181228072455 extends AbstractMigration
                 created_by        INT(11) NOT NULL
             ) COLLATE = utf8_unicode_ci"
         );
-        $this->addSql("CREATE TABLE m_shipment_type
+        $this->addSql("CREATE TABLE shipment_type
             (
                 id                      INT(11) AUTO_INCREMENT PRIMARY KEY,
                 shipment_type_name_vn   VARCHAR(50) NULL,
@@ -50,7 +50,7 @@ final class Version20181228072455 extends AbstractMigration
                 created_by              INT(11) NOT NULL
             ) COLLATE = utf8_unicode_ci"
         );
-        $this->addSql("CREATE TABLE m_carrier
+        $this->addSql("CREATE TABLE carrier
             (
                 id                INT(11) AUTO_INCREMENT PRIMARY KEY,
                 carrier_name_vn   VARCHAR(50) NULL,
@@ -71,8 +71,8 @@ final class Version20181228072455 extends AbstractMigration
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql("DROP TABLE m_service");
-        $this->addSql("DROP TABLE m_shipment_type");
-        $this->addSql("DROP TABLE m_carrier");
+        $this->addSql("DROP TABLE service");
+        $this->addSql("DROP TABLE shipment_type");
+        $this->addSql("DROP TABLE carrier");
     }
 }
