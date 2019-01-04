@@ -3,12 +3,19 @@
 namespace Core\Controller;
 
 use Zend\Mvc\Controller\AbstractRestfulController;
+use OAuth\Entity\User;
 use Zend\View\Model\JsonModel;
+use Doctrine\ORM\EntityManager;
 use Firebase\JWT\JWT;
 use Zend\EventManager\EventManagerInterface;
 
 class ApiController extends AbstractRestfulController
 {
+
+    /**
+     * @var EntityManager
+     */
+    private $entityManager;
 
     /**
      * @var Integer $httpStatusCode Define Api Response code.
@@ -38,6 +45,10 @@ class ApiController extends AbstractRestfulController
      */
     public $tokenPayload;
 
+    public function __construct($entityManager) {
+        
+        $this->entityManager = $entityManager;
+    }
     /**
      * set Event Manager to check Authorization
      * @param \Zend\EventManager\EventManagerInterface $events
@@ -70,10 +81,20 @@ class ApiController extends AbstractRestfulController
                 $this->token = $jwtToken;
                 $this->decodeJwtToken();
                 if (is_object($this->tokenPayload)) {
-                    return;
+                    if(!$this->checkAuthenticity()) {
+                        $response->setStatusCode(200);
+                        $jsonModelArr = [
+                            $responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'], 
+                            'error_code' => -5,
+                            $config['ApiRequest']['responseFormat']['resultKey'] => [
+                                    $config['ApiRequest']['responseFormat']['errorKey'] => 'Expired or Does not exist'
+                                ]
+                            ];
+                    } else {
+                        return;
+                    }
                 }
-                $response->setStatusCode(400);
-                $jsonModelArr = [$responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'], $config['ApiRequest']['responseFormat']['resultKey'] => [$config['ApiRequest']['responseFormat']['errorKey'] => $this->tokenPayload]];
+                
             } else {
                 $response->setStatusCode(401);
                 $jsonModelArr = [$responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'], $config['ApiRequest']['responseFormat']['resultKey'] => [$config['ApiRequest']['responseFormat']['errorKey'] => $config['ApiRequest']['responseFormat']['authenticationRequireText']]];
@@ -102,12 +123,14 @@ class ApiController extends AbstractRestfulController
             $jwtToken = trim(trim($jwtToken, "Bearer"), " ");
             return $jwtToken;
         }
+
         if ($request->isGet()) {
             $jwtToken = $request->getQuery('token');
         }
         if ($request->isPost()) {
             $jwtToken = $request->getPost('token');
         }
+
         return $jwtToken;
     }
 
@@ -189,7 +212,24 @@ class ApiController extends AbstractRestfulController
         } else {
             $sendResponse[$config['ApiRequest']['responseFormat']['messageKey']] = $this->apiResponse;
         }
-
+        
         return new JsonModel($sendResponse);
+    }
+
+    private function checkAuthenticity() {
+        //Find User By Token
+        $user = $this->entityManager->getRepository(User::class)
+            ->find($this->tokenPayload->id);
+        if($user) {
+            if($this->token != $user->getLastToken()) {
+                return false;
+            } else {
+                return true;
+            }
+            
+        } else {
+            return false;
+        }
+        
     }
 }

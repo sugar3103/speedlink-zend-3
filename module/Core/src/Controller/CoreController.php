@@ -2,9 +2,21 @@
 namespace Core\Controller;
 
 use Core\Controller\ApiController;
+use Doctrine\ORM\EntityManager;
 
 class CoreController extends ApiController
 {
+     /**
+     * @var EntityManager
+     */
+    private $entityManager;
+
+    public function __construct($entityManager) {
+        parent::__construct($entityManager);
+        
+        $this->entityManager = $entityManager;
+    }
+
     public function indexAction()
     {
         $this->apiResponse = [
@@ -14,13 +26,8 @@ class CoreController extends ApiController
         return $this->createResponse();
     }
 
-    public function getPostData()
+    public function getRequestData()
     {
-        if ($this->getRequest()->isPost()) {
-            $params = file_get_contents('php://input');
-            $params = json_decode($params, true);
-            
-            return $params;
-        }
+        
     }
 }

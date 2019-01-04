@@ -29,6 +29,7 @@ class StatusController extends CoreController {
 
     public function __construct($entityManager, $statusManager) 
     {
+        parent::__construct($entityManager);
         $this->entityManager = $entityManager;
         $this->statusManager = $statusManager;
     }
