@@ -95,9 +95,9 @@ class ApiController extends AbstractRestfulController
      * @return type String
      */
     public function findJwtToken($request)
-    {
+    {   
+        $jwtToken = $request->getHeaders("Authorization") ? $request->getHeaders("Authorization")->getFieldValue() : '';
         
-        $jwtToken = $request->getHeaders("Authorization") ? $request->getHeaders("Authorization")->getFieldValue() : '';        
         if ($jwtToken) {
             $jwtToken = trim(trim($jwtToken, "Bearer"), " ");
             return $jwtToken;
@@ -176,12 +176,18 @@ class ApiController extends AbstractRestfulController
 
         $sendResponse[$errorKey] = $this->error_code;
         
-        if($this->apiResponse) {
-            if( count($this->apiResponse) == 1) {
-                $sendResponse[$config['ApiRequest']['responseFormat']['messageKey']] = array_shift($this->apiResponse);
-            } else {
-                $sendResponse = array_merge($sendResponse, $this->apiResponse);
-            }
+        // if($this->apiResponse) {
+        //     if( count($this->apiResponse) == 1) {
+        //         $sendResponse[$config['ApiRequest']['responseFormat']['messageKey']] = array_shift($this->apiResponse);
+        //     } else {
+        //         $sendResponse = array_merge($sendResponse, $this->apiResponse);
+        //     }
+        // }
+
+        if ($this->error_code == 1) {
+            $sendResponse[$config['ApiRequest']['responseFormat']['resultKey']] = $this->apiResponse;
+        } else {
+            $sendResponse[$config['ApiRequest']['responseFormat']['messageKey']] = $this->apiResponse;
         }
 
         return new JsonModel($sendResponse);

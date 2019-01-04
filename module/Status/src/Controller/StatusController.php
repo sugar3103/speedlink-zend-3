@@ -80,9 +80,11 @@ class StatusController extends CoreController {
                 "data" => ($dataStatus['listStatus']) ? $dataStatus['listStatus'] : []           
             ];
             
-            $this->apiResponse['result'] = $result;
+            $this->error_code = 1;
+            $this->apiResponse = $result;
             return $this->createResponse();
         } else {
+            $this->error_code = 0;
             $this->apiResponse['message'] = 'Status List';
 
             return $this->createResponse();
@@ -110,10 +112,10 @@ class StatusController extends CoreController {
                 // add status.
                 $this->statusManager->addStatus($data,$user);
 
-                $this->error_code = 0;
+                $this->error_code = 1;
                 $this->apiResponse['message'] = "Success: You have added a status!";
             } else {
-                $this->error_code = 1;
+                $this->error_code = 0;
                 $this->apiResponse = $form->getMessages(); 
             }            
         }
@@ -125,14 +127,14 @@ class StatusController extends CoreController {
     {
         $user = $this->tokenPayload;
 
-        //Create Form Status
-        $form = new StatusForm('update', $this->entityManager);
-
         //get status_id
         $status_id = $this->params()->fromRoute('id', -1);
 
         // Find existing status in the database.
         $status = $this->entityManager->getRepository(Status::class)->findOneBy(array('status_id' => $status_id));
+
+        //Create Form Status
+        $form = new StatusForm('update', $this->entityManager, $status);
 
         if ($status == null) {
             $this->httpStatusCode = 404;
@@ -153,10 +155,10 @@ class StatusController extends CoreController {
                     // update status.
                     $this->statusManager->updateStatus($status, $data,$user);
 
-                    $this->error_code = 0;
+                    $this->error_code = 1;
                     $this->apiResponse['message'] = "Success: You have modified status!";
                 } else {
-                    $this->error_code = 1;
+                    $this->error_code = 0;
                     $this->apiResponse = $form->getMessages(); 
                 }            
             }
@@ -181,7 +183,7 @@ class StatusController extends CoreController {
             //remove status
             $this->statusManager->removeStatus($status);
 
-            $this->error_code = 0;
+            $this->error_code = 1;
             $this->apiResponse['message'] = "Success: You have deleted status!";
         }
 
