@@ -24,6 +24,7 @@ final class Version20181227030329 extends AbstractMigration
             name            VARCHAR(50)                     NOT NULL,
             description     TEXT                            NULL,
             status          INT(1)                          NOT NULL,
+            is_deleted                      TINYINT(1) NOT NULL DEFAULT 0,
             created_by      INT(11)                         NOT NULL,
             created_at      DATETIME                        NOT NULL,
             updated_by      INT(11)                         NULL,
