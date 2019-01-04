@@ -20,11 +20,11 @@ final class Version20181227073747 extends AbstractMigration
         ADD `district_id` INT NOT NULL,
         ADD `ward_id` INT NOT NULL,
         ADD `including_ward_ids` INT NOT NULL,
-        ADD `description` VARCHAR(1000) NOT NULL');
+        ADD `description` text NULL');
 
       $this->addSql('ALTER TABLE `hub` 
         ADD `name` VARCHAR(20) NOT NULL,
-        ADD `description` VARCHAR(1000) NOT NULL');
+        ADD `description` text NULL');
     }
 
     public function down(Schema $schema) : void
