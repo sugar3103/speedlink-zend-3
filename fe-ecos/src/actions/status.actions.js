@@ -7,21 +7,19 @@ function getList(pageNumber = 1, limit = PAGE_LIMIT, paramSearch = '') {
   return dispatch => {
     dispatch(request());
 
-    setTimeout(function() {
-      statusService.getList(pageNumber, limit, paramSearch)
-        .then(res => {
-          switch (res.error_code) {
-            case errorCodeConstants.SUCCESS:
-              dispatch(success(res.result, paramSearch));
-              break;
-            case errorCodeConstants.FAILURE: 
-              dispatch(failure(res.message.toString()));
-              break;
-            default:
-              break;
-          }
-        });
-    }, 1000);
+    statusService.getList(pageNumber, limit, paramSearch)
+      .then(res => {
+        switch (res.error_code) {
+          case errorCodeConstants.SUCCESS:
+            dispatch(success(res.result, paramSearch));
+            break;
+          case errorCodeConstants.FAILURE: 
+            dispatch(failure(res.message.toString()));
+            break;
+          default:
+            break;
+        }
+      });
   };
 
   function request() { return { type: statusConstants.GET_LIST_REQUEST } }
