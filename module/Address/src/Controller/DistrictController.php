@@ -5,10 +5,10 @@ use Core\Controller\CoreController;
 use Doctrine\ORM\EntityManager;
 use Zend\Cache\Storage\StorageInterface;
 use Zend\View\Model\ViewModel;
-use Address\Entity\City;
-use Address\Form\CityForm;
+use Address\Entity\District;
+use Address\Form\DistrictForm;
 
-class CityController extends CoreController {
+class DistrictController extends CoreController {
     /**
      * EntityManager.
      * @var EntityManager
@@ -16,20 +16,20 @@ class CityController extends CoreController {
     protected $entityManager;
     
       /**
-     * City Manager.
-     * @var CityManager
+     * District Manager.
+     * @var DistrictManager
      */
-    protected $cityManager;
+    protected $districtManager;
 
-    public function __construct($entityManager, $cityManager) {
+    public function __construct($entityManager, $districtManager) {
             
         $this->entityManager = $entityManager;
-        $this->cityManager = $cityManager;
+        $this->districtManager = $districtManager;
     }
 
     public function indexAction()
     {
-        $this->apiResponse['message'] = 'City';
+        $this->apiResponse['message'] = 'District';
 
         return $this->createResponse();
     }
@@ -53,29 +53,29 @@ class CityController extends CoreController {
             // get the filters
             $fieldsMap = [
                 0 => 'name',
-                1 => 'country',
+                1 => 'city',
                 2 => 'status'
             ];
 
-            $filters = $this->cityManager->getValueFiltersSearch($params,$fieldsMap);
+            $filters = $this->districtManager->getValueFiltersSearch($params,$fieldsMap);
 
             //get and set sortField,sortDirection
             $sortField = isset($params['sort']) ? $params['sort'] : $fieldsMap[0];
-            $sortDirection = isset($params['order']) ? $params['order'] : 'ASC';
+            $sortDirection = isset($params['order']) ? $params['order'] : 'ASC';            
             
-            //get list city by condition
-            $dataCity = $this->cityManager->getListCityByCondition(
+            //get list district by condition
+            $dataDistrict = $this->districtManager->getListDistrictByCondition(
                 $currentPage, $limit, $sortField, $sortDirection,$filters);
             
             $result = [
-                "totalRecords" => $dataCity['totalCity'],
-                "data" => ($dataCity['listCity']) ? $dataCity['listCity'] : []           
+                "totalRecords" => $dataDistrict['totalDistrict'],
+                "data" => ($dataDistrict['listDistrict']) ? $dataDistrict['listDistrict'] : []           
             ];
             
             $this->apiResponse = $result;
             return $this->createResponse();
         } else {
-            $this->apiResponse['message'] = 'City List';
+            $this->apiResponse['message'] = 'District List';
 
             return $this->createResponse();
         }
@@ -84,10 +84,10 @@ class CityController extends CoreController {
     public function addAction()
     {   
         $user = $this->tokenPayload;
-        //Create New Form City
-        $form = new CityForm('create', $this->entityManager);
+        //Create New Form District
+        $form = new DistrictForm('create', $this->entityManager);
 
-        // check if city  has submitted the form
+        // check if district  has submitted the form
         if ($this->getRequest()->isPost()) {
             $data = file_get_contents('php://input');
             $data = json_decode($data, true);
@@ -99,10 +99,10 @@ class CityController extends CoreController {
                 // get filtered and validated data
                 $data = $form->getData();
                 // add user.
-                $city = $this->cityManager->addCity($data,$user);
+                $district = $this->districtManager->addDistrict($data,$user);
 
                 $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have modified Cities!";
+                $this->apiResponse['message'] = "Success: You have modified Districts!";
             } else {
                 $this->apiResponse = $form->getMessages(); 
             }            

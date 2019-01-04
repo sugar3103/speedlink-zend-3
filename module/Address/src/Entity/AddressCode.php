@@ -1,7 +1,7 @@
 <?php
+
 namespace Address\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,64 +9,108 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="address_code")
  * @ORM\Entity(repositoryClass="\Address\Repository\AddressCodeRepository")
  */
-class AddressCode {
+
+class AddressCode
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="address_code_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $addressCodeId;
 
     /**
-     * @ORM\Id()
-     * @ORM\Column(name="address_code_id")
-     * @ORM\GeneratedValue()
+     * @var string
+     *
+     * @ORM\Column(name="code", type="string", length=50, nullable=false)
      */
-    protected $address_code_id;
+    private $code;
 
     /**
-     * @ORM\Column(name="code", type="string")
+     * @var int
+     *
+     * @ORM\Column(name="country_id", type="integer", nullable=false)
      */
-    protected $code;
+    private $countryId;
 
     /**
-     * @ORM\Column(name="country_id", type="integer")
+     * @var int
+     *
+     * @ORM\Column(name="city_id", type="integer", nullable=false)
      */
-    protected $country_id;
+    private $cityId;
 
     /**
-     * @ORM\Column(name="city_id", type="integer")
+     * @var int
+     *
+     * @ORM\Column(name="district_id", type="integer", nullable=false)
      */
-    protected $city_id;
+    private $districtId;
 
     /**
-     * @ORM\Column(name="district_id", type="integer")
+     * @var int
+     *
+     * @ORM\Column(name="ward_id", type="integer", nullable=false)
      */
-    protected $district_id;
+    private $wardId;
 
     /**
-     * @ORM\Column(name="ward_id", type="integer")
+     * @var int
+     *
+     * @ORM\Column(name="branch_id", type="integer", nullable=false)
      */
-    protected $ward_id;
+    private $branchId;
 
     /**
-     * @ORM\Column(name="branch_id", type="integer")
+     * @var int
+     *
+     * @ORM\Column(name="hub_id", type="integer", nullable=false)
      */
-    protected $branch_id;
+    private $hubId;
 
     /**
-     * @ORM\Column(type="integer", name="hub_id")
+     * @var int
+     *
+     * @ORM\Column(name="created_by", type="integer", nullable=false)
      */
-    protected $hub_id;
-    
-    
-    /**
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    protected $created_at;
+    private $createdBy;
 
     /**
-     * @ORM\Column(name="created_by", type="integer")
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    protected $created_by;
+    private $createdAt;
 
     /**
-     * @ORM\Column(name="updated_at", type="datetime")
+     * @var int|null
+     *
+     * @ORM\Column(name="update_by", type="integer", nullable=true)
      */
+    private $updateBy;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    private $updatedAt;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="ref_as_by", type="integer", nullable=true)
+     */
+    private $refAsBy;
+
+    /**
+     * 
+     * @ORM\OneToOne(targetEntity="\Address\Entity\Country" , inversedBy="objects", fetch="EAGER")
+     * @ORM\JoinColumn(name="country_id", referencedColumnName="country_id", nullable=true)
+     */
+    protected $country;
 
     /**
      * 
@@ -89,203 +133,17 @@ class AddressCode {
      */
     protected $ward;
 
-    public function __construct()
-    {
-    }
-
     /**
-     * Returns address code Id.
-     *
-     * @return integer
-     */
-    public function getId() {
-        return $this->address_code_id;
-    }
-
-    /**
-     * Set Address Code Id.
-     *
-     * @param $id
-     */
-    public function setId($id) {
-        $this->address_code_id = $id;
-    }
-
-    /**
-     * Get Address Code Name.
-     *
-     * @return mixed
-     */
-    public function getCode() {
-        return $this->code;
-    }
-
-    /**
-     * Set Address Code Name.
-     *
-     * @param $name
-     */
-    public function setCode($code) {
-        $this->code = $code;
-    }
-
-    /**
-     * Get Address Code Created Date.
-     *
-     * @return mixed
-     */
-    public function getCreatedAt() {
-        return $this->created_at;
-    }
-
-    /**
-     * Set Address Code Created Date.
-     *
-     * @param $created_at
-     */
-    public function setCreatedAt($created_at) {
-        $this->created_at = $created_at;
-    }
-
-    /**
-     * Get Address Code Created Date.
-     *
-     * @return mixed
-     */
-    public function getCreatedBy() {
-        return $this->created_by;
-    }
-
-    /**
-     * Set Address Code Created Date.
-     *
-     * @param $created_at
-     */
-    public function setCreatedBy($created_by) {
-        $this->created_by = $created_by;
-    }
-
-  
-    /**
-     * Set Country Id
      * 
-     * @param $country_id
+     * @ORM\OneToOne(targetEntity="\NetworkPort\Entity\Hub" , inversedBy="objects", fetch="EAGER")
+     * @ORM\JoinColumn(name="hub_id", referencedColumnName="hub_id", nullable=true)
      */
-    public function setCountryId($country_id)
-    {
-        $this->country_id = $country_id;
-    }
+    protected $hub;
 
     /**
-     * Get Country Id
      * 
-     * @return integer
+     * @ORM\OneToOne(targetEntity="\NetworkPort\Entity\Branch" , inversedBy="objects", fetch="EAGER")
+     * @ORM\JoinColumn(name="branch_id", referencedColumnName="branch_id", nullable=true)
      */
-    public function getCountryId()
-    {
-        return $this->country_id;
-    }
-
-    
-    /**
-     * Set City Id
-     * 
-     * @param $city_id
-     */
-    public function setCityId($city_id)
-    {
-        $this->city_id = $city_id;
-    }
-
-    /**
-     * Get City Id
-     * 
-     * @return integer
-     */
-    public function getCityId()
-    {
-        return $this->city_id;
-    }
-
-     /**
-     * Set District Id
-     * 
-     * @param $district_id
-     */
-    public function setDistrictId($district_id)
-    {
-        $this->district_id = $district_id;
-    }
-
-    /**
-     * Get District Id
-     * 
-     * @return integer
-     */
-    public function getDistrictId()
-    {
-        return $this->district_id;
-    }
-
-     /**
-     * Set Ward Id
-     * 
-     * @param $ward_id
-     */
-    public function setWardId($ward_id)
-    {
-        $this->ward_id = $ward_id;
-    }
-
-    /**
-     * Get Ward Id
-     * 
-     * @return integer
-     */
-    public function getWardId()
-    {
-        return $this->ward_id;
-    }
-
-     /**
-     * Set Branch Id
-     * 
-     * @param $branch_id
-     */
-    public function setBranchId($branch_id)
-    {
-        $this->branch_id = $branch_id;
-    }
-
-    /**
-     * Get Branch Id
-     * 
-     * @return integer
-     */
-    public function getBranchId()
-    {
-        return $this->branch_id;
-    }
-
-     /**
-     * Set Hub Id
-     * 
-     * @param $hub_id
-     */
-    public function setHubId($hub_id)
-    {
-        $this->hub_id = $hub_id;
-    }
-
-    /**
-     * Get Hub Id
-     * 
-     * @return integer
-     */
-    public function getHubId()
-    {
-        return $this->hub_id;
-    }
-
-    
+    protected $branch;
 }

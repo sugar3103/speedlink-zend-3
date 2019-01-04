@@ -21,18 +21,17 @@ final class Version20181108064727 extends AbstractMigration
     {
         $this->addSql('create table user
             (
-              id                              int(10) auto_increment
-                primary key,
+              id                              int(11) auto_increment                primary key,
               email                           varchar(100)                          null,
               password                        char(60)                              null,
               first_name                      varchar(100)                          null,
               last_name                       varchar(100)                          null,
-              language                        char(5) default \'en_US\'               not null,
+              language                        char(5) default \'en_US\'             not null,
               created_at                      timestamp default current_timestamp() not null
               on update current_timestamp(),
               is_active                       int(1) default 0                      not null
               comment \'active=1,inactive=0\',
-              updated_by                      int(10)                               null,
+              updated_by                      int(11)                               null,
               deleted_at                      timestamp                             null,
               updated_at                      timestamp                             null,
               is_admin                        int(1) default 0                      not null,
@@ -49,12 +48,12 @@ final class Version20181108064727 extends AbstractMigration
 
         $this->addSql('create table role
             (
-              id          int(10) auto_increment
+              id          int(11) auto_increment
                 primary key,
-              name        varchar(100)                            not null,
+              name        varchar(100) not null,
               created_at  timestamp  not null,
               updated_at  timestamp  not null,
-              description text                                    null,
+              description text null,
               constraint role_name_uindex
               unique (name)
             )
@@ -85,7 +84,7 @@ final class Version20181108064727 extends AbstractMigration
 
         $this->addSql('create table permission
             (
-              id          int(10) auto_increment
+              id          int(11) auto_increment
                 primary key,
               name        varchar(100)                            not null,
               model       text                                    null,
@@ -98,17 +97,17 @@ final class Version20181108064727 extends AbstractMigration
 
         $this->addSql('create table role_permission
             (
-              role_id       int(10) not null,
-              permission_id int(10) not null,
+              role_id       int(11) not null,
+              permission_id int(11) not null,
               primary key (role_id, permission_id)
             )
               collate = utf8_unicode_ci');
 
         $this->addSql('create table user_role
         (
-          id      int(10) auto_increment,
-          user_id int(10) not null,
-          role_id int(10) not null,
+          id      int(11) auto_increment,
+          user_id int(11) not null,
+          role_id int(11) not null,
           primary key (id)
         )
           collate = utf8_unicode_ci;

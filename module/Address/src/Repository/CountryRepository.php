@@ -1,17 +1,17 @@
 <?php
 namespace Address\Repository;
 
-use Address\Entity\City;
+use Address\Entity\Country;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
 
 /**
- * This is the custom repository class for City entity.
+ * This is the custom repository class for Country entity.
  * @package Address\Repository
  */
-class CityRepository extends EntityRepository {
+class CountryRepository extends EntityRepository {
 
     /**
      * Get list user by condition
@@ -21,7 +21,7 @@ class CityRepository extends EntityRepository {
      * @param array $filters
      * @return array|QueryBuilder
      */
-    public function getListCityByCondition(
+    public function getListCountryByCondition(
         $sortField = 'c.name',
         $sortDirection = 'ASC',
         $filters = [],
@@ -30,17 +30,18 @@ class CityRepository extends EntityRepository {
     )
     {
         try {
-            $queryBuilder = $this->buildCityQueryBuilder($sortField, $sortDirection, $filters);
+            $queryBuilder = $this->buildCountryQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select(
-                "c.cityId,
+                "c.countryId,
                  c.name,
                  c.description,
                  c.status,
                  c.createdBy,
                  c.createdAt"                 
-            )->groupBy('c.cityId')
+            )->groupBy('c.countryId')
             ->setMaxResults($limit)
             ->setFirstResult($offset);
+            
             return $queryBuilder;
 
         } catch (QueryException $e) {
@@ -59,15 +60,10 @@ class CityRepository extends EntityRepository {
      * @return QueryBuilder
      * @throws QueryException
      */
-    public function buildCityQueryBuilder($sortField = 'c.name', $sortDirection = 'asc', $filters)
+    public function buildCountryQueryBuilder($sortField = 'c.name', $sortDirection = 'asc', $filters)
     {
 
         $operatorsMap = [
-            'country_id' => [
-                'alias' => 'c.countryId',
-                'operator' => 'eq'
-            ],
-            
             'name' => [
                 'alias' => 'c.name',
                 'operator' => 'contains'
@@ -85,14 +81,14 @@ class CityRepository extends EntityRepository {
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(City::class, 'c');
+        $queryBuilder->from(Country::class, 'c');
 
         if ($sortField != NULL && $sortDirection != NULL)
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
         else
             $queryBuilder->orderBy('c.name', 'ASC');
 
-        return $this->setCriteriaListCityByFilters($filters, $operatorsMap, $queryBuilder);
+        return $this->setCriteriaListCountryByFilters($filters, $operatorsMap, $queryBuilder);
     }
 
     /**
@@ -104,7 +100,7 @@ class CityRepository extends EntityRepository {
      * @return QueryBuilder
      * @throws QueryException
      */
-    public function setCriteriaListCityByFilters($filters = [], $operatorsMap = [], QueryBuilder $queryBuilder)
+    public function setCriteriaListCountryByFilters($filters = [], $operatorsMap = [], QueryBuilder $queryBuilder)
     {
 
         foreach ($filters as $key => $value){

@@ -5,28 +5,24 @@ namespace Address\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Ward
+ * Country
  *
- * @ORM\Table(name="ward")
- * @ORM\Entity(repositoryClass="\Address\Repository\WardRepository")
+ * @ORM\Table(name="country")
+ * @ORM\Entity(repositoryClass="\Address\Repository\CountryRepository")
  */
-class Ward
+class Country
 {
+    const ACTIVE = 1;
+    const INACTIVE = 0;
+    
     /**
      * @var int
      *
-     * @ORM\Column(name="ward_id", type="integer", nullable=false)
+     * @ORM\Column(name="country_id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $wardId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="district_id", type="integer", nullable=false)
-     */
-    private $districtId;
+    private $countryId;
 
     /**
      * @var string
@@ -43,18 +39,18 @@ class Ward
     private $description;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="postal_code", type="string", length=20, nullable=true)
-     */
-    private $postalCode;
-
-    /**
      * @var int
      *
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
     private $status;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="iso_code", type="string", length=50, nullable=false)
+     */
+    private $isoCode;
 
     /**
      * @var int
@@ -91,5 +87,34 @@ class Ward
      */
     private $refAsBy;
 
+    
+     /**
+     * Returns user status as string.
+     * @return string
+     */
+    public function getIsActiveAsString()
+    {
+        $list = self::getIsActiveList();
+        if (isset($list[$this->isActive]))
+            return $list[$this->isActive];
 
+        return 'Unknown';
+    }
+
+    /**
+     * Returns possible statuses as array.
+     * @return array
+     */
+    public static function getIsActiveList($value = null)
+    {
+        $status = [
+            self::ACTIVE => 'Active',
+            self::INACTIVE => 'Inactive'
+        ];
+
+        if(!empty($value) && isset($status[$value])) {
+            return $status[$value];
+        }
+        return $status;
+    }
 }

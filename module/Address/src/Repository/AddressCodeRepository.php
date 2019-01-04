@@ -22,7 +22,7 @@ class AddressCodeRepository extends EntityRepository {
      * @return array|QueryBuilder
      */
     public function getListCodeByCondition(
-        $sortField = 'ac.address_code_id',
+        $sortField = 'ac.addressCodeId',
         $sortDirection = 'ASC',
         $filters = [],
         $offset = 0,
@@ -33,17 +33,20 @@ class AddressCodeRepository extends EntityRepository {
         try {
             $queryBuilder = $this->buildCodeQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select(
-                "ac.address_code_id AS id,
+                "ac.addressCodeId AS id,
                  ac.code,
+                 ct.name AS country,
                  c.name AS city,  
                  d.name AS district,  
-                 w.name AS ward,            
-                 ac.created_by,
-                 ac.created_at"                 
-            )->groupBy('ac.address_code_id')            
+                 w.name AS ward,
+                 h.name AS hub,
+                 b.name AS branch,            
+                 ac.createdBy,
+                 ac.createdAt"                 
+            )->groupBy('ac.addressCodeId')            
             ->setMaxResults($limit)
             ->setFirstResult($offset);
-            // var_dump($queryBuilder->getQuery()->getSql());die;
+            
             return $queryBuilder;
 
         } catch (QueryException $e) {
@@ -62,7 +65,7 @@ class AddressCodeRepository extends EntityRepository {
      * @return QueryBuilder
      * @throws QueryException
      */
-    public function buildCodeQueryBuilder($sortField = 'ac.address_code_id', $sortDirection = 'asc', $filters)
+    public function buildCodeQueryBuilder($sortField = 'ac.addressCodeId', $sortDirection = 'asc', $filters)
     {
         
         $operatorsMap = [
@@ -71,8 +74,8 @@ class AddressCodeRepository extends EntityRepository {
                 'operator' => 'contains'
             ],
 
-            'country_id' => [
-                'alias' => 'ac.country_id',
+            'country' => [
+                'alias' => 'ac.country',
                 'operator' => 'eq'
             ],
             
@@ -112,17 +115,23 @@ class AddressCodeRepository extends EntityRepository {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(AddressCode::class, 'ac')
         ->leftJoin(
+            'ac.country', 'ct'
+        )->leftJoin(
             'ac.city','c'
         )->leftJoin(
             'ac.district','d'
         )->leftJoin(
             'ac.ward','w'
+        )->leftJoin(
+            'ac.hub','h'
+        )->leftJoin(
+            'ac.branch','b'
         );           
 
         if ($sortField != NULL && $sortDirection != NULL)
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
         else
-            $queryBuilder->orderBy('ac.address_code_id', 'ASC');
+            $queryBuilder->orderBy('ac.addressCodeId', 'ASC');
 
         return $this->setCriteriaListCodeByFilters($filters, $operatorsMap, $queryBuilder);
     }

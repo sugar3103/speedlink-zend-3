@@ -1,10 +1,10 @@
 <?php
 namespace Address\Service;
 
-use Address\Entity\City;
+use Address\Entity\Ward;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-class CityManager  {
+class WardManager  {
     
     /**
      * @var EntityManager
@@ -17,41 +17,41 @@ class CityManager  {
     }
 
      /**
-     * Add City
+     * Add Ward
      *
      * @param $data
-     * @return City|bool
+     * @return Ward|bool
      * @throws \Exception
      */
-    public function addCity($data,$user) {
+    public function addWard($data,$user) {
 
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
 
-            $city = new City();
-            $city->setName($data['name']);
-            $city->setDescription($data['description']);
-            $city->setStatus($data['status']);
-            $city->setZipCode($data['zip_code']);
-            $city->setCountryId($data['country_id']);
+            $ward = new Ward();
+            $ward->setName($data['name']);
+            $ward->setDescription($data['description']);
+            $ward->setStatus($data['status']);
+            $ward->setZipCode($data['zip_code']);
+            $ward->setCountryId($data['country_id']);
 
             $currentDate = date('Y-m-d H:i:s');
-            $city->setCreatedAt($currentDate);
-            $city->setCreatedBy($user->id);
+            $ward->setCreatedAt($currentDate);
+            $ward->setCreatedBy($user->id);
 
-            $city->setCreatedAt($currentDate);
-            $city->setCreatedBy($user->id);
+            $ward->setCreatedAt($currentDate);
+            $ward->setCreatedBy($user->id);
            
             // add the entity to the entity manager.
-            $this->entityManager->persist($city);
+            $this->entityManager->persist($ward);
 
             // apply changes to database.
             $this->entityManager->flush();
 
             $this->entityManager->commit();
 
-            return $city;
+            return $ward;
         }
         catch (ORMException $e) {
 
@@ -62,7 +62,7 @@ class CityManager  {
     }
 
     /**
-     * Get list city by condition
+     * Get list ward by condition
      *
      * @param $currentPage
      * @param $limit
@@ -72,49 +72,49 @@ class CityManager  {
      * @return array
      * @throws ORMException
      */
-    public function getListCityByCondition(
+    public function getListWardByCondition(
         $offset,
         $limit,
-        $sortField = 'c.name',
+        $sortField = 'w.name',
         $sortDirection = 'ASC',
         $filters = []
     ){
 
         $cities     = [];
-        $totalCity = 0;
+        $totalWard = 0;
         
-        //get orm city
-        $ormCity = $this->entityManager->getRepository(City::class)
-            ->getListCityByCondition($sortField, $sortDirection, $filters,$offset,$limit);
+        //get orm ward
+        $ormWard = $this->entityManager->getRepository(Ward::class)
+            ->getListWardByCondition($sortField, $sortDirection, $filters,$offset,$limit);
 
-        if($ormCity){
-            $ormPaginator = new ORMPaginator($ormCity, true);
+        if($ormWard){
+            $ormPaginator = new ORMPaginator($ormWard, true);
             $ormPaginator->setUseOutputWalkers(false);
-            $totalCity = $ormPaginator->count();
+            $totalWard = $ormPaginator->count();
 
             // $adapter = new DoctrineAdapter($ormPaginator);  
             $cities = $ormPaginator->getIterator()->getArrayCopy();
             //set countRow default
             $countRow = 1;
             
-            foreach ($cities as &$city) {//loop
+            foreach ($cities as &$ward) {//loop
                 //set status
-                $city['status'] = City::getIsActiveList($city['status']);
+                $ward['status'] = Ward::getIsActiveList($ward['status']);
 
                 //set created_at
-                $city['createdAt'] =  ($city['createdAt']) ? $this->checkDateFormat($city['createdAt'],'d/m/Y') : '';
+                $ward['createdAt'] =  ($ward['createdAt']) ? $this->checkDateFormat($ward['createdAt'],'d/m/Y') : '';
 
                 $countRow++;
             }
            
         }
 
-        //set data city
-        $dataCity = [
-            'listCity' => $cities,
-            'totalCity' => $totalCity,
+        //set data ward
+        $dataWard = [
+            'listWard' => $cities,
+            'totalWard' => $totalWard,
         ];
-        return $dataCity;
+        return $dataWard;
     }
     
     /**

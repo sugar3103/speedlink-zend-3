@@ -217,14 +217,26 @@ class ApiController extends AbstractRestfulController
     }
 
     private function checkAuthenticity() {
+        $config = $this->getEvent()->getParam('config', false);
         //Find User By Token
         $user = $this->entityManager->getRepository(User::class)
             ->find($this->tokenPayload->id);
         if($user) {
+            // Emtipy Token
             if($this->token != $user->getLastToken()) {
                 return false;
             } else {
-                return true;
+                
+                //Token expired
+                $lastTokenAt = strtotime($user->getLastTokenCreatedAt()->format('Y-m-d H:i:s'));
+                $timeNow = strtotime(date('Y-m-d H:i:s'));
+                $differenceInSeconds = $timeNow - $lastTokenAt;
+                
+                if($differenceInSeconds > $config['ApiRequest']['jwtAuth']['expired']) {
+                    return false;
+                } else {
+                    return true;
+                }
             }
             
         } else {

@@ -1,12 +1,12 @@
 <?php
 namespace Address\Factory;
 
-use Address\Controller\CountryController;
+use Address\Controller\WardController;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Address\Service\CountryManager;
+use Address\Service\WardManager;
 
-class CountryControllerFactory implements FactoryInterface {
+class WardControllerFactory implements FactoryInterface {
     /**
      * This method creates the AuthAdapter service an returns its instance.
      * @param ContainerInterface $container
@@ -18,7 +18,7 @@ class CountryControllerFactory implements FactoryInterface {
     {
         // Get doctrine entity manager for Service Manager.
         $entityManager = $container->get('doctrine.entitymanager.orm_default');        
-        $countryManager = $container->get(CountryManager::class);
-        return new CountryController($entityManager, $countryManager);
+        $wardManager = $container->get(WardManager::class);
+        return new WardController($entityManager, $wardManager);
     }
 }

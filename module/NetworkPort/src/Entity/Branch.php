@@ -136,7 +136,7 @@ class Branch
 
     /**
      * 
-     * @ORM\OneToOne(targetEntity="\NetworkPort\Entity\Country" , inversedBy="branch")
+     * @ORM\OneToOne(targetEntity="\Address\Entity\Country" , inversedBy="branch")
      * @ORM\JoinColumn(name="country_id", referencedColumnName="country_id", nullable=true)
      */
     protected $country;

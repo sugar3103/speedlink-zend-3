@@ -1,201 +1,113 @@
 <?php
 namespace Address\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity()
+ * City
+ *
  * @ORM\Table(name="city")
  * @ORM\Entity(repositoryClass="\Address\Repository\CityRepository")
  */
-class City {
-
+class City
+{
     const ACTIVE = 1;
     const INACTIVE = 0;
-
     /**
-     * @ORM\Id()
-     * @ORM\Column(name="city_id")
-     * @ORM\GeneratedValue()
-     */
-    protected $city_id;
-
-    /**
-     * @ORM\Column(name="country_id", type="integer", unique=true)
-     */
-    protected $country_id;
-
-    /**
-     * @ORM\Column(name="name", type="string", unique=true)
-     */
-    protected $name;
-
-    /**
-     * @ORM\Column(name="description", type="string")
-     */
-    protected $description;
-
-    /**
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    protected $created_at;
-
-    /**
-     * @ORM\Column(name="created_by", type="integer")
-     */
-    protected $created_by;
-
-    /**
-     * @ORM\Column(name="updated_at", type="datetime")
-     */
-    protected $updated_at;
-
-    /**
-     * @ORM\Column(type="integer", name="status")
-     */
-    protected $status;
-    
-    /**
-     * @ORM\Column(type="text", name="zip_code")
-     */
-    protected $zip_code;
-
-    /**
-     * Role constructor.
-     */
-    public function __construct()
-    {
-    }
-
-    /**
-     * Returns role Id.
+     * @var int
      *
-     * @return integer
+     * @ORM\Column(name="city_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    public function getId() {
-        return $this->city_id;
-    }
+    private $cityId;
 
     /**
-     * Set Role Id.
+     * @var int
      *
-     * @param $id
+     * @ORM\Column(name="country_id", type="integer", nullable=false)
      */
-    public function setId($id) {
-        $this->city_id = $id;
-    }
+    private $countryId;
 
     /**
-     * Get Role Name.
+     * @var string
      *
-     * @return mixed
+     * @ORM\Column(name="name", type="string", length=50, nullable=false)
      */
-    public function getName() {
-        return $this->name;
-    }
+    private $name;
 
     /**
-     * Set Role Name.
+     * @var string|null
      *
-     * @param $name
+     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
-    public function setName($name) {
-        $this->name = $name;
-    }
+    private $description;
 
     /**
-     * Get Role Description.
+     * @var int
      *
-     * @return mixed
+     * @ORM\Column(name="status", type="integer", nullable=false)
      */
-    public function getDescription() {
-        return $this->description;
-    }
+    private $status;
 
     /**
-     * Set Role Description.
+     * @var string
      *
-     * @param $description
+     * @ORM\Column(name="zip_code", type="string", length=50, nullable=false)
      */
-    public function setDescription($description) {
-        $this->description = $description;
-    }
+    private $zipCode;
 
     /**
-     * Get Role Created Date.
+     * @var int
      *
-     * @return mixed
+     * @ORM\Column(name="created_by", type="integer", nullable=false)
      */
-    public function getCreatedAt() {
-        return $this->created_at;
-    }
+    private $createdBy;
 
     /**
-     * Set Role Created Date.
+     * @var \DateTime
      *
-     * @param $created_at
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    public function setCreatedAt($created_at) {
-        $this->created_at = $created_at;
-    }
+    private $createdAt;
 
     /**
-     * Get Role Created Date.
+     * @var int|null
      *
-     * @return mixed
+     * @ORM\Column(name="update_by", type="integer", nullable=true)
      */
-    public function getCreatedBy() {
-        return $this->created_by;
-    }
+    private $updateBy;
 
     /**
-     * Set Role Created Date.
+     * @var \DateTime|null
      *
-     * @param $created_at
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    public function setCreatedBy($created_by) {
-        $this->created_by = $created_by;
-    }
+    private $updatedAt;
 
     /**
-     * Get Role Updated Date.
+     * @var int|null
      *
-     * @return mixed
+     * @ORM\Column(name="ref_as_by", type="integer", nullable=true)
      */
-    public function getUpdatedAt() {
-        return $this->updated_at;
-    }
+    private $refAsBy;
 
-    /**
-     * Set Role Updated Date.
-     *
-     * @param $updated_at
-     */
-    public function setUpdatedAt($updated_at) {
-        $this->updated_at = $updated_at;
-    }
-
-    
-    /**
-     * Get Is Active
-     *
-     * @return mixed
-     */
-    public function getStatus() {
-        return $this->status;
-    }
-
-    /**
-     * Set Is Active.
-     *
-     * @param $status
-     */
-    public function setStatus($status) {
-        $this->status = $status;
-    }
 
      /**
+     * Returns user status as string.
+     * @return string
+     */
+    public function getIsActiveAsString()
+    {
+        $list = self::getIsActiveList();
+        if (isset($list[$this->isActive]))
+            return $list[$this->isActive];
+
+        return 'Unknown';
+    }
+
+    /**
      * Returns possible statuses as array.
      * @return array
      */
@@ -210,45 +122,5 @@ class City {
             return $status[$value];
         }
         return $status;
-    }
-
-    /**
-     * Set Country Id
-     * 
-     * @param $country_id
-     */
-    public function setCountryId($country_id)
-    {
-        $this->country_id = $country_id;
-    }
-
-    /**
-     * Get Country Id
-     * 
-     * @return integer
-     */
-    public function getCountryId()
-    {
-        return $this->country_id;
-    }
-
-     /**
-     * Set ZipCode
-     * 
-     * @param $zip_code
-     */
-    public function setZipCode($zip_code)
-    {
-        $this->zip_code = $zip_code;
-    }
-
-    /**
-     * Get ZipCode
-     * 
-     * @return text
-     */
-    public function getZipCode()
-    {
-        return $this->zip_code;
     }
 }

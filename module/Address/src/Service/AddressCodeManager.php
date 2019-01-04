@@ -54,7 +54,7 @@ class AddressCodeManager  {
             
             foreach ($codes as &$code) {//loop
                 //set created_at
-                $code['created_at'] =  ($code['created_at']) ? $this->checkDateFormat($code['created_at'],'d/m/Y') : '';                
+                $code['createdAt'] =  ($code['createdAt']) ? $this->checkDateFormat($code['createdAt'],'d/m/Y') : '';                
             }
            
         }
@@ -98,13 +98,10 @@ class AddressCodeManager  {
     {
         $filters = [];
 
-        if (isset($params['columns']) && !empty($params['columns'])){
-          foreach ($params['columns'] as $column) {
-              foreach ($fieldsMap as $field) {                  
-                  if(trim($column['data']) == $field && !empty(trim($column['search']['value']))) {
-                      $filters[trim($column['data'])] = trim($column['search']['value']);
-                      break;
-                  }
+        if (isset($params['query']) && !empty($params['query'])){
+          foreach ($params['query'] as $key => $column) {
+              if(isset($fieldsMap[$key]) && !empty($column)) {
+                  $filters[$key] = $column;
               }
           }
            

@@ -1,10 +1,11 @@
 <?php
 namespace Address\Service;
 
-use Address\Entity\City;
+use Address\Entity\Country;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-class CityManager  {
+
+class CountryManager  {
     
     /**
      * @var EntityManager
@@ -17,41 +18,41 @@ class CityManager  {
     }
 
      /**
-     * Add City
+     * Add Country
      *
      * @param $data
-     * @return City|bool
+     * @return Country|bool
      * @throws \Exception
      */
-    public function addCity($data,$user) {
+    public function addCountry($data,$user) {
 
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
 
-            $city = new City();
-            $city->setName($data['name']);
-            $city->setDescription($data['description']);
-            $city->setStatus($data['status']);
-            $city->setZipCode($data['zip_code']);
-            $city->setCountryId($data['country_id']);
+            $country = new Country();
+            $country->setName($data['name']);
+            $country->setDescription($data['description']);
+            $country->setStatus($data['status']);
+            $country->setZipCode($data['zip_code']);
+            $country->setCountryId($data['country_id']);
 
             $currentDate = date('Y-m-d H:i:s');
-            $city->setCreatedAt($currentDate);
-            $city->setCreatedBy($user->id);
+            $country->setCreatedAt($currentDate);
+            $country->setCreatedBy($user->id);
 
-            $city->setCreatedAt($currentDate);
-            $city->setCreatedBy($user->id);
+            $country->setCreatedAt($currentDate);
+            $country->setCreatedBy($user->id);
            
             // add the entity to the entity manager.
-            $this->entityManager->persist($city);
+            $this->entityManager->persist($country);
 
             // apply changes to database.
             $this->entityManager->flush();
 
             $this->entityManager->commit();
 
-            return $city;
+            return $country;
         }
         catch (ORMException $e) {
 
@@ -62,7 +63,7 @@ class CityManager  {
     }
 
     /**
-     * Get list city by condition
+     * Get list country by condition
      *
      * @param $currentPage
      * @param $limit
@@ -72,7 +73,7 @@ class CityManager  {
      * @return array
      * @throws ORMException
      */
-    public function getListCityByCondition(
+    public function getListCountryByCondition(
         $offset,
         $limit,
         $sortField = 'c.name',
@@ -80,41 +81,41 @@ class CityManager  {
         $filters = []
     ){
 
-        $cities     = [];
-        $totalCity = 0;
+        $countries     = [];
+        $totalCountry = 0;
         
-        //get orm city
-        $ormCity = $this->entityManager->getRepository(City::class)
-            ->getListCityByCondition($sortField, $sortDirection, $filters,$offset,$limit);
+        //get orm country
+        $ormCountry = $this->entityManager->getRepository(Country::class)
+            ->getListCountryByCondition($sortField, $sortDirection, $filters,$offset,$limit);
 
-        if($ormCity){
-            $ormPaginator = new ORMPaginator($ormCity, true);
+        if($ormCountry){
+            $ormPaginator = new ORMPaginator($ormCountry, true);
             $ormPaginator->setUseOutputWalkers(false);
-            $totalCity = $ormPaginator->count();
+            $totalCountry = $ormPaginator->count();
 
             // $adapter = new DoctrineAdapter($ormPaginator);  
-            $cities = $ormPaginator->getIterator()->getArrayCopy();
+            $countries = $ormPaginator->getIterator()->getArrayCopy();
             //set countRow default
             $countRow = 1;
             
-            foreach ($cities as &$city) {//loop
+            foreach ($countries as &$country) {//loop
                 //set status
-                $city['status'] = City::getIsActiveList($city['status']);
+                $country['status'] = Country::getIsActiveList($country['status']);
 
                 //set created_at
-                $city['createdAt'] =  ($city['createdAt']) ? $this->checkDateFormat($city['createdAt'],'d/m/Y') : '';
+                $country['createdAt'] =  ($country['createdAt']) ? $this->checkDateFormat($country['createdAt'],'d/m/Y') : '';
 
                 $countRow++;
             }
            
         }
 
-        //set data city
-        $dataCity = [
-            'listCity' => $cities,
-            'totalCity' => $totalCity,
+        //set data country 
+        $dataCountry = [
+            'listCountry' => $countries,
+            'totalCountry' => $totalCountry,
         ];
-        return $dataCity;
+        return $dataCountry;
     }
     
     /**
@@ -149,16 +150,12 @@ class CityManager  {
         $filters = [];
 
         if (isset($params['query']) && !empty($params['query'])){
-          
-            if (isset($params['query']) && !empty($params['query'])){
-                foreach ($params['query'] as $key => $column) {
-                    if(isset($fieldsMap[$key]) && !empty($column)) {
-                        $filters[$key] = $column;
-                    }
+            foreach ($params['query'] as $key => $column) {
+                if(isset($fieldsMap[$key]) && !empty($column)) {
+                    $filters[$key] = $column;
                 }
-                 
-              }
-        }
+            }
+          }
        
         return $filters;
     }

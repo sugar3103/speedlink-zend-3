@@ -3,7 +3,6 @@
 data/cache/*
 !data/cache/.gitkeep
 phpunit.xml
-module/Address
 
 
 ### ZendFramework ###
@@ -26,9 +25,8 @@ data/tmp/
 temp/
 
 # React JS
-ecos-system-fe/node_module
-ecos-system-fe/package-lock.json
-ecos-system-fe/src/config.js
+fe-ecos/node_modules
+fe-ecos/package-lock.json
 
 #React-Redux
 fe-ecos/node_modules
