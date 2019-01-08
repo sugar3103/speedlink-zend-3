@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class DataTable extends Component {
 
@@ -33,5 +34,16 @@ class DataTable extends Component {
     );
   }
 };
+
+DataTable.propTypes = {
+  thead: PropTypes.arrayOf(
+    PropTypes.shape({
+      className: PropTypes.string,
+      style: PropTypes.object,
+      value: PropTypes.string.isRequired
+    })
+  ).isRequired,
+  children: PropTypes.array.isRequired
+}
 
 export default DataTable;

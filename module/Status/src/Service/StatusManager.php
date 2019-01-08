@@ -73,7 +73,7 @@ class StatusManager {
      * @return Status|bool
      * @throws \Exception
      */
-    public function updateStatus($status, $data, $user) {
+    public function updateStatus($status, $data) {
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
@@ -84,7 +84,7 @@ class StatusManager {
             $currentDate = date('Y-m-d H:i:s');
             $status->setUpdatedAt($currentDate);
 
-            $status->setUpdatedBy($user->id);
+            $status->setUpdatedBy($data['updated_by']);
 
             // apply changes to database.
             $this->entityManager->flush();

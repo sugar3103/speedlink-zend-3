@@ -86,10 +86,8 @@ class ApiController extends AbstractRestfulController
                         $jsonModelArr = [
                             $responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'], 
                             'error_code' => -5,
-                            $config['ApiRequest']['responseFormat']['resultKey'] => [
-                                    $config['ApiRequest']['responseFormat']['errorKey'] => 'Expired or Does not exist'
-                                ]
-                            ];
+                            $config['ApiRequest']['responseFormat']['messageKey'] => 'Expired or Does not exist'
+                        ];
                     } else {
                         return;
                     }

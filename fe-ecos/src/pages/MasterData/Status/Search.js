@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { statusActions } from '../../../actions';
 import { PAGE_LIMIT } from '../../../constants/config';
 
-class StatusSearch extends Component {
+class Search extends Component {
 
   constructor(props) {
     super(props);
@@ -76,6 +77,10 @@ class StatusSearch extends Component {
   }
 }
 
+Search.propTypes = {
+  handleSearch: PropTypes.func.isRequired
+}
+
 const mapDispatchToProps = (dispatch, props) => {
   return {
     handleSearch: (params) => {
@@ -84,4 +89,4 @@ const mapDispatchToProps = (dispatch, props) => {
   }
 }
 
-export default connect(null, mapDispatchToProps)(StatusSearch);
+export default connect(null, mapDispatchToProps)(Search);

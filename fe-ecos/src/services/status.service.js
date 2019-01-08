@@ -24,6 +24,45 @@ function getList(pageNumber, limit, paramSearch) {
   });
 }
 
+function create(status) {
+  const requestOptions = {
+    url: `status/add`,
+    method: 'POST',
+    headers: authHeader(),
+    body: JSON.stringify(status)
+  }
+  return callAPI(requestOptions).then(res => {
+    return res.data;
+  });
+}
+
+function update(status) {
+  const requestOptions = {
+    url: `status/edit/${status.id}`,
+    method: 'POST',
+    headers: authHeader(),
+    body: JSON.stringify(status)
+  }
+  return callAPI(requestOptions).then(res => {
+    return res.data;
+  });
+}
+
+function remove(id) {
+  const requestOptions = {
+    url: `status/delete/${id}`,
+    method: 'POST',
+    headers: authHeader(),
+    body: {}
+  }
+  return callAPI(requestOptions).then(res => {
+    return res.data;
+  });
+}
+
 export const statusService = {
-  getList
+  getList,
+  create,
+  update,
+  remove
 };

@@ -1,3 +1,3 @@
-import StatusList from './StatusList';
+import List from './List';
 
-export default StatusList;
+export { List }

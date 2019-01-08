@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Pagination from "react-js-pagination";
 
 class PaginationTable extends Component {
@@ -57,6 +58,17 @@ class PaginationTable extends Component {
       </React.Fragment>
     );
   }
+}
+
+PaginationTable.propTypes = {
+  pagination: PropTypes.shape({
+    perpage: PropTypes.number.isRequired,
+    total: PropTypes.number.isRequired,
+    page: PropTypes.number.isRequired,
+    from: PropTypes.number.isRequired,
+    to: PropTypes.number.isRequired
+  }).isRequired,
+  handlePageChange: PropTypes.func.isRequired
 }
     
 export default PaginationTable;

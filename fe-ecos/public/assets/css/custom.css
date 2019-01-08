@@ -17,3 +17,31 @@ legend.scheduler-border {
 #sidebar-menu {
   margin-top: 70px;
 }
+.error label {
+  color: #f1556c;
+}
+.error input[type=text] {
+  border: 1px solid #f1556c;
+  outline: none;
+}
+.error span {
+  display: inline-block;
+  font-style: italic;
+  color: #f1556c;
+}
+
+.react-confirm-alert-overlay {
+  background: rgba(0, 0, 0, 0.5) !important;
+}
+.custom-ui-confirm {
+  text-align: center;
+  width: 400px;
+  padding: 30px;
+  background: #fff;
+  box-shadow: 0 20px 75px rgba(0, 0, 0, 0.23);
+  color: #000;
+}
+
+.custom-ui-confirm > h1 {
+  margin-top: 0;
+}

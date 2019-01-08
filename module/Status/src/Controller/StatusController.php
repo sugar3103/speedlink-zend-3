@@ -105,6 +105,7 @@ class StatusController extends CoreController {
         if ($this->getRequest()->isPost()) {
             $data = file_get_contents('php://input');
             $data = json_decode($data, true);
+            $data['created_by'] = $user->id;
 
             $form->setData($data);
             
@@ -116,7 +117,7 @@ class StatusController extends CoreController {
                 $this->statusManager->addStatus($data,$user);
 
                 $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have added a status!";
+                $this->apiResponse['message'] = "You have added a status!";
             } else {
                 $this->error_code = 0;
                 $this->apiResponse = $form->getMessages(); 
@@ -148,6 +149,7 @@ class StatusController extends CoreController {
                 $data = file_get_contents('php://input');
                 $data = json_decode($data, true);
                 $data['status_id'] = $status_id;
+                $data['updated_by'] = $user->id;
 
                 $form->setData($data);
 
@@ -156,10 +158,10 @@ class StatusController extends CoreController {
                     // get filtered and validated data
                     $data = $form->getData();
                     // update status.
-                    $this->statusManager->updateStatus($status, $data,$user);
+                    $this->statusManager->updateStatus($status, $data);
 
                     $this->error_code = 1;
-                    $this->apiResponse['message'] = "Success: You have modified status!";
+                    $this->apiResponse['message'] = "You have modified status!";
                 } else {
                     $this->error_code = 0;
                     $this->apiResponse = $form->getMessages(); 

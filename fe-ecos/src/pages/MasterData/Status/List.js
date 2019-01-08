@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { statusActions } from '../../../actions';
+import PropTypes from 'prop-types';
+import { statusActions, modalActions } from '../../../actions';
 import { PAGE_LIMIT } from '../../../constants/config';
-import StatusItem from './StatusItem';
 import DataTable from '../../../components/Datatable';
 import Export from '../../../components/Datatable/Export';
 import ItemPerPage from '../../../components/Datatable/ItemPerPage';
 import PaginationTable from '../../../components/Datatable/PaginationTable';
-import StatusSearch from './StatusSearch';
+import Item from './Item';
+import Search from './Search';
+import Action from './Action';
 
-class StatusList extends Component {
+class List extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       pageNumber: 1,
-      pageLimit: PAGE_LIMIT
+      pageLimit: PAGE_LIMIT,
     };
   }
 
@@ -35,12 +37,16 @@ class StatusList extends Component {
     });
   }
 
+  openModal = () => {
+    this.props.onOpenModal();
+  }
+
   showStatus = (data) => {
     var result = null;
     if (data.length > 0) {
       result = data.map((status, index) => {
         return (
-          <StatusItem
+          <Item
             key={index}
             status={status}
             index={index}
@@ -55,7 +61,7 @@ class StatusList extends Component {
 
   render() {
 
-    const { loading, error, items } = this.props;
+    const { loading, items } = this.props;
 
     const thead = [
       {
@@ -91,10 +97,10 @@ class StatusList extends Component {
         <div className="col-12">
           <div className="card-box">
             <h4 className="header-title mb-4 float-left">Status</h4>
-            <button type="button" className="btn btn-success waves-light waves-effect float-right">Create New Status</button>
+            <button type="button" className="btn btn-success waves-light waves-effect float-right" onClick={this.openModal}>Create New Status</button>
             <div className="clearfix"></div>
 
-            <StatusSearch />
+            <Search />
             
             <div id="datatable_wrapper" className="dataTables_wrapper dt-bootstrap4 no-footer">
               <div className="row">
@@ -104,7 +110,6 @@ class StatusList extends Component {
               <div className="row">
                 <DataTable thead={thead}>
                   {loading && <tr><td colSpan={5} className="text-center">Loading status...</td></tr>}
-                  {error && <tr><td colSpan={5} className="text-center"><span className="text-danger">ERROR: {error}</span></td></tr>}
                   {items && items.data && this.showStatus(items.data)}
                 </DataTable>
               </div>
@@ -115,18 +120,29 @@ class StatusList extends Component {
             </div>
           </div>
         </div>
+        <Action />
       </div>
     );
   }
 }
 
+List.propTypes = {
+  loading: PropTypes.bool,
+  items: PropTypes.shape({
+    meta: PropTypes.object,
+    data: PropTypes.array
+  }),
+  paramSearch: PropTypes.object,
+  getListStatus: PropTypes.func.isRequired,
+  onOpenModal: PropTypes.func.isRequired
+}
+
 const mapStateToProps = state => {
   const { status } = state;
-  const { items, loading, error, paramSearch } = status;
+  const { items, loading, paramSearch } = status;
   
   return {
     loading,
-    error,
     items,
     paramSearch
   }
@@ -136,8 +152,11 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     getListStatus: (pageNumber, pageLimit, paramSearch) => {
       return dispatch(statusActions.getList(pageNumber, pageLimit, paramSearch));
+    },
+    onOpenModal: () => {
+      return dispatch(modalActions.open())
     }
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(StatusList);
+export default connect(mapStateToProps, mapDispatchToProps)(List);

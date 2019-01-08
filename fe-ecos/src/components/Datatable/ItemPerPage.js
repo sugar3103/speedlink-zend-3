@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { PAGE_LIMIT_OPTION } from '../../constants/config';
 
 class ItemPerPage extends Component {
@@ -31,6 +32,10 @@ class ItemPerPage extends Component {
       </div>
     );
   }
+}
+
+ItemPerPage.propTypes = {
+  handleChangePerPage: PropTypes.func.isRequired
 }
 
 export default ItemPerPage;

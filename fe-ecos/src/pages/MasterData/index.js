@@ -1,5 +1,5 @@
-import StatusList from './Status';
+import { List as StatusPage } from './Status';
 
 export {
-    StatusList
+    StatusPage
 }

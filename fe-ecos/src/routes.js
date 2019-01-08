@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dashboard } from './pages/Dashboard';
-import { StatusList } from './pages/MasterData';
+import { StatusPage } from './pages/MasterData';
 
 const routes = [
   {
@@ -11,7 +11,7 @@ const routes = [
   {
     path: '/status',
     exact: false,
-    main: () => <StatusList />
+    main: () => <StatusPage />
   }
 ];
 

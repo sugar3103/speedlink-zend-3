@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { userActions } from '../../actions';
 
 class Login extends Component {
@@ -100,13 +101,8 @@ class Login extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  const { loggingIn } = state.authentication;
-  const { alert } = state;
-  return {
-      loggingIn,
-      alert
-  };
+Login.propTypes = {
+  onLogin: PropTypes.func.isRequired
 }
 
 const mapDispatchToProps = (dispatch, props) => {
@@ -117,4 +113,4 @@ const mapDispatchToProps = (dispatch, props) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(null, mapDispatchToProps)(Login);
