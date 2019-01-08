@@ -5,118 +5,139 @@ namespace Address\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Country
+ * District
  *
- * @ORM\Table(name="country")
- * @ORM\Entity(repositoryClass="\Address\Repository\CountryRepository")
+ * @ORM\Table(name="district")
+ * @ORM\Entity(repositoryClass="\Address\Repository\DistrictRepository")
  */
-class Country
+class District
 {
-    const ACTIVE = 1;
-    const INACTIVE = 0;
-    
     /**
      * @var int
      *
-     * @ORM\Column(name="country_id", type="integer", nullable=false)
+     * @ORM\Column(name="district_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $countryId;
+    private $districtId;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="city_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $cityId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=50, nullable=false)
+     * @ORM\Column(name="name", type="string", length=50, precision=0, scale=0, nullable=false, unique=false)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name_en", type="string", length=50, nullable=false)
+     * @ORM\Column(name="name_en", type="string", length=50, precision=0, scale=0, nullable=false, unique=false)
      */
     private $nameEn;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
+     * @ORM\Column(name="description", type="text", length=65535, precision=0, scale=0, nullable=true, unique=false)
      */
     private $description;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="description_en", type="text", length=65535, nullable=true)
+     * @ORM\Column(name="description_en", type="text", length=65535, precision=0, scale=0, nullable=true, unique=false)
      */
     private $descriptionEn;
 
     /**
-     * @var int
+     * @var int|null
      *
-     * @ORM\Column(name="status", type="integer", nullable=false)
+     * @ORM\Column(name="status", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $status;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_deleted", type="boolean", nullable=false)
+     * @ORM\Column(name="is_deleted", type="boolean", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $isDeleted = '0';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="iso_code", type="string", length=50, nullable=false)
-     */
-    private $isoCode;
+    private $isDeleted;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="created_by", type="integer", nullable=false)
+     * @ORM\Column(name="created_by", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $createdBy;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     * @ORM\Column(name="created_at", type="datetime", precision=0, scale=0, nullable=false, unique=false)
      */
     private $createdAt;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="update_by", type="integer", nullable=true)
+     * @ORM\Column(name="update_by", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $updatedBy;
+    private $updateBy;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     * @ORM\Column(name="updated_at", type="datetime", precision=0, scale=0, nullable=true, unique=false)
      */
     private $updatedAt;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="ref_as_by", type="integer", nullable=true)
+     * @ORM\Column(name="ref_as_by", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $refAsBy;
 
-    
-      /**
-     * Get countryId.
+
+    /**
+     * Get districtId.
      *
      * @return int
      */
-    public function getCountryId()
+    public function getDistrictId()
     {
-        return $this->countryId;
+        return $this->districtId;
+    }
+
+    /**
+     * Set cityId.
+     *
+     * @param int $cityId
+     *
+     * @return District
+     */
+    public function setCityId($cityId)
+    {
+        $this->cityId = $cityId;
+
+        return $this;
+    }
+
+    /**
+     * Get cityId.
+     *
+     * @return int
+     */
+    public function getCityId()
+    {
+        return $this->cityId;
     }
 
     /**
@@ -124,7 +145,7 @@ class Country
      *
      * @param string $name
      *
-     * @return Country
+     * @return District
      */
     public function setName($name)
     {
@@ -148,7 +169,7 @@ class Country
      *
      * @param string $nameEn
      *
-     * @return Country
+     * @return District
      */
     public function setNameEn($nameEn)
     {
@@ -172,7 +193,7 @@ class Country
      *
      * @param string|null $description
      *
-     * @return Country
+     * @return District
      */
     public function setDescription($description = null)
     {
@@ -196,7 +217,7 @@ class Country
      *
      * @param string|null $descriptionEn
      *
-     * @return Country
+     * @return District
      */
     public function setDescriptionEn($descriptionEn = null)
     {
@@ -218,11 +239,11 @@ class Country
     /**
      * Set status.
      *
-     * @param int $status
+     * @param int|null $status
      *
-     * @return Country
+     * @return District
      */
-    public function setStatus($status)
+    public function setStatus($status = null)
     {
         $this->status = $status;
 
@@ -232,7 +253,7 @@ class Country
     /**
      * Get status.
      *
-     * @return int
+     * @return int|null
      */
     public function getStatus()
     {
@@ -244,7 +265,7 @@ class Country
      *
      * @param bool $isDeleted
      *
-     * @return Country
+     * @return District
      */
     public function setIsDeleted($isDeleted)
     {
@@ -264,35 +285,11 @@ class Country
     }
 
     /**
-     * Set isoCode.
-     *
-     * @param string $isoCode
-     *
-     * @return Country
-     */
-    public function setIsoCode($isoCode)
-    {
-        $this->isoCode = $isoCode;
-
-        return $this;
-    }
-
-    /**
-     * Get isoCode.
-     *
-     * @return string
-     */
-    public function getIsoCode()
-    {
-        return $this->isoCode;
-    }
-
-    /**
      * Set createdBy.
      *
      * @param int $createdBy
      *
-     * @return Country
+     * @return District
      */
     public function setCreatedBy($createdBy)
     {
@@ -316,7 +313,7 @@ class Country
      *
      * @param \DateTime $createdAt
      *
-     * @return Country
+     * @return District
      */
     public function setCreatedAt($createdAt)
     {
@@ -336,27 +333,27 @@ class Country
     }
 
     /**
-     * Set updatedBy.
+     * Set updateBy.
      *
-     * @param int|null $updatedBy
+     * @param int|null $updateBy
      *
-     * @return Country
+     * @return District
      */
-    public function setUpdatedBy($updatedBy = null)
+    public function setUpdateBy($updateBy = null)
     {
-        $this->updatedBy = $updatedBy;
+        $this->updateBy = $updateBy;
 
         return $this;
     }
 
     /**
-     * Get updatedBy.
+     * Get updateBy.
      *
      * @return int|null
      */
-    public function getUpdatedBy()
+    public function getUpdateBy()
     {
-        return $this->updatedBy;
+        return $this->updateBy;
     }
 
     /**
@@ -364,7 +361,7 @@ class Country
      *
      * @param \DateTime|null $updatedAt
      *
-     * @return Country
+     * @return District
      */
     public function setUpdatedAt($updatedAt = null)
     {
@@ -388,7 +385,7 @@ class Country
      *
      * @param int|null $refAsBy
      *
-     * @return Country
+     * @return District
      */
     public function setRefAsBy($refAsBy = null)
     {
@@ -405,35 +402,5 @@ class Country
     public function getRefAsBy()
     {
         return $this->refAsBy;
-    }
-
-     /**
-     * Returns user status as string.
-     * @return string
-     */
-    public function getIsActiveAsString()
-    {
-        $list = self::getIsActiveList();
-        if (isset($list[$this->isActive]))
-            return $list[$this->isActive];
-
-        return 'Unknown';
-    }
-
-    /**
-     * Returns possible statuses as array.
-     * @return array
-     */
-    public static function getIsActiveList($value = null)
-    {
-        $status = [
-            self::ACTIVE => 'Active',
-            self::INACTIVE => 'Inactive'
-        ];
-
-        if(!empty($value) && isset($status[$value])) {
-            return $status[$value];
-        }
-        return $status;
     }
 }

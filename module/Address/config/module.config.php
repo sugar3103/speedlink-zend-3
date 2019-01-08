@@ -33,7 +33,11 @@ $router = [
                 'country' => [
                     'type'  => Segment::class,
                     'options' => [
-                        'route' => '/country',
+                        'route' => '/country[/:action[/:id]]',
+                        'constraints' => [
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'id' => '[a-zA-Z0-9_-]*',
+                        ],                       
                         'defaults' => [
                             'controller' => Controller\CountryController::class,
                             'action' => 'list',

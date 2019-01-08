@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Zend\Authentication\Result;
 use Zend\Cache\Storage\StorageInterface;
 use Address\Entity\Country;
+use Address\Form\CountryForm;
 
 class CountryController extends CoreController {
     /**
@@ -21,11 +22,11 @@ class CountryController extends CoreController {
     protected $countryManager;
 
     public function __construct($entityManager, $countryManager) {
-            
+        
+        parent::__construct($entityManager);
         $this->entityManager = $entityManager;
         $this->countryManager = $countryManager;
     }
-
 
     public function indexAction()
     {
@@ -70,12 +71,89 @@ class CountryController extends CoreController {
                 "data" => ($dataCountry['listCountry']) ? $dataCountry['listCountry'] : []           
             ];
             
-            $this->apiResponse = $result;
-            return $this->createResponse();
+            $this->apiResponse = $result;            
         } else {
-            $this->apiResponse['message'] = 'Country List';
-
-            return $this->createResponse();
+            $this->httpStatusCode = 404;
+            $this->apiResponse['message'] = "Page Not Found";            
         }
+        return $this->createResponse();
+    }
+
+    public function addAction() {
+        if ($this->getRequest()->isPost()) {
+            // fill in the form with POST data.
+            $payload = file_get_contents('php://input');
+            $data = json_decode($payload, true);
+
+            $user = $this->tokenPayload;
+            //Create New Form Country
+            $form = new CountryForm('create', $this->entityManager);
+            
+
+            $form->setData($data);
+            
+            //validate form
+            if ($form->isValid()) {
+                // get filtered and validated data
+                $data = $form->getData();
+                // add status.
+                $this->countryManager->addCountry($data,$user);
+
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have added a country!";
+            } else {
+                $this->error_code = 0;
+                $this->apiResponse = $form->getMessages(); 
+            } 
+
+        } else {
+            $this->httpStatusCode = 404;
+            $this->apiResponse['message'] = "Page Not Found";            
+        }
+
+        return $this->createResponse();        
+    }
+
+    public function editAction() {
+        if ($this->getRequest()->isPost()) {
+             // fill in the form with POST data.
+             $payload = file_get_contents('php://input');
+             $data = json_decode($payload, true);
+
+             $user = $this->tokenPayload;
+             $country = $this->entityManager->getRepository(Country::class)
+                ->findOneBy(array('countryId' => $data['country_id']));
+             
+             //Create New Form Country
+             $form = new CountryForm('update', $this->entityManager, $country);
+             $form->setData($data);
+             if ($form->isValid()) {
+                $data = $form->getData();
+                
+                $this->countryManager->updateCountry($country, $data,$user);
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have modified country!";
+             }  else {
+                $this->error_code = 0;
+                $this->apiResponse = $form->getMessages(); 
+             }   
+             
+        } else {
+            $this->httpStatusCode = 404;
+            $this->apiResponse['message'] = "Page Not Found";
+        }
+        
+        return $this->createResponse();
+    }
+
+    public function delectAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            
+        } else {
+            $this->httpStatusCode = 404;
+            $this->apiResponse['message'] = "Page Not Found";            
+        }
+        return $this->createResponse();
     }
 }

@@ -35,10 +35,12 @@ class CountryRepository extends EntityRepository {
                 "c.countryId,
                  c.name,
                  c.description,
+                 c.isoCode,
                  c.status,
                  c.createdBy,
                  c.createdAt"                 
-            )->groupBy('c.countryId')
+            )->where("c.isDeleted = 0")
+            ->groupBy('c.countryId')
             ->setMaxResults($limit)
             ->setFirstResult($offset);
             

@@ -32,18 +32,17 @@ class CountryManager  {
 
             $country = new Country();
             $country->setName($data['name']);
+            $country->setNameEn($data['name_en']);
             $country->setDescription($data['description']);
+            $country->setDescriptionEn($data['description_en']);
             $country->setStatus($data['status']);
-            $country->setZipCode($data['zip_code']);
-            $country->setCountryId($data['country_id']);
+            $country->setIsoCode($data['iso_code']);
+            $country->setRefAsBy($data['ref_as_by']);
 
             $currentDate = date('Y-m-d H:i:s');
             $country->setCreatedAt($currentDate);
             $country->setCreatedBy($user->id);
-
-            $country->setCreatedAt($currentDate);
-            $country->setCreatedBy($user->id);
-           
+  
             // add the entity to the entity manager.
             $this->entityManager->persist($country);
 
@@ -60,6 +59,48 @@ class CountryManager  {
             return FALSE;
         }
 
+    }
+
+    /**
+     * Update Country
+     * 
+     * @param $data
+     * @return Country|bool
+     * @throws \Exception
+     */
+    public function updateCountry($country, $data, $user)
+    {
+        // begin transaction
+        $this->entityManager->beginTransaction();
+        try {
+
+            $country->setName($data['name']);
+            $country->setNameEn($data['name_en']);
+            $country->setDescription($data['description']);
+            $country->setDescriptionEn($data['description_en']);
+            $country->setStatus($data['status']);
+            $country->setIsoCode($data['iso_code']);
+            $country->setRefAsBy($data['ref_as_by']);
+
+            $currentDate = date('Y-m-d H:i:s');
+            $country->setUpdatedAt($currentDate);
+            $country->setUpdatedBy($user->id);
+           
+            // add the entity to the entity manager.
+            $this->entityManager->persist($country);
+
+            // apply changes to database.
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+
+            return $country;
+        }
+        catch (ORMException $e) {
+
+            $this->entityManager->rollback();
+            return FALSE;
+        }
     }
 
     /**

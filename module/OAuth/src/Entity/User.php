@@ -53,11 +53,6 @@ class User
     protected $language='en_US';
 
     /**
-     * @ORM\Column(type="datetime",name="deleted_at")
-     */
-    protected $deletedAt;
-
-    /**
      * @ORM\Column(type="datetime",name="created_at")
      */
     protected $createdAt;
@@ -256,24 +251,6 @@ class User
      */
     public function setUpdatedAt($updatedAt) {
         $this->updatedAt = $updatedAt;
-    }
-
-    /**
-     * Get Deleted At.
-     *
-     * @return mixed
-     */
-    public function getDeletedAt() {
-        return $this->deletedAt;
-    }
-
-    /**
-     * Set Deleted At.
-     *
-     * @param $deletedAt
-     */
-    public function setDeletedAt($deletedAt) {
-        $this->deletedAt = $deletedAt;
     }
 
     /**

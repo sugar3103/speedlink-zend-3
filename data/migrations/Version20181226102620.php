@@ -29,8 +29,7 @@ final class Version20181226102620 extends AbstractMigration
           created_by                      int(11)                           not null,
           created_at                      datetime                              null,
           updated_by                      int(11)                               null,
-          updated_at                      datetime                              null,
-          
+          updated_at                      datetime                              null,          
           constraint unique_code
           unique (code)
         )
@@ -56,38 +55,8 @@ final class Version20181226102620 extends AbstractMigration
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
-
+        $this->addSql('DROP TABLE hub');
+        $this->addSql('DROP TABLE branch');
     }
-    // private function defineTables() {
-    //     $tables['branch']= array(
-    //         'query' => 'create table',
-    //         'columns' => array(
-    //             'branch_id' => 'int(11) auto_increment primary key',
-    //             'hub_id'  => 'int(11) not null',
-    //             'code' => 'text varchar(20) not null',
-    //             'status'   => 'int(1) not null',
-    //             'created_by'    => 'int(11) not null',
-    //             'created_at'    =>'datetime not null',
-    //             'updated_by' => 'int(11)',
-    //             'updated_at'    => 'datetime'
-    //         )
-    //     );
-
-    //     $tables['hub'] = array(
-    //         'query' => 'create table',
-    //         'columns'    => array(
-    //             'hub_id' => 'int(11) auto_increment primary key',
-    //             'city_id' => 'int(11) not null',
-    //             'code' => 'text varchar(20) not null',
-    //             'status'   => 'int(1) not null',
-    //             'created_by'    => 'int(11) not null',
-    //             'created_at'    =>'datetime not null',
-    //             'updated_by' => 'int(11)',
-    //             'updated_at'    => 'datetime'
-    //         )
-    //     );      
-
-    //     return $tables;
-    // }
 
 }

@@ -1,32 +1,25 @@
 <?php
 
-namespace Address\Entity;
+
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Ward
+ * Status
  *
- * @ORM\Table(name="ward")
- * @ORM\Entity(repositoryClass="\Address\Repository\WardRepository")
+ * @ORM\Table(name="status")
+ * @ORM\Entity
  */
-class Ward
+class Status
 {
-     /**
-     * @var int
-     *
-     * @ORM\Column(name="ward_id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $wardId;
-
     /**
      * @var int
      *
-     * @ORM\Column(name="district_id", type="integer", nullable=false)
+     * @ORM\Column(name="status_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $districtId;
+    private $statusId;
 
     /**
      * @var string
@@ -55,13 +48,6 @@ class Ward
      * @ORM\Column(name="description_en", type="text", length=65535, nullable=true)
      */
     private $descriptionEn;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="postal_code", type="string", length=20, nullable=true)
-     */
-    private $postalCode;
 
     /**
      * @var int
@@ -94,9 +80,9 @@ class Ward
     /**
      * @var int|null
      *
-     * @ORM\Column(name="update_by", type="integer", nullable=true)
+     * @ORM\Column(name="updated_by", type="integer", nullable=true)
      */
-    private $updateBy;
+    private $updatedBy;
 
     /**
      * @var \DateTime|null
@@ -104,14 +90,6 @@ class Ward
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
     private $updatedAt;
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="ref_as_by", type="integer", nullable=true)
-     */
-    private $refAsBy;
-
 
 
 }
