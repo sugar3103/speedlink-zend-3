@@ -25,21 +25,22 @@ final class Version20181108064727 extends AbstractMigration
               email                           varchar(100)                          null,
               password                        char(60)                              null,
               first_name                      varchar(100)                          null,
-              last_name                       varchar(100)                          null,
-              language                        char(5) default \'en_US\'             not null,
-              created_at                      timestamp default current_timestamp() not null
-              on update current_timestamp(),
+              last_name                       varchar(100)                          null,              
               is_active                       int(1) default 0                      not null
               comment \'active=1,inactive=0\',
-              updated_by                      int(11)                               null,
-              deleted_at                      timestamp                             null,
-              updated_at                      timestamp                             null,
               is_admin                        int(1) default 0                      not null,
               is_ldap                         int(1) default 0                      not null,
               username                        varchar(100)                          not null,
               password_reset_token            varchar(32)                           null,
               password_reset_token_created_at datetime                              null,
+              language                        char(5) default \'en_US\'               not null,
               last_token                      varchar(255)                          null,
+              created_by                      int(11) not null,
+              created_at                      timestamp default current_timestamp() not null
+              on update current_timestamp(),
+              updated_by                      int(11) null,
+              updated_at                      timestamp default current_timestamp() null
+              on update current_timestamp(),
               last_token_create_at            datetime                              null,
               constraint unique_username
               unique (username)
@@ -51,11 +52,17 @@ final class Version20181108064727 extends AbstractMigration
               id          int(11) auto_increment
                 primary key,
               name        varchar(100) not null,
-              created_at  timestamp  not null,
-              updated_at  timestamp  not null,
+              name_en        varchar(100) not null,
+              created_by  int(11)  not null,
+              created_at  timestamp default current_timestamp() not null
+              on update current_timestamp(),              
+              updated_by  int(11)  null,
+              updated_at  timestamp default current_timestamp() null
+              on update current_timestamp(),              
               description text null,
-              constraint role_name_uindex
-              unique (name)
+              description_en text null,
+              constraint role_id_uindex
+              unique (id)
             )
               collate = utf8_unicode_ci');
 
@@ -87,11 +94,14 @@ final class Version20181108064727 extends AbstractMigration
               id          int(11) auto_increment
                 primary key,
               name        varchar(100)                            not null,
+              name_en        varchar(100)                            not null,
               model       text                                    null,
               description text                                    null,
-              created_at  timestamp  not null,
-              updated_at  timestamp  not null,
-              deleted_at  timestamp default current_timestamp()   not null
+              description_en text                                    null,
+              created_by int(11) not null,
+              created_at  timestamp default current_timestamp()   not null,
+              updated_by int(11) null,
+              updated_at  timestamp default current_timestamp()   not null              
             )
               collate = utf8_unicode_ci');
 

@@ -12,13 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Country
 {
-    const ACTIVE = 1;
-    const INACTIVE = 0;
-    
     /**
      * @var int
      *
-     * @ORM\Column(name="country_id", type="integer", nullable=false)
+     * @ORM\Column(name="country_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -27,89 +24,89 @@ class Country
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=50, nullable=false)
+     * @ORM\Column(name="name", type="string", length=50, precision=0, scale=0, nullable=false, unique=false)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name_en", type="string", length=50, nullable=false)
+     * @ORM\Column(name="name_en", type="string", length=50, precision=0, scale=0, nullable=false, unique=false)
      */
     private $nameEn;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
+     * @ORM\Column(name="description", type="text", length=65535, precision=0, scale=0, nullable=true, unique=false)
      */
     private $description;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="description_en", type="text", length=65535, nullable=true)
+     * @ORM\Column(name="description_en", type="text", length=65535, precision=0, scale=0, nullable=true, unique=false)
      */
     private $descriptionEn;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="status", type="integer", nullable=false)
+     * @ORM\Column(name="status", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $status;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_deleted", type="boolean", nullable=false)
+     * @ORM\Column(name="is_deleted", type="boolean", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $isDeleted = '0';
+    private $isDeleted;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="iso_code", type="string", length=50, nullable=false)
+     * @ORM\Column(name="iso_code", type="string", length=50, precision=0, scale=0, nullable=false, unique=false)
      */
     private $isoCode;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="created_by", type="integer", nullable=false)
+     * @ORM\Column(name="created_by", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $createdBy;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     * @ORM\Column(name="created_at", type="datetime", precision=0, scale=0, nullable=false, unique=false)
      */
     private $createdAt;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="update_by", type="integer", nullable=true)
+     * @ORM\Column(name="update_by", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $updatedBy;
+    private $updateBy;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     * @ORM\Column(name="updated_at", type="datetime", precision=0, scale=0, nullable=true, unique=false)
      */
     private $updatedAt;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="ref_as_by", type="integer", nullable=true)
+     * @ORM\Column(name="ref_as_by", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $refAsBy;
 
-    
-      /**
+
+    /**
      * Get countryId.
      *
      * @return int
@@ -336,27 +333,27 @@ class Country
     }
 
     /**
-     * Set updatedBy.
+     * Set updateBy.
      *
-     * @param int|null $updatedBy
+     * @param int|null $updateBy
      *
      * @return Country
      */
-    public function setUpdatedBy($updatedBy = null)
+    public function setUpdateBy($updateBy = null)
     {
-        $this->updatedBy = $updatedBy;
+        $this->updateBy = $updateBy;
 
         return $this;
     }
 
     /**
-     * Get updatedBy.
+     * Get updateBy.
      *
      * @return int|null
      */
-    public function getUpdatedBy()
+    public function getUpdateBy()
     {
-        return $this->updatedBy;
+        return $this->updateBy;
     }
 
     /**
@@ -405,35 +402,5 @@ class Country
     public function getRefAsBy()
     {
         return $this->refAsBy;
-    }
-
-     /**
-     * Returns user status as string.
-     * @return string
-     */
-    public function getIsActiveAsString()
-    {
-        $list = self::getIsActiveList();
-        if (isset($list[$this->isActive]))
-            return $list[$this->isActive];
-
-        return 'Unknown';
-    }
-
-    /**
-     * Returns possible statuses as array.
-     * @return array
-     */
-    public static function getIsActiveList($value = null)
-    {
-        $status = [
-            self::ACTIVE => 'Active',
-            self::INACTIVE => 'Inactive'
-        ];
-
-        if(!empty($value) && isset($status[$value])) {
-            return $status[$value];
-        }
-        return $status;
     }
 }

@@ -16,9 +16,9 @@ final class Version20181228072455 extends AbstractMigration
         $this->addSql("CREATE TABLE service
             (
                 id                INT(11) AUTO_INCREMENT PRIMARY KEY,
-                service_name_vn   VARCHAR(50) NULL,
+                service_name   VARCHAR(50) NULL,
                 service_name_en   VARCHAR(50) NULL,
-                description_vn    TEXT NULL,
+                description    TEXT NULL,
                 description_en    TEXT NULL,
                 service_code      CHAR(50) NULL,
                 status            TINYINT(1) NOT NULL DEFAULT 0,
@@ -32,9 +32,9 @@ final class Version20181228072455 extends AbstractMigration
         $this->addSql("CREATE TABLE shipment_type
             (
                 id                      INT(11) AUTO_INCREMENT PRIMARY KEY,
-                shipment_type_name_vn   VARCHAR(50) NULL,
+                shipment_type_name   VARCHAR(50) NULL,
                 shipment_type_name_en   VARCHAR(50) NULL,
-                description_vn          TEXT NULL,
+                description          TEXT NULL,
                 description_en          TEXT NULL,
                 shipment_type_code      CHAR(50) NULL,
                 carrier_id              INT(11) NOT NULL,
@@ -53,9 +53,9 @@ final class Version20181228072455 extends AbstractMigration
         $this->addSql("CREATE TABLE carrier
             (
                 id                INT(11) AUTO_INCREMENT PRIMARY KEY,
-                carrier_name_vn   VARCHAR(50) NULL,
+                carrier_name   VARCHAR(50) NULL,
                 carrier_name_en   VARCHAR(50) NULL,
-                description_vn    TEXT NULL,
+                description    TEXT NULL,
                 description_en    TEXT NULL,
                 carrier_code      CHAR(50) NULL,
                 status            TINYINT(1) NOT NULL DEFAULT 0,

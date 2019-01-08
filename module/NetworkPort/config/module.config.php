@@ -7,7 +7,6 @@ use DoctrineExtensions\Query\Mysql\GroupConcat;
 use Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter;
 use Gedmo\SoftDeleteable\SoftDeleteableListener;
 use Gedmo\Timestampable\TimestampableListener;
-use Zend\Authentication\AuthenticationService;
 use Zend\Cache\Storage\Adapter\Filesystem;
 use Zend\Log\Formatter\Simple;
 use Zend\Log\Logger;

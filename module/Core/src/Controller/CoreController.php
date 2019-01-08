@@ -28,6 +28,6 @@ class CoreController extends ApiController
 
     public function getRequestData()
     {
-        
+        return $data;
     }
 }
