@@ -216,5 +216,27 @@ class BranchManager {
             return FALSE;
         }
     }
+    
+    /**
+     * Get value filters search
+     *
+     * @param $params
+     * @param $fieldsMap
+     * @return array
+     */
+    public function getValueFiltersSearch($params,$fieldsMap)
+    {
+        $filters = [];
+
+        if (isset($params['query']) && !empty($params['query'])){
+          foreach ($params['query'] as $key => $column) {
+              if(isset($fieldsMap[$key]) && !empty($column)) {
+                  $filters[$key] = $column;
+              }
+          }
+           
+        }
+        return $filters;
+    }
 
 }

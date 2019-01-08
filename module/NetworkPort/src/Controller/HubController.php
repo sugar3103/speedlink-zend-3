@@ -33,6 +33,7 @@ class HubController extends CoreController {
         $entityManager,
         $hubManager
      ) {
+        parent::__construct($entityManager);
         $this->entityManager = $entityManager;
         $this->hubManager = $hubManager;
         // $this->cache = $cache;
@@ -44,21 +45,34 @@ class HubController extends CoreController {
       // $params = $this->params()->fromPost();
 
       $payload = file_get_contents('php://input');
-      $data = json_decode($payload, true);
+      $params = json_decode($payload, true);
 
-      $currentPage = $data['page'];
-      $totalPages = $data['pages'];
-      $limit = $data['limit'];
-      $sortField = isset($data['field']) ? $data['field'] : NULL;
-      $sortDirection = isset($data['sort']) ? $data['sort'] : NULL;
-      $filters = [];
+      //the current page number.
+      $offset = isset($params['start']) ? $params['start'] : 0;
+        
+      //total number of pages available in the server.
+      $totalPages = 1;
+
+      //set limit
+      $limit  = isset($params['length']) ? $params['length'] : 10;
+
+      // get the filters
+      $fieldsMap = [
+          0 => 'name',
+          1 => 'status',
+      ];
+      //get and set sortField,sortDirection
+      $sortField = isset($params['sort']) ? $params['sort'] : $fieldsMap[0];
+      $sortDirection = isset($params['order']) ? $params['order'] : 'ASC';
+
+      $filters = $this->hubManager->getValueFiltersSearch($params,$fieldsMap);
 
       $dataHub = $this->hubManager->getListHubByCondition(
-                $currentPage, $limit, $sortField, $sortDirection, $filters);
+                $offset, $limit, $sortField, $sortDirection, $filters);
 
       return new JsonModel([
           "meta" => [
-              "page" => $currentPage,
+              "page" => $offset,
               "pages" => $totalPages,
               "perpage"=> $limit,
               "total" => $dataHub['totalHub'],//total all records number available in the server
