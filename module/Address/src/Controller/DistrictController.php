@@ -53,7 +53,7 @@ class DistrictController extends CoreController {
             // get the filters
             $fieldsMap = [
                 0 => 'name',
-                1 => 'city',
+                1 => 'district',
                 2 => 'status'
             ];
 
@@ -83,12 +83,12 @@ class DistrictController extends CoreController {
 
     public function addAction()
     {   
-        $user = $this->tokenPayload;
-        //Create New Form District
-        $form = new DistrictForm('create', $this->entityManager);
-
         // check if district  has submitted the form
         if ($this->getRequest()->isPost()) {
+            $user = $this->tokenPayload;
+            //Create New Form District
+            $form = new DistrictForm('create', $this->entityManager);
+
             $data = file_get_contents('php://input');
             $data = json_decode($data, true);
 
@@ -100,14 +100,79 @@ class DistrictController extends CoreController {
                 $data = $form->getData();
                 // add user.
                 $district = $this->districtManager->addDistrict($data,$user);
-
                 $this->error_code = 1;
                 $this->apiResponse['message'] = "Success: You have modified Districts!";
             } else {
+                $this->error_code = 0;
                 $this->apiResponse = $form->getMessages(); 
+                
             }            
+        } else {
+            $this->httpStatusCode = 404;
+            $this->apiResponse['message'] = "Page Not Found";                 
         }
 
+        return $this->createResponse();
+    }
+
+    public function editAction() {
+        if ($this->getRequest()->isPost()) {
+             // fill in the form with POST data.
+             $payload = file_get_contents('php://input');
+             $data = json_decode($payload, true);
+             $user = $this->tokenPayload;
+             $district = $this->entityManager->getRepository(District::class)
+                ->findOneBy(array('districtId' => $data['district_id']));
+            if(isset($data['district_id']) && $district) {
+                //Create New Form District
+                $form = new DistrictForm('update', $this->entityManager, $district);
+                $form->setData($data);
+                if ($form->isValid()) {
+                   $data = $form->getData();
+                   
+                   $this->districtManager->updateDistrict($district, $data,$user);
+                   $this->error_code = 1;
+                   $this->apiResponse['message'] = "Success: You have modified district!";
+                }  else {
+                   $this->error_code = 0;
+                   $this->apiResponse = $form->getMessages(); 
+                }   
+            }   else {
+                $this->error_code = 0;
+                $this->apiResponse['message'] = 'District Not Found'; 
+            }         
+             
+        } else {
+            $this->httpStatusCode = 404;
+            $this->apiResponse['message'] = "Page Not Found";
+        }
+        
+        return $this->createResponse();
+    }
+
+    public function deleteAction()
+    {
+        if ($this->getRequest()->isPost()) {
+              // fill in the form with POST data.
+              $payload = file_get_contents('php://input');
+              $data = json_decode($payload, true);
+ 
+              $user = $this->tokenPayload;
+              $district = $this->entityManager->getRepository(District::class)
+                 ->findOneBy(array('districtId' => $data['district_id']));
+            if($district) {
+                $this->districtManager->deleteDistrict($district);
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have deleted district!";
+            } else {
+                $this->httpStatusCode = 200;
+                $this->error_code = -1;
+                $this->apiResponse['message'] = "Not Found District";
+            }
+        } else {
+            $this->httpStatusCode = 404;
+            $this->apiResponse['message'] = "Page Not Found";            
+        }
         return $this->createResponse();
     }
 }

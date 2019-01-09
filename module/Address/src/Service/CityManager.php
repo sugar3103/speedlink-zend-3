@@ -31,18 +31,18 @@ class CityManager  {
 
             $city = new City();
             $city->setName($data['name']);
+            $city->setNameEn($data['name_en']);
             $city->setDescription($data['description']);
+            $city->setDescriptionEn($data['description_en']);
             $city->setStatus($data['status']);
             $city->setZipCode($data['zip_code']);
             $city->setCountryId($data['country_id']);
+            $city->setRefAsBy($data['ref_as_by']);
 
             $currentDate = date('Y-m-d H:i:s');
             $city->setCreatedAt($currentDate);
             $city->setCreatedBy($user->id);
 
-            $city->setCreatedAt($currentDate);
-            $city->setCreatedBy($user->id);
-           
             // add the entity to the entity manager.
             $this->entityManager->persist($city);
 
@@ -60,6 +60,77 @@ class CityManager  {
         }
 
     }
+
+     /**
+     * Update City
+     * 
+     * @param $data
+     * @return City|bool
+     * @throws \Exception
+     */
+    public function updateCity($city, $data, $user)
+    {
+        // begin transaction
+        $this->entityManager->beginTransaction();
+        try {
+
+            $city->setName($data['name']);
+            $city->setNameEn($data['name_en']);
+            $city->setDescription($data['description']);
+            $city->setDescriptionEn($data['description_en']);
+            $city->setStatus($data['status']);
+            $city->setZipCode($data['zip_code']);
+            $city->setCountryId($data['country_id']);
+            $city->setRefAsBy($data['ref_as_by']);
+
+            $currentDate = date('Y-m-d H:i:s');
+            $city->setUpdatedAt($currentDate);
+            $city->setUpdatedBy($user->id);
+           
+            // add the entity to the entity manager.
+            $this->entityManager->persist($city);
+
+            // apply changes to database.
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+
+            return $city;
+        }
+        catch (ORMException $e) {
+
+            $this->entityManager->rollback();
+            return FALSE;
+        }
+    }
+
+    /**
+     * Remove City
+     *
+     * @param $city
+     * @return City|bool
+     * @throws \Exception
+     */
+    public function deleteCity($city) {
+        // begin transaction
+        $this->entityManager->beginTransaction();
+        try {
+
+            $this->entityManager->remove($city);
+        
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+
+            return $city;
+        }
+        catch (ORMException $e) {
+
+            $this->entityManager->rollback();
+            return FALSE;
+        }
+    }
+
 
     /**
      * Get list city by condition
@@ -116,7 +187,8 @@ class CityManager  {
         ];
         return $dataCity;
     }
-    
+
+       
     /**
      * Check date format
      *

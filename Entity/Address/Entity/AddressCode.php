@@ -87,7 +87,7 @@ class AddressCode
     /**
      * @var int|null
      *
-     * @ORM\Column(name="update_by", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="updated_by", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $updateBy;
 

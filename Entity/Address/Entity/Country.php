@@ -87,9 +87,9 @@ class Country
     /**
      * @var int|null
      *
-     * @ORM\Column(name="update_by", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="updated_by", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $updateBy;
+    private $updatedBy;
 
     /**
      * @var \DateTime|null
@@ -333,27 +333,27 @@ class Country
     }
 
     /**
-     * Set updateBy.
+     * Set updatedBy.
      *
-     * @param int|null $updateBy
+     * @param int|null $updatedBy
      *
      * @return Country
      */
-    public function setUpdateBy($updateBy = null)
+    public function setUpdatedBy($updatedBy = null)
     {
-        $this->updateBy = $updateBy;
+        $this->updatedBy = $updatedBy;
 
         return $this;
     }
 
     /**
-     * Get updateBy.
+     * Get updatedBy.
      *
      * @return int|null
      */
-    public function getUpdateBy()
+    public function getUpdatedBy()
     {
-        return $this->updateBy;
+        return $this->updatedBy;
     }
 
     /**

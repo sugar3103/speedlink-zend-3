@@ -39,7 +39,6 @@ class CountryController extends CoreController {
         if ($this->getRequest()->isPost()) {
             $payload = file_get_contents('php://input');
             $params = json_decode($payload, true);
-            
           
             //the current page number.
             $currentPage = isset($params['start']) ? $params['start'] : 0;
@@ -146,10 +145,25 @@ class CountryController extends CoreController {
         return $this->createResponse();
     }
 
-    public function delectAction()
+    public function deleteAction()
     {
         if ($this->getRequest()->isPost()) {
-            
+              // fill in the form with POST data.
+              $payload = file_get_contents('php://input');
+              $data = json_decode($payload, true);
+ 
+              $user = $this->tokenPayload;
+              $country = $this->entityManager->getRepository(Country::class)
+                 ->findOneBy(array('countryId' => $data['country_id']));
+            if($country) {
+                $this->countryManager->deleteCountry($country);
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have deleted status!";
+            } else {
+                $this->httpStatusCode = 200;
+                $this->error_code = -1;
+                $this->apiResponse['message'] = "Not Found Country";
+            }
         } else {
             $this->httpStatusCode = 404;
             $this->apiResponse['message'] = "Page Not Found";            

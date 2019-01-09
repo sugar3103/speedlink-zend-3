@@ -104,6 +104,32 @@ class CountryManager  {
     }
 
     /**
+     * Remove Country
+     *
+     * @param $country
+     * @return Country|bool
+     * @throws \Exception
+     */
+    public function deleteCountry($country) {
+        // begin transaction
+        $this->entityManager->beginTransaction();
+        try {
+
+            $this->entityManager->remove($country);
+        
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+
+            return $country;
+        }
+        catch (ORMException $e) {
+
+            $this->entityManager->rollback();
+            return FALSE;
+        }
+    }
+    /**
      * Get list country by condition
      *
      * @param $currentPage

@@ -53,7 +53,7 @@ class WardController extends CoreController {
             // get the filters
             $fieldsMap = [
                 0 => 'name',
-                1 => 'district',
+                1 => 'ward',
                 2 => 'status'
             ];
 
@@ -84,12 +84,12 @@ class WardController extends CoreController {
 
     public function addAction()
     {   
-        $user = $this->tokenPayload;
-        //Create New Form Ward
-        $form = new WardForm('create', $this->entityManager);
-
         // check if ward  has submitted the form
         if ($this->getRequest()->isPost()) {
+            $user = $this->tokenPayload;
+            //Create New Form Ward
+            $form = new WardForm('create', $this->entityManager);
+
             $data = file_get_contents('php://input');
             $data = json_decode($data, true);
 
@@ -101,14 +101,79 @@ class WardController extends CoreController {
                 $data = $form->getData();
                 // add user.
                 $ward = $this->wardManager->addWard($data,$user);
-
                 $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have modified Cities!";
+                $this->apiResponse['message'] = "Success: You have modified Wards!";
             } else {
+                $this->error_code = 0;
                 $this->apiResponse = $form->getMessages(); 
+                
             }            
+        } else {
+            $this->httpStatusCode = 404;
+            $this->apiResponse['message'] = "Page Not Found";                 
         }
 
+        return $this->createResponse();
+    }
+
+    public function editAction() {
+        if ($this->getRequest()->isPost()) {
+             // fill in the form with POST data.
+             $payload = file_get_contents('php://input');
+             $data = json_decode($payload, true);
+             $user = $this->tokenPayload;
+             $ward = $this->entityManager->getRepository(Ward::class)
+                ->findOneBy(array('wardId' => $data['ward_id']));
+            if(isset($data['ward_id']) && $ward) {
+                //Create New Form Ward
+                $form = new WardForm('update', $this->entityManager, $ward);
+                $form->setData($data);
+                if ($form->isValid()) {
+                   $data = $form->getData();
+                   
+                   $this->wardManager->updateWard($ward, $data,$user);
+                   $this->error_code = 1;
+                   $this->apiResponse['message'] = "Success: You have modified ward!";
+                }  else {
+                   $this->error_code = 0;
+                   $this->apiResponse = $form->getMessages(); 
+                }   
+            }   else {
+                $this->error_code = 0;
+                $this->apiResponse['message'] = 'Ward Not Found'; 
+            }         
+             
+        } else {
+            $this->httpStatusCode = 404;
+            $this->apiResponse['message'] = "Page Not Found";
+        }
+        
+        return $this->createResponse();
+    }
+
+    public function deleteAction()
+    {
+        if ($this->getRequest()->isPost()) {
+              // fill in the form with POST data.
+              $payload = file_get_contents('php://input');
+              $data = json_decode($payload, true);
+ 
+              $user = $this->tokenPayload;
+              $ward = $this->entityManager->getRepository(Ward::class)
+                 ->findOneBy(array('wardId' => $data['ward_id']));
+            if($ward) {
+                $this->wardManager->deleteWard($ward);
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have deleted ward!";
+            } else {
+                $this->httpStatusCode = 200;
+                $this->error_code = -1;
+                $this->apiResponse['message'] = "Not Found Ward";
+            }
+        } else {
+            $this->httpStatusCode = 404;
+            $this->apiResponse['message'] = "Page Not Found";            
+        }
         return $this->createResponse();
     }
 }

@@ -31,15 +31,13 @@ class DistrictManager  {
 
             $district = new District();
             $district->setName($data['name']);
+            $district->setNameEn($data['name_en']);
             $district->setDescription($data['description']);
-            $district->setStatus($data['status']);
-            $district->setZipCode($data['zip_code']);
-            $district->setCountryId($data['country_id']);
+            $district->setDescriptionEn($data['description_en']);
+            $district->setStatus($data['status']);            
+            $district->setCountryId($data['district_id']);
 
             $currentDate = date('Y-m-d H:i:s');
-            $district->setCreatedAt($currentDate);
-            $district->setCreatedBy($user->id);
-
             $district->setCreatedAt($currentDate);
             $district->setCreatedBy($user->id);
            
@@ -59,6 +57,75 @@ class DistrictManager  {
             return FALSE;
         }
 
+    }
+
+    /**
+     * Update District
+     * 
+     * @param $data
+     * @return District|bool
+     * @throws \Exception
+     */
+    public function updateDistrict($district, $data, $user)
+    {
+        // begin transaction
+        $this->entityManager->beginTransaction();
+        try {
+
+            $district->setName($data['name']);
+            $district->setNameEn($data['name_en']);
+            $district->setDescription($data['description']);
+            $district->setDescriptionEn($data['description_en']);
+            $district->setStatus($data['status']);
+            $district->setCityId($data['city_id']);
+            $district->setRefAsBy($data['ref_as_by']);
+
+            $currentDate = date('Y-m-d H:i:s');
+            $district->setUpdatedAt($currentDate);
+            $district->setUpdatedBy($user->id);
+           
+            // add the entity to the entity manager.
+            $this->entityManager->persist($district);
+
+            // apply changes to database.
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+
+            return $district;
+        }
+        catch (ORMException $e) {
+
+            $this->entityManager->rollback();
+            return FALSE;
+        }
+    }
+
+    /**
+     * Remove District
+     *
+     * @param $district
+     * @return District|bool
+     * @throws \Exception
+     */
+    public function deleteDistrict($district) {
+        // begin transaction
+        $this->entityManager->beginTransaction();
+        try {
+
+            $this->entityManager->remove($district);
+        
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+
+            return $district;
+        }
+        catch (ORMException $e) {
+
+            $this->entityManager->rollback();
+            return FALSE;
+        }
     }
 
     /**

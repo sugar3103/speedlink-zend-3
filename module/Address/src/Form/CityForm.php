@@ -60,9 +60,36 @@ class CityForm extends Form {
         // Create main input filter.
         $inputFilter = $this->getInputFilter();
 
-         // Add input for "username" field.
+        // Add input for "username" field.
         $inputFilter->add([
             'name' => 'name',
+            'required' => true,
+            'filters' => [
+                [
+                    'name' => StringTrim::class
+                ]
+            ],
+            'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'min' => 4,
+                        'max' => 50
+                    ]
+                ],
+                [
+                    'name' => CityExistsValidator::class,
+                    'options' => [
+                        'entityManager' => $this->entityManager,
+                        'city' => $this->city
+                    ]
+                ]
+            ]
+        ]);
+
+        // Add input for "username" field.
+        $inputFilter->add([
+            'name' => 'name_en',
             'required' => true,
             'filters' => [
                 [
@@ -98,6 +125,16 @@ class CityForm extends Form {
         ]);
         $inputFilter->add([
             'name'  => 'description',
+            'required' => false,
+            'filters' => [
+                [
+                    'name' => StringTrim::class
+                ]
+            ]
+        ]);
+
+        $inputFilter->add([
+            'name'  => 'description_en',
             'required' => false,
             'filters' => [
                 [

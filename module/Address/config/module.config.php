@@ -33,56 +33,30 @@ $router = [
                 'country' => [
                     'type'  => Segment::class,
                     'options' => [
-                        'route' => '/country[/:action[/:id]]',
+                        'route' => '/country[/:action]',
                         'constraints' => [
-                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            'id' => '[a-zA-Z0-9_-]*',
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*'                            
                         ],                       
                         'defaults' => [
                             'controller' => Controller\CountryController::class,
                             'action' => 'list',
                             'isAuthorizationRequired' => true
                         ]
-                    ],
-                    'may_terminate' => true,
-                    'child_routes'  => [
-                        'list' => [
-                            'type'  => Segment::class,
-                            'options' => [
-                                'route' => '/add',
-                                'defaults' => [
-                                    'controller' => Controller\CountryController::class,
-                                    'action' => 'add',
-                                    'isAuthorizationRequired' => true
-                                ]
-                            ]
-                        ]
-                    ]
+                    ]                    
                 ],
                 'city' => [
                     'type'  => Segment::class,
                     'options' => [
-                        'route' => '/city',
+                        'route' => '/city[/:action]',
+                        'constraints' => [
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*'                            
+                        ],
                         'defaults' => [
                             'controller' => Controller\CityController::class,
                             'action' => 'list',
                             'isAuthorizationRequired' => true
                         ]
-                    ],
-                    'may_terminate' => true,
-                    'child_routes'  => [
-                        'list' => [
-                            'type'  => Segment::class,
-                            'options' => [
-                                'route' => '/add',
-                                'defaults' => [
-                                    'controller' => Controller\CityController::class,
-                                    'action' => 'add',
-                                    'isAuthorizationRequired' => true
-                                ]
-                            ]
-                        ]
-                    ]
+                    ]                  
                 ]               
             ]
         ],

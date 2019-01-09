@@ -22,7 +22,7 @@ class CityController extends CoreController {
     protected $cityManager;
 
     public function __construct($entityManager, $cityManager) {
-            
+        parent::__construct($entityManager);
         $this->entityManager = $entityManager;
         $this->cityManager = $cityManager;
     }
@@ -30,7 +30,6 @@ class CityController extends CoreController {
     public function indexAction()
     {
         $this->apiResponse['message'] = 'City';
-
         return $this->createResponse();
     }
 
@@ -39,8 +38,7 @@ class CityController extends CoreController {
         if ($this->getRequest()->isPost()) {
             $payload = file_get_contents('php://input');
             $params = json_decode($payload, true);
-            
-          
+
             //the current page number.
             $offset = isset($params['start']) ? $params['start'] : 0;
             
@@ -53,7 +51,7 @@ class CityController extends CoreController {
             // get the filters
             $fieldsMap = [
                 0 => 'name',
-                1 => 'country',
+                1 => 'city',
                 2 => 'status'
             ];
 
@@ -83,12 +81,12 @@ class CityController extends CoreController {
 
     public function addAction()
     {   
-        $user = $this->tokenPayload;
-        //Create New Form City
-        $form = new CityForm('create', $this->entityManager);
-
         // check if city  has submitted the form
         if ($this->getRequest()->isPost()) {
+            $user = $this->tokenPayload;
+            //Create New Form City
+            $form = new CityForm('create', $this->entityManager);
+
             $data = file_get_contents('php://input');
             $data = json_decode($data, true);
 
@@ -100,14 +98,79 @@ class CityController extends CoreController {
                 $data = $form->getData();
                 // add user.
                 $city = $this->cityManager->addCity($data,$user);
-
                 $this->error_code = 1;
                 $this->apiResponse['message'] = "Success: You have modified Cities!";
             } else {
+                $this->error_code = 0;
                 $this->apiResponse = $form->getMessages(); 
+                
             }            
+        } else {
+            $this->httpStatusCode = 404;
+            $this->apiResponse['message'] = "Page Not Found";                 
         }
 
+        return $this->createResponse();
+    }
+
+    public function editAction() {
+        if ($this->getRequest()->isPost()) {
+             // fill in the form with POST data.
+             $payload = file_get_contents('php://input');
+             $data = json_decode($payload, true);
+             $user = $this->tokenPayload;
+             $city = $this->entityManager->getRepository(City::class)
+                ->findOneBy(array('cityId' => $data['city_id']));
+            if(isset($data['city_id']) && $city) {
+                //Create New Form City
+                $form = new CityForm('update', $this->entityManager, $city);
+                $form->setData($data);
+                if ($form->isValid()) {
+                   $data = $form->getData();
+                   
+                   $this->cityManager->updateCity($city, $data,$user);
+                   $this->error_code = 1;
+                   $this->apiResponse['message'] = "Success: You have modified city!";
+                }  else {
+                   $this->error_code = 0;
+                   $this->apiResponse = $form->getMessages(); 
+                }   
+            }   else {
+                $this->error_code = 0;
+                $this->apiResponse['message'] = 'City Not Found'; 
+            }         
+             
+        } else {
+            $this->httpStatusCode = 404;
+            $this->apiResponse['message'] = "Page Not Found";
+        }
+        
+        return $this->createResponse();
+    }
+
+    public function deleteAction()
+    {
+        if ($this->getRequest()->isPost()) {
+              // fill in the form with POST data.
+              $payload = file_get_contents('php://input');
+              $data = json_decode($payload, true);
+ 
+              $user = $this->tokenPayload;
+              $city = $this->entityManager->getRepository(City::class)
+                 ->findOneBy(array('cityId' => $data['city_id']));
+            if($city) {
+                $this->cityManager->deleteCity($city);
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have deleted city!";
+            } else {
+                $this->httpStatusCode = 200;
+                $this->error_code = -1;
+                $this->apiResponse['message'] = "Not Found City";
+            }
+        } else {
+            $this->httpStatusCode = 404;
+            $this->apiResponse['message'] = "Page Not Found";            
+        }
         return $this->createResponse();
     }
 }

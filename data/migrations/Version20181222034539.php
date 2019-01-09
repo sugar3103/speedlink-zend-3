@@ -47,7 +47,7 @@ final class Version20181222034539 extends AbstractMigration
                 'iso_code'  => 'varchar(50) not null',
                 'created_by'    => 'int(11) not null',
                 'created_at'    =>'datetime not null',
-                'update_by' => 'int(11)',
+                'updated_by' => 'int(11)',
                 'updated_at'    => 'datetime',
                 'ref_as_by'     => 'int(11)'
             )
@@ -67,7 +67,7 @@ final class Version20181222034539 extends AbstractMigration
                 'zip_code'  => 'varchar(50) not null',
                 'created_by'    => 'int(11) not null',
                 'created_at'    =>'datetime not null',
-                'update_by' => 'int(11)',
+                'updated_by' => 'int(11)',
                 'updated_at'    => 'datetime',
                 'ref_as_by'     => 'int(11)'
             )
@@ -86,7 +86,7 @@ final class Version20181222034539 extends AbstractMigration
                 'is_deleted' => 'TINYINT(1) NOT NULL DEFAULT 0',
                 'created_by'    => 'int(11) not null',
                 'created_at'    =>'datetime not null',
-                'update_by' => 'int(11)',
+                'updated_by' => 'int(11)',
                 'updated_at'    => 'datetime',
                 'ref_as_by'     => 'int(11)'
             )
@@ -106,7 +106,7 @@ final class Version20181222034539 extends AbstractMigration
                 'is_deleted' => 'TINYINT(1) NOT NULL DEFAULT 0',
                 'created_by'    => 'int(11)  not null',
                 'created_at'    =>'datetime  not null',
-                'update_by' => 'int(11)',
+                'updated_by' => 'int(11)',
                 'updated_at'    => 'datetime',
                 'ref_as_by'     => 'int(11)'
             )
@@ -125,7 +125,7 @@ final class Version20181222034539 extends AbstractMigration
                 'hub_id' => 'int(11) not null',
                 'created_by'    => 'int(11)  not null',
                 'created_at'    =>'datetime  not null',
-                'update_by' => 'int(11)',
+                'updated_by' => 'int(11)',
                 'updated_at'    => 'datetime',
                 'ref_as_by'     => 'int(11)'
             )
