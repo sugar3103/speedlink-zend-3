@@ -10,6 +10,7 @@ use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Zend\Uri\Uri;
 use NetworkPort\Entity\Branch;
+use NetworkPort\Form\BranchForm;
 
 class BranchController extends CoreController {
     /**
@@ -82,30 +83,38 @@ class BranchController extends CoreController {
       }
     }
 
-    /**
-    * Add Branch Action
-    * @throws \Exception
-    */
     public function addbranchAction() {
-        
-        $this->apiResponse['message'] = 'Action Add Branch';        
 
+        $form = new BranchForm('create', $this->entityManager);      
         // check if user has submitted the form.
         if ($this->getRequest()->isPost()) {
             // fill in the form with POST data.
             $payload = file_get_contents('php://input');
             $data = json_decode($payload, true);
+            $user = $this->tokenPayload;
+            $data['created_by'] = $user->id;
 
-            $result = $this->branchManager->addBranch($data);                
-            
-            $this->error_code = $result->getCode();
-                // Check result
-            if ($result->getCode() == Result::SUCCESS) {
-                  $this->apiResponse['message']   = $result->getMessages();                        
-                  $this->apiResponse['out_input'] = $result->getIdentity();                        
-                } else {
-                  $this->apiResponse = $result->getMessages();                        
-                }
+            $form->setData($data);
+            //validate form
+            if ($form->isValid()) {
+              $data = $form->getData();
+
+              $result = $this->branchManager->addBranch($data);                
+              // Check result
+              if ($result->getCode() == Result::SUCCESS) {
+                $this->apiResponse['message']   = $result->getMessages();                        
+                $this->apiResponse['out_input'] = $result->getIdentity();                        
+              } else {
+                $this->error_code = 0;
+                $this->apiResponse = $result->getMessages();                        
+              }
+            }else {
+              $this->error_code = 0;
+              $this->apiResponse = $form->getMessages();      
+            }     
+        } else {
+            $this->httpStatusCode = 404;
+            $this->apiResponse['message'] = "Page Not Found";                 
         }
         return $this->createResponse();
       }
@@ -117,46 +126,55 @@ class BranchController extends CoreController {
     public function updatebranchAction() {
         $payload = file_get_contents('php://input');
         $data = json_decode($payload, true);
+        $user = $this->tokenPayload;
+        $data['updated_by'] = $user->id;
         $this->apiResponse['message'] = 'Action Update Branch';        
-        if($data['id'] < 1) {
-          //bao loi
-          $this->apiResponse['error_code'] = '404';     
-          $this->apiResponse['message'] = 'Branch_id not found!';     
-          return $this->createResponse();
-        }
-        $branch = $this->entityManager->getRepository(Branch::class)->find($data['id']);
-       // $branch = $this->entityManager->getRepository(Branch::class)->findAll();
-        if ($branch == null) {
+        
+        if ( $data['id'] < 1 ) {
           //bao loi k tim thay branch
-          $this->apiResponse['error_code'] = '404';
-          $this->apiResponse['message'] = 'Branch_id not found!';     
+          $this->error_code = 0;
+          $this->apiResponse['message'] = 'Branch Not Found';     
           return $this->createResponse();
         }
-
         if ($this->getRequest()->isPost()) {
-
-            $result = $this->branchManager->updateBranch($branch, $data);                
-
-            $this->error_code = $result->getCode();
+          $branch = $this->entityManager->getRepository(Branch::class)->find($data['id']);
+          if($branch) {
+            $form = new BranchForm('update', $this->entityManager, $branch);
+            $form->setData($data);
+            if ($form->isValid()) {
+              $result = $this->branchManager->updateBranch($branch, $data);                
                 // Check result
-            if ($result->getCode() == Result::SUCCESS) {
-                  $this->apiResponse['message']   = $result->getMessages();                        
-                  $this->apiResponse['out_input'] = $result->getIdentity();                        
-                } else {
-                  $this->apiResponse = $result->getMessages();                        
-                }
+              if ($result->getCode() == Result::SUCCESS) {
+                $this->error_code = 1;
+                $this->apiResponse['message']   = $result->getMessages();                        
+                $this->apiResponse['out_input'] = $result->getIdentity();                        
+              } else {
+                $this->error_code = 0;
+                $this->apiResponse = $result->getMessages();                        
+              }
+            } else {
+              $this->error_code = 0;
+              $this->apiResponse = $form->getMessages(); 
+            }   
+          } else {
+            $this->apiResponse['error_code'] = 0;
+            $this->apiResponse['message'] = 'Branch Not Found';   
+          }            
+        } else {
+          $this->httpStatusCode = 404;
+          $this->apiResponse['message'] = "Page Not Found";
         }
         return $this->createResponse();
       }
 
-       public function deleteAction() {
+      public function deleteAction() {
 
         $payload = file_get_contents('php://input');
         $data = json_decode($payload, true);
         $this->apiResponse['message'] = 'Action Delete Branch';        
         if($data['id'] < 1) {
           //bao loi
-          $this->apiResponse['error_code'] = '404';     
+          $this->apiResponse['error_code'] = 0;     
           $this->apiResponse['message'] = 'Branch_id not found!';     
           return $this->createResponse();
         }
