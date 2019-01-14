@@ -58,6 +58,7 @@ module.exports = {
   "menu.dashboards": "Điều khiển",
   "menu.master-data": "Master Data",
   "menu.status": "Trạng Thái",
+  "menu.address": "Địa chỉ",
   "menu.search": "Tìm kiếm",
   "menu.login": "Đăng nhập",
   "menu.register": "Đăng ký",
@@ -82,4 +83,17 @@ module.exports = {
   "status.desc-confirm": "Bạn muốn xóa trạng thái này?",
   "status.confirm-no": "Không",
   "status.confirm-yes": "Có, xóa nó!",
+
+  /* Master Data - Address */
+  "address.code": "Code",
+  "address.zip-code": "Mã bưu chính",
+  "address.country": "Đất nước",
+  "address.city": "Tỉnh/Thành phố",
+  "address.district": "Quận/Huyện",
+  "address.ward": "Phường/Xã",
+  "address.brand-code": "Brand Code",
+  "address.hub-code": "Hub Code",
+  "address.action": "Hành động",
+  "address.export": "Xuất",
+  
 };

@@ -17,7 +17,13 @@ export default {
                     name: 'menu.status',
                     url: '/app/master-data/status',
                     icon: 'simple-icon-credit-card',
-                }
+                },
+                {
+                    id : 'address',
+                    name: 'menu.address',
+                    url: '/app/master-data/address',
+                    icon: 'simple-icon-location-pin',
+                },
             ]
         }
     ]

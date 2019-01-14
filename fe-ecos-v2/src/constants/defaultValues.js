@@ -10,7 +10,7 @@ export const localeOptions=[
 export const searchPath = "/app/layouts/search";
 
 //api
-export const apiUrl = 'http://localhost';
+export const apiUrl = 'http://speedlink.local';
 
 //error code
 export const EC_SUCCESS = 1;
@@ -22,5 +22,5 @@ export const EC_FAILURE_UNCATEGORIZED = -4;
 export const EC_FAILURE_AUTHENCATION = -5;
 
 //pagination
-export const SELECTED_PAGE_SIZE = 5;
-export const PAGE_SIZE = [5, 10, 15, 20];
+export const SELECTED_PAGE_SIZE = 10;
+export const PAGE_SIZE = [10, 20, 50, 100];

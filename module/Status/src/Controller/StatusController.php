@@ -54,7 +54,7 @@ class StatusController extends CoreController {
  
             //set limit
             $limit  = !empty($params['pagination']['perpage'])
-                         && $params['pagination']['perpage'] > 3 ? $params['pagination']['perpage'] : 3;
+                         && $params['pagination']['perpage'] > 10 ? $params['pagination']['perpage'] : 10;
 
             // get the filters
             $fieldsMap = [

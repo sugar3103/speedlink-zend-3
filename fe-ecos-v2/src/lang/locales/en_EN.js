@@ -59,6 +59,7 @@ module.exports = {
   "menu.dashboards": "Dashboards",
   "menu.master-data": "Master Data",
   "menu.status": "Status",
+  "menu.address": "Address",
   "menu.search": "Search",
   "menu.login": "Login",
   "menu.register": "Register",
@@ -83,4 +84,16 @@ module.exports = {
   "status.desc-confirm": "You want to delete this status?",
   "status.confirm-no": "No",
   "status.confirm-yes": "Yes, delete it!",
+
+  /* Master Data - Address */
+  "address.code": "Code",
+  "address.zip-code": "Zip Code",
+  "address.country": "Country",
+  "address.city": "City",
+  "address.district": "District",
+  "address.ward": "Ward",
+  "address.brand-code": "Brand Code",
+  "address.hub-code": "Hub Code",
+  "address.action": "Action",
+  "address.export": "Export",
 };
