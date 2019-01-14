@@ -17,6 +17,10 @@ use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator;
 use Zend\Authentication\Result;
 
+use Address\Entity\Country;
+use Address\Entity\City;
+use Address\Entity\District;
+use Address\Entity\Ward;
 /**
  * This service is responsible for adding/editing users
  * and changing user password.
@@ -78,11 +82,11 @@ class BranchManager {
         $branch->setDistrictId($data['district_id']);
         $branch->setWardId($data['ward_id']);
         $branch->setDescription($data['description']);
+        $this->getReferenced($branch, $data);
         
         $this->entityManager->persist($branch);
-        $this->entityManager->flush();
+        $this->entityManager->flush();        
         
-        var_dump($branch);die;
         $last_id = $branch->getBranchId();
         $this->entityManager->commit();
         return new Result(
@@ -132,6 +136,35 @@ class BranchManager {
         }
     }
 
+    private function getReferenced($branch,$data) {
+
+        $country = $this->entityManager->getRepository(Country::class)->find($data['country_id']);
+        if ($country == null)
+            throw new \Exception('Not found Country by ID');
+
+        $branch->setCountry($country);
+
+        $city = $this->entityManager->getRepository(City::class)->find($data['country_id']);
+        if ($city == null)
+            throw new \Exception('Not found City by ID');
+
+        $branch->setCity($city);
+        
+        $district = $this->entityManager->getRepository(District::class)->find($data['district_id']);
+        if ($district == null)
+            throw new \Exception('Not found District by ID');
+
+        $branch->setDistrict($district);
+
+        $ward = $this->entityManager->getRepository(Ward::class)->find($data['ward_id']);
+        if ($ward == null)
+            throw new \Exception('Not found Ward by ID');
+
+        $branch->setWard($ward);
+
+        
+
+    }
     /**
      * Get list branch by condition
      *

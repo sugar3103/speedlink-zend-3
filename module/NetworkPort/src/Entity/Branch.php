@@ -105,41 +105,53 @@ class Branch
      */
     private $wardId;
 
-   
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="description", type="string", length=1000, precision=0, scale=0, nullable=true, unique=false)
      */
     private $description;
 
     /**
-     * 
-     * @ORM\OneToOne(targetEntity="\Address\Entity\District" , inversedBy="branch")
-     * @ORM\JoinColumn(name="district_id", referencedColumnName="district_id", nullable=true)
+     * @var \Address\Entity\District
+     *
+     * @ORM\OneToOne(targetEntity="Address\Entity\District", inversedBy="branch")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="district_id", referencedColumnName="district_id", unique=true, nullable=false)
+     * })
      */
-    protected $district;
+    private $district;
 
     /**
-     * 
-     * @ORM\OneToOne(targetEntity="\Address\Entity\City" , inversedBy="branch")
-     * @ORM\JoinColumn(name="city_id", referencedColumnName="city_id", nullable=true)
+     * @var \Address\Entity\City
+     *
+     * @ORM\OneToOne(targetEntity="Address\Entity\City", inversedBy="branch")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="city_id", referencedColumnName="city_id", unique=true, nullable=false)
+     * })
      */
-    protected $city;
+    private $city;
 
     /**
-     * 
-     * @ORM\OneToOne(targetEntity="\Address\Entity\Ward" , inversedBy="branch")
-     * @ORM\JoinColumn(name="ward_id", referencedColumnName="ward_id", nullable=true)
+     * @var \Address\Entity\Ward
+     *
+     * @ORM\OneToOne(targetEntity="Address\Entity\Ward", inversedBy="branch")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="ward_id", referencedColumnName="ward_id", unique=true, nullable=false)
+     * })
      */
-    protected $ward;
+    private $ward;
 
     /**
-     * 
-     * @ORM\OneToOne(targetEntity="\Address\Entity\Country" , inversedBy="branch")
-     * @ORM\JoinColumn(name="country_id", referencedColumnName="country_id", nullable=true)
+     * @var \Address\Entity\Country
+     *
+     * @ORM\OneToOne(targetEntity="Address\Entity\Country", inversedBy="branch")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="country_id", referencedColumnName="country_id", unique=true, nullable=false)
+     * })
      */
-    protected $country;
+    private $country;
+
 
     /**
      * Get branchId.
@@ -439,15 +451,14 @@ class Branch
         return $this->wardId;
     }
 
-    
     /**
      * Set description.
      *
-     * @param string $description
+     * @param string|null $description
      *
      * @return Branch
      */
-    public function setDescription($description)
+    public function setDescription($description = null)
     {
         $this->description = $description;
 
@@ -457,10 +468,106 @@ class Branch
     /**
      * Get description.
      *
-     * @return string
+     * @return string|null
      */
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set district.
+     *
+     * @param \Address\Entity\District|null $district
+     *
+     * @return Branch
+     */
+    public function setDistrict(\Address\Entity\District $district = null)
+    {
+        $this->district = $district;
+
+        return $this;
+    }
+
+    /**
+     * Get district.
+     *
+     * @return \Address\Entity\District|null
+     */
+    public function getDistrict()
+    {
+        return $this->district;
+    }
+
+    /**
+     * Set city.
+     *
+     * @param \Address\Entity\City|null $city
+     *
+     * @return Branch
+     */
+    public function setCity(\Address\Entity\City $city = null)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Get city.
+     *
+     * @return \Address\Entity\City|null
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * Set ward.
+     *
+     * @param \Address\Entity\Ward|null $ward
+     *
+     * @return Branch
+     */
+    public function setWard(\Address\Entity\Ward $ward = null)
+    {
+        $this->ward = $ward;
+
+        return $this;
+    }
+
+    /**
+     * Get ward.
+     *
+     * @return \Address\Entity\Ward|null
+     */
+    public function getWard()
+    {
+        return $this->ward;
+    }
+
+    /**
+     * Set country.
+     *
+     * @param \Address\Entity\Country|null $country
+     *
+     * @return Branch
+     */
+    public function setCountry(\Address\Entity\Country $country = null)
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * Get country.
+     *
+     * @return \Address\Entity\Country|null
+     */
+    public function getCountry()
+    {
+        return $this->country;
     }
 }
