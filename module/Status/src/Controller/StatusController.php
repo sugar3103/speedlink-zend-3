@@ -78,7 +78,8 @@ class StatusController extends CoreController {
                     "from" => ($currentPage - 1) * $limit + 1,
                     "to" => ($currentPage * $limit) > $dataStatus['totalStatus'] ? $dataStatus['totalStatus'] : ($currentPage * $limit),
                     "perpage"=> $limit,
-                    "total" => $dataStatus['totalStatus'],
+                    "totalItems" => $dataStatus['totalStatus'],
+                    "totalPage" => ceil($dataStatus['totalStatus']/$limit)
                 ],
                 "data" => ($dataStatus['listStatus']) ? $dataStatus['listStatus'] : []           
             ];

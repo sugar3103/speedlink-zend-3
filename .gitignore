@@ -31,3 +31,7 @@ fe-ecos/package-lock.json
 #React-Redux
 fe-ecos/node_modules
 fe-ecos/package-lock.json
+
+#React-Redux
+fe-ecos-v2/node_modules
+fe-ecos-v2/package-lock.json
