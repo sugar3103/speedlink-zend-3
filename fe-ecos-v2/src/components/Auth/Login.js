@@ -8,7 +8,7 @@ import createNotification from '../../util/notifications';
 import { Colxx } from "../Layout/CustomBootstrap";
 
 import { connect } from "react-redux";
-import { loginUser } from "../../redux/actions";
+import { loginUser, alertClear } from "../../redux/actions";
 
 import PropTypes from 'prop-types';
 
@@ -34,6 +34,11 @@ class Login extends Component {
     if (nextProps && nextProps.alert) {
       createNotification(nextProps.alert);
     }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps && prevProps.alert)
+      this.props.alertClear();
   }
     
   onUserLogin = () => {
@@ -128,7 +133,8 @@ Login.propTypes = {
     type: PropTypes.string,
     message: PropTypes.string
   }).isRequired,
-  loginUser: PropTypes.func.isRequired
+  loginUser: PropTypes.func.isRequired,
+  alertClear: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = ({ alert }) => {
@@ -139,6 +145,7 @@ const mapStateToProps = ({ alert }) => {
 
 export default connect(mapStateToProps,
   {
-    loginUser
+    loginUser,
+    alertClear
   }
 )(Login);

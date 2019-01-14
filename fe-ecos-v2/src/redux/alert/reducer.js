@@ -19,7 +19,7 @@ export default (state = INIT_STATE, action) => {
     case ALERT_ERROR:
       return { type: 'error', message: action.payload };
     case ALERT_CLEAR:
-      return {};
+      return INIT_STATE;
     default: return state;
   }
 }

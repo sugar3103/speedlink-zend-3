@@ -10,14 +10,20 @@ import Dashboards from './dashboards';
 import MasterData from './master-data';
 
 import { connect } from 'react-redux';
+import { alertClear } from '../redux/actions';
+import PropTypes from 'prop-types';
 
 class MainApp extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps && nextProps.alert) {
-      console.log(nextProps);
       createNotification(nextProps.alert);
     }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps && prevProps.alert)
+      this.props.alertClear();
   }
 
   render() {
@@ -40,9 +46,18 @@ class MainApp extends Component {
     );
   }
 }
+
+MainApp.propTypes = {
+  containerClassnames: PropTypes.string.isRequired,
+  alert: PropTypes.object,
+  alertClear: PropTypes.func.isRequired
+}
+
 const mapStateToProps = ({ menu, alert }) => {
   const { containerClassnames } = menu;
   return { containerClassnames, alert };
 }
 
-export default withRouter(connect(mapStateToProps, {})(MainApp));
+export default withRouter(connect(mapStateToProps, {
+  alertClear
+})(MainApp));

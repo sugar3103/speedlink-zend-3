@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { injectIntl } from 'react-intl';
+import PropTypes from 'prop-types';
 import { 
   Row, 
   Button, 
@@ -146,6 +147,13 @@ class StatusPage extends Component {
       </Fragment>
     );
   }
+}
+
+StatusPage.propTypes = {
+  status: PropTypes.object.isRequired,
+  modal: PropTypes.object,
+  getStatusList: PropTypes.func.isRequired,
+  toggleStatusModal: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ status, modal }) => {
