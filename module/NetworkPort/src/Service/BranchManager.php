@@ -66,7 +66,7 @@ class BranchManager {
         $this->entityManager->beginTransaction();
         try {
         $branch = new Branch;
-
+     
         $branch->setCode($data['code']);
         $branch->setName($data['name']);
         $branch->setHubId($data['hub_id']);
@@ -77,11 +77,12 @@ class BranchManager {
         $branch->setCityId($data['city_id']);
         $branch->setDistrictId($data['district_id']);
         $branch->setWardId($data['ward_id']);
-        $branch->setIncludingWardIds($data['including_ward_ids']);
         $branch->setDescription($data['description']);
-
+        
         $this->entityManager->persist($branch);
         $this->entityManager->flush();
+        
+        var_dump($branch);die;
         $last_id = $branch->getBranchId();
         $this->entityManager->commit();
         return new Result(

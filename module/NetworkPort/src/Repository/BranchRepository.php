@@ -93,6 +93,10 @@ class BranchRepository extends EntityRepository {
                 'alias' => 'u.status',
                 'operator' => 'eq'
             ],
+            'country' => [
+                'alias' => 'u.country',
+                'operator' => 'eq'
+            ],
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();

@@ -10,6 +10,7 @@ use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Zend\Uri\Uri;
 use NetworkPort\Entity\Branch;
+use NetworkPort\Form\BranchForm;
 
 class BranchController extends CoreController {
     /**
@@ -92,20 +93,42 @@ class BranchController extends CoreController {
 
         // check if user has submitted the form.
         if ($this->getRequest()->isPost()) {
+
+            $user = $this->tokenPayload;
+
+            $form = new BranchForm('create', $this->entityManager);
+
             // fill in the form with POST data.
             $payload = file_get_contents('php://input');
             $data = json_decode($payload, true);
 
-            $result = $this->branchManager->addBranch($data);                
+            $form->setData($data);
+             //validate form
+            if ($form->isValid()) {
+              $data = $form->getData();
+
+              // var_dump($user);
+              // var_dump($data);
+              // die();
+              // $data['create_by'] = $user->id;
+              $result = $this->branchManager->addBranch($data);                
             
-            $this->error_code = $result->getCode();
-                // Check result
-            if ($result->getCode() == Result::SUCCESS) {
-                  $this->apiResponse['message']   = $result->getMessages();                        
-                  $this->apiResponse['out_input'] = $result->getIdentity();                        
-                } else {
+              $this->error_code = $result->getCode();
+                  // Check result
+              if ($result->getCode() == Result::SUCCESS) {
+                $this->apiResponse['message']   = $result->getMessages();                        
+                $this->apiResponse['out_input'] = $result->getIdentity();                        
+              } else {
+                  $this->error_code = 0;
                   $this->apiResponse = $result->getMessages();                        
-                }
+              }
+            }else {
+                $this->error_code = 0;
+                $this->apiResponse = $form->getMessages();       
+            }     
+        } else {
+            $this->httpStatusCode = 404;
+            $this->apiResponse['message'] = "Page Not Found";                 
         }
         return $this->createResponse();
       }
