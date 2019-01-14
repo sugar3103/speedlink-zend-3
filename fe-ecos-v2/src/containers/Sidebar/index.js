@@ -14,6 +14,8 @@ import {
   changeDefaultClassnames
 } from "../../redux/actions";
 
+import navigation from '../../constants/SideBar';
+
 class Sidebar extends Component {
   constructor(props) {
     super(props);
@@ -143,9 +145,15 @@ class Sidebar extends Component {
     );
   }
   setSelectedLiActive() {
-    const oldli = document.querySelector(".sub-menu  li.active");
+    const oldli = document.querySelector(".sub-menu li.active");  
+    const oldMainli = document.querySelector(".main-menu li.active");  
+    
     if (oldli !== null) {
       oldli.classList.remove("active");
+    }
+
+    if (oldMainli !== null) {
+      oldMainli.classList.remove("active");
     }
 
     /* set selected parent menu */
@@ -159,13 +167,16 @@ class Sidebar extends Component {
       });
     } else {
       var selectedParentNoSubItem = document.querySelector(".main-menu  li a.active");
+      
       if (selectedParentNoSubItem !== null) {
+        selectedParentNoSubItem.parentElement.classList.add("active");
         this.setState({
           selectedParentMenu: selectedParentNoSubItem.getAttribute(
             "data-flag"
           )
         });
       } else if (this.state.selectedParentMenu === "") {
+        selectedParentNoSubItem.parentElement.classList.add("active");
         this.setState({
           selectedParentMenu: "dashboards"
         });
@@ -201,8 +212,9 @@ class Sidebar extends Component {
     this.props.setContainerClassnames(0, nextClasses.join(" "));
   }
 
-  openSubMenu(e, selectedParent) {
+  openSubMenu(e, selectedParent) { 
     e.preventDefault();
+    
     const { containerClassnames, menuClickCount } = this.props;
     const currentClasses = containerClassnames
       ? containerClassnames.split(" ").filter(x => x !== "")
@@ -235,6 +247,8 @@ class Sidebar extends Component {
     this.setState({
       viewingParentMenu: selectedParent
     });
+
+    
   }
   changeViewingParentMenu(menu) {
     this.toggle();
@@ -244,68 +258,111 @@ class Sidebar extends Component {
     })
   }
 
+  renderMainMenu(items) {
+    var that = this;
+    return(
+      <div className="main-menu">
+          <div className="scroll">
+            <PerfectScrollbar option={{ suppressScrollX: true, wheelPropagation: false }}>
+              <Nav vertical className="list-unstyled">
+                {
+                  items.map(function(item,key){
+                    if(item.childrens) {
+                      return(
+                        <NavItem 
+                          key={key}
+                          className={classnames({
+                          active: ((that.state.selectedParentMenu === item.id && that.state.viewingParentMenu === "") || that.state.viewingParentMenu === item.id)                         
+                          })}                          
+                        >
+                          <NavLink to={item.url} onClick={e => that.openSubMenu(e, item.id)}>
+                            <i className={item.icon} />{" "}
+                            <IntlMessages id={item.name} />
+                          </NavLink>
+                        </NavItem>
+                      )
+                    } else {
+                      return(
+                        <NavItem 
+                          key={key}
+                          className={classnames({
+                          active: ((that.state.selectedParentMenu === item.id && that.state.viewingParentMenu === "") || that.state.viewingParentMenu === item.id)                         
+                          })}
+                          data-flag = {item.id}
+                        >
+                          <NavLink to={item.url}>
+                            <i className={item.icon} />{" "}
+                            <IntlMessages id={item.name} />
+                          </NavLink>
+                        </NavItem>
+                      )
+                    }
+                  })
+                }
+              </Nav>
+            </PerfectScrollbar>
+          </div>
+      </div>
+    )
+  }
+
+  renderSubMenu(items) {
+    var that = this;
+    return(
+      <div className="sub-menu">
+        <div className="scroll">
+          <PerfectScrollbar
+            option={{ suppressScrollX: true, wheelPropagation: false }}
+          >
+          {
+            items.map(function(item,key){
+              
+              if(item.childrens) {
+                return(
+                <Nav
+                  key={key}
+                  className={classnames({
+                    "d-block": ((that.state.selectedParentMenu === item.id && that.state.viewingParentMenu === "") || that.state.viewingParentMenu === item.id)
+                  })}
+                  data-parent={item.id}
+                >
+                {
+                  item.childrens.map(function(child,key){
+                    return(
+                    <NavItem key={key}>
+                      <NavLink to={child.url}>
+                        <i className={child.icon} />{" "}
+                        <IntlMessages id={child.name} />
+                      </NavLink>
+                    </NavItem>
+                    )
+                  })
+                }
+                </Nav>
+                )
+              } else {
+                return false;
+              }
+            })
+          }
+          </PerfectScrollbar>
+        </div>
+      </div>
+    )
+  }
+
+  navList() {
+    return(
+      <div className="sidebar">
+        { this.renderMainMenu(navigation.items) }
+        { this.renderSubMenu(navigation.items) }
+       </div>
+    )
+  }
   render() {
     return (
-      <div className="sidebar">
-        <div className="main-menu">
-          <div className="scroll">
-            <PerfectScrollbar
-              option={{ suppressScrollX: true, wheelPropagation: false }}
-            >
-              <Nav vertical className="list-unstyled">
-                <NavItem
-                  className={classnames({
-                    active: ((this.state.selectedParentMenu === "dashboards" && this.state.viewingParentMenu === "") || this.state.viewingParentMenu === "dashboards")
-                  })}
-                >
-                  <NavLink
-                    to="/app/dashboards"
-                  >
-                    <i className="iconsmind-Shop-4" />{" "}
-                    <IntlMessages id="menu.dashboards" />
-                  </NavLink>
-                </NavItem>
-
-
-                <NavItem
-                  className={classnames({
-                    active: ((this.state.selectedParentMenu === "master-data" && this.state.viewingParentMenu === "") || this.state.viewingParentMenu === "master-data")
-                  })}
-                >
-                  <NavLink
-                    to="/app/master-data"
-                    onClick={e => this.openSubMenu(e, "master-data")}
-                  >
-                    <i className="iconsmind-Digital-Drawing" />{" "}
-                    <IntlMessages id="menu.master-data" />
-                  </NavLink>
-                </NavItem>
-              </Nav>
-            </PerfectScrollbar>
-          </div>
-        </div>
-
-        <div className="sub-menu">
-          <div className="scroll">
-            <PerfectScrollbar
-              option={{ suppressScrollX: true, wheelPropagation: false }}
-            >
-              <Nav
-                className={classnames({
-                  "d-block": ((this.state.selectedParentMenu === "master-data" && this.state.viewingParentMenu === "") || this.state.viewingParentMenu === "master-data")
-                })}
-                data-parent="master-data"
-              >
-                <NavItem>
-                  <NavLink to="/app/master-data/status">
-                    <i className="simple-icon-credit-card" />{" "}
-                    <IntlMessages id="menu.status" />
-                  </NavLink>
-                </NavItem>
-              </Nav>
-            </PerfectScrollbar>
-          </div>
-        </div>
+      <div>
+        { this.navList()}
       </div>
     );
   }

@@ -10,7 +10,7 @@ export const localeOptions=[
 export const searchPath = "/app/layouts/search";
 
 //api
-export const apiUrl = 'http://speedlink.local';
+export const apiUrl = 'http://localhost';
 
 //error code
 export const EC_SUCCESS = 1;
