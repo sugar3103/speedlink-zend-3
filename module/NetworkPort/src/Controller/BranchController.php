@@ -169,6 +169,7 @@ class BranchController extends CoreController {
 
       public function deleteAction() {
 
+        if ($this->getRequest()->isPost()) {
         $payload = file_get_contents('php://input');
         $data = json_decode($payload, true);
         $this->apiResponse['message'] = 'Action Delete Branch';        
@@ -181,12 +182,17 @@ class BranchController extends CoreController {
         // delete hub.
         $result = $this->branchManager->deleteBranch($data['id']);
 
-       if ($result->getCode() == Result::SUCCESS) {
-                  $this->apiResponse['message']   = $result->getMessages();                        
-                  $this->apiResponse['out_input'] = $result->getIdentity();                        
-                } else {
-                  $this->apiResponse = $result->getMessages();                        
-                }
+         if ($result->getCode() == Result::SUCCESS) {
+            $this->error_code = 1;
+            $this->apiResponse['message']   = $result->getMessages();                     
+          } else {
+              $this->error_code = 0;
+              $this->apiResponse = $result->getMessages();                        
+          }
+        } else {
+          $this->httpStatusCode = 404;
+          $this->apiResponse['message'] = "Page Not Found";            
+        }
         return $this->createResponse();       
     }
    

@@ -243,6 +243,4 @@ class HubManager {
         }
         return $filters;
     }
-    
-
 }
