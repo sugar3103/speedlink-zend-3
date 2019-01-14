@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import classnames from 'classnames';
 import {
   Button,
   Label,
@@ -10,11 +9,6 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  TabContent,
-  TabPane,
-  Nav,
-  NavItem,
-  NavLink
 } from 'reactstrap';
 import IntlMessages from "../../../util/IntlMessages";
 
@@ -28,20 +22,9 @@ class Action extends Component {
     this.state = {
       id: '',
       name: '',
-      name_en: '',
       description: '',
-      description_en: '',
       status: 0,
-      errors: {},
-      activeTab: '1',
-    }
-  }
-
-  toggleTab = (tab) => {
-    if (this.state.activeTab !== tab) {
-      this.setState({
-        activeTab: tab
-      });
+      errors: {}
     }
   }
 
@@ -57,42 +40,19 @@ class Action extends Component {
         }
       });
       this.setState({ errors });
-      if ((!errors.name && errors.name_en) || (!errors.description && errors.description_en)) {
-        this.setState({
-          activeTab: '2'
-        });
-      }
     } else {
       this.setState({ errors: {} });
     }
 
-    //show data in modal when dit
     if (nextProps && nextProps.modalData) {
       const data = nextProps.modalData;
       this.setState({
         id: data.status_id,
         name: data.name,
-        name_en: data.name_en,
         description: data.description,
-        description_en: data.description_en,
         status: data.status === 'Active' ? 1 : 0
       });
-    } else {
-      this.setState({
-        id: '',
-        name: '',
-        name_en: '',
-        description: '',
-        description_en: '',
-        status: 0,
-      });
     }
-
-    //set tab with locale
-    const tab = nextProps.locale === 'en' ? '2' : '1';
-    this.setState({
-      activeTab: tab,
-    });
   }
 
   onChange = e => {
@@ -116,9 +76,7 @@ class Action extends Component {
     e.preventDefault();
     const status = {
       name: this.state.name,
-      name_en: this.state.name_en,
       description: this.state.description,
-      description_en: this.state.description_en,
       status: parseInt(this.state.status, 10)
     };
     if (this.state.id) {
@@ -131,12 +89,9 @@ class Action extends Component {
     this.setState({
       id: '',
       name: '',
-      name_en: '',
       description: '',
-      description_en: '',
       status: 0,
     });
-
   }
 
   toggleModal = () => {
@@ -145,7 +100,7 @@ class Action extends Component {
 
   render() {
     const { messages } = this.props.intl;
-    const { id, name, name_en, description, description_en, status, errors } = this.state;
+    const { id, name, description, status, errors } = this.state;
     return (
       <Modal
         isOpen={this.props.modalOpen}
@@ -157,70 +112,25 @@ class Action extends Component {
           {id ? <IntlMessages id="status.update" /> : <IntlMessages id="status.add-new" />}
         </ModalHeader>
         <ModalBody>
-          <Nav tabs>
-            <NavItem>
-              <NavLink
-                className={classnames({ active: this.state.activeTab === '1' })}
-                onClick={() => { this.toggleTab('1'); }}
-              >
-                <IntlMessages id="setting.locale-vie" />
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink
-                className={classnames({ active: this.state.activeTab === '2' })}
-                onClick={() => { this.toggleTab('2'); }}
-              >
-                <IntlMessages id="setting.locale-eng" />
-              </NavLink>
-            </NavItem>
-          </Nav>
-          <TabContent activeTab={this.state.activeTab}>
-            <TabPane tabId="1">
-              <Label className="mt-4">
-                <IntlMessages id="status.name" />
-              </Label>
-              <Input 
-                type="text"
-                name="name"
-                placeholder={messages['status.name']}
-                value={name}
-                onChange={this.onChange}
-              />
-              <div className="text-danger">{errors.name}</div>
-              <Label className="mt-4">
-                <IntlMessages id="status.description" />
-              </Label>
-              <Input 
-                type="textarea" 
-                name="description"
-                value={description}
-                onChange={this.onChange}
-              />
-            </TabPane>
-            <TabPane tabId="2">
-              <Label className="mt-4">
-                <IntlMessages id="status.name" />
-              </Label>
-              <Input 
-                type="text"
-                name="name_en"
-                placeholder={messages['status.name']}
-                value={name_en}
-                onChange={this.onChange}
-              />
-              <div className="text-danger">{errors.name_en}</div>
-              <Label className="mt-4">
-                <IntlMessages id="status.description" />
-              </Label>
-              <Input 
-                type="textarea" 
-                name="description_en"
-                value={description_en}
-                onChange={this.onChange}
-              />
-            </TabPane>
-          </TabContent>
+          <Label>
+            <IntlMessages id="status.name" />
+          </Label>
+          <Input 
+            type="text"
+            name="name"
+            value={name}
+            onChange={this.onChange}
+          />
+          <div className="text-danger">{errors.name}</div>
+          <Label className="mt-4">
+            <IntlMessages id="status.description" />
+          </Label>
+          <Input 
+            type="textarea" 
+            name="description"
+            value={description}
+            onChange={this.onChange}
+          />
           <Label className="mt-4">
             <IntlMessages id="status.status" />
           </Label>
@@ -259,13 +169,11 @@ Action.propTypes = {
   toggleStatusModal: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ status, settings })  => {
+const mapStateToProps = ({ status })  => {
   const { error, modalData } = status;
-  const { locale } = settings;
   return {
     error,
-    modalData,
-    locale
+    modalData
   }
 }
 

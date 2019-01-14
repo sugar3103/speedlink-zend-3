@@ -24,6 +24,12 @@ export default {
                     url: '/app/master-data/address',
                     icon: 'simple-icon-location-pin',
                 },
+                {
+                    id : 'hub',
+                    name: 'menu.hub',
+                    url: '/app/master-data/hub',
+                    icon: 'simple-icon-globe',
+                },
             ]
         }
     ]

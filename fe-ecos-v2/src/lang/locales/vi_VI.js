@@ -36,6 +36,10 @@ module.exports = {
   /* 01.General */
   "general.copyright": "Gogo React © Todos los derechos reservados.",
 
+  /* Setting */
+  "setting.locale-vie": "Tiếng Việt",
+  "setting.locale-eng": "Tiếng Anh",
+
   /* 02.Người dùng đăng nhập, đăng ký, đăng xuất */
   "user.title-page": "CHÀO MỪNG ĐẾN VỚI SPEEDLINK",
   "user.login-text-1": "Vui lòng sử dụng tài khoản của bạn để đăng nhập.",
@@ -59,6 +63,7 @@ module.exports = {
   "menu.master-data": "Master Data",
   "menu.status": "Trạng Thái",
   "menu.address": "Địa chỉ",
+  "menu.hub": "Hub",
   "menu.search": "Tìm kiếm",
   "menu.login": "Đăng nhập",
   "menu.register": "Đăng ký",
@@ -68,13 +73,13 @@ module.exports = {
   "status.add-new": "Tạo mới trạng thái",
   "status.update": "Cập nhật trạng thái",
   "status.name": "Tên",
+  "status.description": "Mô tả",
   "status.status": "Trạng thái",
   "status.all": "Tất cả",
   "status.active": "Kích hoạt",
   "status.inactive": "Không kích hoạt",
   "status.search": "Tìm kiếm",
   "status.clear": "Làm mới",
-  "status.description": "Mô tả",
   "status.action": "Hành động",
   "status.export": "Xuất",
   "status.cancel": "Hủy",
@@ -95,5 +100,25 @@ module.exports = {
   "address.hub-code": "Hub Code",
   "address.action": "Hành động",
   "address.export": "Xuất",
+
+  /* Master Data - Status */
+  "hub.add-new": "Tạo mới Hub",
+  "hub.update": "Cập nhật Hub",
+  "hub.name": "Tên",
+  "hub.status": "Trạng thái",
+  "hub.all": "Tất cả",
+  "hub.active": "Kích hoạt",
+  "hub.inactive": "Không kích hoạt",
+  "hub.search": "Tìm kiếm",
+  "hub.clear": "Làm mới",
+  "hub.description": "Mô tả",
+  "hub.action": "Hành động",
+  "hub.export": "Xuất",
+  "hub.cancel": "Hủy",
+  "hub.submit": "Lưu",
+  "hub.title-confirm": "Bạn chắc chắn?",
+  "hub.desc-confirm": "Bạn muốn xóa trạng thái này?",
+  "hub.confirm-no": "Không",
+  "hub.confirm-yes": "Có, xóa nó!",
   
 };

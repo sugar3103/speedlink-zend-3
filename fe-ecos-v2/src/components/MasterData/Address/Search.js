@@ -25,8 +25,8 @@ class Search extends Component {
       city: '',
       district: '',
       ward: '',
-      brandCode: '',
-      hubCode: ''
+      brand: '',
+      hub: ''
     }
   }
 
@@ -47,8 +47,8 @@ class Search extends Component {
       city: '',
       district: '',
       ward: '',
-      brandCode: '',
-      hubCode: ''
+      branch: '',
+      hub: ''
     });
   }
 
@@ -66,7 +66,7 @@ class Search extends Component {
 
   render() {
     const { messages } = this.props.intl;
-    const { code, zipCode, country, city, district, ward, brandCode, hubCode } = this.state;
+    const { code, zipCode, country, city, district, ward, brand, hub } = this.state;
     return (
       <div className="mb-2">
         <fieldset className="scheduler-border">
@@ -166,7 +166,7 @@ class Search extends Component {
                     type="text"
                     name="brandCode"
                     onChange={this.onChange}
-                    value={brandCode}
+                    value={brand}
                     placeholder={messages["address.brand-code"]}
                   />
                 </FormGroup>
@@ -180,7 +180,7 @@ class Search extends Component {
                     type="text"
                     name="hubCode"
                     onChange={this.onChange}
-                    value={hubCode}
+                    value={hub}
                     placeholder={messages["address.hub-code"]}
                   />
                 </FormGroup>

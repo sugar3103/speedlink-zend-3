@@ -35,7 +35,7 @@ final class Version20181108064727 extends AbstractMigration
               password_reset_token_created_at datetime                              null,
               language                        char(5) default \'en_US\'               not null,
               last_token                      varchar(255)                          null,
-              created_by                      int(11) not null,
+              created_by                      int(11) null,
               created_at                      timestamp default current_timestamp() not null
               on update current_timestamp(),
               updated_by                      int(11) null,
