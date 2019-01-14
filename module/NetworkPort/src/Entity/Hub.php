@@ -316,4 +316,29 @@ class Hub
     {
         return $this->description;
     }
+
+    /**
+     * Set city.
+     *
+     * @param \Address\Entity\City|null $city
+     *
+     * @return Hub
+     */
+    public function setCity(\Address\Entity\City $city = null)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Get city.
+     *
+     * @return \Address\Entity\City|null
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
 }

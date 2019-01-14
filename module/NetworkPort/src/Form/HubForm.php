@@ -1,15 +1,25 @@
 <?php
-namespace Status\Form;
+namespace NetworkPort\Form;
 
-use Status\Entity\Status;
-use Status\Validator\StatusExistsValidator;
+use NetworkPort\Entity\Hub;
+use NetworkPort\Validator\HubExistsValidator;
 use Doctrine\ORM\EntityManager;
 use Zend\Filter\StringTrim;
 use Zend\Filter\ToInt;
+use Zend\Form\Element\Button;
+use Zend\Form\Element\Csrf;
+use Zend\Form\Element\Password;
+use Zend\Form\Element\Select;
+use Zend\Form\Element\Submit;
+use Zend\Form\Element\Text;
 use Zend\Form\Form;
+use Zend\InputFilter\ArrayInput;
+use Zend\Validator\GreaterThan;
+use Zend\Validator\Identical;
+use Zend\Validator\InArray;
 use Zend\Validator\StringLength;
 
-class StatusForm extends Form {
+class HubForm extends Form {
     
     /**
      * Scenario ('create' or 'update')
@@ -24,21 +34,20 @@ class StatusForm extends Form {
     private $entityManager = null;
 
     /**
-     * Current Status.
-     * @var Status
+     * Current Branch.
+     * @var Branch
      */
-    private $status = null;
+    private $hub = null;
 
-    public function __construct($scenario = 'create', $entityManager = null, $status = null)
+    public function __construct($scenario = 'create', $entityManager = null, $hub = null)
     {
         // Define form name.
-        parent::__construct('status-form');
-
+        parent::__construct('hub-form');
         
         // Save parameters for internal use.
         $this->scenario = $scenario;
         $this->entityManager = $entityManager;
-        $this->status = $status;
+        $this->hub = $hub;
 
         $this->addInputFilter();
     }
@@ -47,8 +56,10 @@ class StatusForm extends Form {
      * This method creates input filter (used for form filtering/validation).
      */
     private function addInputFilter() {
+        // Create main input filter.
         $inputFilter = $this->getInputFilter();
 
+        // Add input for "username" field.
         $inputFilter->add([
             'name' => 'name',
             'required' => true,
@@ -66,17 +77,17 @@ class StatusForm extends Form {
                     ]
                 ],
                 [
-                    'name' => StatusExistsValidator::class,
+                    'name' => HubExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'status' => $this->status
+                        'hub' => $this->hub
                     ]
                 ]
             ]
         ]);
 
         $inputFilter->add([
-            'name' => 'name_en',
+            'name' => 'code',
             'required' => true,
             'filters' => [
                 [
@@ -92,33 +103,23 @@ class StatusForm extends Form {
                     ]
                 ],
                 [
-                    'name' => StatusExistsValidator::class,
+                    'name' => HubExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'status' => $this->status
+                        'hub' => $this->hub
                     ]
                 ]
             ]
         ]);
-
+        
         $inputFilter->add([
-            'name'  => 'description',
-            'required' => false,
+            'name' => 'city_id',
+            'required'  => true,
             'filters' => [
                 [
-                    'name' => StringTrim::class
+                    'name' => ToInt::class
                 ]
-            ]
-        ]);
-
-        $inputFilter->add([
-            'name'  => 'description_en',
-            'required' => false,
-            'filters' => [
-                [
-                    'name' => StringTrim::class
-                ]
-            ]
+            ]           
         ]);
 
         $inputFilter->add([
@@ -131,26 +132,33 @@ class StatusForm extends Form {
             ] 
         ]);
 
-        if ($this->scenario == 'update') {
-            $inputFilter->add([
-                'name'  => 'updated_by',
-                'required'  => true,
-                'filters' => [
-                    [
-                        'name' => ToInt::class
-                    ]
-                ] 
-            ]);
-        } else {
-            $inputFilter->add([
-                'name'  => 'created_by',
-                'required'  => true,
-                'filters' => [
-                    [
-                        'name' => ToInt::class
-                    ]
-                ] 
-            ]);
-        }
+        $inputFilter->add([
+            'name'  => 'created_by',
+            'required'  => false,
+            'filters' => [
+                [
+                    'name' => ToInt::class
+                ]
+            ] 
+        ]);$inputFilter->add([
+            'name'  => 'updated_by',
+            'required'  => false,
+            'filters' => [
+                [
+                    'name' => ToInt::class
+                ]
+            ] 
+        ]);
+
+        $inputFilter->add([
+            'name'  => 'description',
+            'required' => false,
+            'filters' => [
+                [
+                    'name' => StringTrim::class
+                ]
+            ]
+        ]);
+        
     }
 }

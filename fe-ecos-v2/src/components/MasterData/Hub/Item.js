@@ -13,7 +13,7 @@ import { injectIntl } from 'react-intl';
 class Item extends Component {
 
   toggleModal = (status) => {
-    this.props.toggleStatusModal(status);
+    this.props.toggleStatusModal(status)
   }
 
   onDelete = (id) => {

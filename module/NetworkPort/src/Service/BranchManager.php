@@ -2,6 +2,7 @@
 namespace NetworkPort\Service;
 
 use NetworkPort\Entity\Branch;
+use NetworkPort\Entity\Hub;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use Zend\Crypt\Password\Bcrypt;
@@ -17,6 +18,10 @@ use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator;
 use Zend\Authentication\Result;
 
+use Address\Entity\Country;
+use Address\Entity\City;
+use Address\Entity\District;
+use Address\Entity\Ward;
 /**
  * This service is responsible for adding/editing users
  * and changing user password.
@@ -66,7 +71,7 @@ class BranchManager {
         $this->entityManager->beginTransaction();
         try {
         $branch = new Branch;
-
+        // var_dump($data); die;
         $branch->setCode($data['code']);
         $branch->setName($data['name']);
         $branch->setHubId($data['hub_id']);
@@ -77,11 +82,12 @@ class BranchManager {
         $branch->setCityId($data['city_id']);
         $branch->setDistrictId($data['district_id']);
         $branch->setWardId($data['ward_id']);
-        $branch->setIncludingWardIds($data['including_ward_ids']);
         $branch->setDescription($data['description']);
-
+        $this->getReferenced($branch, $data);
+        
         $this->entityManager->persist($branch);
-        $this->entityManager->flush();
+        $this->entityManager->flush();        
+        
         $last_id = $branch->getBranchId();
         $this->entityManager->commit();
         return new Result(
@@ -111,8 +117,8 @@ class BranchManager {
             $branch->setCityId($data['city_id']);
             $branch->setDistrictId($data['district_id']);
             $branch->setWardId($data['ward_id']);
-            // $branch->setIncludingWardIds($data['including_ward_ids']);
             $branch->setDescription($data['description']);
+            $this->getReferenced($branch, $data);
             
             // apply changes to database.
             $this->entityManager->flush();
@@ -129,6 +135,39 @@ class BranchManager {
             $this->entityManager->rollback();
             return FALSE;
         }
+    }
+
+    private function getReferenced($branch,$data) {
+
+        $country = $this->entityManager->getRepository(Country::class)->find($data['country_id']);
+        if ($country == null)
+            throw new \Exception('Not found Country by ID');
+
+        $branch->setCountry($country);
+
+        $city = $this->entityManager->getRepository(City::class)->find($data['city_id']);
+        if ($city == null)
+            throw new \Exception('Not found City by ID');
+
+        $branch->setCity($city);
+        
+        $district = $this->entityManager->getRepository(District::class)->find($data['district_id']);
+        if ($district == null)
+            throw new \Exception('Not found District by ID');
+
+        $branch->setDistrict($district);
+
+        $ward = $this->entityManager->getRepository(Ward::class)->find($data['ward_id']);
+        if ($ward == null)
+            throw new \Exception('Not found Ward by ID');
+
+        $branch->setWard($ward);
+
+        $hub = $this->entityManager->getRepository(Hub::class)->find($data['hub_id']);
+        if ($hub == null)
+            throw new \Exception('Not found Hub by ID');
+
+        $branch->setHub($hub);
     }
 
     /**

@@ -12,24 +12,6 @@ use Doctrine\ORM\QueryBuilder;
  * @package NetworkPort\Repository
  */
 class HubRepository extends EntityRepository {
-
-    // /**
-    //  * Retrieves all users in descending createdAt order.
-    //  * @return \Doctrine\ORM\Query
-    //  */
-    // public function findAllUsers() {
-    //     $entityManager = $this->getEntityManager();
-
-    //     $queryBuilder = $entityManager->createQueryBuilder();
-
-    //     $queryBuilder->select('u')
-    //         ->from(User::class, 'u')
-    //         ->orderBy('u.createdAt', 'DESC');
-
-    //     return $queryBuilder->getQuery();
-    // }
-
-
     /**
      * Get list user by condition
      *
@@ -48,7 +30,6 @@ class HubRepository extends EntityRepository {
             $queryBuilder = $this->buildHubQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select(
                "h.hubId,
-                h.cityId,
                 h.code,
                 h.name,
                 h.status,
@@ -94,7 +75,6 @@ class HubRepository extends EntityRepository {
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(Hub::class, 'h')
-       
          ->leftJoin('h.city', 'c');
             // ->groupBy('u.id')
             // ->where('u.deletedAt is null')

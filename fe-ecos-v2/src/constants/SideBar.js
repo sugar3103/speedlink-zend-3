@@ -51,6 +51,12 @@ export default {
                         }
                     ]
                 },
+                {
+                    id : 'hub',
+                    name: 'menu.hub',
+                    url: '/app/master-data/hub',
+                    icon: 'simple-icon-globe',
+                },
             ]
         }
     ]

@@ -17,6 +17,8 @@ use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator;
 use Zend\Authentication\Result;
 
+use Address\Entity\City;
+
 /**
  * This service is responsible for adding/editing users
  * and changing user password.
@@ -66,16 +68,18 @@ class HubManager {
         $this->entityManager->beginTransaction();
         try {
         $hub = new Hub;
-
+        // var_dump($data);die;
         $hub->setCityId($data['city_id']);
         $hub->setCode($data['code']);
         $hub->setName($data['name']);
         $hub->setStatus($data['status']);
-        $hub->setCreatedBy($data['create_by']);
+        $hub->setCreatedBy($data['created_by']);
         $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
         $hub->setCreatedAt($addTime->format('Y-m-d H:i:s'));
-        $hub->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+        // $hub->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
         $hub->setDescription($data['description']);
+
+        $this->getReferenced($hub, $data);
 
         $this->entityManager->persist($hub);
         $this->entityManager->flush();
@@ -84,7 +88,7 @@ class HubManager {
         return new Result(
                 Result::SUCCESS,
                 $last_id,
-                ['Add hub successfully.']
+                ['Add Hub Successfully']
             );
         }
         catch (ORMException $e) {
@@ -102,10 +106,10 @@ class HubManager {
             $hub->setCode($data['code']);
             $hub->setName($data['name']);
             $hub->setStatus($data['status']);
-            $hub->setUpdatedBy($data['update_by']);
+            $hub->setUpdatedBy($data['updated_by']);
             $hub->setUpdatedAt(date('Y-m-d H:i:s'));
             $hub->setDescription($data['description']);
-            
+            $this->getReferenced($hub, $data);
             // apply changes to database.
             $this->entityManager->flush();
             $last_id = $hub->getHubId();
@@ -113,13 +117,21 @@ class HubManager {
             return new Result(
                 Result::SUCCESS,
                 $last_id,
-                ['Update hub successfully.']
+                ['Update Hub Successfully']
             );
         }
         catch (ORMException $e) {
             $this->entityManager->rollback();
             return FALSE;
         }
+    }
+
+    private function getReferenced($hub,$data) {
+
+      $city = $this->entityManager->getRepository(City::class)->find($data['city_id']);
+      if ($city == null)
+          throw new \Exception('Not found City by ID');
+      $hub->setCity($city);
     }
 
     /**
@@ -149,7 +161,6 @@ class HubManager {
             ->getListHubByCondition($sortField, $sortDirection, $filters);
 
         if($ormHub){
-
             //set offset,limit
             $ormPaginator = new ORMPaginator($ormHub, true);
             $ormPaginator->setUseOutputWalkers(false);
