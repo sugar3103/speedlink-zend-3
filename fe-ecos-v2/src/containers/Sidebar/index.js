@@ -158,13 +158,16 @@ class Sidebar extends Component {
 
     /* set selected parent menu */
     const selectedlink = document.querySelector(".sub-menu  a.active");
+    
     if (selectedlink !== null) {
       selectedlink.parentElement.classList.add("active");
+      const selectedlinkParent = selectedlink.parentElement.parentElement.getAttribute(
+        "data-parent"
+      );
       this.setState({
-        selectedParentMenu: selectedlink.parentElement.parentElement.getAttribute(
-          "data-parent"
-        )
+        selectedParentMenu: selectedlinkParent
       });
+      
     } else {
       var selectedParentNoSubItem = document.querySelector(".main-menu  li a.active");
       
@@ -212,44 +215,58 @@ class Sidebar extends Component {
     this.props.setContainerClassnames(0, nextClasses.join(" "));
   }
 
-  openSubMenu(e, selectedParent) { 
+  openSubMenu(e, selectedParent,main) { 
     e.preventDefault();
-    
-    const { containerClassnames, menuClickCount } = this.props;
-    const currentClasses = containerClassnames
-      ? containerClassnames.split(" ").filter(x => x !== "")
-      : "";
+    if(main) {
+      const { containerClassnames, menuClickCount } = this.props;
+      const currentClasses = containerClassnames
+        ? containerClassnames.split(" ").filter(x => x !== "")
+        : "";
 
-    if (!currentClasses.includes("menu-mobile")) {
-      if (
-        currentClasses.includes("menu-sub-hidden") &&
-        (menuClickCount === 2 || menuClickCount === 0)
-      ) {
-        this.props.setContainerClassnames(3, containerClassnames);
-      } else if (
-        currentClasses.includes("menu-hidden") &&
-        (menuClickCount === 1 || menuClickCount === 3)
-      ) {
-        this.props.setContainerClassnames(2, containerClassnames);
-      } else if (
-        currentClasses.includes("menu-default") &&
-        !currentClasses.includes("menu-sub-hidden") &&
-        (menuClickCount === 1 || menuClickCount === 3)
-      ) {
-        this.props.setContainerClassnames(0, containerClassnames);
+      if (!currentClasses.includes("menu-mobile")) {
+        if (
+          currentClasses.includes("menu-sub-hidden") &&
+          (menuClickCount === 2 || menuClickCount === 0)
+        ) {
+          this.props.setContainerClassnames(3, containerClassnames);
+        } else if (
+          currentClasses.includes("menu-hidden") &&
+          (menuClickCount === 1 || menuClickCount === 3)
+        ) {
+          this.props.setContainerClassnames(2, containerClassnames);
+        } else if (
+          currentClasses.includes("menu-default") &&
+          !currentClasses.includes("menu-sub-hidden") &&
+          (menuClickCount === 1 || menuClickCount === 3)
+        ) {
+          this.props.setContainerClassnames(0, containerClassnames);
+        }
+      } else {
+        this.props.addContainerClassname(
+          "sub-show-temporary",
+          containerClassnames
+        );
       }
-    } else {
-      this.props.addContainerClassname(
-        "sub-show-temporary",
-        containerClassnames
-      );
+    } else{
+      const arrow = document.querySelector("#"+ selectedParent + " span.arrow i");
+      const menu = document.querySelector("#"+ selectedParent + " ul");
+      if(arrow.className === "simple-icon-arrow-down"){
+        arrow.className = "simple-icon-arrow-left";
+        menu.className = 'd-none';
+      } else {
+        arrow.className = "simple-icon-arrow-down";
+        menu.className = 'nav d-block';
+      }
+      return false;
     }
+
     this.setState({
       viewingParentMenu: selectedParent
     });
-
     
   }
+
+  
   changeViewingParentMenu(menu) {
     this.toggle();
 
@@ -272,10 +289,11 @@ class Sidebar extends Component {
                         <NavItem 
                           key={key}
                           className={classnames({
-                          active: ((that.state.selectedParentMenu === item.id && that.state.viewingParentMenu === "") || that.state.viewingParentMenu === item.id)                         
-                          })}                          
+                          active: ((that.state.selectedParentMenu === item.id && that.state.viewingParentMenu === "") || that.state.viewingParentMenu === item.id)                          
+                          })}
+                          data-primary = "main"                       
                         >
-                          <NavLink to={item.url} onClick={e => that.openSubMenu(e, item.id)}>
+                          <NavLink to={item.url} onClick={e => that.openSubMenu(e, item.id, true)}>
                             <i className={item.icon} />{" "}
                             <IntlMessages id={item.name} />
                           </NavLink>
@@ -325,17 +343,44 @@ class Sidebar extends Component {
                     "d-block": ((that.state.selectedParentMenu === item.id && that.state.viewingParentMenu === "") || that.state.viewingParentMenu === item.id)
                   })}
                   data-parent={item.id}
+                  data-primary = "sub"                       
                 >
                 {
                   item.childrens.map(function(child,key){
-                    return(
-                    <NavItem key={key}>
-                      <NavLink to={child.url}>
-                        <i className={child.icon} />{" "}
-                        <IntlMessages id={child.name} />
-                      </NavLink>
-                    </NavItem>
-                    )
+                    if(child.childrens) {
+                      return(
+                        <NavItem key={key} id={child.id}>
+                          <NavLink to={child.url} onClick={e => that.openSubMenu(e, child.id,false)}>
+                            <i className={child.icon} />{" "}
+                            <IntlMessages id={child.name} />
+                            <span className="arrow"><i className="simple-icon-arrow-left" />{" "}</span>
+                          </NavLink>
+                          <Nav>
+                            {
+                              child.childrens.map(function(sub_child,key) {
+                                return (
+                                  <NavItem key={key}>
+                                    <NavLink to={sub_child.url}>
+                                      <IntlMessages id={sub_child.name} />
+                                    </NavLink>
+                                  </NavItem>
+                                )
+                              })
+                            }
+                          </Nav>
+                        </NavItem>
+                      )
+                    } else {
+                      return(
+                        <NavItem key={key}>
+                          <NavLink to={child.url}>
+                            <i className={child.icon} />{" "}
+                            <IntlMessages id={child.name} />
+                          </NavLink>
+                        </NavItem>
+                      )
+                    }
+                    
                   })
                 }
                 </Nav>

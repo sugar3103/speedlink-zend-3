@@ -57,7 +57,22 @@ $router = [
                             'isAuthorizationRequired' => true
                         ]
                     ]                  
-                ]               
+                ],
+                'district' => [
+                    'type'  => Segment::class,
+                    'options' => [
+                        'route' => '/district[/:action]',
+                        'constraints' => [
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*'                            
+                        ],
+                        'defaults' => [
+                            'controller' => Controller\DistrictController::class,
+                            'action' => 'list',
+                            'isAuthorizationRequired' => true
+                        ]
+                    ]                  
+                ]     
+
             ]
         ],
     ]

@@ -75,8 +75,8 @@ class AddressCodeRepository extends EntityRepository {
             ],
 
             'country' => [
-                'alias' => 'ac.country',
-                'operator' => 'eq'
+                'alias' => 'ct.name',
+                'operator' => 'contains'
             ],
             
             'city' => [

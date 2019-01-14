@@ -64,6 +64,11 @@ module.exports = {
   "menu.login": "Login",
   "menu.register": "Register",
   "menu.forgot-password": "Forgot Password",
+  "menu.address_code": "Code",
+  "menu.address_country": "Country",
+  "menu.address_city": "City",
+  "menu.address_district": "District",
+  "menu.address_ward": "Ward",
 
   /* Master Data - Status */
   "status.add-new": "Create New Status",

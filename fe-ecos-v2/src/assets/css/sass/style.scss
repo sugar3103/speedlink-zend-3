@@ -47,3 +47,16 @@ legend.scheduler-border {
 .custom-ui-confirm > h1 {
   margin-top: 0;
 }
+
+#app-container .sidebar .sub-menu ul li span.arrow {
+  float: right;
+}
+
+#app-container .sidebar .sub-menu ul li ul li {
+  margin-bottom: 0;
+}
+
+#app-container .sidebar .sub-menu ul li ul li a { padding:2px 0; color: #212121 !important}
+#app-container .sidebar .sub-menu ul li ul li a.active {color: #880a1f !important}
+
+#app-container .sidebar .sub-menu ul li a{ font-size: 14px}

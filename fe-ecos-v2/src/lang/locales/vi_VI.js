@@ -63,6 +63,11 @@ module.exports = {
   "menu.login": "Đăng nhập",
   "menu.register": "Đăng ký",
   "menu.forgot-password": "Quên mật khẩu",
+  "menu.address_code": "Code",
+  "menu.address_country": "Quốc gia",
+  "menu.address_city": "Tỉnh/Thành Phố",
+  "menu.address_district": "Quận/Huyện",
+  "menu.address_ward": "Phường/Xã",
 
   /* Master Data - Status */
   "status.add-new": "Tạo mới trạng thái",

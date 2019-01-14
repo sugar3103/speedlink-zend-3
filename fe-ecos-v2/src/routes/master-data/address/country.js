@@ -6,20 +6,20 @@ import {
   Button, 
   Table, 
 } from 'reactstrap';
-import { Colxx } from "../../components/Layout/CustomBootstrap";
-import Pagination from '../../components/Layout/Pagination';
-import IntlMessages from "../../util/IntlMessages";
-import Search from '../../components/MasterData/Address/Search';
-import Item from '../../components/MasterData/Address/Item';
+import { Colxx } from "../../../components/Layout/CustomBootstrap";
+import Pagination from '../../../components/Layout/Pagination';
+import IntlMessages from "../../../util/IntlMessages";
+
+import Item from '../../../components/MasterData/Address/ItemCountry';
 
 import { connect } from "react-redux";
 import {
-  getAddressList
-} from "../../redux/actions";
-import ItemPerPage from '../../components/Layout/ItemPerPage';
-import { SELECTED_PAGE_SIZE } from '../../constants/defaultValues';
+  getCountryList
+} from "../../../redux/actions";
+import ItemPerPage from '../../../components/Layout/ItemPerPage';
+import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 
-class AddressPage extends Component {
+class CountryPage extends Component {
 
   constructor(props) {
     super(props);
@@ -40,7 +40,7 @@ class AddressPage extends Component {
     if (this.props.address.paramSearch) {
       Object.assign(params, { "query": this.props.address.paramSearch})
     };
-    this.props.getAddressList(params, this.props.history);
+    this.props.getCountryList(params, this.props.history);
 
     this.setState({
       currentPage: page
@@ -58,7 +58,7 @@ class AddressPage extends Component {
     if (this.props.address.paramSearch) {
       Object.assign(params, { "query": this.props.address.paramSearch})
     };
-    this.props.getAddressList(params, this.props.history);
+    this.props.getCountryList (params, this.props.history);
 
     this.setState({
       selectedPageSize: size
@@ -66,7 +66,7 @@ class AddressPage extends Component {
   }
 
   componentDidMount() {
-    this.props.getAddressList(null, this.props.history);
+    this.props.getCountryList (null, this.props.history);
   }
 
   showStatusItem = (items) => {
@@ -76,7 +76,7 @@ class AddressPage extends Component {
         return (
           <Item 
             key={index}
-            address={item}
+            country={item}
           />
         )
       })
@@ -87,7 +87,7 @@ class AddressPage extends Component {
   render() {
     const { messages } = this.props.intl;
     const { items, loading } = this.props.address;
-
+    
     return (
       <Fragment>
         <div className="disable-text-selection">
@@ -98,7 +98,7 @@ class AddressPage extends Component {
                   <IntlMessages id="menu.address" />
                 </h1>
               </div>
-              <Search history={this.props.history} />
+              
               <div className="mb-2">
                 <Button color="warning" size="sm" className="float-sm-left">{messages["address.export"]}</Button>
                 <ItemPerPage changePageSize={this.changePageSize} selectedPageSize={this.state.selectedPageSize} />
@@ -106,18 +106,7 @@ class AddressPage extends Component {
               </div>
               <div className="mb-2">
                 <Table bordered hover>
-                  <thead>
-                    <tr>
-                      <th width="5%">{messages["address.code"]}</th>
-                      <th>{messages["address.zip-code"]}</th>
-                      <th>{messages["address.country"]}</th>
-                      <th>{messages["address.city"]}</th>
-                      <th>{messages["address.district"]}</th>
-                      <th>{messages["address.ward"]}</th>
-                      <th>{messages["address.brand-code"]}</th>
-                      <th>{messages["address.hub-code"]}</th>
-                    </tr>
-                  </thead>
+                  
                   <tbody>
                     {loading ? (
                       <tr><td colSpan={9} className="text-center"><div className="loading-table" /></td></tr>
@@ -136,9 +125,9 @@ class AddressPage extends Component {
   }
 }
 
-AddressPage.propTypes = {
+CountryPage.propTypes = {
   address: PropTypes.object.isRequired,
-  getAddressList: PropTypes.func.isRequired,
+  getCountryList : PropTypes.func.isRequired,
 }
 
 const mapStateToProps = ({ address }) => {
@@ -150,6 +139,6 @@ const mapStateToProps = ({ address }) => {
 export default injectIntl(connect(
   mapStateToProps,
   {
-    getAddressList
+    getCountryList
   }
-)(AddressPage));
+)(CountryPage));
