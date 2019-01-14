@@ -1,8 +1,8 @@
 <?php
 namespace NetworkPort\Form;
 
-use NetworkPort\Entity\Branch;
-use NetworkPort\Validator\BranchExistsValidator;
+use NetworkPort\Entity\Hub;
+use NetworkPort\Validator\HubExistsValidator;
 use Doctrine\ORM\EntityManager;
 use Zend\Filter\StringTrim;
 use Zend\Filter\ToInt;
@@ -19,7 +19,7 @@ use Zend\Validator\Identical;
 use Zend\Validator\InArray;
 use Zend\Validator\StringLength;
 
-class BranchForm extends Form {
+class HubForm extends Form {
     
     /**
      * Scenario ('create' or 'update')
@@ -37,17 +37,17 @@ class BranchForm extends Form {
      * Current Branch.
      * @var Branch
      */
-    private $branch = null;
+    private $hub = null;
 
-    public function __construct($scenario = 'create', $entityManager = null, $branch = null)
+    public function __construct($scenario = 'create', $entityManager = null, $hub = null)
     {
         // Define form name.
-        parent::__construct('branch-form');
+        parent::__construct('hub-form');
         
         // Save parameters for internal use.
         $this->scenario = $scenario;
         $this->entityManager = $entityManager;
-        $this->branch = $branch;
+        $this->hub = $hub;
 
         $this->addInputFilter();
     }
@@ -58,6 +58,7 @@ class BranchForm extends Form {
     private function addInputFilter() {
         // Create main input filter.
         $inputFilter = $this->getInputFilter();
+
         // Add input for "username" field.
         $inputFilter->add([
             'name' => 'name',
@@ -76,10 +77,10 @@ class BranchForm extends Form {
                     ]
                 ],
                 [
-                    'name' => BranchExistsValidator::class,
+                    'name' => HubExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'branch' => $this->branch
+                        'hub' => $this->hub
                     ]
                 ]
             ]
@@ -102,21 +103,21 @@ class BranchForm extends Form {
                     ]
                 ],
                 [
-                    'name' => BranchExistsValidator::class,
+                    'name' => HubExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'branch' => $this->branch
+                        'hub' => $this->hub
                     ]
                 ]
             ]
         ]);
         
         $inputFilter->add([
-            'name' => 'hub_id',
+            'name' => 'city_id',
             'required'  => true,
             'filters' => [
                 [
-                  'name' => ToInt::class
+                    'name' => ToInt::class
                 ]
             ]           
         ]);
@@ -147,43 +148,6 @@ class BranchForm extends Form {
                     'name' => ToInt::class
                 ]
             ] 
-        ]);
-        $inputFilter->add([
-            'name' => 'city_id',
-            'required'  => true,
-            'filters' => [
-                [
-                    'name' => ToInt::class
-                ]
-            ]           
-        ]); 
-         $inputFilter->add([
-            'name' => 'country_id',
-            'required'  => false,
-            'filters' => [
-                [
-                    'name' => ToInt::class
-                ]
-            ]           
-        ]);
-        $inputFilter->add([
-            'name' => 'district_id',
-            'required'  => true,
-            'filters' => [
-                [
-                    'name' => ToInt::class
-                ]
-            ]           
-        ]);
-
-        $inputFilter->add([
-            'name' => 'ward_id',
-            'required'  => true,
-            'filters' => [
-                [
-                    'name' => ToInt::class
-                ]
-            ]           
         ]);
 
         $inputFilter->add([

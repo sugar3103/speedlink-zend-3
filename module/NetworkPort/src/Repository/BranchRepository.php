@@ -13,22 +13,6 @@ use Doctrine\ORM\QueryBuilder;
  */
 class BranchRepository extends EntityRepository {
 
-    // /**
-    //  * Retrieves all users in descending createdAt order.
-    //  * @return \Doctrine\ORM\Query
-    //  */
-    // public function findAllUsers() {
-    //     $entityManager = $this->getEntityManager();
-
-    //     $queryBuilder = $entityManager->createQueryBuilder();
-
-    //     $queryBuilder->select('u')
-    //         ->from(User::class, 'u')
-    //         ->orderBy('u.createdAt', 'DESC');
-
-    //     return $queryBuilder->getQuery();
-    // }
-
     /**
      * Get list user by condition
      *
@@ -55,6 +39,7 @@ class BranchRepository extends EntityRepository {
                 u.updatedAt,
                 u.updatedBy,
                 u.hubId,
+                h.name AS hub_name,
                 d.name AS district,
                 c.name AS city,
                 w.name AS ward,
@@ -104,7 +89,8 @@ class BranchRepository extends EntityRepository {
         ->leftJoin('u.district', 'd')
         ->leftJoin('u.city', 'c')
         ->leftJoin('u.ward', 'w')
-        ->leftJoin('u.country', 'co');
+        ->leftJoin('u.country', 'co')
+        ->leftJoin('u.hub', 'h');
             // ->groupBy('u.id')
             // ->where('u.deletedAt is null')
             // ->andWhere('u.id <> 1')

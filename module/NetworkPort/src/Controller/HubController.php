@@ -10,6 +10,7 @@ use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Zend\Uri\Uri;
 use NetworkPort\Entity\Hub;
+use NetworkPort\Form\HubForm;
 
 class HubController extends CoreController {
     /**
@@ -73,7 +74,7 @@ class HubController extends CoreController {
       return new JsonModel([
           "meta" => [
               "page" => $offset,
-              "pages" => $totalPages,
+              // "pages" => $totalPages,
               "perpage"=> $limit,
               "total" => $dataHub['totalHub'],//total all records number available in the server
           ],
@@ -81,7 +82,6 @@ class HubController extends CoreController {
         ]);
       }
     }
-
 
     /**
     * Add Branch Action
@@ -95,81 +95,114 @@ class HubController extends CoreController {
             // fill in the form with POST data.
             $payload = file_get_contents('php://input');
             $data = json_decode($payload, true);
+            $user = $this->tokenPayload;
+            $data['created_by'] = $user->id;
+            $form = new HubForm('create', $this->entityManager);
 
-            $result = $this->hubManager->addHub($data);                
-            
-            $this->error_code = $result->getCode();
+            $form->setData($data);
+            //validate form
+            if ($form->isValid()) {
+              $data = $form->getData();
+
+              $result = $this->hubManager->addHub($data); 
+              $this->error_code = $result->getCode();
                 // Check result
-            if ($result->getCode() == Result::SUCCESS) {
-                  $this->apiResponse['message']   = $result->getMessages();                        
-                  $this->apiResponse['out_input'] = $result->getIdentity();                        
-                } else {
-                  $this->apiResponse = $result->getMessages();                        
-                }
+              if ($result->getCode() == Result::SUCCESS) {
+                $this->apiResponse['message']   = $result->getMessages();                        
+                $this->apiResponse['out_input'] = $result->getIdentity();                        
+              } else {
+                $this->error_code = 0;
+                $this->apiResponse = $result->getMessages();                        
+              }
+            }
+            else {
+                $this->error_code = 0;
+                $this->apiResponse = $form->getMessages();       
+            }            
+        }
+        else {
+            $this->httpStatusCode = 404;
+            $this->apiResponse['message'] = "Page Not Found";                 
         }
         return $this->createResponse();
       }
 
+    /**
+    * Update Hub Action
+    * @throws \Exception
+    */
     public function updatehubAction() {
         $payload = file_get_contents('php://input');
         $data = json_decode($payload, true);
-        $this->apiResponse['message'] = 'Action Update Hub';        
-        if($data['id'] < 1) {
-          //bao loi
-          $this->apiResponse['error_code'] = '404';     
-          $this->apiResponse['message'] = 'Hub_id not found!';     
+        $user = $this->tokenPayload;
+        $data['updated_by'] = $user->id;
+        $this->apiResponse['message'] = 'Action Update Hub'; 
+ 
+        if ( $data['id'] < 1) {
+          //bao loi k tim thay hub
+          $this->error_code = 0;
+          $this->apiResponse['message'] = 'Hub Not Found';
           return $this->createResponse();
         }
-
-        $hub = $this->entityManager->getRepository(Hub::class)->find($data['id']);
-
-        if ($hub == null) {
-          //bao loi k tim thay branch
-          $this->apiResponse['error_code'] = '404';
-          $this->apiResponse['message'] = 'Hub_id not found!';     
-          return $this->createResponse();
-        }
-
         // check if user has submitted the form.
         if ($this->getRequest()->isPost()) {
-            // fill in the form with POST data.
-            $result = $this->hubManager->updateHub($hub, $data);                
-
-            // $this->error_code = $result->getCode();
+          $hub = $this->entityManager->getRepository(Hub::class)->find($data['id']);
+          if($hub){
+            $form = new HubForm('update', $this->entityManager, $hub);
+            $form->setData($data);
+            if ($form->isValid()) {
+              // fill in the form with POST data.
+              $result = $this->hubManager->updateHub($hub, $data);                
                 // Check result
-            if ($result->getCode() == Result::SUCCESS) {
-                  $this->apiResponse['message']   = $result->getMessages();                        
-                  $this->apiResponse['out_input'] = $result->getIdentity();                        
-                } else {
-                  $this->apiResponse = $result->getMessages();                        
-                }
+              if ($result->getCode() == Result::SUCCESS) {
+                $this->error_code = 1;
+                $this->apiResponse['message']   = $result->getMessages();                 
+                $this->apiResponse['out_input'] = $result->getIdentity();                        
+              } else {
+                $this->error_code = 0;
+                $this->apiResponse = $result->getMessages();                        
+              }
+            } else {
+              $this->error_code = 0;
+              $this->apiResponse = $form->getMessages(); 
+            }   
+          } else {
+            $this->apiResponse['error_code'] = 0;
+            $this->apiResponse['message'] = 'Hub Not Found';   
+          }
+        } else {
+          $this->httpStatusCode = 404;
+          $this->apiResponse['message'] = "Page Not Found";   
         }
         return $this->createResponse();
       }
 
       public function deleteAction() {
 
-        $payload = file_get_contents('php://input');
-        $data = json_decode($payload, true);
-        $this->apiResponse['message'] = 'Action Delete Hub';        
-        if($data['id'] < 1) {
-          //bao loi
-          $this->apiResponse['error_code'] = '404';     
-          $this->apiResponse['message'] = 'Hub_id not found!';     
-          return $this->createResponse();
+        if ($this->getRequest()->isPost()) {
+          $payload = file_get_contents('php://input');
+          $data = json_decode($payload, true);
+          $this->apiResponse['message'] = 'Action Delete Hub';        
+          if($data['id'] < 1) {
+            //bao loi
+            $this->error_code = 0;
+            $this->apiResponse['message'] = 'Hub Not Found';     
+            return $this->createResponse();
+          }
+          // delete hub.
+          $result = $this->hubManager->deleteHub($data['id']);
+
+          if ($result->getCode() == Result::SUCCESS) {
+            $this->error_code = 1;
+            $this->apiResponse['message']   = $result->getMessages();                        
+          } else {
+            $this->error_code = 0;
+            $this->apiResponse = $result->getMessages();                        
+          } 
+        } else {
+          $this->httpStatusCode = 404;
+          $this->apiResponse['message'] = "Page Not Found";            
         }
-        // delete hub.
-        $result = $this->hubManager->deleteHub($data['id']);
-
-       if ($result->getCode() == Result::SUCCESS) {
-                  $this->apiResponse['message']   = $result->getMessages();                        
-                  $this->apiResponse['out_input'] = $result->getIdentity();                        
-                } else {
-                  $this->apiResponse = $result->getMessages();                        
-                }
-        return $this->createResponse();       
+      return $this->createResponse();       
     }
-
-
-   
 }

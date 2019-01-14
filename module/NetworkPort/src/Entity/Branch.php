@@ -115,7 +115,7 @@ class Branch
     /**
      * @var \Address\Entity\District
      *
-     * @ORM\OneToOne(targetEntity="Address\Entity\District", inversedBy="branch")
+     * @ORM\OneToOne(targetEntity="Address\Entity\District")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="district_id", referencedColumnName="district_id", unique=true, nullable=false)
      * })
@@ -125,7 +125,7 @@ class Branch
     /**
      * @var \Address\Entity\City
      *
-     * @ORM\OneToOne(targetEntity="Address\Entity\City", inversedBy="branch")
+     * @ORM\OneToOne(targetEntity="Address\Entity\City")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="city_id", referencedColumnName="city_id", unique=true, nullable=false)
      * })
@@ -135,7 +135,7 @@ class Branch
     /**
      * @var \Address\Entity\Ward
      *
-     * @ORM\OneToOne(targetEntity="Address\Entity\Ward", inversedBy="branch")
+     * @ORM\OneToOne(targetEntity="Address\Entity\Ward")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ward_id", referencedColumnName="ward_id", unique=true, nullable=false)
      * })
@@ -145,13 +145,22 @@ class Branch
     /**
      * @var \Address\Entity\Country
      *
-     * @ORM\OneToOne(targetEntity="Address\Entity\Country", inversedBy="branch")
+     * @ORM\OneToOne(targetEntity="Address\Entity\Country")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="country_id", referencedColumnName="country_id", unique=true, nullable=false)
      * })
      */
     private $country;
 
+    /**
+     * @var \NetworkPort\Entity\Hub
+     *
+     * @ORM\OneToOne(targetEntity="NetworkPort\Entity\Hub", fetch="EAGER")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="hub_id", referencedColumnName="hub_id", unique=true, nullable=true)
+     * })
+     */
+    private $hub;
 
     /**
      * Get branchId.
@@ -569,5 +578,29 @@ class Branch
     public function getCountry()
     {
         return $this->country;
+    }
+
+    /**
+     * Set hub.
+     *
+     * @param \NetworkPort\Entity\Hub|null $hub
+     *
+     * @return Branch
+     */
+    public function setHub(\NetworkPort\Entity\Hub $hub = null)
+    {
+        $this->hub = $hub;
+
+        return $this;
+    }
+
+    /**
+     * Get hub.
+     *
+     * @return \NetworkPort\Entity\Hub|null
+     */
+    public function getHub()
+    {
+        return $this->hub;
     }
 }

@@ -2,6 +2,7 @@
 namespace NetworkPort\Service;
 
 use NetworkPort\Entity\Branch;
+use NetworkPort\Entity\Hub;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use Zend\Crypt\Password\Bcrypt;
@@ -70,7 +71,7 @@ class BranchManager {
         $this->entityManager->beginTransaction();
         try {
         $branch = new Branch;
-     
+        // var_dump($data); die;
         $branch->setCode($data['code']);
         $branch->setName($data['name']);
         $branch->setHubId($data['hub_id']);
@@ -116,8 +117,8 @@ class BranchManager {
             $branch->setCityId($data['city_id']);
             $branch->setDistrictId($data['district_id']);
             $branch->setWardId($data['ward_id']);
-            // $branch->setIncludingWardIds($data['including_ward_ids']);
             $branch->setDescription($data['description']);
+            $this->getReferenced($branch, $data);
             
             // apply changes to database.
             $this->entityManager->flush();
@@ -144,7 +145,7 @@ class BranchManager {
 
         $branch->setCountry($country);
 
-        $city = $this->entityManager->getRepository(City::class)->find($data['country_id']);
+        $city = $this->entityManager->getRepository(City::class)->find($data['city_id']);
         if ($city == null)
             throw new \Exception('Not found City by ID');
 
@@ -162,9 +163,13 @@ class BranchManager {
 
         $branch->setWard($ward);
 
-        
+        $hub = $this->entityManager->getRepository(Hub::class)->find($data['hub_id']);
+        if ($hub == null)
+            throw new \Exception('Not found Hub by ID');
 
+        $branch->setHub($hub);
     }
+
     /**
      * Get list branch by condition
      *
