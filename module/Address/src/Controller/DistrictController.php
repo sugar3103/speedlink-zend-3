@@ -22,7 +22,7 @@ class DistrictController extends CoreController {
     protected $districtManager;
 
     public function __construct($entityManager, $districtManager) {
-            
+        parent::__construct($entityManager);
         $this->entityManager = $entityManager;
         $this->districtManager = $districtManager;
     }

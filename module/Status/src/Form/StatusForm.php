@@ -76,7 +76,43 @@ class StatusForm extends Form {
         ]);
 
         $inputFilter->add([
+            'name' => 'name_en',
+            'required' => true,
+            'filters' => [
+                [
+                    'name' => StringTrim::class
+                ]
+            ],
+            'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'min' => 4,
+                        'max' => 50
+                    ]
+                ],
+                [
+                    'name' => StatusExistsValidator::class,
+                    'options' => [
+                        'entityManager' => $this->entityManager,
+                        'status' => $this->status
+                    ]
+                ]
+            ]
+        ]);
+
+        $inputFilter->add([
             'name'  => 'description',
+            'required' => false,
+            'filters' => [
+                [
+                    'name' => StringTrim::class
+                ]
+            ]
+        ]);
+
+        $inputFilter->add([
+            'name'  => 'description_en',
             'required' => false,
             'filters' => [
                 [

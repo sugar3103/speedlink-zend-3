@@ -26,9 +26,19 @@ class Status
     protected $name;
 
     /**
+     * @ORM\Column(type="string",name="name_en",unique=true)
+     */
+    protected $name_en;
+
+    /**
      * @ORM\Column(type="text", name="description")
      */
     protected $description;
+
+    /**
+     * @ORM\Column(type="text", name="description_en")
+     */
+    protected $description_en;
 
     /**
      * @ORM\Column(type="integer", name="status")
@@ -92,6 +102,24 @@ class Status
     }
 
     /**
+     * Get name en
+     *
+     * @return mixed
+     */
+    public function getNameEn() {
+        return $this->name_en;
+    }
+
+    /**
+     * Set name english
+     *
+     * @param $nameEn
+     */
+    public function setNameEn($nameEn) {
+        $this->name_en = $nameEn;
+    }
+
+    /**
      * Get description
      *
      * @return mixed
@@ -107,6 +135,24 @@ class Status
      */
     public function setDescription($description) {
         $this->description = $description;
+    }
+
+    /**
+     * Get description en
+     *
+     * @return mixed
+     */
+    public function getDescriptionEn() {
+        return $this->description_en;
+    }
+
+    /**
+     * Set description en
+     *
+     * @param $descriptionEn
+     */
+    public function setDescriptionEn($descriptionEn) {
+        $this->description_en = $descriptionEn;
     }
 
     /**

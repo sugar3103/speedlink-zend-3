@@ -40,7 +40,7 @@ class CityController extends CoreController {
             $params = json_decode($payload, true);
 
             //the current page number.
-            $offset = isset($params['start']) ? $params['start'] : 0;
+            $currentPage = isset($params['start']) ? $params['start'] : 0;
             
             //total number of pages available in the server.
             $totalPages = 1;
@@ -65,11 +65,21 @@ class CityController extends CoreController {
             $dataCity = $this->cityManager->getListCityByCondition(
                 $currentPage, $limit, $sortField, $sortDirection,$filters);
             
+            
             $result = [
-                "totalRecords" => $dataCity['totalCity'],
+                "meta" => [
+                    "page" => $currentPage,
+                    "pages" => $totalPages,
+                    "from" => ($currentPage - 1) * $limit + 1,
+                    "to" => ($currentPage * $limit) > $dataCity['totalCity'] ? $dataCity['totalCity'] : ($currentPage * $limit),
+                    "perpage"=> $limit,
+                    "totalItems" => $dataCity['totalCity'],
+                    "totalPage" => ceil($dataCity['totalCity']/$limit)
+                ],
                 "data" => ($dataCity['listCity']) ? $dataCity['listCity'] : []           
             ];
             
+            $this->error_code = 1;
             $this->apiResponse = $result;
             return $this->createResponse();
         } else {

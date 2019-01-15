@@ -38,7 +38,9 @@ class StatusManager {
 
             $status = new Status();
             $status->setName($data['name']);
+            $status->setNameEn($data['name_en']);
             $status->setDescription($data['description']);
+            $status->setDescriptionEn($data['description_en']);
             $status->setStatus($data['status']);
 
             $currentDate = date('Y-m-d H:i:s');

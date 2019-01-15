@@ -32,7 +32,9 @@ class StatusRepository extends EntityRepository {
             $queryBuilder->select(
                 "s.status_id,
                  s.name,
+                 s.name_en,
                  s.description,
+                 s.description_en,
                  s.status,
                  s.created_by,
                  s.created_at,

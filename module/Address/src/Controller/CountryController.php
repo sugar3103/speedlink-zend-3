@@ -65,12 +65,22 @@ class CountryController extends CoreController {
             $dataCountry = $this->countryManager->getListCountryByCondition(
                 $currentPage, $limit, $sortField, $sortDirection,$filters);
             
+            
             $result = [
-                "totalRecords" => $dataCountry['totalCountry'],
+                "meta" => [
+                    "page" => $currentPage,
+                    "pages" => $totalPages,
+                    "from" => ($currentPage - 1) * $limit + 1,
+                    "to" => ($currentPage * $limit) > $dataCountry['totalCountry'] ? $dataCountry['totalCountry'] : ($currentPage * $limit),
+                    "perpage"=> $limit,
+                    "totalItems" => $dataCountry['totalCountry'],
+                    "totalPage" => ceil($dataCountry['totalCountry']/$limit)
+                ],
                 "data" => ($dataCountry['listCountry']) ? $dataCountry['listCountry'] : []           
             ];
             
-            $this->apiResponse = $result;            
+            $this->error_code = 1;
+            $this->apiResponse = $result;           
         } else {
             $this->httpStatusCode = 404;
             $this->apiResponse['message'] = "Page Not Found";            
