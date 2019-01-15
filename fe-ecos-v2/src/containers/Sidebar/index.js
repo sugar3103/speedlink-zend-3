@@ -396,19 +396,12 @@ class Sidebar extends Component {
     )
   }
 
-  navList() {
-    return(
+  render() {
+    return (
       <div className="sidebar">
         { this.renderMainMenu(navigation.items) }
         { this.renderSubMenu(navigation.items) }
        </div>
-    )
-  }
-  render() {
-    return (
-      <div>
-        { this.navList()}
-      </div>
     );
   }
 }

@@ -22,7 +22,7 @@ class WardController extends CoreController {
     protected $wardManager;
 
     public function __construct($entityManager, $wardManager) {
-            
+        parent::__construct($entityManager);
         $this->entityManager = $entityManager;
         $this->wardManager = $wardManager;
     }

@@ -72,7 +72,7 @@ export default (state = INIT_STATE, action) => {
         loading: false, 
         error: action.payload 
       };
-      case CITY_GET_LIST:      
+    case CITY_GET_LIST:      
       return { 
         ...state, 
         loading: true,
@@ -92,7 +92,8 @@ export default (state = INIT_STATE, action) => {
         loading: false, 
         error: action.payload 
       };
-      case DISTRICT_GET_LIST:      
+    
+    case DISTRICT_GET_LIST:      
       return { 
         ...state, 
         loading: true,

@@ -32,13 +32,13 @@ class DistrictRepository extends EntityRepository {
         try {
             $queryBuilder = $this->buildDistrictQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select(
-                "d.district_id,
+                "d.districtId,
                  d.name,
                  d.description,
                  d.status,
-                 d.created_by,
-                 d.created_at"                 
-            )->groupBy('d.district_id')
+                 d.createdBy,
+                 d.createdAt"                 
+            )->groupBy('d.districtId')
             ->setMaxResults($limit)
             ->setFirstResult($offset);
             return $queryBuilder;

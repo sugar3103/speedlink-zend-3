@@ -32,13 +32,13 @@ class WardRepository extends EntityRepository {
         try {
             $queryBuilder = $this->buildWardQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select(
-                "w.ward_id,
+                "w.wardId,
                  w.name,
                  w.description,
                  w.status,
-                 w.created_by,
-                 w.created_at"                 
-            )->groupBy('w.ward_id')
+                 w.createdBy,
+                 w.createdAt"                 
+            )->groupBy('w.wardId')
             ->setMaxResults($limit)
             ->setFirstResult($offset);
             return $queryBuilder;
@@ -85,7 +85,7 @@ class WardRepository extends EntityRepository {
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(Ward::class, 'd');
+        $queryBuilder->from(Ward::class, 'w');
 
         if ($sortField != NULL && $sortDirection != NULL)
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

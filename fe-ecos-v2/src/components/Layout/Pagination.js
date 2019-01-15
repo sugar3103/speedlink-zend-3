@@ -42,7 +42,7 @@ class Pagination extends React.Component {
     let lastPageButtonClassName = currentPage >= totalPage ? "disabled" : "";
     let prevPageButtonClassName = currentPage <= 1 ? "disabled" : "";
     let nextPageButtonClassName = currentPage >= totalPage ? "disabled" : "";
-    return totalPage > 1 ? (
+    return totalPage > 0 ? (
       <div className="mb-2">
         <span className="page-info">{`Show ${meta.from} to ${meta.to} of ${meta.totalItems} entries`}</span>
         <Nav className="pagination justify-content-center float-sm-right">

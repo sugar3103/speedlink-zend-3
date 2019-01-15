@@ -71,8 +71,21 @@ $router = [
                             'isAuthorizationRequired' => true
                         ]
                     ]                  
-                ]     
-
+                ],
+                'ward' => [
+                    'type'  => Segment::class,
+                    'options' => [
+                        'route' => '/ward[/:action]',
+                        'constraints' => [
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*'                            
+                        ],
+                        'defaults' => [
+                            'controller' => Controller\WardController::class,
+                            'action' => 'list',
+                            'isAuthorizationRequired' => true
+                        ]
+                    ]                  
+                ]                
             ]
         ],
     ]

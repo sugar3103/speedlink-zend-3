@@ -140,7 +140,7 @@ class DistrictManager  {
      * @throws ORMException
      */
     public function getListDistrictByCondition(
-        $offset,
+        $currentPage,
         $limit,
         $sortField = 'd.name',
         $sortDirection = 'ASC',
@@ -149,6 +149,7 @@ class DistrictManager  {
 
         $cities     = [];
         $totalDistrict = 0;        
+        $offset = ($currentPage * $limit) - $limit;    
         //get orm district
         $ormDistrict = $this->entityManager->getRepository(District::class)
             ->getListDistrictByCondition($sortField, $sortDirection, $filters,$offset,$limit);
@@ -213,19 +214,15 @@ class DistrictManager  {
     public function getValueFiltersSearch($params,$fieldsMap)
     {
         $filters = [];
-
+        
         if (isset($params['query']) && !empty($params['query'])){
           
-            if (isset($params['query']) && !empty($params['query'])){
-                foreach ($params['query'] as $key => $column) {
-                    if(isset($fieldsMap[$key]) && !empty($column)) {
-                        $filters[$key] = $column;
-                    }
-                }
-                 
-              }
+            foreach ($fieldsMap as $field)
+            {
+                if(isset($params['query'][$field]) && $params['query'][$field] != -1)
+                    $filters [$field] = trim($params['query'][$field]);
+            }
         }
-       
         return $filters;
     }
 }
