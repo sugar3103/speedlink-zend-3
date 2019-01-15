@@ -41,7 +41,7 @@ class CountryRepository extends EntityRepository {
                  c.status,
                  c.createdBy,
                  c.createdAt"                 
-            )->where("c.isDeleted = 0")
+            )->andWhere("c.isDeleted = 0")
             ->groupBy('c.countryId')
             ->setMaxResults($limit)
             ->setFirstResult($offset);
@@ -52,7 +52,6 @@ class CountryRepository extends EntityRepository {
             
             return [];
         }
-
     }
 
     /**
@@ -66,7 +65,7 @@ class CountryRepository extends EntityRepository {
      */
     public function buildCountryQueryBuilder($sortField = 'c.name', $sortDirection = 'asc', $filters)
     {
-
+        
         $operatorsMap = [
             'name' => [
                 'alias' => 'c.name',
@@ -91,8 +90,8 @@ class CountryRepository extends EntityRepository {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
         else
             $queryBuilder->orderBy('c.name', 'ASC');
-
-        return $this->setCriteriaListCountryByFilters($filters, $operatorsMap, $queryBuilder);
+        
+        return $this->setCriteriaListCountryByFilters($filters, $operatorsMap, $queryBuilder);        
     }
 
     /**
@@ -108,7 +107,7 @@ class CountryRepository extends EntityRepository {
     {
 
         foreach ($filters as $key => $value){
-
+            
            if (isset($operatorsMap[$key]) && $value !== "")
                 $expr = Criteria::create()->andWhere(Criteria::expr()->{$operatorsMap[$key]['operator']}($operatorsMap[$key]['alias'], $value));
             elseif ($value === "")
@@ -116,9 +115,10 @@ class CountryRepository extends EntityRepository {
             else
                 $expr = Criteria::create()->andWhere(Criteria::expr()->contains($operatorsMap[$key]['alias'], $value));
 
+            
             $queryBuilder->addCriteria($expr);
         }
-
+        
         return $queryBuilder;
     }
 

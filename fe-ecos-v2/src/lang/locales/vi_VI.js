@@ -115,6 +115,7 @@ module.exports = {
   "country.status": "Trạng thái",
   "country.created-at": "Ngày tạo",
   "country.action": "Hành động",
+  "country.all": "Tất cả",
   "country.active": "Kích hoạt",
   "country.inactive": "Không kích hoạt",
   "country.search": "Tìm kiếm",

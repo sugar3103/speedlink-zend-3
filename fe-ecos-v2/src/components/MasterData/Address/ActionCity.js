@@ -19,14 +19,14 @@ import {
 import IntlMessages from "../../../util/IntlMessages";
 
 import { connect } from 'react-redux';
-import { addCountryItem, updateCountryItem, toggleCountryModal } from '../../../redux/actions';
+import { addCityItem, updateCityItem, toggleCityModal } from '../../../redux/actions';
 
-class ActionCountry extends Component {
+class ActionCity extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      country_id: '',
+      city_id: '',
       name: '',
       name_en: '',
       description: '',
@@ -68,8 +68,8 @@ class ActionCountry extends Component {
     }
 
     //show data in modal when dit
-    if (nextProps && nextProps.modalCountryData) {
-      const data = nextProps.modalCountryData;
+    if (nextProps && nextProps.modalCityData) {
+      const data = nextProps.modalCityData;
       
       this.setState({
         country_id: data.countryId,
@@ -128,9 +128,9 @@ class ActionCountry extends Component {
     };
     if (this.state.country_id) {
       country.country_id = this.state.country_id;
-      this.props.updateCountryItem(country);
+      this.props.updateCityItem(country);
     } else {
-      this.props.addCountryItem(country);
+      this.props.addCityItem(country);
     }
 
     this.setState({
@@ -146,7 +146,7 @@ class ActionCountry extends Component {
   }
 
   toggleModal = () => {
-    this.props.toggleCountryModal()
+    this.props.toggleCityModal()
   }
 
   render() {
@@ -266,26 +266,26 @@ class ActionCountry extends Component {
   }
 }
 
-ActionCountry.propTypes = {
+ActionCity.propTypes = {
   error: PropTypes.object,
-  modalCountryData: PropTypes.object,
-  addCountryItem: PropTypes.func.isRequired,
-  updateCountryItem: PropTypes.func.isRequired,
-  toggleCountryModal: PropTypes.func.isRequired
+  modalCityData: PropTypes.object,
+  addCityItem: PropTypes.func.isRequired,
+  updateCityItem: PropTypes.func.isRequired,
+  toggleCityModal: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ address, settings })  => {
-  const { error, modalCountryData } = address;
+  const { error, modalCityData } = address;
   const { locale } = settings;
   return {
     error,
-    modalCountryData,
+    modalCityData,
     locale
   }
 }
 
 export default injectIntl(connect(mapStateToProps, {
-  addCountryItem,
-  updateCountryItem,
-  toggleCountryModal
-})(ActionCountry));
+  addCityItem,
+  updateCityItem,
+  toggleCityModal
+})(ActionCity));

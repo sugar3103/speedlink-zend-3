@@ -121,6 +121,7 @@ module.exports = {
   "country.created-at": "Created At",
   "country.action": "Action",
   "country.active": "Active",
+  "country.all": "All",
   "country.inactive": "Inactive",
   "country.search": "Search",
   "country.clear": "Clear",

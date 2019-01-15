@@ -3,6 +3,7 @@ import {
   ADDRESS_GET_LIST_SUCCESS,
   ADDRESS_GET_LIST_ERROR,
 
+  COUNTRY_TOGGLE_MODAL,
   COUNTRY_GET_LIST,
   COUNTRY_GET_LIST_SUCCESS,
   COUNTRY_GET_LIST_ERROR,
@@ -13,6 +14,7 @@ import {
   COUNTRY_UPDATE_ITEM_SUCCESS,
   COUNTRY_UPDATE_ITEM_ERROR,
 
+  CITY_TOGGLE_MODAL,
   CITY_GET_LIST,
   CITY_GET_LIST_SUCCESS,
   CITY_GET_LIST_ERROR,
@@ -25,7 +27,6 @@ import {
   WARD_GET_LIST,
   WARD_GET_LIST_SUCCESS,
   WARD_GET_LIST_ERROR,
-  COUNTRY_TOGGLE_MODAL,
 } from '../../../constants/actionTypes';
 
 
@@ -95,6 +96,11 @@ export const updateCountryItemError = (error) => ({
 });
 
 //City
+export const toggleCityModal = (city = null) => ({
+  type: CITY_TOGGLE_MODAL,
+  payload: city
+});
+
 export const getCityList = (params, history) => ({
   type: CITY_GET_LIST,
   payload: { params, history }

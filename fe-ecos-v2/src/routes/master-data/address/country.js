@@ -20,6 +20,7 @@ import {
 import ItemPerPage from '../../../components/Layout/ItemPerPage';
 import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 import ActionCountry from '../../../components/MasterData/Address/ActionCountry';
+import SearchCountry from '../../../components/MasterData/Address/SearchCountry';
 
 class CountryPage extends Component {
 
@@ -114,7 +115,7 @@ class CountryPage extends Component {
                   <ActionCountry modalOpen={modalCountryOpen} />
                 </div>
               </div>
-              
+              <SearchCountry history={this.props.history} />
               <div className="mb-2">
                 <Button color="warning" size="sm" className="float-sm-left">{messages["address.export"]}</Button>
                 <ItemPerPage changePageSize={this.changePageSize} selectedPageSize={this.state.selectedPageSize} />

@@ -3,6 +3,7 @@ import {
   ADDRESS_GET_LIST_SUCCESS,
   ADDRESS_GET_LIST_ERROR,
 
+  COUNTRY_TOGGLE_MODAL,
   COUNTRY_GET_LIST,
   COUNTRY_GET_LIST_SUCCESS,
   COUNTRY_GET_LIST_ERROR,
@@ -13,6 +14,7 @@ import {
   COUNTRY_UPDATE_ITEM_SUCCESS,
   COUNTRY_UPDATE_ITEM_ERROR,
 
+  CITY_TOGGLE_MODAL,
   CITY_GET_LIST,
   CITY_GET_LIST_SUCCESS,
   CITY_GET_LIST_ERROR,
@@ -24,7 +26,6 @@ import {
   WARD_GET_LIST,
   WARD_GET_LIST_SUCCESS,
   WARD_GET_LIST_ERROR,
-  COUNTRY_TOGGLE_MODAL,
 } from '../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -40,11 +41,10 @@ export default (state = INIT_STATE, action) => {
   
   switch (action.type) {
     case ADDRESS_GET_LIST:
-      const { params } = action.payload;
       return { 
         ...state, 
         loading: true,
-        paramSearch: (params && params.query) ? params.query : null
+        paramSearch: (action.payload.params && action.payload.params.query) ? action.payload.params.query : null
       };
 
     case ADDRESS_GET_LIST_SUCCESS:
@@ -69,11 +69,11 @@ export default (state = INIT_STATE, action) => {
         error: null
       }
 
-    case COUNTRY_GET_LIST:      
+    case COUNTRY_GET_LIST:  
       return { 
         ...state, 
         loading: true,
-        paramSearch: (params && params.query) ? params.query : null
+        paramSearch: (action.payload.params && action.payload.params.query) ? action.payload.params.query : null
       };
 
     case COUNTRY_GET_LIST_SUCCESS:
@@ -130,11 +130,19 @@ export default (state = INIT_STATE, action) => {
         error: action.payload 
       };
 
+    case CITY_TOGGLE_MODAL:
+      return {
+        ...state,
+        modalCityOpen: !state.modalCityOpen,
+        modalCityData: action.payload,
+        error: null
+      }
+
     case CITY_GET_LIST:      
       return { 
         ...state, 
         loading: true,
-        paramSearch: (params && params.query) ? params.query : null
+        paramSearch: (action.payload.params && action.payload.params.query) ? action.payload.params.query : null
       };
 
     case CITY_GET_LIST_SUCCESS:
@@ -155,7 +163,7 @@ export default (state = INIT_STATE, action) => {
       return { 
         ...state, 
         loading: true,
-        paramSearch: (params && params.query) ? params.query : null
+        paramSearch: (action.payload.params && action.payload.params.query) ? action.payload.params.query : null
       };
 
     case DISTRICT_GET_LIST_SUCCESS:
@@ -176,7 +184,7 @@ export default (state = INIT_STATE, action) => {
       return { 
         ...state, 
         loading: true,
-        paramSearch: (params && params.query) ? params.query : null
+        paramSearch: (action.payload.params && action.payload.params.query) ? action.payload.params.query : null
       };
 
     case WARD_GET_LIST_SUCCESS:

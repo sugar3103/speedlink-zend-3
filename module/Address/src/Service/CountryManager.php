@@ -218,13 +218,14 @@ class CountryManager  {
         $filters = [];
 
         if (isset($params['query']) && !empty($params['query'])){
-            foreach ($params['query'] as $key => $column) {
-                if(isset($fieldsMap[$key]) && !empty($column)) {
-                    $filters[$key] = $column;
-                }
+        
+            foreach ($fieldsMap as $field)
+            {
+                if(isset($params['query'][$field]) && $params['query'][$field] != -1)
+                    $filters[$field] = trim($params['query'][$field]);
             }
-          }
-       
+        }
+
         return $filters;
     }
 }

@@ -95,7 +95,7 @@ class DistrictPage extends Component {
 
   render() {
     const { messages } = this.props.intl;
-    const { items, loading,modalOpen } = this.props.address;
+    const { items, loading } = this.props.address;
     
     return (
       <Fragment>
@@ -125,7 +125,7 @@ class DistrictPage extends Component {
               </div>
               <div className="mb-2">
                 <Table bordered hover>
-                <thead>
+                  <thead>
                     <tr>
                       <th width="5%">{messages["address.id"]}</th>
                       <th>{messages["address.district"]}</th>
