@@ -8,25 +8,37 @@ import {
   COUNTRY_GET_LIST,
   CITY_GET_LIST,
   DISTRICT_GET_LIST,
-  WARD_GET_LIST
+  WARD_GET_LIST,
+  COUNTRY_ADD_ITEM,
+  COUNTRY_UPDATE_ITEM
 } from "../../../constants/actionTypes";
 
 import {
   getAddressListSuccess,
   getAddressListError,
+
+  toggleCountryModal,
   getCountryListSuccess,
   getCountryListError,
+  addCountryItemSuccess,
+  addCountryItemError,
+  updateCountryItemSuccess,
+  updateCountryItemError,
+  getCountryList,
+
   getCityListSuccess,
   getCityListError,
+
   getDistrictListSuccess,
   getDistrictListError,
+
   getWardListSuccess,
   getWardListError
 } from "./actions";
 
-import { alertDanger } from '../../../redux/actions';
+import { alertDanger, alertSuccess } from '../../../redux/actions';
 
-//list status
+//list address
 
 function getAddressListApi(params) {
   return axios.request({
@@ -73,6 +85,8 @@ export function* watchGetList() {
 }
 
 //Country
+
+//list country
 function getCountryListApi(params) {
   return axios.request({
     method: 'post',
@@ -115,6 +129,104 @@ function* getCountryListItems({ payload }) {
 
 export function* watchCountryGetList() {
   yield takeEvery(COUNTRY_GET_LIST, getCountryListItems);
+}
+
+//add country
+
+function addCountryApi(item) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}/address/country/add`,
+    headers: authHeader(),
+    data: item
+  });
+}
+
+const addCountryItemRequest = async item => {
+  return await addCountryApi(item).then(res => res.data).catch(err => err)
+};
+
+function* addCountryItem({ payload }) {
+  const { item, history } = payload;
+  
+  try {
+    const response = yield call(addCountryItemRequest, item);
+    
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(addCountryItemSuccess(response.result));
+        yield put(getCountryList(history));
+        yield put(toggleCountryModal());
+        yield put(alertSuccess(response.result.message));
+        break;
+
+      case EC_FAILURE:
+        yield put(addCountryItemError(response.message));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        history.push('/login');
+        yield put(alertDanger('Please login to countinue'))
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(addCountryItemError(error));
+  }
+}
+
+export function* watchAddCountryItem() {
+  yield takeEvery(COUNTRY_ADD_ITEM, addCountryItem);
+}
+
+//update country
+
+function updateCountryApi(item) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}/address/country/edit`,
+    headers: authHeader(),
+    data: item
+  });
+}
+
+const updateCountryItemRequest = async item => {
+  return await updateCountryApi(item).then(res => res.data).catch(err => err)
+};
+
+function* updateCountryItem({ payload }) {
+  const { item, history } = payload;
+  try {
+    const response = yield call(updateCountryItemRequest, item);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(updateCountryItemSuccess(response.result));
+        yield put(getCountryList(history));
+        yield put(toggleCountryModal());
+        yield put(alertSuccess(response.result.message));
+        break;
+
+      case EC_FAILURE:
+        yield put(updateCountryItemError(response.message));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        history.push('/login');
+        yield put(alertDanger('Please login to countinue'))
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(updateCountryItemError(error));
+  }
+}
+
+export function* watchUpdateCountryItem() {
+  yield takeEvery(COUNTRY_UPDATE_ITEM, updateCountryItem);
 }
 
 //City
@@ -257,6 +369,8 @@ export default function* rootSaga() {
   yield all([
     fork(watchGetList),
     fork(watchCountryGetList),
+    fork(watchAddCountryItem),
+    fork(watchUpdateCountryItem),
     fork(watchCityGetList),
     fork(watchDistrictGetList),
     fork(watchWardGetList),

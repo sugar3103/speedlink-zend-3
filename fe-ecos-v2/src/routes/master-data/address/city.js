@@ -107,7 +107,15 @@ class CityPage extends Component {
               </div>
               <div className="mb-2">
                 <Table bordered hover>
-                  
+                  <thead>
+                    <tr>
+                      <th width="5%">#</th>
+                      <th>{messages["address.name"]}</th>
+                      <th>{messages["address.status"]}</th>
+                      <th>{messages["address.created"]}</th>                      
+                      <th width="15%" className="text-center">{messages["address.action"]}</th>
+                    </tr>
+                  </thead>
                   <tbody>
                     {loading ? (
                       <tr><td colSpan={9} className="text-center"><div className="loading-table" /></td></tr>
