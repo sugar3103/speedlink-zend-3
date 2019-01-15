@@ -14,10 +14,12 @@ import Item from '../../../components/MasterData/Address/ItemCountry';
 
 import { connect } from "react-redux";
 import {
-  getCountryList
+  getCountryList,
+  toggleCountryModal
 } from "../../../redux/actions";
 import ItemPerPage from '../../../components/Layout/ItemPerPage';
 import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
+import ActionCountry from '../../../components/MasterData/Address/ActionCountry';
 
 class CountryPage extends Component {
 
@@ -69,7 +71,7 @@ class CountryPage extends Component {
     this.props.getCountryList (null, this.props.history);
   }
 
-  showStatusItem = (items) => {
+  showCountryItem = (items) => {
     let result = null;
     if (items.length > 0) {
       result = items.map((item, index) => {
@@ -84,9 +86,13 @@ class CountryPage extends Component {
     return result;
   }
 
+  toggleModal = () => {
+    this.props.toggleCountryModal();
+  }
+
   render() {
     const { messages } = this.props.intl;
-    const { items, loading } = this.props.address;
+    const { items, loading, modalCountryOpen } = this.props.address;
     
     return (
       <Fragment>
@@ -95,8 +101,18 @@ class CountryPage extends Component {
             <Colxx xxs="12">
               <div className="mb-2">
                 <h1>
-                  <IntlMessages id="menu.address" />
+                  <IntlMessages id="menu.address_country" />
                 </h1>
+                <div className="float-sm-right">
+                  <Button
+                    color="success"
+                    onClick={this.toggleModal}
+                    size="sm"
+                  >
+                    <IntlMessages id="country.add-new" />
+                  </Button>
+                  <ActionCountry modalOpen={modalCountryOpen} />
+                </div>
               </div>
               
               <div className="mb-2">
@@ -106,12 +122,21 @@ class CountryPage extends Component {
               </div>
               <div className="mb-2">
                 <Table bordered hover>
-                  
+                  <thead>
+                    <tr>
+                      <th width="5%">#</th>
+                      <th width="20%">{messages["country.name"]}</th>
+                      <th>{messages["country.iso-code"]}</th>
+                      <th>{messages["country.status"]}</th>
+                      <th>{messages["country.created-at"]}</th>
+                      <th className="text-center" width="15%">{messages["country.action"]}</th>
+                    </tr>
+                  </thead>
                   <tbody>
                     {loading ? (
                       <tr><td colSpan={9} className="text-center"><div className="loading-table" /></td></tr>
                     ) : (
-                      this.showStatusItem(items.data)
+                      this.showCountryItem(items.data)
                     )}
                   </tbody>
                 </Table>
@@ -139,6 +164,7 @@ const mapStateToProps = ({ address }) => {
 export default injectIntl(connect(
   mapStateToProps,
   {
-    getCountryList
+    getCountryList,
+    toggleCountryModal
   }
 )(CountryPage));

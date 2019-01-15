@@ -40,14 +40,15 @@ class CountryController extends CoreController {
             $payload = file_get_contents('php://input');
             $params = json_decode($payload, true);
           
-            //the current page number.
-            $currentPage = isset($params['start']) ? $params['start'] : 0;
-            
+           //the current page number.
+            $currentPage = isset( $params['pagination']) ? (int) $params['pagination']['page'] : 1;
+
             //total number of pages available in the server.
-            $totalPages = 1;
+            $totalPages = isset($params['pagination']['pages']) ? (int) $params['pagination']['pages'] : 1;
  
             //set limit
-            $limit  = isset($params['length']) ? $params['length'] : 10;
+            $limit  = !empty($params['pagination']['perpage'])
+                         && $params['pagination']['perpage'] > 10 ? $params['pagination']['perpage'] : 10;
 
             // get the filters
             $fieldsMap = [

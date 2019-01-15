@@ -9,7 +9,6 @@ class ItemCity extends Component {
 
   render() {
     const { city } = this.props;
-    // console.log(city);
     return (
       <tr>
         <th scope="row">{city.cityId}</th>

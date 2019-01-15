@@ -37,7 +37,7 @@ class CountryManager  {
             $country->setDescriptionEn($data['description_en']);
             $country->setStatus($data['status']);
             $country->setIsoCode($data['iso_code']);
-            $country->setRefAsBy($data['ref_as_by']);
+            // $country->setRefAsBy($data['ref_as_by']);
 
             $currentDate = date('Y-m-d H:i:s');
             $country->setCreatedAt($currentDate);
@@ -80,7 +80,7 @@ class CountryManager  {
             $country->setDescriptionEn($data['description_en']);
             $country->setStatus($data['status']);
             $country->setIsoCode($data['iso_code']);
-            $country->setRefAsBy($data['ref_as_by']);
+            // $country->setRefAsBy($data['ref_as_by']);
 
             $currentDate = date('Y-m-d H:i:s');
             $country->setUpdatedAt($currentDate);
@@ -141,7 +141,7 @@ class CountryManager  {
      * @throws ORMException
      */
     public function getListCountryByCondition(
-        $offset,
+        $currentPage,
         $limit,
         $sortField = 'c.name',
         $sortDirection = 'ASC',
@@ -150,6 +150,7 @@ class CountryManager  {
 
         $countries     = [];
         $totalCountry = 0;
+        $offset = ($currentPage * $limit) - $limit;      
         
         //get orm country
         $ormCountry = $this->entityManager->getRepository(Country::class)

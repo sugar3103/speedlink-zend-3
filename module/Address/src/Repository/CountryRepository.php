@@ -34,7 +34,9 @@ class CountryRepository extends EntityRepository {
             $queryBuilder->select(
                 "c.countryId,
                  c.name,
+                 c.nameEn,
                  c.description,
+                 c.descriptionEn,
                  c.isoCode,
                  c.status,
                  c.createdBy,

@@ -106,6 +106,23 @@ module.exports = {
   "address.action": "Hành động",
   "address.export": "Xuất",
 
+  /* Master Data - Address - Country */
+  "country.add-new": "Tạo mới đất nước",
+  "country.update": "Cập nhật đất nước",
+  "country.name": "Tên",
+  "country.description": "Mô tả",
+  "country.iso-code": "Mã ISO",
+  "country.status": "Trạng thái",
+  "country.created-at": "Ngày tạo",
+  "country.action": "Hành động",
+  "country.active": "Kích hoạt",
+  "country.inactive": "Không kích hoạt",
+  "country.search": "Tìm kiếm",
+  "country.clear": "Làm mới",
+  "country.export": "Xuất",
+  "country.cancel": "Hủy",
+  "country.submit": "Lưu",
+
   /* Master Data - Status */
   "hub.add-new": "Tạo mới Hub",
   "hub.update": "Cập nhật Hub",

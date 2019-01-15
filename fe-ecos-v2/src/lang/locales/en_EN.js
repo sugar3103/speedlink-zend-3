@@ -107,6 +107,23 @@ module.exports = {
   "address.action": "Action",
   "address.export": "Export",
 
+  /* Master Data - Address - Country*/
+  "country.add-new": "Add New Country",
+  "country.update": "Update Country",
+  "country.name": "Name",
+  "country.description": "Description",
+  "country.iso-code": "ISO Code",
+  "country.status": "Status",
+  "country.created-at": "Created At",
+  "country.action": "Action",
+  "country.active": "Active",
+  "country.inactive": "Inactive",
+  "country.search": "Search",
+  "country.clear": "Clear",
+  "country.export": "Export",
+  "country.cancel": "Cancel",
+  "country.submit": "Save",
+
   /* Master Data - Status */
   "hub.add-new": "Create New Hub",
   "hub.update": "Update Hub",

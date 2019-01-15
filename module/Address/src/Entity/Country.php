@@ -431,7 +431,7 @@ class Country
             self::INACTIVE => 'Inactive'
         ];
 
-        if(!empty($value) && isset($status[$value])) {
+        if(isset($value) && isset($status[$value])) {
             return $status[$value];
         }
         return $status;

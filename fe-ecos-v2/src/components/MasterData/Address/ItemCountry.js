@@ -1,14 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Button } from 'reactstrap';
 
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import { toggleCountryModal } from '../../../redux/actions';
 
 class ItemCountry extends Component {
 
+  toggleModal = (country) => {
+    this.props.toggleCountryModal(country);
+  }
+
   render() {
-    const { country } = this.props;    
+    const { country } = this.props; 
+    
     return (
       <tr>
         <th scope="row">{country.countryId}</th>
@@ -16,6 +24,9 @@ class ItemCountry extends Component {
         <td>{country.isoCode}</td>
         <td>{country.status}</td>
         <td>{country.createdAt}</td>
+        <td className="text-center">
+          <Button color="success" size="xs" onClick={() => this.toggleModal(country)}><i className="simple-icon-pencil" /></Button> &nbsp;
+        </td>
       </tr>
     );
   }
@@ -23,6 +34,9 @@ class ItemCountry extends Component {
 
 ItemCountry.propTypes = {
   country: PropTypes.object.isRequired,
+  toggleCountryModal: PropTypes.func.isRequired,
 }
 
-export default injectIntl(ItemCountry);
+export default injectIntl(connect(null, {
+  toggleCountryModal
+})(ItemCountry));

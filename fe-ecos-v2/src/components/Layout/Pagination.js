@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import { Colxx } from "./CustomBootstrap";
 import { Nav, NavItem, NavLink } from "reactstrap";
 class Pagination extends React.Component {
 
@@ -42,7 +41,7 @@ class Pagination extends React.Component {
     let lastPageButtonClassName = currentPage >= totalPage ? "disabled" : "";
     let prevPageButtonClassName = currentPage <= 1 ? "disabled" : "";
     let nextPageButtonClassName = currentPage >= totalPage ? "disabled" : "";
-    return totalPage > 1 ? (
+    return (
       <div className="mb-2">
         <span className="page-info">{`Show ${meta.from} to ${meta.to} of ${meta.totalItems} entries`}</span>
         <Nav className="pagination justify-content-center float-sm-right">
@@ -101,9 +100,7 @@ class Pagination extends React.Component {
         </Nav>
         <div className="clearfix"></div>
       </div>
-    ) : (
-        <Colxx xxs="12" className="mt-2" />
-      );
+    );
   }
 }
 
