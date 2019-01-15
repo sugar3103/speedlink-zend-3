@@ -20,6 +20,7 @@ import {
   DISTRICT_GET_LIST,
   DISTRICT_GET_LIST_SUCCESS,
   DISTRICT_GET_LIST_ERROR,
+  DISTRICT_TOGGLE_MODAL,
 
   WARD_GET_LIST,
   WARD_GET_LIST_SUCCESS,
@@ -110,6 +111,11 @@ export const getCityListError = (error) => ({
 });
 
 //District
+export const toggleDistrictModal = (status = null) => ({
+  type: DISTRICT_TOGGLE_MODAL,
+  payload: status
+})
+
 export const getDistrictList = (params, history) => ({
   type: DISTRICT_GET_LIST,
   payload: { params, history }

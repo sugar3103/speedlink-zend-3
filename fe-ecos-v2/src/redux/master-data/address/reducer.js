@@ -150,7 +150,8 @@ export default (state = INIT_STATE, action) => {
         loading: false, 
         error: action.payload 
       };
-      case DISTRICT_GET_LIST:      
+    
+    case DISTRICT_GET_LIST:      
       return { 
         ...state, 
         loading: true,

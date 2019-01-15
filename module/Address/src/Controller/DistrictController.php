@@ -42,19 +42,20 @@ class DistrictController extends CoreController {
             
           
             //the current page number.
-            $offset = isset($params['start']) ? $params['start'] : 0;
-            
+            $currentPage = isset( $params['pagination']) ? (int) $params['pagination']['page'] : 1;
+
             //total number of pages available in the server.
-            $totalPages = 1;
- 
+            $totalPages = isset($params['pagination']['pages']) ? (int) $params['pagination']['pages'] : 1;
+
             //set limit
-            $limit  = isset($params['length']) ? $params['length'] : 10;
+            $limit  = !empty($params['pagination']['perpage'])
+                       && $params['pagination']['perpage'] > 10 ? $params['pagination']['perpage'] : 10;
 
             // get the filters
             $fieldsMap = [
                 0 => 'name',
                 1 => 'district',
-                2 => 'status'
+                2 => 'status'                
             ];
 
             $filters = $this->districtManager->getValueFiltersSearch($params,$fieldsMap);
@@ -67,18 +68,31 @@ class DistrictController extends CoreController {
             $dataDistrict = $this->districtManager->getListDistrictByCondition(
                 $currentPage, $limit, $sortField, $sortDirection,$filters);
             
+            // $result = [
+            //     "totalRecords" => $dataDistrict['totalDistrict'],
+            //     "data" => ($dataDistrict['listDistrict']) ? $dataDistrict['listDistrict'] : []           
+            // ];
+
             $result = [
-                "totalRecords" => $dataDistrict['totalDistrict'],
+                "meta" => [
+                    "page" => $currentPage,
+                    "pages" => $totalPages,
+                    "from" => ($currentPage - 1) * $limit + 1,
+                    "to" => ($currentPage * $limit) > $dataDistrict['totalDistrict'] ? $dataDistrict['totalDistrict'] : ($currentPage * $limit),
+                    "perpage"=> $limit,
+                    "totalItems" => $dataDistrict['totalDistrict'],
+                    "totalPage" => ceil($dataDistrict['totalDistrict']/$limit)
+                ],
                 "data" => ($dataDistrict['listDistrict']) ? $dataDistrict['listDistrict'] : []           
             ];
-            
-            $this->apiResponse = $result;
-            return $this->createResponse();
-        } else {
-            $this->apiResponse['message'] = 'District List';
 
-            return $this->createResponse();
+            $this->error_code = 1;
+            $this->apiResponse = $result;            
+        } else {
+            $this->httpStatusCode = 404;
+            $this->apiResponse['message'] = "Page Not Found";            
         }
+        return $this->createResponse();
     }
 
     public function addAction()
