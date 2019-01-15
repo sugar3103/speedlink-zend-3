@@ -12,13 +12,22 @@
  // Get Folder Module
  function getModules(&$result) {
      $modules = array();
+     $registerModule = array();
      $directories = glob(dirname(__DIR__) .'/../module/*');
      foreach ($directories as $directory) {
-         if(is_dir($directory)){
-             $modules[] = basename($directory);
+         if(is_dir($directory .'/config')){
+             $modules[basename($directory)] = basename($directory);
+             $registerModule[] = basename($directory);
+         } else {
+             $subModules = glob($directory . '/*');
+             foreach ($subModules as $subModule) {
+                 $modules[basename($directory)][] = basename($subModule);
+                 $registerModule[] = basename($subModule);
+             }
          }
      }
-     $result = array_merge($result,$modules);
+     
+     $result = array_merge($result,$registerModule);
  
      //Check Module Composer
      $isDiff = false;
@@ -29,18 +38,27 @@
      //Check Is Module
      foreach ($prs_4 as $_module => $value) {
          $name_module = str_replace("\\","", $_module);
-         if(!is_dir(dirname(__DIR__) .'/../module/'.$name_module)) {
+         if(!is_dir(dirname(__DIR__) .'/../module/'.$name_module .'/config')) {
              unset($prs_4[$_module]);
              $isDiff = true;
          }
      }
  
      //Check Module
-     foreach ($modules as $module) {
+     foreach ($modules as $key => $module) {
+        if(is_array($module)) {
+            foreach ($module as $path) {
+                if(!isset($prs_4[$path ."\\"])){
+                    $prs_4[$path ."\\"] = "module/". $key ."/".$path ."/src/";
+                    $isDiff = true;
+                }
+            }
+        }else {
          if(!isset($prs_4[$module ."\\"])){
              $prs_4[$module ."\\"] = "module/". $module ."/src/";
              $isDiff = true;
          }
+        }
      }
  
      if($isDiff) {
