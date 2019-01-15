@@ -37,8 +37,8 @@ class DistrictPage extends Component {
       }
     }
     
-    if (this.props.address.paramSearch) {
-      Object.assign(params, { "query": this.props.address.paramSearch})
+    if (this.props.districts.paramSearch) {
+      Object.assign(params, { "query": this.props.districts.paramSearch})
     };
     this.props.getDistrictList(params, this.props.history);
 
@@ -55,8 +55,8 @@ class DistrictPage extends Component {
       }
     }
 
-    if (this.props.address.paramSearch) {
-      Object.assign(params, { "query": this.props.address.paramSearch})
+    if (this.props.districts.paramSearch) {
+      Object.assign(params, { "query": this.props.districts.paramSearch})
     };
     this.props.getDistrictList (params, this.props.history);
 
@@ -95,7 +95,7 @@ class DistrictPage extends Component {
 
   render() {
     const { messages } = this.props.intl;
-    const { items, loading } = this.props.address;
+    const { items, loading } = this.props.districts;
     
     return (
       <Fragment>
@@ -153,13 +153,14 @@ class DistrictPage extends Component {
 }
 
 DistrictPage.propTypes = {
-  address: PropTypes.object.isRequired,
+  districts: PropTypes.object.isRequired,
   getDistrictList : PropTypes.func.isRequired,
 }
 
 const mapStateToProps = ({ address }) => {
+  const { districts } = address;
   return {
-    address
+    districts
   };
 };
 

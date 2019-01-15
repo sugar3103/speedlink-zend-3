@@ -14,10 +14,12 @@ import Item from '../../../components/MasterData/Address/ItemCity';
 
 import { connect } from "react-redux";
 import {
-  getCityList
+  getCityList,
+  toggleCityModal
 } from "../../../redux/actions";
 import ItemPerPage from '../../../components/Layout/ItemPerPage';
 import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
+import ActionCity from '../../../components/MasterData/Address/ActionCity';
 
 class CityPage extends Component {
 
@@ -37,8 +39,8 @@ class CityPage extends Component {
       }
     }
     
-    if (this.props.address.paramSearch) {
-      Object.assign(params, { "query": this.props.address.paramSearch})
+    if (this.props.cities.paramSearch) {
+      Object.assign(params, { "query": this.props.cities.paramSearch})
     };
     this.props.getCityList(params, this.props.history);
 
@@ -55,8 +57,8 @@ class CityPage extends Component {
       }
     }
 
-    if (this.props.address.paramSearch) {
-      Object.assign(params, { "query": this.props.address.paramSearch})
+    if (this.props.cities.paramSearch) {
+      Object.assign(params, { "query": this.props.cities.paramSearch})
     };
     this.props.getCityList (params, this.props.history);
 
@@ -85,9 +87,13 @@ class CityPage extends Component {
     return result;
   }
 
+  toggleModal = () => {
+    this.props.toggleCityModal();
+  }
+
   render() {
     const { messages } = this.props.intl;
-    const { items, loading } = this.props.address;
+    const { items, loading, modalOpen } = this.props.cities;
     
     return (
       <Fragment>
@@ -98,10 +104,19 @@ class CityPage extends Component {
                 <h1>
                   <IntlMessages id="menu.address_city" />
                 </h1>
+                <div className="float-sm-right">
+                  <Button
+                    color="success"
+                    onClick={this.toggleModal}
+                    size="sm"
+                  >
+                    <IntlMessages id="city.add-new" />
+                  </Button>
+                  <ActionCity modalOpen={modalOpen} />
+                </div>
               </div>
-              
               <div className="mb-2">
-                <Button color="warning" size="sm" className="float-sm-left">{messages["address.export"]}</Button>
+                <Button color="warning" size="sm" className="float-sm-left">{messages["city.export"]}</Button>
                 <ItemPerPage changePageSize={this.changePageSize} selectedPageSize={this.state.selectedPageSize} />
                 <div className="clearfix"></div>
               </div>
@@ -110,10 +125,10 @@ class CityPage extends Component {
                   <thead>
                     <tr>
                       <th width="5%">#</th>
-                      <th>{messages["address.name"]}</th>
-                      <th>{messages["address.status"]}</th>
-                      <th>{messages["address.created"]}</th>                      
-                      <th width="15%" className="text-center">{messages["address.action"]}</th>
+                      <th>{messages["city.name"]}</th>
+                      <th>{messages["city.status"]}</th>
+                      <th>{messages["city.created"]}</th>                      
+                      <th width="15%" className="text-center">{messages["city.action"]}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -135,19 +150,22 @@ class CityPage extends Component {
 }
 
 CityPage.propTypes = {
-  address: PropTypes.object.isRequired,
+  cities: PropTypes.object.isRequired,
   getCityList : PropTypes.func.isRequired,
+  toggleCityModal : PropTypes.func.isRequired,
 }
 
 const mapStateToProps = ({ address }) => {
+  const { cities } = address
   return {
-    address
+    cities
   };
 };
 
 export default injectIntl(connect(
   mapStateToProps,
   {
-    getCityList
+    getCityList,
+    toggleCityModal
   }
 )(CityPage));

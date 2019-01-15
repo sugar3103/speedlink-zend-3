@@ -6,11 +6,13 @@ import { authHeader } from '../../../util/auth-header';
 import {
   ADDRESS_GET_LIST,
   COUNTRY_GET_LIST,
+  COUNTRY_ADD_ITEM,
+  COUNTRY_UPDATE_ITEM,
   CITY_GET_LIST,
+  CITY_ADD_ITEM,
+  CITY_UPDATE_ITEM,
   DISTRICT_GET_LIST,
   WARD_GET_LIST,
-  COUNTRY_ADD_ITEM,
-  COUNTRY_UPDATE_ITEM
 } from "../../../constants/actionTypes";
 
 import {
@@ -26,8 +28,14 @@ import {
   updateCountryItemError,
   getCountryList,
 
+  toggleCityModal,
   getCityListSuccess,
   getCityListError,
+  addCityItemSuccess,
+  addCityItemError,
+  updateCityItemSuccess,
+  updateCityItemError,
+  getCityList,
 
   getDistrictListSuccess,
   getDistrictListError,
@@ -274,6 +282,104 @@ export function* watchCityGetList() {
   yield takeEvery(CITY_GET_LIST, getCityListItems);
 }
 
+//add city
+
+function addCityApi(item) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}/address/city/add`,
+    headers: authHeader(),
+    data: item
+  });
+}
+
+const addCityItemRequest = async item => {
+  return await addCityApi(item).then(res => res.data).catch(err => err)
+};
+
+function* addCityItem({ payload }) {
+  const { item, history } = payload;
+  
+  try {
+    const response = yield call(addCityItemRequest, item);
+    
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(addCityItemSuccess(response.result));
+        yield put(getCityList(history));
+        yield put(toggleCityModal());
+        yield put(alertSuccess(response.result.message));
+        break;
+
+      case EC_FAILURE:
+        yield put(addCityItemError(response.message));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        history.push('/login');
+        yield put(alertDanger('Please login to countinue'))
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(addCityItemError(error));
+  }
+}
+
+export function* watchAddCityItem() {
+  yield takeEvery(CITY_ADD_ITEM, addCityItem);
+}
+
+//update city
+
+function updateCityApi(item) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}/address/city/edit`,
+    headers: authHeader(),
+    data: item
+  });
+}
+
+const updateCityItemRequest = async item => {
+  return await updateCityApi(item).then(res => res.data).catch(err => err)
+};
+
+function* updateCityItem({ payload }) {
+  const { item, history } = payload;
+  try {
+    const response = yield call(updateCityItemRequest, item);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(updateCityItemSuccess(response.result));
+        yield put(getCityList(history));
+        yield put(toggleCityModal());
+        yield put(alertSuccess(response.result.message));
+        break;
+
+      case EC_FAILURE:
+        yield put(updateCityItemError(response.message));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        history.push('/login');
+        yield put(alertDanger('Please login to countinue'))
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(updateCityItemError(error));
+  }
+}
+
+export function* watchUpdateCityItem() {
+  yield takeEvery(CITY_UPDATE_ITEM, updateCityItem);
+}
+
 //District
 function getDistrictListApi(params) {
   return axios.request({
@@ -372,6 +478,8 @@ export default function* rootSaga() {
     fork(watchAddCountryItem),
     fork(watchUpdateCountryItem),
     fork(watchCityGetList),
+    fork(watchAddCityItem),
+    fork(watchUpdateCityItem),
     fork(watchDistrictGetList),
     fork(watchWardGetList),
   ]);

@@ -18,6 +18,12 @@ import {
   CITY_GET_LIST,
   CITY_GET_LIST_SUCCESS,
   CITY_GET_LIST_ERROR,
+  CITY_ADD_ITEM,
+  CITY_ADD_ITEM_SUCCESS,
+  CITY_ADD_ITEM_ERROR,
+  CITY_UPDATE_ITEM,
+  CITY_UPDATE_ITEM_SUCCESS,
+  CITY_UPDATE_ITEM_ERROR,
   
   DISTRICT_GET_LIST,
   DISTRICT_GET_LIST_SUCCESS,
@@ -29,12 +35,44 @@ import {
 } from '../../../constants/actionTypes';
 
 const INIT_STATE = {
-  items: null,
-  error: null,
-  loading: true,
-  paramSearch: null,
-  modalCountryOpen: false,
-  modalCountryData: null
+  codes: {
+    items: null,
+    loading: true,
+    paramSearch: null,
+    error: null
+  },
+  countries: {
+    items: null,
+    loading: true,
+    paramSearch: null,
+    error: null,
+    modalOpen: false,
+    modalData: null
+  },
+  cities: {
+    items: null,
+    loading: true,
+    paramSearch: null,
+    error: null,
+    modalOpen: false,
+    modalData: null
+  },
+  districts: {
+    items: null,
+    loading: true,
+    paramSearch: null,
+    error: null,
+    modalOpen: false,
+    modalData: null
+  },
+  wards: {
+    items: null,
+    loading: true,
+    paramSearch: null,
+    error: null,
+    modalOpen: false,
+    modalData: null
+  }
 };
 
 export default (state = INIT_STATE, action) => {
@@ -43,162 +81,289 @@ export default (state = INIT_STATE, action) => {
     case ADDRESS_GET_LIST:
       return { 
         ...state, 
-        loading: true,
-        paramSearch: (action.payload.params && action.payload.params.query) ? action.payload.params.query : null
+        codes: {
+          ...state.codes,
+          loading: true,
+          paramSearch: (action.payload.params && action.payload.params.query) ? action.payload.params.query : null
+        }
       };
 
     case ADDRESS_GET_LIST_SUCCESS:
       return { 
         ...state, 
-        loading: false, 
-        items: action.payload 
+        codes: {
+          ...state.codes,
+          loading: false,
+          items: action.payload 
+        }
       };
 
     case ADDRESS_GET_LIST_ERROR:
       return { 
         ...state, 
-        loading: false, 
-        error: action.payload 
+        codes: {
+          ...state.codes,
+          loading: false, 
+          error: action.payload 
+        }
       };
 
     case COUNTRY_TOGGLE_MODAL:
       return {
         ...state,
-        modalCountryOpen: !state.modalCountryOpen,
-        modalCountryData: action.payload,
-        error: null
+        codes: {
+          ...state.codes,
+          modalOpen: !state.codes.modalOpen,
+          modalData: action.payload,
+          error: null
+        }
       }
 
     case COUNTRY_GET_LIST:  
       return { 
         ...state, 
-        loading: true,
-        paramSearch: (action.payload.params && action.payload.params.query) ? action.payload.params.query : null
+        countries: {
+          ...state.countries,
+          loading: true,
+          paramSearch: (action.payload.params && action.payload.params.query) ? action.payload.params.query : null
+        }
       };
 
     case COUNTRY_GET_LIST_SUCCESS:
       return { 
         ...state, 
-        loading: false, 
-        items: action.payload 
+        countries: {
+          ...state.countries,
+          loading: false, 
+          items: action.payload 
+        }
       };
 
     case COUNTRY_GET_LIST_ERROR:
       return { 
         ...state, 
-        loading: false, 
-        error: action.payload 
+        countries: {
+          ...state.countries,
+          loading: false, 
+          error: action.payload 
+        }
       };
 
     case COUNTRY_ADD_ITEM:
 			return { 
         ...state, 
-        loading: false 
+        countries: {
+          ...state.countries,
+          loading: false 
+        }
       };
 
 		case COUNTRY_ADD_ITEM_SUCCESS:
 			return { 
         ...state, 
-        loading: false, 
-        error: null
+        countries: {
+          ...state.countries,
+          loading: false, 
+          error: null
+        }
       };
 
 		case COUNTRY_ADD_ITEM_ERROR:
 			return { 
         ...state, 
-        loading: false, 
-        error: action.payload 
+        countries: {
+          ...state.countries,
+          loading: false, 
+          error: action.payload 
+        }
       };
 
     case COUNTRY_UPDATE_ITEM:
 			return { 
         ...state, 
-        loading: false 
+        countries: {
+          ...state.countries,
+          loading: false
+        }
       };
 
 		case COUNTRY_UPDATE_ITEM_SUCCESS:
 			return { 
         ...state, 
-        loading: false, 
-        error: null
+        countries: {
+          ...state.countries,
+          loading: false, 
+          error: null
+        }
       };
 
 		case COUNTRY_UPDATE_ITEM_ERROR:
 			return { 
         ...state, 
-        loading: false, 
-        error: action.payload 
+        countries: {
+          ...state.countries,
+          loading: false, 
+          error: action.payload 
+        }
       };
 
     case CITY_TOGGLE_MODAL:
       return {
         ...state,
-        modalCityOpen: !state.modalCityOpen,
-        modalCityData: action.payload,
-        error: null
+        cities: {
+          ...state.cities,
+          modalOpen: !state.cities.modalOpen,
+          modalData: action.payload,
+          error: null
+        }
       }
 
     case CITY_GET_LIST:      
       return { 
         ...state, 
-        loading: true,
-        paramSearch: (action.payload.params && action.payload.params.query) ? action.payload.params.query : null
+        cities: {
+          ...state.cities,
+          loading: true,
+          paramSearch: (action.payload.params && action.payload.params.query) ? action.payload.params.query : null
+        }
       };
 
     case CITY_GET_LIST_SUCCESS:
       return { 
         ...state, 
-        loading: false, 
-        items: action.payload 
+        cities: {
+          ...state.cities,
+          loading: false, 
+          items: action.payload 
+        }
       };
 
     case CITY_GET_LIST_ERROR:
       return { 
         ...state, 
-        loading: false, 
-        error: action.payload 
+        cities: {
+          ...state.cities,
+          loading: false, 
+          error: action.payload 
+        }
+      };
+
+    case CITY_ADD_ITEM:
+			return { 
+        ...state, 
+        cities: {
+          ...state.cities,
+          loading: false 
+        }
+      };
+
+		case CITY_ADD_ITEM_SUCCESS:
+			return { 
+        ...state, 
+        cities: {
+          ...state.cities,
+          loading: false, 
+          error: null
+        }
+      };
+
+		case CITY_ADD_ITEM_ERROR:
+			return { 
+        ...state, 
+        cities: {
+          ...state.cities,
+          loading: false, 
+          error: action.payload 
+        }
+      };
+
+    case CITY_UPDATE_ITEM:
+			return { 
+        ...state, 
+        cities: {
+          ...state.cities,
+          loading: false 
+        }
+      };
+
+		case CITY_UPDATE_ITEM_SUCCESS:
+			return { 
+        ...state, 
+        cities: {
+          ...state.cities,
+          loading: false, 
+          error: null
+        }
+      };
+
+		case CITY_UPDATE_ITEM_ERROR:
+			return { 
+        ...state, 
+        cities: {
+          ...state.cities,
+          loading: false, 
+          error: action.payload 
+        }
       };
     
     case DISTRICT_GET_LIST:      
       return { 
         ...state, 
-        loading: true,
-        paramSearch: (action.payload.params && action.payload.params.query) ? action.payload.params.query : null
+        districts: {
+          ...state.districts,
+          loading: true,
+          paramSearch: (action.payload.params && action.payload.params.query) ? action.payload.params.query : null
+        }
       };
 
     case DISTRICT_GET_LIST_SUCCESS:
       return { 
         ...state, 
-        loading: false, 
-        items: action.payload 
+        districts: {
+          ...state.districts,
+          loading: false, 
+          items: action.payload 
+        }
       };
 
     case DISTRICT_GET_LIST_ERROR:
       return { 
         ...state, 
-        loading: false, 
-        error: action.payload 
+        districts: {
+          ...state.districts,
+          loading: false, 
+          error: action.payload 
+        }
       };
 
-      case WARD_GET_LIST:      
+    case WARD_GET_LIST:      
       return { 
         ...state, 
-        loading: true,
-        paramSearch: (action.payload.params && action.payload.params.query) ? action.payload.params.query : null
+        wards: {
+          ...state.wards,
+          loading: true,
+          paramSearch: (action.payload.params && action.payload.params.query) ? action.payload.params.query : null
+        }
       };
 
     case WARD_GET_LIST_SUCCESS:
       return { 
         ...state, 
-        loading: false, 
-        items: action.payload 
+        wards: {
+          ...state.wards,
+          loading: false, 
+          items: action.payload 
+        }
       };
 
     case WARD_GET_LIST_ERROR:
       return { 
         ...state, 
-        loading: false, 
-        error: action.payload 
+        wards: {
+          ...state.wards,
+          loading: false, 
+          error: action.payload 
+        }
       };
 
     default: 

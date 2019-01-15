@@ -40,8 +40,8 @@ class CountryPage extends Component {
       }
     }
     
-    if (this.props.address.paramSearch) {
-      Object.assign(params, { "query": this.props.address.paramSearch})
+    if (this.props.countries.paramSearch) {
+      Object.assign(params, { "query": this.props.countries.paramSearch})
     };
     this.props.getCountryList(params, this.props.history);
 
@@ -58,8 +58,8 @@ class CountryPage extends Component {
       }
     }
 
-    if (this.props.address.paramSearch) {
-      Object.assign(params, { "query": this.props.address.paramSearch})
+    if (this.props.countries.paramSearch) {
+      Object.assign(params, { "query": this.props.countries.paramSearch})
     };
     this.props.getCountryList (params, this.props.history);
 
@@ -93,7 +93,7 @@ class CountryPage extends Component {
 
   render() {
     const { messages } = this.props.intl;
-    const { items, loading, modalCountryOpen } = this.props.address;
+    const { items, loading, modalOpen } = this.props.countries;
     
     return (
       <Fragment>
@@ -112,7 +112,7 @@ class CountryPage extends Component {
                   >
                     <IntlMessages id="country.add-new" />
                   </Button>
-                  <ActionCountry modalOpen={modalCountryOpen} />
+                  <ActionCountry modalOpen={modalOpen} />
                 </div>
               </div>
               <SearchCountry history={this.props.history} />
@@ -152,13 +152,14 @@ class CountryPage extends Component {
 }
 
 CountryPage.propTypes = {
-  address: PropTypes.object.isRequired,
+  countries: PropTypes.object.isRequired,
   getCountryList : PropTypes.func.isRequired,
 }
 
 const mapStateToProps = ({ address }) => {
+  const { countries } = address;
   return {
-    address
+    countries
   };
 };
 

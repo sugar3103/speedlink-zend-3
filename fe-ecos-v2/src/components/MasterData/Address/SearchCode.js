@@ -9,13 +9,13 @@ import {
   Label, 
   Input, 
 } from 'reactstrap';
-import { Colxx } from "../../../components/Layout/CustomBootstrap";
+import { Colxx } from "../../Layout/CustomBootstrap";
 
 import { connect } from 'react-redux';
 import { getAddressList } from '../../../redux/actions';
 import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 
-class Search extends Component {
+class SearchCode extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -199,10 +199,10 @@ class Search extends Component {
   }
 }
 
-Search.propTypes = {
+SearchCode.propTypes = {
   getAddressList: PropTypes.func.isRequired
 }
 
 export default injectIntl(connect(null, {
   getAddressList
-})(Search));
+})(SearchCode));

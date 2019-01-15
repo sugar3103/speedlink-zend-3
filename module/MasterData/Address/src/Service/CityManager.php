@@ -144,7 +144,7 @@ class CityManager  {
      * @throws ORMException
      */
     public function getListCityByCondition(
-        $offset,
+        $currentPage,
         $limit,
         $sortField = 'c.name',
         $sortDirection = 'ASC',
@@ -153,6 +153,7 @@ class CityManager  {
 
         $cities     = [];
         $totalCity = 0;
+        $offset = ($currentPage * $limit) - $limit;     
         
         //get orm city
         $ormCity = $this->entityManager->getRepository(City::class)

@@ -31,8 +31,9 @@ class ActionCity extends Component {
       name_en: '',
       description: '',
       description_en: '',
-      iso_code: '',
       status: 0,
+      zip_code: '',
+      country_id: '',
       errors: {},
       activeTab: '1',
     }
@@ -72,23 +73,25 @@ class ActionCity extends Component {
       const data = nextProps.modalCityData;
       
       this.setState({
-        country_id: data.countryId,
+        city_id: data.cityId,
         name: data.name,
         name_en: data.nameEn,
         description: data.description,
         description_en: data.descriptionEn,
-        iso_code: data.isoCode,
-        status: data.status === 'Active' ? 1 : 0
+        status: data.status === 'Active' ? 1 : 0,
+        zip_code: data.zipCode,
+        country_id: data.countryId
       });
     } else {
       this.setState({
-        country_id: '',
+        city_id: '',
         name: '',
         name_en: '',
         description: '',
         description_en: '',
-        iso_code: '',
         status: 0,
+        zip_code: '',
+        country_id: ''
       });
     }
 
@@ -118,28 +121,30 @@ class ActionCity extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    const country = {
+    const city = {
       name: this.state.name,
       name_en: this.state.name_en,
       description: this.state.description,
       description_en: this.state.description_en,
-      iso_code: this.state.iso_code,
+      zip_code: this.state.zip_code,
+      country_id: this.state.country_id,
       status: parseInt(this.state.status, 10)
     };
-    if (this.state.country_id) {
-      country.country_id = this.state.country_id;
-      this.props.updateCityItem(country);
+    if (this.state.city_id) {
+      city.city_id = this.state.city_id;
+      this.props.updateCityItem(city);
     } else {
-      this.props.addCityItem(country);
+      this.props.addCityItem(city);
     }
 
     this.setState({
-      country_id: '',
+      city_id: '',
       name: '',
       name_en: '',
       description: '',
       description_en: '',
-      iso_code: '',
+      zip_code: '',
+      country_id: '',
       status: 0,
     });
 
@@ -151,7 +156,7 @@ class ActionCity extends Component {
 
   render() {
     const { messages } = this.props.intl;
-    const { country_id, name, name_en, description, description_en, iso_code, status, errors } = this.state;
+    const { city_id, name, name_en, description, description_en, zip_code, country_id, status, errors } = this.state;
     return (
       <Modal
         isOpen={this.props.modalOpen}
@@ -160,7 +165,7 @@ class ActionCity extends Component {
         backdrop="static"
       >
         <ModalHeader toggle={this.toggleModal}>
-          {country_id ? <IntlMessages id="country.update" /> : <IntlMessages id="country.add-new" />}
+          {city_id ? <IntlMessages id="city.update" /> : <IntlMessages id="city.add-new" />}
         </ModalHeader>
         <ModalBody>
           <Nav tabs>
@@ -184,18 +189,18 @@ class ActionCity extends Component {
           <TabContent activeTab={this.state.activeTab}>
             <TabPane tabId="1">
               <Label className="mt-4">
-                <IntlMessages id="country.name" />
+                <IntlMessages id="city.name" />
               </Label>
               <Input 
                 type="text"
                 name="name"
-                placeholder={messages['country.name']}
+                placeholder={messages['city.name']}
                 value={name}
                 onChange={this.onChange}
               />
               <div className="text-danger">{errors.name}</div>
               <Label className="mt-4">
-                <IntlMessages id="country.description" />
+                <IntlMessages id="city.description" />
               </Label>
               <Input 
                 type="textarea" 
@@ -206,18 +211,18 @@ class ActionCity extends Component {
             </TabPane>
             <TabPane tabId="2">
               <Label className="mt-4">
-                <IntlMessages id="country.name" />
+                <IntlMessages id="city.name" />
               </Label>
               <Input 
                 type="text"
                 name="name_en"
-                placeholder={messages['country.name']}
+                placeholder={messages['city.name']}
                 value={name_en}
                 onChange={this.onChange}
               />
               <div className="text-danger">{errors.name_en}</div>
               <Label className="mt-4">
-                <IntlMessages id="country.description" />
+                <IntlMessages id="city.description" />
               </Label>
               <Input 
                 type="textarea" 
@@ -228,16 +233,28 @@ class ActionCity extends Component {
             </TabPane>
           </TabContent>
           <Label className="mt-4">
-            <IntlMessages id="country.iso-code" />
+            <IntlMessages id="city.zip-code" />
           </Label>
           <Input 
             type="text" 
-            name="iso_code"
-            value={iso_code}
+            name="zip_code"
+            value={zip_code}
             onChange={this.onChange}
           />
           <Label className="mt-4">
-            <IntlMessages id="country.status" />
+            <IntlMessages id="city.country" />
+          </Label>
+          <Input 
+            type="select"
+            name="country"
+            value={country_id}
+            onChange={this.onChange}
+          >
+            <option value={1}>{messages['city.active']}</option>
+            <option value={0}>{messages['city.inactive']}</option>
+          </Input>
+          <Label className="mt-4">
+            <IntlMessages id="city.status" />
           </Label>
           <Input 
             type="select"
@@ -245,8 +262,8 @@ class ActionCity extends Component {
             value={status}
             onChange={this.onChange}
           >
-            <option value={1}>{messages['country.active']}</option>
-            <option value={0}>{messages['country.inactive']}</option>
+            <option value={1}>{messages['city.active']}</option>
+            <option value={0}>{messages['city.inactive']}</option>
           </Input>
         </ModalBody>
         <ModalFooter>
@@ -255,10 +272,10 @@ class ActionCity extends Component {
             outline
             onClick={this.toggleModal}
           >
-            <IntlMessages id="country.cancel" />
+            <IntlMessages id="city.cancel" />
           </Button>
           <Button color="info" onClick={this.onSubmit}>
-            <IntlMessages id="country.submit" />
+            <IntlMessages id="city.submit" />
           </Button>
         </ModalFooter>
       </Modal>

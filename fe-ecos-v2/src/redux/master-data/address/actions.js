@@ -18,6 +18,12 @@ import {
   CITY_GET_LIST,
   CITY_GET_LIST_SUCCESS,
   CITY_GET_LIST_ERROR,
+  CITY_ADD_ITEM,
+  CITY_ADD_ITEM_SUCCESS,
+  CITY_ADD_ITEM_ERROR,
+  CITY_UPDATE_ITEM,
+  CITY_UPDATE_ITEM_SUCCESS,
+  CITY_UPDATE_ITEM_ERROR,
   
   DISTRICT_GET_LIST,
   DISTRICT_GET_LIST_SUCCESS,
@@ -116,7 +122,35 @@ export const getCityListError = (error) => ({
   payload: error
 });
 
-//District
+export const addCityItem = (item, history) => ({
+  type: CITY_ADD_ITEM,
+  payload: { item, history }
+});
+
+export const addCityItemSuccess = () => ({
+  type: CITY_ADD_ITEM_SUCCESS,
+});
+
+export const addCityItemError = (error) => ({
+  type: CITY_ADD_ITEM_ERROR,
+  payload: error
+});
+
+export const updateCityItem = (item, history) => ({
+  type: CITY_UPDATE_ITEM,
+  payload: { item, history }
+});
+
+export const updateCityItemSuccess = () => ({
+  type: CITY_UPDATE_ITEM_SUCCESS,
+});
+
+export const updateCityItemError = (error) => ({
+  type: CITY_UPDATE_ITEM_ERROR,
+  payload: error
+});
+
+//#region  District
 export const toggleDistrictModal = (status = null) => ({
   type: DISTRICT_TOGGLE_MODAL,
   payload: status
@@ -136,8 +170,9 @@ export const getDistrictListError = (error) => ({
   type: DISTRICT_GET_LIST_ERROR,
   payload: error
 });
+//#endregion
 
-//Ward
+//#region Colections Ward
 export const getWardList = (params, history) => ({
   type: WARD_GET_LIST,
   payload: { params, history }
@@ -152,3 +187,5 @@ export const getWardListError = (error) => ({
   type: WARD_GET_LIST_ERROR,
   payload: error
 });
+
+//#endregion

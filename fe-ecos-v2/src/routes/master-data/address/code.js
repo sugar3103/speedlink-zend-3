@@ -9,8 +9,8 @@ import {
 import { Colxx } from "../../../components/Layout/CustomBootstrap";
 import Pagination from '../../../components/Layout/Pagination';
 import IntlMessages from "../../../util/IntlMessages";
-import Search from '../../../components/MasterData/Address/Search';
-import Item from '../../../components/MasterData/Address/Item';
+import SearchCode from '../../../components/MasterData/Address/SearchCode';
+import ItemCode from '../../../components/MasterData/Address/ItemCode';
 
 import { connect } from "react-redux";
 import {
@@ -37,8 +37,8 @@ class CodePage extends Component {
       }
     }
     
-    if (this.props.address.paramSearch) {
-      Object.assign(params, { "query": this.props.address.paramSearch})
+    if (this.props.codes.paramSearch) {
+      Object.assign(params, { "query": this.props.codes.paramSearch})
     };
     this.props.getAddressList(params, this.props.history);
 
@@ -55,8 +55,8 @@ class CodePage extends Component {
       }
     }
 
-    if (this.props.address.paramSearch) {
-      Object.assign(params, { "query": this.props.address.paramSearch})
+    if (this.props.codes.paramSearch) {
+      Object.assign(params, { "query": this.props.codes.paramSearch})
     };
     this.props.getAddressList (params, this.props.history);
 
@@ -74,7 +74,7 @@ class CodePage extends Component {
     if (items.length > 0) {
       result = items.map((item, index) => {
         return (
-          <Item 
+          <ItemCode 
             key={index}
             address={item}
           />
@@ -86,7 +86,7 @@ class CodePage extends Component {
 
   render() {
     const { messages } = this.props.intl;
-    const { items, loading } = this.props.address;
+    const { items, loading } = this.props.codes;
 
     return (
       <Fragment>
@@ -98,7 +98,7 @@ class CodePage extends Component {
                   <IntlMessages id="menu.address" />
                 </h1>
               </div>
-              <Search history={this.props.history} />
+              <SearchCode history={this.props.history} />
               <div className="mb-2">
                 <Button color="warning" size="sm" className="float-sm-left">{messages["address.export"]}</Button>
                 <ItemPerPage changePageSize={this.changePageSize} selectedPageSize={this.state.selectedPageSize} />
@@ -137,13 +137,14 @@ class CodePage extends Component {
 }
 
 CodePage.propTypes = {
-  address: PropTypes.object.isRequired,
+  codes: PropTypes.object.isRequired,
   getAddressList : PropTypes.func.isRequired,
 }
 
 const mapStateToProps = ({ address }) => {
+  const { codes } = address;
   return {
-    address
+    codes
   };
 };
 

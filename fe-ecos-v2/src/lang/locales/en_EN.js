@@ -129,6 +129,25 @@ module.exports = {
   "country.cancel": "Cancel",
   "country.submit": "Save",
 
+  /* Master Data - Address - City*/
+  "city.add-new": "Add New City",
+  "city.update": "Update City",
+  "city.name": "Name",
+  "city.description": "Description",
+  "city.zip-code": "Zip Code",
+  "city.status": "Status",
+  "city.created-at": "Created At",
+  "city.action": "Action",
+  "city.active": "Active",
+  "city.all": "All",
+  "city.inactive": "Inactive",
+  "city.search": "Search",
+  "city.clear": "Clear",
+  "city.export": "Export",
+  "city.cancel": "Cancel",
+  "city.submit": "Save",
+  "city.country": "Country",
+
   /* Master Data - Status */
   "hub.add-new": "Create New Hub",
   "hub.update": "Update Hub",

@@ -124,6 +124,25 @@ module.exports = {
   "country.cancel": "Hủy",
   "country.submit": "Lưu",
 
+  /* Master Data - Address - City */
+  "city.add-new": "Tạo mới thành phố",
+  "city.update": "Cập nhật thành phố",
+  "city.name": "Tên",
+  "city.description": "Mô tả",
+  "city.zip-code": "Zip Code",
+  "city.status": "Trạng thái",
+  "city.created-at": "Ngày tạo",
+  "city.action": "Hành động",
+  "city.all": "Tất cả",
+  "city.active": "Kích hoạt",
+  "city.inactive": "Không kích hoạt",
+  "city.search": "Tìm kiếm",
+  "city.clear": "Làm mới",
+  "city.export": "Xuất",
+  "city.cancel": "Hủy",
+  "city.submit": "Lưu",
+  "city.country": "Đất nước",
+
   /* Master Data - Status */
   "hub.add-new": "Tạo mới Hub",
   "hub.update": "Cập nhật Hub",

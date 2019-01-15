@@ -5,7 +5,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 
 import { injectIntl } from 'react-intl';
 
-class Item extends Component {
+class ItemCode extends Component {
 
   render() {
     const { address } = this.props;
@@ -24,8 +24,8 @@ class Item extends Component {
   }
 }
 
-Item.propTypes = {
+ItemCode.propTypes = {
   address: PropTypes.object.isRequired,
 }
 
-export default injectIntl(Item);
+export default injectIntl(ItemCode);
