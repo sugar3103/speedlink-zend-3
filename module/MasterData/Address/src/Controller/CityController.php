@@ -36,19 +36,6 @@ class CityController extends CoreController {
     public function listAction()
     {
         if ($this->getRequest()->isPost()) {
-            $payload = file_get_contents('php://input');
-            $params = json_decode($payload, true);
-
-            //the current page number.
-            $currentPage = isset( $params['pagination']) ? (int) $params['pagination']['page'] : 1;
-
-            //total number of pages available in the server.
-            $totalPages = isset($params['pagination']['pages']) ? (int) $params['pagination']['pages'] : 1;
- 
-            //set limit
-            $limit  = !empty($params['pagination']['perpage'])
-                         && $params['pagination']['perpage'] > 10 ? $params['pagination']['perpage'] : 10;
-
             // get the filters
             $fieldsMap = [
                 0 => 'name',
@@ -56,16 +43,11 @@ class CityController extends CoreController {
                 2 => 'status'
             ];
 
-            $filters = $this->cityManager->getValueFiltersSearch($params,$fieldsMap);
-
-            //get and set sortField,sortDirection
-            $sortField = isset($params['sort']) ? $params['sort'] : $fieldsMap[0];
-            $sortDirection = isset($params['order']) ? $params['order'] : 'ASC';
+            list($currentPage,$totalPages,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
             
             //get list city by condition
             $dataCity = $this->cityManager->getListCityByCondition(
-                $currentPage, $limit, $sortField, $sortDirection,$filters);
-            
+                $currentPage, $limit, $sortField, $sortDirection,$filters);            
             
             $result = [
                 "meta" => [
@@ -81,13 +63,12 @@ class CityController extends CoreController {
             ];
             
             $this->error_code = 1;
-            $this->apiResponse = $result;
-            return $this->createResponse();
+            $this->apiResponse = $result;            
         } else {
             $this->apiResponse['message'] = 'City List';
-
-            return $this->createResponse();
         }
+
+        return $this->createResponse();
     }
 
     public function addAction()
@@ -98,11 +79,8 @@ class CityController extends CoreController {
             //Create New Form City
             $form = new CityForm('create', $this->entityManager);
 
-            $data = file_get_contents('php://input');
-            $data = json_decode($data, true);
+            $form->setData($this->getRequestData());
 
-            $form->setData($data);
-            
             //validate form
             if ($form->isValid()) {
                 // get filtered and validated data

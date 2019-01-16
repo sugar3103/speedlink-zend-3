@@ -30,7 +30,7 @@ $router = [
                 'defaults' => [
                     'controller' => Controller\CarrierController::class,
                     'action' => 'index',
-                    'isAuthorizationRequired' => false
+                    'isAuthorizationRequired' => true
                 ]
             ]
         ],

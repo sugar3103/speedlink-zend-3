@@ -37,20 +37,6 @@ class DistrictController extends CoreController {
     public function listAction()
     {
         if ($this->getRequest()->isPost()) {
-            $payload = file_get_contents('php://input');
-            $params = json_decode($payload, true);
-            
-          
-            //the current page number.
-            $currentPage = isset( $params['pagination']) ? (int) $params['pagination']['page'] : 1;
-
-            //total number of pages available in the server.
-            $totalPages = isset($params['pagination']['pages']) ? (int) $params['pagination']['pages'] : 1;
-
-            //set limit
-            $limit  = !empty($params['pagination']['perpage'])
-                       && $params['pagination']['perpage'] > 10 ? $params['pagination']['perpage'] : 10;
-
             // get the filters
             $fieldsMap = [
                 0 => 'name',
@@ -58,21 +44,13 @@ class DistrictController extends CoreController {
                 2 => 'status'                
             ];
 
-            $filters = $this->districtManager->getValueFiltersSearch($params,$fieldsMap);
-
-            //get and set sortField,sortDirection
-            $sortField = isset($params['sort']) ? $params['sort'] : $fieldsMap[0];
-            $sortDirection = isset($params['order']) ? $params['order'] : 'ASC';            
+            list($currentPage,$totalPages,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
             
             //get list district by condition
             $dataDistrict = $this->districtManager->getListDistrictByCondition(
                 $currentPage, $limit, $sortField, $sortDirection,$filters);
             
-            // $result = [
-            //     "totalRecords" => $dataDistrict['totalDistrict'],
-            //     "data" => ($dataDistrict['listDistrict']) ? $dataDistrict['listDistrict'] : []           
-            // ];
-
+            
             $result = [
                 "meta" => [
                     "page" => $currentPage,
@@ -103,10 +81,7 @@ class DistrictController extends CoreController {
             //Create New Form District
             $form = new DistrictForm('create', $this->entityManager);
 
-            $data = file_get_contents('php://input');
-            $data = json_decode($data, true);
-
-            $form->setData($data);
+            $form->setData($this->getRequestData());
             
             //validate form
             if ($form->isValid()) {

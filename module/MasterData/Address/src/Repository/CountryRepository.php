@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
 
+use Core\Utils\Utils;
 /**
  * This is the custom repository class for Country entity.
  * @package Address\Repository
@@ -90,38 +91,7 @@ class CountryRepository extends EntityRepository {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
         else
             $queryBuilder->orderBy('c.name', 'ASC');
-        
-        return $this->setCriteriaListCountryByFilters($filters, $operatorsMap, $queryBuilder);        
+
+        return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
-
-    /**
-     * Set criteria list by filters
-     *
-     * @param array $filters
-     * @param array $operatorsMap
-     * @param QueryBuilder $queryBuilder
-     * @return QueryBuilder
-     * @throws QueryException
-     */
-    public function setCriteriaListCountryByFilters($filters = [], $operatorsMap = [], QueryBuilder $queryBuilder)
-    {
-
-        foreach ($filters as $key => $value){
-            
-           if (isset($operatorsMap[$key]) && $value !== "")
-                $expr = Criteria::create()->andWhere(Criteria::expr()->{$operatorsMap[$key]['operator']}($operatorsMap[$key]['alias'], $value));
-            elseif ($value === "")
-                continue;
-            else
-                $expr = Criteria::create()->andWhere(Criteria::expr()->contains($operatorsMap[$key]['alias'], $value));
-
-            
-            $queryBuilder->addCriteria($expr);
-        }
-        
-        return $queryBuilder;
-    }
-
-
-
 }
