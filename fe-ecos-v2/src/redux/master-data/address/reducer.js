@@ -28,6 +28,7 @@ import {
 } from '../../../constants/actionTypes';
 
 const INIT_STATE = {
+  
   items: null,
   error: null,
   loading: true,

@@ -33,19 +33,6 @@ class AddressController extends CoreController {
     public function indexAction()
     {
         if ($this->getRequest()->isPost()) {
-            $payload = file_get_contents('php://input');
-            $params = json_decode($payload, true);
-          
-            //the current page number.
-            $currentPage = isset( $params['pagination']) ? (int) $params['pagination']['page'] : 1;
-
-            //total number of pages available in the server.
-            $totalPages = isset($params['pagination']['pages']) ? (int) $params['pagination']['pages'] : 1;
- 
-            //set limit
-            $limit  = !empty($params['pagination']['perpage'])
-                         && $params['pagination']['perpage'] > 10 ? $params['pagination']['perpage'] : 10;
-          
             // get the filters
             $fieldsMap = [
                 0 => 'code',
@@ -57,11 +44,7 @@ class AddressController extends CoreController {
                 6 => 'hub'
             ];
 
-            $filters = $this->addressCodeManager->getValueFiltersSearch($params,$fieldsMap);
-            
-            //get and set sortField,sortDirection
-            $sortField = isset($params['sort']) ? $params['sort'] : $fieldsMap[0];
-            $sortDirection = isset($params['order']) ? $params['order'] : 'ASC';
+            list($currentPage,$totalPages,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
             
             //get list code by condition
             $dataCode = $this->addressCodeManager->getListCodeByCondition(

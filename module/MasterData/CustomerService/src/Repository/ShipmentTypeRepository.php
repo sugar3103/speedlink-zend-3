@@ -72,7 +72,6 @@ class ShipmentTypeRepository extends EntityRepository
             $queryBuilder->orderBy('smt.id', 'ASC');
         }
 
-        $utils = new Utils();
-        return $utils->setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
+        return Core\Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
 }

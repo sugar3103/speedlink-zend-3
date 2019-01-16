@@ -4,6 +4,7 @@ namespace Address\Service;
 use Address\Entity\City;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
+use Core\Utils\Utils;
 class CityManager  {
     
     /**
@@ -165,6 +166,7 @@ class CityManager  {
 
             // $adapter = new DoctrineAdapter($ormPaginator);  
             $cities = $ormPaginator->getIterator()->getArrayCopy();
+
             //set countRow default
             $countRow = 1;
             
@@ -173,8 +175,8 @@ class CityManager  {
                 $city['status'] = City::getIsActiveList($city['status']);
 
                 //set created_at
-                $city['createdAt'] =  ($city['createdAt']) ? $this->checkDateFormat($city['createdAt'],'d/m/Y') : '';
-
+                $city['createdAt'] =  ($city['createdAt']) ? Utils::checkDateFormat($city['createdAt'],'d/m/Y') : '';
+                
                 $countRow++;
             }
            
@@ -186,52 +188,5 @@ class CityManager  {
             'totalCity' => $totalCity,
         ];
         return $dataCity;
-    }
-
-       
-    /**
-     * Check date format
-     *
-     * @param $dateAction
-     * @param $dateFormat
-     * @return string
-     */
-    public function checkDateFormat($dateAction,$dateFormat)
-    {
-        $dateLast = '';
-        $dateCheck = ! empty($dateAction) ? $dateAction->format('Y-m-d H:i:s') : '';
-        if ($dateCheck) {
-            $datetime = new \DateTime($dateCheck, new \DateTimeZone('UTC'));
-            $laTime = new \DateTimeZone('Asia/Ho_Chi_Minh');
-            $datetime->setTimezone($laTime);
-            $dateLast = $datetime->format($dateFormat);
-        }
-        return $dateLast;
-    }
-
-     /**
-     * Get value filters search
-     *
-     * @param $params
-     * @param $fieldsMap
-     * @return array
-     */
-    public function getValueFiltersSearch($params,$fieldsMap)
-    {
-        $filters = [];
-
-        if (isset($params['query']) && !empty($params['query'])){
-          
-            if (isset($params['query']) && !empty($params['query'])){
-                foreach ($params['query'] as $key => $column) {
-                    if(isset($fieldsMap[$key]) && !empty($column)) {
-                        $filters[$key] = $column;
-                    }
-                }
-                 
-              }
-        }
-       
-        return $filters;
     }
 }

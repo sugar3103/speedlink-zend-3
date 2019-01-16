@@ -4,7 +4,7 @@ namespace Address\Service;
 use Address\Entity\Country;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-
+use Core\Utils\Utils;
 class CountryManager  {
     
     /**
@@ -171,7 +171,7 @@ class CountryManager  {
                 $country['status'] = Country::getIsActiveList($country['status']);
 
                 //set created_at
-                $country['createdAt'] =  ($country['createdAt']) ? $this->checkDateFormat($country['createdAt'],'d/m/Y') : '';
+                $country['createdAt'] =  ($country['createdAt']) ? Utils::checkDateFormat($country['createdAt'],'d/m/Y') : '';
 
                 $countRow++;
             }
@@ -183,48 +183,7 @@ class CountryManager  {
             'listCountry' => $countries,
             'totalCountry' => $totalCountry,
         ];
+
         return $dataCountry;
-    }
-    
-    /**
-     * Check date format
-     *
-     * @param $dateAction
-     * @param $dateFormat
-     * @return string
-     */
-    public function checkDateFormat($dateAction,$dateFormat)
-    {
-        $dateLast = '';
-        $dateCheck = ! empty($dateAction) ? $dateAction->format('Y-m-d H:i:s') : '';
-        if ($dateCheck) {
-            $datetime = new \DateTime($dateCheck, new \DateTimeZone('UTC'));
-            $laTime = new \DateTimeZone('Asia/Ho_Chi_Minh');
-            $datetime->setTimezone($laTime);
-            $dateLast = $datetime->format($dateFormat);
-        }
-        return $dateLast;
-    }
-
-     /**
-     * Get value filters search
-     *
-     * @param $params
-     * @param $fieldsMap
-     * @return array
-     */
-    public function getValueFiltersSearch($params,$fieldsMap)
-    {
-        $filters = [];
-
-        if (isset($params['query']) && !empty($params['query'])){
-            foreach ($params['query'] as $key => $column) {
-                if(isset($fieldsMap[$key]) && !empty($column)) {
-                    $filters[$key] = $column;
-                }
-            }
-          }
-       
-        return $filters;
     }
 }

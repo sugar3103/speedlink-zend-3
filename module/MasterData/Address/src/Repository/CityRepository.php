@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
+use Core\Utils\Utils;
 
 /**
  * This is the custom repository class for City entity.
@@ -92,36 +93,6 @@ class CityRepository extends EntityRepository {
         else
             $queryBuilder->orderBy('c.name', 'ASC');
 
-        return $this->setCriteriaListCityByFilters($filters, $operatorsMap, $queryBuilder);
+        return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
-
-    /**
-     * Set criteria list by filters
-     *
-     * @param array $filters
-     * @param array $operatorsMap
-     * @param QueryBuilder $queryBuilder
-     * @return QueryBuilder
-     * @throws QueryException
-     */
-    public function setCriteriaListCityByFilters($filters = [], $operatorsMap = [], QueryBuilder $queryBuilder)
-    {
-
-        foreach ($filters as $key => $value){
-
-           if (isset($operatorsMap[$key]) && $value !== "")
-                $expr = Criteria::create()->andWhere(Criteria::expr()->{$operatorsMap[$key]['operator']}($operatorsMap[$key]['alias'], $value));
-            elseif ($value === "")
-                continue;
-            else
-                $expr = Criteria::create()->andWhere(Criteria::expr()->contains($operatorsMap[$key]['alias'], $value));
-
-            $queryBuilder->addCriteria($expr);
-        }
-
-        return $queryBuilder;
-    }
-
-
-
 }
