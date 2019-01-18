@@ -1,16 +1,13 @@
 <?php
-
 namespace Core;
 
-use Zend\Router\Http\Literal;
-use Zend\Router\Http\Segment;
-use Zend\ServiceManager\Factory\InvokableFactory;
+use Core\Route\StaticRoute;
 
 return [
     'router' => [
         'routes' => [
             '404' => [
-                'type' => Segment::class,
+                'type' => StaticRoute::class,
                 'options' => [
                     'route' => '/:*',
                     'defaults' => [
@@ -21,7 +18,7 @@ return [
                 'priority' => -1000,
             ],
             'home' => [
-                'type' => Segment::class,
+                'type' => StaticRoute::class,
                 'options' => [
                     'route'    => '/',
                     'defaults' => [
@@ -31,7 +28,7 @@ return [
                 ],
             ],
             'application' => [
-                'type'    => Segment::class,
+                'type'    => StaticRoute::class,
                 'options' => [
                     'route'    => '/application[/:action]',
                     'defaults' => [

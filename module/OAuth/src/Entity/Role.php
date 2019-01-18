@@ -1,214 +1,351 @@
 <?php
+
 namespace OAuth\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity()
+ * Role
+ *
  * @ORM\Table(name="role")
  * @ORM\Entity(repositoryClass="\OAuth\Repository\RoleRepository")
  */
-class Role {
-
+class Role
+{
     /**
-     * @ORM\Id()
-     * @ORM\Column(name="id")
-     * @ORM\GeneratedValue()
+     * @var string
+     *
+     * @ORM\Column(name="id", type="string", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    private $id;
 
     /**
-     * @ORM\Column(name="name", type="string", unique=true)
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", precision=0, scale=0, nullable=false, unique=true)
      */
-    protected $name;
+    private $name;
 
     /**
-     * @ORM\Column(name="description", type="string")
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", precision=0, scale=0, nullable=false, unique=false)
      */
-    protected $description;
+    private $description;
 
     /**
-     * @ORM\Column(name="deleted_at",type="datetime")
+     * @var \DateTime
+     *
+     * @ORM\Column(name="deleted_at", type="datetime", precision=0, scale=0, nullable=false, unique=false)
      */
-    protected $deletedAt;
+    private $deletedAt;
 
     /**
-     * @ORM\Column(name="created_at", type="datetime")
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime", precision=0, scale=0, nullable=false, unique=false)
      */
-    protected $createdAt;
+    private $createdAt;
 
     /**
-     * @ORM\Column(name="updated_at", type="datetime")
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime", precision=0, scale=0, nullable=false, unique=false)
      */
-    protected $updatedAt;
+    private $updatedAt;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\OAuth\Entity\Role")
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="OAuth\Entity\Role")
      * @ORM\JoinTable(name="role_hierarchy",
-     *     joinColumns={@ORM\JoinColumn(name="child_role_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="parent_role_id", referencedColumnName="id")})
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="child_role_id", referencedColumnName="id", nullable=true)
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="parent_role_id", referencedColumnName="id", nullable=true)
+     *   }
+     * )
      */
-    protected $parentRoles;
+    private $parentRoles;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\OAuth\Entity\Role")
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="OAuth\Entity\Role")
      * @ORM\JoinTable(name="role_hierarchy",
-     *     joinColumns={@ORM\JoinColumn(name="parent_role_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="child_role_id", referencedColumnName="id")})
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="parent_role_id", referencedColumnName="id", nullable=true)
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="child_role_id", referencedColumnName="id", nullable=true)
+     *   }
+     * )
      */
-    protected $childRoles;
+    private $childRoles;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\OAuth\Entity\Permission")
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="OAuth\Entity\Permission")
      * @ORM\JoinTable(name="role_permission",
-     *     joinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="permission_id", referencedColumnName="id")})
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="role_id", referencedColumnName="id", nullable=true)
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="permission_id", referencedColumnName="id", nullable=true)
+     *   }
+     * )
      */
     private $permissions;
 
     /**
-     * Role constructor.
+     * Constructor
      */
     public function __construct()
     {
-        $this->parentRoles = new ArrayCollection();
-        $this->childRoles = new ArrayCollection();
-        $this->permissions = new ArrayCollection();
+        $this->parentRoles = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->childRoles = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->permissions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Returns role Id.
+     * Get id.
      *
-     * @return integer
+     * @return string
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
-     * Set Role Id.
+     * Set name.
      *
-     * @param $id
+     * @param string $name
+     *
+     * @return Role
      */
-    public function setId($id) {
-        $this->id = $id;
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     /**
-     * Get Role Name.
+     * Get name.
      *
-     * @return mixed
+     * @return string
      */
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
     /**
-     * Set Role Name.
+     * Set description.
      *
-     * @param $name
+     * @param string $description
+     *
+     * @return Role
      */
-    public function setName($name) {
-        $this->name = $name;
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
     }
 
     /**
-     * Get Role Description.
+     * Get description.
      *
-     * @return mixed
+     * @return string
      */
-    public function getDescription() {
+    public function getDescription()
+    {
         return $this->description;
     }
 
     /**
-     * Set Role Description.
+     * Set deletedAt.
      *
-     * @param $description
+     * @param \DateTime $deletedAt
+     *
+     * @return Role
      */
-    public function setDescription($description) {
-        $this->description = $description;
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
     }
 
     /**
-     * Get Role Created Date.
+     * Get deletedAt.
      *
-     * @return mixed
+     * @return \DateTime
      */
-    public function getCreatedAt() {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set Role Created Date.
-     *
-     * @param $createdAt
-     */
-    public function setCreatedAt($createdAt) {
-        $this->createdAt = $createdAt;
-    }
-
-    /**
-     * Get Role Updated Date.
-     *
-     * @return mixed
-     */
-    public function getUpdatedAt() {
-        return $this->updatedAt;
-    }
-
-    /**
-     * Set Role Updated Date.
-     *
-     * @param $updatedAt
-     */
-    public function setUpdatedAt($updatedAt) {
-        $this->updatedAt = $updatedAt;
-    }
-
-    /**
-     * Get Deleted At.
-     *
-     * @return mixed
-     */
-    public function getDeletedAt() {
+    public function getDeletedAt()
+    {
         return $this->deletedAt;
     }
 
     /**
-     * Set Deleted At.
+     * Set createdAt.
      *
-     * @param $deletedAt
+     * @param \DateTime $createdAt
+     *
+     * @return Role
      */
-    public function setDeletedAt($deletedAt) {
-        $this->deletedAt = $deletedAt;
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     /**
-     * Get Parent Roles.
+     * Get createdAt.
      *
-     * @return ArrayCollection
+     * @return \DateTime
      */
-    public function getParentRoles() {
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt.
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return Role
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt.
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Add parentRole.
+     *
+     * @param \OAuth\Entity\Role $parentRole
+     *
+     * @return Role
+     */
+    public function addParentRole(\OAuth\Entity\Role $parentRole)
+    {
+        $this->parentRoles[] = $parentRole;
+
+        return $this;
+    }
+
+    /**
+     * Remove parentRole.
+     *
+     * @param \OAuth\Entity\Role $parentRole
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeParentRole(\OAuth\Entity\Role $parentRole)
+    {
+        return $this->parentRoles->removeElement($parentRole);
+    }
+
+    /**
+     * Get parentRoles.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getParentRoles()
+    {
         return $this->parentRoles;
     }
 
     /**
-     * Get Child Roles.
+     * Add childRole.
      *
-     * @return ArrayCollection
+     * @param \OAuth\Entity\Role $childRole
+     *
+     * @return Role
      */
-    public function getChildRoles() {
+    public function addChildRole(\OAuth\Entity\Role $childRole)
+    {
+        $this->childRoles[] = $childRole;
+
+        return $this;
+    }
+
+    /**
+     * Remove childRole.
+     *
+     * @param \OAuth\Entity\Role $childRole
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeChildRole(\OAuth\Entity\Role $childRole)
+    {
+        return $this->childRoles->removeElement($childRole);
+    }
+
+    /**
+     * Get childRoles.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getChildRoles()
+    {
         return $this->childRoles;
     }
 
     /**
-     * Get Permissions.
+     * Add permission.
      *
-     * @return ArrayCollection
+     * @param \OAuth\Entity\Permission $permission
+     *
+     * @return Role
      */
-    public function getPermissions() {
+    public function addPermission(\OAuth\Entity\Permission $permission)
+    {
+        $this->permissions[] = $permission;
+
+        return $this;
+    }
+
+    /**
+     * Remove permission.
+     *
+     * @param \OAuth\Entity\Permission $permission
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removePermission(\OAuth\Entity\Permission $permission)
+    {
+        return $this->permissions->removeElement($permission);
+    }
+
+    /**
+     * Get permissions.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPermissions()
+    {
         return $this->permissions;
     }
 

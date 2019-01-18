@@ -30,30 +30,26 @@ class CoreController extends ApiController
     {
         if ($this->getRequest()->isPost()) {
             $payload = file_get_contents('php://input');
-            $params = json_decode($payload, true);
+            $params = !empty(json_decode($payload, true)) ? json_decode($payload, true) : array();
             if(!empty($fieldsMap)) {
                 //the current page number.
-                $currentPage = isset( $params['pagination']) ? (int) $params['pagination']['page'] : 1;
+                $start = isset( $params['offset']) ? (int) $params['offset']['start'] : 1;
 
-                //total number of pages available in the server.
-                $totalPages = isset($params['pagination']['pages']) ? (int) $params['pagination']['pages'] : 1;
-    
                 //set limit
-                $limit  = !empty($params['pagination']['perpage'])
-                            && $params['pagination']['perpage'] > 10 ? $params['pagination']['perpage'] : 10;
+                $limit  = !empty($params['offset']['limit'])
+                            && $params['offset']['limit'] > 10 ? $params['offset']['limit'] : 10;
                 
                 //get and set sortField,sortDirection
                 $sortField = isset($params['sort']) ? $params['sort'] : $fieldsMap[0];
                 $sortDirection = isset($params['order']) ? $params['order'] : 'ASC';
 
                 $filters = $this->getValueFiltersSearch($params,$fieldsMap);
-                return array($currentPage,$totalPages,$limit,$sortField,$sortDirection,$filters);    
-            } else {
+                
+                return array($start,$limit,$sortField,$sortDirection,$filters);    
+            } else {                
                 return $params;
-            }
-            
-        }
-        
+            }            
+        }        
     }
 
      /**

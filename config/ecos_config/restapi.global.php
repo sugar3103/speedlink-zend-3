@@ -7,10 +7,10 @@
 return [
     'ApiRequest' => [
         'responseFormat' => [
-            'statusKey' => 'status',
-            'statusOkText' => 'OK',
-            'statusNokText' => 'NOKs',
-            'resultKey' => 'result',
+            'statusKey' => 'error',
+            'statusOkText' => false,
+            'statusNokText' => true,
+            'dataKey' => 'data',
             'messageKey' => 'message',
             'defaultMessageText' => 'Empty response!',
             'errorKey' => 'error_code',

@@ -25,7 +25,7 @@ final class Version20181226102620 extends AbstractMigration
           hub_id                          int(11)                           not null,
           code                            varchar(20)                       not null,
           status                          int(1) default 0                  not null,
-          is_deleted                      TINYINT(1) NOT NULL DEFAULT 0,
+          is_deleted                      TINYINT(1) NOT NULL DEFAULT     0,
           created_by                      int(11)                           not null,
           created_at                      datetime                              null,
           updated_by                      int(11)                               null,

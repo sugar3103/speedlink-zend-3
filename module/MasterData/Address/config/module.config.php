@@ -12,14 +12,12 @@ use Zend\Cache\Storage\Adapter\Filesystem;
 use Zend\Log\Formatter\Simple;
 use Zend\Log\Logger;
 use Zend\Log\LoggerAbstractServiceFactory;
-use Zend\Router\Http\Literal;
-use Zend\Router\Http\Segment;
-use Zend\ServiceManager\Factory\InvokableFactory;
+use Core\Route\StaticRoute;
 
 $router = [
     'routes' => [
         'address' => [
-            'type' => Segment::class,
+            'type' => StaticRoute::class,
             'options' => [
                 'route' => '/address',
                 'defaults' => [
@@ -31,7 +29,7 @@ $router = [
             'may_terminate' => true,
             'child_routes'  => [
                 'country' => [
-                    'type'  => Segment::class,
+                    'type'  => StaticRoute::class,
                     'options' => [
                         'route' => '/country[/:action]',
                         'constraints' => [
@@ -45,7 +43,7 @@ $router = [
                     ]                    
                 ],
                 'city' => [
-                    'type'  => Segment::class,
+                    'type'  => StaticRoute::class,
                     'options' => [
                         'route' => '/city[/:action]',
                         'constraints' => [
@@ -59,7 +57,7 @@ $router = [
                     ]                  
                 ],
                 'district' => [
-                    'type'  => Segment::class,
+                    'type'  => StaticRoute::class,
                     'options' => [
                         'route' => '/district[/:action]',
                         'constraints' => [
@@ -73,7 +71,7 @@ $router = [
                     ]                  
                 ],
                 'ward' => [
-                    'type'  => Segment::class,
+                    'type'  => StaticRoute::class,
                     'options' => [
                         'route' => '/ward[/:action]',
                         'constraints' => [

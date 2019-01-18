@@ -44,27 +44,19 @@ class AddressController extends CoreController {
                 6 => 'hub'
             ];
 
-            list($currentPage,$totalPages,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
+            list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
             
-            //get list code by condition
-            $dataCode = $this->addressCodeManager->getListCodeByCondition(
-                $currentPage, $limit, $sortField, $sortDirection,$filters);
-
-            $result = [
-                "meta" => [
-                    "page" => $currentPage,
-                    "pages" => $totalPages,
-                    "from" => ($currentPage - 1) * $limit + 1,
-                    "to" => ($currentPage * $limit) > $dataCode['totalCode'] ? $dataCode['totalCode'] : ($currentPage * $limit),
-                    "perpage"=> $limit,
-                    "totalItems" => $dataCode['totalCode'],
-                    "totalPage" => ceil($dataCode['totalCode']/$limit)
-                ],
-                "data" => ($dataCode['listCode']) ? $dataCode['listCode'] : []           
-            ];
-
+            //get list User by condition
+            $dataCode = $this->addressCodeManager->getListCodeByCondition($start, $limit, $sortField, $sortDirection,$filters);            
+            
+            $result = ($dataCode['listCode']) ? $dataCode['listUser'] : [] ;
+            
             $this->error_code = 1;
-            $this->apiResponse = $result;
+            $this->apiResponse =  array(
+                'message'   => "Get List Success",
+                'data'      => $result,
+                'total'     => $dataCode['listCode']
+            ); 
         } else {
             $this->error_code = 0;
             $this->apiResponse['message'] = ['Address Code Manager'];

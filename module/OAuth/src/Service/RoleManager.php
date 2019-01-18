@@ -304,7 +304,7 @@ class RoleManager {
      * @throws \Doctrine\ORM\ORMException
      */
     public function getListRoleByCondition(
-        $currentPage,
+        $start,
         $limit,
         $sortField = '',
         $sortDirection = 'asc',
@@ -323,33 +323,17 @@ class RoleManager {
             //set offset,limit
             $ormPaginator = new ORMPaginator($ormRole, true);
             $ormPaginator->setUseOutputWalkers(false);
-            $adapter = new DoctrineAdapter($ormPaginator);
-            $paginator = new Paginator($adapter);
-
-            //sets the current page number
-            $paginator->setCurrentPageNumber($currentPage);
-
-            //Sets the number of items per page
-            $paginator->setItemCountPerPage($limit);
-
+            $totalRole = $ormPaginator->count();
+            
             //get list
-            $roles = $paginator->getIterator()->getArrayCopy();
-
-            //set countRow default
-            $countRow = 1;
+            $roles = $ormPaginator->getIterator()->getArrayCopy();
 
             foreach ($roles as &$role) {//loop
                 //set created_at
                 $role['created_at'] =  ($role['created_at']) ? $this->checkDateFormat($role['created_at'],'d/m/Y') : '';
 
-                //set count row
-                $role['count_row'] = $countRow;
-
                 $countRow++;
             }
-
-            //get and set total
-            $totalRole = $paginator->getTotalItemCount();
         }
 
         //set data
@@ -359,47 +343,4 @@ class RoleManager {
         ];
         return $dataRole;
     }
-
-    /**
-     * Check date format
-     *
-     * @param $dateAction
-     * @param $dateFormat
-     * @return string
-     */
-    public function checkDateFormat($dateAction,$dateFormat)
-    {
-        $dateLast = '';
-        $dateCheck = ! empty($dateAction) ? $dateAction->format('Y-m-d H:i:s') : '';
-        if ($dateCheck) {
-            $datetime = new \DateTime($dateCheck, new \DateTimeZone('UTC'));
-            $laTime = new \DateTimeZone('Asia/Ho_Chi_Minh');
-            $datetime->setTimezone($laTime);
-            $dateLast = $datetime->format($dateFormat);
-        }
-        return $dateLast;
-    }
-
-    /**
-     * Get value filters search
-     *
-     * @param $params
-     * @param $fieldsMap
-     * @return array
-     */
-    public function getValueFiltersSearch($params,$fieldsMap)
-    {
-        $filters = [];
-
-        if (isset($params['query']) && !empty($params['query'])){
-
-            foreach ($fieldsMap as $field)
-            {
-                if(isset($params['query'][$field]) && $params['query'][$field] != '')
-                    $filters [$field] = trim($params['query'][$field]);
-            }
-        }
-        return $filters;
-    }
-
 }
