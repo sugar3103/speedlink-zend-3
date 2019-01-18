@@ -31,7 +31,7 @@ class AddressCodeManager  {
      * @throws ORMException
      */
     public function getListCodeByCondition(
-        $currentPage,
+        $start,
         $limit,
         $sortField = '',
         $sortDirection = 'ASC',

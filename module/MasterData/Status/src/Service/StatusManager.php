@@ -75,18 +75,19 @@ class StatusManager {
      * @return Status|bool
      * @throws \Exception
      */
-    public function updateStatus($status, $data) {
+    public function updateStatus($status, $data,$user) {
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
             $status->setName($data['name']);
+            $status->setNameEn($data['name_en']);
             $status->setDescription($data['description']);
+            $status->setDescriptionEn($data['description_en']);
             $status->setStatus($data['status']);
-
+            
             $currentDate = date('Y-m-d H:i:s');
             $status->setUpdatedAt($currentDate);
-
-            $status->setUpdatedBy($data['updated_by']);
+            $status->setUpdatedBy($user->id);
 
             // apply changes to database.
             $this->entityManager->flush();
@@ -140,19 +141,12 @@ class StatusManager {
      * @return array
      * @throws ORMException
      */
-    public function getListStatusByCondition(
-        $currentPage,
-        $limit,
-        $sort = [],
-        $filters = []
-    ){
-
+    public function getListStatusByCondition($start,$limit,$sortField = '',$sortDirection = 'asc',$filters = []){
         $statuss     = [];
-        $totalStatus = 0;
-        $offset = ($currentPage * $limit) - $limit;
+        $totalStatus = 0;        
         //get orm status
         $ormStatus = $this->entityManager->getRepository(Status::class)
-            ->getListStatusByCondition($sort, $filters,$offset,$limit);
+            ->getListStatusByCondition($start, $limit, $sortField, $sortDirection, $filters);
 
         if($ormStatus){
             $ormPaginator = new ORMPaginator($ormStatus, true);

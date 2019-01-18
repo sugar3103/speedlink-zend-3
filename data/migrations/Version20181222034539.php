@@ -30,7 +30,9 @@ final class Version20181222034539 extends AbstractMigration
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
-
+        foreach ($this->defineTables() as $table => $value) {
+            $this->addSql('DROP TABLE'. $table);
+        }
     }
 
     private function defineTables() {
@@ -49,7 +51,8 @@ final class Version20181222034539 extends AbstractMigration
                 'created_at'    =>'datetime not null',
                 'updated_by' => 'int(11)',
                 'updated_at'    => 'datetime',
-                'ref_as_by'     => 'int(11)'
+                'ref_as_by'     => 'int(11)',
+                'constraint' => 'unique_country_id unique (country_id)'
             )
         );
 
@@ -69,7 +72,8 @@ final class Version20181222034539 extends AbstractMigration
                 'created_at'    =>'datetime not null',
                 'updated_by' => 'int(11)',
                 'updated_at'    => 'datetime',
-                'ref_as_by'     => 'int(11)'
+                'ref_as_by'     => 'int(11)',
+                'constraint' => 'unique_city_id unique (city_id)'
             )
         );
 
@@ -88,7 +92,8 @@ final class Version20181222034539 extends AbstractMigration
                 'created_at'    =>'datetime not null',
                 'updated_by' => 'int(11)',
                 'updated_at'    => 'datetime',
-                'ref_as_by'     => 'int(11)'
+                'ref_as_by'     => 'int(11)',
+                'constraint' => 'unique_district_id unique (district_id)'
             )
         );
 
@@ -108,7 +113,8 @@ final class Version20181222034539 extends AbstractMigration
                 'created_at'    =>'datetime  not null',
                 'updated_by' => 'int(11)',
                 'updated_at'    => 'datetime',
-                'ref_as_by'     => 'int(11)'
+                'ref_as_by'     => 'int(11)',
+                'constraint' => 'unique_ward_id unique (ward_id)'
             )
         );
 
@@ -127,7 +133,8 @@ final class Version20181222034539 extends AbstractMigration
                 'created_at'    =>'datetime  not null',
                 'updated_by' => 'int(11)',
                 'updated_at'    => 'datetime',
-                'ref_as_by'     => 'int(11)'
+                'ref_as_by'     => 'int(11)',
+                'constraint' => 'unique_address_code_id unique (address_code_id,code)'
             )
         );
 

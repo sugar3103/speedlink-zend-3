@@ -13,9 +13,11 @@ use Zend\Mime\Part as MimePart;
 use Zend\Mail\Message;
 use Zend\Mail\Transport\Smtp as SmtpTransport;
 use Zend\Mail\Transport\SmtpOptions;
+
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator;
+use Core\Utils\Utils;
 
 /**
  * This service is responsible for adding/editing users
@@ -406,37 +408,23 @@ class UserManager {
      * @return array
      * @throws ORMException
      */
-    public function getListUserByCondition(
-        $currentPage,
-        $limit,
-        $sortField = '',
-        $sortDirection = 'asc',
-        $filters = []
-    ){
+    public function getListUserByCondition($start,$limit,$sortField = '',$sortDirection = 'asc',$filters = []){
 
         $users     = [];
         $totalUser = 0;
 
         //get orm user
         $ormUser = $this->entityManager->getRepository(User::class)
-            ->getListUserByCondition($sortField, $sortDirection, $filters);
-
+            ->getListUserByCondition($start, $limit, $sortField, $sortDirection, $filters);
+        
         if($ormUser){
-
             //set offset,limit
             $ormPaginator = new ORMPaginator($ormUser, true);
             $ormPaginator->setUseOutputWalkers(false);
-            $adapter = new DoctrineAdapter($ormPaginator);
-            $paginator = new Paginator($adapter);
-
-            //sets the current page number
-            $paginator->setCurrentPageNumber($currentPage);
-
-            //Sets the number of items per page
-            $paginator->setItemCountPerPage($limit);
+            $totalUser = $ormPaginator->count();
 
             //get user list
-            $users = $paginator->getIterator()->getArrayCopy();
+            $users = $ormPaginator->getIterator()->getArrayCopy();
 
             //set countRow default
             $countRow = 1;
@@ -447,16 +435,10 @@ class UserManager {
                 $user['status'] = User::getIsActiveList($user['is_active']);
 
                 //set created_at
-                $user['created_at'] =  ($user['created_at']) ? $this->checkDateFormat($user['created_at'],'d/m/Y') : '';
-
-                //set count row
-                $user['count_row'] = $countRow;
+                $user['created_at'] =  ($user['created_at']) ? Utils::checkDateFormat($user['created_at'],'d/m/Y') : '';
 
                 $countRow++;
             }
-
-            //get and set total user
-            $totalUser = $paginator->getTotalItemCount();
         }
 
         //set data user
@@ -464,49 +446,7 @@ class UserManager {
             'listUser' => $users,
             'totalUser' => $totalUser,
         ];
+        
         return $dataUser;
     }
-
-    /**
-     * Check date format
-     *
-     * @param $dateAction
-     * @param $dateFormat
-     * @return string
-     */
-    public function checkDateFormat($dateAction,$dateFormat)
-    {
-        $dateLast = '';
-        $dateCheck = ! empty($dateAction) ? $dateAction->format('Y-m-d H:i:s') : '';
-        if ($dateCheck) {
-            $datetime = new \DateTime($dateCheck, new \DateTimeZone('UTC'));
-            $laTime = new \DateTimeZone('Asia/Ho_Chi_Minh');
-            $datetime->setTimezone($laTime);
-            $dateLast = $datetime->format($dateFormat);
-        }
-        return $dateLast;
-    }
-
-    /**
-     * Get value filters search
-     *
-     * @param $params
-     * @param $fieldsMap
-     * @return array
-     */
-    public function getValueFiltersSearch($params,$fieldsMap)
-    {
-        $filters = [];
-
-        if (isset($params['query']) && !empty($params['query'])){
-
-            foreach ($fieldsMap as $field)
-            {
-                if(isset($params['query'][$field]) && $params['query'][$field] != '')
-                    $filters [$field] = trim($params['query'][$field]);
-            }
-        }
-        return $filters;
-    }
-
 }
