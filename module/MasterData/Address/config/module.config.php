@@ -13,6 +13,7 @@ use Zend\Log\Formatter\Simple;
 use Zend\Log\Logger;
 use Zend\Log\LoggerAbstractServiceFactory;
 use Core\Route\StaticRoute;
+use Zend\Router\Http\Segment;
 
 $router = [
     'routes' => [
@@ -29,7 +30,7 @@ $router = [
             'may_terminate' => true,
             'child_routes'  => [
                 'country' => [
-                    'type'  => StaticRoute::class,
+                    'type'  => Segment::class,
                     'options' => [
                         'route' => '/country[/:action]',
                         'constraints' => [
@@ -43,7 +44,7 @@ $router = [
                     ]                    
                 ],
                 'city' => [
-                    'type'  => StaticRoute::class,
+                    'type'  => Segment::class,
                     'options' => [
                         'route' => '/city[/:action]',
                         'constraints' => [
@@ -57,7 +58,7 @@ $router = [
                     ]                  
                 ],
                 'district' => [
-                    'type'  => StaticRoute::class,
+                    'type'  => Segment::class,
                     'options' => [
                         'route' => '/district[/:action]',
                         'constraints' => [
@@ -71,7 +72,7 @@ $router = [
                     ]                  
                 ],
                 'ward' => [
-                    'type'  => StaticRoute::class,
+                    'type'  => Segment::class,
                     'options' => [
                         'route' => '/ward[/:action]',
                         'constraints' => [

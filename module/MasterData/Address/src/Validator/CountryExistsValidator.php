@@ -13,6 +13,7 @@ class CountryExistsValidator extends AbstractValidator {
     protected $options = [
         'entityManager' => null,
         'country' => null,
+        'language' => null
     ];
 
     /**
@@ -60,9 +61,11 @@ class CountryExistsValidator extends AbstractValidator {
 
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
-
-        $country = $entityManager->getRepository(Country::class)
-            ->findOneByName($value);
+        if($this->options['language'] === NULL) {
+            $country = $entityManager->getRepository(Country::class)->findOneByName($value);
+        } else if($this->options['language'] === 'en') {
+            $country = $entityManager->getRepository(Country::class)->findOneByNameEn($value);       
+        }
 
         if ($this->options['country'] == null)
             $isValid = ($country == null);

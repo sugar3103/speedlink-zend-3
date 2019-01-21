@@ -44,7 +44,6 @@ class CountryForm extends Form {
         // Define form name.
         parent::__construct('country-form');
 
-        
         // Save parameters for internal use.
         $this->scenario = $scenario;
         $this->entityManager = $entityManager;
@@ -80,7 +79,7 @@ class CountryForm extends Form {
                     'name' => CountryExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'country' => $this->country
+                        'country' => $this->country                        
                     ]
                 ]
             ]
@@ -106,7 +105,8 @@ class CountryForm extends Form {
                     'name' => CountryExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'country' => $this->country
+                        'country' => $this->country,
+                        'language' => 'en'
                     ]
                 ]
             ]

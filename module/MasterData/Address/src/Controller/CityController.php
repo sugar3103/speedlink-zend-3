@@ -43,27 +43,19 @@ class CityController extends CoreController {
                 2 => 'status'
             ];
 
-            list($currentPage,$totalPages,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
+            list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
             
             //get list city by condition
-            $dataCity = $this->cityManager->getListCityByCondition(
-                $currentPage, $limit, $sortField, $sortDirection,$filters);            
+            $dataCity = $this->cityManager->getListCityByCondition($start, $limit, $sortField, $sortDirection,$filters);            
             
-            $result = [
-                "meta" => [
-                    "page" => $currentPage,
-                    "pages" => $totalPages,
-                    "from" => ($currentPage - 1) * $limit + 1,
-                    "to" => ($currentPage * $limit) > $dataCity['totalCity'] ? $dataCity['totalCity'] : ($currentPage * $limit),
-                    "perpage"=> $limit,
-                    "totalItems" => $dataCity['totalCity'],
-                    "totalPage" => ceil($dataCity['totalCity']/$limit)
-                ],
-                "data" => ($dataCity['listCity']) ? $dataCity['listCity'] : []           
-            ];
+            $result = ($dataCity['listCity']) ? $dataCity['listCity'] : [] ;
             
             $this->error_code = 1;
-            $this->apiResponse = $result;            
+            $this->apiResponse =  array(
+                'message'   => "Get List Success",
+                'data'      => $result,
+                'total'     => $dataCity['totalCity']
+            );          
         } else {
             $this->apiResponse['message'] = 'City List';
         }
@@ -90,26 +82,22 @@ class CityController extends CoreController {
                 $this->error_code = 1;
                 $this->apiResponse['message'] = "Success: You have modified Cities!";
             } else {
-                $this->error_code = 0;
-                $this->apiResponse = $form->getMessages(); 
+                $this->error_code = -1;
+                $this->apiResponse['message'] = $form->getMessages(); 
                 
             }            
-        } else {
-            $this->httpStatusCode = 404;
-            $this->apiResponse['message'] = "Page Not Found";                 
-        }
+        } 
 
         return $this->createResponse();
     }
 
     public function editAction() {
         if ($this->getRequest()->isPost()) {
-             // fill in the form with POST data.
-             $payload = file_get_contents('php://input');
-             $data = json_decode($payload, true);
+             $data = $this->getRequestData();
              $user = $this->tokenPayload;
-             $city = $this->entityManager->getRepository(City::class)
-                ->findOneBy(array('cityId' => $data['city_id']));
+
+            $city = $this->entityManager->getRepository(City::class)->findOneBy(array('cityId' => $data['city_id']));
+            
             if(isset($data['city_id']) && $city) {
                 //Create New Form City
                 $form = new CityForm('update', $this->entityManager, $city);
@@ -121,18 +109,15 @@ class CityController extends CoreController {
                    $this->error_code = 1;
                    $this->apiResponse['message'] = "Success: You have modified city!";
                 }  else {
-                   $this->error_code = 0;
-                   $this->apiResponse = $form->getMessages(); 
+                   $this->error_code = -1;
+                   $this->apiResponse['message'] = $form->getMessages(); 
                 }   
             }   else {
-                $this->error_code = 0;
+                $this->error_code = -1;
                 $this->apiResponse['message'] = 'City Not Found'; 
             }         
              
-        } else {
-            $this->httpStatusCode = 404;
-            $this->apiResponse['message'] = "Page Not Found";
-        }
+        } 
         
         return $this->createResponse();
     }
@@ -140,10 +125,8 @@ class CityController extends CoreController {
     public function deleteAction()
     {
         if ($this->getRequest()->isPost()) {
-              // fill in the form with POST data.
-              $payload = file_get_contents('php://input');
-              $data = json_decode($payload, true);
- 
+              $data = $this->getRequestData();
+
               $user = $this->tokenPayload;
               $city = $this->entityManager->getRepository(City::class)
                  ->findOneBy(array('cityId' => $data['city_id']));
@@ -152,14 +135,11 @@ class CityController extends CoreController {
                 $this->error_code = 1;
                 $this->apiResponse['message'] = "Success: You have deleted city!";
             } else {
-                $this->httpStatusCode = 200;
                 $this->error_code = -1;
                 $this->apiResponse['message'] = "Not Found City";
             }
-        } else {
-            $this->httpStatusCode = 404;
-            $this->apiResponse['message'] = "Page Not Found";            
-        }
+        } 
+
         return $this->createResponse();
     }
 }

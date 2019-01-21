@@ -44,32 +44,19 @@ class DistrictController extends CoreController {
                 2 => 'status'                
             ];
 
-            list($currentPage,$totalPages,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
+            list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
             
             //get list district by condition
             $dataDistrict = $this->districtManager->getListDistrictByCondition(
-                $currentPage, $limit, $sortField, $sortDirection,$filters);
+                $start, $limit, $sortField, $sortDirection,$filters);            
             
-            
-            $result = [
-                "meta" => [
-                    "page" => $currentPage,
-                    "pages" => $totalPages,
-                    "from" => ($currentPage - 1) * $limit + 1,
-                    "to" => ($currentPage * $limit) > $dataDistrict['totalDistrict'] ? $dataDistrict['totalDistrict'] : ($currentPage * $limit),
-                    "perpage"=> $limit,
-                    "totalItems" => $dataDistrict['totalDistrict'],
-                    "totalPage" => ceil($dataDistrict['totalDistrict']/$limit)
-                ],
-                "data" => ($dataDistrict['listDistrict']) ? $dataDistrict['listDistrict'] : []           
-            ];
-
             $this->error_code = 1;
-            $this->apiResponse = $result;            
-        } else {
-            $this->httpStatusCode = 404;
-            $this->apiResponse['message'] = "Page Not Found";            
-        }
+            $this->apiResponse =  array(
+                'message' => 'Get list success',
+                'data' => $dataDistrict['listDistrict'],
+                'total' => $dataDistrict['totalDistrict']
+            );
+        } 
         return $this->createResponse();
     }
 
