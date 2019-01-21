@@ -1,11 +1,13 @@
 export default {
   items: [
     {
+      id: 'dashboard',
       title: 'menu.dashboard',
       route: '/app/dashboards',
       icon: 'home'
     },
     {
+      id: 'master-data',
       title: 'menu.master-data',
       route: '/app/master-data',
       icon: 'database',
@@ -16,6 +18,7 @@ export default {
           icon: 'dice',
         },
         {
+          id: 'address',
           title: 'menu.address',
           route: '/app/master-data/address',
           icon: 'store',
@@ -47,6 +50,19 @@ export default {
             }
           ]
         },
+      ]
+    },{
+      id: 'setting',
+      title: 'menu.setting',
+      route: '/app/setting',
+      icon: 'cog',
+      childrens: [
+        {
+          id: 'users',
+          title: 'menu.user',
+          route: '/app/setting/user',
+          icon: 'users'
+        }
       ]
     }
   ]

@@ -5,6 +5,7 @@ import classNames from 'classnames';
 
 export default class SidebarCategory extends Component {
   static propTypes = {
+    id: PropTypes.string,
     title: PropTypes.string.isRequired,
     icon: PropTypes.string,
     isNew: PropTypes.bool,
@@ -19,7 +20,7 @@ export default class SidebarCategory extends Component {
   constructor() {
     super();
     this.state = {
-      collapse: false,
+      collapse: false
     };
   }
 
@@ -29,7 +30,7 @@ export default class SidebarCategory extends Component {
 
   render() {
     const {
-      title, icon, isNew, children,
+      id,title, icon, isNew, children,
     } = this.props;
     const categoryClass = classNames({
       'sidebar__category-wrap': true,
@@ -37,7 +38,7 @@ export default class SidebarCategory extends Component {
     });
 
     return (
-      <div className={categoryClass}>
+      <div className={categoryClass} id={id}>
         <button className="sidebar__link sidebar__category" onClick={this.toggle}>
           {icon ? <span className={`sidebar__link-icon lnr lnr-${icon}`} /> : ''}
           <p className="sidebar__link-title">{title}
@@ -47,9 +48,7 @@ export default class SidebarCategory extends Component {
         </button>
         <Collapse isOpen={this.state.collapse} className="sidebar__submenu-wrap">
           <ul className="sidebar__submenu">
-            <div>
               {children}
-            </div>
           </ul>
         </Collapse>
       </div>

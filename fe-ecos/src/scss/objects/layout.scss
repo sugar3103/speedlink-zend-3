@@ -44,3 +44,13 @@
     }
   }
 }
+
+.theme-dark {
+  .sidebar__link-active {
+    background: #2a2a31;
+  }
+}
+
+.sidebar__submenu {
+  padding-bottom: 0px;
+}

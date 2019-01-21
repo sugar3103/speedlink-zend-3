@@ -6,6 +6,16 @@ import SidebarCategory from './SidebarCategory';
 import navigation from '../../../constants/SideBar';
 
 class SidebarContent extends Component {
+  constructor(props) {
+    super(props)
+    
+    this.state = {
+      selectedParentMenu: "",
+      viewingParentMenu:"", 
+    };
+
+    this.setSelectedLiActive = this.setSelectedLiActive.bind(this);
+  }
   static propTypes = {
     onClick: PropTypes.func.isRequired,
   };
@@ -14,12 +24,24 @@ class SidebarContent extends Component {
     this.props.onClick();
   };
 
+  setSelectedLiActive() {
+    const sidebarCategory = document.querySelector(".sidebar__block .sidebar__link-active");
+    if(sidebarCategory.parentElement.classList !== 'sidebar__block'){
+      console.log(sidebarCategory.parentElement);
+    } 
+  }
+
+  componentDidMount() {
+    this.setSelectedLiActive();
+  }
+
+
   renderNavigation = (items) => {
     const { messages } = this.props.intl;
     return items.map((item, index) => {
       if (item.childrens) {
         return (
-          <SidebarCategory title={messages[item.title]} icon={item.icon} key={index}>
+          <SidebarCategory title={messages[item.title]} icon={item.icon} key={index} id={item.id}>
             {this.renderNavigation(item.childrens)}
           </SidebarCategory>
         )
