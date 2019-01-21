@@ -22,11 +22,11 @@ class AddressCodeRepository extends EntityRepository {
      * @return array|QueryBuilder
      */
     public function getListCodeByCondition(
+        $start = 1,
+        $limit = 10,
         $sortField = 'ac.addressCodeId',
         $sortDirection = 'ASC',
-        $filters = [],
-        $offset = 0,
-        $limit = 10
+        $filters = []        
     )
     {
         
@@ -39,18 +39,13 @@ class AddressCodeRepository extends EntityRepository {
                  c.name AS city,  
                  d.name AS district,  
                  w.name AS ward,
-                 h.name AS hub,
-                 b.name AS branch,            
                  ac.createdBy,
                  ac.createdAt"                 
             )->groupBy('ac.addressCodeId')            
             ->setMaxResults($limit)
-            ->setFirstResult($offset);
-            
+            ->setFirstResult(($start - 1) * $limit);            
             return $queryBuilder;
-
-        } catch (QueryException $e) {
-            
+        } catch (QueryException $e) {            
             return [];
         }
 
@@ -107,12 +102,11 @@ class AddressCodeRepository extends EntityRepository {
             'created_at' => [
                 'alias' => 'ac.created_at',
                 'operator' => 'contains'
-            ],
-            
-
+            ]
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+        
         $queryBuilder->from(AddressCode::class, 'ac')
         ->leftJoin(
             'ac.country', 'ct'
@@ -122,10 +116,10 @@ class AddressCodeRepository extends EntityRepository {
             'ac.district','d'
         )->leftJoin(
             'ac.ward','w'
-        )->leftJoin(
-            'ac.hub','h'
-        )->leftJoin(
-            'ac.branch','b'
+        // )->leftJoin(
+        //     'ac.hub','h'
+        // )->leftJoin(
+        //     'ac.branch','b'
         );           
 
         if ($sortField != NULL && $sortDirection != NULL)

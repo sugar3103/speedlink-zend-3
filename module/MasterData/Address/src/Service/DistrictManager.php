@@ -4,6 +4,8 @@ namespace Address\Service;
 use Address\Entity\District;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
+use Core\Utils\Utils;
+
 class DistrictManager  {
     
     /**
@@ -140,7 +142,7 @@ class DistrictManager  {
      * @throws ORMException
      */
     public function getListDistrictByCondition(
-        $currentPage,
+        $start,
         $limit,
         $sortField = 'd.name',
         $sortDirection = 'ASC',
@@ -148,11 +150,11 @@ class DistrictManager  {
     ){
 
         $cities     = [];
-        $totalDistrict = 0;        
-        $offset = ($currentPage * $limit) - $limit;    
+        $totalDistrict = 0;                
+
         //get orm district
         $ormDistrict = $this->entityManager->getRepository(District::class)
-            ->getListDistrictByCondition($sortField, $sortDirection, $filters,$offset,$limit);
+            ->getListDistrictByCondition($start,$limit,$sortField, $sortDirection, $filters);
 
         if($ormDistrict){
             $ormPaginator = new ORMPaginator($ormDistrict, true);
@@ -169,7 +171,7 @@ class DistrictManager  {
                 $district['status'] = District::getIsActiveList($district['status']);
 
                 //set created_at
-                $district['createdAt'] =  ($district['createdAt']) ? $this->checkDateFormat($district['createdAt'],'d/m/Y') : '';
+                $district['createdAt'] =  ($district['createdAt']) ? Utils::checkDateFormat($district['createdAt'],'d/m/Y') : '';
 
                 $countRow++;
             }
@@ -182,47 +184,5 @@ class DistrictManager  {
             'totalDistrict' => $totalDistrict,
         ];
         return $dataDistrict;
-    }
-    
-    /**
-     * Check date format
-     *
-     * @param $dateAction
-     * @param $dateFormat
-     * @return string
-     */
-    public function checkDateFormat($dateAction,$dateFormat)
-    {
-        $dateLast = '';
-        $dateCheck = ! empty($dateAction) ? $dateAction->format('Y-m-d H:i:s') : '';
-        if ($dateCheck) {
-            $datetime = new \DateTime($dateCheck, new \DateTimeZone('UTC'));
-            $laTime = new \DateTimeZone('Asia/Ho_Chi_Minh');
-            $datetime->setTimezone($laTime);
-            $dateLast = $datetime->format($dateFormat);
-        }
-        return $dateLast;
-    }
-
-     /**
-     * Get value filters search
-     *
-     * @param $params
-     * @param $fieldsMap
-     * @return array
-     */
-    public function getValueFiltersSearch($params,$fieldsMap)
-    {
-        $filters = [];
-        
-        if (isset($params['query']) && !empty($params['query'])){
-          
-            foreach ($fieldsMap as $field)
-            {
-                if(isset($params['query'][$field]) && $params['query'][$field] != -1)
-                    $filters [$field] = trim($params['query'][$field]);
-            }
-        }
-        return $filters;
     }
 }
