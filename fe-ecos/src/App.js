@@ -1,13 +1,14 @@
 import React from "react";
 import { Provider } from "react-redux";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Router, Route, Switch } from "react-router-dom";
 import { configureStore } from "./redux/store";
 
 import App from "./containers/App/App";
+import history from './util/history';
 
 const MainApp = () => (
   <Provider store={configureStore()}>
-    <Router>
+    <Router history={history}>
       <Switch>
         <Route path="/" component={App} />
       </Switch>

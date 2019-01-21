@@ -1,11 +1,14 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import DownIcon from 'mdi-react/ChevronDownIcon';
 import { Collapse } from 'reactstrap';
 import TopbarMenuLink from './TopbarMenuLink';
+import { logoutUser } from '../../../redux/actions';
+import PropTypes from 'prop-types';
 
 const Ava = `${process.env.PUBLIC_URL}/img/ava.png`;
 
-export default class TopbarProfile extends PureComponent {
+class TopbarProfile extends PureComponent {
   constructor() {
     super();
     this.state = {
@@ -16,6 +19,10 @@ export default class TopbarProfile extends PureComponent {
   toggle = () => {
     this.setState({ collapse: !this.state.collapse });
   };
+
+  hanldeLogOut = () => {
+    this.props.logoutUser();
+  }
 
   render() {
     return (
@@ -35,10 +42,22 @@ export default class TopbarProfile extends PureComponent {
             <div className="topbar__menu-divider" />
             <TopbarMenuLink title="Account Settings" icon="cog" path="/account/profile" />
             <TopbarMenuLink title="Lock Screen" icon="lock" path="/lock_screen" />
-            <TopbarMenuLink title="Log Out" icon="exit" path="/log_in" />
+            {/* eslint-disable-next-line */}
+            <a className="topbar__link" href="javascript:void(0)" onClick={this.hanldeLogOut}>
+              <span className={`topbar__link-icon lnr lnr-exit`} />
+              <p className="topbar__link-title">Log Out</p>
+            </a>
           </div>
         </Collapse>
       </div>
     );
   }
 }
+
+TopbarProfile.propTypes = {
+  logoutUser: PropTypes.func.isRequired,
+}
+
+export default connect(null, {
+  logoutUser
+})(TopbarProfile);
