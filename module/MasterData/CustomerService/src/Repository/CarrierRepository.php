@@ -5,7 +5,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
 use CustomerService\Entity\Carrier;
-
+use Core\Utils\Utils;
 
 /**
  * This is the custom repository class for User entity.
@@ -63,8 +63,6 @@ class CarrierRepository extends EntityRepository
         } else {
             $queryBuilder->orderBy('c.id', 'ASC');
         }
-
-        $utils = new Utils();
-        return $utils->setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
+        return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
 }

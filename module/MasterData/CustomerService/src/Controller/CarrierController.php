@@ -27,18 +27,19 @@ class CarrierController extends CoreController
 
     public function __construct($entityManager, $carrierManager)
     {
+        parent::__construct($entityManager);
         $this->entityManager = $entityManager;
         $this->carrierManager = $carrierManager;
     }
 
     public function indexAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            // TODO: Check error_code
-            $this->httpStatusCode = 405;
-            $this->apiResponse['message'] = 'Request not allow';
-            return $this->createResponse();
-        }
+        // if (!$this->getRequest()->isPost()) {
+        //     // TODO: Check error_code
+        //     $this->httpStatusCode = 405;
+        //     $this->apiResponse['message'] = 'Request not allow';
+        //     return $this->createResponse();
+        // }
 
         $result = [
             "totalRecords" => 0,

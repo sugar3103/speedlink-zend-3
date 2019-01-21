@@ -69,7 +69,7 @@ class StatusForm extends Form {
                     'name' => StatusExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'status' => $this->status
+                        'status' => $this->status                        
                     ]
                 ]
             ]
@@ -95,7 +95,8 @@ class StatusForm extends Form {
                     'name' => StatusExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'status' => $this->status
+                        'status' => $this->status,
+                        'language' => 'en'
                     ]
                 ]
             ]
@@ -129,28 +130,6 @@ class StatusForm extends Form {
                     'name' => ToInt::class
                 ]
             ] 
-        ]);
-
-        if ($this->scenario == 'update') {
-            $inputFilter->add([
-                'name'  => 'updated_by',
-                'required'  => true,
-                'filters' => [
-                    [
-                        'name' => ToInt::class
-                    ]
-                ] 
-            ]);
-        } else {
-            $inputFilter->add([
-                'name'  => 'created_by',
-                'required'  => true,
-                'filters' => [
-                    [
-                        'name' => ToInt::class
-                    ]
-                ] 
-            ]);
-        }
+        ]);      
     }
 }

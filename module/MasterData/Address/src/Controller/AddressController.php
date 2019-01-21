@@ -33,19 +33,6 @@ class AddressController extends CoreController {
     public function indexAction()
     {
         if ($this->getRequest()->isPost()) {
-            $payload = file_get_contents('php://input');
-            $params = json_decode($payload, true);
-          
-            //the current page number.
-            $currentPage = isset( $params['pagination']) ? (int) $params['pagination']['page'] : 1;
-
-            //total number of pages available in the server.
-            $totalPages = isset($params['pagination']['pages']) ? (int) $params['pagination']['pages'] : 1;
- 
-            //set limit
-            $limit  = !empty($params['pagination']['perpage'])
-                         && $params['pagination']['perpage'] > 10 ? $params['pagination']['perpage'] : 10;
-          
             // get the filters
             $fieldsMap = [
                 0 => 'code',
@@ -57,31 +44,19 @@ class AddressController extends CoreController {
                 6 => 'hub'
             ];
 
-            $filters = $this->addressCodeManager->getValueFiltersSearch($params,$fieldsMap);
+            list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
             
-            //get and set sortField,sortDirection
-            $sortField = isset($params['sort']) ? $params['sort'] : $fieldsMap[0];
-            $sortDirection = isset($params['order']) ? $params['order'] : 'ASC';
+            //get list User by condition
+            $dataCode = $this->addressCodeManager->getListCodeByCondition($start, $limit, $sortField, $sortDirection,$filters);            
             
-            //get list code by condition
-            $dataCode = $this->addressCodeManager->getListCodeByCondition(
-                $currentPage, $limit, $sortField, $sortDirection,$filters);
-
-            $result = [
-                "meta" => [
-                    "page" => $currentPage,
-                    "pages" => $totalPages,
-                    "from" => ($currentPage - 1) * $limit + 1,
-                    "to" => ($currentPage * $limit) > $dataCode['totalCode'] ? $dataCode['totalCode'] : ($currentPage * $limit),
-                    "perpage"=> $limit,
-                    "totalItems" => $dataCode['totalCode'],
-                    "totalPage" => ceil($dataCode['totalCode']/$limit)
-                ],
-                "data" => ($dataCode['listCode']) ? $dataCode['listCode'] : []           
-            ];
-
+            $result = ($dataCode['listCode']) ? $dataCode['listUser'] : [] ;
+            
             $this->error_code = 1;
-            $this->apiResponse = $result;
+            $this->apiResponse =  array(
+                'message'   => "Get List Success",
+                'data'      => $result,
+                'total'     => $dataCode['listCode']
+            ); 
         } else {
             $this->error_code = 0;
             $this->apiResponse['message'] = ['Address Code Manager'];

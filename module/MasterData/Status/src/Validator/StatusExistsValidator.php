@@ -12,7 +12,8 @@ class StatusExistsValidator extends AbstractValidator {
      */
     protected $options = [
         'entityManager' => null,
-        'status' => null
+        'status' => null,
+        'language' => null
     ];
 
     /**
@@ -53,6 +54,7 @@ class StatusExistsValidator extends AbstractValidator {
      */
     public function isValid($value)
     {
+        
         if (!is_scalar($value)) {
             $this->error(self::NOT_SCALAR);
             return false;
@@ -60,9 +62,13 @@ class StatusExistsValidator extends AbstractValidator {
 
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
-
-        $status = $entityManager->getRepository(Status::class)
-        ->findOneByName($value);
+        if($this->options['language'] === NULL) {
+            $status = $entityManager->getRepository(Status::class)->findOneByName($value);
+        } else if($this->options['language'] === 'en') {
+            $status = $entityManager->getRepository(Status::class)->findOneBy(array('name_en' => $value));       
+        }
+        
+        
 
         if ($this->options['status'] == null)
             $isValid = ($status == null);

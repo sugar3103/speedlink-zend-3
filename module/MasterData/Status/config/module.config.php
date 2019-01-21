@@ -8,7 +8,7 @@ use Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter;
 use Gedmo\SoftDeleteable\SoftDeleteableListener;
 use Gedmo\Timestampable\TimestampableListener;
 use Zend\Cache\Storage\Adapter\Filesystem;
-use Zend\Router\Http\Segment;
+use Core\Route\StaticRoute;
 use Zend\ServiceManager\Factory\InvokableFactory;
 
 
@@ -17,31 +17,23 @@ use Core\DBAL\Types\UTCDateTimeType;
 $router = [
     'routes' => [
         'status' => [
-            'type' => Segment::class,
+            'type' => StaticRoute::class,
             'options' => [
-                'route' => '/status',
+                'verb' => 'POST',
+                'route' => '/status[/:action]',
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*'                            
+                ],
                 'defaults' => [
                     'controller' => Controller\StatusController::class,
-                    'action' => 'list',
+                    'action' => 'index',
                     'isAuthorizationRequired' => true
                 ],
-            ],
-            'may_terminate' => true,
-            'child_routes'  => [
-                'city' => [
-                    'type'  => Segment::class,
-                    'options' => [
-                        'route' => '[/:action][/:id]',
-                        'constraints' => [
-                            'action' => '[a-zA-Z0-9]*',
-                            'id' => '[0-9]*'
-                        ]
-                    ]
-                ]               
-            ]
+            ]            
         ],
     ]
 ];
+
 $controllers = [
     'factories' => [
         Controller\StatusController::class => Factory\StatusControllerFactory::class

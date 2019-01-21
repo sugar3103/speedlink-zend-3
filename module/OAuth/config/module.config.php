@@ -12,52 +12,63 @@ use Zend\Cache\Storage\Adapter\Filesystem;
 use Zend\Log\Formatter\Simple;
 use Zend\Log\Logger;
 use Zend\Log\LoggerAbstractServiceFactory;
-use Zend\Router\Http\Literal;
-use Zend\Router\Http\Segment;
-
+use Core\Route\StaticRoute;
 
 use Core\DBAL\Types\UTCDateTimeType;
 
 $router = [
     'routes' => [
         'auth' => [
-            'type' => Segment::class,
+            'type' => StaticRoute::class,
             'options' => [
-                'route' => '/auth',
+                'verb' => 'POST',
+                'route' => '/auth[/:action]',
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*'                            
+                ],                       
                 'defaults' => [
                     'controller' => Controller\AuthController::class,
                     'action' => 'index',
+                    'isAuthorizationRequired' => false
+                ]
+            ]
+         
+        ],
+        'user' => [
+            'type' => StaticRoute::class,
+            'options' => [
+                'route' => '/user[/:action]',
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*'                            
+                ],                       
+                'defaults' => [
+                    'controller' => Controller\UserController::class,
+                    'action' => 'index',
+                    'isAuthorizationRequired' => true
+                ]
+            ]
+         
+        ],
+        'roles' => [
+            'type' => StaticRoute::class,
+            'options' => [
+                'route' => '/roles[/:action]',
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
                 ],
-            ],
-            'may_terminate' => true,
-            'child_routes'  => [
-                'login' => [
-                    'type'  => Segment::class,
-                    'options' => [
-                        'route' => '/login',
-                        'defaults' => [
-                            'controller' => Controller\AuthController::class,
-                            'action' => 'login'
-                        ]
-                    ]
-                ],
-                'vertify' => [
-                    'type'  => Segment::class,
-                    'options' => [
-                        'route' => '/vertify',
-                        'defaults' => [
-                            'controller' => Controller\AuthController::class,
-                            'action' => 'vertify'
-                        ]
-                    ]
-                ],
+                'defaults' => [
+                    'controller' => Controller\RoleController::class,
+                    'action' => 'index'
+                ]
             ]
         ],
     ]
 ];
 $controllers = [
     'factories' => [
-        Controller\AuthController::class => Factory\AuthControllerFactory::class
+        Controller\AuthController::class => Factory\AuthControllerFactory::class,
+        Controller\UserController::class => Factory\UserControllerFactory::class,
+        Controller\RoleController::class => Factory\RoleControllerFactory::class
     ]
 ];
 
@@ -183,11 +194,12 @@ $doctrine = [
         ]
     ]
 ];
+
 return [
-    'router' => $router,
-    'controllers' => $controllers,
-    'caches'    => $caches,
+    'router'            => $router,
+    'controllers'       => $controllers,
+    'caches'            => $caches,
     'service_manager'   => $service_manager,
     'doctrine'          => $doctrine,
-    'view_manager' => $view_manager
+    'view_manager'      => $view_manager
 ];

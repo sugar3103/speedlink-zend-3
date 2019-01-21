@@ -71,40 +71,51 @@ class ApiController extends AbstractRestfulController
         $isAuthorizationRequired = $event->getRouteMatch()->getParam('isAuthorizationRequired');
         $config = $event->getApplication()->getServiceManager()->get('Config');
         $event->setParam('config', $config);
-        if (isset($config['ApiRequest'])) {
+        
+        if (isset($config['ApiRequest'])) { 
             $responseStatusKey = $config['ApiRequest']['responseFormat']['statusKey'];
-            if (!$isAuthorizationRequired) {
-                return;
-            }
+            
+            if (!$isAuthorizationRequired) return;
+            
             $jwtToken = $this->findJwtToken($request);
-            if ($jwtToken) {
-                $this->token = $jwtToken;
-                $this->decodeJwtToken();
-                if (is_object($this->tokenPayload)) {
-                    if(!$this->checkAuthenticity()) {
-                        $response->setStatusCode(200);
+            
+            if($request->isPost()) { 
+                if ($jwtToken) {
+                    $this->token = $jwtToken;
+                    $this->decodeJwtToken();
+                    if (is_object($this->tokenPayload) && !$this->checkAuthenticity()) {
+                        $response->setStatusCode(401);
                         $jsonModelArr = [
-                            $responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'], 
-                            'error_code' => -5,
-                            $config['ApiRequest']['responseFormat']['messageKey'] => 'Expired or Does not exist'
+                            $responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'],                             
+                            'error_code' => 401,
+                            $config['ApiRequest']['responseFormat']['dataKey'] => [],
+                            $config['ApiRequest']['responseFormat']['errorKey'] => 'Your API key is wrong'
                         ];
-                    } else {
-                        return;
-                    }
+                    } else { return; }
+                } else {
+                    $response->setStatusCode(401);
+                    $jsonModelArr = [
+                        $responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'],
+                        'error_code' => 405,
+                        $config['ApiRequest']['responseFormat']['messageKey'] => $config['ApiRequest']['responseFormat']['authenticationRequireText']];
                 }
-                
             } else {
-                $response->setStatusCode(401);
-                $jsonModelArr = [$responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'], $config['ApiRequest']['responseFormat']['resultKey'] => [$config['ApiRequest']['responseFormat']['errorKey'] => $config['ApiRequest']['responseFormat']['authenticationRequireText']]];
+                $response->setStatusCode(405);
+                $jsonModelArr = [
+                    $responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'],
+                    'error_code' => 405,                    
+                    $config['ApiRequest']['responseFormat']['messageKey'] => $config['ApiRequest']['responseFormat']['methodNotAllowedKey']
+                ];
             }
         } else {
             $response->setStatusCode(400);
             $jsonModelArr = ['status' => 'NOK', 'result' => ['error' => 'Require copy this file vender\multidots\zf3-rest-api\config\restapi.global.php and paste to root config\autoload\restapi.global.php']];
         }
-
         $response->getHeaders()->addHeaderLine('Content-Type', 'application/json');
+        $jsonModelArr['total'] = 0;
         $view = new JsonModel($jsonModelArr);
         $response->setContent($view->serialize());
+       
         return $response;
     }
 
@@ -123,7 +134,7 @@ class ApiController extends AbstractRestfulController
         }
 
         if ($request->isGet()) {
-            $jwtToken = $request->getQuery('token');
+            $jwtToken = $request->getQuery('token');            
         }
         if ($request->isPost()) {
             $jwtToken = $request->getPost('token');
@@ -195,21 +206,8 @@ class ApiController extends AbstractRestfulController
             $sendResponse[$statusKey] = $config['ApiRequest']['responseFormat']['statusNokText'];
         }
 
-        $sendResponse[$errorKey] = $this->error_code;
-        
-        // if($this->apiResponse) {
-        //     if( count($this->apiResponse) == 1) {
-        //         $sendResponse[$config['ApiRequest']['responseFormat']['messageKey']] = array_shift($this->apiResponse);
-        //     } else {
-        //         $sendResponse = array_merge($sendResponse, $this->apiResponse);
-        //     }
-        // }
-
-        if ($this->error_code == 1) {
-            $sendResponse[$config['ApiRequest']['responseFormat']['resultKey']] = $this->apiResponse;
-        } else {
-            $sendResponse[$config['ApiRequest']['responseFormat']['messageKey']] = $this->apiResponse;
-        }
+        $sendResponse[$errorKey] = $this->error_code;        
+        $sendResponse = array_merge($sendResponse, $this->apiResponse);
         
         return new JsonModel($sendResponse);
     }

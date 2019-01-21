@@ -37,13 +37,15 @@
      
      //Check Is Module
      foreach ($prs_4 as $_module => $value) {
-         $name_module = str_replace("\\","", $_module);
-         if(!is_dir(dirname(__DIR__) .'/../module/'.$name_module .'/config')) {
+        // var_dump($value);
+         $name_module = str_replace("/src/","", $value);
+         
+         if(!is_dir(dirname(__DIR__) .'/../' .$name_module .'/config')) {
              unset($prs_4[$_module]);
              $isDiff = true;
          }
-     }
- 
+     }     
+     
      //Check Module
      foreach ($modules as $key => $module) {
         if(is_array($module)) {
@@ -60,7 +62,7 @@
          }
         }
      }
- 
+     
      if($isDiff) {
          //Update Composer File
          $autoload['psr-4'] = $prs_4;

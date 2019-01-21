@@ -37,19 +37,7 @@ class WardController extends CoreController {
     public function listAction()
     {
         if ($this->getRequest()->isPost()) {
-            $payload = file_get_contents('php://input');
-            $params = json_decode($payload, true);
             
-          
-            //the current page number.
-            $offset = isset($params['start']) ? $params['start'] : 0;
-            
-            //total number of pages available in the server.
-            $totalPages = 1;
- 
-            //set limit
-            $limit  = isset($params['length']) ? $params['length'] : 10;
-
             // get the filters
             $fieldsMap = [
                 0 => 'name',
@@ -57,13 +45,8 @@ class WardController extends CoreController {
                 2 => 'status'
             ];
 
-            $filters = $this->wardManager->getValueFiltersSearch($params,$fieldsMap);
-
-            //get and set sortField,sortDirection
-            $sortField = isset($params['sort']) ? $params['sort'] : $fieldsMap[0];
-            $sortDirection = isset($params['order']) ? $params['order'] : 'ASC';
-            
-            
+            list($currentPage,$totalPages,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
+           
             //get list ward by condition
             $dataWard = $this->wardManager->getListWardByCondition(
                 $currentPage, $limit, $sortField, $sortDirection,$filters);
@@ -73,13 +56,14 @@ class WardController extends CoreController {
                 "data" => ($dataWard['listWard']) ? $dataWard['listWard'] : []           
             ];
             
+            $this->error_code = 1;
             $this->apiResponse = $result;
-            return $this->createResponse();
+           
         } else {
             $this->apiResponse['message'] = 'Ward List';
-
-            return $this->createResponse();
         }
+
+        return $this->createResponse();
     }
 
     public function addAction()
@@ -89,11 +73,7 @@ class WardController extends CoreController {
             $user = $this->tokenPayload;
             //Create New Form Ward
             $form = new WardForm('create', $this->entityManager);
-
-            $data = file_get_contents('php://input');
-            $data = json_decode($data, true);
-
-            $form->setData($data);
+            $form->setData($this->getRequestData());
             
             //validate form
             if ($form->isValid()) {
@@ -118,9 +98,9 @@ class WardController extends CoreController {
 
     public function editAction() {
         if ($this->getRequest()->isPost()) {
-             // fill in the form with POST data.
-             $payload = file_get_contents('php://input');
-             $data = json_decode($payload, true);
+
+             // fill in the form with POST data.             
+             $data = $this->getRequestData();
              $user = $this->tokenPayload;
              $ward = $this->entityManager->getRepository(Ward::class)
                 ->findOneBy(array('wardId' => $data['ward_id']));
@@ -156,7 +136,7 @@ class WardController extends CoreController {
         if ($this->getRequest()->isPost()) {
               // fill in the form with POST data.
               $payload = file_get_contents('php://input');
-              $data = json_decode($payload, true);
+              $data = $this->getRequestData();
  
               $user = $this->tokenPayload;
               $ward = $this->entityManager->getRepository(Ward::class)

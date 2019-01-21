@@ -1,0 +1,22 @@
+import React, { Component } from 'react';
+import { Card, CardBody, Col } from 'reactstrap';
+
+class Dashborad extends Component {
+  render() {
+    return (
+      <Col md={12}>
+        <Card>
+          <CardBody>
+            <div className="card__title">
+              <h5 className="bold-text">Example title</h5>
+              <h5 className="subhead">Example subhead</h5>
+            </div>
+            <p>Your content here</p>
+          </CardBody>
+        </Card>
+      </Col>
+    );
+  }
+}
+
+export default Dashborad;

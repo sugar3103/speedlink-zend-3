@@ -4,6 +4,7 @@ namespace Address\Service;
 use Address\Entity\AddressCode;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
+use Core\Utils\Utils;
 
 class AddressCodeManager  {
     
@@ -30,7 +31,7 @@ class AddressCodeManager  {
      * @throws ORMException
      */
     public function getListCodeByCondition(
-        $currentPage,
+        $start,
         $limit,
         $sortField = '',
         $sortDirection = 'ASC',
@@ -55,7 +56,7 @@ class AddressCodeManager  {
             
             foreach ($codes as &$code) {//loop
                 //set created_at
-                $code['createdAt'] =  ($code['createdAt']) ? $this->checkDateFormat($code['createdAt'],'d/m/Y') : '';                
+                $code['createdAt'] =  ($code['createdAt']) ? Utils::checkDateFormat($code['createdAt'],'d/m/Y') : '';                
             }
            
         }
@@ -66,48 +67,5 @@ class AddressCodeManager  {
             'totalCode' => $totalCode,
         ];
         return $dataCode;
-    }
-    
-    /**
-     * Check date format
-     *
-     * @param $dateAction
-     * @param $dateFormat
-     * @return string
-     */
-    public function checkDateFormat($dateAction,$dateFormat)
-    {
-        $dateLast = '';
-        $dateCheck = ! empty($dateAction) ? $dateAction->format('Y-m-d H:i:s') : '';
-        if ($dateCheck) {
-            $datetime = new \DateTime($dateCheck, new \DateTimeZone('UTC'));
-            $laTime = new \DateTimeZone('Asia/Ho_Chi_Minh');
-            $datetime->setTimezone($laTime);
-            $dateLast = $datetime->format($dateFormat);
-        }
-        return $dateLast;
-    }
-
-     /**
-     * Get value filters search
-     *
-     * @param $params
-     * @param $fieldsMap
-     * @return array
-     */
-    public function getValueFiltersSearch($params,$fieldsMap)
-    {
-        $filters = [];
-
-        if (isset($params['query']) && !empty($params['query'])){
-          
-            foreach ($fieldsMap as $field)
-            {
-                if(isset($params['query'][$field]) && $params['query'][$field] != -1)
-                    $filters [$field] = trim($params['query'][$field]);
-            }
-        }
-       
-        return $filters;
     }
 }

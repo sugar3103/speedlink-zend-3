@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
+use Core\Utils\Utils;
 
 /**
  * This is the custom repository class for User entity.
@@ -39,13 +40,17 @@ class UserRepository extends EntityRepository {
      * @return array|QueryBuilder
      */
     public function getListUserByCondition(
+        $start = 1,
+        $limit = 10,
         $sortField = 'u.id',
         $sortDirection = 'asc',
         $filters = []
     )
     {
+        
         try {
             $queryBuilder = $this->buildUserQueryBuilder($sortField, $sortDirection, $filters);
+            
             $queryBuilder->select(
                 "u.id,
                  u.email,
@@ -58,7 +63,9 @@ class UserRepository extends EntityRepository {
             ->leftJoin(
                 'u.roles',
                 'r'
-            )->groupBy('u.id');
+            )->andWhere('u.id <> 0')->groupBy('u.id')
+            ->setMaxResults($limit)
+            ->setFirstResult(($start - 1) * $limit);
 
             return $queryBuilder;
 
@@ -99,44 +106,14 @@ class UserRepository extends EntityRepository {
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(User::class, 'u')
-            ->where('u.deletedAt is null')
-            ->andWhere('u.id <> 1');
+        $queryBuilder->from(User::class, 'u');
+            
 
         if ($sortField != NULL && $sortDirection != NULL)
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
         else
             $queryBuilder->orderBy('u.id', 'DESC');
-
-        return $this->setCriteriaListUserByFilters($filters, $operatorsMap, $queryBuilder);
+            
+        return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
-
-    /**
-     * Set criteria list by filters
-     *
-     * @param array $filters
-     * @param array $operatorsMap
-     * @param QueryBuilder $queryBuilder
-     * @return QueryBuilder
-     * @throws QueryException
-     */
-    public function setCriteriaListUserByFilters($filters = [], $operatorsMap = [], QueryBuilder $queryBuilder)
-    {
-
-        foreach ($filters as $key => $value){
-
-           if (isset($operatorsMap[$key]) && $value !== "")
-                $expr = Criteria::create()->andWhere(Criteria::expr()->{$operatorsMap[$key]['operator']}($operatorsMap[$key]['alias'], $value));
-            elseif ($value === "")
-                continue;
-            else
-                $expr = Criteria::create()->andWhere(Criteria::expr()->contains($operatorsMap[$key]['alias'], $value));
-
-            $queryBuilder->addCriteria($expr);
-        }
-
-        return $queryBuilder;
-    }
-
-
 }

@@ -37,30 +37,14 @@ class CountryController extends CoreController {
 
     public function listAction() {
         if ($this->getRequest()->isPost()) {
-            $payload = file_get_contents('php://input');
-            $params = json_decode($payload, true);
-          
-           //the current page number.
-            $currentPage = isset( $params['pagination']) ? (int) $params['pagination']['page'] : 1;
-
-            //total number of pages available in the server.
-            $totalPages = isset($params['pagination']['pages']) ? (int) $params['pagination']['pages'] : 1;
- 
-            //set limit
-            $limit  = !empty($params['pagination']['perpage'])
-                         && $params['pagination']['perpage'] > 10 ? $params['pagination']['perpage'] : 10;
-
+            
             // get the filters
             $fieldsMap = [
                 0 => 'name',                
                 1 => 'status'
             ];
 
-            $filters = $this->countryManager->getValueFiltersSearch($params,$fieldsMap);
-
-            //get and set sortField,sortDirection
-            $sortField = isset($params['sort']) ? $params['sort'] : $fieldsMap[0];
-            $sortDirection = isset($params['order']) ? $params['order'] : 'ASC';
+            list($currentPage,$totalPages,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
 
             //get list country by condition
             $dataCountry = $this->countryManager->getListCountryByCondition(
@@ -91,16 +75,11 @@ class CountryController extends CoreController {
 
     public function addAction() {
         if ($this->getRequest()->isPost()) {
-            // fill in the form with POST data.
-            $payload = file_get_contents('php://input');
-            $data = json_decode($payload, true);
-
             $user = $this->tokenPayload;
             //Create New Form Country
             $form = new CountryForm('create', $this->entityManager);
             
-
-            $form->setData($data);
+            $form->setData($this->getRequestData());
             
             //validate form
             if ($form->isValid()) {
@@ -126,20 +105,15 @@ class CountryController extends CoreController {
 
     public function editAction() {
         if ($this->getRequest()->isPost()) {
-             // fill in the form with POST data.
-             $payload = file_get_contents('php://input');
-             $data = json_decode($payload, true);
-
              $user = $this->tokenPayload;
              $country = $this->entityManager->getRepository(Country::class)
                 ->findOneBy(array('countryId' => $data['country_id']));
              
              //Create New Form Country
              $form = new CountryForm('update', $this->entityManager, $country);
-             $form->setData($data);
+             $form->setData($this->getRequestData());
              if ($form->isValid()) {
-                $data = $form->getData();
-                
+                $data = $form->getData();                
                 $this->countryManager->updateCountry($country, $data,$user);
                 $this->error_code = 1;
                 $this->apiResponse['message'] = "Success: You have modified country!";
@@ -159,9 +133,9 @@ class CountryController extends CoreController {
     public function deleteAction()
     {
         if ($this->getRequest()->isPost()) {
-              // fill in the form with POST data.
-              $payload = file_get_contents('php://input');
-              $data = json_decode($payload, true);
+              
+            // fill in the form with POST data.              
+              $data = $this->getRequestData();
  
               $user = $this->tokenPayload;
               $country = $this->entityManager->getRepository(Country::class)
