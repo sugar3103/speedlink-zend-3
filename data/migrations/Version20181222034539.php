@@ -39,7 +39,7 @@ final class Version20181222034539 extends AbstractMigration
         $tables['country']= array(
             'query' => 'create table',
             'columns' => array(
-                'country_id' => 'int(11) auto_increment primary key',
+                'id' => 'int(11) auto_increment primary key',
                 'name'  => 'varchar(50) not null',
                 'name_en'  => 'varchar(50) not null',
                 'description' => 'text null',
@@ -52,14 +52,14 @@ final class Version20181222034539 extends AbstractMigration
                 'updated_by' => 'int(11)',
                 'updated_at'    => 'datetime',
                 'ref_as_by'     => 'int(11)',
-                'constraint' => 'unique_country_id unique (country_id)'
+                'constraint' => 'unique_country_id unique (id)'
             )
         );
 
         $tables['city'] = array(
             'query' => 'create table',
             'columns'    => array(
-                'city_id' => 'int(11) auto_increment primary key',
+                'id' => 'int(11) auto_increment primary key',
                 'country_id' => 'int(11) not null',
                 'name'  => 'varchar(50) not null',
                 'name_en'  => 'varchar(50) not null',
@@ -73,14 +73,14 @@ final class Version20181222034539 extends AbstractMigration
                 'updated_by' => 'int(11)',
                 'updated_at'    => 'datetime',
                 'ref_as_by'     => 'int(11)',
-                'constraint' => 'unique_city_id unique (city_id)'
+                'constraint' => 'unique_city_id unique (id)'
             )
         );
 
         $tables['district'] = array(
             'query' => 'create table',
             'columns'    => array(
-                'district_id' => 'int(11) auto_increment primary key',
+                'id' => 'int(11) auto_increment primary key',
                 'city_id' => 'int(10)  not null',
                 'name'  => 'varchar(50)  not null',
                 'name_en'  => 'varchar(50)  not null',
@@ -93,14 +93,14 @@ final class Version20181222034539 extends AbstractMigration
                 'updated_by' => 'int(11)',
                 'updated_at'    => 'datetime',
                 'ref_as_by'     => 'int(11)',
-                'constraint' => 'unique_district_id unique (district_id)'
+                'constraint' => 'unique_district_id unique (id)'
             )
         );
 
         $tables['ward'] = array(
             'query' => 'create table',
             'columns'    => array(
-                'ward_id' => 'int(11) auto_increment primary key',
+                'id' => 'int(11) auto_increment primary key',
                 'district_id' => 'int(11) not null',
                 'name'  => 'varchar(50)  not null',
                 'name_en'  => 'varchar(50)  not null',
@@ -114,14 +114,14 @@ final class Version20181222034539 extends AbstractMigration
                 'updated_by' => 'int(11)',
                 'updated_at'    => 'datetime',
                 'ref_as_by'     => 'int(11)',
-                'constraint' => 'unique_ward_id unique (ward_id)'
+                'constraint' => 'unique_ward_id unique (id)'
             )
         );
 
         $tables['address_code'] = array(
             'query' => 'create table',
             'columns'    => array(
-                'address_code_id' => 'int(11) auto_increment primary key',
+                'id' => 'int(11) auto_increment primary key',
                 'code' => 'varchar(50) CHARACTER SET utf8 NOT NULL',
                 'country_id' => 'int(11) not null',
                 'city_id' => 'int(11) not null',
@@ -134,7 +134,7 @@ final class Version20181222034539 extends AbstractMigration
                 'updated_by' => 'int(11)',
                 'updated_at'    => 'datetime',
                 'ref_as_by'     => 'int(11)',
-                'constraint' => 'unique_address_code_id unique (address_code_id,code)'
+                'constraint' => 'unique_address_code_id unique (id,code)'
             )
         );
 
