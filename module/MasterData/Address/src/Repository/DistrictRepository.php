@@ -50,6 +50,31 @@ class DistrictRepository extends EntityRepository {
 
     }
 
+    public function getListDistrictSelect(
+        $sortField = 'd.name',
+        $sortDirection = 'ASC',
+        $filters = []
+    )
+    {
+        try {
+            $queryBuilder = $this->buildDistrictQueryBuilder($sortField, $sortDirection, $filters);
+            $queryBuilder->select(
+                "d.districtId,
+                 d.name,
+                 d.nameEn,
+                 d.status"                 
+            )
+            // ->groupBy('c.cityId')
+             // ->setMaxResults(100)
+            // ->setFirstResult($offset)
+            ;
+            return $queryBuilder;
+
+        } catch (QueryException $e) {
+            return [];
+        }
+    }
+
     /**
      * Build query builder
      *
@@ -67,7 +92,10 @@ class DistrictRepository extends EntityRepository {
                 'alias' => 'd.city_id',
                 'operator' => 'eq'
             ],
-            
+             'district_id' => [
+                'alias' => 'd.districtId',
+                'operator' => 'eq'
+            ],
             'name' => [
                 'alias' => 'd.name',
                 'operator' => 'contains'

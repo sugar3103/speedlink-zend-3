@@ -40,7 +40,7 @@ class AddressCodeManager  {
         
         $codes     = [];
         $totalCode = 0;  
-        $offset = ($currentPage * $limit) - $limit;      
+        $offset = ($start * $limit) - $limit;      
         
         //get orm code
         $ormCode = $this->entityManager->getRepository(AddressCode::class)

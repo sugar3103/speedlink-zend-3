@@ -82,7 +82,6 @@ class AuthController extends CoreController {
             // fill in the form with POST data.
             $payload = file_get_contents('php://input');
             $data = json_decode($payload, true);
-            
             $form->setData($data);
             // Validate From
             if ($form->isValid()) {

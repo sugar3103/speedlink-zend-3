@@ -225,4 +225,42 @@ class DistrictManager  {
         }
         return $filters;
     }
+
+     public function getListDistrictSelect(
+        $sortField = 'd.name',
+        $sortDirection = 'ASC',
+        $filters = []
+    ){
+
+        $districts     = [];
+        $totalDistrict = 0;
+        
+        //get orm Hub
+        $ormDistrict = $this->entityManager->getRepository(District::class)
+            ->getListDistrictSelect($sortField, $sortDirection, $filters);
+
+        if($ormDistrict){
+            $ormPaginator = new ORMPaginator($ormDistrict, true);
+            $ormPaginator->setUseOutputWalkers(false);
+            $totalDistrict = $ormPaginator->count();
+
+            // $adapter = new DoctrineAdapter($ormPaginator);  
+            $districts = $ormPaginator->getIterator()->getArrayCopy();
+            //set countRow default
+            $countRow = 1;
+            
+            foreach ($districts as &$district) {//loop
+                //set status
+                $district['status'] = District::getIsActiveList($district['status']);
+                $countRow++;
+            }  
+        }
+        //set data district
+        $dataDistrict = [
+            'listDistrict' => $districts,
+            'totalDistrict' => $totalDistrict,
+        ];
+        return $dataDistrict;
+    }
+
 }

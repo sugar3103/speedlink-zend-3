@@ -43,80 +43,63 @@ class HubController extends CoreController {
     public function indexAction()
     {
       if($this->getRequest()->isPost()) {
-      // $params = $this->params()->fromPost();
-
-      $payload = file_get_contents('php://input');
-      $params = json_decode($payload, true);
-
-      //the current page number.
-      $offset = isset($params['start']) ? $params['start'] : 0;
-        
-      //total number of pages available in the server.
-      $totalPages = 1;
-
-      //set limit
-      $limit  = isset($params['length']) ? $params['length'] : 10;
-
       // get the filters
       $fieldsMap = [
-          0 => 'name',
+          0 => 'hub_id',
           1 => 'status',
+          2 => 'code'
       ];
-      //get and set sortField,sortDirection
-      $sortField = isset($params['sort']) ? $params['sort'] : $fieldsMap[0];
-      $sortDirection = isset($params['order']) ? $params['order'] : 'ASC';
-
-      $filters = $this->hubManager->getValueFiltersSearch($params,$fieldsMap);
+      
+      list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);
 
       $dataHub = $this->hubManager->getListHubByCondition(
-                $offset, $limit, $sortField, $sortDirection, $filters);
+                $start, $limit, $sortField, $sortDirection, $filters);
 
-      return new JsonModel([
-          "meta" => [
-              "page" => $offset,
-              // "pages" => $totalPages,
-              "perpage"=> $limit,
-              "total" => $dataHub['totalHub'],//total all records number available in the server
-          ],
-          "data" => ($dataHub['listHub']) ? $dataHub['listHub'] : []
-        ]);
+      $result = [
+        "data" => (($dataHub['listHub']) ? $dataHub['listHub'] : [] ) ,
+        "total" => $dataHub['totalHub']
+      ];
+        
+        $this->error_code = 1;
+        $this->apiResponse['message'] = 'Success';
+        $this->apiResponse['total'] = $result['total'];
+        $this->apiResponse['data'] = $result['data'];
+      } else {
+        $this->error_code = 0;
+        $this->apiResponse['message'] = 'Failed';
       }
+      return $this->createResponse();
     }
 
     /**
     * Add Branch Action
     * @throws \Exception
     */
-    public function addhubAction() {
-        
-        $this->apiResponse['message'] = 'Action Add Hub';        
+    public function addAction() {     
         // check if user has submitted the form.
         if ($this->getRequest()->isPost()) {
             // fill in the form with POST data.
-            $payload = file_get_contents('php://input');
-            $data = json_decode($payload, true);
+          
             $user = $this->tokenPayload;
-            $data['created_by'] = $user->id;
+            
             $form = new HubForm('create', $this->entityManager);
 
-            $form->setData($data);
+            $form->setData($this->getRequestData());
             //validate form
             if ($form->isValid()) {
               $data = $form->getData();
 
-              $result = $this->hubManager->addHub($data); 
+              $result = $this->hubManager->addHub($data,$user); 
+
               $this->error_code = $result->getCode();
                 // Check result
-              if ($result->getCode() == Result::SUCCESS) {
-                $this->apiResponse['message']   = $result->getMessages();                        
-                $this->apiResponse['out_input'] = $result->getIdentity();                        
-              } else {
-                $this->error_code = 0;
-                $this->apiResponse = $result->getMessages();                        
-              }
+              
+              $this->error_code = 1;
+              $this->apiResponse['message'] = "Success: You have added a hub!";
             }
             else {
                 $this->error_code = 0;
+                $this->apiResponse['message'] = "Error";
                 $this->apiResponse = $form->getMessages();       
             }            
         }
@@ -131,9 +114,8 @@ class HubController extends CoreController {
     * Update Hub Action
     * @throws \Exception
     */
-    public function updatehubAction() {
-        $payload = file_get_contents('php://input');
-        $data = json_decode($payload, true);
+    public function editAction() {
+        $data = $this->getRequestData();
         $user = $this->tokenPayload;
         $data['updated_by'] = $user->id;
         $this->apiResponse['message'] = 'Action Update Hub'; 
@@ -154,20 +136,14 @@ class HubController extends CoreController {
               // fill in the form with POST data.
               $result = $this->hubManager->updateHub($hub, $data);                
                 // Check result
-              if ($result->getCode() == Result::SUCCESS) {
-                $this->error_code = 1;
-                $this->apiResponse['message']   = $result->getMessages();                 
-                $this->apiResponse['out_input'] = $result->getIdentity();                        
-              } else {
-                $this->error_code = 0;
-                $this->apiResponse = $result->getMessages();                        
-              }
+              $this->error_code = 1;
+              $this->apiResponse['message'] = "You have modified hub!";
             } else {
               $this->error_code = 0;
               $this->apiResponse = $form->getMessages(); 
             }   
           } else {
-            $this->apiResponse['error_code'] = 0;
+            $this->error_code = 0;
             $this->apiResponse['message'] = 'Hub Not Found';   
           }
         } else {
@@ -178,31 +154,57 @@ class HubController extends CoreController {
       }
 
       public function deleteAction() {
-
-        if ($this->getRequest()->isPost()) {
-          $payload = file_get_contents('php://input');
-          $data = json_decode($payload, true);
-          $this->apiResponse['message'] = 'Action Delete Hub';        
-          if($data['id'] < 1) {
-            //bao loi
-            $this->error_code = 0;
-            $this->apiResponse['message'] = 'Hub Not Found';     
-            return $this->createResponse();
-          }
-          // delete hub.
-          $result = $this->hubManager->deleteHub($data['id']);
-
-          if ($result->getCode() == Result::SUCCESS) {
-            $this->error_code = 1;
-            $this->apiResponse['message']   = $result->getMessages();                        
-          } else {
-            $this->error_code = 0;
-            $this->apiResponse = $result->getMessages();                        
-          } 
+        $data = $this->getRequestData();
+        if(isset($data['id'])) {
+            // Find existing status in the database.
+            $hub = $this->entityManager->getRepository(Hub::class)->findOneBy(array('hubId' => $data['id']));    
+            if ($hub == null) {
+                $this->error_code = 0;
+                $this->apiResponse['message'] = "Hub Not Found";
+            } else {
+                //remove status
+                $this->hubManager->deleteHub($hub);
+    
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have deleted hub!";
+            }          
         } else {
-          $this->httpStatusCode = 404;
-          $this->apiResponse['message'] = "Page Not Found";            
+            $this->error_code = 0;
+            $this->apiResponse['message'] = "Hub request id !";
         }
       return $this->createResponse();       
     }
+
+    public function listAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            // get the filters
+            $fieldsMap = [
+                0 => 'hub_id',
+                1 => 'status',
+                2 => 'code'
+            ];
+
+            list($sortField,$sortDirection,$filters) = $this->getRequestDataSelect($fieldsMap);
+
+            //get list city by condition
+            $dataHub = $this->hubManager->getListHubSelect(
+              $sortField ,$sortDirection, $filters);
+            
+          $result = [
+            "data" => (($dataHub['listHub']) ? $dataHub['listHub'] : [] ) ,
+            "total" => $dataHub['totalHub']
+          ];
+
+        $this->error_code = 1;
+        $this->apiResponse['message'] = 'Success';
+        $this->apiResponse['total'] = $result['total'];
+        $this->apiResponse['data'] = $result['data'];   
+        } else {
+          $this->error_code = 0;
+          $this->apiResponse['message'] = 'Failed';
+        }
+        return $this->createResponse();
+    }
+
 }

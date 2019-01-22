@@ -11,7 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="\NetworkPort\Repository\HubRepository")
  */
 class Hub
-{
+{ 
+    const ACTIVE = 1;
+    const INACTIVE = 0;
+    
     /**
      * @var int
      *
@@ -78,11 +81,25 @@ class Hub
     private $name;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="name_en", type="string", length=50, precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $nameEn;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=1000, precision=0, scale=0, nullable=false, unique=false)
      */
     private $description;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="description_en", type="text", length=65535, precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $descriptionEn;
 
     /**
      * 
@@ -294,6 +311,30 @@ class Hub
     }
 
     /**
+     * Set nameEn.
+     *
+     * @param string|null $nameEn
+     *
+     * @return ShipmentType
+     */
+    public function setNameEn($nameEn = null)
+    {
+        $this->nameEn = $nameEn;
+
+        return $this;
+    }
+
+    /**
+     * Get nameEn.
+     *
+     * @return string|null
+     */
+    public function getNameEn()
+    {
+        return $this->nameEn;
+    }
+    
+    /**
      * Set description.
      *
      * @param string $description
@@ -315,6 +356,30 @@ class Hub
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set descriptionEn.
+     *
+     * @param string|null $descriptionEn
+     *
+     * @return ShipmentType
+     */
+    public function setDescriptionEn($descriptionEn = null)
+    {
+        $this->descriptionEn = $descriptionEn;
+
+        return $this;
+    }
+
+    /**
+     * Get descriptionEn.
+     *
+     * @return string|null
+     */
+    public function getDescriptionEn()
+    {
+        return $this->descriptionEn;
     }
 
     /**
@@ -340,5 +405,23 @@ class Hub
     {
         return $this->city;
     }
+
+    /**
+     * Returns possible hubs as array.
+     * @return array
+     */
+    public static function getIsActiveList($value = null)
+    {
+        $hubs = [
+            self::ACTIVE => 'Active',
+            self::INACTIVE => 'Inactive'
+        ];
+
+        if(isset($value) && isset($hubs[$value])) {
+            return $hubs[$value];
+        }
+        return $hubs;
+    }
+
 
 }

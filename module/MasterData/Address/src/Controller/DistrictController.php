@@ -27,14 +27,14 @@ class DistrictController extends CoreController {
         $this->districtManager = $districtManager;
     }
 
+    // public function indexAction()
+    // {
+    //     $this->apiResponse['message'] = 'District';
+
+    //     return $this->createResponse();
+    // }
+
     public function indexAction()
-    {
-        $this->apiResponse['message'] = 'District';
-
-        return $this->createResponse();
-    }
-
-    public function listAction()
     {
         if ($this->getRequest()->isPost()) {
             // get the filters
@@ -164,4 +164,37 @@ class DistrictController extends CoreController {
         }
         return $this->createResponse();
     }
+
+     public function listAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            // get the filters
+            $fieldsMap = [
+                0 => 'district_id',
+                1 => 'status',
+                2 => 'city_id'
+            ];
+
+            list($sortField,$sortDirection,$filters) = $this->getRequestDataSelect($fieldsMap);
+
+            //get list city by condition
+            $dataDistrict = $this->districtManager->getListDistrictSelect(
+              $sortField ,$sortDirection, $filters);
+            
+          $result = [
+            "data" => (($dataDistrict['listDistrict']) ? $dataDistrict['listDistrict'] : [] ) ,
+            "total" => $dataDistrict['totalDistrict']
+          ];
+
+        $this->error_code = 1;
+        $this->apiResponse['message'] = 'Success';
+        $this->apiResponse['total'] = $result['total'];
+        $this->apiResponse['data'] = $result['data'];   
+        } else {
+          $this->error_code = 0;
+          $this->apiResponse['message'] = 'Failed';
+        }
+        return $this->createResponse();
+    }
+
 }

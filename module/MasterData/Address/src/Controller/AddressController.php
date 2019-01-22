@@ -49,7 +49,7 @@ class AddressController extends CoreController {
             //get list User by condition
             $dataCode = $this->addressCodeManager->getListCodeByCondition($start, $limit, $sortField, $sortDirection,$filters);            
             
-            $result = ($dataCode['listCode']) ? $dataCode['listUser'] : [] ;
+            $result = ($dataCode['listCode']) ? $dataCode['listCode'] : [] ;
             
             $this->error_code = 1;
             $this->apiResponse =  array(

@@ -55,6 +55,32 @@ class CountryRepository extends EntityRepository {
         }
     }
 
+     public function getListCountrySelect(
+        $sortField = 'c.name',
+        $sortDirection = 'ASC',
+        $filters = []
+    )
+    {
+        try {
+            $queryBuilder = $this->buildCountryQueryBuilder($sortField, $sortDirection, $filters);
+            $queryBuilder->select(
+                "c.countryId,
+                 c.name,
+                 c.nameEn,
+                 c.status"                 
+            )
+            // ->groupBy('c.cityId')
+             // ->setMaxResults(100)
+            // ->setFirstResult($offset)
+            ;
+            return $queryBuilder;
+
+        } catch (QueryException $e) {
+            return [];
+        }
+    }
+
+
     /**
      * Build query builder
      *

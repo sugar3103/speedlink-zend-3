@@ -11,7 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="\NetworkPort\Repository\BranchRepository")
  */
 class Branch
-{
+{ 
+    
+    const ACTIVE = 1;
+    const INACTIVE = 0;
+
     /**
      * @var int
      *
@@ -78,6 +82,13 @@ class Branch
     private $name;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="name_en", type="string", length=50, precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $nameEn;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="country_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
@@ -111,6 +122,13 @@ class Branch
      * @ORM\Column(name="description", type="string", length=1000, precision=0, scale=0, nullable=true, unique=false)
      */
     private $description;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="description_en", type="text", length=65535, precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $descriptionEn;
 
     /**
      * @var \Address\Entity\District
@@ -365,6 +383,30 @@ class Branch
     }
 
     /**
+     * Set nameEn.
+     *
+     * @param string|null $nameEn
+     *
+     * @return Branch
+     */
+    public function setNameEn($nameEn = null)
+    {
+        $this->nameEn = $nameEn;
+
+        return $this;
+    }
+
+    /**
+     * Get nameEn.
+     *
+     * @return string|null
+     */
+    public function getNameEn()
+    {
+        return $this->nameEn;
+    }
+
+    /**
      * Set countryId.
      *
      * @param int $countryId
@@ -485,6 +527,30 @@ class Branch
     }
 
     /**
+     * Set descriptionEn.
+     *
+     * @param string|null $descriptionEn
+     *
+     * @return Branch
+     */
+    public function setDescriptionEn($descriptionEn = null)
+    {
+        $this->descriptionEn = $descriptionEn;
+
+        return $this;
+    }
+
+    /**
+     * Get descriptionEn.
+     *
+     * @return string|null
+     */
+    public function getDescriptionEn()
+    {
+        return $this->descriptionEn;
+    }
+    
+    /**
      * Set district.
      *
      * @param \Address\Entity\District|null $district
@@ -603,4 +669,22 @@ class Branch
     {
         return $this->hub;
     }
+
+    /**
+     * Returns possible branch as array.
+     * @return array
+     */
+    public static function getIsActiveList($value = null)
+    {
+        $branch = [
+            self::ACTIVE => 'Active',
+            self::INACTIVE => 'Inactive'
+        ];
+
+        if(isset($value) && isset($branch[$value])) {
+            return $branch[$value];
+        }
+        return $branch;
+    }
+
 }

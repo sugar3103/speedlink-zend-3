@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
+use Core\Utils\Utils;
 
 /**
  * This is the custom repository class for User entity.
@@ -21,6 +22,8 @@ class HubRepository extends EntityRepository {
      * @return array|QueryBuilder
      */
     public function getListHubByCondition(
+        $start = 0,
+        $limit = 10,
         $sortField = 'h.hubId',
         $sortDirection = 'asc',
         $filters = []
@@ -32,20 +35,52 @@ class HubRepository extends EntityRepository {
                "h.hubId,
                 h.code,
                 h.name,
+                h.nameEn,
                 h.status,
                 h.createdAt,
                 h.createdBy,
                 h.updatedAt,
                 h.updatedBy,
                 h.description,
+                h.descriptionEn,
+                h.cityId,
                 c.name as city_name"
-            );
+            )
+            // ->groupBy('h.hubId')
+            ->setMaxResults($limit)
+            ->setFirstResult($start);
             return $queryBuilder;
 
         } catch (QueryException $e) {
             return [];
         }
     }
+
+    public function getListHubSelect(
+        $sortField = 'h.name',
+        $sortDirection = 'ASC',
+        $filters = []
+    )
+    {
+        try {
+            $queryBuilder = $this->buildHubQueryBuilder($sortField, $sortDirection, $filters);
+            $queryBuilder->select(
+                "h.hubId,
+                 h.name,
+                 h.nameEn,
+                 h.status"                 
+            )
+            // ->groupBy('c.cityId')
+            // ->setMaxResults($limit)
+            // ->setFirstResult($offset)
+            ;
+            return $queryBuilder;
+
+        } catch (QueryException $e) {
+            return [];
+        }
+    }
+
 
     /**
      * Build query builder
@@ -59,9 +94,13 @@ class HubRepository extends EntityRepository {
     public function buildHubQueryBuilder($sortField = 'h.hubId', $sortDirection = 'asc', $filters)
     {
         $operatorsMap = [
-            'hub_id' => [
-                'alias' => 'u.hubId',
-                'operator' => 'eq'
+             'hub_id' => [
+                'alias' => 'h.hubId',
+                'operator' => 'contains'
+            ],
+            'code' => [
+                'alias' => 'h.code',
+                'operator' => 'contains'
             ],
             'created_at' => [
                 'alias' => 'h.createdAt',
@@ -83,34 +122,8 @@ class HubRepository extends EntityRepository {
         if ($sortField != NULL && $sortDirection != NULL)
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
         else
-            $queryBuilder->orderBy('h.hubId', 'DESC');
-        return $this->setCriteriaListUserByFilters($filters, $operatorsMap, $queryBuilder);
+            $queryBuilder->orderBy('h.code', 'ASC');
+
+        return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
-
-    /**
-     * Set criteria list by filters
-     *
-     * @param array $filters
-     * @param array $operatorsMap
-     * @param QueryBuilder $queryBuilder
-     * @return QueryBuilder
-     * @throws QueryException
-     */
-    public function setCriteriaListUserByFilters($filters = [], $operatorsMap = [], QueryBuilder $queryBuilder)
-    {
-        foreach ($filters as $key => $value){
-
-           if (isset($operatorsMap[$key]) && $value !== "")
-                $expr = Criteria::create()->andWhere(Criteria::expr()->{$operatorsMap[$key]['operator']}($operatorsMap[$key]['alias'], $value));
-            elseif ($value === "")
-                continue;
-            else
-                $expr = Criteria::create()->andWhere(Criteria::expr()->contains($operatorsMap[$key]['alias'], $value));
-
-            $queryBuilder->addCriteria($expr);
-        }
-        return $queryBuilder;
-    }
-
-
 }

@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
+use Core\Utils\Utils;
 
 /**
  * This is the custom repository class for User entity.
@@ -22,6 +23,8 @@ class BranchRepository extends EntityRepository {
      * @return array|QueryBuilder
      */
     public function getListBranchByCondition(
+        $start = 0,
+        $limit = 10,
         $sortField = 'u.branchId',
         $sortDirection = 'asc',
         $filters = []
@@ -33,19 +36,28 @@ class BranchRepository extends EntityRepository {
                 "u.branchId,
                 u.code,
                 u.name,
+                u.nameEn,
                 u.status,
                 u.createdAt,
                 u.createdBy,
                 u.updatedAt,
                 u.updatedBy,
                 u.hubId,
+                u.districtId,
+                u.cityId,
+                u.wardId,
+                u.countryId,
                 h.name AS hub_name,
                 d.name AS district,
                 c.name AS city,
                 w.name AS ward,
                 co.name AS country,
-                u.description"
-            );
+                u.description,
+                u.descriptionEn
+                "
+            )
+            ->setMaxResults($limit)
+            ->setFirstResult($start);
             return $queryBuilder;
 
         } catch (QueryException $e) {
@@ -66,6 +78,14 @@ class BranchRepository extends EntityRepository {
     {
 
         $operatorsMap = [
+            'code' => [
+                'alias' => 'u.code',
+                'operator' => 'contains'
+            ],
+            'name' => [
+                'alias' => 'u.name',
+                'operator' => 'contains'
+            ],
             'branch_id' => [
                 'alias' => 'u.branchId',
                 'operator' => 'eq'
@@ -100,35 +120,9 @@ class BranchRepository extends EntityRepository {
         else
             $queryBuilder->orderBy('u.branchId', 'DESC');
 
-        return $this->setCriteriaListUserByFilters($filters, $operatorsMap, $queryBuilder);
+        return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
 
-    /**
-     * Set criteria list by filters
-     *
-     * @param array $filters
-     * @param array $operatorsMap
-     * @param QueryBuilder $queryBuilder
-     * @return QueryBuilder
-     * @throws QueryException
-     */
-    public function setCriteriaListUserByFilters($filters = [], $operatorsMap = [], QueryBuilder $queryBuilder)
-    {
-
-        foreach ($filters as $key => $value){
-
-           if (isset($operatorsMap[$key]) && $value !== "")
-                $expr = Criteria::create()->andWhere(Criteria::expr()->{$operatorsMap[$key]['operator']}($operatorsMap[$key]['alias'], $value));
-            elseif ($value === "")
-                continue;
-            else
-                $expr = Criteria::create()->andWhere(Criteria::expr()->contains($operatorsMap[$key]['alias'], $value));
-
-            $queryBuilder->addCriteria($expr);
-        }
-
-        return $queryBuilder;
-    }
 
 
 }

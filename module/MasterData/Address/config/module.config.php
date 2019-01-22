@@ -13,6 +13,7 @@ use Zend\Log\Formatter\Simple;
 use Zend\Log\Logger;
 use Zend\Log\LoggerAbstractServiceFactory;
 use Core\Route\StaticRoute;
+use Zend\Router\Http\Segment;
 
 $router = [
     'routes' => [
@@ -29,7 +30,7 @@ $router = [
             'may_terminate' => true,
             'child_routes'  => [
                 'country' => [
-                    'type'  => StaticRoute::class,
+                    'type'  => Segment::class,
                     'options' => [
                         'route' => '/country[/:action]',
                         'constraints' => [
@@ -37,13 +38,13 @@ $router = [
                         ],                       
                         'defaults' => [
                             'controller' => Controller\CountryController::class,
-                            'action' => 'list',
+                            'action' => 'index',
                             'isAuthorizationRequired' => true
                         ]
                     ]                    
                 ],
                 'city' => [
-                    'type'  => StaticRoute::class,
+                    'type'  => Segment::class,
                     'options' => [
                         'route' => '/city[/:action]',
                         'constraints' => [
@@ -51,13 +52,13 @@ $router = [
                         ],
                         'defaults' => [
                             'controller' => Controller\CityController::class,
-                            'action' => 'list',
+                            'action' => 'index',
                             'isAuthorizationRequired' => true
                         ]
                     ]                  
                 ],
                 'district' => [
-                    'type'  => StaticRoute::class,
+                    'type'  => Segment::class,
                     'options' => [
                         'route' => '/district[/:action]',
                         'constraints' => [
@@ -65,13 +66,13 @@ $router = [
                         ],
                         'defaults' => [
                             'controller' => Controller\DistrictController::class,
-                            'action' => 'list',
+                            'action' => 'index',
                             'isAuthorizationRequired' => true
                         ]
                     ]                  
                 ],
                 'ward' => [
-                    'type'  => StaticRoute::class,
+                    'type'  => Segment::class,
                     'options' => [
                         'route' => '/ward[/:action]',
                         'constraints' => [
@@ -79,7 +80,7 @@ $router = [
                         ],
                         'defaults' => [
                             'controller' => Controller\WardController::class,
-                            'action' => 'list',
+                            'action' => 'index',
                             'isAuthorizationRequired' => true
                         ]
                     ]                  

@@ -70,6 +70,7 @@ class ApiController extends AbstractRestfulController
         $response = $event->getResponse();
         $isAuthorizationRequired = $event->getRouteMatch()->getParam('isAuthorizationRequired');
         $config = $event->getApplication()->getServiceManager()->get('Config');
+        
         $event->setParam('config', $config);
         
         if (isset($config['ApiRequest'])) { 

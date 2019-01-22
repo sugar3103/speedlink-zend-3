@@ -52,6 +52,40 @@ class CityRepository extends EntityRepository {
     }
 
     /**
+     * Get list city select
+     *
+     * @param string $sortField
+     * @param string $sortDirection
+     * @param array $filters
+     * @return array|QueryBuilder
+     */
+    public function getListCitySelect(
+       $sortField = 'c.name',
+        $sortDirection = 'ASC',
+        $filters = []
+    )
+    {
+        try {
+            $queryBuilder = $this->buildCityQueryBuilder($sortField, $sortDirection, $filters);
+            $queryBuilder->select(
+                "c.cityId,
+                 c.name,
+                 c.nameEn,
+                 c.status"                 
+            )
+            // ->groupBy('c.cityId')
+            // ->setMaxResults($limit)
+            // ->setFirstResult($offset)
+            ;
+            return $queryBuilder;
+
+        } catch (QueryException $e) {
+            return [];
+        }
+    }
+
+
+    /**
      * Build query builder
      *
      * @param string $sortField
@@ -82,6 +116,10 @@ class CityRepository extends EntityRepository {
                 'alias' => 'c.status',
                 'operator' => 'eq'
             ],
+            'city_id' => [
+                'alias' => 'c.cityId',
+                'operator' => 'eq'
+            ]
 
         ];
 
