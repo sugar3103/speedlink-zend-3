@@ -68,22 +68,16 @@ class AuthController extends CoreController {
      * @throws \Exception
      */
     public function loginAction() {
-        
-        $this->apiResponse['message'] = 'Action Login';        
-
-        // create login form
-        $form = new LoginForm();
-
-        // store login status.
-        $isLoginError = false;
-
         // check if user has submitted the form.
         if ($this->getRequest()->isPost()) {
-            // fill in the form with POST data.
-            $payload = file_get_contents('php://input');
-            $data = json_decode($payload, true);
-            
-            $form->setData($data);
+            // create login form
+            $form = new LoginForm();
+
+            // store login status.
+            $isLoginError = false;
+
+            $data = $this->getRequestData();            
+            $form->setData($data);            
             // Validate From
             if ($form->isValid()) {
 
@@ -147,10 +141,10 @@ class AuthController extends CoreController {
                     }                  
                     $this->apiResponse['message'] = $result->getMessages();                        
                 } else {
-                    $this->apiResponse = $result->getMessages();                        
+                    $this->apiResponse['message'] = $result->getMessages();                        
                 }
             } else {
-                $this->apiResponse = $form->getMessages();    
+                $this->apiResponse['message'] = $form->getMessages();    
             }
             
         }

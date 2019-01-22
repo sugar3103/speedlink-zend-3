@@ -27,7 +27,7 @@ class SidebarContent extends Component {
   setSelectedLiActive() {
     const sidebarCategory = document.querySelector(".sidebar__block .sidebar__link-active");
     if(sidebarCategory.parentElement.classList !== 'sidebar__block'){
-      console.log(sidebarCategory.parentElement);
+      // console.log(sidebarCategory.parentElement);
     } 
   }
 

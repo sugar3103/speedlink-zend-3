@@ -16,6 +16,10 @@ module.exports = {
   'menu.address_district': 'Quận/Huyện',
   'menu.address_ward': 'Phường/Xã',
 
+  //Menu Setting
+  'menu.setting': 'Cài đặt',
+  'menu.user': 'Người dùng',
+
   //auth - login
   'login.welcome': 'Chào mừng đến với',
   'login.note': 'Vui lòng sử dụng tài khoản của bạn để đăng nhập',
@@ -28,5 +32,16 @@ module.exports = {
   'login.username-error-empty': 'Tên đăng nhập không được bỏ trống',
   'login.password-error-empty': 'Mật khẩu không được bỏ trống',
 
-  'dashboard.title': 'Bảng điều khiển'
+  'dashboard.title': 'Bảng điều khiển',
+
+  //Address
+  'address.code' : 'Address Code',
+  'address.countries': 'Quốc gia',
+  'address.country': 'Quốc gia',
+  'address.cites': 'Tỉnh/Thành phố',
+  'address.city': 'Tỉnh/Thành phố',
+  'address.districts': 'Quận/Huyện',
+  'address.district': 'Quận/Huyện',
+  'address.wards': 'Phường/Xã',
+  'address.ward': 'Ward'
 };

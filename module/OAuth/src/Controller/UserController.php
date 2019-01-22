@@ -60,7 +60,7 @@ class UserController extends CoreController {
         if ($this->getRequest()->isPost()) {
             $user = $this->tokenPayload;
             //Create New Form City
-            $form = new CityForm('create', $this->entityManager);
+            $form = new UserForm('create', $this->entityManager);
 
             $form->setData($this->getRequestData());
 
