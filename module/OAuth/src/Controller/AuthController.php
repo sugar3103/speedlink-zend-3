@@ -68,22 +68,15 @@ class AuthController extends CoreController {
      * @throws \Exception
      */
     public function loginAction() {
-        
-        $this->apiResponse['message'] = 'Action Login';        
-
-        // create login form
-        $form = new LoginForm();
-
-        // store login status.
-        $isLoginError = false;
-
         // check if user has submitted the form.
         if ($this->getRequest()->isPost()) {
-            // fill in the form with POST data.
-            $payload = file_get_contents('php://input');
-            $data = json_decode($payload, true);
-            $data['remember_me'] = ($data['remember_me']) ? 1 : 0;
-            $form->setData($data);
+            $form = new LoginForm();
+
+            // store login status.
+            $isLoginError = false;
+
+            $data = $this->getRequestData();            
+            $form->setData($data);            
             // Validate From
             if ($form->isValid()) {
 

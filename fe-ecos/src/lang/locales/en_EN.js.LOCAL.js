@@ -20,11 +20,6 @@ module.exports = {
   'menu.address_district': 'District',
   'menu.address_ward': 'Ward',
 
-
-  //Menu Setting
-  'menu.setting': 'Settings',
-  'menu.user': 'Users',
-
   //auth - login
   'login.welcome': 'Welcome to',
   'login.note': 'Please use your credentials to login',
@@ -56,15 +51,4 @@ module.exports = {
   //validate
   'status.validate-name-empty': 'Name shouldn’t be empty',
   'status.validate-nameEn-empty': 'English name shouldn’t be empty',
-  
-  //Address
-  'address.code' : 'Address Code',
-  'address.countries': 'Countries',
-  'address.country': 'Country',
-  'address.cites': 'Cites',
-  'address.city': 'City',
-  'address.districts': 'Districts',
-  'address.district': 'District',
-  'address.wards': 'Wards',
-  'address.ward': 'Ward'
 };

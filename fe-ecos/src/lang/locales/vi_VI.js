@@ -20,6 +20,10 @@ module.exports = {
   'menu.address_district': 'Quận/Huyện',
   'menu.address_ward': 'Phường/Xã',
 
+  //Menu Setting
+  'menu.setting': 'Cài đặt',
+  'menu.user': 'Người dùng',
+
   //auth - login
   'login.welcome': 'Chào mừng đến với',
   'login.note': 'Vui lòng sử dụng tài khoản của bạn để đăng nhập',
@@ -51,4 +55,15 @@ module.exports = {
   //validate
   'status.validate-name-empty': 'Tên không được bỏ trống',
   'status.validate-nameEn-empty': 'Tên tiếng anh không được bỏ trống',
+  
+  //Address
+  'address.code' : 'Address Code',
+  'address.countries': 'Quốc gia',
+  'address.country': 'Quốc gia',
+  'address.cites': 'Tỉnh/Thành phố',
+  'address.city': 'Tỉnh/Thành phố',
+  'address.districts': 'Quận/Huyện',
+  'address.district': 'Quận/Huyện',
+  'address.wards': 'Phường/Xã',
+  'address.ward': 'Ward'
 };

@@ -68,7 +68,9 @@ class RoleController extends CoreController {
                 'total'     => $dataRole['totalRole']
             );        
         }
+
         return $this->createResponse();
+        
     }
 
     /**
@@ -96,7 +98,7 @@ class RoleController extends CoreController {
         if ($this->getRequest()->isPost()) {
 
             // fill in the form with POST data
-            $data = $this->params()->fromPost();
+            $data = $this->getRequestData();
 
             $form->setData($data);
 
