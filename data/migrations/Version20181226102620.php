@@ -21,7 +21,7 @@ final class Version20181226102620 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
       $this->addSql('create table branch
         (
-          branch_id                       int(11) auto_increment            primary key,
+          id                       int(11) auto_increment            primary key,
           hub_id                          int(11)                           not null,
           code                            varchar(20)                       not null,
           status                          int(1) default 0                  not null,
@@ -37,7 +37,7 @@ final class Version20181226102620 extends AbstractMigration
 
       $this->addSql('create table hub
         (
-          hub_id                          int(11) auto_increment            primary key,
+          id                          int(11) auto_increment            primary key,
           city_id                         int(11)                           not null,
           code                            varchar(20)                       not null,
           status                          int(1) default 0                  not null,

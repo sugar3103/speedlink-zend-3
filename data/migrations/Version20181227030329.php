@@ -20,7 +20,7 @@ final class Version20181227030329 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         $this->addSql("CREATE TABLE IF NOT EXISTS status (
-            status_id       INT(11)         AUTO_INCREMENT  PRIMARY KEY,
+            id       INT(11)         AUTO_INCREMENT  PRIMARY KEY,
             name            VARCHAR(50)                     NOT NULL,
             name_en            VARCHAR(50)                     NOT NULL,
             description     TEXT                            NULL,
