@@ -19,4 +19,5 @@ export const EC_FAILURE_AUTHENCATION = -5;
 
 //pagination
 export const SELECTED_PAGE_SIZE = 10;
+export const PAGE_LIMIT = 5;
 export const PAGE_SIZE = [10, 20, 50, 100];

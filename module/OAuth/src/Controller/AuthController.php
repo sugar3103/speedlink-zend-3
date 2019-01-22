@@ -82,7 +82,7 @@ class AuthController extends CoreController {
             // fill in the form with POST data.
             $payload = file_get_contents('php://input');
             $data = json_decode($payload, true);
-            
+            $data['remember_me'] = ($data['remember_me']) ? 1 : 0;
             $form->setData($data);
             // Validate From
             if ($form->isValid()) {
@@ -147,10 +147,10 @@ class AuthController extends CoreController {
                     }                  
                     $this->apiResponse['message'] = $result->getMessages();                        
                 } else {
-                    $this->apiResponse = $result->getMessages();                        
+                    $this->apiResponse['message'] = $result->getMessages();                        
                 }
             } else {
-                $this->apiResponse = $form->getMessages();    
+                $this->apiResponse['message'] = $form->getMessages();    
             }
             
         }

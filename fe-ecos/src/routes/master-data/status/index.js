@@ -1,5 +1,6 @@
 import React from 'react';
 import { Col, Container, Row } from 'reactstrap';
+import { List } from '../../../components/MasterData/Status';
 
 const Status = () => (
   <Container>
@@ -10,6 +11,9 @@ const Status = () => (
               information
         </h3>
       </Col>
+    </Row>
+    <Row>
+      <List />
     </Row>
   </Container>
 );
