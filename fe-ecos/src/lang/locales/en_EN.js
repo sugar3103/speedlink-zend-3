@@ -92,11 +92,22 @@ module.exports = {
   'user.add-new': 'Add New User',
 
   //Role
-  'role.list': 'Role List',
+  'role.list': 'Roles',
+  'role.name': 'Role',
   'role.active': 'Enable',
   'role.inactive': 'Disable',
   'role.status': 'Status',
   'role.created-at': 'Created At',
   'role.action': 'Action',
   'role.add-new': 'Add New Role',
+
+  //Role
+  'permisson.list': 'Permissons',
+  'permisson.name': 'Permisson',
+  'permisson.active': 'Enable',
+  'permisson.inactive': 'Disable',  
+  'permisson.created-at': 'Created At',
+  'permisson.action': 'Action',
+  'permisson.add-new': 'Add New Permisson',
+  
 };

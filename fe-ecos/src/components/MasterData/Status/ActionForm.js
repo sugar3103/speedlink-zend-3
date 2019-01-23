@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Button, ButtonToolbar, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -9,7 +9,7 @@ import renderRadioButtonField from '../../../containers/Shared/form/RadioButton'
 import classnames from 'classnames';
 import validate from './validateActionForm';
 
-class Action extends Component {
+class Action extends PureComponent {
 
   constructor() {
     super();
@@ -35,9 +35,9 @@ class Action extends Component {
   }
 
   componentDidMount() {
-    const data = this.props.modalData;
-    if (data && data.status) {
-      data.status = data.status === 'active' ? 1 : 0;
+    const data = this.props.modalData;     
+    if (data) {
+      data.status = data.status === 'Active' ? 1 : 0;
       this.props.initialize(data);
     }
   }
@@ -151,13 +151,13 @@ class Action extends Component {
                     component={renderRadioButtonField}
                     label={messages['status.active']}
                     radioValue={1}
+                    defaultChecked
                   />
                   <Field
                     name="status"
                     component={renderRadioButtonField}
                     label={messages['status.inactive']}
-                    radioValue={0}
-                    defaultChecked
+                    radioValue={0}                    
                   />
                 </div>
               </div>
@@ -173,7 +173,7 @@ class Action extends Component {
   }
 }
 
-const mapStateToProps = ({status}) => {
+const mapStateToProps = ({status}) => {  
   const { errors, modalData } = status;
   return {
     errors,
@@ -183,7 +183,7 @@ const mapStateToProps = ({status}) => {
 
 export default reduxForm({
   form: 'status_action_form',
-  validate
+  validate  
 })(injectIntl(connect(mapStateToProps, {
   toggleStatusModal
 })(Action)));

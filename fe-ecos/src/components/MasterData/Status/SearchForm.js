@@ -9,7 +9,7 @@ class SearchForm extends Component {
     const { handleSubmit, reset } = this.props;
     const { messages } = this.props.intl;
     return (
-      <form className="form" onSubmit={handleSubmit}>
+      <form className="form" onSubmit={handleSubmit} id="fromSearchStatus">
         <div className="form__half">
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['status.name']}</span>
@@ -44,11 +44,17 @@ class SearchForm extends Component {
           <Button 
             size="sm" 
             outline 
-            onClick={reset}
+            onClick={(e)=> {
+              reset();
+              setTimeout(() => {
+                handleSubmit();  
+              }, 200);
+            }}
           >{messages['status.clear']}</Button>{' '}
           <Button 
             size="sm" 
-            color="primary" 
+            color="primary"
+            id="search" 
           >{messages['status.search']}</Button>
         </div>
       </form>

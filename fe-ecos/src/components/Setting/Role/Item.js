@@ -41,8 +41,7 @@ class Item extends Component {
     return (
       <tr>
         <th scope="row">{role.id}</th>
-        <td>{role.rolename}</td>
-        <td>{role.full_name}</td>
+        <td>{role.name}</td>
         <td>{role.is_active === 1 ? <Badge color="success">{messages['role.active']}</Badge> : <Badge color="dark">{messages['role.inactive']}</Badge>}</td>
         <td>{role.created_at}</td>
         <td className="text-center">

@@ -8,6 +8,7 @@ import ItemPerPage from '../../../containers/Shared/pagination/ItemPerPage';
 import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
+import MagnifyIcon from 'mdi-react/MagnifyIcon';
 // import Action from './Action';
 
 import {
@@ -113,6 +114,12 @@ class List extends Component {
             <div className="card__title">
               <h5 className="bold-text">{messages['user.list-title']}</h5>
               <ButtonToolbar className="master-data-list__btn-toolbar-top">
+                <form className="form">
+                  <div className="form__form-group products-list__search">
+                    <input placeholder="Search..." name="search" />
+                    <MagnifyIcon />
+                  </div>
+                </form>
                 <Button 
                   color="success" 
                   className="master-data-list__btn-add"

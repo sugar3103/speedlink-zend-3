@@ -8,21 +8,20 @@ import ItemPerPage from '../../../containers/Shared/pagination/ItemPerPage';
 import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
-import Action from './Action';
-import Search from './Search';
+// import Action from './Action';
 
 import {
-  getStatusList,
-  toggleStatusModal
+  getPermissonList,
+  togglePermissonModal
 } from "../../../redux/actions";
 
 
-const StatusFormatter = ({ value }) => (
+const PermissonFormatter = ({ value }) => (
   value === 'Enabled' ? <span className="badge badge-success">Enabled</span> :
     <span className="badge badge-disabled">Disabled</span>
 );
 
-StatusFormatter.propTypes = {
+PermissonFormatter.propTypes = {
   value: PropTypes.string.isRequired,
 };
 
@@ -45,18 +44,18 @@ class List extends Component {
       }
     }
 
-    if (this.props.status.paramSearch) {
-      Object.assign(params, { "query": this.props.status.paramSearch})
+    if (this.props.permisson.paramSearch) {
+      Object.assign(params, { "query": this.props.permisson.paramSearch})
     };
-    this.props.getStatusList(params, this.props.history);
+    this.props.getPermissonList(params, this.props.history);
 
     this.setState({
       selectedPageSize: size
     });
   }
 
-  toggleModal = () => {    
-    this.props.toggleStatusModal();
+  toggleModal = () => {
+    this.props.togglePermissonModal();
   }
 
   onChangePage = (page) => {
@@ -67,10 +66,10 @@ class List extends Component {
       }
     }
 
-    if (this.props.status.paramSearch) {
-      Object.assign(params, { "query": this.props.status.paramSearch })
+    if (this.props.permisson.paramSearch) {
+      Object.assign(params, { "query": this.props.permisson.paramSearch })
     };
-    this.props.getStatusList(params);
+    this.props.getPermissonList(params);
 
     this.setState({
       currentPage: page
@@ -78,25 +77,25 @@ class List extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps && nextProps.status && nextProps.status.total) {
+    if (nextProps && nextProps.permisson && nextProps.permisson.total) {
       this.setState({
-        total: nextProps.status.total
+        total: nextProps.permisson.total
       });
     }
   }
 
   componentDidMount() {
-    this.props.getStatusList();
+    this.props.getPermissonList();
   }
 
-  showStatusItem = (items) => {
+  showPermissonItem = (items) => {
     let result = null;
     if (items.length > 0) {
       result = items.map((item, index) => {
         return (
           <Item 
             key={index}
-            status={item}
+            permisson={item}
           />
         )
       })
@@ -105,43 +104,39 @@ class List extends Component {
   }
 
   render() {
-    const { items, loading, modalOpen } = this.props.status;
+    const { items, loading, modalOpen } = this.props.permisson;
     const { messages } = this.props.intl;
     return (
       <Col md={12} lg={12}>
         <Card>
           <CardBody className="master-data-list">
             <div className="card__title">
-              <h5 className="bold-text">{messages['status.list-title']}</h5>
+              <h5 className="bold-text">{messages['permisson.list-title']}</h5>
               <ButtonToolbar className="master-data-list__btn-toolbar-top">
                 <Button 
                   color="success" 
                   className="master-data-list__btn-add"
                   onClick={this.toggleModal}
-                >{messages['status.add-new']}</Button>
+                >{messages['permisson.add-new']}</Button>
               </ButtonToolbar>
-              <Action modalOpen={modalOpen} />
+              
             </div>
-            <Search />
             <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
             <Table responsive bordered hover>
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>{messages['status.name']}</th>
-                  <th>{messages['status.name-en']}</th>
-                  <th>{messages['status.desc']}</th>
-                  <th>{messages['status.desc-en']}</th>
-                  <th>{messages['status.status']}</th>
-                  <th>{messages['status.created-at']}</th>
-                  <th>{messages['status.action']}</th>
+                  <th>{messages['permisson.name']}</th>
+                  <th>{messages['permisson.fullname']}</th>
+                  <th>{messages['permisson.created-at']}</th>
+                  <th className="text-center">{messages['permisson.action']}</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={8} className="text-center"><div className="panel__refresh" /></td></tr>
+                  <tr><td colSpan={5} className="text-center"><div className="loading-table" /></td></tr>
                 ) : (
-                    this.showStatusItem(items)
+                    this.showPermissonItem(items)
                   )}
               </tbody>
             </Table>
@@ -154,15 +149,15 @@ class List extends Component {
 }
 
 List.propTypes = {
-  status: PropTypes.object.isRequired,
+  permisson: PropTypes.object.isRequired,
   modal: PropTypes.object,
-  getStatusList: PropTypes.func.isRequired,
-  toggleStatusModal: PropTypes.func.isRequired
+  getPermissonList: PropTypes.func.isRequired,
+  togglePermissonModal: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ status, modal }) => {
+const mapStateToProps = ({ permisson, modal }) => {
   return {
-    status,
+    permisson,
     modal
   };
 };
@@ -170,7 +165,7 @@ const mapStateToProps = ({ status, modal }) => {
 export default injectIntl(connect(
   mapStateToProps,
   {
-    getStatusList,
-    toggleStatusModal,
+    getPermissonList,
+    togglePermissonModal,
   }
 )(List));

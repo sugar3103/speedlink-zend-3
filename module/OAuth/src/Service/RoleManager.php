@@ -333,8 +333,6 @@ class RoleManager {
             foreach ($roles as &$role) {//loop
                 //set created_at
                 $role['created_at'] =  ($role['created_at']) ? Utils::checkDateFormat($role['created_at'],'d/m/Y') : '';
-
-                $countRow++;
             }
         }
 

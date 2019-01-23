@@ -126,8 +126,7 @@ class List extends Component {
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>{messages['role.rolename']}</th>
-                  <th>{messages['role.fullname']}</th>
+                  <th>{messages['role.name']}</th>                  
                   <th>{messages['role.status']}</th>
                   <th>{messages['role.created-at']}</th>
                   <th className="text-center">{messages['role.action']}</th>
