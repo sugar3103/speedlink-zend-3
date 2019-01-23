@@ -1,5 +1,4 @@
 <?php
-
 namespace NetworkPort\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -15,204 +14,101 @@ class Branch
     /**
      * @var int
      *
-     * @ORM\Column(name="branch_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $branchId;
+    private $id;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="hub_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="hub_id", type="integer", nullable=false)
      */
-    private $hubId;
+    private $hub_id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code", type="string", length=20, precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="code", type="string", length=20, nullable=false)
      */
     private $code;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="status", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="status", type="integer", nullable=false)
      */
-    private $status;
+    private $status = '0';
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_deleted", type="boolean", nullable=false)
+     */
+    private $is_deleted = '0';
 
     /**
      * @var int
      *
-     * @ORM\Column(name="created_by", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="created_by", type="integer", nullable=false)
      */
-    private $createdBy;
+    private $created_by;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="created_at", type="datetime", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="created_at", type="datetime", nullable=true)
      */
-    private $createdAt;
+    private $created_at;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="updated_by", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="updated_by", type="integer", nullable=true)
      */
-    private $updatedBy;
+    private $updated_by;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="updated_at", type="datetime", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    private $updatedAt;
+    private $updated_at;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=20, precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $name;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="country_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $countryId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="city_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $cityId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="district_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $districtId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="ward_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $wardId;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="description", type="string", length=1000, precision=0, scale=0, nullable=true, unique=false)
-     */
-    private $description;
-
-    /**
-     * @var \Address\Entity\District
-     *
-     * @ORM\OneToOne(targetEntity="Address\Entity\District")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="district_id", referencedColumnName="district_id", unique=true, nullable=false)
-     * })
-     */
-    private $district;
-
-    /**
-     * @var \Address\Entity\City
-     *
-     * @ORM\OneToOne(targetEntity="Address\Entity\City")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="city_id", referencedColumnName="city_id", unique=true, nullable=false)
-     * })
-     */
-    private $city;
-
-    /**
-     * @var \Address\Entity\Ward
-     *
-     * @ORM\OneToOne(targetEntity="Address\Entity\Ward")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ward_id", referencedColumnName="ward_id", unique=true, nullable=false)
-     * })
-     */
-    private $ward;
-
-    /**
-     * @var \Address\Entity\Country
-     *
-     * @ORM\OneToOne(targetEntity="Address\Entity\Country")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="country_id", referencedColumnName="country_id", unique=true, nullable=false)
-     * })
-     */
-    private $country;
-
-    /**
-     * @var \NetworkPort\Entity\Hub
-     *
-     * @ORM\OneToOne(targetEntity="NetworkPort\Entity\Hub", fetch="EAGER")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="hub_id", referencedColumnName="hub_id", unique=true, nullable=true)
-     * })
-     */
-    private $hub;
-
-    /**
-     * Get branchId.
-     *
      * @return int
      */
-    public function getBranchId()
+    public function getId()
     {
-        return $this->branchId;
+        return $this->id;
     }
 
     /**
-     * Set hubId.
-     *
-     * @param int $hubId
-     *
-     * @return Branch
+     * @param int $id
      */
-    public function setHubId($hubId)
+    public function setId($id)
     {
-        $this->hubId = $hubId;
-
-        return $this;
+        $this->id = $id;
     }
 
     /**
-     * Get hubId.
-     *
      * @return int
      */
     public function getHubId()
     {
-        return $this->hubId;
+        return $this->hub_id;
     }
 
     /**
-     * Set code.
-     *
-     * @param string $code
-     *
-     * @return Branch
+     * @param int $hub_id
      */
-    public function setCode($code)
+    public function setHubId($hub_id)
     {
-        $this->code = $code;
-
-        return $this;
+        $this->hub_id = $hub_id;
     }
 
     /**
-     * Get code.
-     *
      * @return string
      */
     public function getCode()
@@ -221,22 +117,14 @@ class Branch
     }
 
     /**
-     * Set status.
-     *
-     * @param int $status
-     *
-     * @return Branch
+     * @param string $code
      */
-    public function setStatus($status)
+    public function setCode($code)
     {
-        $this->status = $status;
-
-        return $this;
+        $this->code = $code;
     }
 
     /**
-     * Get status.
-     *
      * @return int
      */
     public function getStatus()
@@ -245,362 +133,91 @@ class Branch
     }
 
     /**
-     * Set createdBy.
-     *
-     * @param int $createdBy
-     *
-     * @return Branch
+     * @param int $status
      */
-    public function setCreatedBy($createdBy)
+    public function setStatus($status)
     {
-        $this->createdBy = $createdBy;
-
-        return $this;
+        $this->status = $status;
     }
 
     /**
-     * Get createdBy.
-     *
+     * @return bool
+     */
+    public function isDeleted()
+    {
+        return $this->is_deleted;
+    }
+
+    /**
+     * @param bool $is_deleted
+     */
+    public function setIsDeleted($is_deleted)
+    {
+        $this->is_deleted = $is_deleted;
+    }
+
+    /**
      * @return int
      */
     public function getCreatedBy()
     {
-        return $this->createdBy;
+        return $this->created_by;
     }
 
     /**
-     * Set createdAt.
-     *
-     * @param \DateTime|null $createdAt
-     *
-     * @return Branch
+     * @param int $created_by
      */
-    public function setCreatedAt($createdAt = null)
+    public function setCreatedBy($created_by)
     {
-        $this->createdAt = $createdAt;
-
-        return $this;
+        $this->created_by = $created_by;
     }
 
     /**
-     * Get createdAt.
-     *
      * @return \DateTime|null
      */
     public function getCreatedAt()
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
 
     /**
-     * Set updatedBy.
-     *
-     * @param int|null $updatedBy
-     *
-     * @return Branch
+     * @param \DateTime|null $created_at
      */
-    public function setUpdatedBy($updatedBy = null)
+    public function setCreatedAt($created_at)
     {
-        $this->updatedBy = $updatedBy;
-
-        return $this;
+        $this->created_at = $created_at;
     }
 
     /**
-     * Get updatedBy.
-     *
      * @return int|null
      */
     public function getUpdatedBy()
     {
-        return $this->updatedBy;
+        return $this->updated_by;
     }
 
     /**
-     * Set updatedAt.
-     *
-     * @param \DateTime|null $updatedAt
-     *
-     * @return Branch
+     * @param int|null $updated_by
      */
-    public function setUpdatedAt($updatedAt = null)
+    public function setUpdatedBy($updated_by)
     {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
+        $this->updated_by = $updated_by;
     }
 
     /**
-     * Get updatedAt.
-     *
      * @return \DateTime|null
      */
     public function getUpdatedAt()
     {
-        return $this->updatedAt;
+        return $this->updated_at;
     }
 
     /**
-     * Set name.
-     *
-     * @param string $name
-     *
-     * @return Branch
+     * @param \DateTime|null $updated_at
      */
-    public function setName($name)
+    public function setUpdatedAt($updated_at)
     {
-        $this->name = $name;
-
-        return $this;
+        $this->updated_at = $updated_at;
     }
 
-    /**
-     * Get name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set countryId.
-     *
-     * @param int $countryId
-     *
-     * @return Branch
-     */
-    public function setCountryId($countryId)
-    {
-        $this->countryId = $countryId;
-
-        return $this;
-    }
-
-    /**
-     * Get countryId.
-     *
-     * @return int
-     */
-    public function getCountryId()
-    {
-        return $this->countryId;
-    }
-
-    /**
-     * Set cityId.
-     *
-     * @param int $cityId
-     *
-     * @return Branch
-     */
-    public function setCityId($cityId)
-    {
-        $this->cityId = $cityId;
-
-        return $this;
-    }
-
-    /**
-     * Get cityId.
-     *
-     * @return int
-     */
-    public function getCityId()
-    {
-        return $this->cityId;
-    }
-
-    /**
-     * Set districtId.
-     *
-     * @param int $districtId
-     *
-     * @return Branch
-     */
-    public function setDistrictId($districtId)
-    {
-        $this->districtId = $districtId;
-
-        return $this;
-    }
-
-    /**
-     * Get districtId.
-     *
-     * @return int
-     */
-    public function getDistrictId()
-    {
-        return $this->districtId;
-    }
-
-    /**
-     * Set wardId.
-     *
-     * @param int $wardId
-     *
-     * @return Branch
-     */
-    public function setWardId($wardId)
-    {
-        $this->wardId = $wardId;
-
-        return $this;
-    }
-
-    /**
-     * Get wardId.
-     *
-     * @return int
-     */
-    public function getWardId()
-    {
-        return $this->wardId;
-    }
-
-    /**
-     * Set description.
-     *
-     * @param string|null $description
-     *
-     * @return Branch
-     */
-    public function setDescription($description = null)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description.
-     *
-     * @return string|null
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set district.
-     *
-     * @param \Address\Entity\District|null $district
-     *
-     * @return Branch
-     */
-    public function setDistrict(\Address\Entity\District $district = null)
-    {
-        $this->district = $district;
-
-        return $this;
-    }
-
-    /**
-     * Get district.
-     *
-     * @return \Address\Entity\District|null
-     */
-    public function getDistrict()
-    {
-        return $this->district;
-    }
-
-    /**
-     * Set city.
-     *
-     * @param \Address\Entity\City|null $city
-     *
-     * @return Branch
-     */
-    public function setCity(\Address\Entity\City $city = null)
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
-    /**
-     * Get city.
-     *
-     * @return \Address\Entity\City|null
-     */
-    public function getCity()
-    {
-        return $this->city;
-    }
-
-    /**
-     * Set ward.
-     *
-     * @param \Address\Entity\Ward|null $ward
-     *
-     * @return Branch
-     */
-    public function setWard(\Address\Entity\Ward $ward = null)
-    {
-        $this->ward = $ward;
-
-        return $this;
-    }
-
-    /**
-     * Get ward.
-     *
-     * @return \Address\Entity\Ward|null
-     */
-    public function getWard()
-    {
-        return $this->ward;
-    }
-
-    /**
-     * Set country.
-     *
-     * @param \Address\Entity\Country|null $country
-     *
-     * @return Branch
-     */
-    public function setCountry(\Address\Entity\Country $country = null)
-    {
-        $this->country = $country;
-
-        return $this;
-    }
-
-    /**
-     * Get country.
-     *
-     * @return \Address\Entity\Country|null
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     * Set hub.
-     *
-     * @param \NetworkPort\Entity\Hub|null $hub
-     *
-     * @return Branch
-     */
-    public function setHub(\NetworkPort\Entity\Hub $hub = null)
-    {
-        $this->hub = $hub;
-
-        return $this;
-    }
-
-    /**
-     * Get hub.
-     *
-     * @return \NetworkPort\Entity\Hub|null
-     */
-    public function getHub()
-    {
-        return $this->hub;
-    }
 }

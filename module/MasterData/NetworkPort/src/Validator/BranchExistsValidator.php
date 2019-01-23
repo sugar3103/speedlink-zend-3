@@ -59,19 +59,20 @@ class BranchExistsValidator extends AbstractValidator {
         }
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
- 
         $branch = $entityManager->getRepository(Branch::class)->findOneByName($value);
 
-        if ($this->options['branch'] == null)
+        if ($this->options['branch'] == null) {
             $isValid = ($branch == null);
-        elseif ($this->options['branch']->getName() != $value && $branch != null)
+        } elseif ($this->options['branch']->getName() != $value && $branch != null) {
             $isValid = false;
-        else
+        } else {
             $isValid = true;
+        }
 
         // if there were an error, set error message.
-        if (!$isValid)
+        if (!$isValid) {
             $this->error(self::BRANCH_EXISTS);
+        }
           
         // return validation result
         return $isValid;
