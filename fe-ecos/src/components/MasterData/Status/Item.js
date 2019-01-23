@@ -40,7 +40,7 @@ class Item extends Component {
     const { messages } = this.props.intl;
     return (
       <tr>
-        <th scope="row">{status.status_id}</th>
+        <th scope="row">{status.id}</th>
         <td>{status.name}</td>
         <td>{status.name_en}</td>
         <td>{status.description}</td>
@@ -49,7 +49,7 @@ class Item extends Component {
         <td>{status.created_at}</td>
         <td className="text-center">
           <Button color="info" size="sm" onClick={() => this.toggleModal(status)}><span className="lnr lnr-pencil" /></Button> &nbsp;
-          <Button color="danger" size="sm" onClick={() => this.onDelete(status.status_id)}><span className="lnr lnr-trash" /></Button>
+          <Button color="danger" size="sm" onClick={() => this.onDelete(status.id)}><span className="lnr lnr-trash" /></Button>
         </td>
       </tr>
     );

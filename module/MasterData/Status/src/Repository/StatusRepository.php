@@ -24,7 +24,7 @@ class StatusRepository extends EntityRepository {
     public function getListStatusByCondition(
         $start = 1,
         $limit = 10,
-        $sortField = 's.status_id',
+        $sortField = 's.id',
         $sortDirection = 'asc',
         $filters = []        
     )
@@ -32,7 +32,7 @@ class StatusRepository extends EntityRepository {
         try {
             $queryBuilder = $this->buildUserQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select(
-                "s.status_id,
+                "s.id,
                  s.name,
                  s.name_en,
                  s.description,
@@ -42,7 +42,7 @@ class StatusRepository extends EntityRepository {
                  s.created_at,
                  s.updated_by,
                  s.updated_at"                 
-            )->groupBy('s.status_id')
+            )->groupBy('s.id')
             ->setMaxResults($limit)
             ->setFirstResult(($start - 1) * $limit);
 
@@ -62,7 +62,7 @@ class StatusRepository extends EntityRepository {
      * @return QueryBuilder
      * @throws QueryException
      */
-    public function buildUserQueryBuilder($sortField = 's.status_id', $sortDirection = 'asc', $filters)
+    public function buildUserQueryBuilder($sortField = 's.id', $sortDirection = 'asc', $filters)
     {
 
         $operatorsMap = [
