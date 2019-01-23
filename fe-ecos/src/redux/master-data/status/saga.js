@@ -6,7 +6,8 @@ import history from '../../../util/history';
 
 import {
   STATUS_GET_LIST,
-  STATUS_ADD_ITEM
+  STATUS_ADD_ITEM,
+  STATUS_UPDATE_ITEM, 
 } from "../../../constants/actionTypes";
 
 import {
@@ -15,6 +16,8 @@ import {
   getStatusListError,
   addStatusItemSuccess,
   addStatusItemError,
+  updateStatusItemSuccess,
+  updateStatusItemError,
   getStatusList,
 } from "./actions";
 
@@ -82,7 +85,7 @@ function* addStatusItem({ payload }) {
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(addStatusItemSuccess());
-        yield put(getStatusList(history));
+        yield put(getStatusList());
         yield put(toggleStatusModal());
         createNotification({type: 'success', message: response.message});
         break;
@@ -103,49 +106,48 @@ function* addStatusItem({ payload }) {
   }
 }
 
-// //update status
+//update status
 
-// function updateStatusApi(item) {
-//   return axios.request({
-//     method: 'post',
-//     url: `${apiUrl}/status/edit/${item.id}`,
-//     headers: authHeader(),
-//     data: item
-//   });
-// }
+function updateStatusApi(item) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}status/edit`,
+    headers: authHeader(),
+    data: item
+  });
+}
 
-// const updateStatusItemRequest = async item => {
-//   return await updateStatusApi(item).then(res => res.data).catch(err => err)
-// };
+const updateStatusItemRequest = async item => {
+  return await updateStatusApi(item).then(res => res.data).catch(err => err)
+};
 
-// function* updateStatusItem({ payload }) {
-//   const { item, history } = payload;
-//   try {
-//     const response = yield call(updateStatusItemRequest, item);
-//     switch (response.error_code) {
-//       case EC_SUCCESS:
-//         yield put(updateStatusItemSuccess(response.result));
-//         yield put(getStatusList(history));
-//         yield put(toggleStatusModal());
-//         yield put(alertSuccess(response.result.message));
-//         break;
+function* updateStatusItem({ payload }) {
+  try {
+    const response = yield call(updateStatusItemRequest, payload);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(updateStatusItemSuccess());
+        yield put(getStatusList());
+        yield put(toggleStatusModal());
+        createNotification({type: 'success', message: response.message});
+        break;
 
-//       case EC_FAILURE:
-//         yield put(updateStatusItemError(response.message));
-//         break;
+      case EC_FAILURE:
+        yield put(updateStatusItemError(response.data));
+        break;
 
-//       case EC_FAILURE_AUTHENCATION:
-//         localStorage.removeItem('user');
-//         history.push('/login');
-//         yield put(alertDanger('Please login to countinue'))
-//         break;
-//       default:
-//         break;
-//     }
-//   } catch (error) {
-//     yield put(updateStatusItemError(error));
-//   }
-// }
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        yield call(history.push, '/login');
+        createNotification({type: 'warning', message: 'Please login to countinue'});
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(updateStatusItemError(error));
+  }
+}
 
 // //delete status
 
@@ -197,9 +199,9 @@ export function* wathcAddItem() {
   yield takeEvery(STATUS_ADD_ITEM, addStatusItem);
 }
 
-// export function* wathcUpdateItem() {
-//   yield takeEvery(STATUS_UPDATE_ITEM, updateStatusItem);
-// }
+export function* wathcUpdateItem() {
+  yield takeEvery(STATUS_UPDATE_ITEM, updateStatusItem);
+}
 
 // export function* wathcDeleteItem() {
 //   yield takeEvery(STATUS_DELETE_ITEM, deleteStatusItem);
@@ -207,5 +209,5 @@ export function* wathcAddItem() {
 
 
 export default function* rootSaga() {
-  yield all([fork(watchGetList), fork(wathcAddItem)]);
+  yield all([fork(watchGetList), fork(wathcAddItem), fork(wathcUpdateItem)]);
 }

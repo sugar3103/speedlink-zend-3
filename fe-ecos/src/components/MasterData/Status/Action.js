@@ -7,7 +7,11 @@ import { addStatusItem, updateStatusItem, toggleStatusModal } from '../../../red
 class Action extends Component {
 
   handleSubmit = values => {
-    this.props.addStatusItem(values);
+    if (values.id) {
+      this.props.updateStatusItem(values);
+    } else {
+      this.props.addStatusItem(values);
+    }
   }
 
   toggleModal = () => {

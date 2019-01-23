@@ -94,9 +94,9 @@ class StatusController extends CoreController {
     {
         $user = $this->tokenPayload;
         $data = $this->getRequestData();
-        if(isset($data['status_id'])) {
+        if(isset($data['id'])) {
             // Find existing status in the database.
-            $status = $this->entityManager->getRepository(Status::class)->findOneBy(array('status_id' => $data['status_id']));    
+            $status = $this->entityManager->getRepository(Status::class)->findOneBy(array('id' => $data['id']));    
             if ($status) {
                 //Create Form Status
                 $form = new StatusForm('update', $this->entityManager, $status);
@@ -130,9 +130,9 @@ class StatusController extends CoreController {
     {
         
         $data = $this->getRequestData();
-        if(isset($data['status_id'])) {
+        if(isset($data['id'])) {
             // Find existing status in the database.
-            $status = $this->entityManager->getRepository(Status::class)->findOneBy(array('status_id' => $data['status_id']));    
+            $status = $this->entityManager->getRepository(Status::class)->findOneBy(array('id' => $data['id']));    
             if ($status == null) {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = "Status Not Found";
