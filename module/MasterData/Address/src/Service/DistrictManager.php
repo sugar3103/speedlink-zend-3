@@ -4,6 +4,8 @@ namespace Address\Service;
 use Address\Entity\District;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
+use Core\Utils\Utils;
+
 class DistrictManager  {
     
     /**
@@ -140,7 +142,7 @@ class DistrictManager  {
      * @throws ORMException
      */
     public function getListDistrictByCondition(
-        $currentPage,
+        $start,
         $limit,
         $sortField = 'd.name',
         $sortDirection = 'ASC',
@@ -148,11 +150,11 @@ class DistrictManager  {
     ){
 
         $cities     = [];
-        $totalDistrict = 0;        
-        $offset = ($currentPage * $limit) - $limit;    
+        $totalDistrict = 0;                
+
         //get orm district
         $ormDistrict = $this->entityManager->getRepository(District::class)
-            ->getListDistrictByCondition($sortField, $sortDirection, $filters,$offset,$limit);
+            ->getListDistrictByCondition($start,$limit,$sortField, $sortDirection, $filters);
 
         if($ormDistrict){
             $ormPaginator = new ORMPaginator($ormDistrict, true);
@@ -169,7 +171,7 @@ class DistrictManager  {
                 $district['status'] = District::getIsActiveList($district['status']);
 
                 //set created_at
-                $district['createdAt'] =  ($district['createdAt']) ? $this->checkDateFormat($district['createdAt'],'d/m/Y') : '';
+                $district['createdAt'] =  ($district['createdAt']) ? Utils::checkDateFormat($district['createdAt'],'d/m/Y') : '';
 
                 $countRow++;
             }
@@ -183,6 +185,7 @@ class DistrictManager  {
         ];
         return $dataDistrict;
     }
+<<<<<<< HEAD
     
     /**
      * Check date format
@@ -263,4 +266,6 @@ class DistrictManager  {
         return $dataDistrict;
     }
 
+=======
+>>>>>>> 3c59ad45ddc552e3caa01f597aab6f49311943b1
 }

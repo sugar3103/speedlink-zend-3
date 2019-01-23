@@ -13,7 +13,7 @@ const initialState = {
     collapse: false,
   },
   theme: {
-    className: 'theme-light'
+    className: localStorage.getItem('currentTheme') && localStorage.getItem('currentTheme') === 'theme-dark' ? 'theme-dark' : 'theme-light'
   },
   locale: (localStorage.getItem('currentLanguage') && localeOptions.filter(x=>x.id === localStorage.getItem('currentLanguage')).length>0) ? localStorage.getItem('currentLanguage') : defaultLocale,
 };

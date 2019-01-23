@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import LogInForm from '../../components/Auth/LoginForm';
+import { loginUser } from '../../redux/actions';
+import PropTypes from 'prop-types';
 
 class LogIn extends Component {
 
   handleSubmit = values => {
-    console.log(values);
+    this.props.loginUser(values);
   }
 
   render() {
@@ -30,4 +33,10 @@ class LogIn extends Component {
   }
 };
 
-export default injectIntl(LogIn);
+LogIn.propTypes = {
+  loginUser: PropTypes.func.isRequired,
+}
+
+export default injectIntl(connect(null, {
+  loginUser
+})(LogIn));

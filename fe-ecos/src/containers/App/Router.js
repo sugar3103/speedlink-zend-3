@@ -1,6 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import { IntlProvider } from 'react-intl';
+import { NotificationContainer } from 'react-notifications';
+
+import 'react-notifications/lib/notifications.css';
 
 import { defaultStartPath } from '../../constants/defaultValues';
 import { connect } from "react-redux";
@@ -42,6 +45,7 @@ class Router extends Component {
         >
           <MainWrapper>
             <main>
+            <NotificationContainer />
               <Switch>
                 <InitialPath
                   path={`${match.url}app`}
@@ -60,8 +64,8 @@ class Router extends Component {
   }
 }
 
-const mapStateToProps = ({ settings }) => {
-  const user = {};
+const mapStateToProps = ({ settings, authUser }) => {
+  const { user } = authUser;
   const { locale } = settings;
   return { user, locale };
 };

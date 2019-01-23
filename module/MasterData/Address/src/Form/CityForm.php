@@ -108,7 +108,8 @@ class CityForm extends Form {
                     'name' => CityExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'city' => $this->city
+                        'city' => $this->city,
+                        'language'=> 'en'
                     ]
                 ]
             ]

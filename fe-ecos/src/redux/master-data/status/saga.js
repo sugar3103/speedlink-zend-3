@@ -1,0 +1,208 @@
+import axios from "axios";
+import { all, call, fork, put, takeEvery } from "redux-saga/effects";
+import { apiUrl, EC_SUCCESS, EC_FAILURE, EC_FAILURE_AUTHENCATION } from '../../../constants/defaultValues';
+import { authHeader } from '../../../util/auth-header';
+import history from '../../../util/history';
+
+import {
+  STATUS_GET_LIST,
+} from "../../../constants/actionTypes";
+
+import {
+  getStatusListSuccess,
+  getStatusListError,
+} from "./actions";
+
+import createNotification from '../../../util/notifications';
+
+//list status
+
+function getListApi(params) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}status`,
+    headers: authHeader(),
+    data: JSON.stringify(params)
+  });
+}
+
+const getStatusListRequest = async (params) => {
+  return await getListApi(params).then(res => res.data).catch(err => err)
+};
+
+function* getStatusListItems({ payload }) {
+  try {
+    const response = yield call(getStatusListRequest, payload);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(getStatusListSuccess(response.data, response.total));
+        break;
+
+      case EC_FAILURE:
+        yield put(getStatusListError(response.message));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login');
+        yield put(createNotification({type: 'warning', message: 'Please login to countinue'}));
+        break;
+      default:
+        break;
+    }
+    
+  } catch (error) {
+    yield put(getStatusListError(error));
+  }
+}
+
+// //add status
+
+// function addStatusApi(item) {
+//   return axios.request({
+//     method: 'post',
+//     url: `${apiUrl}/status/add`,
+//     headers: authHeader(),
+//     data: item
+//   });
+// }
+
+// const addStatusItemRequest = async item => {
+//   return await addStatusApi(item).then(res => res.data).catch(err => err)
+// };
+
+// function* addStatusItem({ payload }) {
+//   const { item, history } = payload;
+//   try {
+//     const response = yield call(addStatusItemRequest, item);
+//     switch (response.error_code) {
+//       case EC_SUCCESS:
+//         yield put(addStatusItemSuccess(response.result));
+//         yield put(getStatusList(history));
+//         yield put(toggleStatusModal());
+//         yield put(alertSuccess(response.result.message));
+//         break;
+
+//       case EC_FAILURE:
+//         yield put(addStatusItemError(response.message));
+//         break;
+
+//       case EC_FAILURE_AUTHENCATION:
+//         localStorage.removeItem('user');
+//         history.push('/login');
+//         yield put(alertDanger('Please login to countinue'))
+//         break;
+//       default:
+//         break;
+//     }
+//   } catch (error) {
+//     yield put(addStatusItemError(error));
+//   }
+// }
+
+// //update status
+
+// function updateStatusApi(item) {
+//   return axios.request({
+//     method: 'post',
+//     url: `${apiUrl}/status/edit/${item.id}`,
+//     headers: authHeader(),
+//     data: item
+//   });
+// }
+
+// const updateStatusItemRequest = async item => {
+//   return await updateStatusApi(item).then(res => res.data).catch(err => err)
+// };
+
+// function* updateStatusItem({ payload }) {
+//   const { item, history } = payload;
+//   try {
+//     const response = yield call(updateStatusItemRequest, item);
+//     switch (response.error_code) {
+//       case EC_SUCCESS:
+//         yield put(updateStatusItemSuccess(response.result));
+//         yield put(getStatusList(history));
+//         yield put(toggleStatusModal());
+//         yield put(alertSuccess(response.result.message));
+//         break;
+
+//       case EC_FAILURE:
+//         yield put(updateStatusItemError(response.message));
+//         break;
+
+//       case EC_FAILURE_AUTHENCATION:
+//         localStorage.removeItem('user');
+//         history.push('/login');
+//         yield put(alertDanger('Please login to countinue'))
+//         break;
+//       default:
+//         break;
+//     }
+//   } catch (error) {
+//     yield put(updateStatusItemError(error));
+//   }
+// }
+
+// //delete status
+
+// function deleteStatusApi(id) {
+//   return axios.request({
+//     method: 'post',
+//     url: `${apiUrl}/status/delete/${id}`,
+//     headers: authHeader(),
+//   });
+// }
+
+// const deleteStatusItemRequest = async id => {
+//   return await deleteStatusApi(id).then(res => res.data).catch(err => err)
+// };
+
+// function* deleteStatusItem({ payload }) {
+//   const { id, history } = payload;
+//   try {
+//     const response = yield call(deleteStatusItemRequest, id);
+//     switch (response.error_code) {
+//       case EC_SUCCESS:
+//         yield put(deleteStatusItemSuccess(response.result));
+//         yield put(getStatusList(history));
+//         yield put(alertSuccess(response.result.message));
+//         break;
+
+//       case EC_FAILURE:
+//         yield put(deleteStatusItemError(response.message));
+//         break;
+
+//       case EC_FAILURE_AUTHENCATION:
+//         localStorage.removeItem('user');
+//         history.push('/login');
+//         yield put(alertDanger('Please login to countinue'))
+//         break;
+//       default:
+//         break;
+//     }
+//   } catch (error) {
+//     yield put(deleteStatusItemError(error));
+//   }
+// }
+
+export function* watchGetList() {
+  yield takeEvery(STATUS_GET_LIST, getStatusListItems);
+}
+
+// export function* wathcAddItem() {
+//   yield takeEvery(STATUS_ADD_ITEM, addStatusItem);
+// }
+
+// export function* wathcUpdateItem() {
+//   yield takeEvery(STATUS_UPDATE_ITEM, updateStatusItem);
+// }
+
+// export function* wathcDeleteItem() {
+//   yield takeEvery(STATUS_DELETE_ITEM, deleteStatusItem);
+// }
+
+
+export default function* rootSaga() {
+  yield all([fork(watchGetList)]);
+}

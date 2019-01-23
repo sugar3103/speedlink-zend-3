@@ -5,6 +5,10 @@ module.exports = {
   'theme.desc-setting': 'Thay đổi giao diện theo ý bạn muốn!',
   'theme.dark-theme': 'Giao diện màu tối',
 
+  //layout
+  'layout.locale-vie': 'Tiếng Việt',
+  'layout.locale-eng': 'Tiếng Anh',
+
   //menu
   'menu.dashboard': 'Bảng điều khiển',
   'menu.master-data': 'Master Data',
@@ -15,6 +19,10 @@ module.exports = {
   'menu.address_city': 'Thành phố',
   'menu.address_district': 'Quận/Huyện',
   'menu.address_ward': 'Phường/Xã',
+
+  //Menu Setting
+  'menu.setting': 'Cài đặt',
+  'menu.user': 'Người dùng',
 
   //auth - login
   'login.welcome': 'Chào mừng đến với',
@@ -28,5 +36,34 @@ module.exports = {
   'login.username-error-empty': 'Tên đăng nhập không được bỏ trống',
   'login.password-error-empty': 'Mật khẩu không được bỏ trống',
 
-  'dashboard.title': 'Bảng điều khiển'
+  'dashboard.title': 'Bảng điều khiển',
+
+  //master-data --- Status
+  'status.list-title': 'Danh sách trạng thái',
+  'status.add-new': 'Tạo mới trạng thái',
+  'status.name': 'Tên',
+  'status.name-en': 'Tên tiếng anh',
+  'status.desc': 'Mô tả',
+  'status.desc-en': 'Mô tả tiếng anh',
+  'status.status': 'Trạng thái',
+  'status.created-at': 'Ngày tạo',
+  'status.action': 'Hành động',
+  'status.active': 'Kích hoạt',
+  'status.inactive': 'Đã ẩn',
+  'status.cancel': 'Hủy bỏ',
+  'status.save': 'Lưu',
+  //validate
+  'status.validate-name-empty': 'Tên không được bỏ trống',
+  'status.validate-nameEn-empty': 'Tên tiếng anh không được bỏ trống',
+  
+  //Address
+  'address.code' : 'Address Code',
+  'address.countries': 'Quốc gia',
+  'address.country': 'Quốc gia',
+  'address.cites': 'Tỉnh/Thành phố',
+  'address.city': 'Tỉnh/Thành phố',
+  'address.districts': 'Quận/Huyện',
+  'address.district': 'Quận/Huyện',
+  'address.wards': 'Phường/Xã',
+  'address.ward': 'Ward'
 };

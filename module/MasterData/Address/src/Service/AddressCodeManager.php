@@ -40,11 +40,15 @@ class AddressCodeManager  {
         
         $codes     = [];
         $totalCode = 0;  
+<<<<<<< HEAD
         $offset = ($start * $limit) - $limit;      
+=======
+        // $offset = ($currentPage * $limit) - $limit;      
+>>>>>>> 3c59ad45ddc552e3caa01f597aab6f49311943b1
         
         //get orm code
         $ormCode = $this->entityManager->getRepository(AddressCode::class)
-            ->getListCodeByCondition($sortField, $sortDirection, $filters,$offset,$limit);
+            ->getListCodeByCondition($start, $limit, $sortField, $sortDirection, $filters);
 
         if($ormCode){
             $ormPaginator = new ORMPaginator($ormCode, true);

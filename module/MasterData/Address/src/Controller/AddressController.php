@@ -55,7 +55,7 @@ class AddressController extends CoreController {
             $this->apiResponse =  array(
                 'message'   => "Get List Success",
                 'data'      => $result,
-                'total'     => $dataCode['listCode']
+                'total'     => $dataCode['totalCode']
             ); 
         } else {
             $this->error_code = 0;

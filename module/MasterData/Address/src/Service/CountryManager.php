@@ -141,7 +141,7 @@ class CountryManager  {
      * @throws ORMException
      */
     public function getListCountryByCondition(
-        $currentPage,
+        $start,
         $limit,
         $sortField = 'c.name',
         $sortDirection = 'ASC',
@@ -149,12 +149,11 @@ class CountryManager  {
     ){
 
         $countries     = [];
-        $totalCountry = 0;
-        $offset = ($currentPage * $limit) - $limit;      
+        $totalCountry = 0;        
         
         //get orm country
         $ormCountry = $this->entityManager->getRepository(Country::class)
-            ->getListCountryByCondition($sortField, $sortDirection, $filters,$offset,$limit);
+            ->getListCountryByCondition($start,$limit,$sortField, $sortDirection, $filters);
 
         if($ormCountry){
             $ormPaginator = new ORMPaginator($ormCountry, true);

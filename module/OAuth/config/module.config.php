@@ -58,7 +58,8 @@ $router = [
                 ],
                 'defaults' => [
                     'controller' => Controller\RoleController::class,
-                    'action' => 'index'
+                    'action' => 'index',
+                    'isAuthorizationRequired' => true
                 ]
             ]
         ],

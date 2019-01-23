@@ -6,8 +6,8 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
-
 use Core\Utils\Utils;
+
 /**
  * This is the custom repository class for Country entity.
  * @package Address\Repository
@@ -23,11 +23,11 @@ class CountryRepository extends EntityRepository {
      * @return array|QueryBuilder
      */
     public function getListCountryByCondition(
+        $start = 1,
+        $limit = 10,
         $sortField = 'c.name',
         $sortDirection = 'ASC',
-        $filters = [],
-        $offset = 0,
-        $limit = 10
+        $filters = []        
     )
     {
         try {
@@ -45,7 +45,7 @@ class CountryRepository extends EntityRepository {
             )->andWhere("c.isDeleted = 0")
             ->groupBy('c.countryId')
             ->setMaxResults($limit)
-            ->setFirstResult($offset);
+            ->setFirstResult(($start - 1) * $limit);
             
             return $queryBuilder;
 

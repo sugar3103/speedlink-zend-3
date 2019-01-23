@@ -22,11 +22,11 @@ class DistrictRepository extends EntityRepository {
      * @return array|QueryBuilder
      */
     public function getListDistrictByCondition(
+        $start = 1,
+        $limit = 10,
         $sortField = 'd.name',
         $sortDirection = 'ASC',
-        $filters = [],
-        $offset = 0,
-        $limit = 10
+        $filters = []       
     )
     {
         try {
@@ -34,13 +34,15 @@ class DistrictRepository extends EntityRepository {
             $queryBuilder->select(
                 "d.districtId,
                  d.name,
+                 d.nameEn,
                  d.description,
+                 d.descriptionEn,
                  d.status,
                  d.createdBy,
                  d.createdAt"                 
             )->groupBy('d.districtId')
             ->setMaxResults($limit)
-            ->setFirstResult($offset);
+            ->setFirstResult(($start - 1) * $limit);
             return $queryBuilder;
 
         } catch (QueryException $e) {

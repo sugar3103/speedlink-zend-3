@@ -67,8 +67,6 @@ class StatusExistsValidator extends AbstractValidator {
         } else if($this->options['language'] === 'en') {
             $status = $entityManager->getRepository(Status::class)->findOneBy(array('name_en' => $value));       
         }
-        
-        
 
         if ($this->options['status'] == null)
             $isValid = ($status == null);

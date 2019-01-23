@@ -34,6 +34,13 @@ class ApiController extends AbstractRestfulController
     public $token;
 
     /**
+     * 
+     * @var type bool
+     */
+
+    public $error = false;
+
+    /**
      *
      * @var type string 
      */
@@ -66,6 +73,7 @@ class ApiController extends AbstractRestfulController
      */
     public function checkAuthorization($event)
     {
+        
         $request = $event->getRequest();
         $response = $event->getResponse();
         $isAuthorizationRequired = $event->getRouteMatch()->getParam('isAuthorizationRequired');
@@ -209,7 +217,8 @@ class ApiController extends AbstractRestfulController
 
         $sendResponse[$errorKey] = $this->error_code;        
         $sendResponse = array_merge($sendResponse, $this->apiResponse);
-        
+        $this->errorCode();
+        $sendResponse['error'] = $this->error;
         return new JsonModel($sendResponse);
     }
 
@@ -240,5 +249,19 @@ class ApiController extends AbstractRestfulController
             return false;
         }
         
+    }
+
+    private function errorCode() {
+        switch ($this->error) {
+            case 0:
+                $this->error = true;
+                break;
+            case -1:
+                $this->error = true;
+                break;
+            default:
+                $this->error = false;
+                break;
+        }
     }
 }

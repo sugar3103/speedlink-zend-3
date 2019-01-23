@@ -6,7 +6,7 @@ export const localeOptions=[
 ];
 
 //api
-export const apiUrl = 'http://speedlink.local/api/v1/';
+export const apiUrl = 'http://localhost/api/v1/';
 
 //error code
 export const EC_SUCCESS = 1;
@@ -19,4 +19,5 @@ export const EC_FAILURE_AUTHENCATION = -5;
 
 //pagination
 export const SELECTED_PAGE_SIZE = 10;
+export const PAGE_LIMIT = 5;
 export const PAGE_SIZE = [10, 20, 50, 100];

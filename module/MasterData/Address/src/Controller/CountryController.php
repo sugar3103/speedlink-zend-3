@@ -44,32 +44,22 @@ class CountryController extends CoreController {
                 1 => 'status'
             ];
 
-            list($currentPage,$totalPages,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
+            list($start, $limit, $sortField, $sortDirection, $filters) = $this->getRequestData($fieldsMap);                        
 
             //get list country by condition
             $dataCountry = $this->countryManager->getListCountryByCondition(
-                $currentPage, $limit, $sortField, $sortDirection,$filters);
+                $start, $limit, $sortField, $sortDirection,$filters);
             
-            
-            $result = [
-                "meta" => [
-                    "page" => $currentPage,
-                    "pages" => $totalPages,
-                    "from" => ($currentPage - 1) * $limit + 1,
-                    "to" => ($currentPage * $limit) > $dataCountry['totalCountry'] ? $dataCountry['totalCountry'] : ($currentPage * $limit),
-                    "perpage"=> $limit,
-                    "totalItems" => $dataCountry['totalCountry'],
-                    "totalPage" => ceil($dataCountry['totalCountry']/$limit)
-                ],
-                "data" => ($dataCountry['listCountry']) ? $dataCountry['listCountry'] : []           
-            ];
+            $result = ($dataCountry['listCountry']) ? $dataCountry['listCountry'] : [] ;
             
             $this->error_code = 1;
-            $this->apiResponse = $result;           
-        } else {
-            $this->httpStatusCode = 404;
-            $this->apiResponse['message'] = "Page Not Found";            
+            $this->apiResponse =  array(
+                'message'   => "Get List Success",
+                'data'      => $result,
+                'total'     => $dataCountry['totalCountry']
+            );       
         }
+
         return $this->createResponse();
     }
 
@@ -91,69 +81,72 @@ class CountryController extends CoreController {
                 $this->error_code = 1;
                 $this->apiResponse['message'] = "Success: You have added a country!";
             } else {
-                $this->error_code = 0;
-                $this->apiResponse = $form->getMessages(); 
+                $this->error_code = -1;                
+                // $this->apiResponse['message'] = "Error";
+                $this->apiResponse['message'] = $form->getMessages();  
             } 
-
-        } else {
-            $this->httpStatusCode = 404;
-            $this->apiResponse['message'] = "Page Not Found";            
-        }
+        } 
 
         return $this->createResponse();        
     }
 
     public function editAction() {
-        if ($this->getRequest()->isPost()) {
-             $user = $this->tokenPayload;
-             $country = $this->entityManager->getRepository(Country::class)
-                ->findOneBy(array('countryId' => $data['country_id']));
-             
-             //Create New Form Country
-             $form = new CountryForm('update', $this->entityManager, $country);
-             $form->setData($this->getRequestData());
-             if ($form->isValid()) {
-                $data = $form->getData();                
-                $this->countryManager->updateCountry($country, $data,$user);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have modified country!";
-             }  else {
+
+        $user = $this->tokenPayload;
+        $data = $this->getRequestData();
+        if(isset($data['country_id'])) {
+            // Find existing status in the database.
+            $country = $this->entityManager->getRepository(Country::class)->findOneBy(array('countryId' => $data['country_id']));    
+            if ($country) {
+                //Create Form Status
+                $form = new CountryForm('update', $this->entityManager, $country);
+                $form->setData($data);
+                //validate form
+                if ($form->isValid()) {
+                    // get filtered and validated data
+                    $data = $form->getData();
+                    // update country.
+                    $this->countryManager->updateCountry($country, $data,$user);
+
+                    $this->error_code = 1;
+                    $this->apiResponse['message'] = "You have modified country!";
+                } else {
+                    $this->error_code = 0;
+                    $this->apiResponse['data'] = $form->getMessages(); 
+                }      
+            } else {
                 $this->error_code = 0;
-                $this->apiResponse = $form->getMessages(); 
-             }   
-             
+                $this->apiResponse['message'] = "Country Not Found";
+            }
         } else {
-            $this->httpStatusCode = 404;
-            $this->apiResponse['message'] = "Page Not Found";
+            $this->error_code = -1;
+            $this->apiResponse['message'] = "Country request Id!";
         }
-        
+
         return $this->createResponse();
     }
 
     public function deleteAction()
     {
-        if ($this->getRequest()->isPost()) {
-              
-            // fill in the form with POST data.              
-              $data = $this->getRequestData();
- 
-              $user = $this->tokenPayload;
-              $country = $this->entityManager->getRepository(Country::class)
-                 ->findOneBy(array('countryId' => $data['country_id']));
-            if($country) {
-                $this->countryManager->deleteCountry($country);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have deleted status!";
+        $data = $this->getRequestData();
+        if(isset($data['country_id'])) {
+            // Find existing country in the database.
+            $country = $this->entityManager->getRepository(Country::class)->findOneBy(array('countryId' => $data['country_id']));    
+            if ($country == null) {
+                $this->error_code = 0;
+                $this->apiResponse['message'] = "Status Not Found";
             } else {
-                $this->httpStatusCode = 200;
-                $this->error_code = -1;
-                $this->apiResponse['message'] = "Not Found Country";
-            }
+                //remove country
+                $this->countryManager->deleteCountry($country);
+    
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have deleted country!";
+            }          
         } else {
-            $this->httpStatusCode = 404;
-            $this->apiResponse['message'] = "Page Not Found";            
+            $this->error_code = -1;
+            $this->apiResponse['message'] = "Country request Id!";
         }
-        return $this->createResponse();
+        return $this->createResponse();        
     }
 
     public function listAction()

@@ -19,12 +19,14 @@ export function changeMobileSidebarVisibility() {
 }
 
 export function changeThemeToDark() {
+  localStorage.setItem('currentTheme', 'theme-dark');
   return {
     type: CHANGE_THEME_TO_DARK,
   };
 }
 
 export function changeThemeToLight() {
+  localStorage.setItem('currentTheme', 'theme-light');
   return {
     type: CHANGE_THEME_TO_LIGHT,
   };

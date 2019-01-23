@@ -138,7 +138,7 @@ class StaticRoute implements RouteInterface
             $options['defaults'] = [];
         }
 
-        //Rewrite Url API
+        //Rewrite Url API        
         $options['route'] = '/api/v1'. $options['route'];
         
         return new static($options['route'], $options['constraints'], $options['defaults']);
