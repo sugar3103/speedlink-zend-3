@@ -68,6 +68,10 @@ class AuthController extends CoreController {
      * @throws \Exception
      */
     public function loginAction() {
+        // check if we do not have users in database at all. If so, create
+        // the 'Admin' user.
+        $this->userManager->createAdminUserIfNotExists();
+
         // check if user has submitted the form.
         if ($this->getRequest()->isPost()) {
             $form = new LoginForm();
@@ -76,7 +80,7 @@ class AuthController extends CoreController {
             $isLoginError = false;
 
             $data = $this->getRequestData();            
-            $form->setData($data);            
+            $form->setData($data);                        
             // Validate From
             if ($form->isValid()) {
 
@@ -114,7 +118,7 @@ class AuthController extends CoreController {
                         'id'            => $_user->getId(),
                         'username'      => $_user->getUsername(),
                         'first_name'    => $_user->getFirstName(),
-                        'last_name'    => $_user->getLastname(),
+                        'last_name'    => $_user->getLastName(),
                         'email'         => $_user->getEmail()
                     ];
 

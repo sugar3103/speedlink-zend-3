@@ -5,42 +5,84 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="\OAuth\Repository\PermissionRepository")
+ * Permission
+ *
  * @ORM\Table(name="permission")
+ * @ORM\Entity(repositoryClass="\OAuth\Repository\PermissionRepository")
  */
-class Permission {
+class Permission
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
     /**
-     * @ORM\Id()
-     * @ORM\Column(name="id")
-     * @ORM\GeneratedValue()
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=100, nullable=false)
      */
-    protected $id;
+    private $name;
 
     /**
-     * @ORM\Column(name="name", type="string", unique=true)
+     * @var string
+     *
+     * @ORM\Column(name="name_en", type="string", length=100, nullable=false)
      */
-    protected $name;
+    private $name_en;
 
     /**
-     * @ORM\Column(name="description", type="string")
+     * @var string|null
+     *
+     * @ORM\Column(name="model", type="text", length=65535, nullable=true)
      */
-    protected $description;
+    private $model;
 
     /**
-     * @ORM\Column(name="deleted_at",type="datetime")
+     * @var string|null
+     *
+     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
-    protected $deletedAt;
+    private $description;
 
     /**
-     * @ORM\Column(name="created_at", type="datetime")
+     * @var string|null
+     *
+     * @ORM\Column(name="description_en", type="text", length=65535, nullable=true)
      */
-    protected $createdAt;
+    private $description_en;
 
     /**
-     * @ORM\Column(name="updated_at", type="datetime")
+     * @var int
+     *
+     * @ORM\Column(name="created_by", type="integer", nullable=false)
      */
-    protected $updatedAt;
+    private $created_by;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
+     */
+    private $created_at;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="updated_by", type="integer", nullable=true)
+     */
+    private $updated_by;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
+     */
+    private $updated_at;
 
     /**
      * @ORM\ManyToMany(targetEntity="\OAuth\Entity\Role", mappedBy="permissions")
@@ -60,121 +102,162 @@ class Permission {
     }
 
     /**
-     * Get Permission Id.
-     *
-     * @return mixed
+     * @return int
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
-     * Set Permission Id.
-     *
-     * @param $id
+     * @param int $id
      */
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
     }
 
     /**
-     * Get Permission Name.
-     *
-     * @return mixed
+     * @return string
      */
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
     /**
-     * Set Permission Name.
-     *
-     * @param $name
+     * @param string $name
      */
-    public function setName($name) {
+    public function setName($name)
+    {
         $this->name = $name;
     }
 
     /**
-     * Get Permission Description.
-     *
-     * @return mixed
+     * @return string
      */
-    public function getDescription() {
+    public function getNameEn()
+    {
+        return $this->name_en;
+    }
+
+    /**
+     * @param string $name_en
+     */
+    public function setNameEn($name_en)
+    {
+        $this->name_en = $name_en;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
+     * @param string|null $model
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescription()
+    {
         return $this->description;
     }
 
     /**
-     * Set Permission Description.
-     *
-     * @param $description
-     * @return mixed
+     * @param string|null $description
      */
-    public function setDescription($description) {
-        return $this->description = $description;
+    public function setDescription($description)
+    {
+        $this->description = $description;
     }
 
     /**
-     * Get Permission Created Date.
-     *
-     * @return mixed
+     * @return string|null
      */
-    public function getCreatedAt() {
-        return $this->createdAt;
+    public function getDescriptionEn()
+    {
+        return $this->description_en;
     }
 
     /**
-     * Set Permission Created Date.
-     *
-     * @param $createdAt
+     * @param string|null $description_en
      */
-    public function setCreatedAt($createdAt) {
-        $this->createdAt = $createdAt;
+    public function setDescriptionEn($description_en)
+    {
+        $this->description_en = $description_en;
     }
 
     /**
-     * Get Deleted At.
-     *
-     * @return mixed
+     * @return int
      */
-    public function getUpdatedAt() {
-        return $this->updatedAt;
+    public function getCreatedBy()
+    {
+        return $this->created_by;
     }
 
     /**
-     * Set Deleted At.
-     *
-     * @param updatedAt
+     * @param int $created_by
      */
-    public function setUpdatedAt($updatedAt) {
-        $this->updatedAt = $updatedAt;
+    public function setCreatedBy($created_by)
+    {
+        $this->created_by = $created_by;
     }
 
     /**
-     * Get Deleted At.
-     *
-     * @return mixed
+     * @return \DateTime
      */
-    public function getDeletedAt() {
-        return $this->deletedAt;
+    public function getCreatedAt()
+    {
+        return $this->created_at;
     }
 
     /**
-     * Set Deleted At.
-     *
-     * @param $deletedAt
+     * @param \DateTime $created_at
      */
-    public function setDeletedAt($deletedAt) {
-        $this->deletedAt = $deletedAt;
+    public function setCreatedAt($created_at)
+    {
+        $this->created_at = $created_at;
     }
 
+    /**
+     * @return int|null
+     */
+    public function getUpdatedBy()
+    {
+        return $this->updated_by;
+    }
 
     /**
-     * Get Roles belong to this permission.
-     *
-     * @return ArrayCollection
+     * @param int|null $updated_by
      */
-    public function getRoles() {
-        return $this->roles;
+    public function setUpdatedBy($updated_by)
+    {
+        $this->updated_by = $updated_by;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * @param \DateTime $updated_at
+     */
+    public function setUpdatedAt($updated_at)
+    {
+        $this->updated_at = $updated_at;
     }
 }

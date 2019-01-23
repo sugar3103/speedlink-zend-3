@@ -37,7 +37,7 @@ class PermissionManager {
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function addPermission($data) {
+    public function addPermission($data,$user) {
 
         // begin transaction
         $this->entityManager->beginTransaction();
@@ -45,11 +45,13 @@ class PermissionManager {
 
             $permission = new Permission();
             $permission->setName($data['name']);
+            $permission->setNameEn($data['name_en']);
             $permission->setDescription($data['description']);
+            $permission->setDescriptionEn($data['description_en']);
 
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $permission->setCreatedAt($addTime->format('Y-m-d H:i:s'));
-            $permission->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+            $permission->setCreatedBy($user->id);
 
             $this->entityManager->persist($permission);
 
@@ -76,18 +78,21 @@ class PermissionManager {
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function updatePermission($permission, $data) {
+    public function updatePermission($permission, $data,$user) {
 
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
 
             $permission->setName($data['name']);
+            $permission->setNameEn($data['name_en']);
             $permission->setDescription($data['description']);
+            $permission->setDescriptionEn($data['description_en']);
 
             // Set time UTC
             $updatedTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $permission->setUpdatedAt($updatedTime->format('Y-m-d H:i:s'));
+            $permission->setUpdatedBy($user->id);
 
             $this->entityManager->flush();
 
@@ -119,7 +124,7 @@ class PermissionManager {
 
             // Set deleted time
             $deletedTime = new \DateTime('now', new \DateTimeZone('UTC'));
-            $permission->setDeletedAt($deletedTime->format('Y-m-d H:i:s'));
+            $permission->setIsDeleted($deletedTime->format('Y-m-d H:i:s'));
 
             $this->entityManager->flush();
 
@@ -156,8 +161,11 @@ class PermissionManager {
         foreach ($defaultPermissions as $name => $description) {
             $permission = new Permission();
             $permission->setName($name);
+            $permission->setNameEn($name);
             $permission->setDescription($description);
+            $permission->setDescriptionEn($description);
             $permission->setCreatedAt(date('Y-m-d H:i:s'));
+            $permission->setCreatedBy(1);
 
             $this->entityManager->persist($permission);
         }
@@ -180,7 +188,7 @@ class PermissionManager {
      * @throws ORMException
      */
     public function getListPermissionByCondition(
-        $currentPage,
+        $start,
         $limit,
         $sortField = '',
         $sortDirection = 'asc',
@@ -190,33 +198,23 @@ class PermissionManager {
         $totalPermission = 0;
 
         $ormPermission = $this->entityManager->getRepository(Permission::class)
-            ->getListPermissionByCondition($sortField, $sortDirection, $filters);
+            ->getListPermissionByCondition($start,$limit,$sortField, $sortDirection, $filters);
 
         if($ormPermission){
-
-            //set offset,limit
+           //set offset,limit
             $ormPaginator = new ORMPaginator($ormPermission, true);
             $ormPaginator->setUseOutputWalkers(false);
-            $adapter = new DoctrineAdapter($ormPaginator);
-            $paginator = new Paginator($adapter);
-
-            //sets the current page number
-            $paginator->setCurrentPageNumber($currentPage);
-
-            //Sets the number of items per page
-            $paginator->setItemCountPerPage($limit);
+            $totalPermission = $ormPaginator->count();
 
             //get permission list
-            $permissions = $paginator->getIterator()->getArrayCopy();
+            $permissions = $ormPaginator->getIterator()->getArrayCopy();
 
             foreach ($permissions as &$permission) {//loop
 
                 //set created_at to GMT +7
                 $permission['created_at'] =  ($permission['created_at']) ? $this->checkDateFormat($permission['created_at'],'d/m/Y') : '';
             }
-
-            //get and set total permission
-            $totalPermission = $paginator->getTotalItemCount();
+            
         }
 
         // Get data permission

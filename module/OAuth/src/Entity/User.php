@@ -1,13 +1,14 @@
 <?php
-
 namespace OAuth\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use OAuth\Entity\Role;
 
 /**
  * User
  *
- * @ORM\Table(name="user")
+ * @ORM\Table(name="user", uniqueConstraints={@ORM\UniqueConstraint(name="unique_username", columns={"username"})})
  * @ORM\Entity(repositoryClass="\OAuth\Repository\UserRepository")
  */
 class User
@@ -17,119 +18,134 @@ class User
 
     const LOCAL_USER = 0;
     const LDAP_USER = 1;
+
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="username", type="string", precision=0, scale=0, nullable=false, unique=true)
-     */
-    private $username;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="email", type="string", length=100, nullable=true)
      */
     private $email;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="password", type="string", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="password", type="string", length=60, nullable=true, options={"fixed"=true})
      */
     private $password;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="first_name", type="string", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="first_name", type="string", length=100, nullable=true)
      */
-    private $firstName;
+    private $first_name;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="last_name", type="string", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="last_name", type="string", length=100, nullable=true)
      */
-    private $lastName;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="language", type="string", precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $language;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime", precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime", precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $updatedAt;
+    private $last_name;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="is_ldap", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="is_active", type="integer", nullable=false, options={"comment"="active=1,inactive=0"})
      */
-    private $isLdap;
+    private $is_active = '0';
 
     /**
      * @var int
      *
-     * @ORM\Column(name="is_admin", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="is_admin", type="integer", nullable=false)
      */
-    private $isAdmin;
+    private $is_admin = '0';
 
     /**
      * @var int
      *
-     * @ORM\Column(name="is_active", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="is_ldap", type="integer", nullable=false)
      */
-    private $isActive;
+    private $is_ldap = '0';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="password_reset_token", type="string", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="username", type="string", length=100, nullable=false)
      */
-    private $passwordResetToken;
+    private $username;
 
     /**
-     * @var \DateTime
+     * @var string|null
      *
-     * @ORM\Column(name="password_reset_token_created_at", type="datetime", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="password_reset_token", type="string", length=32, nullable=true)
      */
-    private $passwordResetTokenCreatedAt;
+    private $password_reset_token;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="password_reset_token_created_at", type="datetime", nullable=true)
+     */
+    private $password_reset_token_created_at;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="last_token", type="string", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="language", type="string", length=5, nullable=false, options={"default"="en_US","fixed"=true})
      */
-    private $lastToken;
+    private $language = 'en_US';
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="last_token", type="string", length=255, nullable=true)
+     */
+    private $last_token;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="created_by", type="integer", nullable=true)
+     */
+    private $created_by;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="last_token_create_at", type="datetime", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="created_at", type="datetime", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
      */
-    private $lastTokenCreatedAt;
+    private $created_at;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="updated_by", type="integer", nullable=true)
+     */
+    private $updated_by;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true, options={"default"="CURRENT_TIMESTAMP"})
+     */
+    private $updated_at;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="last_token_created_at", type="datetime", nullable=true)
+     */
+    private $last_token_created_at;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -151,12 +167,10 @@ class User
      */
     public function __construct()
     {
-        $this->roles = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->roles = new ArrayCollection();
     }
 
     /**
-     * Get id.
-     *
      * @return int
      */
     public function getId()
@@ -165,22 +179,126 @@ class User
     }
 
     /**
-     * Set username.
-     *
-     * @param string $username
-     *
-     * @return User
+     * @param int $id
      */
-    public function setUsername($username)
+    public function setId($id)
     {
-        $this->username = $username;
-
-        return $this;
+        $this->id = $id;
     }
 
     /**
-     * Get username.
-     *
+     * @return string|null
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string|null $email
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param string|null $password
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFirstName()
+    {
+        return $this->first_name;
+    }
+
+    /**
+     * @param string|null $first_name
+     */
+    public function setFirstName($first_name)
+    {
+        $this->first_name = $first_name;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLastName()
+    {
+        return $this->last_name;
+    }
+
+    /**
+     * @param string|null $last_name
+     */
+    public function setLastName($last_name)
+    {
+        $this->last_name = $last_name;
+    }
+
+    /**
+     * @return int
+     */
+    public function getisActive()
+    {
+        return $this->is_active;
+    }
+
+    /**
+     * @param int $is_active
+     */
+    public function setIsActive($is_active)
+    {
+        $this->is_active = $is_active;
+    }
+
+    /**
+     * @return int
+     */
+    public function getisAdmin()
+    {
+        return $this->is_admin;
+    }
+
+    /**
+     * @param int $is_admin
+     */
+    public function setIsAdmin($is_admin)
+    {
+        $this->is_admin = $is_admin;
+    }
+
+    /**
+     * @return int
+     */
+    public function getisLdap()
+    {
+        return $this->is_ldap;
+    }
+
+    /**
+     * @param int $is_ldap
+     */
+    public function setIsLdap($is_ldap)
+    {
+        $this->is_ldap = $is_ldap;
+    }
+
+    /**
      * @return string
      */
     public function getUsername()
@@ -189,118 +307,46 @@ class User
     }
 
     /**
-     * Set email.
-     *
-     * @param string $email
-     *
-     * @return User
+     * @param string $username
      */
-    public function setEmail($email)
+    public function setUsername($username)
     {
-        $this->email = $email;
-
-        return $this;
+        $this->username = $username;
     }
 
     /**
-     * Get email.
-     *
-     * @return string
+     * @return string|null
      */
-    public function getEmail()
+    public function getPasswordResetToken()
     {
-        return $this->email;
+        return $this->password_reset_token;
     }
 
     /**
-     * Set password.
-     *
-     * @param string $password
-     *
-     * @return User
+     * @param string|null $password_reset_token
      */
-    public function setPassword($password)
+    public function setPasswordResetToken($password_reset_token)
     {
-        $this->password = $password;
-
-        return $this;
+        $this->password_reset_token = $password_reset_token;
     }
 
     /**
-     * Get password.
-     *
-     * @return string
+     * @return \DateTime|null
      */
-    public function getPassword()
+    public function getPasswordResetTokenCreatedAt()
     {
-        return $this->password;
+        return $this->password_reset_token_created_at;
     }
 
     /**
-     * Set firstName.
-     *
-     * @param string $firstName
-     *
-     * @return User
+     * @param \DateTime|null $password_reset_token_created_at
      */
-    public function setFirstName($firstName)
+    public function setPasswordResetTokenCreatedAt($password_reset_token_created_at)
     {
-        $this->firstName = $firstName;
-
-        return $this;
+        $this->password_reset_token_created_at = $password_reset_token_created_at;
     }
 
     /**
-     * Get firstName.
-     *
-     * @return string
-     */
-    public function getFirstName()
-    {
-        return $this->firstName;
-    }
-
-    /**
-     * Set lastName.
-     *
-     * @param string $lastName
-     *
-     * @return User
-     */
-    public function setLastName($lastName)
-    {
-        $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    /**
-     * Get lastName.
-     *
-     * @return string
-     */
-    public function getLastName()
-    {
-        return $this->lastName;
-    }
-
-    /**
-     * Set language.
-     *
-     * @param string $language
-     *
-     * @return User
-     */
-    public function setLanguage($language)
-    {
-        $this->language = $language;
-
-        return $this;
-    }
-
-    /**
-     * Get language.
-     *
      * @return string
      */
     public function getLanguage()
@@ -309,219 +355,107 @@ class User
     }
 
     /**
-     * Set createdAt.
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return User
+     * @param string $language
      */
-    public function setCreatedAt($createdAt)
+    public function setLanguage($language)
     {
-        $this->createdAt = $createdAt;
-
-        return $this;
+        $this->language = $language;
     }
 
     /**
-     * Get createdAt.
-     *
+     * @return string|null
+     */
+    public function getLastToken()
+    {
+        return $this->last_token;
+    }
+
+    /**
+     * @param string|null $last_token
+     */
+    public function setLastToken($last_token)
+    {
+        $this->last_token = $last_token;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCreatedBy()
+    {
+        return $this->created_by;
+    }
+
+    /**
+     * @param int|null $created_by
+     */
+    public function setCreatedBy($created_by)
+    {
+        $this->created_by = $created_by;
+    }
+
+    /**
      * @return \DateTime
      */
     public function getCreatedAt()
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
 
     /**
-     * Set updatedAt.
-     *
-     * @param \DateTime $updatedAt
-     *
-     * @return User
+     * @param \DateTime $created_at
      */
-    public function setUpdatedAt($updatedAt)
+    public function setCreatedAt($created_at)
     {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
+        $this->created_at = $created_at;
     }
 
     /**
-     * Get updatedAt.
-     *
-     * @return \DateTime
+     * @return int|null
+     */
+    public function getUpdatedBy()
+    {
+        return $this->updated_by;
+    }
+
+    /**
+     * @param int|null $updated_by
+     */
+    public function setUpdatedBy($updated_by)
+    {
+        $this->updated_by = $updated_by;
+    }
+
+    /**
+     * @return \DateTime|null
      */
     public function getUpdatedAt()
     {
-        return $this->updatedAt;
+        return $this->updated_at;
     }
 
     /**
-     * Set isLdap.
-     *
-     * @param int $isLdap
-     *
-     * @return User
+     * @param \DateTime|null $updated_at
      */
-    public function setIsLdap($isLdap)
+    public function setUpdatedAt($updated_at)
     {
-        $this->isLdap = $isLdap;
-
-        return $this;
+        $this->updated_at = $updated_at;
     }
 
     /**
-     * Get isLdap.
-     *
-     * @return int
-     */
-    public function getIsLdap()
-    {
-        return $this->isLdap;
-    }
-
-    /**
-     * Set isAdmin.
-     *
-     * @param int $isAdmin
-     *
-     * @return User
-     */
-    public function setIsAdmin($isAdmin)
-    {
-        $this->isAdmin = $isAdmin;
-
-        return $this;
-    }
-
-    /**
-     * Get isAdmin.
-     *
-     * @return int
-     */
-    public function getIsAdmin()
-    {
-        return $this->isAdmin;
-    }
-
-    /**
-     * Set isActive.
-     *
-     * @param int $isActive
-     *
-     * @return User
-     */
-    public function setIsActive($isActive)
-    {
-        $this->isActive = $isActive;
-
-        return $this;
-    }
-
-    /**
-     * Get isActive.
-     *
-     * @return int
-     */
-    public function getIsActive()
-    {
-        return $this->isActive;
-    }
-
-    /**
-     * Set passwordResetToken.
-     *
-     * @param string $passwordResetToken
-     *
-     * @return User
-     */
-    public function setPasswordResetToken($passwordResetToken)
-    {
-        $this->passwordResetToken = $passwordResetToken;
-
-        return $this;
-    }
-
-    /**
-     * Get passwordResetToken.
-     *
-     * @return string
-     */
-    public function getPasswordResetToken()
-    {
-        return $this->passwordResetToken;
-    }
-
-    /**
-     * Set passwordResetTokenCreatedAt.
-     *
-     * @param \DateTime $passwordResetTokenCreatedAt
-     *
-     * @return User
-     */
-    public function setPasswordResetTokenCreatedAt($passwordResetTokenCreatedAt)
-    {
-        $this->passwordResetTokenCreatedAt = $passwordResetTokenCreatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get passwordResetTokenCreatedAt.
-     *
-     * @return \DateTime
-     */
-    public function getPasswordResetTokenCreatedAt()
-    {
-        return $this->passwordResetTokenCreatedAt;
-    }
-
-    /**
-     * Set lastToken.
-     *
-     * @param string $lastToken
-     *
-     * @return User
-     */
-    public function setLastToken($lastToken)
-    {
-        $this->lastToken = $lastToken;
-
-        return $this;
-    }
-
-    /**
-     * Get lastToken.
-     *
-     * @return string
-     */
-    public function getLastToken()
-    {
-        return $this->lastToken;
-    }
-
-    /**
-     * Set lastTokenCreatedAt.
-     *
-     * @param \DateTime $lastTokenCreatedAt
-     *
-     * @return User
-     */
-    public function setLastTokenCreatedAt($lastTokenCreatedAt)
-    {
-        $this->lastTokenCreatedAt = $lastTokenCreatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get lastTokenCreatedAt.
-     *
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getLastTokenCreatedAt()
     {
-        return $this->lastTokenCreatedAt;
+        return $this->last_token_created_at;
+    }
+
+    /**
+     * @param \DateTime|null $last_token_created_at
+     */
+    public function setLastTokenCreatedAt($last_token_created_at)
+    {
+        $this->last_token_created_at = $last_token_created_at;
     }
 
     /**
@@ -531,7 +465,7 @@ class User
      *
      * @return User
      */
-    public function addRole(\OAuth\Entity\Role $role)
+    public function addRole(Role $role)
     {
         $this->roles[] = $role;
 
@@ -545,7 +479,7 @@ class User
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeRole(\OAuth\Entity\Role $role)
+    public function removeRole(Role $role)
     {
         return $this->roles->removeElement($role);
     }
@@ -586,8 +520,8 @@ class User
     public function getIsActiveAsString()
     {
         $list = self::getIsActiveList();
-        if (isset($list[$this->isActive]))
-            return $list[$this->isActive];
+        if (isset($list[$this->is_active]))
+            return $list[$this->is_active];
 
         return 'Unknown';
     }

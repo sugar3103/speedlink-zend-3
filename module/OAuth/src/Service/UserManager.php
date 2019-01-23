@@ -194,17 +194,16 @@ class UserManager {
     public function createAdminUserIfNotExists() {
         $user = $this->entityManager->getRepository(User::class)
             ->findOneBy([]);
-
+        
         if ($user == null) {
-
             $this->permissionManager->createDefaultPermissionsIfNotExist();
             $this->roleManager->createDefaultRolesIfNotExist();
 
             $user = new User();
-            $user->setUsername('admin');
-            $user->setFirstName('Admin');
+            $user->setUsername('administrator');
+            $user->setFirstName('Administrator');
             $bcrypt = new Bcrypt();
-            $passwordHash = $bcrypt->create('123456');
+            $passwordHash = $bcrypt->create('Admin@20!9');
             $user->setPassword($passwordHash);
             $user->setIsActive(User::ACTIVE);
             $user->setIsLdap(User::LOCAL_USER);

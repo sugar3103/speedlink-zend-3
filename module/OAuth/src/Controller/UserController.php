@@ -56,6 +56,7 @@ class UserController extends CoreController {
     
     public function addAction()
     {   
+        
         // check if city  has submitted the form
         if ($this->getRequest()->isPost()) {
             $user = $this->tokenPayload;
@@ -69,19 +70,16 @@ class UserController extends CoreController {
                 // get filtered and validated data
                 $data = $form->getData();
                 // add user.
-                $city = $this->cityManager->addCity($data,$user);
+                $user = $this->userManager->addUser($data,$user);
                 $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have modified Cities!";
+                $this->apiResponse['message'] = "Success: You have modified Users!";
             } else {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = "Error: You have modified Cities!";
+                $this->apiResponse['message'] = "Error: You have modified Users!";
                 $this->apiResponse = $form->getMessages(); 
                 
             }            
-        } else {
-            $this->httpStatusCode = 404;
-            $this->apiResponse['message'] = "Page Not Found";                 
-        }
+        } 
 
         return $this->createResponse();
     }

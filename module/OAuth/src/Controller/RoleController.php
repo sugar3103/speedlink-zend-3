@@ -7,9 +7,6 @@ use OAuth\Form\RolePermissionForm;
 use OAuth\Form\RoleForm;
 use OAuth\Service\RoleManager;
 use Doctrine\ORM\EntityManager;
-use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
-use Zend\Mvc\Controller\AbstractActionController;
 use Core\Controller\CoreController;
 
 /**
@@ -81,18 +78,8 @@ class RoleController extends CoreController {
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function addAction() {
-
         // create form
         $form = new RoleForm('create', $this->entityManager);
-
-        $roleList = [];
-        $roles = $this->entityManager->getRepository(Role::class)
-            ->findBy([], ['name' => 'ASC']);
-
-        foreach ($roles as $role) {
-            $roleList[$role->getId()] = $role->getName();
-        }
-        $form->get('inherit_roles')->setValueOptions($roleList);
 
         // check if user has submitted the form
         if ($this->getRequest()->isPost()) {
@@ -111,16 +98,14 @@ class RoleController extends CoreController {
                 // add role
                 $this->roleManager->addRole($data);
 
-                // add a flash message.
-                $this->flashMessenger()->addSuccessMessage('Added new role.');
-
-                // redirect to "index" page
-                return $this->redirect()->toRoute('roles', ['action' => 'index']);
-            }
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have add new role.";
+            }  else {
+                $this->error_code = 0;                
+                $this->apiResponse['message'] = $form->getMessages();                 
+            } 
         }
-        return new ViewModel([
-            'form' => $form
-        ]);
+        return $this->createResponse();
     }
 
     /**

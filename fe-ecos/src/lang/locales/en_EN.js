@@ -24,6 +24,9 @@ module.exports = {
   //Menu Setting
   'menu.setting': 'Settings',
   'menu.user': 'Users',
+  'menu.user.list': 'User List',
+  'menu.user.role': 'Roles',
+  'menu.user.permisson': 'Permissons',
 
   //auth - login
   'login.welcome': 'Welcome to',
@@ -66,5 +69,25 @@ module.exports = {
   'address.districts': 'Districts',
   'address.district': 'District',
   'address.wards': 'Wards',
-  'address.ward': 'Ward'
+  'address.ward': 'Ward',
+
+  //User
+  'user.list': 'User List',
+  'user.active': 'Enable',
+  'user.inactive': 'Disable',
+  'user.username': 'Username',
+  'user.fullname': 'Full Name',
+  'user.status': 'Status',
+  'user.created-at': 'Created At',
+  'user.action': 'Action',
+  'user.add-new': 'Add New User',
+
+  //Role
+  'role.list': 'Role List',
+  'role.active': 'Enable',
+  'role.inactive': 'Disable',
+  'role.status': 'Status',
+  'role.created-at': 'Created At',
+  'role.action': 'Action',
+  'role.add-new': 'Add New Role',
 };

@@ -41,7 +41,7 @@ final class Version20181108064727 extends AbstractMigration
               updated_by                      int(11) null,
               updated_at                      timestamp default current_timestamp() null
               on update current_timestamp(),
-              last_token_create_at            datetime                              null,
+              last_token_created_at            datetime                              null,
               constraint unique_username
               unique (username)
             )

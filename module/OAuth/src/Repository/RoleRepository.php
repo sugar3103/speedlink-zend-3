@@ -23,6 +23,8 @@ class RoleRepository extends EntityRepository {
      * @return array|QueryBuilder
      */
     public function getListRoleByCondition(
+        $start = 1,
+        $limit = 10,
         $sortField = 'r.id',
         $sortDirection = 'asc',
         $filters = []
@@ -34,8 +36,10 @@ class RoleRepository extends EntityRepository {
                 "r.id,
                  r.name,
                  r.description,
-                 r.createdAt AS created_at"
-            );
+                 r.created_at"
+            )->andWhere('r.id <> 0')->groupBy('r.id')
+            ->setMaxResults($limit)
+            ->setFirstResult(($start - 1) * $limit);
 
             return $queryBuilder;
 
@@ -58,7 +62,6 @@ class RoleRepository extends EntityRepository {
     {
 
         $operatorsMap = [
-
             'name' => [
                 'alias' => 'r.name',
                 'operator' => 'contains'
@@ -68,7 +71,7 @@ class RoleRepository extends EntityRepository {
                 'operator' => 'contains'
             ],
             'created_at' => [
-                'alias' => 'r.createdAt',
+                'alias' => 'r.created_at',
                 'operator' => 'contains'
             ]
         ];
