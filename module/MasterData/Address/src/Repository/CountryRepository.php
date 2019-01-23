@@ -2,7 +2,6 @@
 namespace Address\Repository;
 
 use Address\Entity\Country;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
@@ -27,30 +26,28 @@ class CountryRepository extends EntityRepository {
         $limit = 10,
         $sortField = 'c.name',
         $sortDirection = 'ASC',
-        $filters = []        
+        $filters = []
     )
     {
         try {
             $queryBuilder = $this->buildCountryQueryBuilder($sortField, $sortDirection, $filters);
-            $queryBuilder->select(
-                "c.countryId,
+            $queryBuilder->select("
+                c.id,
                  c.name,
-                 c.nameEn,
+                 c.name_en,
                  c.description,
-                 c.descriptionEn,
-                 c.isoCode,
+                 c.description_en,
+                 c.iso_code,
                  c.status,
-                 c.createdBy,
-                 c.createdAt"                 
-            )->andWhere("c.isDeleted = 0")
-            ->groupBy('c.countryId')
+                 c.created_by,
+                 c.created_at
+            ")->andWhere("c.is_deleted = 0")
+            ->groupBy('c.id')
             ->setMaxResults($limit)
             ->setFirstResult(($start - 1) * $limit);
-            
-            return $queryBuilder;
 
+            return $queryBuilder;
         } catch (QueryException $e) {
-            
             return [];
         }
     }
@@ -72,26 +69,24 @@ class CountryRepository extends EntityRepository {
                 'alias' => 'c.name',
                 'operator' => 'contains'
             ],
-
             'created_at' => [
-                'alias' => 'c.createdAt',
+                'alias' => 'c.created_at',
                 'operator' => 'contains'
             ],
             'status' => [
                 'alias' => 'c.status',
                 'operator' => 'eq'
             ],
-
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(Country::class, 'c');
 
-        if ($sortField != NULL && $sortDirection != NULL)
+        if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
-        else
+        } else {
             $queryBuilder->orderBy('c.name', 'ASC');
-
+        }
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
 }

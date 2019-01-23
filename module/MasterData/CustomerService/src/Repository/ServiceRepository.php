@@ -19,9 +19,9 @@ class ServiceRepository extends EntityRepository
             $queryBuilder->select("
                 s.id,
                 s.name,
-                s.nameEn,
+                s.name_en,
                 s.description,
-                s.descriptionEn,
+                s.description_en,
                 s.code,
                 s.status
             ");
@@ -55,7 +55,7 @@ class ServiceRepository extends EntityRepository
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(Service::class, 's')->where('s.isDeleted = 0');
+        $queryBuilder->from(Service::class, 's')->where('s.is_deleted = 0');
 
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

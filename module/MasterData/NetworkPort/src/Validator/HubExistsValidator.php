@@ -60,20 +60,20 @@ class HubExistsValidator extends AbstractValidator {
 
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
+        $hub = $entityManager->getRepository(Hub::class)->findOneByName($value);
 
-        $hub = $entityManager->getRepository(Hub::class)
-            ->findOneByName($value);
-
-        if ($this->options['hub'] == null)
+        if ($this->options['hub'] == null) {
             $isValid = ($hub == null);
-        elseif ($this->options['hub']->getName() != $value && $hub != null)
+        } elseif ($this->options['hub']->getName() != $value && $hub != null) {
             $isValid = false;
-        else
+        } else {
             $isValid = true;
+        }
 
         // if there were an error, set error message.
-        if (!$isValid)
+        if (!$isValid) {
             $this->error(self::HUB_EXISTS);
+        }
 
         // return validation result
         return $isValid;

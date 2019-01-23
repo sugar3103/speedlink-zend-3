@@ -1,5 +1,4 @@
 <?php
-
 namespace Address\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -7,135 +6,121 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Country
  *
- * @ORM\Table(name="country")
+ * @ORM\Table(name="country", uniqueConstraints={@ORM\UniqueConstraint(name="unique_country_id", columns={"id"})})
  * @ORM\Entity(repositoryClass="\Address\Repository\CountryRepository")
  */
 class Country
 {
-    const ACTIVE = 1;
-    const INACTIVE = 0;
-
     /**
      * @var int
      *
-     * @ORM\Column(name="country_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $countryId;
+    private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=50, precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="name", type="string", length=50, nullable=false)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name_en", type="string", length=50, precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="name_en", type="string", length=50, nullable=false)
      */
-    private $nameEn;
+    private $name_en;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="description", type="text", length=65535, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
     private $description;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="description_en", type="text", length=65535, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="description_en", type="text", length=65535, nullable=true)
      */
-    private $descriptionEn;
+    private $description_en;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="status", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="status", type="integer", nullable=false)
      */
     private $status;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_deleted", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="is_deleted", type="boolean", nullable=false)
      */
-    private $isDeleted = 0;
+    private $is_deleted = '0';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="iso_code", type="string", length=50, precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="iso_code", type="string", length=50, nullable=false)
      */
-    private $isoCode;
+    private $iso_code;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="created_by", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="created_by", type="integer", nullable=false)
      */
-    private $createdBy;
+    private $created_by;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="created_at", type="datetime", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    private $createdAt;
+    private $created_at;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="updated_by", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="updated_by", type="integer", nullable=true)
      */
-    private $updatedBy;
+    private $updated_by;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="updated_at", type="datetime", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    private $updatedAt;
+    private $updated_at;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="ref_as_by", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="ref_as_by", type="integer", nullable=true)
      */
-    private $refAsBy;
-
+    private $ref_as_by;
 
     /**
-     * Get countryId.
-     *
      * @return int
      */
-    public function getCountryId()
+    public function getId()
     {
-        return $this->countryId;
+        return $this->id;
     }
 
     /**
-     * Set name.
-     *
-     * @param string $name
-     *
-     * @return Country
+     * @param int $id
      */
-    public function setName($name)
+    public function setId($id)
     {
-        $this->name = $name;
-
-        return $this;
+        $this->id = $id;
     }
 
     /**
-     * Get name.
-     *
      * @return string
      */
     public function getName()
@@ -144,46 +129,30 @@ class Country
     }
 
     /**
-     * Set nameEn.
-     *
-     * @param string $nameEn
-     *
-     * @return Country
+     * @param string $name
      */
-    public function setNameEn($nameEn)
+    public function setName($name)
     {
-        $this->nameEn = $nameEn;
-
-        return $this;
+        $this->name = $name;
     }
 
     /**
-     * Get nameEn.
-     *
      * @return string
      */
     public function getNameEn()
     {
-        return $this->nameEn;
+        return $this->name_en;
     }
 
     /**
-     * Set description.
-     *
-     * @param string|null $description
-     *
-     * @return Country
+     * @param string $name_en
      */
-    public function setDescription($description = null)
+    public function setNameEn($name_en)
     {
-        $this->description = $description;
-
-        return $this;
+        $this->name_en = $name_en;
     }
 
     /**
-     * Get description.
-     *
      * @return string|null
      */
     public function getDescription()
@@ -192,46 +161,30 @@ class Country
     }
 
     /**
-     * Set descriptionEn.
-     *
-     * @param string|null $descriptionEn
-     *
-     * @return Country
+     * @param string|null $description
      */
-    public function setDescriptionEn($descriptionEn = null)
+    public function setDescription($description)
     {
-        $this->descriptionEn = $descriptionEn;
-
-        return $this;
+        $this->description = $description;
     }
 
     /**
-     * Get descriptionEn.
-     *
      * @return string|null
      */
     public function getDescriptionEn()
     {
-        return $this->descriptionEn;
+        return $this->description_en;
     }
 
     /**
-     * Set status.
-     *
-     * @param int $status
-     *
-     * @return Country
+     * @param string|null $description_en
      */
-    public function setStatus($status)
+    public function setDescriptionEn($description_en)
     {
-        $this->status = $status;
-
-        return $this;
+        $this->description_en = $description_en;
     }
 
     /**
-     * Get status.
-     *
      * @return int
      */
     public function getStatus()
@@ -240,200 +193,123 @@ class Country
     }
 
     /**
-     * Set isDeleted.
-     *
-     * @param bool $isDeleted
-     *
-     * @return Country
+     * @param int $status
      */
-    public function setIsDeleted($isDeleted)
+    public function setStatus($status)
     {
-        $this->isDeleted = $isDeleted;
-
-        return $this;
+        $this->status = $status;
     }
 
     /**
-     * Get isDeleted.
-     *
      * @return bool
      */
-    public function getIsDeleted()
+    public function isDeleted()
     {
-        return $this->isDeleted;
+        return $this->is_deleted;
     }
 
     /**
-     * Set isoCode.
-     *
-     * @param string $isoCode
-     *
-     * @return Country
+     * @param bool $is_deleted
      */
-    public function setIsoCode($isoCode)
+    public function setIsDeleted($is_deleted)
     {
-        $this->isoCode = $isoCode;
-
-        return $this;
+        $this->is_deleted = $is_deleted;
     }
 
     /**
-     * Get isoCode.
-     *
      * @return string
      */
     public function getIsoCode()
     {
-        return $this->isoCode;
+        return $this->iso_code;
     }
 
     /**
-     * Set createdBy.
-     *
-     * @param int $createdBy
-     *
-     * @return Country
+     * @param string $iso_code
      */
-    public function setCreatedBy($createdBy)
+    public function setIsoCode($iso_code)
     {
-        $this->createdBy = $createdBy;
-
-        return $this;
+        $this->iso_code = $iso_code;
     }
 
     /**
-     * Get createdBy.
-     *
      * @return int
      */
     public function getCreatedBy()
     {
-        return $this->createdBy;
+        return $this->created_by;
     }
 
     /**
-     * Set createdAt.
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return Country
+     * @param int $created_by
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedBy($created_by)
     {
-        $this->createdAt = $createdAt;
-
-        return $this;
+        $this->created_by = $created_by;
     }
 
     /**
-     * Get createdAt.
-     *
      * @return \DateTime
      */
     public function getCreatedAt()
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
 
     /**
-     * Set updatedBy.
-     *
-     * @param int|null $updatedBy
-     *
-     * @return Country
+     * @param \DateTime $created_at
      */
-    public function setUpdatedBy($updatedBy = null)
+    public function setCreatedAt($created_at)
     {
-        $this->updatedBy = $updatedBy;
-
-        return $this;
+        $this->created_at = $created_at;
     }
 
     /**
-     * Get updatedBy.
-     *
      * @return int|null
      */
     public function getUpdatedBy()
     {
-        return $this->updatedBy;
+        return $this->updated_by;
     }
 
     /**
-     * Set updatedAt.
-     *
-     * @param \DateTime|null $updatedAt
-     *
-     * @return Country
+     * @param int|null $updated_by
      */
-    public function setUpdatedAt($updatedAt = null)
+    public function setUpdatedBy($updated_by)
     {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
+        $this->updated_by = $updated_by;
     }
 
     /**
-     * Get updatedAt.
-     *
      * @return \DateTime|null
      */
     public function getUpdatedAt()
     {
-        return $this->updatedAt;
+        return $this->updated_at;
     }
 
     /**
-     * Set refAsBy.
-     *
-     * @param int|null $refAsBy
-     *
-     * @return Country
+     * @param \DateTime|null $updated_at
      */
-    public function setRefAsBy($refAsBy = null)
+    public function setUpdatedAt($updated_at)
     {
-        $this->refAsBy = $refAsBy;
-
-        return $this;
+        $this->updated_at = $updated_at;
     }
 
     /**
-     * Get refAsBy.
-     *
      * @return int|null
      */
     public function getRefAsBy()
     {
-        return $this->refAsBy;
+        return $this->ref_as_by;
     }
 
     /**
-     * Returns user status as string.
-     * @return string
+     * @param int|null $ref_as_by
      */
-    public function getIsActiveAsString()
+    public function setRefAsBy($ref_as_by)
     {
-        $list = self::getIsActiveList();
-        if (isset($list[$this->isActive]))
-            return $list[$this->isActive];
-
-        return 'Unknown';
+        $this->ref_as_by = $ref_as_by;
     }
 
-    /**
-     * Returns possible statuses as array.
-     * @return array
-     */
-    public static function getIsActiveList($value = null)
-    {
-        $status = [
-            self::ACTIVE => 'Active',
-            self::INACTIVE => 'Inactive'
-        ];
-
-        if(isset($value) && isset($status[$value])) {
-            return $status[$value];
-        }
-        return $status;
-    }
 }

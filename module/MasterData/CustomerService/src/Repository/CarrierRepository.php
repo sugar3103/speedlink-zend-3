@@ -20,12 +20,12 @@ class CarrierRepository extends EntityRepository
             $queryBuilder->select("
                 c.id,
                 c.name,
-                c.nameEn,
+                c.name_en,
                 c.description,
-                c.descriptionEn,
+                c.description_en,
                 c.code,
                 c.status
-            ");
+            ")->where('c.is_deleted = 0');
             return $queryBuilder;
 
         } catch (QueryException $e) {
@@ -56,7 +56,7 @@ class CarrierRepository extends EntityRepository
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(Carrier::class, 'c')->where('c.isDeleted = 0');
+        $queryBuilder->from(Carrier::class, 'c');
 
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

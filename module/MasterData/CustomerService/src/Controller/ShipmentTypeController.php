@@ -2,9 +2,10 @@
 namespace CustomerService\Controller;
 
 use Core\Controller\CoreController;
+use CustomerService\Service\ShipmentTypeManager;
 use Doctrine\ORM\EntityManager;
 use CustomerService\Entity\ShipmentType;
-use Zend\View\Model\JsonModel;
+use CustomerService\Form\ShipmentTypeForm;
 
 class ShipmentTypeController extends CoreController
 {
@@ -22,16 +23,17 @@ class ShipmentTypeController extends CoreController
     /**
      * AuthController constructor.
      * @param $entityManager
-     * @param $serviceManager
+     * @param $shipmentTypeManager
      */
 
     public function __construct($entityManager, $shipmentTypeManager)
     {
+        parent::__construct($entityManager);
         $this->entityManager = $entityManager;
         $this->shipmentTypeManager = $shipmentTypeManager;
     }
 
-        public function indexAction()
+    public function indexAction()
     {
         if (!$this->getRequest()->isPost()) {
             // TODO: Check error_code
@@ -41,7 +43,7 @@ class ShipmentTypeController extends CoreController
         }
 
         $result = [
-            "totalRecords" => 0,
+            "total" => 0,
             "data" => []
         ];
 
@@ -54,16 +56,15 @@ class ShipmentTypeController extends CoreController
 
         $dataShipmentType = $this->shipmentTypeManager->getListShipmentTypeByCondition($currentPage, $limit, $sortField, $sortDirection, $filters);
 
-        $result["totalRecords"] = $dataShipmentType['totalShipmentType'];
+        $result['message'] = 'Success';
+        $result["total"] = $dataShipmentType['totalShipmentType'];
         $result["data"] = !empty($dataShipmentType['listShipmentType']) ? $dataShipmentType['listShipmentType'] : [];
-        $result['code'] = 0;
-        $result['message'] = ['Success'];
         $this->apiResponse = $result;
 
         return $this->createResponse();
     }
 
-        public function addAction()
+    public function addAction()
     {
         if (!$this->getRequest()->isPost()) {
             // TODO: Check error_code
@@ -102,7 +103,7 @@ class ShipmentTypeController extends CoreController
         return $this->createResponse();
     }
 
-        public function editAction()
+    public function editAction()
     {
         if (!$this->getRequest()->isPost()) {
             // TODO: Check error_code
@@ -142,7 +143,7 @@ class ShipmentTypeController extends CoreController
         return $this->createResponse();
     }
 
-        public function deleteAction()
+    public function deleteAction()
     {
         if (!$this->getRequest()->isPost()) {
             // TODO: Check error_code

@@ -4,6 +4,7 @@ namespace CustomerService\Validator;
 use Address\Entity\Country;
 use CustomerService\Entity\Carrier;
 use CustomerService\Entity\Service;
+use CustomerService\Entity\ShipmentType;
 use Zend\Validator\AbstractValidator;
 
 class ShipmentTypeExistsValidator extends AbstractValidator {
@@ -62,16 +63,19 @@ class ShipmentTypeExistsValidator extends AbstractValidator {
 
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
+        if ($this->options['language'] === NULL) {
+            $shipmentType = $entityManager->getRepository(ShipmentType::class)->findOneByName($value);
+        } else if($this->options['language'] === 'en') {
+            $shipmentType = $entityManager->getRepository(ShipmentType::class)->findOneBy(array('name_en' => $value));
+        }
 
-        $shipmentType = $entityManager->getRepository(Service::class)
-            ->findOneByName($value);
-
-        if ($this->options['shipmentType'] == null)
+        if ($this->options['shipmentType'] == null) {
             $isValid = ($shipmentType == null);
-        elseif ($this->options['shipmentType']->getName() != $value && $shipmentType != null)
+        } elseif ($this->options['shipmentType']->getName() != $value && $shipmentType != null) {
             $isValid = false;
-        else
+        } else {
             $isValid = true;
+        }
 
         // if there were an error, set error message.
         if (!$isValid)

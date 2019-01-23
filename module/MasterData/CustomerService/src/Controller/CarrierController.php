@@ -1,10 +1,11 @@
 <?php
 namespace CustomerService\Controller;
 
+use Core\Controller\CoreController;
+use CustomerService\Service\CarrierManager;
+use Doctrine\ORM\EntityManager;
 use CustomerService\Entity\Carrier;
 use CustomerService\Form\CarrierForm;
-use Core\Controller\CoreController;
-use Doctrine\ORM\EntityManager;
 
 class CarrierController extends CoreController
 {
@@ -34,15 +35,15 @@ class CarrierController extends CoreController
 
     public function indexAction()
     {
-        // if (!$this->getRequest()->isPost()) {
-        //     // TODO: Check error_code
-        //     $this->httpStatusCode = 405;
-        //     $this->apiResponse['message'] = 'Request not allow';
-        //     return $this->createResponse();
-        // }
+         if (!$this->getRequest()->isPost()) {
+             // TODO: Check error_code
+             $this->httpStatusCode = 405;
+             $this->apiResponse['message'] = 'Request not allow';
+             return $this->createResponse();
+         }
 
         $result = [
-            "totalRecords" => 0,
+            "total" => 0,
             "data" => []
         ];
 
@@ -55,10 +56,9 @@ class CarrierController extends CoreController
 
         $dataCarrier = $this->carrierManager->getListCarrierByCondition($currentPage, $limit, $sortField, $sortDirection, $filters);
 
-        $result["totalRecords"] = $dataCarrier['totalCarrier'];
+        $result['message'] = 'Success';
+        $result["total"] = $dataCarrier['totalCarrier'];
         $result["data"] = !empty($dataCarrier['listCarrier']) ? $dataCarrier['listCarrier'] : [];
-        $result['code'] = 0;
-        $result['message'] = ['Success'];
         $this->apiResponse = $result;
 
         return $this->createResponse();
