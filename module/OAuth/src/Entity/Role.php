@@ -276,6 +276,24 @@ class Role
         $this->description_en = $description_en;
     }
 
+      /**
+     * Get Parent Roles.
+     *
+     * @return ArrayCollection
+     */
+    public function getParentRoles() {
+        return $this->parentRoles;
+    }
+
+    /**
+     * Get Child Roles.
+     *
+     * @return ArrayCollection
+     */
+    public function getChildRoles() {
+        return $this->childRoles;
+    }
+    
     /**
      * Add Parent Role.
      *
