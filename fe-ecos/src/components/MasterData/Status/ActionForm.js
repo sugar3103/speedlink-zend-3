@@ -35,7 +35,11 @@ class Action extends Component {
   }
 
   componentDidMount() {
-    this.props.initialize(this.props.modalData);
+    const data = this.props.modalData;
+    if (data && data.status) {
+      data.status = data.status === 'active' ? 1 : 0;
+      this.props.initialize(data);
+    }
   }
   
 
