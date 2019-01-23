@@ -9,6 +9,7 @@ import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import Action from './Action';
+import Search from './Search';
 
 import {
   getStatusList,
@@ -121,6 +122,7 @@ class List extends Component {
               </ButtonToolbar>
               <Action modalOpen={modalOpen} />
             </div>
+            <Search />
             <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
             <Table responsive bordered hover>
               <thead>

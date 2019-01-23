@@ -6,11 +6,16 @@ import history from '../../../util/history';
 
 import {
   STATUS_GET_LIST,
+  STATUS_ADD_ITEM
 } from "../../../constants/actionTypes";
 
 import {
+  toggleStatusModal,
   getStatusListSuccess,
   getStatusListError,
+  addStatusItemSuccess,
+  addStatusItemError,
+  getStatusList,
 } from "./actions";
 
 import createNotification from '../../../util/notifications';
@@ -39,13 +44,13 @@ function* getStatusListItems({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(getStatusListError(response.message));
+        yield put(getStatusListError(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
         yield call(history.push, '/login');
-        yield put(createNotification({type: 'warning', message: 'Please login to countinue'}));
+        createNotification({type: 'warning', message: 'Please login to countinue'});
         break;
       default:
         break;
@@ -56,49 +61,47 @@ function* getStatusListItems({ payload }) {
   }
 }
 
-// //add status
+//add status
 
-// function addStatusApi(item) {
-//   return axios.request({
-//     method: 'post',
-//     url: `${apiUrl}/status/add`,
-//     headers: authHeader(),
-//     data: item
-//   });
-// }
+function addStatusApi(item) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}status/add`,
+    headers: authHeader(),
+    data: item
+  });
+}
 
-// const addStatusItemRequest = async item => {
-//   return await addStatusApi(item).then(res => res.data).catch(err => err)
-// };
+const addStatusItemRequest = async item => {
+  return await addStatusApi(item).then(res => res.data).catch(err => err)
+};
 
-// function* addStatusItem({ payload }) {
-//   const { item, history } = payload;
-//   try {
-//     const response = yield call(addStatusItemRequest, item);
-//     switch (response.error_code) {
-//       case EC_SUCCESS:
-//         yield put(addStatusItemSuccess(response.result));
-//         yield put(getStatusList(history));
-//         yield put(toggleStatusModal());
-//         yield put(alertSuccess(response.result.message));
-//         break;
+function* addStatusItem({ payload }) {
+  try {
+    const response = yield call(addStatusItemRequest, payload);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(addStatusItemSuccess());
+        yield put(getStatusList(history));
+        yield put(toggleStatusModal());
+        createNotification({type: 'success', message: response.message});
+        break;
 
-//       case EC_FAILURE:
-//         yield put(addStatusItemError(response.message));
-//         break;
-
-//       case EC_FAILURE_AUTHENCATION:
-//         localStorage.removeItem('user');
-//         history.push('/login');
-//         yield put(alertDanger('Please login to countinue'))
-//         break;
-//       default:
-//         break;
-//     }
-//   } catch (error) {
-//     yield put(addStatusItemError(error));
-//   }
-// }
+      case EC_FAILURE:
+        yield put(addStatusItemError(response.data));
+        break;
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        yield call(history.push, '/login');
+        createNotification({type: 'warning', message: 'Please login to countinue'});
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(addStatusItemError(error));
+  }
+}
 
 // //update status
 
@@ -190,9 +193,9 @@ export function* watchGetList() {
   yield takeEvery(STATUS_GET_LIST, getStatusListItems);
 }
 
-// export function* wathcAddItem() {
-//   yield takeEvery(STATUS_ADD_ITEM, addStatusItem);
-// }
+export function* wathcAddItem() {
+  yield takeEvery(STATUS_ADD_ITEM, addStatusItem);
+}
 
 // export function* wathcUpdateItem() {
 //   yield takeEvery(STATUS_UPDATE_ITEM, updateStatusItem);
@@ -204,5 +207,5 @@ export function* watchGetList() {
 
 
 export default function* rootSaga() {
-  yield all([fork(watchGetList)]);
+  yield all([fork(watchGetList), fork(wathcAddItem)]);
 }

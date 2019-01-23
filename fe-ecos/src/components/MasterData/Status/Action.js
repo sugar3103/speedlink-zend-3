@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 import { Modal } from 'reactstrap';
+import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
+import { addStatusItem, updateStatusItem, toggleStatusModal } from '../../../redux/actions';
 
 class Action extends Component {
 
   handleSubmit = values => {
-    console.log(values);
+    this.props.addStatusItem(values);
+  }
+
+  toggleModal = () => {
+    this.props.toggleStatusModal();
   }
 
   render() {
@@ -21,4 +27,8 @@ class Action extends Component {
   }
 }
 
-export default Action;
+export default connect(null, {
+  addStatusItem,
+  updateStatusItem,
+  toggleStatusModal
+})(Action);

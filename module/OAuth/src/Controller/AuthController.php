@@ -79,8 +79,9 @@ class AuthController extends CoreController {
             // store login status.
             $isLoginError = false;
 
-            $data = $this->getRequestData();            
-            $form->setData($data);                        
+            $data = $this->getRequestData();  
+            $data['remember_me'] = $data['remember_me'] ? 1 : 0;          
+            $form->setData($data);            
             // Validate From
             if ($form->isValid()) {
 

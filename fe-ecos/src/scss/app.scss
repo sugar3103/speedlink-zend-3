@@ -18,6 +18,7 @@
 @import './component/table';
 @import './component/load';
 @import './component/form';
+@import './component/radio-btn';
 @import './component/tabs';
 @import './component/toggle-btn'; 
 @import './component/pagination'; 
@@ -29,4 +30,7 @@
 
 //objects...
 @import 'objects/layout.scss';
+
+//customs
+@import './customs.scss';
 

@@ -49,13 +49,22 @@ module.exports = {
   'status.created-at': 'Ngày tạo',
   'status.action': 'Hành động',
   'status.active': 'Kích hoạt',
-  'status.inactive': 'Đã ẩn',
+  'status.inactive': 'Ẩn',
   'status.cancel': 'Hủy bỏ',
   'status.save': 'Lưu',
+  'status.search': 'Tìm kiếm',
+  'status.clear': 'Làm mới',
+  'status.all': 'Tất cả',
   //validate
   'status.validate-name-empty': 'Tên không được bỏ trống',
+  'status.validate-name-minlength': 'Tên phải có trên 5 ký tự',
+  'status.validate-name-maxlength': 'Tên phải có dưới 60 ký tự ',
+  'status.validate-name-exists': 'Tên đã tồn tại',
   'status.validate-nameEn-empty': 'Tên tiếng anh không được bỏ trống',
-  
+  'status.validate-nameEn-minlength': 'Tên tiếng anh phải có trên 5 ký tự',
+  'status.validate-nameEn-maxlength': 'Tên tiếng anh phải có dưới 60 ký tự',
+  'status.validate-nameEn-exists': 'Tên tiếng anh đã tồn tại',
+
   //Address
   'address.code' : 'Address Code',
   'address.countries': 'Quốc gia',
