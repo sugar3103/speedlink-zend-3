@@ -101,7 +101,7 @@ final class Version20181108064727 extends AbstractMigration
               created_by int(11) not null,
               created_at  timestamp default current_timestamp()   not null,
               updated_by int(11) null,
-              updated_at  timestamp default current_timestamp()   not null              
+              updated_at  timestamp default current_timestamp()   null              
             )
               collate = utf8_unicode_ci');
 
