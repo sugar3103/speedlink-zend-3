@@ -1,5 +1,4 @@
 <?php
-
 namespace Address\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -7,158 +6,137 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * District
  *
- * @ORM\Table(name="district")
+ * @ORM\Table(name="district", uniqueConstraints={@ORM\UniqueConstraint(name="unique_district_id", columns={"id"})})
  * @ORM\Entity(repositoryClass="\Address\Repository\DistrictRepository")
  */
 class District
 {
-    const ACTIVE = 1;
-    const INACTIVE = 0;
     /**
      * @var int
      *
-     * @ORM\Column(name="district_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $districtId;
+    private $id;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="city_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="city_id", type="integer", nullable=false)
      */
-    private $cityId;
+    private $city_id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=50, precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="name", type="string", length=50, nullable=false)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name_en", type="string", length=50, precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="name_en", type="string", length=50, nullable=false)
      */
-    private $nameEn;
+    private $name_en;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="description", type="text", length=65535, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
     private $description;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="description_en", type="text", length=65535, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="description_en", type="text", length=65535, nullable=true)
      */
-    private $descriptionEn;
+    private $description_en;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="status", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="status", type="integer", nullable=true)
      */
     private $status;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_deleted", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="is_deleted", type="boolean", nullable=false)
      */
-    private $isDeleted;
+    private $is_deleted = '0';
 
     /**
      * @var int
      *
-     * @ORM\Column(name="created_by", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="created_by", type="integer", nullable=false)
      */
-    private $createdBy;
+    private $created_by;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="created_at", type="datetime", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    private $createdAt;
+    private $created_at;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="updated_by", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="updated_by", type="integer", nullable=true)
      */
-    private $updateBy;
+    private $updated_by;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="updated_at", type="datetime", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    private $updatedAt;
+    private $updated_at;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="ref_as_by", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="ref_as_by", type="integer", nullable=true)
      */
-    private $refAsBy;
-
+    private $ref_as_by;
 
     /**
-     * Get districtId.
-     *
      * @return int
      */
-    public function getDistrictId()
+    public function getId()
     {
-        return $this->districtId;
+        return $this->id;
     }
 
     /**
-     * Set cityId.
-     *
-     * @param int $cityId
-     *
-     * @return District
+     * @param int $id
      */
-    public function setCityId($cityId)
+    public function setId($id)
     {
-        $this->cityId = $cityId;
-
-        return $this;
+        $this->id = $id;
     }
 
     /**
-     * Get cityId.
-     *
      * @return int
      */
     public function getCityId()
     {
-        return $this->cityId;
+        return $this->city_id;
     }
 
     /**
-     * Set name.
-     *
-     * @param string $name
-     *
-     * @return District
+     * @param int $city_id
      */
-    public function setName($name)
+    public function setCityId($city_id)
     {
-        $this->name = $name;
-
-        return $this;
+        $this->city_id = $city_id;
     }
 
     /**
-     * Get name.
-     *
      * @return string
      */
     public function getName()
@@ -167,46 +145,30 @@ class District
     }
 
     /**
-     * Set nameEn.
-     *
-     * @param string $nameEn
-     *
-     * @return District
+     * @param string $name
      */
-    public function setNameEn($nameEn)
+    public function setName($name)
     {
-        $this->nameEn = $nameEn;
-
-        return $this;
+        $this->name = $name;
     }
 
     /**
-     * Get nameEn.
-     *
      * @return string
      */
     public function getNameEn()
     {
-        return $this->nameEn;
+        return $this->name_en;
     }
 
     /**
-     * Set description.
-     *
-     * @param string|null $description
-     *
-     * @return District
+     * @param string $name_en
      */
-    public function setDescription($description = null)
+    public function setNameEn($name_en)
     {
-        $this->description = $description;
-
-        return $this;
+        $this->name_en = $name_en;
     }
 
     /**
-     * Get description.
-     *
      * @return string|null
      */
     public function getDescription()
@@ -215,46 +177,30 @@ class District
     }
 
     /**
-     * Set descriptionEn.
-     *
-     * @param string|null $descriptionEn
-     *
-     * @return District
+     * @param string|null $description
      */
-    public function setDescriptionEn($descriptionEn = null)
+    public function setDescription($description)
     {
-        $this->descriptionEn = $descriptionEn;
-
-        return $this;
+        $this->description = $description;
     }
 
     /**
-     * Get descriptionEn.
-     *
      * @return string|null
      */
     public function getDescriptionEn()
     {
-        return $this->descriptionEn;
+        return $this->description_en;
     }
 
     /**
-     * Set status.
-     *
-     * @param int|null $status
-     *
-     * @return District
+     * @param string|null $description_en
      */
-    public function setStatus($status = null)
+    public function setDescriptionEn($description_en)
     {
-        $this->status = $status;
-
-        return $this;
+        $this->description_en = $description_en;
     }
 
     /**
-     * Get status.
-     *
      * @return int|null
      */
     public function getStatus()
@@ -263,176 +209,107 @@ class District
     }
 
     /**
-     * Set isDeleted.
-     *
-     * @param bool $isDeleted
-     *
-     * @return District
+     * @param int|null $status
      */
-    public function setIsDeleted($isDeleted)
+    public function setStatus($status)
     {
-        $this->isDeleted = $isDeleted;
-
-        return $this;
+        $this->status = $status;
     }
 
     /**
-     * Get isDeleted.
-     *
      * @return bool
      */
-    public function getIsDeleted()
+    public function isDeleted()
     {
-        return $this->isDeleted;
+        return $this->is_deleted;
     }
 
     /**
-     * Set createdBy.
-     *
-     * @param int $createdBy
-     *
-     * @return District
+     * @param bool $is_deleted
      */
-    public function setCreatedBy($createdBy)
+    public function setIsDeleted($is_deleted)
     {
-        $this->createdBy = $createdBy;
-
-        return $this;
+        $this->is_deleted = $is_deleted;
     }
 
     /**
-     * Get createdBy.
-     *
      * @return int
      */
     public function getCreatedBy()
     {
-        return $this->createdBy;
+        return $this->created_by;
     }
 
     /**
-     * Set createdAt.
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return District
+     * @param int $created_by
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedBy($created_by)
     {
-        $this->createdAt = $createdAt;
-
-        return $this;
+        $this->created_by = $created_by;
     }
 
     /**
-     * Get createdAt.
-     *
      * @return \DateTime
      */
     public function getCreatedAt()
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
 
     /**
-     * Set updateBy.
-     *
-     * @param int|null $updateBy
-     *
-     * @return District
+     * @param \DateTime $created_at
      */
-    public function setUpdateBy($updateBy = null)
+    public function setCreatedAt($created_at)
     {
-        $this->updateBy = $updateBy;
-
-        return $this;
+        $this->created_at = $created_at;
     }
 
     /**
-     * Get updateBy.
-     *
      * @return int|null
      */
-    public function getUpdateBy()
+    public function getUpdatedBy()
     {
-        return $this->updateBy;
+        return $this->updated_by;
     }
 
     /**
-     * Set updatedAt.
-     *
-     * @param \DateTime|null $updatedAt
-     *
-     * @return District
+     * @param int|null $updated_by
      */
-    public function setUpdatedAt($updatedAt = null)
+    public function setUpdatedBy($updated_by)
     {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
+        $this->updated_by = $updated_by;
     }
 
     /**
-     * Get updatedAt.
-     *
      * @return \DateTime|null
      */
     public function getUpdatedAt()
     {
-        return $this->updatedAt;
+        return $this->updated_at;
     }
 
     /**
-     * Set refAsBy.
-     *
-     * @param int|null $refAsBy
-     *
-     * @return District
+     * @param \DateTime|null $updated_at
      */
-    public function setRefAsBy($refAsBy = null)
+    public function setUpdatedAt($updated_at)
     {
-        $this->refAsBy = $refAsBy;
-
-        return $this;
+        $this->updated_at = $updated_at;
     }
 
     /**
-     * Get refAsBy.
-     *
      * @return int|null
      */
     public function getRefAsBy()
     {
-        return $this->refAsBy;
-    }
-
-     /**
-     * Returns user status as string.
-     * @return string
-     */
-    public function getIsActiveAsString()
-    {
-        $list = self::getIsActiveList();
-        if (isset($list[$this->isActive]))
-            return $list[$this->isActive];
-
-        return 'Unknown';
+        return $this->ref_as_by;
     }
 
     /**
-     * Returns possible statuses as array.
-     * @return array
+     * @param int|null $ref_as_by
      */
-    public static function getIsActiveList($value = null)
+    public function setRefAsBy($ref_as_by)
     {
-        $status = [
-            self::ACTIVE => 'Active',
-            self::INACTIVE => 'Inactive'
-        ];
-        
-        if(isset($status[$value])) {
-            return $status[$value];
-        }
-        return $status;
+        $this->ref_as_by = $ref_as_by;
     }
+
 }

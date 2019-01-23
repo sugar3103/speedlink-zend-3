@@ -19,18 +19,18 @@ class ShipmentTypeRepository extends EntityRepository
             $queryBuilder->select("
                 smt.id,
                 smt.name,
-                smt.nameEn,
+                smt.name_en,
                 smt.description,
-                smt.descriptionEn,
-                smt.code AS shipmentTypeCode,
-                smt.categoryCode,
-                smt.productTypeCode,
-                smt.volumetricNumber,
+                smt.description_en,
+                smt.code AS shipment_type_code,
+                smt.category_code,
+                smt.product_type_code,
+                smt.volumetric_number,
                 smt.status,
-                smt.carrierId,
-                c.code AS carrierCode,
-                smt.serviceId,
-                s.code AS serviceCode
+                smt.carrier_id,
+                c.code AS carrier_code,
+                smt.service_id,
+                s.code AS service_code
             ");
             return $queryBuilder;
         } catch (QueryException $e) {
@@ -62,9 +62,9 @@ class ShipmentTypeRepository extends EntityRepository
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(ShipmentType::class, 'smt')
-            ->leftJoin('smt.joinCarrier', 'c')
-            ->leftJoin('smt.joinService', 's')
-            ->where('smt.isDeleted = 0');
+            ->leftJoin('smt.join_carrier', 'c')
+            ->leftJoin('smt.join_service', 's')
+            ->where('smt.is_deleted = 0');
 
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

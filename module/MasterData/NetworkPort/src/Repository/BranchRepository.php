@@ -1,8 +1,8 @@
 <?php
 namespace NetworkPort\Repository;
 
+use Core\Utils\Utils;
 use NetworkPort\Entity\Branch;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
@@ -11,8 +11,8 @@ use Doctrine\ORM\QueryBuilder;
  * This is the custom repository class for User entity.
  * @package NetworkPort\Repository
  */
-class BranchRepository extends EntityRepository {
-
+class BranchRepository extends EntityRepository
+{
     /**
      * Get list user by condition
      *
@@ -22,32 +22,32 @@ class BranchRepository extends EntityRepository {
      * @return array|QueryBuilder
      */
     public function getListBranchByCondition(
-        $sortField = 'u.branchId',
+        $sortField = 'b.id',
         $sortDirection = 'asc',
         $filters = []
     )
     {
         try {
             $queryBuilder = $this->buildBranchQueryBuilder($sortField, $sortDirection, $filters);
-            $queryBuilder->select(
-                "u.branchId,
-                u.code,
-                u.name,
-                u.status,
-                u.createdAt,
-                u.createdBy,
-                u.updatedAt,
-                u.updatedBy,
-                u.hubId,
+            $queryBuilder->select("
+                b.id,
+                b.code,
+                b.name,
+                b.status,
+                b.created_at,
+                b.created_by,
+                b.updated_at,
+                b.updated_by,
+                b.hub_id,
                 h.name AS hub_name,
                 d.name AS district,
                 c.name AS city,
                 w.name AS ward,
                 co.name AS country,
-                u.description"
-            );
-            return $queryBuilder;
+                b.description
+            ")->where('b.is_deleted = 0');
 
+            return $queryBuilder;
         } catch (QueryException $e) {
             return [];
         }
@@ -62,73 +62,44 @@ class BranchRepository extends EntityRepository {
      * @return QueryBuilder
      * @throws QueryException
      */
-    public function buildBranchQueryBuilder($sortField = 'u.branchId', $sortDirection = 'asc', $filters)
+    public function buildBranchQueryBuilder($sortField = 'b.id', $sortDirection = 'asc', $filters)
     {
-
         $operatorsMap = [
             'branch_id' => [
-                'alias' => 'u.branchId',
+                'alias' => 'b.id',
                 'operator' => 'eq'
             ],
             'created_at' => [
-                'alias' => 'u.createdAt',
+                'alias' => 'b.created_at',
                 'operator' => 'contains'
             ],
             'status' => [
-                'alias' => 'u.status',
+                'alias' => 'b.status',
                 'operator' => 'eq'
             ],
             'country' => [
-                'alias' => 'u.country',
+                'alias' => 'b.country',
                 'operator' => 'eq'
             ],
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(Branch::class, 'u')
-        ->leftJoin('u.district', 'd')
-        ->leftJoin('u.city', 'c')
-        ->leftJoin('u.ward', 'w')
-        ->leftJoin('u.country', 'co')
-        ->leftJoin('u.hub', 'h');
-            // ->groupBy('u.id')
-            // ->where('u.deletedAt is null')
-            // ->andWhere('u.id <> 1')
+        $queryBuilder->from(Branch::class, 'b')
+        ->leftJoin('b.district', 'd')
+        ->leftJoin('b.city', 'c')
+        ->leftJoin('b.ward', 'w')
+        ->leftJoin('b.country', 'co')
+        ->leftJoin('b.hub', 'h');
+        // ->groupBy('b.id')
+        // ->where('b.deletedAt is null')
+        // ->andWhere('b.id <> 1')
             
-        if ($sortField != NULL && $sortDirection != NULL)
+        if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
-        else
-            $queryBuilder->orderBy('u.branchId', 'DESC');
-
-        return $this->setCriteriaListUserByFilters($filters, $operatorsMap, $queryBuilder);
-    }
-
-    /**
-     * Set criteria list by filters
-     *
-     * @param array $filters
-     * @param array $operatorsMap
-     * @param QueryBuilder $queryBuilder
-     * @return QueryBuilder
-     * @throws QueryException
-     */
-    public function setCriteriaListUserByFilters($filters = [], $operatorsMap = [], QueryBuilder $queryBuilder)
-    {
-
-        foreach ($filters as $key => $value){
-
-           if (isset($operatorsMap[$key]) && $value !== "")
-                $expr = Criteria::create()->andWhere(Criteria::expr()->{$operatorsMap[$key]['operator']}($operatorsMap[$key]['alias'], $value));
-            elseif ($value === "")
-                continue;
-            else
-                $expr = Criteria::create()->andWhere(Criteria::expr()->contains($operatorsMap[$key]['alias'], $value));
-
-            $queryBuilder->addCriteria($expr);
+        } else {
+            $queryBuilder->orderBy('b.id', 'DESC');
         }
-
-        return $queryBuilder;
+        return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
-
 
 }

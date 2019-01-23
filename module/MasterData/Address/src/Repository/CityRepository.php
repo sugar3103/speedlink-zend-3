@@ -2,7 +2,6 @@
 namespace Address\Repository;
 
 use Address\Entity\City;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
@@ -32,20 +31,20 @@ class CityRepository extends EntityRepository {
     {
         try {
             $queryBuilder = $this->buildCityQueryBuilder($sortField, $sortDirection, $filters);
-            $queryBuilder->select(
-                "c.cityId,
-                 c.name,
-                 c.description,
-                 c.status,
-                 c.createdBy,
-                 c.createdAt"                 
-            )->groupBy('c.cityId')
+            $queryBuilder->select("
+                c.id,
+                c.name,
+                c.description,
+                c.status,
+                c.created_by,
+                c.created_at
+            ")->andWhere("c.is_deleted = 0")
+            ->groupBy('c.id')
             ->setMaxResults($limit)
             ->setFirstResult($offset);
-            return $queryBuilder;
 
+            return $queryBuilder;
         } catch (QueryException $e) {
-            
             return [];
         }
 
@@ -65,7 +64,7 @@ class CityRepository extends EntityRepository {
 
         $operatorsMap = [
             'country_id' => [
-                'alias' => 'c.countryId',
+                'alias' => 'c.country_id',
                 'operator' => 'eq'
             ],
             
@@ -75,7 +74,7 @@ class CityRepository extends EntityRepository {
             ],
 
             'created_at' => [
-                'alias' => 'c.createdAt',
+                'alias' => 'c.created_at',
                 'operator' => 'contains'
             ],
             'status' => [
@@ -88,11 +87,11 @@ class CityRepository extends EntityRepository {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(City::class, 'c');
 
-        if ($sortField != NULL && $sortDirection != NULL)
+        if ($sortField != NULL && $sortDirection != NULL){
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
-        else
+        } else {
             $queryBuilder->orderBy('c.name', 'ASC');
-
+        }
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
 }

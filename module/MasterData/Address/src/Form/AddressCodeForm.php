@@ -6,21 +6,11 @@ use Address\Validator\CityExistsValidator;
 use Doctrine\ORM\EntityManager;
 use Zend\Filter\StringTrim;
 use Zend\Filter\ToInt;
-use Zend\Form\Element\Button;
-use Zend\Form\Element\Csrf;
-use Zend\Form\Element\Password;
-use Zend\Form\Element\Select;
-use Zend\Form\Element\Submit;
-use Zend\Form\Element\Text;
 use Zend\Form\Form;
-use Zend\InputFilter\ArrayInput;
-use Zend\Validator\GreaterThan;
-use Zend\Validator\Identical;
-use Zend\Validator\InArray;
 use Zend\Validator\StringLength;
 
-class CityForm extends Form {
-    
+class AddressCodeForm extends Form
+{
     /**
      * Scenario ('create' or 'update')
      * @var string
@@ -44,7 +34,6 @@ class CityForm extends Form {
         // Define form name.
         parent::__construct('city-form');
 
-        
         // Save parameters for internal use.
         $this->scenario = $scenario;
         $this->entityManager = $entityManager;
@@ -56,7 +45,8 @@ class CityForm extends Form {
      /**
      * This method creates input filter (used for form filtering/validation).
      */
-    private function addInputFilter() {
+    private function addInputFilter()
+    {
         // Create main input filter.
         $inputFilter = $this->getInputFilter();
 
@@ -125,6 +115,5 @@ class CityForm extends Form {
                 ]
             ] 
         ]);
-        
     }
 }

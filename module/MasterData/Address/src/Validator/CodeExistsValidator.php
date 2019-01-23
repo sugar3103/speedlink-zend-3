@@ -4,7 +4,7 @@ namespace Address\Validator;
 use Address\Entity\City;
 use Zend\Validator\AbstractValidator;
 
-class CityExistsValidator extends AbstractValidator {
+class CodeExistsValidator extends AbstractValidator {
 
     /**
      * Available validator options.

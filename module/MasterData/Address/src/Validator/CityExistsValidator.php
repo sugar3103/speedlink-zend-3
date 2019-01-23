@@ -62,22 +62,24 @@ class CityExistsValidator extends AbstractValidator {
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
 
-        if($this->options['language'] === NULL) {
+        if ($this->options['language'] === NULL) {
             $city = $entityManager->getRepository(City::class)->findOneByName($value);
         } else if($this->options['language'] === 'en') { 
-            $city = $entityManager->getRepository(City::class)->findOneByNameEn($value);
+            $city = $entityManager->getRepository(City::class)->findOneBy(array('name_en' => $value));
         }
        
-        if ($this->options['city'] == null)
+        if ($this->options['city'] == null) {
             $isValid = ($city == null);
-        elseif ($this->options['city']->getName() != $value && $city != null)
-            $isValid = false;            
-        else
+        } elseif ($this->options['city']->getName() != $value && $city != null) {
+            $isValid = false;
+        } else {
             $isValid = true;
+        }
 
         // if there were an error, set error message.
-        if (!$isValid)
+        if (!$isValid) {
             $this->error(self::CITY_EXISTS);
+        }
 
         // return validation result
         return $isValid;
