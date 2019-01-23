@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { toggleStatusModal } from '../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../containers/Shared/form/CustomField';
-import renderSelectField from '../../../containers/Shared/form/Select';
+import renderRadioButtonField from '../../../containers/Shared/form/RadioButton';
 import classnames from 'classnames';
 import validate from './validateActionForm';
 
@@ -15,8 +15,29 @@ class Action extends Component {
     super();
     this.state = {
       activeTab: '1',
+      errors: {}
     };
   }
+
+  onChange = (e) => {
+    this.setState({
+      errors: {}
+    });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      const { errors } = nextProps;
+      this.setState({
+        errors: errors
+      });
+    }
+  }
+
+  componentDidMount() {
+    this.props.initialize(this.props.modalData);
+  }
+  
 
   toggleTab = (tab) => {
     if (this.state.activeTab !== tab) {
@@ -33,7 +54,8 @@ class Action extends Component {
   render() {
     const { messages } = this.props.intl;
     const { handleSubmit } = this.props;
-
+    const { errors } = this.state;
+    
     return (
       <form className="form" onSubmit={handleSubmit}>
         <div className="modal__header">
@@ -75,8 +97,10 @@ class Action extends Component {
                         component={CustomField}
                         type="text"
                         placeholder={messages['status.name']}
+                        onChange={this.onChange}
                       />
                     </div>
+                    {errors && errors.name && errors.name.statusExists && <span className="form__form-group-error">{messages['status.validate-name-exists']}</span>}
                   </div>
                   <div className="form__form-group">
                     <span className="form__form-group-label">{messages['status.desc']}</span>
@@ -94,18 +118,20 @@ class Action extends Component {
                     <span className="form__form-group-label">{messages['status.name-en']}</span>
                     <div className="form__form-group-field">
                       <Field
-                        name="nameEn"
+                        name="name_en"
                         component={CustomField}
                         type="text"
                         placeholder={messages['status.name-en']}
+                        onChange={this.onChange}
                       />
                     </div>
+                    {errors && errors.name_en && errors.name_en.statusExists && <span className="form__form-group-error">{messages['status.validate-nameEn-exists']}</span>}
                   </div>
                   <div className="form__form-group">
                     <span className="form__form-group-label">{messages['status.desc-en']}</span>
                     <div className="form__form-group-field">
                       <Field
-                        name="descriptionEn"
+                        name="description_en"
                         component="textarea"
                         type="text"
                       />
@@ -118,11 +144,16 @@ class Action extends Component {
                 <div className="form__form-group-field">
                   <Field
                     name="status"
-                    component={renderSelectField}
-                    options={[
-                      { value: 'one', label: 'One' },
-                      { value: 'two', label: 'Two' },
-                    ]}
+                    component={renderRadioButtonField}
+                    label={messages['status.active']}
+                    radioValue={1}
+                  />
+                  <Field
+                    name="status"
+                    component={renderRadioButtonField}
+                    label={messages['status.inactive']}
+                    radioValue={0}
+                    defaultChecked
                   />
                 </div>
               </div>
@@ -130,17 +161,25 @@ class Action extends Component {
           </div>
         </div>
         <ButtonToolbar className="modal__footer">
-          <Button onClick={this.toggleModal}>{messages['status.cancel']}</Button>{' '}
-          <Button outline color="success" type="submit">{messages['status.save']}</Button>
+          <Button outline onClick={this.toggleModal}>{messages['status.cancel']}</Button>{' '}
+          <Button color="success" type="submit">{messages['status.save']}</Button>
         </ButtonToolbar>
       </form>
     );
   }
 }
 
+const mapStateToProps = ({status}) => {
+  const { errors, modalData } = status;
+  return {
+    errors,
+    modalData
+  }
+}
+
 export default reduxForm({
   form: 'status_action_form',
   validate
-})(injectIntl(connect(null, {
+})(injectIntl(connect(mapStateToProps, {
   toggleStatusModal
 })(Action)));
