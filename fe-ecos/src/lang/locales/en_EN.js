@@ -81,6 +81,7 @@ module.exports = {
   'address.ward': 'Ward',
 
   //User
+  'user.avatar': 'Avatar',
   'user.list': 'User List',
   'user.active': 'Enable',
   'user.inactive': 'Disable',
