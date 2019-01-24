@@ -87,7 +87,7 @@ module.exports = {
   'status.validate-nameEn-maxlength': 'English name must be 60 characters or less',
   'status.validate-nameEn-exists': 'English name already exists',
 
-  //Address
+  //Master-data --- Address
   'address.code' : 'Address Code',
   'address.countries': 'Countries',
   'address.country': 'Country',
@@ -97,7 +97,7 @@ module.exports = {
   'address.district': 'District',
   'address.wards': 'Wards',
   'address.ward': 'Ward',
-  //Address --- Code
+  //Master-data --- Address --- Code
   'code.list-title': 'List Address',
   'code.code': 'Code',
   'code.country': 'Country',
@@ -108,6 +108,43 @@ module.exports = {
   'code.search': 'Search',
   'code.clear': 'Clear',
   'code.no-result': 'no result found',
+  //Master-data --- Address --- Country
+  'country.list-title': 'Country List',
+  'country.add-new': 'Add New Country',
+  'country.update': 'Update Country',
+  'country.name': 'Name',
+  'country.name-en': 'English Name',
+  'country.desc': 'Description',
+  'country.desc-en': 'English Description',
+  'country.status': 'Status',
+  'country.iso-code': 'ISO Code',
+  'country.created-at': 'Created At',
+  'country.action': 'Action',
+  'country.active': 'Enable',
+  'country.inactive': 'Disable',
+  'country.cancel': 'Cancel',
+  'country.save': 'Save',
+  'country.search': 'Search',
+  'country.clear': 'Clear',
+  'country.all': 'All',
+  'country.no-result': 'No result found',
+  'country.title-confirm': 'Delete Country',
+  'country.desc-confirm': 'Are you sure delete this country?',
+  'country.confirm-no': 'No',
+  'country.confirm-yes': 'Yes, delete it!',
+  'country.add-success': 'You have added a country!',
+  'country.update-success': 'You have modified country!',
+  'country.delete-success': 'You have deleted country!',
+  //validate
+  'country.validate-name-empty': 'Name shouldn’t be empty',
+  'country.validate-name-minlength': 'Name must be 5 characters or more',
+  'country.validate-name-maxlength': 'Name must be 60 characters or less',
+  'country.validate-name-exists': 'Name already exists',
+  'country.validate-nameEn-empty': 'English name shouldn’t be empty',
+  'country.validate-nameEn-minlength': 'English name must be 5 characters or more',
+  'country.validate-nameEn-maxlength': 'English name must be 60 characters or less',
+  'country.validate-nameEn-exists': 'English name already exists',
+  'country.validate-isoCode-empty': 'ISO Code shouldn’t be empty',
 
   //User
   'user.avatar': 'Avatar',

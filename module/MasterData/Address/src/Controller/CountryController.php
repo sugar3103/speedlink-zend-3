@@ -79,7 +79,7 @@ class CountryController extends CoreController {
                 $this->countryManager->addCountry($data,$user);
 
                 $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have added a country!";
+                $this->apiResponse['message'] = "You have added a country!";
             } else {
                 $this->error_code = -1;                
                 // $this->apiResponse['message'] = "Error";
@@ -94,9 +94,9 @@ class CountryController extends CoreController {
 
         $user = $this->tokenPayload;
         $data = $this->getRequestData();
-        if(isset($data['country_id'])) {
+        if(isset($data['id'])) {
             // Find existing status in the database.
-            $country = $this->entityManager->getRepository(Country::class)->findOneBy(array('countryId' => $data['country_id']));    
+            $country = $this->entityManager->getRepository(Country::class)->findOneBy(array('id' => $data['id']));    
             if ($country) {
                 //Create Form Status
                 $form = new CountryForm('update', $this->entityManager, $country);
@@ -129,9 +129,9 @@ class CountryController extends CoreController {
     public function deleteAction()
     {
         $data = $this->getRequestData();
-        if(isset($data['country_id'])) {
+        if(isset($data['id'])) {
             // Find existing country in the database.
-            $country = $this->entityManager->getRepository(Country::class)->findOneBy(array('countryId' => $data['country_id']));    
+            $country = $this->entityManager->getRepository(Country::class)->findOneBy(array('id' => $data['id']));    
             if ($country == null) {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = "Status Not Found";
