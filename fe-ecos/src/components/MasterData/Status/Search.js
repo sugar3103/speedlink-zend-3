@@ -19,9 +19,7 @@ class Search extends Component {
     }
     this.props.getStatusList(params);
   }
-  reset = () => {
-    console.log('reset');
-  }
+
   render() {
     const { messages } = this.props.intl;
     return (

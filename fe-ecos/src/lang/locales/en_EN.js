@@ -37,6 +37,7 @@ module.exports = {
   'login.remember-me': 'Remember me',
   'login.login': 'Sign In',
   'login.register': 'Create Account',
+  'login.login-again': 'Please login again to countinue',
   'login.username-error-empty': 'Username field shouldn’t be empty',
   'login.password-error-empty': 'Password field shouldn’t be empty',
 
@@ -45,6 +46,7 @@ module.exports = {
   //master-data --- Status
   'status.list-title': 'Status List',
   'status.add-new': 'Add New Status',
+  'status.update': 'Update Status',
   'status.name': 'Name',
   'status.name-en': 'English Name',
   'status.desc': 'Description',
@@ -59,6 +61,14 @@ module.exports = {
   'status.search': 'Search',
   'status.clear': 'Clear',
   'status.all': 'All',
+  'status.no-result': 'No result found',
+  'status.title-confirm': 'Delete Status',
+  'status.desc-confirm': 'Are you sure delete this status?',
+  'status.confirm-no': 'No',
+  'status.confirm-yes': 'Yes, delete it!',
+  'status.add-success': 'You have added a status!',
+  'status.update-success': 'You have modified status!',
+  'status.delete-success': 'You have deleted status!',
   //validate
   'status.validate-name-empty': 'Name shouldn’t be empty',
   'status.validate-name-minlength': 'Name must be 5 characters or more',
@@ -81,6 +91,7 @@ module.exports = {
   'address.ward': 'Ward',
 
   //User
+  'user.avatar': 'Avatar',
   'user.list': 'User List',
   'user.active': 'Enable',
   'user.inactive': 'Disable',

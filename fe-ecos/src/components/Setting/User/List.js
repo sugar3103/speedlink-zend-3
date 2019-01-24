@@ -133,6 +133,7 @@ class List extends Component {
               <thead>
                 <tr>
                   <th>#</th>
+                  <th>{messages['user.avatar']}</th>
                   <th>{messages['user.username']}</th>
                   <th>{messages['user.fullname']}</th>
                   <th>{messages['user.status']}</th>

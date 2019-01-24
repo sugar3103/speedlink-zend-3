@@ -159,9 +159,6 @@ class StatusManager {
             $countRow = 1;
             
             foreach ($statuss as &$status) {
-                //set status
-                $status['status'] = Status::getIsActiveList($status['status']);
-
                 //set created_at
                 $status['created_at'] =  ($status['created_at']) ? $this->checkDateFormat($status['created_at'],'d/m/Y H:i:s') : '';
 

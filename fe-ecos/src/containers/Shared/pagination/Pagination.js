@@ -14,8 +14,8 @@ export default class PaginationComponent extends PureComponent {
     pagination: PropTypes.shape({
       currentPage: PropTypes.number.isRequired,
       selectedPageSize: PropTypes.number.isRequired,
-      total: PropTypes.number.isRequired
-    }).isRequired
+    }).isRequired,
+    total: PropTypes.number.isRequired
   };
 
   onChangePage = (e) => {
@@ -23,8 +23,8 @@ export default class PaginationComponent extends PureComponent {
   }
 
   render() {
-    const { pagination } = this.props;
-    const { total, currentPage, selectedPageSize } = pagination;
+    const { pagination, total } = this.props;
+    const { currentPage, selectedPageSize } = pagination;
     const totalPage = Math.ceil(total / selectedPageSize);
     const pageLimit = PAGE_LIMIT;
 
@@ -50,7 +50,7 @@ export default class PaginationComponent extends PureComponent {
       points.push(i);
     }
 
-    return (
+    return total === 0 ? '' : (
       <div className="pagination__wrap">
         <Pagination className="pagination">
           <PaginationItem className="pagination__item" disabled={currentPage === 1}>

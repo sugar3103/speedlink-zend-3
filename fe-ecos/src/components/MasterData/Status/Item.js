@@ -22,7 +22,7 @@ class Item extends Component {
       customUI: ({ onClose }) => {
         return (
           <div className='custom-ui-confirm'>
-            <h1>{messages["status.title-confirm"]}</h1>
+            <h2>{messages["status.title-confirm"]}</h2>
             <p>{messages["status.desc-confirm"]}</p>
             <Button color="light" size="sm" onClick={onClose}>{messages["status.confirm-no"]}</Button> &nbsp;
             <Button color="danger" size="sm" onClick={() => {
@@ -45,7 +45,7 @@ class Item extends Component {
         <td>{status.name_en}</td>
         <td>{status.description}</td>
         <td>{status.description_en}</td>
-        <td>{status.status === 'Active' ? <Badge color="success">{messages['status.active']}</Badge> : <Badge color="dark">{messages['status.inactive']}</Badge>}</td>
+        <td>{status.status === 1 ? <Badge color="success">{messages['status.active']}</Badge> : <Badge color="dark">{messages['status.inactive']}</Badge>}</td>
         <td>{status.created_at}</td>
         <td className="text-center">
           <Button color="info" size="sm" onClick={() => this.toggleModal(status)}><span className="lnr lnr-pencil" /></Button> &nbsp;

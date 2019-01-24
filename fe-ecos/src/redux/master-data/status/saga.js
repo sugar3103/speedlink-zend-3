@@ -7,7 +7,8 @@ import history from '../../../util/history';
 import {
   STATUS_GET_LIST,
   STATUS_ADD_ITEM,
-  STATUS_UPDATE_ITEM, 
+  STATUS_UPDATE_ITEM,
+  STATUS_DELETE_ITEM 
 } from "../../../constants/actionTypes";
 
 import {
@@ -18,6 +19,8 @@ import {
   addStatusItemError,
   updateStatusItemSuccess,
   updateStatusItemError,
+  deleteStatusItemSuccess,
+  deleteStatusItemError,
   getStatusList,
 } from "./actions";
 
@@ -53,7 +56,7 @@ function* getStatusListItems({ payload }) {
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
         yield call(history.push, '/login');
-        createNotification({type: 'warning', message: 'Please login to countinue'});
+        createNotification({type: 'warning', message: 'login.login-again'});
         break;
       default:
         break;
@@ -87,7 +90,7 @@ function* addStatusItem({ payload }) {
         yield put(addStatusItemSuccess());
         yield put(getStatusList());
         yield put(toggleStatusModal());
-        createNotification({type: 'success', message: response.message});
+        createNotification({type: 'success', message: 'status.add-success'});
         break;
 
       case EC_FAILURE:
@@ -96,7 +99,7 @@ function* addStatusItem({ payload }) {
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('user');
         yield call(history.push, '/login');
-        createNotification({type: 'warning', message: 'Please login to countinue'});
+        createNotification({type: 'warning', message: 'login.login-again'});
         break;
       default:
         break;
@@ -129,7 +132,7 @@ function* updateStatusItem({ payload }) {
         yield put(updateStatusItemSuccess());
         yield put(getStatusList());
         yield put(toggleStatusModal());
-        createNotification({type: 'success', message: response.message});
+        createNotification({type: 'success', message: 'status.update-success'});
         break;
 
       case EC_FAILURE:
@@ -139,7 +142,7 @@ function* updateStatusItem({ payload }) {
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('user');
         yield call(history.push, '/login');
-        createNotification({type: 'warning', message: 'Please login to countinue'});
+        createNotification({type: 'warning', message: 'login.login-again'});
         break;
       default:
         break;
@@ -149,47 +152,47 @@ function* updateStatusItem({ payload }) {
   }
 }
 
-// //delete status
+//delete status
 
-// function deleteStatusApi(id) {
-//   return axios.request({
-//     method: 'post',
-//     url: `${apiUrl}/status/delete/${id}`,
-//     headers: authHeader(),
-//   });
-// }
+function deleteStatusApi(id) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}status/delete`,
+    headers: authHeader(),
+    data: {  id: id }
+  });
+}
 
-// const deleteStatusItemRequest = async id => {
-//   return await deleteStatusApi(id).then(res => res.data).catch(err => err)
-// };
+const deleteStatusItemRequest = async id => {
+  return await deleteStatusApi(id).then(res => res.data).catch(err => err)
+};
 
-// function* deleteStatusItem({ payload }) {
-//   const { id, history } = payload;
-//   try {
-//     const response = yield call(deleteStatusItemRequest, id);
-//     switch (response.error_code) {
-//       case EC_SUCCESS:
-//         yield put(deleteStatusItemSuccess(response.result));
-//         yield put(getStatusList(history));
-//         yield put(alertSuccess(response.result.message));
-//         break;
+function* deleteStatusItem({ payload }) {
+  try {
+    const response = yield call(deleteStatusItemRequest, payload);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(deleteStatusItemSuccess());
+        yield put(getStatusList());
+        createNotification({type: 'success', message: 'status.delete-success'});
+        break;
 
-//       case EC_FAILURE:
-//         yield put(deleteStatusItemError(response.message));
-//         break;
+      case EC_FAILURE:
+        yield put(deleteStatusItemError(response.data));
+        break;
 
-//       case EC_FAILURE_AUTHENCATION:
-//         localStorage.removeItem('user');
-//         history.push('/login');
-//         yield put(alertDanger('Please login to countinue'))
-//         break;
-//       default:
-//         break;
-//     }
-//   } catch (error) {
-//     yield put(deleteStatusItemError(error));
-//   }
-// }
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        yield call(history.push, '/login');
+        createNotification({type: 'warning', message: 'login.login-again'});
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(deleteStatusItemError(error));
+  }
+}
 
 export function* watchGetList() {
   yield takeEvery(STATUS_GET_LIST, getStatusListItems);
@@ -203,11 +206,11 @@ export function* wathcUpdateItem() {
   yield takeEvery(STATUS_UPDATE_ITEM, updateStatusItem);
 }
 
-// export function* wathcDeleteItem() {
-//   yield takeEvery(STATUS_DELETE_ITEM, deleteStatusItem);
-// }
+export function* wathcDeleteItem() {
+  yield takeEvery(STATUS_DELETE_ITEM, deleteStatusItem);
+}
 
 
 export default function* rootSaga() {
-  yield all([fork(watchGetList), fork(wathcAddItem), fork(wathcUpdateItem)]);
+  yield all([fork(watchGetList), fork(wathcAddItem), fork(wathcUpdateItem), fork(wathcDeleteItem)]);
 }

@@ -33,6 +33,7 @@ module.exports = {
   'login.remember-me': 'Ghi nhớ đăng nhập',
   'login.login': 'Đăng Nhập',
   'login.register': 'Tạo tài khoản',
+  'login.login-again': 'Vui lòng đăng nhập lại để tiếp tục',
   'login.username-error-empty': 'Tên đăng nhập không được bỏ trống',
   'login.password-error-empty': 'Mật khẩu không được bỏ trống',
 
@@ -41,6 +42,7 @@ module.exports = {
   //master-data --- Status
   'status.list-title': 'Danh sách trạng thái',
   'status.add-new': 'Tạo mới trạng thái',
+  'status.update': 'Cập nhật trạng thái',
   'status.name': 'Tên',
   'status.name-en': 'Tên tiếng anh',
   'status.desc': 'Mô tả',
@@ -55,6 +57,14 @@ module.exports = {
   'status.search': 'Tìm kiếm',
   'status.clear': 'Làm mới',
   'status.all': 'Tất cả',
+  'status.no-result': 'Không tìm thấy kết quả',
+  'status.title-confirm': 'Xóa Trạng Thái',
+  'status.desc-confirm': 'Bạn chắc chắn muốn xóa trạng thái này?',
+  'status.confirm-no': 'Không',
+  'status.confirm-yes': 'Có, xóa nó!',
+  'status.add-success': 'Bạn đã thêm một trạng thái mới!',
+  'status.update-success': 'Bạn đã cập nhật một trạng thái!',
+  'status.delete-success': 'Bạn đã xóa một trạng thái!',
   //validate
   'status.validate-name-empty': 'Tên không được bỏ trống',
   'status.validate-name-minlength': 'Tên phải có trên 5 ký tự',

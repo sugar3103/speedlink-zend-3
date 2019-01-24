@@ -19,11 +19,13 @@ class Action extends Component {
   }
 
   render() {
+    const { modalData } = this.props;
+    const className = modalData ? 'primary' : 'success';
     return (
       <Modal
         isOpen={this.props.modalOpen}
         toggle={this.toggleModal}
-        className={`modal-dialog--success modal-dialog--header`}
+        className={`modal-dialog--${className} modal-dialog--header`}
       >
         <ActionForm onSubmit={this.handleSubmit} />
       </Modal>
@@ -31,7 +33,14 @@ class Action extends Component {
   }
 }
 
-export default connect(null, {
+const mapStateToProps = ({status}) => {
+  const { modalData } = status;
+  return {
+    modalData
+  }
+}
+
+export default connect(mapStateToProps, {
   addStatusItem,
   updateStatusItem,
   toggleStatusModal

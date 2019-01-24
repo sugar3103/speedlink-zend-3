@@ -42,6 +42,7 @@ class Item extends Component {
       <tr>
         <th scope="row">{user.id}</th>
         <td>{user.username}</td>
+        <td></td>
         <td>{user.full_name}</td>
         <td>{user.is_active === 1 ? <Badge color="success">{messages['user.active']}</Badge> : <Badge color="dark">{messages['user.inactive']}</Badge>}</td>
         <td>{user.created_at}</td>

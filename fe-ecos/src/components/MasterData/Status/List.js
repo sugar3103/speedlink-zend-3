@@ -32,7 +32,6 @@ class List extends Component {
     this.state = {
       selectedPageSize: SELECTED_PAGE_SIZE,
       currentPage: 1,
-      total: 20
     };
   }
 
@@ -77,19 +76,12 @@ class List extends Component {
     });
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps && nextProps.status && nextProps.status.total) {
-      this.setState({
-        total: nextProps.status.total
-      });
-    }
-  }
-
   componentDidMount() {
     this.props.getStatusList();
   }
 
   showStatusItem = (items) => {
+    const { messages } = this.props.intl;
     let result = null;
     if (items.length > 0) {
       result = items.map((item, index) => {
@@ -100,12 +92,16 @@ class List extends Component {
           />
         )
       })
+    } else {
+      result = (
+        <tr><td colSpan={8} className="text-center">{messages['status.no-result']}</td></tr>
+      )
     }
     return result;
   }
 
   render() {
-    const { items, loading, modalOpen } = this.props.status;
+    const { items, loading, modalOpen, total } = this.props.status;
     const { messages } = this.props.intl;
     return (
       <Col md={12} lg={12}>
@@ -139,13 +135,13 @@ class List extends Component {
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={8} className="text-center"><div className="panel__refresh" /></td></tr>
+                  <tr><td colSpan={8} className="text-center"><div className="loading-table" /></td></tr>
                 ) : (
                     this.showStatusItem(items)
                   )}
               </tbody>
             </Table>
-            <Pagination pagination={this.state} onChangePage={this.onChangePage} />
+            <Pagination pagination={this.state} total={total} onChangePage={this.onChangePage} />
           </CardBody>
         </Card>
       </Col>

@@ -27,6 +27,55 @@ legend.scheduler-border {
     border-bottom:none;
 }
 
+.loading-table {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: 2px solid rgba(#DDDDDD, 0.2);
+    border-radius: 50%;
+    border-top-color: #DDDDDD;
+    animation: spin 1s ease-in-out infinite;
+    -webkit-animation: spin 1s ease-in-out infinite;
+    z-index: 1;
+}
+  
+.react-confirm-alert-overlay {
+    background: rgba(0, 0, 0, 0.5) !important;
+}
+.custom-ui-confirm {
+    text-align: center;
+    width: 100%;
+    padding: 30px;
+    background: #fff;
+    box-shadow: 0 20px 75px rgba(0, 0, 0, 0.23);
+    color: #000;
+
+    p {
+        margin-bottom: 10px;
+    }
+}
+
 .search-group-button {
     margin-left: auto;
+    .btn {
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }
+}
+
+.master-data-list {
+    .form__form-group {
+        margin-bottom: 0px;
+    }
+    
+    .products-list__search {
+        svg {
+            position: absolute;
+            right: 5px;
+            top: 9px;
+            fill: #999;
+            height: 14px;
+            width: 14px;
+        }
+    }
 }

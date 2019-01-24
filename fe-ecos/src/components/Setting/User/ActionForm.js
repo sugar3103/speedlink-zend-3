@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Button, ButtonToolbar, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleStatusModal } from '../../../redux/actions';
+import { toggleUserModal } from '../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../containers/Shared/form/CustomField';
 import renderRadioButtonField from '../../../containers/Shared/form/RadioButton';
@@ -37,6 +37,7 @@ class Action extends PureComponent {
   componentDidMount() {
     const data = this.props.modalData;     
     if (data) {
+      data.status = data.status === 'Active' ? 1 : 0;
       this.props.initialize(data);
     }
   }
@@ -51,20 +52,19 @@ class Action extends PureComponent {
   };
 
   toggleModal = () => {
-    this.props.toggleStatusModal();
+    this.props.toggleUserModal();
   }
 
   render() {
     const { messages } = this.props.intl;
-    const { handleSubmit, modalData } = this.props;
+    const { handleSubmit } = this.props;
     const { errors } = this.state;
-    const className = modalData ? 'primary' : 'success';
-    const title = modalData ? messages['status.update'] : messages['status.add-new'];
     
     return (
       <form className="form" onSubmit={handleSubmit}>
         <div className="modal__header">
-          <h4 className="bold-text  modal__title">{title}</h4>
+          <button className="lnr lnr-cross modal__close-btn" onClick={this.toggleModal} />
+          <h4 className="bold-text  modal__title">{messages['status.add-new']}</h4>
         </div>
         <div className="modal__body">
           <div className="tabs">
@@ -166,7 +166,7 @@ class Action extends PureComponent {
         </div>
         <ButtonToolbar className="modal__footer">
           <Button outline onClick={this.toggleModal}>{messages['status.cancel']}</Button>{' '}
-          <Button color={className} type="submit">{messages['status.save']}</Button>
+          <Button color="success" type="submit">{messages['status.save']}</Button>
         </ButtonToolbar>
       </form>
     );
@@ -185,5 +185,5 @@ export default reduxForm({
   form: 'status_action_form',
   validate  
 })(injectIntl(connect(mapStateToProps, {
-  toggleStatusModal
+  toggleUserModal
 })(Action)));

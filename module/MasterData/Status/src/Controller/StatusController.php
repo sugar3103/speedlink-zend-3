@@ -128,7 +128,6 @@ class StatusController extends CoreController {
 
     public function deleteAction()
     {
-        
         $data = $this->getRequestData();
         if(isset($data['id'])) {
             // Find existing status in the database.
