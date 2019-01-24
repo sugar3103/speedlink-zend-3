@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { injectIntl } from 'react-intl';
 import { Modal } from 'reactstrap';
 import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
@@ -7,10 +8,11 @@ import { addStatusItem, updateStatusItem, toggleStatusModal } from '../../../red
 class Action extends Component {
 
   handleSubmit = values => {
+    const { messages } = this.props.intl;
     if (values.id) {
-      this.props.updateStatusItem(values);
+      this.props.updateStatusItem(values, messages);
     } else {
-      this.props.addStatusItem(values);
+      this.props.addStatusItem(values, messages);
     }
   }
 
@@ -40,8 +42,8 @@ const mapStateToProps = ({status}) => {
   }
 }
 
-export default connect(mapStateToProps, {
+export default injectIntl(connect(mapStateToProps, {
   addStatusItem,
   updateStatusItem,
   toggleStatusModal
-})(Action);
+})(Action));

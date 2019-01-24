@@ -9,6 +9,11 @@ module.exports = {
   'layout.locale-vie': 'Vietnamese',
   'layout.locale-eng': 'English',
 
+  //notification
+  'notification.success': 'Success',
+  'notification.warning': 'Warning',
+  'notification.error': 'Error',
+
   //menu
   'menu.dashboard': 'Dashboard',
   'menu.master-data': 'Master Data',

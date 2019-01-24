@@ -6,13 +6,13 @@ export default function createNotification(noti) {
       NotificationManager.info(noti.message);
       break;
     case 'success':
-      NotificationManager.success(noti.message, 'notification.success');
+      NotificationManager.success(noti.message, noti.title);
       break;
     case "warning":
-      NotificationManager.warning(noti.message, 'notification.warning');
+      NotificationManager.warning(noti.message, noti.title);
       break;
     case 'error':
-      NotificationManager.error(noti.message, 'notification.error');
+      NotificationManager.error(noti.message, noti.title);
       break;
     default:
       return;

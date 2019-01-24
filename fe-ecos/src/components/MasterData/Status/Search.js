@@ -10,6 +10,7 @@ import  { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 class Search extends Component {
 
   handleSubmit = values => {
+    const { messages } = this.props.intl;
     const params = {
       offset: {
         start: 1,
@@ -17,7 +18,7 @@ class Search extends Component {
       },
       query: values
     }
-    this.props.getStatusList(params);
+    this.props.getStatusList(params, messages);
   }
 
   render() {

@@ -26,7 +26,7 @@ class Item extends Component {
             <p>{messages["status.desc-confirm"]}</p>
             <Button color="light" size="sm" onClick={onClose}>{messages["status.confirm-no"]}</Button> &nbsp;
             <Button color="danger" size="sm" onClick={() => {
-              this.props.deleteStatusItem(id)
+              this.props.deleteStatusItem(id, messages)
               onClose()
             }}>{messages["status.confirm-yes"]}</Button>
           </div>
