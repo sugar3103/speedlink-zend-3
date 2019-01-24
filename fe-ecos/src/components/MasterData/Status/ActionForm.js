@@ -8,6 +8,7 @@ import CustomField from '../../../containers/Shared/form/CustomField';
 import renderSelectField from '../../../containers/Shared/form/Select';
 import classnames from 'classnames';
 import validate from './validateActionForm';
+import PropTypes from 'prop-types';
 
 class Action extends Component {
 
@@ -29,7 +30,12 @@ class Action extends Component {
   toggleModal = () => {
     this.props.toggleStatusModal();
   }
-
+  componentWillReceiveProps(nextProps) {
+      if (nextProps && nextProps.modalData) {
+      const data = nextProps.modalData;
+      console.log(data);
+    }
+  }
   render() {
     const { messages } = this.props.intl;
     const { handleSubmit } = this.props;
@@ -138,9 +144,20 @@ class Action extends Component {
   }
 }
 
+Action.propTypes = {
+  modalData: PropTypes.object,
+}
+
+const mapStateToProps = ({  status })  => {
+  const { modalData } = status;
+  return {
+    modalData
+  }
+}
+
 export default reduxForm({
   form: 'status_action_form',
   validate
-})(injectIntl(connect(null, {
+})(injectIntl(connect(mapStateToProps, {
   toggleStatusModal
 })(Action)));

@@ -15,10 +15,10 @@ class Status
     
     /**
      * @ORM\Id
-     * @ORM\Column(name="status_id", type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue
      */
-    protected $status_id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string",name="name",unique=true)
@@ -71,7 +71,7 @@ class Status
      * @return mixed
      */
     public function getId() {
-        return $this->status_id;
+        return $this->id;
     }
 
     /**
@@ -80,7 +80,7 @@ class Status
      * @param $id
      */
     public function setId($id) {
-        $this->status_id = $id;
+        $this->id = $id;
     }
 
     /**

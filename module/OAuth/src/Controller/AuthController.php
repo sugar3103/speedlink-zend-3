@@ -70,7 +70,8 @@ class AuthController extends CoreController {
     public function loginAction() {
         // check if user has submitted the form.
         if ($this->getRequest()->isPost()) {
-
+            // create login form
+            $form = new LoginForm();
             $data = $this->getRequestData();            
             $form->setData($data);            
 
