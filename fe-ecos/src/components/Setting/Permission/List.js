@@ -8,20 +8,20 @@ import ItemPerPage from '../../../containers/Shared/pagination/ItemPerPage';
 import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
-// import Action from './Action';
+import Action from './Action';
 
 import {
-  getPermissonList,
-  togglePermissonModal
+  getPermissionList,
+  togglePermissionModal
 } from "../../../redux/actions";
 
 
-const PermissonFormatter = ({ value }) => (
+const PermissionFormatter = ({ value }) => (
   value === 'Enabled' ? <span className="badge badge-success">Enabled</span> :
     <span className="badge badge-disabled">Disabled</span>
 );
 
-PermissonFormatter.propTypes = {
+PermissionFormatter.propTypes = {
   value: PropTypes.string.isRequired,
 };
 
@@ -47,7 +47,7 @@ class List extends Component {
     if (this.props.permisson.paramSearch) {
       Object.assign(params, { "query": this.props.permisson.paramSearch})
     };
-    this.props.getPermissonList(params, this.props.history);
+    this.props.getPermissionList(params, this.props.history);
 
     this.setState({
       selectedPageSize: size
@@ -55,7 +55,7 @@ class List extends Component {
   }
 
   toggleModal = () => {
-    this.props.togglePermissonModal();
+    this.props.togglePermissionModal();
   }
 
   onChangePage = (page) => {
@@ -69,7 +69,7 @@ class List extends Component {
     if (this.props.permisson.paramSearch) {
       Object.assign(params, { "query": this.props.permisson.paramSearch })
     };
-    this.props.getPermissonList(params);
+    this.props.getPermissionList(params);
 
     this.setState({
       currentPage: page
@@ -85,10 +85,10 @@ class List extends Component {
   }
 
   componentDidMount() {
-    this.props.getPermissonList();
+    this.props.getPermissionList();
   }
 
-  showPermissonItem = (items) => {
+  showPermissionItem = (items) => {
     let result = null;
     if (items.length > 0) {
       result = items.map((item, index) => {
@@ -104,7 +104,7 @@ class List extends Component {
   }
 
   render() {
-    const { items, loading, modalOpen } = this.props.permisson;
+    const { items, loading, modalOpen,total } = this.props.permisson;
     const { messages } = this.props.intl;
     return (
       <Col md={12} lg={12}>
@@ -119,7 +119,7 @@ class List extends Component {
                   onClick={this.toggleModal}
                 >{messages['permisson.add-new']}</Button>
               </ButtonToolbar>
-              
+              <Action modalOpen={modalOpen} />
             </div>
             <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
             <Table responsive bordered hover>
@@ -136,11 +136,11 @@ class List extends Component {
                 {loading ? (
                   <tr><td colSpan={5} className="text-center"><div className="loading-table" /></td></tr>
                 ) : (
-                    this.showPermissonItem(items)
+                    this.showPermissionItem(items)
                   )}
               </tbody>
             </Table>
-            <Pagination pagination={this.state} onChangePage={this.onChangePage} />
+            <Pagination pagination={this.state} total={total} onChangePage={this.onChangePage} />
           </CardBody>
         </Card>
       </Col>
@@ -151,8 +151,8 @@ class List extends Component {
 List.propTypes = {
   permisson: PropTypes.object.isRequired,
   modal: PropTypes.object,
-  getPermissonList: PropTypes.func.isRequired,
-  togglePermissonModal: PropTypes.func.isRequired
+  getPermissionList: PropTypes.func.isRequired,
+  togglePermissionModal: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ permisson, modal }) => {
@@ -165,7 +165,7 @@ const mapStateToProps = ({ permisson, modal }) => {
 export default injectIntl(connect(
   mapStateToProps,
   {
-    getPermissonList,
-    togglePermissonModal,
+    getPermissionList,
+    togglePermissionModal,
   }
 )(List));

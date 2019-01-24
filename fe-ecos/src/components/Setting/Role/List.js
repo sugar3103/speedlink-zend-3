@@ -14,6 +14,7 @@ import {
   getRoleList,
   toggleRoleModal
 } from "../../../redux/actions";
+import Action from './Action';
 
 
 const RoleFormatter = ({ value }) => (
@@ -119,7 +120,7 @@ class List extends Component {
                   onClick={this.toggleModal}
                 >{messages['role.add-new']}</Button>
               </ButtonToolbar>
-              
+              <Action modalOpen={modalOpen} />
             </div>
             <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
             <Table responsive bordered hover>
