@@ -12,7 +12,7 @@ import {
   PERMISSION_DELETE_ITEM,
   PERMISSION_DELETE_ITEM_SUCCESS,
   PERMISSION_DELETE_ITEM_ERROR
-} from '../../constants/actionTypes';
+} from '../../../constants/actionTypes';
 
 export const togglePermissionModal = (status = null) => ({
   type: PERMISSION_TOGGLE_MODAL,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Col, Container, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
-import { List } from '../../../components/Setting/Permisson';
+import { List } from '../../../components/Setting/Permission';
 
 class Permisson extends Component {
   render() {

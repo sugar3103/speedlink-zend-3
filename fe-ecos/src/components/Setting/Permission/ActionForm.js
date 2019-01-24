@@ -156,7 +156,8 @@ class Action extends PureComponent {
   }
 }
 
-const mapStateToProps = ({ permisson }) => {
+const mapStateToProps = ({ users }) => {
+  const { permisson } = users;
   const { errors, modalData } = permisson;
   return {
     errors,

@@ -12,7 +12,7 @@ import {
   USER_DELETE_ITEM,
   USER_DELETE_ITEM_SUCCESS,
   USER_DELETE_ITEM_ERROR
-} from '../../constants/actionTypes';
+} from '../../../constants/actionTypes';
 
 export const toggleUserModal = (status = null) => ({
   type: USER_TOGGLE_MODAL,

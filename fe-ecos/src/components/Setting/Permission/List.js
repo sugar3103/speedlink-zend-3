@@ -104,7 +104,7 @@ class List extends Component {
   }
 
   render() {
-    const { items, loading, modalOpen,total } = this.props.permisson;
+    const { items, loading, modalOpen,total } = this.props.permission;
     const { messages } = this.props.intl;
     return (
       <Col md={12} lg={12}>
@@ -149,16 +149,17 @@ class List extends Component {
 }
 
 List.propTypes = {
-  permisson: PropTypes.object.isRequired,
-  modal: PropTypes.object,
+  permission: PropTypes.object.isRequired,
   getPermissionList: PropTypes.func.isRequired,
   togglePermissionModal: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ permisson, modal }) => {
+const mapStateToProps = ({ users }) => {
+  console.log(users);
+  
+  const { permission } = users;
   return {
-    permisson,
-    modal
+    permission,
   };
 };
 

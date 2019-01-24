@@ -160,15 +160,14 @@ class List extends Component {
 
 List.propTypes = {
   user: PropTypes.object.isRequired,
-  modal: PropTypes.object,
   getUserList: PropTypes.func.isRequired,
   toggleUserModal: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ user, modal }) => {
+const mapStateToProps = ({ users }) => {
+  const { user } = users;
   return {
-    user,
-    modal
+    user
   };
 };
 

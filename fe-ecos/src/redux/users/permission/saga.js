@@ -1,15 +1,15 @@
 import axios from "axios";
 import { all, call, fork, put, takeEvery } from "redux-saga/effects";
-import { apiUrl, EC_SUCCESS, EC_FAILURE, EC_FAILURE_AUTHENCATION } from '../../constants/defaultValues';
-import { authHeader } from '../../util/auth-header';
-import history from '../../util/history';
+import { apiUrl, EC_SUCCESS, EC_FAILURE, EC_FAILURE_AUTHENCATION } from '../../../constants/defaultValues';
+import { authHeader } from '../../../util/auth-header';
+import history from '../../../util/history';
 
 import {
   PERMISSION_GET_LIST,
   PERMISSION_ADD_ITEM,
   PERMISSION_UPDATE_ITEM,
   PERMISSION_DELETE_ITEM 
-} from "../../constants/actionTypes";
+} from "../../../constants/actionTypes";
 
 import {
   togglePermissionModal,
@@ -24,7 +24,7 @@ import {
   getPermissionList,
 } from "./actions";
 
-import createNotification from '../../util/notifications';
+import createNotification from '../../../util/notifications';
 
 //list permission
 

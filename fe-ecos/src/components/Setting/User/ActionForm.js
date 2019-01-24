@@ -198,7 +198,8 @@ class Action extends PureComponent {
   }
 }
 
-const mapStateToProps = ({ user,role }) => {
+const mapStateToProps = ({ users }) => {
+  const { user, role } = users;
   const { errors, modalData } = user;
   return {
     errors,

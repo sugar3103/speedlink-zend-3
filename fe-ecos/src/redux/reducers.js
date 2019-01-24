@@ -4,9 +4,7 @@ import settings from './settings/reducer';
 import authUser from './auth/reducer';
 import status from './master-data/status/reducer';
 import address from './master-data/address/reducers';
-import user from './user/reducer';
-import role from './role/reducer';
-import permisson from './permisson/reducer';
+import users from './users/reducers';
 
 const reducers = combineReducers({
   form: reduxFormReducer,
@@ -14,9 +12,7 @@ const reducers = combineReducers({
   authUser,
   status,
   address,
-  user,
-  role,
-  permisson
+  users,
 });
 
 export default reducers;
