@@ -7,7 +7,7 @@ import { injectIntl } from 'react-intl';
 class Action extends Component {
 
   handleSubmit = values => {
-    const { messages } = this.props.intl;    
+    const { messages } = this.props.intl;        
     if (values.id) {
       this.props.updatePermissionItem(values,messages);
     } else {

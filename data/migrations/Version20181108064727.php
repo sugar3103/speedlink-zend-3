@@ -94,7 +94,6 @@ final class Version20181108064727 extends AbstractMigration
               id          int(11) auto_increment
                 primary key,
               name        varchar(100)                            not null,
-              name_en        varchar(100)                            not null,
               model       text                                    null,
               description text                                    null,
               description_en text                                    null,

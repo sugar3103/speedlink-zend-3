@@ -295,6 +295,16 @@ class Role
     }
     
     /**
+     * Get Permissions.
+     *
+     * @return ArrayCollection
+     */
+    public function getPermissions() {
+        return $this->permissions;
+    }
+
+    
+    /**
      * Add Parent Role.
      *
      * @param Role $role

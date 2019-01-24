@@ -34,9 +34,9 @@ export const getPermissionListError = (error) => ({
   payload: error
 });
 
-export const addPermissionItem = (item) => ({
+export const addPermissionItem = (item, messages) => ({
   type: PERMISSION_ADD_ITEM,
-  payload: item
+  payload: {item, messages}
 });
 
 export const addPermissionItemSuccess = () => ({
@@ -48,9 +48,9 @@ export const addPermissionItemError = (error) => ({
   payload: error
 });
 
-export const updatePermissionItem = (item) => ({
+export const updatePermissionItem = (item, messages) => ({
   type: PERMISSION_UPDATE_ITEM,
-  payload: item
+  payload: {item,messages}
 });
 
 export const updatePermissionItemSuccess = () => ({
@@ -62,9 +62,9 @@ export const updatePermissionItemError = (error) => ({
   payload: error
 });
 
-export const deletePermissionItem = (id) => ({
+export const deletePermissionItem = (id, messages) => ({
   type: PERMISSION_DELETE_ITEM,
-  payload: id
+  payload: {id,messages}
 });
 
 export const deletePermissionItemSuccess = () => ({

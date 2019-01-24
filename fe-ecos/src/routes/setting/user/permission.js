@@ -3,14 +3,14 @@ import { Col, Container, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { List } from '../../../components/Setting/Permission';
 
-class Permisson extends Component {
+class Permission extends Component {
   render() {
     const { messages } = this.props.intl;
     return (
       <Container>
         <Row>
           <Col md={12}>
-            <h3 className="page-title">{messages['permisson.list']}</h3>
+            <h3 className="page-title">{messages['permission.list']}</h3>
             <h3 className="page-subhead subhead">Use this elements, if you want to show some hints or additional
                   information
             </h3>
@@ -24,4 +24,4 @@ class Permisson extends Component {
   }
 };
 
-export default injectIntl(Permisson);
+export default injectIntl(Permission);

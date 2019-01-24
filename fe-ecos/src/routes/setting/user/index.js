@@ -3,7 +3,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 
 import Lists from './list';
 import Role from './role';
-import Permisson from './permisson';
+import Permission from './permission';
 
 const User = ({ match }) => (
   <Fragment>
@@ -11,7 +11,7 @@ const User = ({ match }) => (
           <Redirect exact from={`${match.url}/`} to={`${match.url}/list`} />
           <Route path={`${match.url}/list`} component={Lists} />          
           <Route path={`${match.url}/role`} component={Role} />          
-          <Route path={`${match.url}/permisson`} component={Permisson} />          
+          <Route path={`${match.url}/permission`} component={Permission} />          
           <Redirect to="/error" />
       </Switch>
   </Fragment>

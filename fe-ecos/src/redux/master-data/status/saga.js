@@ -230,19 +230,19 @@ export function* watchGetList() {
   yield takeEvery(STATUS_GET_LIST, getStatusListItems);
 }
 
-export function* wathcAddItem() {
+export function* watchAddItem() {
   yield takeEvery(STATUS_ADD_ITEM, addStatusItem);
 }
 
-export function* wathcUpdateItem() {
+export function* watchUpdateItem() {
   yield takeEvery(STATUS_UPDATE_ITEM, updateStatusItem);
 }
 
-export function* wathcDeleteItem() {
+export function* watchDeleteItem() {
   yield takeEvery(STATUS_DELETE_ITEM, deleteStatusItem);
 }
 
 
 export default function* rootSaga() {
-  yield all([fork(watchGetList), fork(wathcAddItem), fork(wathcUpdateItem), fork(wathcDeleteItem)]);
+  yield all([fork(watchGetList), fork(watchAddItem), fork(watchUpdateItem), fork(watchDeleteItem)]);
 }

@@ -37,7 +37,6 @@ class PermissionRepository extends EntityRepository
             $queryBuilder->select([
                 "p.id,
                  p.name,
-                 p.name_en,
                  p.description,
                  p.description_en,
                  p.created_at"

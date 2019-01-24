@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { togglePermissionModal } from '../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../containers/Shared/form/CustomField';
-import renderRadioButtonField from '../../../containers/Shared/form/RadioButton';
 import classnames from 'classnames';
 import validate from './validateActionForm';
 
@@ -15,7 +14,7 @@ class Action extends PureComponent {
     super();
     this.state = {
       activeTab: '1',
-      errors: {}      
+      errors: {}
     };
   }
 
@@ -26,6 +25,7 @@ class Action extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
     if (nextProps.errors) {
       const { errors } = nextProps;
       this.setState({
@@ -35,8 +35,7 @@ class Action extends PureComponent {
   }
 
   componentDidMount() {
-    
-    const data = this.props.modalData;    
+    const data = this.props.modalData;
     if (data) {
       this.props.initialize(data);
     }
@@ -53,14 +52,12 @@ class Action extends PureComponent {
   toggleModal = () => {
     this.props.togglePermissionModal();
   }
-  
+
   render() {
     const { messages } = this.props.intl;
     const { handleSubmit, modalData } = this.props;
-    const { errors } = this.state;
-    const className = modalData ? 'primary' : 'success';
-    const title = modalData ? messages['permisson.update'] : messages['permisson.add-new'];
-
+    const { errors } = this.props;
+    const title = modalData ? messages['permission.update'] : messages['permission.add-new'];
     return (
       <form className="form" onSubmit={handleSubmit}>
         <div className="modal__header">
@@ -68,7 +65,20 @@ class Action extends PureComponent {
           <h4 className="bold-text  modal__title">{title}</h4>
         </div>
         <div className="modal__body">
-        <div className="tabs">
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['permission.name']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="name"
+                component={CustomField}
+                type="text"
+                placeholder={messages['permissions.name']}
+                onChange={this.onChange}
+              />
+            </div>
+            {errors && errors.name && errors.name.permissionExists && <span className="form__form-group-error">{messages['permission.validate-name-exists']}</span>}
+          </div>
+          <div className="tabs">
             <div className="tabs__wrap">
               <Nav tabs>
                 <NavItem>
@@ -94,21 +104,9 @@ class Action extends PureComponent {
               </Nav>
               <TabContent activeTab={this.state.activeTab}>
                 <TabPane tabId="1">
+
                   <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['status.name']}</span>
-                    <div className="form__form-group-field">
-                      <Field
-                        name="name"
-                        component={CustomField}
-                        type="text"
-                        placeholder={messages['status.name']}
-                        onChange={this.onChange}
-                      />
-                    </div>
-                    {errors && errors.name && errors.name.statusExists && <span className="form__form-group-error">{messages['status.validate-name-exists']}</span>}
-                  </div>
-                  <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['status.desc']}</span>
+                    <span className="form__form-group-label">{messages['permissions.desc']}</span>
                     <div className="form__form-group-field">
                       <Field
                         name="description"
@@ -118,22 +116,9 @@ class Action extends PureComponent {
                     </div>
                   </div>
                 </TabPane>
-                <TabPane tabId="2">
+                <TabPane tabId="2">                  
                   <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['status.name-en']}</span>
-                    <div className="form__form-group-field">
-                      <Field
-                        name="name_en"
-                        component={CustomField}
-                        type="text"
-                        placeholder={messages['status.name-en']}
-                        onChange={this.onChange}
-                      />
-                    </div>
-                    {errors && errors.name_en && errors.name_en.statusExists && <span className="form__form-group-error">{messages['status.validate-nameEn-exists']}</span>}
-                  </div>
-                  <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['status.desc-en']}</span>
+                    <span className="form__form-group-label">{messages['permissions.desc-en']}</span>
                     <div className="form__form-group-field">
                       <Field
                         name="description_en"
@@ -143,7 +128,7 @@ class Action extends PureComponent {
                     </div>
                   </div>
                 </TabPane>
-              </TabContent>              
+              </TabContent>
             </div>
           </div>
         </div>
@@ -157,8 +142,7 @@ class Action extends PureComponent {
 }
 
 const mapStateToProps = ({ users }) => {
-  const { permisson } = users;
-  const { errors, modalData } = permisson;
+  const { errors, modalData } = users.permission;
   return {
     errors,
     modalData
@@ -166,7 +150,7 @@ const mapStateToProps = ({ users }) => {
 }
 
 export default reduxForm({
-  form: 'permisson_action_form',
+  form: 'permission_action_form',
   validate
 })(injectIntl(connect(mapStateToProps, {
   togglePermissionModal

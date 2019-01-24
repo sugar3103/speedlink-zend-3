@@ -29,13 +29,6 @@ class Permission
     private $name;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name_en", type="string", length=100, nullable=false)
-     */
-    private $name_en;
-
-    /**
      * @var string|null
      *
      * @ORM\Column(name="model", type="text", length=65535, nullable=true)
@@ -132,23 +125,7 @@ class Permission
     {
         $this->name = $name;
     }
-
-    /**
-     * @return string
-     */
-    public function getNameEn()
-    {
-        return $this->name_en;
-    }
-
-    /**
-     * @param string $name_en
-     */
-    public function setNameEn($name_en)
-    {
-        $this->name_en = $name_en;
-    }
-
+    
     /**
      * @return string|null
      */

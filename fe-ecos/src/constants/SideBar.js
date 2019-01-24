@@ -76,9 +76,9 @@ export default {
               icon: 'users'
             },
             {
-              id: 'permisson',
-              title: 'menu.user.permisson',
-              route: '/app/setting/user/permisson',
+              id: 'permission',
+              title: 'menu.user.permission',
+              route: '/app/setting/user/permission',
               icon: 'users'
             }
           ]

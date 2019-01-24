@@ -12,8 +12,8 @@ import { injectIntl } from 'react-intl';
 
 class Item extends Component {
 
-  toggleModal = (permisson) => {
-    this.props.togglePermissionModal(permisson);
+  toggleModal = (permission) => {
+    this.props.togglePermissionModal(permission);
   }
 
   onDelete = (id) => {
@@ -22,13 +22,14 @@ class Item extends Component {
       customUI: ({ onClose }) => {
         return (
           <div className='custom-ui-confirm'>
-            <h1>{messages["permisson.title-confirm"]}</h1>
-            <p>{messages["permisson.desc-confirm"]}</p>
-            <Button color="light" size="sm" onClick={onClose}>{messages["permisson.confirm-no"]}</Button> &nbsp;
+            {/* <h1>{messages["title-confirm"]}</h1> */}
+            <h3>{messages["desc-confirm"]}</h3>
+            <hr/>
+            <Button color="light" size="sm" onClick={onClose}>{messages["confirm-no"]}</Button> &nbsp;
             <Button color="danger" size="sm" onClick={() => {
               this.props.deletePermissionItem(id)
               onClose()
-            }}>{messages["permisson.confirm-yes"]}</Button>
+            }}>{messages["confirm-yes"]}</Button>
           </div>
         )
       }
@@ -36,17 +37,17 @@ class Item extends Component {
   }
 
   render() {
-    const { permisson } = this.props;
+    const { permission } = this.props;
     // const { messages } = this.props.intl;
     return (
       <tr>
-        <th scope="row">{permisson.id}</th>
-        <td>{permisson.name}</td>
-        <td>{permisson.full_name}</td>        
-        <td>{permisson.created_at}</td>
+        <th scope="row">{permission.id}</th>
+        <td>{permission.name}</td>
+        <td>{permission.full_name}</td>        
+        <td>{permission.created_at}</td>
         <td className="text-center">
-          <Button color="info" size="sm" onClick={() => this.toggleModal(permisson)}><span className="lnr lnr-pencil" /></Button> &nbsp;
-          <Button color="danger" size="sm" onClick={() => this.onDelete(permisson.permisson_id)}><span className="lnr lnr-trash" /></Button>
+          <Button color="info" size="sm" onClick={() => this.toggleModal(permission)}><span className="lnr lnr-pencil" /></Button> &nbsp;
+          <Button color="danger" size="sm" onClick={() => this.onDelete(permission.id)}><span className="lnr lnr-trash" /></Button>
         </td>
       </tr>
     );
@@ -54,7 +55,7 @@ class Item extends Component {
 }
 
 Item.propTypes = {
-  permisson: PropTypes.object.isRequired,
+  permission: PropTypes.object.isRequired,
   togglePermissionModal: PropTypes.func.isRequired,
   deletePermissionItem: PropTypes.func.isRequired
 }

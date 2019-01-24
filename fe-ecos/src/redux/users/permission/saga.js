@@ -72,7 +72,59 @@ export function* watchGetList() {
 }
 
 //Add
+function addPermissionApi(item) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}permission/add`,
+    headers: authHeader(),
+    data: item
+  });
+}
 
+const addPermissionItemRequest = async item => {
+  return await addPermissionApi(item).then(res => res.data).catch(err => err)
+};
+
+function* addPermissionItem({ payload }) {
+  const { item, messages } = payload;
+  try {
+    const response = yield call(addPermissionItemRequest, item);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(addPermissionItemSuccess());
+        yield put(getPermissionList(null, messages));
+        yield put(togglePermissionModal());
+        createNotification({
+          type: 'success', 
+          message: messages['permission.add-success'], 
+          title: messages['notification.success']
+        });
+        break;
+
+      case EC_FAILURE:
+        yield put(addPermissionItemError(response.data));
+        break;
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning', 
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(addPermissionItemError(error));
+  }
+}
+export function* watchAddItem() {
+  yield takeEvery(PERMISSION_ADD_ITEM, addPermissionItem);
+}
+
+//Update
 function updatePermissionApi(item) {
   return axios.request({
     method: 'post',
@@ -123,17 +175,72 @@ function* updatePermissionItem({ payload }) {
   }
 }
 
-export function* wathcUpdateItem() {
+export function* watchUpdateItem() {
   yield takeEvery(PERMISSION_UPDATE_ITEM, updatePermissionItem);
 }
 
-//Update
+
 
 //Delete
+function deletePermissionApi(id) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}permission/delete`,
+    headers: authHeader(),
+    data: {  id: id }
+  });
+}
+
+const deletePermissionItemRequest = async id => {
+  return await deletePermissionApi(id).then(res => res.data).catch(err => err)
+};
+
+function* deletePermissionItem({ payload }) {
+  const { id, messages } = payload;
+  
+  try {
+    const response = yield call(deletePermissionItemRequest, id);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(deletePermissionItemSuccess());
+        yield put(getPermissionList(null, messages));
+        createNotification({
+          type: 'success', 
+          message: messages['permission.delete-success'], 
+          title: messages['notification.success']
+        });
+        break;
+
+      case EC_FAILURE:
+        yield put(deletePermissionItemError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning', 
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(deletePermissionItemError(error));
+  }
+}
+
+export function* watchDeleteItem() {
+  yield takeEvery(PERMISSION_DELETE_ITEM, deletePermissionItem);
+}
 
 export default function* rootSaga() {
   yield all([
     fork(watchGetList),
-    fork(wathcUpdateItem),
+    fork(watchAddItem),
+    fork(watchUpdateItem),
+    fork(watchDeleteItem)
   ]);
 }

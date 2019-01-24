@@ -44,8 +44,8 @@ class List extends Component {
       }
     }
 
-    if (this.props.permisson.paramSearch) {
-      Object.assign(params, { "query": this.props.permisson.paramSearch})
+    if (this.props.permission.paramSearch) {
+      Object.assign(params, { "query": this.props.permission.paramSearch})
     };
     this.props.getPermissionList(params, this.props.history);
 
@@ -66,8 +66,8 @@ class List extends Component {
       }
     }
 
-    if (this.props.permisson.paramSearch) {
-      Object.assign(params, { "query": this.props.permisson.paramSearch })
+    if (this.props.permission.paramSearch) {
+      Object.assign(params, { "query": this.props.permission.paramSearch })
     };
     this.props.getPermissionList(params);
 
@@ -77,9 +77,9 @@ class List extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps && nextProps.permisson && nextProps.permisson.total) {
+    if (nextProps && nextProps.permission && nextProps.permission.total) {
       this.setState({
-        total: nextProps.permisson.total
+        total: nextProps.permission.total
       });
     }
   }
@@ -95,7 +95,7 @@ class List extends Component {
         return (
           <Item 
             key={index}
-            permisson={item}
+            permission={item}
           />
         )
       })
@@ -111,13 +111,13 @@ class List extends Component {
         <Card>
           <CardBody className="master-data-list">
             <div className="card__title">
-              <h5 className="bold-text">{messages['permisson.list-title']}</h5>
+              <h5 className="bold-text">{messages['permission.list-title']}</h5>
               <ButtonToolbar className="master-data-list__btn-toolbar-top">
                 <Button 
                   color="success" 
                   className="master-data-list__btn-add"
                   onClick={this.toggleModal}
-                >{messages['permisson.add-new']}</Button>
+                >{messages['permission.add-new']}</Button>
               </ButtonToolbar>
               <Action modalOpen={modalOpen} />
             </div>
@@ -126,10 +126,10 @@ class List extends Component {
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>{messages['permisson.name']}</th>
-                  <th>{messages['permisson.fullname']}</th>
-                  <th>{messages['permisson.created-at']}</th>
-                  <th className="text-center">{messages['permisson.action']}</th>
+                  <th>{messages['permission.name']}</th>
+                  <th>{messages['permission.fullname']}</th>
+                  <th>{messages['permission.created-at']}</th>
+                  <th className="text-center">{messages['permission.action']}</th>
                 </tr>
               </thead>
               <tbody>
@@ -155,8 +155,6 @@ List.propTypes = {
 }
 
 const mapStateToProps = ({ users }) => {
-  console.log(users);
-  
   const { permission } = users;
   return {
     permission,
