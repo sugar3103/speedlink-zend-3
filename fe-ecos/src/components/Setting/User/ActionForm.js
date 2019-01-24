@@ -15,11 +15,8 @@ class Action extends PureComponent {
     super();
     this.state = {
       activeTab: '1',
-      errors: {},
-      roles: []
+      errors: {}      
     };
-
-   
   }
 
   onChange = (e) => {
@@ -39,7 +36,7 @@ class Action extends PureComponent {
 
   componentDidMount() {
     this.props.getRoleList();
-    const data = this.props.modalData;
+    const data = this.props.modalData;    
     if (data) {
       data.user = data.user === 'Active' ? 1 : 0;
       this.props.initialize(data);
@@ -182,9 +179,10 @@ class Action extends PureComponent {
                 <span className="form__form-group-label">{messages['role.list']}</span>
                 <div className="form__form-group-field">
                 <Field
-                    name="multiSelect"
+                    name="roles"
                     component={renderMultiSelectField}
                     options={items && this.showOptions(items)}
+                    onChange={this.onChange}
                   />
                 </div>
               </div>

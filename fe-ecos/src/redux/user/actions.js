@@ -34,9 +34,9 @@ export const getUserListError = (error) => ({
   payload: error
 });
 
-export const addUserItem = (item) => ({
+export const addUserItem = (item,messages) => ({
   type: USER_ADD_ITEM,
-  payload: item
+  payload: {item,messages}
 });
 
 export const addUserItemSuccess = () => ({
@@ -48,9 +48,9 @@ export const addUserItemError = (error) => ({
   payload: error
 });
 
-export const updateUserItem = (item) => ({
+export const updateUserItem = (item,messages) => ({
   type: USER_UPDATE_ITEM,
-  payload: item
+  payload: {item,messages}
 });
 
 export const updateUserItemSuccess = () => ({

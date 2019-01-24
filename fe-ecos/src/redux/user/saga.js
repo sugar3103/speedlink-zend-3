@@ -6,16 +6,21 @@ import history from '../../util/history';
 
 import {
   USER_GET_LIST,
+  USER_UPDATE_ITEM,  
 } from "../../constants/actionTypes";
 
 import {
   getUserListSuccess,
   getUserListError,
+  updateUserItemSuccess,
+  updateUserItemError,
+  getUserList,
+  toggleUserModal
 } from "./actions";
 
 import createNotification from '../../util/notifications';
 
-//list status
+//list user
 
 function getListApi(params) {
   return axios.request({
@@ -60,6 +65,61 @@ export function* watchGetList() {
   yield takeEvery(USER_GET_LIST, getUserListItems);
 }
 
+
+//update user
+
+function updateUserApi(item) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}user/edit`,
+    headers: authHeader(),
+    data: item
+  });
+}
+
+const updateUserItemRequest = async item => {
+  return await updateUserApi(item).then(res => res.data).catch(err => err)
+};
+
+function* updateUserItem({ payload }) {
+  const { item, messages } = payload;
+  try {
+    const response = yield call(updateUserItemRequest, item);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(updateUserItemSuccess());
+        yield put(getUserList(null, messages));
+        yield put(toggleUserModal());
+        createNotification({
+          type: 'success', 
+          message: messages['user.update-success'], 
+          title: messages['notification.success']
+        });
+        break;
+
+      case EC_FAILURE:
+        yield put(updateUserItemError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning', 
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(updateUserItemError(error));
+  }
+}
+export function* wathcUpdateItem() {
+  yield takeEvery(USER_UPDATE_ITEM, updateUserItem);
+}
 export default function* rootSaga() {
-  yield all([fork(watchGetList)]);
+  yield all([fork(watchGetList),fork(wathcUpdateItem)]);
 }

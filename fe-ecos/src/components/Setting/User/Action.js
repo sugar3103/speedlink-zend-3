@@ -3,14 +3,16 @@ import { Modal } from 'reactstrap';
 import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
 import { addUserItem, updateUserItem, toggleUserModal } from '../../../redux/actions';
-
+import { injectIntl } from 'react-intl';
 class Action extends Component {
 
   handleSubmit = values => {
+    const { messages } = this.props.intl;
+    console.log(values.roles);
     if (values.id) {
-      this.props.updateUserItem(values);
+      this.props.updateUserItem(values,messages);
     } else {
-      this.props.addUserItem(values);
+      this.props.addUserItem(values,messages);
     }
   }
 
@@ -31,8 +33,8 @@ class Action extends Component {
   }
 }
 
-export default connect(null, {
+export default injectIntl(connect(null, {
   addUserItem,
   updateUserItem,
   toggleUserModal
-})(Action);
+})(Action));

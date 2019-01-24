@@ -135,8 +135,8 @@ class UserManager {
      * @throws \Exception
      * @return bool
      */
-    public function updateUser($user, $data) {
-
+    public function updateUser($user, $data,$assignee) {
+        
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
@@ -425,19 +425,13 @@ class UserManager {
             //get user list
             $users = $ormPaginator->getIterator()->getArrayCopy();
 
-            //set countRow default
-            $countRow = 1;
-
             foreach ($users as &$user) {//loop
-
                 //set status
-                $user['status'] = User::getIsActiveList($user['is_active']);
-
+                $user['status'] = $user['is_active'];                
                 //set created_at
-                $user['created_at'] =  ($user['created_at']) ? Utils::checkDateFormat($user['created_at'],'d/m/Y') : '';
-
-                $countRow++;
+                $user['created_at'] =  ($user['created_at']) ? Utils::checkDateFormat($user['created_at'],'d/m/Y') : '';                
             }
+            
         }
 
         //set data user

@@ -31,15 +31,14 @@ class MultiSelectField extends PureComponent {
     options: [],
   };
 
-  handleChange = (value) => {
-    this.props.onChange(value);
+  handleChange = (selectedOptions) => {
+    this.props.onChange(selectedOptions.map(selected => { return selected.value }));
   };
 
   render() {
     const {
       value, name, placeholder, options,
-    } = this.props;
-
+    } = this.props;    
     return (
       <Select
         multi
@@ -58,12 +57,12 @@ class MultiSelectField extends PureComponent {
 }
 
 const renderMultiSelectField = props => (
-  <div className="form__form-group-input-wrap">
+  <div className="form__form-group-input-wrap">  
     <MultiSelectField
       {...props.input}
       options={props.options}
       placeholder={props.placeholder}
-    />
+    />    
     {props.meta.touched && props.meta.error && <span className="form__form-group-error">{props.meta.error}</span>}
   </div>
 );

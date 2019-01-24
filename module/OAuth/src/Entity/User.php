@@ -500,8 +500,7 @@ class User
      * @return string
      */
     public function getRolesAsString() {
-        $roleList = '';
-
+        $roleList = '';        
         $count = count($this->roles);
         $i = 0;
         foreach ($this->roles as $role) {

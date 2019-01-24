@@ -58,7 +58,7 @@ class UserRepository extends EntityRepository {
                  u.is_active,
                  CONCAT(COALESCE(u.first_name,''), COALESCE(u.last_name,'')) as full_name,
                  u.created_at,
-                 GROUP_CONCAT(r.name) AS role_name"
+                 GROUP_CONCAT(r.id) AS roles"
             )
             ->leftJoin(
                 'u.roles',

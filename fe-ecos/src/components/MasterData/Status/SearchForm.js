@@ -55,7 +55,7 @@ class SearchForm extends Component {
             size="sm" 
             color="primary"
             id="search" 
-          >{messages['status.search']}</Button>
+          >{ messages['status.search'] }</Button>
         </div>
       </form>
     );
