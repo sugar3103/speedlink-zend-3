@@ -36,7 +36,7 @@ export default (state = INIT_STATE, action) => {
       }
 
     case STATUS_GET_LIST:
-      const params = action.payload;
+      const { params } = action.payload;
       return { 
         ...state, 
         loading: true,
