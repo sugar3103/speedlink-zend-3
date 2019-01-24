@@ -89,5 +89,16 @@ module.exports = {
   'address.districts': 'Quận/Huyện',
   'address.district': 'Quận/Huyện',
   'address.wards': 'Phường/Xã',
-  'address.ward': 'Ward'
+  'address.ward': 'Ward',
+  //Address --- Code
+  'code.list-title': 'Danh sách địa chỉ',
+  'code.code': 'Code',
+  'code.country': 'Đất nước',
+  'code.city': 'Tỉnh/Thành Phố',
+  'code.district': 'Quận/Huyện',
+  'code.ward': 'Phường/Xã',
+  'code.created-at': 'Ngày tạo',
+  'code.search': 'Tìm kiếm',
+  'code.clear': 'Làm mới',
+  'code.no-result': 'Không tìm thấy kết quả',
 };

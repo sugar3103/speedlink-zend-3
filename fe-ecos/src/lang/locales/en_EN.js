@@ -97,6 +97,17 @@ module.exports = {
   'address.district': 'District',
   'address.wards': 'Wards',
   'address.ward': 'Ward',
+  //Address --- Code
+  'code.list-title': 'List Address',
+  'code.code': 'Code',
+  'code.country': 'Country',
+  'code.city': 'City',
+  'code.district': 'District',
+  'code.ward': 'Ward',
+  'code.created-at': 'Created At',
+  'code.search': 'Search',
+  'code.clear': 'Clear',
+  'code.no-result': 'no result found',
 
   //User
   'user.avatar': 'Avatar',

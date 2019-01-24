@@ -9,7 +9,7 @@ class SearchForm extends Component {
     const { handleSubmit, reset } = this.props;
     const { messages } = this.props.intl;
     return (
-      <form className="form" onSubmit={handleSubmit} id="fromSearchStatus">
+      <form className="form" onSubmit={handleSubmit}>
         <div className="form__half">
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['status.name']}</span>

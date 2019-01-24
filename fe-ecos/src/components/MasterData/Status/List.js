@@ -51,6 +51,7 @@ class List extends Component {
     this.props.getStatusList(params, messages);
 
     this.setState({
+      currentPage: 1,
       selectedPageSize: size
     });
   }

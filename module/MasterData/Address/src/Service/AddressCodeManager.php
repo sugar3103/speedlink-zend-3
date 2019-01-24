@@ -56,7 +56,7 @@ class AddressCodeManager  {
             
             foreach ($codes as &$code) {//loop
                 //set created_at
-                $code['createdAt'] =  ($code['createdAt']) ? Utils::checkDateFormat($code['createdAt'],'d/m/Y') : '';                
+                $code['created_at'] =  ($code['created_at']) ? Utils::checkDateFormat($code['created_at'],'d/m/Y') : '';                
             }
            
         }

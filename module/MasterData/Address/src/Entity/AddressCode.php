@@ -109,7 +109,7 @@ class AddressCode
      *
      * @ORM\OneToOne(targetEntity="Address\Entity\Country", inversedBy="objects", fetch="EAGER")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="country_id", referencedColumnName="country_id", unique=true, nullable=true)
+     *   @ORM\JoinColumn(name="country_id", referencedColumnName="id", unique=true, nullable=true)
      * })
      */
     private $country;

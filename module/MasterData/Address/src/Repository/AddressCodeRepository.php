@@ -41,8 +41,7 @@ class AddressCodeRepository extends EntityRepository
                 w.name AS ward,
                 ac.created_by,
                 ac.created_at
-            ")->andWhere("ac.is_deleted = 0")
-            ->groupBy('ac.id')
+            ")->groupBy('ac.id')
             ->setMaxResults($limit)
             ->setFirstResult(($start - 1) * $limit);
             return $queryBuilder;
