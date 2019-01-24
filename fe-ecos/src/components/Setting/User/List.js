@@ -9,7 +9,7 @@ import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import MagnifyIcon from 'mdi-react/MagnifyIcon';
-// import Action from './Action';
+import Action from './Action';
 
 import {
   getUserList,
@@ -105,7 +105,7 @@ class List extends Component {
   }
 
   render() {
-    const { items, loading, modalOpen } = this.props.user;
+    const { items, loading, modalOpen,total } = this.props.user;
     const { messages } = this.props.intl;
     return (
       <Col md={12} lg={12}>
@@ -126,7 +126,7 @@ class List extends Component {
                   onClick={this.toggleModal}
                 >{messages['user.add-new']}</Button>
               </ButtonToolbar>
-              
+              <Action modalOpen={modalOpen} />
             </div>
             <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
             <Table responsive bordered hover>
@@ -149,7 +149,7 @@ class List extends Component {
                   )}
               </tbody>
             </Table>
-            <Pagination pagination={this.state} onChangePage={this.onChangePage} />
+            <Pagination pagination={this.state} total={total} onChangePage={this.onChangePage} />
           </CardBody>
         </Card>
       </Col>

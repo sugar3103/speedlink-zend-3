@@ -1,5 +1,8 @@
 module.exports = {
 
+  //Global
+  'cancel': 'Cancel',
+  'save': 'Save',
   //theme
   'theme.title-setting': 'Theme Customizer',
   'theme.desc-setting': 'Change the theme as you like!',
@@ -102,10 +105,14 @@ module.exports = {
   'user.inactive': 'Disable',
   'user.username': 'Username',
   'user.fullname': 'Full Name',
+  'user.firstname': 'First Name',
+  'user.lastname': 'Last Name',
   'user.status': 'Status',
   'user.created-at': 'Created At',
   'user.action': 'Action',
   'user.add-new': 'Add New User',
+  'user.password': 'Password',
+  'user.confirm_password': 'Confirm password',
 
   //Role
   'role.list': 'Roles',
