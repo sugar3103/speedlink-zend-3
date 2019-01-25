@@ -118,7 +118,7 @@ class CountryController extends CoreController {
                 $this->apiResponse['message'] = "Country Not Found";
             }
         } else {
-            $this->error_code = -1;
+            $this->error_code = 0;
             $this->apiResponse['message'] = "Country request Id!";
         }
 
