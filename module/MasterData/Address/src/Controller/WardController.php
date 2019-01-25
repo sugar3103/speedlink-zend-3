@@ -41,24 +41,23 @@ class WardController extends CoreController {
             // get the filters
             $fieldsMap = [
                 0 => 'name',
-                1 => 'ward',
+                1 => 'district',
                 2 => 'status'
             ];
 
-            list($currentPage,$totalPages,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
-           
+            list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
+            
             //get list ward by condition
             $dataWard = $this->wardManager->getListWardByCondition(
-                $currentPage, $limit, $sortField, $sortDirection,$filters);
-            
-            $result = [
-                "totalRecords" => $dataWard['totalWard'],
-                "data" => ($dataWard['listWard']) ? $dataWard['listWard'] : []           
-            ];
+                $start, $limit, $sortField, $sortDirection,$filters);            
             
             $this->error_code = 1;
-            $this->apiResponse = $result;
-           
+            $this->apiResponse =  array(
+                'message' => 'Get list success',
+                'data' => $dataWard['listWard'],
+                'total' => $dataWard['totalWard']
+            );
+
         } else {
             $this->apiResponse['message'] = 'Ward List';
         }
@@ -82,7 +81,7 @@ class WardController extends CoreController {
                 // add user.
                 $ward = $this->wardManager->addWard($data,$user);
                 $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have modified Wards!";
+                $this->apiResponse['message'] = "You have modified Wards!";
             } else {
                 $this->error_code = 0;
                 $this->apiResponse = $form->getMessages(); 
@@ -103,8 +102,8 @@ class WardController extends CoreController {
              $data = $this->getRequestData();
              $user = $this->tokenPayload;
              $ward = $this->entityManager->getRepository(Ward::class)
-                ->findOneBy(array('wardId' => $data['ward_id']));
-            if(isset($data['ward_id']) && $ward) {
+                ->findOneBy(array('id' => $data['id']));
+            if(isset($data['id']) && $ward) {
                 //Create New Form Ward
                 $form = new WardForm('update', $this->entityManager, $ward);
                 $form->setData($data);
@@ -113,7 +112,7 @@ class WardController extends CoreController {
                    
                    $this->wardManager->updateWard($ward, $data,$user);
                    $this->error_code = 1;
-                   $this->apiResponse['message'] = "Success: You have modified ward!";
+                   $this->apiResponse['message'] = "You have modified ward!";
                 }  else {
                    $this->error_code = 0;
                    $this->apiResponse = $form->getMessages(); 
@@ -140,14 +139,14 @@ class WardController extends CoreController {
  
               $user = $this->tokenPayload;
               $ward = $this->entityManager->getRepository(Ward::class)
-                 ->findOneBy(array('wardId' => $data['ward_id']));
+                 ->findOneBy(array('id' => $data['id']));
             if($ward) {
                 $this->wardManager->deleteWard($ward);
                 $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have deleted ward!";
+                $this->apiResponse['message'] = "You have deleted ward!";
             } else {
                 $this->httpStatusCode = 200;
-                $this->error_code = -1;
+                $this->error_code = 0;
                 $this->apiResponse['message'] = "Not Found Ward";
             }
         } else {

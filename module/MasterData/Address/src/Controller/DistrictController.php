@@ -40,7 +40,7 @@ class DistrictController extends CoreController {
             // get the filters
             $fieldsMap = [
                 0 => 'name',
-                1 => 'district',
+                1 => 'city',
                 2 => 'status'                
             ];
 
@@ -77,7 +77,7 @@ class DistrictController extends CoreController {
                 // add user.
                 $district = $this->districtManager->addDistrict($data,$user);
                 $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have modified Districts!";
+                $this->apiResponse['message'] = "You have modified Districts!";
             } else {
                 $this->error_code = 0;
                 $this->apiResponse = $form->getMessages(); 
@@ -98,8 +98,8 @@ class DistrictController extends CoreController {
              $data = json_decode($payload, true);
              $user = $this->tokenPayload;
              $district = $this->entityManager->getRepository(District::class)
-                ->findOneBy(array('districtId' => $data['district_id']));
-            if(isset($data['district_id']) && $district) {
+                ->findOneBy(array('id' => $data['id']));
+            if(isset($data['id']) && $district) {
                 //Create New Form District
                 $form = new DistrictForm('update', $this->entityManager, $district);
                 $form->setData($data);
@@ -108,7 +108,7 @@ class DistrictController extends CoreController {
                    
                    $this->districtManager->updateDistrict($district, $data,$user);
                    $this->error_code = 1;
-                   $this->apiResponse['message'] = "Success: You have modified district!";
+                   $this->apiResponse['message'] = "You have modified district!";
                 }  else {
                    $this->error_code = 0;
                    $this->apiResponse = $form->getMessages(); 
@@ -135,14 +135,14 @@ class DistrictController extends CoreController {
  
               $user = $this->tokenPayload;
               $district = $this->entityManager->getRepository(District::class)
-                 ->findOneBy(array('districtId' => $data['district_id']));
+                 ->findOneBy(array('id' => $data['id']));
             if($district) {
                 $this->districtManager->deleteDistrict($district);
                 $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have deleted district!";
+                $this->apiResponse['message'] = "You have deleted district!";
             } else {
                 $this->httpStatusCode = 200;
-                $this->error_code = -1;
+                $this->error_code = 0;
                 $this->apiResponse['message'] = "Not Found District";
             }
         } else {

@@ -35,12 +35,12 @@ class Action extends PureComponent {
   }
 
   componentDidMount() {
-    const data = this.props.modalData;     
+    const data = this.props.modalData;
     if (data) {
       this.props.initialize(data);
     }
   }
-  
+
 
   toggleTab = (tab) => {
     if (this.state.activeTab !== tab) {
@@ -60,7 +60,7 @@ class Action extends PureComponent {
     const { errors } = this.state;
     const className = modalData ? 'primary' : 'success';
     const title = modalData ? messages['status.update'] : messages['status.add-new'];
-    
+
     return (
       <form className="form" onSubmit={handleSubmit}>
         <div className="modal__header">
@@ -143,24 +143,24 @@ class Action extends PureComponent {
                   </div>
                 </TabPane>
               </TabContent>
-              <div className="form__form-group">
-                <span className="form__form-group-label">{messages['status.status']}</span>
-                <div className="form__form-group-field">
-                  <Field
-                    name="status"
-                    component={renderRadioButtonField}
-                    label={messages['status.active']}
-                    radioValue={1}
-                    defaultChecked
-                  />
-                  <Field
-                    name="status"
-                    component={renderRadioButtonField}
-                    label={messages['status.inactive']}
-                    radioValue={0}                    
-                  />
-                </div>
-              </div>
+            </div>
+          </div>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['status.status']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="status"
+                component={renderRadioButtonField}
+                label={messages['status.active']}
+                radioValue={1}
+                defaultChecked
+              />
+              <Field
+                name="status"
+                component={renderRadioButtonField}
+                label={messages['status.inactive']}
+                radioValue={0}
+              />
             </div>
           </div>
         </div>
@@ -173,7 +173,7 @@ class Action extends PureComponent {
   }
 }
 
-const mapStateToProps = ({status}) => {  
+const mapStateToProps = ({ status }) => {
   const { errors, modalData } = status;
   return {
     errors,
@@ -183,7 +183,7 @@ const mapStateToProps = ({status}) => {
 
 export default reduxForm({
   form: 'status_action_form',
-  validate  
+  validate
 })(injectIntl(connect(mapStateToProps, {
   toggleStatusModal
 })(Action)));

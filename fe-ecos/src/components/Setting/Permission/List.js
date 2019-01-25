@@ -9,6 +9,7 @@ import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import Action from './Action';
+import MagnifyIcon from 'mdi-react/MagnifyIcon';
 
 import {
   getPermissionList,
@@ -31,7 +32,8 @@ class List extends Component {
     this.state = {
       selectedPageSize: SELECTED_PAGE_SIZE,
       currentPage: 1,
-      total: 20
+      total: 20,
+      searchPermission: ''
     };
   }
 
@@ -43,10 +45,7 @@ class List extends Component {
         limit: size
       }
     }
-
-    if (this.props.permission.paramSearch) {
-      Object.assign(params, { "query": this.props.permission.paramSearch})
-    };
+   
     this.props.getPermissionList(params, this.props.history);
 
     this.setState({
@@ -66,9 +65,6 @@ class List extends Component {
       }
     }
 
-    if (this.props.permission.paramSearch) {
-      Object.assign(params, { "query": this.props.permission.paramSearch })
-    };
     this.props.getPermissionList(params);
 
     this.setState({
@@ -88,7 +84,7 @@ class List extends Component {
     this.props.getPermissionList();
   }
 
-  showPermissionItem = (items) => {
+  showPermissionItem = (items,messages) => {
     let result = null;
     if (items.length > 0) {
       result = items.map((item, index) => {
@@ -99,10 +95,30 @@ class List extends Component {
           />
         )
       })
+    } else {
+      result = (
+        <tr><td colSpan={8} className="text-center">{messages['no-result']}</td></tr>
+      )
     }
     return result;
   }
 
+  handleSearch = (e) => {
+    e.preventDefault();
+    
+    let params = {
+      offset: {
+        start: 1,
+        limit: this.state.selectedPageSize
+      }
+    }
+    Object.assign(params, { "query": {"name": this.state.searchPermission}});
+    this.props.getPermissionList(params);
+  }
+
+  handleChange = (e) => {
+    this.setState({searchPermission: e.target.value});
+  }
   render() {
     const { items, loading, modalOpen,total } = this.props.permission;
     const { messages } = this.props.intl;
@@ -113,6 +129,12 @@ class List extends Component {
             <div className="card__title">
               <h5 className="bold-text">{messages['permission.list-title']}</h5>
               <ButtonToolbar className="master-data-list__btn-toolbar-top">
+                <form className="form" onSubmit={this.handleSearch}>
+                  <div className="form__form-group products-list__search">
+                    <input placeholder="Search..." name="search" value={this.state.searchPermission} onChange={this.handleChange}/>
+                    <MagnifyIcon />
+                  </div>
+                </form>
                 <Button 
                   color="success" 
                   className="master-data-list__btn-add"
@@ -136,7 +158,7 @@ class List extends Component {
                 {loading ? (
                   <tr><td colSpan={5} className="text-center"><div className="loading-table" /></td></tr>
                 ) : (
-                    this.showPermissionItem(items)
+                    this.showPermissionItem(items,messages)
                   )}
               </tbody>
             </Table>
