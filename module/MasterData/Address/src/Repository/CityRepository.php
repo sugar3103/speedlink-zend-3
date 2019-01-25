@@ -22,11 +22,11 @@ class CityRepository extends EntityRepository {
      * @return array|QueryBuilder
      */
     public function getListCityByCondition(
+        $start = 1,
+        $limit = 10,
         $sortField = 'c.name',
         $sortDirection = 'ASC',
-        $filters = [],
-        $offset = 0,
-        $limit = 10
+        $filters = []
     )
     {
         try {
@@ -41,9 +41,12 @@ class CityRepository extends EntityRepository {
                 c.created_by,
                 c.created_at
             ")->andWhere("c.is_deleted = 0")
-            ->groupBy('c.id')
-            ->setMaxResults($limit)
-            ->setFirstResult($offset);
+            ->groupBy('c.id');
+            
+            if($limit) {
+                $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
+            }
+            
 
             return $queryBuilder;
         } catch (QueryException $e) {

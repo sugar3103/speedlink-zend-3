@@ -33,11 +33,12 @@ class CoreController extends ApiController
             $params = !empty(json_decode($payload, true)) ? json_decode($payload, true) : array();
             if(!empty($fieldsMap)) {
                 //the current page number.
-                $start = isset( $params['offset']) ? (int) $params['offset']['start'] : 1;
+                $start = isset( $params['offset']['start']) ? (int) $params['offset']['start'] : 1;
 
                 //set limit
-                $limit  = !empty($params['offset']['limit'])
-                            && $params['offset']['limit'] > 10 ? $params['offset']['limit'] : 10;
+                $limit  = isset($params['offset']['limit']) ? (int) $params['offset']['limit'] : 10;
+                
+                $fields = isset($params['field']) ? $params['field'] : array();
                 
                 //get and set sortField,sortDirection
                 $sortField = isset($params['sort']) ? $params['sort'] : $fieldsMap[0];
@@ -45,7 +46,7 @@ class CoreController extends ApiController
 
                 $filters = $this->getValueFiltersSearch($params,$fieldsMap);
                 
-                return array($start,$limit,$sortField,$sortDirection,$filters);    
+                return array($start,$limit,$sortField,$sortDirection,$filters,$fields);    
             } else {                
                 return $params;
             }            
@@ -73,5 +74,19 @@ class CoreController extends ApiController
         }
        
         return $filters;
+    }
+
+    public function filterByField($data,$fields) {
+        $results = array();
+        if(!empty($fields)) {
+            foreach ($data as $value) {            
+                $result = array();
+                foreach ($fields as $field) {
+                    $result[$field] = $value[$field];
+                }
+                $results[] = $result;
+            }
+        }
+        return $results;        
     }
 }

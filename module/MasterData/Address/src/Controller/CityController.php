@@ -43,17 +43,18 @@ class CityController extends CoreController {
                 2 => 'status'
             ];
 
-            list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
+            list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);                        
             
             //get list city by condition
             $dataCity = $this->cityManager->getListCityByCondition($start, $limit, $sortField, $sortDirection,$filters);            
             
-            $result = ($dataCity['listCity']) ? $dataCity['listCity'] : [] ;
+
+            $results = $this->filterByField($dataCity['listCity'], $fields);
             
             $this->error_code = 1;
             $this->apiResponse =  array(
                 'message'   => "Get List Success",
-                'data'      => $result,
+                'data'      => $results,
                 'total'     => $dataCity['totalCity']
             );          
         } else {

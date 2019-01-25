@@ -145,7 +145,7 @@ class CityManager  {
      * @throws ORMException
      */
     public function getListCityByCondition(
-        $currentPage,
+        $start,
         $limit,
         $sortField = 'c.name',
         $sortDirection = 'ASC',
@@ -153,12 +153,11 @@ class CityManager  {
     ){
 
         $cities     = [];
-        $totalCity = 0;
-        $offset = ($currentPage * $limit) - $limit;     
+        $totalCity = 0;        
         
         //get orm city
         $ormCity = $this->entityManager->getRepository(City::class)
-            ->getListCityByCondition($sortField, $sortDirection, $filters,$offset,$limit);
+            ->getListCityByCondition($start, $limit, $sortField, $sortDirection, $filters);
 
         if($ormCity){
             $ormPaginator = new ORMPaginator($ormCity, true);

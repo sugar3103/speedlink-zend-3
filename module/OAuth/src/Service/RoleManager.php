@@ -52,6 +52,7 @@ class RoleManager {
             $role = new Role();
             $role->setName($data['name']);
             $role->setNameEn($data['name_en']);
+            $role->setStatus($data['status']);
             $role->setDescription($data['description']);
             $role->setDescriptionEn($data['description_en']);
             $role->setCreatedAt(date('Y-m-d H:i:s'));
@@ -105,6 +106,7 @@ class RoleManager {
             $role->setDescription($data['description']);
             $role->setNameEn($data['name_en']);
             $role->setDescriptionEn($data['description_en']);
+            $role->setStatus($data['status']);
 
             // clear parent roles so we don't populate database twice
             $role->clearParentRoles();
@@ -208,6 +210,7 @@ class RoleManager {
             $role = new Role();
             $role->setName($name);
             $role->setNameEn($name);
+            $role->setStatus(1);
             $role->setDescription($info['description']);
             $role->setDescriptionEn($info['description']);
             $role->setCreatedAt(date('Y-m-d H:i:s'));
@@ -223,9 +226,9 @@ class RoleManager {
             }
 
             $this->entityManager->persist($role);
-
+            
             // assign permissions to role
-            $permissions = $this->entityManager->getRepository(Permission::class)->findByName($info['permissions']);
+            $permissions = $this->entityManager->getRepository(Permission::class)->findByName($info['permission']);
 
             foreach ($permissions as $permission) {
                 $role->getPermissions()->add($permission);

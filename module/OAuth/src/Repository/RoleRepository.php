@@ -35,6 +35,7 @@ class RoleRepository extends EntityRepository {
             $queryBuilder->select(
                 "r.id,
                  r.name,
+                 r.status,
                  r.description,
                  r.created_at"
             )->andWhere('r.id <> 0')->groupBy('r.id')
