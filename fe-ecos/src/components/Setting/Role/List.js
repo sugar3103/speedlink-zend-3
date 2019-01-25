@@ -105,7 +105,7 @@ class List extends Component {
   }
 
   render() {
-    const { items, loading, modalOpen } = this.props.role;
+    const { items, loading, modalOpen ,total} = this.props.role;
     const { messages } = this.props.intl;
     return (
       <Col md={12} lg={12}>
@@ -141,7 +141,7 @@ class List extends Component {
                   )}
               </tbody>
             </Table>
-            <Pagination pagination={this.state} onChangePage={this.onChangePage} />
+            <Pagination pagination={this.state} total={total} onChangePage={this.onChangePage} />
           </CardBody>
         </Card>
       </Col>

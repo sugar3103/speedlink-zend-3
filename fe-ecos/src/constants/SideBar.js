@@ -73,13 +73,13 @@ export default {
               id: 'role',
               title: 'menu.user.role',
               route: '/app/setting/user/role',
-              icon: 'users'
+              icon: 'link'
             },
             {
               id: 'permission',
               title: 'menu.user.permission',
               route: '/app/setting/user/permission',
-              icon: 'users'
+              icon: 'lock'
             }
           ]
         }

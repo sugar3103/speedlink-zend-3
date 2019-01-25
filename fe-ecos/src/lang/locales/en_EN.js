@@ -32,9 +32,9 @@ module.exports = {
   //Menu Setting
   'menu.setting': 'Settings',
   'menu.user': 'Users',
-  'menu.user.list': 'User List',
+  'menu.user.list': 'User',
   'menu.user.role': 'Roles',
-  'menu.user.permisson': 'Permissons',
+  'menu.user.permission': 'Permissions',
 
   //auth - login
   'login.welcome': 'Welcome to',
@@ -148,7 +148,7 @@ module.exports = {
 
   //User
   'user.avatar': 'Avatar',
-  'user.list': 'User List',
+  'user.list': 'User',
   'user.active': 'Enable',
   'user.inactive': 'Disable',
   'user.username': 'Username',
@@ -173,12 +173,12 @@ module.exports = {
   'role.add-new': 'Add New Role',
 
   //Role
-  'permisson.list': 'Permissons',
-  'permisson.name': 'Permisson',
-  'permisson.active': 'Enable',
-  'permisson.inactive': 'Disable',  
-  'permisson.created-at': 'Created At',
-  'permisson.action': 'Action',
-  'permisson.add-new': 'Add New Permisson',
-  
+  'permission.list': 'Permissons',
+  'permission.name': 'Permisson',
+  'permission.active': 'Enable',
+  'permission.inactive': 'Disable',  
+  'permission.created-at': 'Created At',
+  'permission.action': 'Action',
+  'permission.add-new': 'Add New Permisson',
+  'permission.update': 'Edit Permisson',
 };

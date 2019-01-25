@@ -95,6 +95,8 @@ final class Version20181108064727 extends AbstractMigration
                 primary key,
               name        varchar(100)                            not null,
               model       text                                    null,
+              status int(1) not null,
+              is_deleted int(1) not null,
               description text                                    null,
               description_en text                                    null,
               created_by int(11) not null,
