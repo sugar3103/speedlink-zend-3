@@ -86,7 +86,10 @@ class CoreController extends ApiController
                 }
                 $results[] = $result;
             }
+            return $results;            
+        } else {
+            return $data;
         }
-        return $results;        
+        
     }
 }
