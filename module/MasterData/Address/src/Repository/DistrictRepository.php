@@ -64,9 +64,9 @@ class DistrictRepository extends EntityRepository {
     public function buildDistrictQueryBuilder($sortField = 'd.name', $sortDirection = 'asc', $filters)
     {
         $operatorsMap = [
-            'city_id' => [
-                'alias' => 'd.city_id',
-                'operator' => 'eq'
+            'city' => [
+                'alias' => 'c.name',
+                'operator' => 'contains'
             ],
             'name' => [
                 'alias' => 'd.name',
@@ -84,7 +84,7 @@ class DistrictRepository extends EntityRepository {
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(District::class, 'd');
+        $queryBuilder->from(District::class, 'd')->leftJoin('d.city','c');
 
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

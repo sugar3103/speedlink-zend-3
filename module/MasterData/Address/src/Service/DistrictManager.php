@@ -37,7 +37,7 @@ class DistrictManager  {
             $district->setDescription($data['description']);
             $district->setDescriptionEn($data['description_en']);
             $district->setStatus($data['status']);            
-            $district->setCountryId($data['district_id']);
+            $district->setCityId($data['city_id']);
 
             $currentDate = date('Y-m-d H:i:s');
             $district->setCreatedAt($currentDate);
@@ -149,7 +149,7 @@ class DistrictManager  {
         $filters = []
     ){
 
-        $cities     = [];
+        $districts     = [];
         $totalDistrict = 0;                
 
         //get orm district
@@ -162,16 +162,14 @@ class DistrictManager  {
             $totalDistrict = $ormPaginator->count();
 
             // $adapter = new DoctrineAdapter($ormPaginator);  
-            $cities = $ormPaginator->getIterator()->getArrayCopy();
+            $districts = $ormPaginator->getIterator()->getArrayCopy();
             //set countRow default
             $countRow = 1;
             
-            foreach ($cities as &$district) {//loop
-                //set status
-                $district['status'] = District::getIsActiveList($district['status']);
+            foreach ($districts as &$district) {//loop
 
                 //set created_at
-                $district['createdAt'] =  ($district['createdAt']) ? Utils::checkDateFormat($district['createdAt'],'d/m/Y') : '';
+                $district['created_at'] =  ($district['created_at']) ? Utils::checkDateFormat($district['created_at'],'d/m/Y') : '';
 
                 $countRow++;
             }
@@ -180,7 +178,7 @@ class DistrictManager  {
 
         //set data district
         $dataDistrict = [
-            'listDistrict' => $cities,
+            'listDistrict' => $districts,
             'totalDistrict' => $totalDistrict,
         ];
         return $dataDistrict;

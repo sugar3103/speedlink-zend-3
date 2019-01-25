@@ -105,6 +105,16 @@ class District
     private $ref_as_by;
 
     /**
+     * @var \Address\Entity\City
+     *
+     * @ORM\OneToOne(targetEntity="Address\Entity\City", inversedBy="objects", fetch="EAGER")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="city_id", referencedColumnName="id", unique=true, nullable=true)
+     * })
+     */
+    private $city;
+
+    /**
      * @return int
      */
     public function getId()
