@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Col } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
-import { Button } from 'reactstrap';
+import renderSelectField from '../../../../containers/Shared/form/Select';
+import { Button, Col } from 'reactstrap';
 
 class SearchForm extends Component {
   render() {
@@ -12,66 +12,47 @@ class SearchForm extends Component {
       <form className="form" onSubmit={handleSubmit}>
         <Col md={4}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['code.code']}</span>
+            <span className="form__form-group-label">{messages['city.name']}</span>
             <div className="form__form-group-field">
               <Field
-                name="code"
+                name="name"
                 component="input"
                 type="text"
-                placeholder={messages['code.code']}
-              />
-            </div>
-          </div>
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['code.district']}</span>
-            <div className="form__form-group-field">
-              <Field
-                name="district"
-                component="input"
-                type="text"
-                placeholder={messages['code.district']}
+                placeholder={messages['city.name']}
               />
             </div>
           </div>
         </Col>
         <Col md={4}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['code.country']}</span>
+            <span className="form__form-group-label">{messages['city.country']}</span>
             <div className="form__form-group-field">
               <Field
                 name="country"
                 component="input"
                 type="text"
-                placeholder={messages['code.country']}
-              />
-            </div>
-          </div>
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['code.ward']}</span>
-            <div className="form__form-group-field">
-              <Field
-                name="ward"
-                component="input"
-                type="text"
-                placeholder={messages['code.ward']}
+                placeholder={messages['city.country']}
               />
             </div>
           </div>
         </Col>
         <Col md={4}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['code.city']}</span>
+            <span className="form__form-group-label">{messages['city.status']}</span>
             <div className="form__form-group-field">
               <Field
-                name="city"
-                component="input"
+                name="status"
+                component={renderSelectField}
                 type="text"
-                placeholder={messages['code.city']}
+                options={[
+                  { value: -1, label: messages['city.all'] },
+                  { value: 1, label: messages['city.active'] },
+                  { value: 0, label: messages['city.inactive'] }
+                ]}
               />
             </div>
           </div>
         </Col>
-
         <Col md={12} className="text-right search-group-button">
             <Button 
               size="sm" 
@@ -82,12 +63,12 @@ class SearchForm extends Component {
                   handleSubmit();  
                 }, 200);
               }}
-            >{messages['code.clear']}</Button>{' '}
+            >{messages['city.clear']}</Button>{' '}
             <Button 
               size="sm" 
               color="primary"
               id="search" 
-            >{ messages['code.search'] }</Button>
+            >{ messages['city.search'] }</Button>
         </Col>
       </form>
     );
@@ -95,5 +76,5 @@ class SearchForm extends Component {
 }
 
 export default reduxForm({
-  form: 'code_search_form',
+  form: 'city_search_form',
 })(injectIntl(SearchForm));

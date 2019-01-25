@@ -2,9 +2,10 @@ import React, { PureComponent } from 'react';
 import { Button, ButtonToolbar, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleCountryModal } from '../../../../redux/actions';
+import { toggleCityModal } from '../../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../../containers/Shared/form/CustomField';
+import renderSelectField from '../../../../containers/Shared/form/Select';
 import renderRadioButtonField from '../../../../containers/Shared/form/RadioButton';
 import classnames from 'classnames';
 import validate from './validateActionForm';
@@ -51,15 +52,15 @@ class Action extends PureComponent {
   };
 
   toggleModal = () => {
-    this.props.toggleCountryModal();
+    this.props.toggleCityModal();
   }
 
   render() {
     const { messages } = this.props.intl;
-    const { handleSubmit, modalData } = this.props;
+    const { handleSubmit, modalData, countries } = this.props;
     const { errors } = this.state;
     const className = modalData ? 'primary' : 'success';
-    const title = modalData ? messages['country.update'] : messages['country.add-new'];
+    const title = modalData ? messages['city.update'] : messages['city.add-new'];
 
     return (
       <form className="form" onSubmit={handleSubmit}>
@@ -94,20 +95,20 @@ class Action extends PureComponent {
               <TabContent activeTab={this.state.activeTab}>
                 <TabPane tabId="1">
                   <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['country.name']}</span>
+                    <span className="form__form-group-label">{messages['city.name']}</span>
                     <div className="form__form-group-field">
                       <Field
                         name="name"
                         component={CustomField}
                         type="text"
-                        placeholder={messages['country.name']}
+                        placeholder={messages['city.name']}
                         onChange={this.onChange}
                       />
                     </div>
-                    {errors && errors.name && errors.name.countryExists && <span className="form__form-group-error">{messages['country.validate-name-exists']}</span>}
+                    {errors && errors.name && errors.name.cityExists && <span className="form__form-group-error">{messages['city.validate-name-exists']}</span>}
                   </div>
                   <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['country.desc']}</span>
+                    <span className="form__form-group-label">{messages['city.desc']}</span>
                     <div className="form__form-group-field">
                       <Field
                         name="description"
@@ -119,20 +120,20 @@ class Action extends PureComponent {
                 </TabPane>
                 <TabPane tabId="2">
                   <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['country.name-en']}</span>
+                    <span className="form__form-group-label">{messages['city.name-en']}</span>
                     <div className="form__form-group-field">
                       <Field
                         name="name_en"
                         component={CustomField}
                         type="text"
-                        placeholder={messages['country.name-en']}
+                        placeholder={messages['city.name-en']}
                         onChange={this.onChange}
                       />
                     </div>
-                    {errors && errors.name_en && errors.name_en.countryExists && <span className="form__form-group-error">{messages['country.validate-nameEn-exists']}</span>}
+                    {errors && errors.name_en && errors.name_en.cityExists && <span className="form__form-group-error">{messages['city.validate-nameEn-exists']}</span>}
                   </div>
                   <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['country.desc-en']}</span>
+                    <span className="form__form-group-label">{messages['city.desc-en']}</span>
                     <div className="form__form-group-field">
                       <Field
                         name="description_en"
@@ -146,39 +147,49 @@ class Action extends PureComponent {
             </div>
           </div>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['country.status']}</span>
+            <span className="form__form-group-label">{messages['city.status']}</span>
             <div className="form__form-group-field">
               <Field
                 name="status"
                 component={renderRadioButtonField}
-                label={messages['country.active']}
+                label={messages['city.active']}
                 radioValue={1}
                 defaultChecked
               />
               <Field
                 name="status"
                 component={renderRadioButtonField}
-                label={messages['country.inactive']}
+                label={messages['city.inactive']}
                 radioValue={0}
               />
             </div>
           </div>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['country.iso-code']}</span>
+            <span className="form__form-group-label">{messages['city.iso-code']}</span>
             <div className="form__form-group-field">
               <Field
                 name="iso_code"
                 component={CustomField}
                 type="text"
-                placeholder={messages['country.iso_code']}
-                onChange={this.onChange}
+                placeholder={messages['city.iso_code']}
+              />
+            </div>
+          </div>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['city.country']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="country"
+                component={renderSelectField}
+                type="text"
+                options={countries && this.showOptionCountry(countries)}
               />
             </div>
           </div>
         </div>
         <ButtonToolbar className="modal__footer">
-          <Button outline onClick={this.toggleModal}>{messages['country.cancel']}</Button>{' '}
-          <Button color={className} type="submit">{messages['country.save']}</Button>
+          <Button outline onClick={this.toggleModal}>{messages['city.cancel']}</Button>{' '}
+          <Button color={className} type="submit">{messages['city.save']}</Button>
         </ButtonToolbar>
       </form>
     );
@@ -186,16 +197,18 @@ class Action extends PureComponent {
 }
 
 const mapStateToProps = ({ address }) => {
-  const { errors, modalData } = address.country;
+  const { errors, modalData } = address.city;
+  const countries = address.country.items;
   return {
     errors,
-    modalData
+    modalData,
+    countries
   }
 }
 
 export default reduxForm({
-  form: 'country_action_form',
+  form: 'city_action_form',
   validate
 })(injectIntl(connect(mapStateToProps, {
-  toggleCountryModal
+  toggleCityModal,
 })(Action)));

@@ -5,53 +5,53 @@ import { authHeader } from '../../../../util/auth-header';
 import history from '../../../../util/history';
 
 import {
-  COUNTRY_GET_LIST,
-  COUNTRY_ADD_ITEM,
-  COUNTRY_UPDATE_ITEM,
-  COUNTRY_DELETE_ITEM 
+  CITY_GET_LIST,
+  CITY_ADD_ITEM,
+  CITY_UPDATE_ITEM,
+  CITY_DELETE_ITEM 
 } from "../../../../constants/actionTypes";
 
 import {
-  toggleCountryModal,
-  getCountryListSuccess,
-  getCountryListError,
-  addCountryItemSuccess,
-  addCountryItemError,
-  updateCountryItemSuccess,
-  updateCountryItemError,
-  deleteCountryItemSuccess,
-  deleteCountryItemError,
-  getCountryList,
+  toggleCityModal,
+  getCityListSuccess,
+  getCityListError,
+  addCityItemSuccess,
+  addCityItemError,
+  updateCityItemSuccess,
+  updateCityItemError,
+  deleteCityItemSuccess,
+  deleteCityItemError,
+  getCityList,
 } from "./actions";
 
 import createNotification from '../../../../util/notifications';
 
-//list country
+//list city
 
 function getListApi(params) {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}address/country`,
+    url: `${apiUrl}address/city`,
     headers: authHeader(),
     data: JSON.stringify(params)
   });
 }
 
-const getCountryListRequest = async (params) => {
+const getCityListRequest = async (params) => {
   return await getListApi(params).then(res => res.data).catch(err => err)
 };
 
-function* getCountryListItems({ payload }) {
+function* getCityListItems({ payload }) {
   const { params, messages } = payload;
   try {
-    const response = yield call(getCountryListRequest, params);
+    const response = yield call(getCityListRequest, params);
     switch (response.error_code) {
       case EC_SUCCESS:
-        yield put(getCountryListSuccess(response.data, response.total));
+        yield put(getCityListSuccess(response.data, response.total));
         break;
 
       case EC_FAILURE:
-        yield put(getCountryListError(response.data));
+        yield put(getCityListError(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -68,43 +68,43 @@ function* getCountryListItems({ payload }) {
     }
     
   } catch (error) {
-    yield put(getCountryListError(error));
+    yield put(getCityListError(error));
   }
 }
 
-//add country
+//add city
 
-function addCountryApi(item) {
+function addCityApi(item) {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}address/country/add`,
+    url: `${apiUrl}address/city/add`,
     headers: authHeader(),
     data: item
   });
 }
 
-const addCountryItemRequest = async item => {
-  return await addCountryApi(item).then(res => res.data).catch(err => err)
+const addCityItemRequest = async item => {
+  return await addCityApi(item).then(res => res.data).catch(err => err)
 };
 
-function* addCountryItem({ payload }) {
+function* addCityItem({ payload }) {
   const { item, messages } = payload;
   try {
-    const response = yield call(addCountryItemRequest, item);
+    const response = yield call(addCityItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
-        yield put(addCountryItemSuccess());
-        yield put(getCountryList(null, messages));
-        yield put(toggleCountryModal());
+        yield put(addCityItemSuccess());
+        yield put(getCityList(null, messages));
+        yield put(toggleCityModal());
         createNotification({
           type: 'success', 
-          message: messages['country.add-success'], 
+          message: messages['city.add-success'], 
           title: messages['notification.success']
         });
         break;
 
       case EC_FAILURE:
-        yield put(addCountryItemError(response.data));
+        yield put(addCityItemError(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('user');
@@ -119,43 +119,43 @@ function* addCountryItem({ payload }) {
         break;
     }
   } catch (error) {
-    yield put(addCountryItemError(error));
+    yield put(addCityItemError(error));
   }
 }
 
-//update country
+//update city
 
-function updateCountryApi(item) {
+function updateCityApi(item) {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}address/country/edit`,
+    url: `${apiUrl}address/city/edit`,
     headers: authHeader(),
     data: item
   });
 }
 
-const updateCountryItemRequest = async item => {
-  return await updateCountryApi(item).then(res => res.data).catch(err => err)
+const updateCityItemRequest = async item => {
+  return await updateCityApi(item).then(res => res.data).catch(err => err)
 };
 
-function* updateCountryItem({ payload }) {
+function* updateCityItem({ payload }) {
   const { item, messages } = payload;
   try {
-    const response = yield call(updateCountryItemRequest, item);
+    const response = yield call(updateCityItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
-        yield put(updateCountryItemSuccess());
-        yield put(getCountryList(null, messages));
-        yield put(toggleCountryModal());
+        yield put(updateCityItemSuccess());
+        yield put(getCityList(null, messages));
+        yield put(toggleCityModal());
         createNotification({
           type: 'success', 
-          message: messages['country.update-success'], 
+          message: messages['city.update-success'], 
           title: messages['notification.success']
         });
         break;
 
       case EC_FAILURE:
-        yield put(updateCountryItemError(response.data));
+        yield put(updateCityItemError(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -171,42 +171,42 @@ function* updateCountryItem({ payload }) {
         break;
     }
   } catch (error) {
-    yield put(updateCountryItemError(error));
+    yield put(updateCityItemError(error));
   }
 }
 
-//delete country
+//delete city
 
-function deleteCountryApi(id) {
+function deleteCityApi(id) {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}address/country/delete`,
+    url: `${apiUrl}address/city/delete`,
     headers: authHeader(),
     data: {  id: id }
   });
 }
 
-const deleteCountryItemRequest = async id => {
-  return await deleteCountryApi(id).then(res => res.data).catch(err => err)
+const deleteCityItemRequest = async id => {
+  return await deleteCityApi(id).then(res => res.data).catch(err => err)
 };
 
-function* deleteCountryItem({ payload }) {
+function* deleteCityItem({ payload }) {
   const { id, messages } = payload;
   try {
-    const response = yield call(deleteCountryItemRequest, id);
+    const response = yield call(deleteCityItemRequest, id);
     switch (response.error_code) {
       case EC_SUCCESS:
-        yield put(deleteCountryItemSuccess());
-        yield put(getCountryList(null, messages));
+        yield put(deleteCityItemSuccess());
+        yield put(getCityList(null, messages));
         createNotification({
           type: 'success', 
-          message: messages['country.delete-success'], 
+          message: messages['city.delete-success'], 
           title: messages['notification.success']
         });
         break;
 
       case EC_FAILURE:
-        yield put(deleteCountryItemError(response.data));
+        yield put(deleteCityItemError(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -222,24 +222,24 @@ function* deleteCountryItem({ payload }) {
         break;
     }
   } catch (error) {
-    yield put(deleteCountryItemError(error));
+    yield put(deleteCityItemError(error));
   }
 }
 
 export function* watchGetList() {
-  yield takeEvery(COUNTRY_GET_LIST, getCountryListItems);
+  yield takeEvery(CITY_GET_LIST, getCityListItems);
 }
 
 export function* wathcAddItem() {
-  yield takeEvery(COUNTRY_ADD_ITEM, addCountryItem);
+  yield takeEvery(CITY_ADD_ITEM, addCityItem);
 }
 
 export function* wathcUpdateItem() {
-  yield takeEvery(COUNTRY_UPDATE_ITEM, updateCountryItem);
+  yield takeEvery(CITY_UPDATE_ITEM, updateCityItem);
 }
 
 export function* wathcDeleteItem() {
-  yield takeEvery(COUNTRY_DELETE_ITEM, deleteCountryItem);
+  yield takeEvery(CITY_DELETE_ITEM, deleteCityItem);
 }
 
 

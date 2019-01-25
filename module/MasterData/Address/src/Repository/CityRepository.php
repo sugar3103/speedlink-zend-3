@@ -34,7 +34,9 @@ class CityRepository extends EntityRepository {
             $queryBuilder->select("
                 c.id,
                 c.name,
+                c.name_en,
                 c.description,
+                c.description_en,
                 c.status,
                 c.created_by,
                 c.created_at
@@ -63,9 +65,9 @@ class CityRepository extends EntityRepository {
     {
 
         $operatorsMap = [
-            'country_id' => [
-                'alias' => 'c.country_id',
-                'operator' => 'eq'
+            'country' => [
+                'alias' => 'ct.name',
+                'operator' => 'contains'
             ],
             
             'name' => [
@@ -85,7 +87,8 @@ class CityRepository extends EntityRepository {
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(City::class, 'c');
+        $queryBuilder->from(City::class, 'c')
+            ->leftJoin('c.country', 'ct');
 
         if ($sortField != NULL && $sortDirection != NULL){
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

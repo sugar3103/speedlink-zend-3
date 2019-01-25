@@ -81,8 +81,7 @@ class CountryController extends CoreController {
                 $this->error_code = 1;
                 $this->apiResponse['message'] = "You have added a country!";
             } else {
-                $this->error_code = -1;                
-                // $this->apiResponse['message'] = "Error";
+                $this->error_code = 0;                
                 $this->apiResponse['message'] = $form->getMessages();  
             } 
         } 
@@ -134,16 +133,16 @@ class CountryController extends CoreController {
             $country = $this->entityManager->getRepository(Country::class)->findOneBy(array('id' => $data['id']));    
             if ($country == null) {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = "Status Not Found";
+                $this->apiResponse['message'] = "Country Not Found";
             } else {
                 //remove country
                 $this->countryManager->deleteCountry($country);
     
                 $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have deleted country!";
+                $this->apiResponse['message'] = "You have deleted country!";
             }          
         } else {
-            $this->error_code = -1;
+            $this->error_code = 0;
             $this->apiResponse['message'] = "Country request Id!";
         }
         return $this->createResponse();        
