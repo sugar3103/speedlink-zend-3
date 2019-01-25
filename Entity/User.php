@@ -54,7 +54,7 @@ class User
      *
      * @ORM\Column(name="last_name", type="string", length=100, nullable=true)
      */
-    private $last_lame;
+    private $last_name;
 
     /**
      * @var int
@@ -237,17 +237,17 @@ class User
     /**
      * @return string|null
      */
-    public function getLastLame()
+    public function getLastName()
     {
-        return $this->last_lame;
+        return $this->last_name;
     }
 
     /**
-     * @param string|null $last_lame
+     * @param string|null $last_name
      */
-    public function setLastLame($last_lame)
+    public function setLastName($last_name)
     {
-        $this->last_lame = $last_lame;
+        $this->last_name = $last_name;
     }
 
     /**

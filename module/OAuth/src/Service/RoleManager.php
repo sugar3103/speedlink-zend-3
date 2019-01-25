@@ -8,6 +8,7 @@ use Doctrine\ORM\ORMException;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator;
+use Core\Utils\Utils;
 
 /**
  * this service is responsible for adding/editing roles.
@@ -50,15 +51,16 @@ class RoleManager {
 
             $role = new Role();
             $role->setName($data['name']);
+            $role->setNameEn($data['name_en']);
             $role->setDescription($data['description']);
+            $role->setDescriptionEn($data['description_en']);
             $role->setCreatedAt(date('Y-m-d H:i:s'));
 
             // add parent roles to inherit
             $inheritedRoles = $data['inherit_roles'];
             if (!empty($inheritedRoles)) {
                 foreach ($inheritedRoles as $roleId) {
-                    $parentRole = $this->entityManager->getRepository(Role::class)
-                        ->findOneById($roleId);
+                    $parentRole = $this->entityManager->getRepository(Role::class)->findOneById($roleId);
 
                     if ($parentRole == null)
                         throw new \Exception("Role to inherit not found");
@@ -101,6 +103,8 @@ class RoleManager {
 
             $role->setName($data['name']);
             $role->setDescription($data['description']);
+            $role->setNameEn($data['name_en']);
+            $role->setDescriptionEn($data['description_en']);
 
             // clear parent roles so we don't populate database twice
             $role->clearParentRoles();
@@ -109,8 +113,7 @@ class RoleManager {
             $inheritedRoles = $data['inherit_roles'];
             if (!empty($inheritedRoles)) {
                 foreach ($inheritedRoles as $roleId) {
-                    $parentRole = $this->entityManager->getRepository(Role::class)
-                        ->findOneById($roleId);
+                    $parentRole = $this->entityManager->getRepository(Role::class)->findOneById($roleId);
 
                     if ($parentRole == null)
                         throw new \Exception("Role to inherit not found");
@@ -204,13 +207,14 @@ class RoleManager {
             // create new role
             $role = new Role();
             $role->setName($name);
+            $role->setNameEn($name);
             $role->setDescription($info['description']);
+            $role->setDescriptionEn($info['description']);
             $role->setCreatedAt(date('Y-m-d H:i:s'));
-
+            $role->setCreatedBy(1);
             // assign parent role
             if ($info['parent'] != null) {
-                $parentRole = $this->entityManager->getRepository(Role::class)
-                    ->findOneByName($info['parent']);
+                $parentRole = $this->entityManager->getRepository(Role::class)->findOneByName($info['parent']);
 
                 if ($parentRole == null)
                     throw new \Exception("Parent role " . $info['parent'] . ' doesn\' t exist');
@@ -221,8 +225,7 @@ class RoleManager {
             $this->entityManager->persist($role);
 
             // assign permissions to role
-            $permissions = $this->entityManager->getRepository(Permission::class)
-                ->findByName($info['permissions']);
+            $permissions = $this->entityManager->getRepository(Permission::class)->findByName($info['permissions']);
 
             foreach ($permissions as $permission) {
                 $role->getPermissions()->add($permission);
@@ -316,10 +319,9 @@ class RoleManager {
 
         //get orm role
         $ormRole = $this->entityManager->getRepository(Role::class)
-            ->getListRoleByCondition($sortField, $sortDirection, $filters);
+            ->getListRoleByCondition($start, $limit, $sortField, $sortDirection, $filters);
 
         if($ormRole){
-
             //set offset,limit
             $ormPaginator = new ORMPaginator($ormRole, true);
             $ormPaginator->setUseOutputWalkers(false);
@@ -330,9 +332,7 @@ class RoleManager {
 
             foreach ($roles as &$role) {//loop
                 //set created_at
-                $role['created_at'] =  ($role['created_at']) ? $this->checkDateFormat($role['created_at'],'d/m/Y') : '';
-
-                $countRow++;
+                $role['created_at'] =  ($role['created_at']) ? Utils::checkDateFormat($role['created_at'],'d/m/Y') : '';
             }
         }
 

@@ -1,5 +1,4 @@
 <?php
-
 namespace Address\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -7,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * AddressCode
  *
- * @ORM\Table(name="address_code")
+ * @ORM\Table(name="address_code", uniqueConstraints={@ORM\UniqueConstraint(name="unique_address_code_id", columns={"id", "code"})})
  * @ORM\Entity(repositoryClass="\Address\Repository\AddressCodeRepository")
  */
 class AddressCode
@@ -15,102 +14,102 @@ class AddressCode
     /**
      * @var int
      *
-     * @ORM\Column(name="address_code_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $addressCodeId;
+    private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code", type="string", length=50, precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="code", type="string", length=50, nullable=false)
      */
     private $code;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="country_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="country_id", type="integer", nullable=false)
      */
-    private $countryId;
+    private $country_id;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="city_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="city_id", type="integer", nullable=false)
      */
-    private $cityId;
+    private $city_id;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="district_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="district_id", type="integer", nullable=false)
      */
-    private $districtId;
+    private $district_id;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="ward_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="ward_id", type="integer", nullable=false)
      */
-    private $wardId;
+    private $ward_id;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="branch_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="branch_id", type="integer", nullable=false)
      */
-    private $branchId;
+    private $branch_id;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="hub_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="hub_id", type="integer", nullable=false)
      */
-    private $hubId;
+    private $hub_id;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="created_by", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="created_by", type="integer", nullable=false)
      */
-    private $createdBy;
+    private $created_by;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="created_at", type="datetime", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    private $createdAt;
+    private $created_at;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="updated_by", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="updated_by", type="integer", nullable=true)
      */
-    private $updateBy;
+    private $updated_by;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="updated_at", type="datetime", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    private $updatedAt;
+    private $updated_at;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="ref_as_by", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="ref_as_by", type="integer", nullable=true)
      */
-    private $refAsBy;
+    private $ref_as_by;
 
     /**
      * @var \Address\Entity\Country
      *
      * @ORM\OneToOne(targetEntity="Address\Entity\Country", inversedBy="objects", fetch="EAGER")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="country_id", referencedColumnName="country_id", unique=true, nullable=true)
+     *   @ORM\JoinColumn(name="country_id", referencedColumnName="id", unique=true, nullable=true)
      * })
      */
     private $country;
@@ -120,7 +119,7 @@ class AddressCode
      *
      * @ORM\OneToOne(targetEntity="Address\Entity\City", inversedBy="objects", fetch="EAGER")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="city_id", referencedColumnName="city_id", unique=true, nullable=true)
+     *   @ORM\JoinColumn(name="city_id", referencedColumnName="id", unique=true, nullable=true)
      * })
      */
     private $city;
@@ -130,7 +129,7 @@ class AddressCode
      *
      * @ORM\OneToOne(targetEntity="Address\Entity\District", inversedBy="objects", fetch="EAGER")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="district_id", referencedColumnName="district_id", unique=true, nullable=true)
+     *   @ORM\JoinColumn(name="district_id", referencedColumnName="id", unique=true, nullable=true)
      * })
      */
     private $district;
@@ -140,7 +139,7 @@ class AddressCode
      *
      * @ORM\OneToOne(targetEntity="Address\Entity\Ward", inversedBy="objects", fetch="EAGER")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ward_id", referencedColumnName="ward_id", unique=true, nullable=true)
+     *   @ORM\JoinColumn(name="ward_id", referencedColumnName="id", unique=true, nullable=true)
      * })
      */
     private $ward;
@@ -150,7 +149,7 @@ class AddressCode
      *
      * @ORM\OneToOne(targetEntity="NetworkPort\Entity\Hub", inversedBy="objects", fetch="EAGER")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="hub_id", referencedColumnName="hub_id", unique=true, nullable=true)
+     *   @ORM\JoinColumn(name="hub_id", referencedColumnName="id", unique=true, nullable=true)
      * })
      */
     private $hub;
@@ -160,39 +159,28 @@ class AddressCode
      *
      * @ORM\OneToOne(targetEntity="NetworkPort\Entity\Branch", inversedBy="objects", fetch="EAGER")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="branch_id", referencedColumnName="branch_id", unique=true, nullable=true)
+     *   @ORM\JoinColumn(name="branch_id", referencedColumnName="id", unique=true, nullable=true)
      * })
      */
     private $branch;
 
-
     /**
-     * Get addressCodeId.
-     *
      * @return int
      */
-    public function getAddressCodeId()
+    public function getId()
     {
-        return $this->addressCodeId;
+        return $this->id;
     }
 
     /**
-     * Set code.
-     *
-     * @param string $code
-     *
-     * @return AddressCode
+     * @param int $id
      */
-    public function setCode($code)
+    public function setId($id)
     {
-        $this->code = $code;
-
-        return $this;
+        $this->id = $id;
     }
 
     /**
-     * Get code.
-     *
      * @return string
      */
     public function getCode()
@@ -201,410 +189,187 @@ class AddressCode
     }
 
     /**
-     * Set countryId.
-     *
-     * @param int $countryId
-     *
-     * @return AddressCode
+     * @param string $code
      */
-    public function setCountryId($countryId)
+    public function setCode($code)
     {
-        $this->countryId = $countryId;
-
-        return $this;
+        $this->code = $code;
     }
 
     /**
-     * Get countryId.
-     *
      * @return int
      */
     public function getCountryId()
     {
-        return $this->countryId;
+        return $this->country_id;
     }
 
     /**
-     * Set cityId.
-     *
-     * @param int $cityId
-     *
-     * @return AddressCode
+     * @param int $country_id
      */
-    public function setCityId($cityId)
+    public function setCountryId($country_id)
     {
-        $this->cityId = $cityId;
-
-        return $this;
+        $this->country_id = $country_id;
     }
 
     /**
-     * Get cityId.
-     *
      * @return int
      */
     public function getCityId()
     {
-        return $this->cityId;
+        return $this->city_id;
     }
 
     /**
-     * Set districtId.
-     *
-     * @param int $districtId
-     *
-     * @return AddressCode
+     * @param int $city_id
      */
-    public function setDistrictId($districtId)
+    public function setCityId($city_id)
     {
-        $this->districtId = $districtId;
-
-        return $this;
+        $this->city_id = $city_id;
     }
 
     /**
-     * Get districtId.
-     *
      * @return int
      */
     public function getDistrictId()
     {
-        return $this->districtId;
+        return $this->district_id;
     }
 
     /**
-     * Set wardId.
-     *
-     * @param int $wardId
-     *
-     * @return AddressCode
+     * @param int $district_id
      */
-    public function setWardId($wardId)
+    public function setDistrictId($district_id)
     {
-        $this->wardId = $wardId;
-
-        return $this;
+        $this->district_id = $district_id;
     }
 
     /**
-     * Get wardId.
-     *
      * @return int
      */
     public function getWardId()
     {
-        return $this->wardId;
+        return $this->ward_id;
     }
 
     /**
-     * Set branchId.
-     *
-     * @param int $branchId
-     *
-     * @return AddressCode
+     * @param int $ward_id
      */
-    public function setBranchId($branchId)
+    public function setWardId($ward_id)
     {
-        $this->branchId = $branchId;
-
-        return $this;
+        $this->ward_id = $ward_id;
     }
 
     /**
-     * Get branchId.
-     *
      * @return int
      */
     public function getBranchId()
     {
-        return $this->branchId;
+        return $this->branch_id;
     }
 
     /**
-     * Set hubId.
-     *
-     * @param int $hubId
-     *
-     * @return AddressCode
+     * @param int $branch_id
      */
-    public function setHubId($hubId)
+    public function setBranchId($branch_id)
     {
-        $this->hubId = $hubId;
-
-        return $this;
+        $this->branch_id = $branch_id;
     }
 
     /**
-     * Get hubId.
-     *
      * @return int
      */
     public function getHubId()
     {
-        return $this->hubId;
+        return $this->hub_id;
     }
 
     /**
-     * Set createdBy.
-     *
-     * @param int $createdBy
-     *
-     * @return AddressCode
+     * @param int $hub_id
      */
-    public function setCreatedBy($createdBy)
+    public function setHubId($hub_id)
     {
-        $this->createdBy = $createdBy;
-
-        return $this;
+        $this->hub_id = $hub_id;
     }
 
     /**
-     * Get createdBy.
-     *
      * @return int
      */
     public function getCreatedBy()
     {
-        return $this->createdBy;
+        return $this->created_by;
     }
 
     /**
-     * Set createdAt.
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return AddressCode
+     * @param int $created_by
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedBy($created_by)
     {
-        $this->createdAt = $createdAt;
-
-        return $this;
+        $this->created_by = $created_by;
     }
 
     /**
-     * Get createdAt.
-     *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
 
     /**
-     * Set updateBy.
-     *
-     * @param int|null $updateBy
-     *
-     * @return AddressCode
+     * @param DateTime $created_at
      */
-    public function setUpdateBy($updateBy = null)
+    public function setCreatedAt($created_at)
     {
-        $this->updateBy = $updateBy;
-
-        return $this;
+        $this->created_at = $created_at;
     }
 
     /**
-     * Get updateBy.
-     *
      * @return int|null
      */
-    public function getUpdateBy()
+    public function getUpdatedBy()
     {
-        return $this->updateBy;
+        return $this->updated_by;
     }
 
     /**
-     * Set updatedAt.
-     *
-     * @param \DateTime|null $updatedAt
-     *
-     * @return AddressCode
+     * @param int|null $updated_by
      */
-    public function setUpdatedAt($updatedAt = null)
+    public function setUpdatedBy($updated_by)
     {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
+        $this->updated_by = $updated_by;
     }
 
     /**
-     * Get updatedAt.
-     *
-     * @return \DateTime|null
+     * @return DateTime|null
      */
     public function getUpdatedAt()
     {
-        return $this->updatedAt;
+        return $this->updated_at;
     }
 
     /**
-     * Set refAsBy.
-     *
-     * @param int|null $refAsBy
-     *
-     * @return AddressCode
+     * @param DateTime|null $updated_at
      */
-    public function setRefAsBy($refAsBy = null)
+    public function setUpdatedAt($updated_at)
     {
-        $this->refAsBy = $refAsBy;
-
-        return $this;
+        $this->updated_at = $updated_at;
     }
 
     /**
-     * Get refAsBy.
-     *
      * @return int|null
      */
     public function getRefAsBy()
     {
-        return $this->refAsBy;
+        return $this->ref_as_by;
     }
 
     /**
-     * Set country.
-     *
-     * @param \Address\Entity\Country|null $country
-     *
-     * @return AddressCode
+     * @param int|null $ref_as_by
      */
-    public function setCountry(\Address\Entity\Country $country = null)
+    public function setRefAsBy($ref_as_by)
     {
-        $this->country = $country;
-
-        return $this;
+        $this->ref_as_by = $ref_as_by;
     }
 
-    /**
-     * Get country.
-     *
-     * @return \Address\Entity\Country|null
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     * Set city.
-     *
-     * @param \Address\Entity\City|null $city
-     *
-     * @return AddressCode
-     */
-    public function setCity(\Address\Entity\City $city = null)
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
-    /**
-     * Get city.
-     *
-     * @return \Address\Entity\City|null
-     */
-    public function getCity()
-    {
-        return $this->city;
-    }
-
-    /**
-     * Set district.
-     *
-     * @param \Address\Entity\District|null $district
-     *
-     * @return AddressCode
-     */
-    public function setDistrict(\Address\Entity\District $district = null)
-    {
-        $this->district = $district;
-
-        return $this;
-    }
-
-    /**
-     * Get district.
-     *
-     * @return \Address\Entity\District|null
-     */
-    public function getDistrict()
-    {
-        return $this->district;
-    }
-
-    /**
-     * Set ward.
-     *
-     * @param \Address\Entity\Ward|null $ward
-     *
-     * @return AddressCode
-     */
-    public function setWard(\Address\Entity\Ward $ward = null)
-    {
-        $this->ward = $ward;
-
-        return $this;
-    }
-
-    /**
-     * Get ward.
-     *
-     * @return \Address\Entity\Ward|null
-     */
-    public function getWard()
-    {
-        return $this->ward;
-    }
-
-    /**
-     * Set hub.
-     *
-     * @param \NetworkPort\Entity\Hub|null $hub
-     *
-     * @return AddressCode
-     */
-    public function setHub(\NetworkPort\Entity\Hub $hub = null)
-    {
-        $this->hub = $hub;
-
-        return $this;
-    }
-
-    /**
-     * Get hub.
-     *
-     * @return \NetworkPort\Entity\Hub|null
-     */
-    public function getHub()
-    {
-        return $this->hub;
-    }
-
-    /**
-     * Set branch.
-     *
-     * @param \NetworkPort\Entity\Branch|null $branch
-     *
-     * @return AddressCode
-     */
-    public function setBranch(\NetworkPort\Entity\Branch $branch = null)
-    {
-        $this->branch = $branch;
-
-        return $this;
-    }
-
-    /**
-     * Get branch.
-     *
-     * @return \NetworkPort\Entity\Branch|null
-     */
-    public function getBranch()
-    {
-        return $this->branch;
-    }
 }

@@ -1,19 +1,33 @@
 import React, { Component } from 'react';
+import { injectIntl } from 'react-intl';
 import { Modal } from 'reactstrap';
+import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
+import { addStatusItem, updateStatusItem, toggleStatusModal } from '../../../redux/actions';
 
 class Action extends Component {
 
   handleSubmit = values => {
-    console.log(values);
+    const { messages } = this.props.intl;
+    if (values.id) {
+      this.props.updateStatusItem(values, messages);
+    } else {
+      this.props.addStatusItem(values, messages);
+    }
+  }
+
+  toggleModal = () => {
+    this.props.toggleStatusModal();
   }
 
   render() {
+    const { modalData } = this.props;
+    const className = modalData ? 'primary' : 'success';
     return (
       <Modal
         isOpen={this.props.modalOpen}
         toggle={this.toggleModal}
-        className={`modal-dialog--success modal-dialog--header`}
+        className={`modal-dialog--${className} modal-dialog--header`}
       >
         <ActionForm onSubmit={this.handleSubmit} />
       </Modal>
@@ -21,4 +35,15 @@ class Action extends Component {
   }
 }
 
-export default Action;
+const mapStateToProps = ({status}) => {
+  const { modalData } = status;
+  return {
+    modalData
+  }
+}
+
+export default injectIntl(connect(mapStateToProps, {
+  addStatusItem,
+  updateStatusItem,
+  toggleStatusModal
+})(Action));

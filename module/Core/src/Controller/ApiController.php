@@ -252,7 +252,7 @@ class ApiController extends AbstractRestfulController
     }
 
     private function errorCode() {
-        switch ($this->error) {
+        switch ($this->error_code) {
             case 0:
                 $this->error = true;
                 break;

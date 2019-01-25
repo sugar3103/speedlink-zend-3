@@ -1,18 +1,18 @@
 <?php
 namespace NetworkPort\Repository;
 
+use Core\Utils\Utils;
 use NetworkPort\Entity\Hub;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
-use Core\Utils\Utils;
 
 /**
  * This is the custom repository class for User entity.
  * @package NetworkPort\Repository
  */
-class HubRepository extends EntityRepository {
+class HubRepository extends EntityRepository
+{
     /**
      * Get list user by condition
      *
@@ -31,26 +31,21 @@ class HubRepository extends EntityRepository {
     {
         try {
             $queryBuilder = $this->buildHubQueryBuilder($sortField, $sortDirection, $filters);
-            $queryBuilder->select(
-               "h.hubId,
+            $queryBuilder->select("
+                h.id,
                 h.code,
                 h.name,
                 h.nameEn,
                 h.status,
-                h.createdAt,
-                h.createdBy,
-                h.updatedAt,
-                h.updatedBy,
+                h.created_at,
+                h.created_by,
+                h.updated_at,
+                h.updated_by,
                 h.description,
-                h.descriptionEn,
-                h.cityId,
-                c.name as city_name"
-            )
-            // ->groupBy('h.hubId')
-            ->setMaxResults($limit)
-            ->setFirstResult($start);
-            return $queryBuilder;
+                c.name as city_name
+            ")->where('h.is_deleted = 0');
 
+            return $queryBuilder;
         } catch (QueryException $e) {
             return [];
         }
@@ -91,19 +86,15 @@ class HubRepository extends EntityRepository {
      * @return QueryBuilder
      * @throws QueryException
      */
-    public function buildHubQueryBuilder($sortField = 'h.hubId', $sortDirection = 'asc', $filters)
+    public function buildHubQueryBuilder($sortField = 'h.id', $sortDirection = 'asc', $filters)
     {
         $operatorsMap = [
-             'hub_id' => [
-                'alias' => 'h.hubId',
-                'operator' => 'contains'
-            ],
-            'code' => [
-                'alias' => 'h.code',
-                'operator' => 'contains'
+            'hub_id' => [
+                'alias' => 'u.id',
+                'operator' => 'eq'
             ],
             'created_at' => [
-                'alias' => 'h.createdAt',
+                'alias' => 'h.created_at',
                 'operator' => 'contains'
             ],
             'status' => [
@@ -115,15 +106,16 @@ class HubRepository extends EntityRepository {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(Hub::class, 'h')
          ->leftJoin('h.city', 'c');
-            // ->groupBy('u.id')
-            // ->where('u.deletedAt is null')
-            // ->andWhere('u.id <> 1')
+        // ->groupBy('u.id')
+        // ->where('u.deletedAt is null')
+        // ->andWhere('u.id <> 1')
             
-        if ($sortField != NULL && $sortDirection != NULL)
+        if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
-        else
-            $queryBuilder->orderBy('h.code', 'ASC');
-
+        } else {
+            $queryBuilder->orderBy('h.id', 'DESC');
+        }
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
+
 }

@@ -61,7 +61,27 @@ export default {
           id: 'users',
           title: 'menu.user',
           route: '/app/setting/user',
-          icon: 'users'
+          icon: 'users',
+          childrens: [
+            {
+              id: 'user',
+              title: 'menu.user.list',
+              route: '/app/setting/user/list',
+              icon: 'users'
+            },
+            {
+              id: 'role',
+              title: 'menu.user.role',
+              route: '/app/setting/user/role',
+              icon: 'link'
+            },
+            {
+              id: 'permission',
+              title: 'menu.user.permission',
+              route: '/app/setting/user/permission',
+              icon: 'lock'
+            }
+          ]
         }
       ]
     }

@@ -2,7 +2,7 @@
 namespace Address\Repository;
 
 use Address\Entity\District;
-use Doctrine\Common\Collections\Criteria;
+use Core\Utils\Utils;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
@@ -26,27 +26,27 @@ class DistrictRepository extends EntityRepository {
         $limit = 10,
         $sortField = 'd.name',
         $sortDirection = 'ASC',
-        $filters = []       
+        $filters = []
     )
     {
         try {
             $queryBuilder = $this->buildDistrictQueryBuilder($sortField, $sortDirection, $filters);
-            $queryBuilder->select(
-                "d.districtId,
-                 d.name,
-                 d.nameEn,
-                 d.description,
-                 d.descriptionEn,
-                 d.status,
-                 d.createdBy,
-                 d.createdAt"                 
-            )->groupBy('d.districtId')
+            $queryBuilder->select("
+                d.id,
+                d.name,
+                d.name_en,
+                d.description,
+                d.description_en,
+                d.status,
+                d.created_by,
+                d.created_at
+            ")->andWhere("d.is_deleted = 0")
+            ->groupBy('d.id')
             ->setMaxResults($limit)
             ->setFirstResult(($start - 1) * $limit);
-            return $queryBuilder;
 
+            return $queryBuilder;
         } catch (QueryException $e) {
-            
             return [];
         }
 
@@ -88,21 +88,15 @@ class DistrictRepository extends EntityRepository {
      */
     public function buildDistrictQueryBuilder($sortField = 'd.name', $sortDirection = 'asc', $filters)
     {
-
         $operatorsMap = [
             'city_id' => [
                 'alias' => 'd.city_id',
-                'operator' => 'eq'
-            ],
-             'district_id' => [
-                'alias' => 'd.districtId',
                 'operator' => 'eq'
             ],
             'name' => [
                 'alias' => 'd.name',
                 'operator' => 'contains'
             ],
-
             'created_at' => [
                 'alias' => 'd.created_at',
                 'operator' => 'contains'
@@ -117,41 +111,12 @@ class DistrictRepository extends EntityRepository {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(District::class, 'd');
 
-        if ($sortField != NULL && $sortDirection != NULL)
+        if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
-        else
+        } else {
             $queryBuilder->orderBy('d.name', 'ASC');
-
-        return $this->setCriteriaListDistrictByFilters($filters, $operatorsMap, $queryBuilder);
-    }
-
-    /**
-     * Set criteria list by filters
-     *
-     * @param array $filters
-     * @param array $operatorsMap
-     * @param QueryBuilder $queryBuilder
-     * @return QueryBuilder
-     * @throws QueryException
-     */
-    public function setCriteriaListDistrictByFilters($filters = [], $operatorsMap = [], QueryBuilder $queryBuilder)
-    {
-
-        foreach ($filters as $key => $value){
-
-           if (isset($operatorsMap[$key]) && $value !== "")
-                $expr = Criteria::create()->andWhere(Criteria::expr()->{$operatorsMap[$key]['operator']}($operatorsMap[$key]['alias'], $value));
-            elseif ($value === "")
-                continue;
-            else
-                $expr = Criteria::create()->andWhere(Criteria::expr()->contains($operatorsMap[$key]['alias'], $value));
-
-            $queryBuilder->addCriteria($expr);
         }
-
-        return $queryBuilder;
+        return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
-
-
 
 }

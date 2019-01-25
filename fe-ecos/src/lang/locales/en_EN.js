@@ -1,5 +1,8 @@
 module.exports = {
 
+  //Global
+  'cancel': 'Cancel',
+  'save': 'Save',
   //theme
   'theme.title-setting': 'Theme Customizer',
   'theme.desc-setting': 'Change the theme as you like!',
@@ -8,6 +11,11 @@ module.exports = {
   //layout
   'layout.locale-vie': 'Vietnamese',
   'layout.locale-eng': 'English',
+
+  //notification
+  'notification.success': 'Success',
+  'notification.warning': 'Warning',
+  'notification.error': 'Error',
 
   //menu
   'menu.dashboard': 'Dashboard',
@@ -24,6 +32,9 @@ module.exports = {
   //Menu Setting
   'menu.setting': 'Settings',
   'menu.user': 'Users',
+  'menu.user.list': 'User',
+  'menu.user.role': 'Roles',
+  'menu.user.permission': 'Permissions',
 
   //auth - login
   'login.welcome': 'Welcome to',
@@ -34,6 +45,7 @@ module.exports = {
   'login.remember-me': 'Remember me',
   'login.login': 'Sign In',
   'login.register': 'Create Account',
+  'login.login-again': 'Please login again to countinue',
   'login.username-error-empty': 'Username field shouldn’t be empty',
   'login.password-error-empty': 'Password field shouldn’t be empty',
 
@@ -42,6 +54,7 @@ module.exports = {
   //master-data --- Status
   'status.list-title': 'Status List',
   'status.add-new': 'Add New Status',
+  'status.update': 'Update Status',
   'status.name': 'Name',
   'status.name-en': 'English Name',
   'status.desc': 'Description',
@@ -53,11 +66,28 @@ module.exports = {
   'status.inactive': 'Disable',
   'status.cancel': 'Cancel',
   'status.save': 'Save',
+  'status.search': 'Search',
+  'status.clear': 'Clear',
+  'status.all': 'All',
+  'status.no-result': 'No result found',
+  'status.title-confirm': 'Delete Status',
+  'status.desc-confirm': 'Are you sure delete this status?',
+  'status.confirm-no': 'No',
+  'status.confirm-yes': 'Yes, delete it!',
+  'status.add-success': 'You have added a status!',
+  'status.update-success': 'You have modified status!',
+  'status.delete-success': 'You have deleted status!',
   //validate
   'status.validate-name-empty': 'Name shouldn’t be empty',
+  'status.validate-name-minlength': 'Name must be 5 characters or more',
+  'status.validate-name-maxlength': 'Name must be 60 characters or less',
+  'status.validate-name-exists': 'Name already exists',
   'status.validate-nameEn-empty': 'English name shouldn’t be empty',
-  
-  //Address
+  'status.validate-nameEn-minlength': 'English name must be 5 characters or more',
+  'status.validate-nameEn-maxlength': 'English name must be 60 characters or less',
+  'status.validate-nameEn-exists': 'English name already exists',
+
+  //Master-data --- Address
   'address.code' : 'Address Code',
   'address.countries': 'Countries',
   'address.country': 'Country',
@@ -66,5 +96,89 @@ module.exports = {
   'address.districts': 'Districts',
   'address.district': 'District',
   'address.wards': 'Wards',
-  'address.ward': 'Ward'
+  'address.ward': 'Ward',
+  //Master-data --- Address --- Code
+  'code.list-title': 'List Address',
+  'code.code': 'Code',
+  'code.country': 'Country',
+  'code.city': 'City',
+  'code.district': 'District',
+  'code.ward': 'Ward',
+  'code.created-at': 'Created At',
+  'code.search': 'Search',
+  'code.clear': 'Clear',
+  'code.no-result': 'no result found',
+  //Master-data --- Address --- Country
+  'country.list-title': 'Country List',
+  'country.add-new': 'Add New Country',
+  'country.update': 'Update Country',
+  'country.name': 'Name',
+  'country.name-en': 'English Name',
+  'country.desc': 'Description',
+  'country.desc-en': 'English Description',
+  'country.status': 'Status',
+  'country.iso-code': 'ISO Code',
+  'country.created-at': 'Created At',
+  'country.action': 'Action',
+  'country.active': 'Enable',
+  'country.inactive': 'Disable',
+  'country.cancel': 'Cancel',
+  'country.save': 'Save',
+  'country.search': 'Search',
+  'country.clear': 'Clear',
+  'country.all': 'All',
+  'country.no-result': 'No result found',
+  'country.title-confirm': 'Delete Country',
+  'country.desc-confirm': 'Are you sure delete this country?',
+  'country.confirm-no': 'No',
+  'country.confirm-yes': 'Yes, delete it!',
+  'country.add-success': 'You have added a country!',
+  'country.update-success': 'You have modified country!',
+  'country.delete-success': 'You have deleted country!',
+  //validate
+  'country.validate-name-empty': 'Name shouldn’t be empty',
+  'country.validate-name-minlength': 'Name must be 5 characters or more',
+  'country.validate-name-maxlength': 'Name must be 60 characters or less',
+  'country.validate-name-exists': 'Name already exists',
+  'country.validate-nameEn-empty': 'English name shouldn’t be empty',
+  'country.validate-nameEn-minlength': 'English name must be 5 characters or more',
+  'country.validate-nameEn-maxlength': 'English name must be 60 characters or less',
+  'country.validate-nameEn-exists': 'English name already exists',
+  'country.validate-isoCode-empty': 'ISO Code shouldn’t be empty',
+
+  //User
+  'user.avatar': 'Avatar',
+  'user.list': 'User',
+  'user.active': 'Enable',
+  'user.inactive': 'Disable',
+  'user.username': 'Username',
+  'user.fullname': 'Full Name',
+  'user.firstname': 'First Name',
+  'user.lastname': 'Last Name',
+  'user.status': 'Status',
+  'user.created-at': 'Created At',
+  'user.action': 'Action',
+  'user.add-new': 'Add New User',
+  'user.password': 'Password',
+  'user.confirm_password': 'Confirm password',
+
+  //Role
+  'role.list': 'Roles',
+  'role.name': 'Role',
+  'role.active': 'Enable',
+  'role.inactive': 'Disable',
+  'role.status': 'Status',
+  'role.created-at': 'Created At',
+  'role.action': 'Action',
+  'role.add-new': 'Add New Role',
+
+  //Role
+  'permission.list': 'Permissons',
+  'permission.name': 'Permisson',
+  'permission.active': 'Enable',
+  'permission.inactive': 'Disable',  
+  'permission.created-at': 'Created At',
+  'permission.action': 'Action',
+  'permission.add-new': 'Add New Permisson',
+  'permission.update': 'Edit Permisson',
 };

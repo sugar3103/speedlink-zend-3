@@ -16,7 +16,7 @@ class UserController extends CoreController {
     protected $entityManager;
     
       /**
-     * City Manager.
+     * User Manager.
      * @var UserManager
      */
     protected $userManager;
@@ -56,10 +56,11 @@ class UserController extends CoreController {
     
     public function addAction()
     {   
-        // check if city  has submitted the form
+        
+        // check if user  has submitted the form
         if ($this->getRequest()->isPost()) {
             $user = $this->tokenPayload;
-            //Create New Form City
+            //Create New Form User
             $form = new UserForm('create', $this->entityManager);
 
             $form->setData($this->getRequestData());
@@ -69,54 +70,48 @@ class UserController extends CoreController {
                 // get filtered and validated data
                 $data = $form->getData();
                 // add user.
-                $city = $this->cityManager->addCity($data,$user);
+                $user = $this->userManager->addUser($data,$user);
                 $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have modified Cities!";
+                $this->apiResponse['message'] = "Success: You have modified Users!";
             } else {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = "Error: You have modified Cities!";
+                $this->apiResponse['message'] = "Error: You have modified Users!";
                 $this->apiResponse = $form->getMessages(); 
                 
             }            
-        } else {
-            $this->httpStatusCode = 404;
-            $this->apiResponse['message'] = "Page Not Found";                 
-        }
+        } 
 
         return $this->createResponse();
     }
 
     public function editAction() {
         if ($this->getRequest()->isPost()) {
-             // fill in the form with POST data.
-             $payload = file_get_contents('php://input');
-             $data = json_decode($payload, true);
+             $data = $this->getRequestData();
+             
              $user = $this->tokenPayload;
-             $city = $this->entityManager->getRepository(City::class)
-                ->findOneBy(array('cityId' => $data['city_id']));
-            if(isset($data['city_id']) && $city) {
-                //Create New Form City
-                $form = new CityForm('update', $this->entityManager, $city);
+             $_user = $this->entityManager->getRepository(User::class)
+                ->findOneById($data['id']);
+            
+            if(isset($data['id']) && $_user) {
+                //Create New Form User
+                $form = new UserForm('update', $this->entityManager, $_user);
                 $form->setData($data);
                 if ($form->isValid()) {
-                   $data = $form->getData();
-                   
-                   $this->cityManager->updateCity($city, $data,$user);
+                   $data = $form->getData(); 
+                                     
+                   $this->userManager->updateUser($_user, $data,$user);
                    $this->error_code = 1;
-                   $this->apiResponse['message'] = "Success: You have modified city!";
+                   $this->apiResponse['message'] = "Success: You have modified user!";
                 }  else {
                    $this->error_code = 0;
                    $this->apiResponse = $form->getMessages(); 
                 }   
             }   else {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = 'City Not Found'; 
+                $this->apiResponse['message'] = 'User Not Found'; 
             }         
              
-        } else {
-            $this->httpStatusCode = 404;
-            $this->apiResponse['message'] = "Page Not Found";
-        }
+        } 
         
         return $this->createResponse();
     }
@@ -124,26 +119,22 @@ class UserController extends CoreController {
     public function deleteAction()
     {
         if ($this->getRequest()->isPost()) {
-              // fill in the form with POST data.
-              $payload = file_get_contents('php://input');
-              $data = json_decode($payload, true);
+              $data = $this->getRequestData();
  
               $user = $this->tokenPayload;
-              $city = $this->entityManager->getRepository(City::class)
-                 ->findOneBy(array('cityId' => $data['city_id']));
-            if($city) {
-                $this->cityManager->deleteCity($city);
+              $_user = $this->entityManager->getRepository(User::class)
+                 ->findOneById($data['id']);
+            if($_user) {
+                $this->userManager->deleteUser($_user);
                 $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have deleted city!";
+                $this->apiResponse['message'] = "Success: You have deleted user!";
             } else {
                 $this->httpStatusCode = 200;
                 $this->error_code = -1;
-                $this->apiResponse['message'] = "Not Found City";
+                $this->apiResponse['message'] = "Not Found User";
             }
-        } else {
-            $this->httpStatusCode = 404;
-            $this->apiResponse['message'] = "Page Not Found";            
         }
+
         return $this->createResponse();
     }
 }

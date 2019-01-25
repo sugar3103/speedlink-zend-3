@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import Select from 'react-select';
+import Select from 'react-select-v1';
 import PropTypes from 'prop-types';
 
 class SelectField extends PureComponent {
@@ -8,16 +8,12 @@ class SelectField extends PureComponent {
     name: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
     options: PropTypes.arrayOf(PropTypes.shape({
-      value: PropTypes.string,
+      value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+      ]),
       label: PropTypes.string,
-    })),
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.shape({
-        value: PropTypes.string,
-        label: PropTypes.string,
-      }),
-    ]).isRequired,
+    }))
   };
 
   static defaultProps = {
@@ -26,7 +22,7 @@ class SelectField extends PureComponent {
   };
 
   handleChange = (selectedOption) => {
-    this.props.onChange(selectedOption);
+    this.props.onChange(selectedOption.value);
   };
 
   render() {
@@ -69,7 +65,10 @@ renderSelectField.propTypes = {
     error: PropTypes.string,
   }),
   options: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.string,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
     label: PropTypes.string,
   })),
   placeholder: PropTypes.string,

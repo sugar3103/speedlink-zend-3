@@ -6,21 +6,11 @@ use Address\Validator\CountryExistsValidator;
 use Doctrine\ORM\EntityManager;
 use Zend\Filter\StringTrim;
 use Zend\Filter\ToInt;
-use Zend\Form\Element\Button;
-use Zend\Form\Element\Csrf;
-use Zend\Form\Element\Password;
-use Zend\Form\Element\Select;
-use Zend\Form\Element\Submit;
-use Zend\Form\Element\Text;
 use Zend\Form\Form;
-use Zend\InputFilter\ArrayInput;
-use Zend\Validator\GreaterThan;
-use Zend\Validator\Identical;
-use Zend\Validator\InArray;
 use Zend\Validator\StringLength;
 
-class CountryForm extends Form {
-    
+class CountryForm extends Form
+{
     /**
      * Scenario ('create' or 'update')
      * @var string
@@ -55,7 +45,8 @@ class CountryForm extends Form {
      /**
      * This method creates input filter (used for form filtering/validation).
      */
-    private function addInputFilter() {
+    private function addInputFilter()
+    {
         // Create main input filter.
         $inputFilter = $this->getInputFilter();
 
@@ -79,7 +70,7 @@ class CountryForm extends Form {
                     'name' => CountryExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'country' => $this->country                        
+                        'country' => $this->country
                     ]
                 ]
             ]
@@ -151,6 +142,5 @@ class CountryForm extends Form {
                 ]
             ] 
         ]);
-        
     }
 }

@@ -1,176 +1,272 @@
-<?php 
+<?php
 namespace Status\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * Status
+ *
  * @ORM\Table(name="status")
  * @ORM\Entity(repositoryClass="\Status\Repository\StatusRepository")
  */
-class Status 
+class Status
 {
-
     const ACTIVE = 1;
     const INACTIVE = 0;
-    
-    /**
-     * @ORM\Id
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\GeneratedValue
-     */
-    protected $id;
 
     /**
-     * @ORM\Column(type="string",name="name",unique=true)
-     */
-    protected $name;
-
-    /**
-     * @ORM\Column(type="string",name="name_en",unique=true)
-     */
-    protected $name_en;
-
-    /**
-     * @ORM\Column(type="text", name="description")
-     */
-    protected $description;
-
-    /**
-     * @ORM\Column(type="text", name="description_en")
-     */
-    protected $description_en;
-
-    /**
-     * @ORM\Column(type="integer", name="status")
-     */
-    protected $status;
-
-    /**
-     * @ORM\Column(type="integer", name="created_by")
-     */
-    protected $created_by;
-
-    /**
-     * @ORM\Column(type="datetime",name="created_at")
-     */
-    protected $created_at;
-
-     /**
-     * @ORM\Column(type="integer", name="updated_by")
-     */
-    protected $updated_by;
-
-    /**
-     * @ORM\Column(type="datetime",name="updated_at")
-     */
-    protected $updated_at;
-
-    /**
-     * Get Id
+     * @var int
      *
-     * @return mixed
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    public function getId() {
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=50, nullable=false)
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name_en", type="string", length=50, nullable=false)
+     */
+    private $name_en;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="description_en", type="text", length=65535, nullable=true)
+     */
+    private $description_en;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="status", type="integer", nullable=false)
+     */
+    private $status;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_deleted", type="boolean", nullable=false)
+     */
+    private $is_deleted = '0';
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="created_by", type="integer", nullable=false)
+     */
+    private $created_by;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     */
+    private $created_at;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="updated_by", type="integer", nullable=true)
+     */
+    private $updated_by;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    private $updated_at;
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
-     * Set Id
-     *
-     * @param $id
+     * @param int $id
      */
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
     }
 
     /**
-     * Get name
-     *
-     * @return mixed
+     * @return string
      */
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
     /**
-     * Set name
-     *
-     * @param $name
+     * @param string $name
      */
-    public function setName($name) {
+    public function setName($name)
+    {
         $this->name = $name;
     }
 
     /**
-     * Get name en
-     *
-     * @return mixed
+     * @return string
      */
-    public function getNameEn() {
+    public function getNameEn()
+    {
         return $this->name_en;
     }
 
     /**
-     * Set name english
-     *
-     * @param $nameEn
+     * @param string $name_en
      */
-    public function setNameEn($nameEn) {
-        $this->name_en = $nameEn;
+    public function setNameEn($name_en)
+    {
+        $this->name_en = $name_en;
     }
 
     /**
-     * Get description
-     *
-     * @return mixed
+     * @return string|null
      */
-    public function getDescription() {
+    public function getDescription()
+    {
         return $this->description;
     }
 
     /**
-     * Set description
-     *
-     * @param $description
+     * @param string|null $description
      */
-    public function setDescription($description) {
+    public function setDescription($description)
+    {
         $this->description = $description;
     }
 
     /**
-     * Get description en
-     *
-     * @return mixed
+     * @return string|null
      */
-    public function getDescriptionEn() {
+    public function getDescriptionEn()
+    {
         return $this->description_en;
     }
 
     /**
-     * Set description en
-     *
-     * @param $descriptionEn
+     * @param string|null $description_en
      */
-    public function setDescriptionEn($descriptionEn) {
-        $this->description_en = $descriptionEn;
+    public function setDescriptionEn($description_en)
+    {
+        $this->description_en = $description_en;
     }
 
     /**
-     * Get status
-     *
-     * @return mixed
+     * @return int
      */
-    public function getStatus() {
+    public function getStatus()
+    {
         return $this->status;
     }
 
     /**
-     * Set status
-     *
-     * @param $status
+     * @param int $status
      */
-    public function setStatus($status) {
+    public function setStatus($status)
+    {
         $this->status = $status;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDeleted()
+    {
+        return $this->is_deleted;
+    }
+
+    /**
+     * @param bool $is_deleted
+     */
+    public function setIsDeleted($is_deleted)
+    {
+        $this->is_deleted = $is_deleted;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCreatedBy()
+    {
+        return $this->created_by;
+    }
+
+    /**
+     * @param int $created_by
+     */
+    public function setCreatedBy($created_by)
+    {
+        $this->created_by = $created_by;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * @param \DateTime $created_at
+     */
+    public function setCreatedAt($created_at)
+    {
+        $this->created_at = $created_at;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getUpdatedBy()
+    {
+        return $this->updated_by;
+    }
+
+    /**
+     * @param int|null $updated_by
+     */
+    public function setUpdatedBy($updated_by)
+    {
+        $this->updated_by = $updated_by;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * @param \DateTime|null $updated_at
+     */
+    public function setUpdatedAt($updated_at)
+    {
+        $this->updated_at = $updated_at;
     }
 
     /**
@@ -190,78 +286,4 @@ class Status
         return $status;
     }
 
-    /**
-     * Get Created By
-     *
-     * @return mixed
-     */
-    public function getCreatedBy() {
-        return $this->created_by;
-    }
-
-    /**
-     * Set Created By
-     *
-     * @param $created_by
-     */
-    public function setCreatedBy($created_by) {
-        $this->created_by = $created_by;
-    }
-
-    /**
-     * Get Created At
-     *
-     * @return mixed
-     */
-    public function getCreatedAt() {
-        return $this->created_at;
-    }
-
-    /**
-     * Set Created At
-     *
-     * @param $created_at
-     */
-    public function setCreatedAt($created_at) {
-        $this->created_at = $created_at;
-    }
-
-    /**
-     * Get Updated By
-     *
-     * @return mixed
-     */
-    public function getUpdatedBy() {
-        return $this->updated_by;
-    }
-
-    /**
-     * Set Updated By
-     *
-     * @param $updated_by
-     */
-    public function setUpdatedBy($updated_by) {
-        $this->updated_by = $updated_by;
-    }
-
-    /**
-     * Get Updated At
-     *
-     * @return mixed
-     */
-    public function getUpdatedAt() {
-        return $this->updated_at;
-    }
-
-    /**
-     * Set Updated At
-     *
-     * @param $updated_at
-     */
-    public function setUpdatedAt($updated_at) {
-        $this->updated_at = $updated_at;
-    }
-
 }
-
-?>

@@ -1,5 +1,4 @@
 <?php
-
 namespace CustomerService\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -15,7 +14,7 @@ class ShipmentType
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,133 +23,130 @@ class ShipmentType
     /**
      * @var string|null
      *
-     * @ORM\Column(name="name", type="string", length=50, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="name", type="string", length=50, nullable=true)
      */
     private $name;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="name_en", type="string", length=50, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="name_en", type="string", length=50, nullable=true)
      */
-    private $nameEn;
+    private $name_en;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="description", type="text", length=65535, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
     private $description;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="description_en", type="text", length=65535, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="description_en", type="text", length=65535, nullable=true)
      */
-    private $descriptionEn;
+    private $description_en;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="code", type="string", length=50, precision=0, scale=0, nullable=true, options={"fixed"=true}, unique=false)
+     * @ORM\Column(name="code", type="string", length=50, nullable=true, options={"fixed"=true})
      */
     private $code;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="carrier_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="carrier_id", type="integer", nullable=false)
      */
-    private $carrierId;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="category_code", type="string", length=50, precision=0, scale=0, nullable=true, options={"fixed"=true}, unique=false)
-     */
-    private $categoryCode;
+    private $carrier_id;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="service_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="category_code", type="integer", nullable=false, options={"comment"="Inbound, Outbound, Domestic"})
      */
-    private $serviceId;
+    private $category_code;
 
     /**
-     * @var string|null
+     * @var int
      *
-     * @ORM\Column(name="product_type_code", type="string", length=50, precision=0, scale=0, nullable=true, options={"fixed"=true}, unique=false)
+     * @ORM\Column(name="service_id", type="integer", nullable=false)
      */
-    private $productTypeCode;
+    private $service_id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="product_type_code", type="integer", nullable=false, options={"comment"="Dox, Parcel"})
+     */
+    private $product_type_code;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="volumetric_number", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="volumetric_number", type="integer", nullable=true)
      */
-    private $volumetricNumber;
+    private $volumetric_number;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="status", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="status", type="boolean", nullable=false)
      */
-    private $status;
+    private $status = '0';
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_deleted", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="is_deleted", type="boolean", nullable=false)
      */
-    private $isDeleted = 0;
+    private $is_deleted = '0';
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="updated_at", type="datetime", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    private $updatedAt;
+    private $updated_at;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="updated_by", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="updated_by", type="integer", nullable=true)
      */
-    private $updatedBy;
+    private $updated_by;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="created_at", type="datetime", precision=0, scale=0, nullable=false, options={"default"="0000-00-00 00:00:00"}, unique=false)
+     * @ORM\Column(name="created_at", type="datetime", nullable=false, options={"default"="0000-00-00 00:00:00"})
      */
-    private $createdAt = '0000-00-00 00:00:00';
+    private $created_at;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="created_by", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="created_by", type="integer", nullable=false)
      */
-    private $createdBy;
+    private $created_by;
 
     /**
      *
      * @ORM\OneToOne(targetEntity="\CustomerService\Entity\Carrier", inversedBy="shipment_type")
      * @ORM\JoinColumn(name="carrier_id", referencedColumnName="id", nullable=true)
      */
-    private $joinCarrier;
+    private $join_carrier;
 
     /**
      *
      * @ORM\OneToOne(targetEntity="\CustomerService\Entity\Service", inversedBy="shipment_type")
      * @ORM\JoinColumn(name="service_id", referencedColumnName="id", nullable=true)
      */
-    private $joinService;
-
+    private $join_service;
 
     /**
-     * Get id.
-     *
      * @return int
      */
     public function getId()
@@ -159,22 +155,14 @@ class ShipmentType
     }
 
     /**
-     * Set name.
-     *
-     * @param string|null $name
-     *
-     * @return ShipmentType
+     * @param int $id
      */
-    public function setName($name = null)
+    public function setId($id)
     {
-        $this->name = $name;
-
-        return $this;
+        $this->id = $id;
     }
 
     /**
-     * Get name.
-     *
      * @return string|null
      */
     public function getName()
@@ -183,46 +171,30 @@ class ShipmentType
     }
 
     /**
-     * Set nameEn.
-     *
-     * @param string|null $nameEn
-     *
-     * @return ShipmentType
+     * @param string|null $name
      */
-    public function setNameEn($nameEn = null)
+    public function setName($name)
     {
-        $this->nameEn = $nameEn;
-
-        return $this;
+        $this->name = $name;
     }
 
     /**
-     * Get nameEn.
-     *
      * @return string|null
      */
     public function getNameEn()
     {
-        return $this->nameEn;
+        return $this->name_en;
     }
 
     /**
-     * Set description.
-     *
-     * @param string|null $description
-     *
-     * @return ShipmentType
+     * @param string|null $name_en
      */
-    public function setDescription($description = null)
+    public function setNameEn($name_en)
     {
-        $this->description = $description;
-
-        return $this;
+        $this->name_en = $name_en;
     }
 
     /**
-     * Get description.
-     *
      * @return string|null
      */
     public function getDescription()
@@ -231,46 +203,30 @@ class ShipmentType
     }
 
     /**
-     * Set descriptionEn.
-     *
-     * @param string|null $descriptionEn
-     *
-     * @return ShipmentType
+     * @param string|null $description
      */
-    public function setDescriptionEn($descriptionEn = null)
+    public function setDescription($description)
     {
-        $this->descriptionEn = $descriptionEn;
-
-        return $this;
+        $this->description = $description;
     }
 
     /**
-     * Get descriptionEn.
-     *
      * @return string|null
      */
     public function getDescriptionEn()
     {
-        return $this->descriptionEn;
+        return $this->description_en;
     }
 
     /**
-     * Set code.
-     *
-     * @param string|null $code
-     *
-     * @return ShipmentType
+     * @param string|null $description_en
      */
-    public function setCode($code = null)
+    public function setDescriptionEn($description_en)
     {
-        $this->code = $code;
-
-        return $this;
+        $this->description_en = $description_en;
     }
 
     /**
-     * Get code.
-     *
      * @return string|null
      */
     public function getCode()
@@ -279,298 +235,187 @@ class ShipmentType
     }
 
     /**
-     * Set carrierId.
-     *
-     * @param int $carrierId
-     *
-     * @return ShipmentType
+     * @param string|null $code
      */
-    public function setCarrierId($carrierId)
+    public function setCode($code)
     {
-        $this->carrierId = $carrierId;
-
-        return $this;
+        $this->code = $code;
     }
 
     /**
-     * Get carrierId.
-     *
      * @return int
      */
     public function getCarrierId()
     {
-        return $this->carrierId;
+        return $this->carrier_id;
     }
 
     /**
-     * Set categoryCode.
-     *
-     * @param int $categoryCode
-     *
-     * @return ShipmentType
+     * @param int $carrier_id
      */
-    public function setCategoryCode($categoryCode)
+    public function setCarrierId($carrier_id)
     {
-        $this->categoryCode = $categoryCode;
-
-        return $this;
+        $this->carrier_id = $carrier_id;
     }
 
     /**
-     * Get categoryCode.
-     *
      * @return int
      */
     public function getCategoryCode()
     {
-        return $this->categoryCode;
+        return $this->category_code;
     }
 
     /**
-     * Set serviceId.
-     *
-     * @param int $serviceId
-     *
-     * @return ShipmentType
+     * @param int $category_code
      */
-    public function setServiceId($serviceId)
+    public function setCategoryCode($category_code)
     {
-        $this->serviceId = $serviceId;
-
-        return $this;
+        $this->category_code = $category_code;
     }
 
     /**
-     * Get serviceId.
-     *
      * @return int
      */
     public function getServiceId()
     {
-        return $this->serviceId;
+        return $this->service_id;
     }
 
     /**
-     * Set productTypeCode.
-     *
-     * @param int $productTypeCode
-     *
-     * @return ShipmentType
+     * @param int $service_id
      */
-    public function setProductTypeCode($productTypeCode)
+    public function setServiceId($service_id)
     {
-        $this->productTypeCode = $productTypeCode;
-
-        return $this;
+        $this->service_id = $service_id;
     }
 
     /**
-     * Get productTypeCode.
-     *
      * @return int
      */
     public function getProductTypeCode()
     {
-        return $this->productTypeCode;
+        return $this->product_type_code;
     }
 
     /**
-     * Set volumetricNumber.
-     *
-     * @param int|null $volumetricNumber
-     *
-     * @return ShipmentType
+     * @param int $product_type_code
      */
-    public function setVolumetricNumber($volumetricNumber = null)
+    public function setProductTypeCode($product_type_code)
     {
-        $this->volumetricNumber = $volumetricNumber;
-
-        return $this;
+        $this->product_type_code = $product_type_code;
     }
 
     /**
-     * Get volumetricNumber.
-     *
      * @return int|null
      */
     public function getVolumetricNumber()
     {
-        return $this->volumetricNumber;
+        return $this->volumetric_number;
     }
 
     /**
-     * Set status.
-     *
-     * @param bool $status
-     *
-     * @return ShipmentType
+     * @param int|null $volumetric_number
      */
-    public function setStatus($status)
+    public function setVolumetricNumber($volumetric_number)
     {
-        $this->status = $status;
-
-        return $this;
+        $this->volumetric_number = $volumetric_number;
     }
 
     /**
-     * Get status.
-     *
      * @return bool
      */
-    public function getStatus()
+    public function isStatus()
     {
         return $this->status;
     }
 
     /**
-     * Set isDeleted.
-     *
-     * @param bool $isDeleted
-     *
-     * @return ShipmentType
+     * @param bool $status
      */
-    public function setIsDeleted($isDeleted)
+    public function setStatus($status)
     {
-        $this->isDeleted = $isDeleted;
-
-        return $this;
+        $this->status = $status;
     }
 
     /**
-     * Get isDeleted.
-     *
      * @return bool
      */
-    public function getIsDeleted()
+    public function isDeleted()
     {
-        return $this->isDeleted;
+        return $this->is_deleted;
     }
 
     /**
-     * Set updatedAt.
-     *
-     * @param \DateTime|null $updatedAt
-     *
-     * @return ShipmentType
+     * @param bool $is_deleted
      */
-    public function setUpdatedAt($updatedAt = null)
+    public function setIsDeleted($is_deleted)
     {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
+        $this->is_deleted = $is_deleted;
     }
 
     /**
-     * Get updatedAt.
-     *
      * @return \DateTime|null
      */
     public function getUpdatedAt()
     {
-        return $this->updatedAt;
+        return $this->updated_at;
     }
 
     /**
-     * Set updatedBy.
-     *
-     * @param int|null $updatedBy
-     *
-     * @return ShipmentType
+     * @param \DateTime|null $updated_at
      */
-    public function setUpdatedBy($updatedBy = null)
+    public function setUpdatedAt($updated_at)
     {
-        $this->updatedBy = $updatedBy;
-
-        return $this;
+        $this->updated_at = $updated_at;
     }
 
     /**
-     * Get updatedBy.
-     *
      * @return int|null
      */
     public function getUpdatedBy()
     {
-        return $this->updatedBy;
+        return $this->updated_by;
     }
 
     /**
-     * Set createdAt.
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return ShipmentType
+     * @param int|null $updated_by
      */
-    public function setCreatedAt($createdAt)
+    public function setUpdatedBy($updated_by)
     {
-        $this->createdAt = $createdAt;
-
-        return $this;
+        $this->updated_by = $updated_by;
     }
 
     /**
-     * Get createdAt.
-     *
      * @return \DateTime
      */
     public function getCreatedAt()
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
 
     /**
-     * Set createdBy.
-     *
-     * @param int $createdBy
-     *
-     * @return ShipmentType
+     * @param \DateTime $created_at
      */
-    public function setCreatedBy($createdBy)
+    public function setCreatedAt($created_at)
     {
-        $this->createdBy = $createdBy;
-
-        return $this;
+        $this->created_at = $created_at;
     }
 
     /**
-     * Get createdBy.
-     *
      * @return int
      */
     public function getCreatedBy()
     {
-        return $this->createdBy;
+        return $this->created_by;
     }
 
     /**
-     * @return mixed
+     * @param int $created_by
      */
-    public function getJoinCarrier()
+    public function setCreatedBy($created_by)
     {
-        return $this->joinCarrier;
+        $this->created_by = $created_by;
     }
 
-    /**
-     * @param mixed $joinCarrier
-     */
-    public function setJoinCarrier($joinCarrier)
-    {
-        $this->joinCarrier = $joinCarrier;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getJoinService()
-    {
-        return $this->joinService;
-    }
-
-    /**
-     * @param mixed $joinService
-     */
-    public function setJoinService($joinService)
-    {
-        $this->joinService = $joinService;
-    }
 }

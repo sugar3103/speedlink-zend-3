@@ -19,9 +19,9 @@ export const toggleStatusModal = (status = null) => ({
   payload: status
 })
 
-export const getStatusList = (params) => ({
+export const getStatusList = (params, messages) => ({
   type: STATUS_GET_LIST,
-  payload: params
+  payload: { params, messages }
 });
 
 export const getStatusListSuccess = (items, total) => ({
@@ -34,9 +34,9 @@ export const getStatusListError = (error) => ({
   payload: error
 });
 
-export const addStatusItem = (item) => ({
+export const addStatusItem = (item, messages) => ({
   type: STATUS_ADD_ITEM,
-  payload: item
+  payload: { item, messages }
 });
 
 export const addStatusItemSuccess = () => ({
@@ -48,9 +48,9 @@ export const addStatusItemError = (error) => ({
   payload: error
 });
 
-export const updateStatusItem = (item) => ({
+export const updateStatusItem = (item, messages) => ({
   type: STATUS_UPDATE_ITEM,
-  payload: item
+  payload: { item, messages }
 });
 
 export const updateStatusItemSuccess = () => ({
@@ -62,9 +62,9 @@ export const updateStatusItemError = (error) => ({
   payload: error
 });
 
-export const deleteStatusItem = (id) => ({
+export const deleteStatusItem = (id, messages) => ({
   type: STATUS_DELETE_ITEM,
-  payload: id
+  payload: { id, messages }
 });
 
 export const deleteStatusItemSuccess = () => ({

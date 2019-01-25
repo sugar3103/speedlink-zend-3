@@ -2,10 +2,10 @@
 namespace CustomerService\Controller;
 
 use Core\Controller\CoreController;
+use CustomerService\Service\ServiceManager;
 use Doctrine\ORM\EntityManager;
 use CustomerService\Entity\Service;
 use CustomerService\Form\ServiceForm;
-use Zend\View\Model\JsonModel;
 
 class ServiceController extends CoreController
 {
@@ -28,6 +28,7 @@ class ServiceController extends CoreController
 
     public function __construct($entityManager, $serviceManager)
     {
+        parent::__construct($entityManager);
         $this->entityManager = $entityManager;
         $this->serviceManager = $serviceManager;
     }
@@ -42,7 +43,7 @@ class ServiceController extends CoreController
         }
 
         $result = [
-            "totalRecords" => 0,
+            "total" => 0,
             "data" => []
         ];
 
@@ -55,10 +56,9 @@ class ServiceController extends CoreController
 
         $dataService = $this->serviceManager->getListServiceByCondition($currentPage, $limit, $sortField, $sortDirection, $filters);
 
-        $result["totalRecords"] = $dataService['totalService'];
+        $result['message'] = 'Success';
+        $result["total"] = $dataService['totalService'];
         $result["data"] = !empty($dataService['listService']) ? $dataService['listService'] : [];
-        $result['code'] = 0;
-        $result['message'] = ['Success'];
         $this->apiResponse = $result;
 
         return $this->createResponse();

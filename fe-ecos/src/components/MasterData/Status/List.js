@@ -9,6 +9,7 @@ import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import Action from './Action';
+import Search from './Search';
 
 import {
   getStatusList,
@@ -31,11 +32,11 @@ class List extends Component {
     this.state = {
       selectedPageSize: SELECTED_PAGE_SIZE,
       currentPage: 1,
-      total: 20
     };
   }
 
   onChangePageSize = (size) => {
+    const { messages } = this.props.intl;
     size = parseInt(size, 10);
     let params = {
       offset: {
@@ -47,18 +48,20 @@ class List extends Component {
     if (this.props.status.paramSearch) {
       Object.assign(params, { "query": this.props.status.paramSearch})
     };
-    this.props.getStatusList(params, this.props.history);
+    this.props.getStatusList(params, messages);
 
     this.setState({
+      currentPage: 1,
       selectedPageSize: size
     });
   }
 
-  toggleModal = () => {
+  toggleModal = () => {    
     this.props.toggleStatusModal();
   }
 
   onChangePage = (page) => {
+    const { messages } = this.props.intl;
     let params = {
       offset: {
         start: parseInt(page, 10),
@@ -69,26 +72,20 @@ class List extends Component {
     if (this.props.status.paramSearch) {
       Object.assign(params, { "query": this.props.status.paramSearch })
     };
-    this.props.getStatusList(params);
+    this.props.getStatusList(params, messages);
 
     this.setState({
       currentPage: page
     });
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps && nextProps.status && nextProps.status.total) {
-      this.setState({
-        total: nextProps.status.total
-      });
-    }
-  }
-
   componentDidMount() {
-    this.props.getStatusList();
+    const { messages } = this.props.intl;
+    this.props.getStatusList(null, messages);
   }
 
   showStatusItem = (items) => {
+    const { messages } = this.props.intl;
     let result = null;
     if (items.length > 0) {
       result = items.map((item, index) => {
@@ -99,12 +96,16 @@ class List extends Component {
           />
         )
       })
+    } else {
+      result = (
+        <tr><td colSpan={8} className="text-center">{messages['status.no-result']}</td></tr>
+      )
     }
     return result;
   }
 
   render() {
-    const { items, loading, modalOpen } = this.props.status;
+    const { items, loading, modalOpen, total } = this.props.status;
     const { messages } = this.props.intl;
     return (
       <Col md={12} lg={12}>
@@ -121,6 +122,7 @@ class List extends Component {
               </ButtonToolbar>
               <Action modalOpen={modalOpen} />
             </div>
+            <Search />
             <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
             <Table responsive bordered hover>
               <thead>
@@ -137,13 +139,13 @@ class List extends Component {
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={5} className="text-center"><div className="loading-table" /></td></tr>
+                  <tr><td colSpan={8} className="text-center"><div className="loading-table" /></td></tr>
                 ) : (
                     this.showStatusItem(items)
                   )}
               </tbody>
             </Table>
-            <Pagination pagination={this.state} onChangePage={this.onChangePage} />
+            <Pagination pagination={this.state} total={total} onChangePage={this.onChangePage} />
           </CardBody>
         </Card>
       </Col>

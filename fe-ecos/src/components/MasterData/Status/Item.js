@@ -22,11 +22,11 @@ class Item extends Component {
       customUI: ({ onClose }) => {
         return (
           <div className='custom-ui-confirm'>
-            <h1>{messages["status.title-confirm"]}</h1>
+            <h2>{messages["status.title-confirm"]}</h2>
             <p>{messages["status.desc-confirm"]}</p>
             <Button color="light" size="sm" onClick={onClose}>{messages["status.confirm-no"]}</Button> &nbsp;
             <Button color="danger" size="sm" onClick={() => {
-              this.props.deleteStatusItem(id)
+              this.props.deleteStatusItem(id, messages)
               onClose()
             }}>{messages["status.confirm-yes"]}</Button>
           </div>
@@ -40,16 +40,16 @@ class Item extends Component {
     const { messages } = this.props.intl;
     return (
       <tr>
-        <th scope="row">{status.status_id}</th>
+        <th scope="row">{status.id}</th>
         <td>{status.name}</td>
         <td>{status.name_en}</td>
         <td>{status.description}</td>
         <td>{status.description_en}</td>
-        <td>{status.status === 'Active' ? <Badge color="success">{messages['status.active']}</Badge> : <Badge color="dark">{messages['status.inactive']}</Badge>}</td>
+        <td>{status.status === 1 ? <Badge color="success">{messages['status.active']}</Badge> : <Badge color="dark">{messages['status.inactive']}</Badge>}</td>
         <td>{status.created_at}</td>
         <td className="text-center">
           <Button color="info" size="sm" onClick={() => this.toggleModal(status)}><span className="lnr lnr-pencil" /></Button> &nbsp;
-          <Button color="danger" size="sm" onClick={() => this.onDelete(status.status_id)}><span className="lnr lnr-trash" /></Button>
+          <Button color="danger" size="sm" onClick={() => this.onDelete(status.id)}><span className="lnr lnr-trash" /></Button>
         </td>
       </tr>
     );

@@ -24,7 +24,9 @@
         "gedmo\/doctrine-extensions": "^2.4",
         "zendframework\/zend-crypt": "^3.3",
         "firebase\/php-jwt": "^5.0",
-        "beberlei/DoctrineExtensions": "^1.1"
+        "beberlei/DoctrineExtensions": "^1.1",
+        "zendframework/zend-permissions-rbac": "^3.0",
+        "zendframework/zend-serializer": "^2.9"
     },
     "autoload": {
         "psr-4": {

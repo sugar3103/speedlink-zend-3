@@ -62,20 +62,24 @@ class ServiceExistsValidator extends AbstractValidator {
 
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
+        if ($this->options['language'] === NULL) {
+            $service = $entityManager->getRepository(Service::class)->findOneByName($value);
+        } else if($this->options['language'] === 'en') {
+            $service = $entityManager->getRepository(Service::class)->findOneBy(array('name_en' => $value));
+        }
 
-        $service = $entityManager->getRepository(Service::class)
-            ->findOneByName($value);
-
-        if ($this->options['service'] == null)
+        if ($this->options['service'] == null) {
             $isValid = ($service == null);
-        elseif ($this->options['service']->getName() != $value && $service != null)
+        } elseif ($this->options['service']->getName() != $value && $service != null) {
             $isValid = false;
-        else
+        } else {
             $isValid = true;
+        }
 
         // if there were an error, set error message.
-        if (!$isValid)
+        if (!$isValid) {
             $this->error(self::SERVICE_EXISTS);
+        }
 
         // return validation result
         return $isValid;

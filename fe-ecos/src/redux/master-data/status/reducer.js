@@ -17,7 +17,7 @@ import {
 const INIT_STATE = {
   items: null,
   total: 0,
-  error: null,
+  errors: null,
   loading: true,
   modalOpen: false,
   modalData: null,
@@ -32,11 +32,11 @@ export default (state = INIT_STATE, action) => {
         ...state,
         modalOpen: !state.modalOpen,
         modalData: action.payload,
-        error: null
+        errors: null
       }
 
     case STATUS_GET_LIST:
-      const params = action.payload;
+      const { params } = action.payload;
       return { 
         ...state, 
         loading: true,
@@ -56,7 +56,7 @@ export default (state = INIT_STATE, action) => {
       return { 
         ...state, 
         loading: false, 
-        error: action.payload 
+        errors: action.payload 
       };
 
     case STATUS_ADD_ITEM:
@@ -69,14 +69,14 @@ export default (state = INIT_STATE, action) => {
 			return { 
         ...state, 
         loading: false, 
-        error: null
+        errors: null
       };
 
 		case STATUS_ADD_ITEM_ERROR:
 			return { 
         ...state, 
         loading: false, 
-        error: action.payload 
+        errors: action.payload 
       };
 
     case STATUS_UPDATE_ITEM:
@@ -89,14 +89,14 @@ export default (state = INIT_STATE, action) => {
 			return { 
         ...state, 
         loading: false, 
-        error: null
+        errors: null
       };
 
 		case STATUS_UPDATE_ITEM_ERROR:
 			return { 
         ...state, 
         loading: false, 
-        error: action.payload 
+        errors: action.payload 
       };
 
     case STATUS_DELETE_ITEM:
@@ -113,7 +113,7 @@ export default (state = INIT_STATE, action) => {
 		case STATUS_DELETE_ITEM_ERROR:
 			return { 
         ...state, 
-        error: action.payload 
+        errors: action.payload 
       };
 
     default: 

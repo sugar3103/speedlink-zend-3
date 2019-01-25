@@ -63,13 +63,28 @@ $router = [
                 ]
             ]
         ],
+        'permission' => [
+            'type' => StaticRoute::class,
+            'options' => [
+                'route' => '/permission[/:action]',
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                ],
+                'defaults' => [
+                    'controller' => Controller\PermissionController::class,
+                    'action' => 'index',
+                    'isAuthorizationRequired' => true
+                ]
+            ]
+        ],
     ]
 ];
 $controllers = [
     'factories' => [
-        Controller\AuthController::class => Factory\AuthControllerFactory::class,
-        Controller\UserController::class => Factory\UserControllerFactory::class,
-        Controller\RoleController::class => Factory\RoleControllerFactory::class
+        Controller\AuthController::class        => Factory\AuthControllerFactory::class,
+        Controller\UserController::class        => Factory\UserControllerFactory::class,
+        Controller\RoleController::class        => Factory\RoleControllerFactory::class,
+        Controller\PermissionController::class  => Factory\PermissionControllerFactory::class
     ]
 ];
 

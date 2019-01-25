@@ -9,6 +9,9 @@
   .form__form-group-label {
     color: #646777;
   }
+  .radio-btn__radio-custom {
+    border: 1px solid #ddd;
+  }
 
 }
 
@@ -175,7 +178,7 @@
   }
 
   .modal__body {
-    padding: 25px 40px 20px 20px;
+    padding: 25px 20px 20px 20px;
   }
 
   .modal__footer {

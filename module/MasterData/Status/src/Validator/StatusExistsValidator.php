@@ -70,10 +70,21 @@ class StatusExistsValidator extends AbstractValidator {
 
         if ($this->options['status'] == null)
             $isValid = ($status == null);
-        elseif ($this->options['status']->getName() != $value && $status != null)
-            $isValid = false;
-        else
-            $isValid = true;
+        else {
+            if($this->options['language'] === 'en') {
+                if ($this->options['status']->getNameEn() != $value && $status != null)
+                    $isValid = false;
+                else
+                    $isValid = true;
+            } else {
+                if ($this->options['status']->getName() != $value && $status != null)
+                    $isValid = false;
+                else
+                    $isValid = true;
+            }
+        }
+        
+      
 
         // if there were an error, set error message.
         if (!$isValid)

@@ -166,11 +166,9 @@ class CountryManager  {
             $countRow = 1;
             
             foreach ($countries as &$country) {//loop
-                //set status
-                $country['status'] = Country::getIsActiveList($country['status']);
 
                 //set created_at
-                $country['createdAt'] =  ($country['createdAt']) ? Utils::checkDateFormat($country['createdAt'],'d/m/Y') : '';
+                $country['created_at'] =  ($country['created_at']) ? Utils::checkDateFormat($country['created_at'],'d/m/Y') : '';
 
                 $countRow++;
             }

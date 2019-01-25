@@ -2,6 +2,7 @@
 namespace Address\Repository;
 
 use Address\Entity\Ward;
+use Core\Utils\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
@@ -31,14 +32,15 @@ class WardRepository extends EntityRepository {
     {
         try {
             $queryBuilder = $this->buildWardQueryBuilder($sortField, $sortDirection, $filters);
-            $queryBuilder->select(
-                "w.wardId,
-                 w.name,
-                 w.description,
-                 w.status,
-                 w.createdBy,
-                 w.createdAt"                 
-            )->groupBy('w.wardId')
+            $queryBuilder->select("
+                w.id,
+                w.name,
+                w.description,
+                w.status,
+                w.created_by,
+                w.created_at
+            ")->andWhere("w.is_deleted = 0")
+            ->groupBy('w.id')
             ->setMaxResults($limit)
             ->setFirstResult($offset);
             return $queryBuilder;
@@ -92,15 +94,10 @@ class WardRepository extends EntityRepository {
                 'alias' => 'w.district_id',
                 'operator' => 'eq'
             ],
-            'ward_id' => [
-                'alias' => 'w.wardId',
-                'operator' => 'eq'
-            ],
             'name' => [
                 'alias' => 'w.name',
                 'operator' => 'contains'
             ],
-
             'created_at' => [
                 'alias' => 'w.created_at',
                 'operator' => 'contains'
@@ -115,41 +112,12 @@ class WardRepository extends EntityRepository {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(Ward::class, 'w');
 
-        if ($sortField != NULL && $sortDirection != NULL)
+        if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
-        else
+        } else {
             $queryBuilder->orderBy('w.name', 'ASC');
-
-        return $this->setCriteriaListWardByFilters($filters, $operatorsMap, $queryBuilder);
-    }
-
-    /**
-     * Set criteria list by filters
-     *
-     * @param array $filters
-     * @param array $operatorsMap
-     * @param QueryBuilder $queryBuilder
-     * @return QueryBuilder
-     * @throws QueryException
-     */
-    public function setCriteriaListWardByFilters($filters = [], $operatorsMap = [], QueryBuilder $queryBuilder)
-    {
-
-        foreach ($filters as $key => $value){
-
-           if (isset($operatorsMap[$key]) && $value !== "")
-                $expr = Criteria::create()->andWhere(Criteria::expr()->{$operatorsMap[$key]['operator']}($operatorsMap[$key]['alias'], $value));
-            elseif ($value === "")
-                continue;
-            else
-                $expr = Criteria::create()->andWhere(Criteria::expr()->contains($operatorsMap[$key]['alias'], $value));
-
-            $queryBuilder->addCriteria($expr);
         }
-
-        return $queryBuilder;
+        return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
-
-
 
 }

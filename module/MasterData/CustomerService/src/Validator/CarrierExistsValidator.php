@@ -61,20 +61,24 @@ class CarrierExistsValidator extends AbstractValidator {
 
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
+        if ($this->options['language'] === NULL) {
+            $carrier = $entityManager->getRepository(Carrier::class)->findOneByName($value);
+        } else if($this->options['language'] === 'en') {
+            $carrier = $entityManager->getRepository(Carrier::class)->findOneBy(array('name_en' => $value));
+        }
 
-        $carrier = $entityManager->getRepository(Carrier::class)
-            ->findOneByName($value);
-
-        if ($this->options['carrier'] == null)
+        if ($this->options['carrier'] == null) {
             $isValid = ($carrier == null);
-        elseif ($this->options['carrier']->getName() != $value && $carrier != null)
+        } elseif ($this->options['carrier']->getName() != $value && $carrier != null) {
             $isValid = false;
-        else
+        } else {
             $isValid = true;
+        }
 
         // if there were an error, set error message.
-        if (!$isValid)
+        if (!$isValid) {
             $this->error(self::CARRIER_EXISTS);
+        }
 
         // return validation result
         return $isValid;
