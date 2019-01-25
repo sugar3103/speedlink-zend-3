@@ -38,6 +38,7 @@ class CityRepository extends EntityRepository {
                 c.description,
                 c.description_en,
                 c.status,
+                c.zip_code,
                 c.created_by,
                 c.created_at
             ")->andWhere("c.is_deleted = 0")

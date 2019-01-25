@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Button, ButtonToolbar, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleCityModal } from '../../../../redux/actions';
+import { toggleCityModal, getCountryList } from '../../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../../containers/Shared/form/CustomField';
 import renderSelectField from '../../../../containers/Shared/form/Select';
@@ -40,8 +40,40 @@ class Action extends PureComponent {
     if (data) {
       this.props.initialize(data);
     }
+    const params = {
+      field: ['id', 'name'],
+      offset: {
+        limit: 10
+      }
+    }
+    this.props.getCountryList(params);
   }
 
+  onInputChange = value => {
+    const params = {
+      field: ['id', 'name'],
+      offset: {
+        limit: 10
+      },
+      query: {
+        name: value
+      }
+    }
+    this.props.getCountryList(params);
+  }
+
+  showOptionCountry = (items) => {
+    let result = [];
+    if (items.length > 0) {
+      result = items.map(item => {
+        return {
+          value: item.id,
+          label: item.name
+        }
+      })
+    }
+    return result;
+  }
 
   toggleTab = (tab) => {
     if (this.state.activeTab !== tab) {
@@ -165,13 +197,13 @@ class Action extends PureComponent {
             </div>
           </div>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['city.iso-code']}</span>
+            <span className="form__form-group-label">{messages['city.zip-code']}</span>
             <div className="form__form-group-field">
               <Field
-                name="iso_code"
+                name="zip_code"
                 component={CustomField}
                 type="text"
-                placeholder={messages['city.iso_code']}
+                placeholder={messages['city.zip_code']}
               />
             </div>
           </div>
@@ -179,10 +211,12 @@ class Action extends PureComponent {
             <span className="form__form-group-label">{messages['city.country']}</span>
             <div className="form__form-group-field">
               <Field
-                name="country"
+                name="country_id"
                 component={renderSelectField}
                 type="text"
                 options={countries && this.showOptionCountry(countries)}
+                placeholder={messages['city.country']}
+                onInputChange={this.onInputChange}
               />
             </div>
           </div>
@@ -211,4 +245,5 @@ export default reduxForm({
   validate
 })(injectIntl(connect(mapStateToProps, {
   toggleCityModal,
+  getCountryList
 })(Action)));

@@ -2,6 +2,7 @@
 namespace Address\Service;
 
 use Address\Entity\City;
+use Address\Entity\Country;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Core\Utils\Utils;
@@ -17,6 +18,12 @@ class CityManager  {
         $this->entityManager = $entityManager;        
     }
 
+    private function getReferenced($city,$data) {
+        $country = $this->entityManager->getRepository(Country::class)->find($data['country_id']);
+        if ($country == null)
+            throw new \Exception('Not found Country by ID');
+        $city->setCountry = $country;
+    }
      /**
      * Add City
      *
@@ -25,7 +32,7 @@ class CityManager  {
      * @throws \Exception
      */
     public function addCity($data,$user) {
-
+        
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
@@ -38,14 +45,15 @@ class CityManager  {
             $city->setStatus($data['status']);
             $city->setZipCode($data['zip_code']);
             $city->setCountryId($data['country_id']);
-            $city->setRefAsBy($data['ref_as_by']);
-
+            // $city->setRefAsBy($data['ref_as_by']);
+            
             $currentDate = date('Y-m-d H:i:s');
             $city->setCreatedAt($currentDate);
             $city->setCreatedBy($user->id);
-
+            
+            $this->getReferenced($city,$data);
             // add the entity to the entity manager.
-            $this->entityManager->persist($city);
+            // $this->entityManager->persist($city);
 
             // apply changes to database.
             $this->entityManager->flush();

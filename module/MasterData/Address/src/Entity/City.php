@@ -345,4 +345,23 @@ class City
         $this->ref_as_by = $ref_as_by;
     }
 
+    /**
+     * 
+     * @return Address\Entity\Country
+     */
+
+     public function getCountry()
+     {
+        return $this->country;
+     }
+
+    /**
+     * 
+     * @param Address\Entity\Country
+     */
+
+    public function setCountry($country)
+    {
+       $this->country = $country;
+    }
 }

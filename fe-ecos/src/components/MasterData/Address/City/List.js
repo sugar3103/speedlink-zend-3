@@ -132,7 +132,7 @@ class List extends Component {
                   <th>{messages['city.name-en']}</th>
                   <th>{messages['city.desc']}</th>
                   <th>{messages['city.desc-en']}</th>
-                  <th>{messages['city.iso-code']}</th>
+                  <th>{messages['city.zip-code']}</th>
                   <th>{messages['city.status']}</th>
                   <th>{messages['city.created-at']}</th>
                   <th>{messages['city.action']}</th>

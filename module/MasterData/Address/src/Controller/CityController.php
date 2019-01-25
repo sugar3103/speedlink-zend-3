@@ -81,7 +81,7 @@ class CityController extends CoreController {
                 // add user.
                 $city = $this->cityManager->addCity($data,$user);
                 $this->error_code = 1;
-                $this->apiResponse['message'] = "You have modified Cities!";
+                $this->apiResponse['message'] = "You have add new Cities!";
             } else {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = $form->getMessages(); 

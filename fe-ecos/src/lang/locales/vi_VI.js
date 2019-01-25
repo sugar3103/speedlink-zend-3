@@ -148,7 +148,7 @@ module.exports = {
   'city.desc-en': 'Mô tả tiếng anh',
   'city.status': 'Trạng thái',
   'city.country': 'Đất nước',
-  'city.iso-code': 'ISO Code',
+  'city.zip-code': 'Zip Code',
   'city.created-at': 'Ngày tạo',
   'city.action': 'Hành động',
   'city.active': 'Kích hoạt',
