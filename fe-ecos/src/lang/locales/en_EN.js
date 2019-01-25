@@ -287,6 +287,7 @@ module.exports = {
   'role.created-at': 'Created At',
   'role.action': 'Action',
   'role.add-new': 'Add New Role',
+  'role.desc': 'Description',
 
   //Role
   'permission.list': 'Permissions',

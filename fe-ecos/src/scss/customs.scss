@@ -87,3 +87,26 @@ legend.scheduler-border {
         }
     }
 }
+
+//Flag
+.flag {
+    width: 25px;
+    height: 17px;
+    &.vn {
+        background: url('images/flag/vn.png');
+        background-size: cover;
+    }
+    &.us {
+        background: url('images/flag/us.png');
+        background-size: cover;
+    }
+}
+.form__form-group-field {
+    margin-bottom: 5px;
+}
+
+    .form__form-group-icon {
+        background: #f2f4f7;
+        border: 1px solid #f2f4f7;
+        height: auto;
+    }

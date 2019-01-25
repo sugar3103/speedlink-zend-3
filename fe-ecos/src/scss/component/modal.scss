@@ -15,9 +15,9 @@
 
 }
 
-.modal-dialog {
-  max-width: 385px;
-}
+// .modal-dialog {
+//   max-width: 385px;
+// }
 
 .modal-content {
   border-radius: 0;
@@ -153,8 +153,8 @@
 }
 
 .modal-dialog--header {
-  width: 520px;
-  max-width: 520px;
+  // width: 520px;
+  // max-width: 520px;
 
   .modal-content {
     padding: 0;
@@ -178,11 +178,18 @@
   }
 
   .modal__body {
-    padding: 25px 20px 20px 20px;
+    // padding: 25px 20px 20px 20px;
+    padding: 15px; 
+    .card-body {
+      padding: 5px;
+    }
+    .card__title {
+      margin-bottom: 10px
+    }
   }
 
   .modal__footer {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     justify-content: flex-end;
     padding-right: 20px;
   }
