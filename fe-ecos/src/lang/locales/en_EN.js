@@ -3,6 +3,12 @@ module.exports = {
   //Global
   'cancel': 'Cancel',
   'save': 'Save',
+  'no-result': 'No result found',
+  'title-confirm': 'Delete Status',
+  'desc-confirm': 'Are you sure delete this?',
+  'confirm-no': 'No',
+  'confirm-yes': 'Yes, delete it!',
+ 
   //theme
   'theme.title-setting': 'Theme Customizer',
   'theme.desc-setting': 'Change the theme as you like!',
@@ -211,12 +217,17 @@ module.exports = {
   'role.add-new': 'Add New Role',
 
   //Role
-  'permission.list': 'Permissons',
-  'permission.name': 'Permisson',
+  'permission.list': 'Permissions',
+  'permission.name': 'Permission',
   'permission.active': 'Enable',
   'permission.inactive': 'Disable',  
   'permission.created-at': 'Created At',
   'permission.action': 'Action',
   'permission.add-new': 'Add New Permission',
-  'permission.update': 'Edit Permission'
+  'permission.update': 'Edit Permission',
+  'permission.validate-name-exists': 'Another permission with such nam already exists',
+  'permission.add-success': 'You have added a permission!',
+  'permission.update-success': 'You have modified permission!',
+  'permission.delete-success': 'You have deleted permission!',
+
 };
