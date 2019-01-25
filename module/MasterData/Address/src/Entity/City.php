@@ -114,7 +114,7 @@ class City
     /**
      * @var \Address\Entity\Country
      *
-     * @ORM\OneToOne(targetEntity="Address\Entity\Country", inversedBy="objects", fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="Address\Entity\Country", fetch="EAGER")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="country_id", referencedColumnName="id", unique=true, nullable=true)
      * })

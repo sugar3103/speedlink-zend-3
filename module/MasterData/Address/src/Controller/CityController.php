@@ -73,11 +73,13 @@ class CityController extends CoreController {
             $form = new CityForm('create', $this->entityManager);
 
             $form->setData($this->getRequestData());
-
+            
             //validate form
             if ($form->isValid()) {
                 // get filtered and validated data
+                
                 $data = $form->getData();
+                
                 // add user.
                 $city = $this->cityManager->addCity($data,$user);
                 $this->error_code = 1;

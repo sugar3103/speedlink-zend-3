@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Button, ButtonToolbar, Card, CardBody, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleRoleModal, getPermissionList } from '../../../redux/actions';
+import { toggleRoleModal, getPermissionList,getRoleList } from '../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../containers/Shared/form/CustomField';
 import renderRadioButtonField from '../../../containers/Shared/form/RadioButton';
@@ -36,7 +36,10 @@ class Action extends PureComponent {
   }
 
   componentDidMount() {
+    //Param Permission
     this.props.getPermissionList();
+    //Paran Role
+    this.props.getRoleList();
     const data = this.props.modalData;
     if (data) {
       this.props.initialize(data);
@@ -171,7 +174,8 @@ const mapStateToProps = ({ users }) => {
   return {
     errors,
     modalData,
-    permission
+    permission,
+    role
   }
 }
 
@@ -180,5 +184,6 @@ export default reduxForm({
   validate
 })(injectIntl(connect(mapStateToProps, {
   toggleRoleModal,
-  getPermissionList
+  getPermissionList,
+  getRoleList
 })(Action)));
