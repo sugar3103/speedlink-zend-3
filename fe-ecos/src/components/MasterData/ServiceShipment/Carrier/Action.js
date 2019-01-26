@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { injectIntl } from 'react-intl';
 import { Modal } from 'reactstrap';
 import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
@@ -6,10 +7,11 @@ import { addCarrierItem, updateCarrierItem, toggleCarrierModal } from '../../../
 
 class Action extends Component {
   handleSubmit = values => {
+    const { messages } = this.props.intl;
     if (values.id) {
-      this.props.updateCarrierItem(values);
+      this.props.updateCarrierItem(values, messages);
     } else {
-      this.props.addCarrierItem(values);
+      this.props.addCarrierItem(values, messages);
     }
   };
 

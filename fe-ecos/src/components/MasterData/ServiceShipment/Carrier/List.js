@@ -31,6 +31,7 @@ class List extends Component {
   }
 
   onChangePageSize = (size) => {
+    const { messages } = this.props.intl;
     size = parseInt(size, 10);
     let params = {
       offset: {
@@ -42,9 +43,10 @@ class List extends Component {
     if (this.props.carrier.paramSearch) {
       Object.assign(params, { "query": this.props.carrier.paramSearch})
     }
-    this.props.getCarrierList(params, this.props.history);
+    this.props.getCarrierList(params, messages);
 
     this.setState({
+      currentPage: 1,
       selectedPageSize: size
     });
   };
@@ -54,6 +56,7 @@ toggleModal = () => {
 };
 
   onChangePage = (page) => {
+    const { messages } = this.props.intl;
     let params = {
       offset: {
         start: parseInt(page, 10),
@@ -64,7 +67,7 @@ toggleModal = () => {
     if (this.props.carrier.paramSearch) {
       Object.assign(params, { "query": this.props.carrier.paramSearch })
     }
-    this.props.getCarrierList(params);
+    this.props.getCarrierList(params, messages);
 
     this.setState({
       currentPage: page
@@ -72,13 +75,14 @@ toggleModal = () => {
   };
 
   componentDidMount() {
-    this.props.getCarrierList();
+    const { messages } = this.props.intl;
+    this.props.getCarrierList(null, messages);
   }
 
   showCarrierItem = (items) => {
     const { messages } = this.props.intl;
     let result = null;
-    if (items.length > 0) {
+    if (items != null && items.length > 0) {
       result = items.map((item, index) => {
         return (
           <Item key={index} carrier={item} />
@@ -101,39 +105,40 @@ toggleModal = () => {
           <CardBody className="master-data-list">
             <div className="card__title">
               <h5 className="bold-text">{messages['carrier.list-title']}</h5>
-              <ButtonToolbar className="master-data-list__btn-toolbar-top">
-                <Button 
-                  color="success" 
-                  className="master-data-list__btn-add"
-                  onClick={this.toggleModal}
-                >{messages['carrier.add-new']}</Button>
+            </div>
+            <div className={'panel__content'}>
+              <Search />
+              <ButtonToolbar className="">
+                <Button color="success" className="master-data-list__btn-add" onClick={this.toggleModal} >
+                  {messages['carrier.add-new']}
+                </Button>
               </ButtonToolbar>
               <Action modalOpen={modalOpen} />
-            </div>
-            <Search />
-            <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
-            <Table responsive bordered hover>
-              <thead>
+
+              <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
+              <Table responsive bordered hover>
+                <thead>
                 <tr>
                   <th>#</th>
                   <th>{messages['carrier.name']}</th>
                   <th>{messages['carrier.name-en']}</th>
                   <th>{messages['carrier.desc']}</th>
                   <th>{messages['carrier.desc-en']}</th>
-                  <th>{messages['carrier.carrier']}</th>
+                  <th>{messages['carrier.status']}</th>
                   <th>{messages['carrier.created-at']}</th>
                   <th>{messages['carrier.action']}</th>
                 </tr>
-              </thead>
-              <tbody>
+                </thead>
+                <tbody>
                 {loading ? (
                   <tr><td colSpan={8} className="text-center"><div className="loading-table" /></td></tr>
                 ) : (
                   this.showCarrierItem(items)
                 )}
-              </tbody>
-            </Table>
-            <Pagination pagination={this.state} total={total} onChangePage={this.onChangePage} />
+                </tbody>
+              </Table>
+              <Pagination pagination={this.state} total={total} onChangePage={this.onChangePage} />
+            </div>
           </CardBody>
         </Card>
       </Col>

@@ -9,3 +9,4 @@ export * from './master-data/address/ward/actions';
 export * from './users/permission/actions';
 export * from './users/role/actions';
 export * from './users/user/actions';
+export * from './master-data/service-shipment/carrier/actions';

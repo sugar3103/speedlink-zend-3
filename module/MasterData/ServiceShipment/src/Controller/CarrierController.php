@@ -56,6 +56,7 @@ class CarrierController extends CoreController
 
         $dataCarrier = $this->carrierManager->getListCarrierByCondition($currentPage, $limit, $sortField, $sortDirection, $filters);
 
+        $result['error_code'] = 1;
         $result['message'] = 'Success';
         $result["total"] = $dataCarrier['totalCarrier'];
         $result["data"] = !empty($dataCarrier['listCarrier']) ? $dataCarrier['listCarrier'] : [];

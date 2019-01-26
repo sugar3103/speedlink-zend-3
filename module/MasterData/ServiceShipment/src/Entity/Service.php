@@ -56,18 +56,18 @@ class Service
     private $code;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="status", type="boolean", nullable=false)
+     * @ORM\Column(name="status", type="integer", nullable=false)
      */
-    private $status = '0';
+    private $status = 0;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="is_deleted", type="boolean", nullable=false)
+     * @ORM\Column(name="is_deleted", type="integer", nullable=false)
      */
-    private $is_deleted = '0';
+    private $is_deleted = 0;
 
     /**
      * @var \DateTime|null

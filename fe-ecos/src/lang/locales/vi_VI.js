@@ -24,6 +24,10 @@ module.exports = {
   'menu.address_city': 'Thành phố',
   'menu.address_district': 'Quận/Huyện',
   'menu.address_ward': 'Phường/Xã',
+  'menu.customer_service': 'Service/Shipment Type',
+  'menu.cs_carrier': 'Carrier',
+  'menu.cs_service': 'ServiceShipment',
+  'menu.cs_shipment_type': 'Shipment Type',
 
   //Menu Setting
   'menu.setting': 'Cài đặt',

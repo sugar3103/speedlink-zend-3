@@ -40,7 +40,7 @@ class Item extends Component {
         <td>{carrier.name_en}</td>
         <td>{carrier.description}</td>
         <td>{carrier.description_en}</td>
-        <td>{carrier.carrier === 1 ? <Badge color="success">{messages['carrier.active']}</Badge> : <Badge color="dark">{messages['carrier.inactive']}</Badge>}</td>
+        <td>{carrier.status === 1 ? <Badge color="success">{messages['carrier.active']}</Badge> : <Badge color="dark">{messages['carrier.inactive']}</Badge>}</td>
         <td>{carrier.created_at}</td>
         <td className="text-center">
           <Button color="info" size="sm" onClick={() => this.toggleModal(carrier)}><span className="lnr lnr-pencil" /></Button> &nbsp;

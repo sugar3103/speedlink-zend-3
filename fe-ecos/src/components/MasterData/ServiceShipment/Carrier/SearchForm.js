@@ -12,7 +12,7 @@ class SearchForm extends Component {
       <form className="form" onSubmit={handleSubmit} id="fromSearchCarrier">
         <div className="form__half">
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['carrier.name']}</span>
+            <span className="form__form-group-label">{messages['carrier.code']}</span>
             <div className="form__form-group-field">
               <Field name="name" component="input" type="text" placeholder={messages['carrier.name']} />
             </div>
@@ -20,7 +20,7 @@ class SearchForm extends Component {
         </div>
         <div className="form__half">
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['carrier.carrier']}</span>
+            <span className="form__form-group-label">{messages['carrier.status']}</span>
             <div className="form__form-group-field">
               <Field name="carrier" component={renderSelectField} type="text" options={[
                 { value: -1, label: messages['carrier.all'] },

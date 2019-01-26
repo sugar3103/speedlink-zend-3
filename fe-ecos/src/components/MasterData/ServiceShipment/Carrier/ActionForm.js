@@ -117,10 +117,10 @@ class Action extends PureComponent {
                 </TabPane>
               </TabContent>
               <div className="form__form-group">
-                <span className="form__form-group-label">{messages['carrier.carrier']}</span>
+                <span className="form__form-group-label">{messages['carrier.status']}</span>
                 <div className="form__form-group-field">
                   <Field name="carrier" component={renderRadioButtonField}
-                    label={messages['carrier.active']} radioValue={1} defaultChecked />
+                         label={messages['carrier.active']} radioValue={1} defaultChecked />
                   <Field name="carrier" component={renderRadioButtonField}
                          label={messages['carrier.inactive']} radioValue={0} />
                 </div>

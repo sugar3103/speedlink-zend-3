@@ -19,7 +19,7 @@ class ItemPerPage extends Component {
 
   render() {
     return (
-      <p>Show
+      <p className={'float-right'}>Show
         <select className="select-options" value={this.props.selectedPageSize} onChange={this.changePageSize}>
           {this.showPageOption()}
         </select>
