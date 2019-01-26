@@ -23,7 +23,7 @@ class SelectField extends PureComponent {
   };
 
   handleChange = (selectedOption) => {
-    if (selectedOption && selectedOption.value) {
+    if (selectedOption && typeof selectedOption.value !== 'undefined') {
       this.props.onChange(selectedOption.value);
     } else {
       this.props.onChange(selectedOption);
@@ -58,7 +58,7 @@ const renderSelectField = props => (
       options={props.options}
       placeholder={props.placeholder}
     />
-    {props.meta.touched && props.meta.error && <span className="form__form-group-error">{props.meta.error}</span>}
+    {props.meta.touched && props.meta.error && <span className="form__form-group-error">{props.messages[props.meta.error]}</span>}
   </div>
 );
 

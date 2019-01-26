@@ -30,13 +30,13 @@ class SearchForm extends Component {
     }
     return result;
   }
-  
+
 
   onInputChange = value => {
     const params = {
       field: ['id', 'name'],
       offset: {
-        limit: 10
+        limit: 0
       },
       query: {
         name: value
@@ -50,7 +50,7 @@ class SearchForm extends Component {
     const { messages } = this.props.intl;
     return (
       <form className="form" onSubmit={handleSubmit}>
-      <Col md={4}>
+        <Col md={4}>
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['city.country']}</span>
             <div className="form__form-group-field">
@@ -86,6 +86,7 @@ class SearchForm extends Component {
                 name="status"
                 component={renderSelectField}
                 type="text"
+                placeholder={messages['city.status']}
                 options={[
                   { value: -1, label: messages['city.all'] },
                   { value: 1, label: messages['city.active'] },
@@ -96,30 +97,30 @@ class SearchForm extends Component {
           </div>
         </Col>
         <Col md={12} className="text-right search-group-button">
-            <Button 
-              size="sm" 
-              outline 
-              onClick={(e)=> {
-                reset();
-                setTimeout(() => {
-                  handleSubmit();  
-                }, 200);
-              }}
-            >{messages['city.clear']}</Button>{' '}
-            <Button 
-              size="sm" 
-              color="primary"
-              id="search" 
-            >{ messages['city.search'] }</Button>
+          <Button
+            size="sm"
+            outline
+            onClick={(e) => {
+              reset();
+              setTimeout(() => {
+                handleSubmit();
+              }, 200);
+            }}
+          >{messages['city.clear']}</Button>{' '}
+          <Button
+            size="sm"
+            color="primary"
+            id="search"
+          >{messages['city.search']}</Button>
         </Col>
       </form>
     );
   }
 }
 
-const mapStateToProps = ({address}) => {
+const mapStateToProps = ({ address }) => {
   const countries = address.country.items;
-  return { 
+  return {
     countries
   }
 }

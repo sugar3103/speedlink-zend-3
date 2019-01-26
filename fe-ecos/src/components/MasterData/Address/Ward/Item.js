@@ -45,6 +45,7 @@ class Item extends Component {
         <td>{ward.name_en}</td>
         <td>{ward.description}</td>
         <td>{ward.description_en}</td>
+        <td>{ward.postal_code}</td>
         <td>{ward.status === 1 ? <Badge color="success">{messages['ward.active']}</Badge> : <Badge color="dark">{messages['ward.inactive']}</Badge>}</td>
         <td>{ward.created_at}</td>
         <td className="text-center">

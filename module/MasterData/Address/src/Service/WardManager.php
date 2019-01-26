@@ -1,6 +1,7 @@
 <?php
 namespace Address\Service;
 
+use Address\Entity\District;
 use Address\Entity\Ward;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
@@ -15,6 +16,13 @@ class WardManager  {
     public function __construct($entityManager)
     {
         $this->entityManager = $entityManager;        
+    }
+
+    private function getReferenced(&$ward,$data) {
+        $district = $this->entityManager->getRepository(District::class)->find($data['district_id']);
+        if ($district == null)
+            throw new \Exception('Not found District by ID');
+        $ward->setDistrict($district);
     }
 
      /**
@@ -36,14 +44,14 @@ class WardManager  {
             $ward->setDescription($data['description']);
             $ward->setDescriptionEn($data['description_en']);
             $ward->setStatus($data['status']);
+            $ward->setPostalCode($data['postal_code']);
             $ward->setDistrictId($data['district_id']);
 
             $currentDate = date('Y-m-d H:i:s');
             $ward->setCreatedAt($currentDate);
             $ward->setCreatedBy($user->id);
 
-            $ward->setCreatedAt($currentDate);
-            $ward->setCreatedBy($user->id);
+            $this->getReferenced($ward,$data);
            
             // add the entity to the entity manager.
             $this->entityManager->persist($ward);
@@ -82,21 +90,21 @@ class WardManager  {
             $ward->setDescriptionEn($data['description_en']);
             $ward->setStatus($data['status']);
             $ward->setDistrictId($data['district_id']);
-            $ward->setRefAsBy($data['ref_as_by']);
+            $ward->setPostalCode($data['postal_code']);
+            // $ward->setRefAsBy($data['ref_as_by']);
 
             $currentDate = date('Y-m-d H:i:s');
             $ward->setUpdatedAt($currentDate);
             $ward->setUpdatedBy($user->id);
            
-            // add the entity to the entity manager.
-            $this->entityManager->persist($ward);
+            $this->getReferenced($ward,$data);
 
             // apply changes to database.
             $this->entityManager->flush();
 
             $this->entityManager->commit();
 
-            return $district;
+            return $ward;
         }
         catch (ORMException $e) {
 

@@ -38,12 +38,15 @@ class DistrictRepository extends EntityRepository {
                 d.description,
                 d.description_en,
                 d.status,
+                d.city_id,
                 d.created_by,
                 d.created_at
             ")->andWhere("d.is_deleted = 0")
-            ->groupBy('d.id')
-            ->setMaxResults($limit)
-            ->setFirstResult(($start - 1) * $limit);
+            ->groupBy('d.id');
+            
+            if($limit) {
+                $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
+            }
 
             return $queryBuilder;
         } catch (QueryException $e) {
@@ -65,8 +68,12 @@ class DistrictRepository extends EntityRepository {
     {
         $operatorsMap = [
             'city' => [
-                'alias' => 'c.name',
-                'operator' => 'contains'
+                'alias' => 'd.city_id',
+                'operator' => 'eq'
+            ],
+            'id' => [
+                'alias' => 'd.id',
+                'operator' => 'eq'
             ],
             'name' => [
                 'alias' => 'd.name',
@@ -84,7 +91,7 @@ class DistrictRepository extends EntityRepository {
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(District::class, 'd')->leftJoin('d.city','c');
+        $queryBuilder->from(District::class, 'd');
 
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

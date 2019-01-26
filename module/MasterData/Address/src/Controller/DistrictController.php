@@ -40,20 +40,23 @@ class DistrictController extends CoreController {
             // get the filters
             $fieldsMap = [
                 0 => 'name',
-                1 => 'city',
-                2 => 'status'                
+                1 => 'id',
+                2 => 'city',
+                3 => 'status'                
             ];
 
-            list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
+            list($start,$limit,$sortField,$sortDirection,$filters, $fields) = $this->getRequestData($fieldsMap);                        
             
             //get list district by condition
             $dataDistrict = $this->districtManager->getListDistrictByCondition(
-                $start, $limit, $sortField, $sortDirection,$filters);            
+                $start, $limit, $sortField, $sortDirection,$filters); 
+                
+            $results = $this->filterByField($dataDistrict['listDistrict'], $fields);
             
             $this->error_code = 1;
             $this->apiResponse =  array(
                 'message' => 'Get list success',
-                'data' => $dataDistrict['listDistrict'],
+                'data' => $results,
                 'total' => $dataDistrict['totalDistrict']
             );
         } 
@@ -77,10 +80,10 @@ class DistrictController extends CoreController {
                 // add user.
                 $district = $this->districtManager->addDistrict($data,$user);
                 $this->error_code = 1;
-                $this->apiResponse['message'] = "You have modified Districts!";
+                $this->apiResponse['message'] = "You added new a Districts!";
             } else {
                 $this->error_code = 0;
-                $this->apiResponse = $form->getMessages(); 
+                $this->apiResponse['data'] = $form->getMessages(); 
                 
             }            
         } else {
@@ -111,11 +114,11 @@ class DistrictController extends CoreController {
                    $this->apiResponse['message'] = "You have modified district!";
                 }  else {
                    $this->error_code = 0;
-                   $this->apiResponse = $form->getMessages(); 
+                   $this->apiResponse['data'] = $form->getMessages(); 
                 }   
             }   else {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = 'District Not Found'; 
+                $this->apiResponse['data'] = 'District Not Found'; 
             }         
              
         } else {
@@ -143,7 +146,7 @@ class DistrictController extends CoreController {
             } else {
                 $this->httpStatusCode = 200;
                 $this->error_code = 0;
-                $this->apiResponse['message'] = "Not Found District";
+                $this->apiResponse['data'] = "Not Found District";
             }
         } else {
             $this->httpStatusCode = 404;

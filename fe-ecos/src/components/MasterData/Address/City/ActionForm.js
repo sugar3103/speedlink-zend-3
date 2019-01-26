@@ -40,12 +40,17 @@ class Action extends PureComponent {
     if (data) {
       this.props.initialize(data);
     }
-    const params = {
+
+    let params = {
       field: ['id', 'name'],
       offset: {
-        limit: 10
+        limit: 5
       }
     }
+    if (data && data.country_id) {
+      params = {...params, query: {id: data.country_id}}
+    }
+
     this.props.getCountryList(params);
   }
 
@@ -53,7 +58,7 @@ class Action extends PureComponent {
     const params = {
       field: ['id', 'name'],
       offset: {
-        limit: 10
+        limit: 0
       },
       query: {
         name: value
@@ -217,6 +222,7 @@ class Action extends PureComponent {
                 options={countries && this.showOptionCountry(countries)}
                 placeholder={messages['city.country']}
                 onInputChange={this.onInputChange}
+                messages={messages}
               />
             </div>
           </div>

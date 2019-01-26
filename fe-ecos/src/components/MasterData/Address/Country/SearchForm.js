@@ -31,6 +31,7 @@ class SearchForm extends Component {
                 name="status"
                 component={renderSelectField}
                 type="text"
+                placeholder={messages['country.status']}
                 options={[
                   { value: -1, label: messages['country.all'] },
                   { value: 1, label: messages['country.active'] },

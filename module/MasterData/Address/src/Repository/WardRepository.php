@@ -38,6 +38,8 @@ class WardRepository extends EntityRepository {
                 w.name_en,
                 w.description,
                 w.description_en,
+                w.district_id,
+                w.postal_code,
                 w.status,
                 w.created_by,
                 w.created_at
@@ -68,7 +70,7 @@ class WardRepository extends EntityRepository {
 
         $operatorsMap = [
             'district' => [
-                'alias' => 'd.name',
+                'alias' => 'w.district_id',
                 'operator' => 'contains'
             ],
             'name' => [
@@ -87,7 +89,7 @@ class WardRepository extends EntityRepository {
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(Ward::class, 'w')->leftJoin('w.district','d');
+        $queryBuilder->from(Ward::class, 'w');
 
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

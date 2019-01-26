@@ -107,7 +107,7 @@ class District
     /**
      * @var \Address\Entity\City
      *
-     * @ORM\OneToOne(targetEntity="Address\Entity\City", inversedBy="objects", fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="Address\Entity\City", fetch="EAGER")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="city_id", referencedColumnName="id", unique=true, nullable=true)
      * })
@@ -321,5 +321,25 @@ class District
     {
         $this->ref_as_by = $ref_as_by;
     }
+
+    /**
+     * 
+     * @return Address\Entity\City
+     */
+
+    public function getCity()
+    {
+       return $this->city;
+    }
+
+   /**
+    * 
+    * @param Address\Entity\City
+    */
+
+   public function setCity($city)
+   {
+      $this->city = $city;
+   }
 
 }

@@ -117,7 +117,7 @@ class Ward
     /**
      * @var \Address\Entity\District
      *
-     * @ORM\OneToOne(targetEntity="Address\Entity\District", inversedBy="objects", fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="Address\Entity\District", fetch="EAGER")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="district_id", referencedColumnName="id", unique=true, nullable=true)
      * })
@@ -347,6 +347,26 @@ class Ward
     {
         $this->ref_as_by = $ref_as_by;
     }
+
+    /**
+     * 
+     * @return Address\Entity\District
+     */
+
+    public function getDistrict()
+    {
+       return $this->district;
+    }
+
+   /**
+    * 
+    * @param Address\Entity\District
+    */
+
+   public function setDistrict($district)
+   {
+      $this->district = $district;
+   }
 
     /**
      * Returns user status as string.

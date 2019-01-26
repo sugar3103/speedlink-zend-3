@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Button, ButtonToolbar, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleWardModal } from '../../../../redux/actions';
+import { toggleWardModal, getDistrictList } from '../../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../../containers/Shared/form/CustomField';
 import renderRadioButtonField from '../../../../containers/Shared/form/RadioButton';
@@ -40,8 +40,45 @@ class Action extends PureComponent {
     if (data) {
       this.props.initialize(data);
     }
+
+    let params = {
+      field: ['id', 'name'],
+      offset: {
+        limit: 5
+      }
+    }
+    if (data && data.district_id) {
+      params = {...params, query: {id: data.district_id}}
+    }
+
+    this.props.getDistrictList(params);
   }
 
+  onInputChange = value => {
+    const params = {
+      field: ['id', 'name'],
+      offset: {
+        limit: 0
+      },
+      query: {
+        name: value
+      }
+    }
+    this.props.getDistrictList(params);
+  }
+
+  showOptionDistrict = (items) => {
+    let result = [];
+    if (items.length > 0) {
+      result = items.map(item => {
+        return {
+          value: item.id,
+          label: item.name
+        }
+      })
+    }
+    return result;
+  }
 
   toggleTab = (tab) => {
     if (this.state.activeTab !== tab) {
@@ -57,7 +94,7 @@ class Action extends PureComponent {
 
   render() {
     const { messages } = this.props.intl;
-    const { handleSubmit, modalData } = this.props;
+    const { handleSubmit, modalData, districts } = this.props;
     const { errors } = this.state;
     const className = modalData ? 'primary' : 'success';
     const title = modalData ? messages['ward.update'] : messages['ward.add-new'];
@@ -165,13 +202,27 @@ class Action extends PureComponent {
             </div>
           </div>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['ward.city']}</span>
+            <span className="form__form-group-label">{messages['ward.postal-code']}</span>
             <div className="form__form-group-field">
               <Field
-                name="iso_code"
+                name="postal_code"
+                component={CustomField}
+                type="text"
+                placeholder={messages['ward.postal-code']}
+              />
+            </div>
+          </div>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['ward.district']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="district_id"
                 component={renderSelectField}
                 type="text"
-                placeholder={messages['ward.city']}
+                placeholder={messages['ward.district']}
+                options={districts && this.showOptionDistrict(districts)}
+                onInputChange={this.onInputChange}
+                messages={messages}
               />
             </div>
           </div>
@@ -187,9 +238,11 @@ class Action extends PureComponent {
 
 const mapStateToProps = ({ address }) => {
   const { errors, modalData } = address.ward;
+  const districts = address.district.items;
   return {
     errors,
-    modalData
+    modalData,
+    districts
   }
 }
 
@@ -197,5 +250,6 @@ export default reduxForm({
   form: 'ward_action_form',
   validate
 })(injectIntl(connect(mapStateToProps, {
-  toggleWardModal
+  toggleWardModal,
+  getDistrictList
 })(Action)));

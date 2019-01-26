@@ -39,6 +39,7 @@ class CityRepository extends EntityRepository {
                 c.description_en,
                 c.status,
                 c.zip_code,
+                c.country_id,
                 c.created_by,
                 c.created_at
             ")->andWhere("c.is_deleted = 0")
@@ -70,10 +71,13 @@ class CityRepository extends EntityRepository {
 
         $operatorsMap = [
             'country' => [
-                'alias' => 'ct.name',
-                'operator' => 'contains'
+                'alias' => 'c.country_id',
+                'operator' => 'eq'
             ],
-            
+            'id' => [
+                'alias' => 'c.id',
+                'operator' => 'eq'
+            ],
             'name' => [
                 'alias' => 'c.name',
                 'operator' => 'contains'
@@ -86,13 +90,11 @@ class CityRepository extends EntityRepository {
             'status' => [
                 'alias' => 'c.status',
                 'operator' => 'eq'
-            ],
-
+            ]
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(City::class, 'c')
-            ->leftJoin('c.country', 'ct');
+        $queryBuilder->from(City::class, 'c');
 
         if ($sortField != NULL && $sortDirection != NULL){
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

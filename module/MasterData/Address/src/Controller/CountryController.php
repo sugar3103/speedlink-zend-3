@@ -41,7 +41,8 @@ class CountryController extends CoreController {
             // get the filters
             $fieldsMap = [
                 0 => 'name',                
-                1 => 'status'
+                1 => 'id',
+                2 => 'status',
             ];
 
             list($start, $limit, $sortField, $sortDirection, $filters, $fields) = $this->getRequestData($fieldsMap);                        
@@ -82,7 +83,7 @@ class CountryController extends CoreController {
                 $this->apiResponse['message'] = "You have added a country!";
             } else {
                 $this->error_code = 0;                
-                $this->apiResponse['message'] = $form->getMessages();  
+                $this->apiResponse['data'] = $form->getMessages();  
             } 
         } 
 
@@ -115,11 +116,11 @@ class CountryController extends CoreController {
                 }      
             } else {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = "Country Not Found";
+                $this->apiResponse['data'] = "Country Not Found";
             }
         } else {
             $this->error_code = 0;
-            $this->apiResponse['message'] = "Country request Id!";
+            $this->apiResponse['data'] = "Country request Id!";
         }
 
         return $this->createResponse();
@@ -133,7 +134,7 @@ class CountryController extends CoreController {
             $country = $this->entityManager->getRepository(Country::class)->findOneBy(array('id' => $data['id']));    
             if ($country == null) {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = "Country Not Found";
+                $this->apiResponse['data'] = "Country Not Found";
             } else {
                 //remove country
                 $this->countryManager->deleteCountry($country);
@@ -143,7 +144,7 @@ class CountryController extends CoreController {
             }          
         } else {
             $this->error_code = 0;
-            $this->apiResponse['message'] = "Country request Id!";
+            $this->apiResponse['data'] = "Country request Id!";
         }
         return $this->createResponse();        
     }

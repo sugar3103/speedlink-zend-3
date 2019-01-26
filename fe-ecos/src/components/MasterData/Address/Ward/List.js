@@ -132,6 +132,7 @@ class List extends Component {
                   <th>{messages['ward.name-en']}</th>
                   <th>{messages['ward.desc']}</th>
                   <th>{messages['ward.desc-en']}</th>
+                  <th>{messages['ward.postal-code']}</th>
                   <th>{messages['ward.status']}</th>
                   <th>{messages['ward.created-at']}</th>
                   <th>{messages['ward.action']}</th>

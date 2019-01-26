@@ -16,8 +16,12 @@ const validate = (values) => {
       errors.name_en = 'city.validate-nameEn-maxlength';
     }
 
-    if (!values.iso_code) {
-      errors.iso_code = 'city.validate-isoCode-empty';
+    if (!values.zip_code) {
+      errors.zip_code = 'city.validate-zipcode-empty';
+    }
+
+    if (!values.country_id) {
+      errors.country_id = 'city.validate-country-empty';
     }
 
     return errors;
