@@ -164,7 +164,7 @@ module.exports = {
   'city.desc-en': 'English Description',
   'city.status': 'Status',
   'city.country': 'Country',
-  'city.iso-code': 'ISO Code',
+  'city.zip-code': 'Zip Code',
   'city.created-at': 'Created At',
   'city.action': 'Action',
   'city.active': 'Enable',
@@ -290,6 +290,7 @@ module.exports = {
   'role.created-at': 'Created At',
   'role.action': 'Action',
   'role.add-new': 'Add New Role',
+  'role.desc': 'Description',
 
   //Role
   'permission.list': 'Permissions',

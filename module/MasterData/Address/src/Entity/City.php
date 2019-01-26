@@ -114,7 +114,7 @@ class City
     /**
      * @var \Address\Entity\Country
      *
-     * @ORM\OneToOne(targetEntity="Address\Entity\Country", inversedBy="objects", fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="Address\Entity\Country", fetch="EAGER")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="country_id", referencedColumnName="id", unique=true, nullable=true)
      * })
@@ -345,4 +345,23 @@ class City
         $this->ref_as_by = $ref_as_by;
     }
 
+    /**
+     * 
+     * @return Address\Entity\Country
+     */
+
+     public function getCountry()
+     {
+        return $this->country;
+     }
+
+    /**
+     * 
+     * @param Address\Entity\Country
+     */
+
+    public function setCountry($country)
+    {
+       $this->country = $country;
+    }
 }

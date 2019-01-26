@@ -42,9 +42,11 @@ class CountryRepository extends EntityRepository {
                  c.created_by,
                  c.created_at
             ")->andWhere("c.is_deleted = 0")
-            ->groupBy('c.id')
-            ->setMaxResults($limit)
-            ->setFirstResult(($start - 1) * $limit);
+            ->groupBy('c.id');
+
+            if($limit) {
+                $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
+            }
 
             return $queryBuilder;
         } catch (QueryException $e) {

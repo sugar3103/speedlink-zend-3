@@ -35,8 +35,10 @@ class RoleRepository extends EntityRepository {
             $queryBuilder->select(
                 "r.id,
                  r.name,
+                 r.name_en,
                  r.status,
                  r.description,
+                 r.description_en,
                  r.created_at"
             )->andWhere('r.id <> 0')->groupBy('r.id')
             ->setMaxResults($limit)

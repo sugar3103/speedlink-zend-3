@@ -7,6 +7,7 @@ class SelectField extends PureComponent {
     onChange: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
+    onInputChange: PropTypes.func,
     options: PropTypes.arrayOf(PropTypes.shape({
       value: PropTypes.oneOfType([
         PropTypes.string,
@@ -22,12 +23,16 @@ class SelectField extends PureComponent {
   };
 
   handleChange = (selectedOption) => {
-    this.props.onChange(selectedOption.value);
+    if (selectedOption && selectedOption.value) {
+      this.props.onChange(selectedOption.value);
+    } else {
+      this.props.onChange(selectedOption);
+    }
   };
 
   render() {
     const {
-      value, name, placeholder, options,
+      value, name, placeholder, options, onInputChange
     } = this.props;
 
     return (
@@ -36,9 +41,10 @@ class SelectField extends PureComponent {
         value={value}
         onChange={this.handleChange}
         options={options}
-        clearable={false}
+        clearable={true}
         className="form__form-group-select"
         placeholder={placeholder}
+        onInputChange={onInputChange}
       />
     );
   }
@@ -48,6 +54,7 @@ const renderSelectField = props => (
   <div className="form__form-group-input-wrap">
     <SelectField
       {...props.input}
+      onInputChange={props.onInputChange}
       options={props.options}
       placeholder={props.placeholder}
     />
@@ -72,6 +79,7 @@ renderSelectField.propTypes = {
     label: PropTypes.string,
   })),
   placeholder: PropTypes.string,
+  onInputChange: PropTypes.func
 };
 
 renderSelectField.defaultProps = {

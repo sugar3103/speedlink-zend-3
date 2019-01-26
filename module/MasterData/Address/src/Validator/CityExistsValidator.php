@@ -54,26 +54,35 @@ class CityExistsValidator extends AbstractValidator {
      */
     public function isValid($value)
     {
+        
         if (!is_scalar($value)) {
             $this->error(self::NOT_SCALAR);
             return false;
         }
 
+      
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
-
-        if ($this->options['language'] === NULL) {
+        if($this->options['language'] === NULL) {
             $city = $entityManager->getRepository(City::class)->findOneByName($value);
-        } else if($this->options['language'] === 'en') { 
-            $city = $entityManager->getRepository(City::class)->findOneBy(array('name_en' => $value));
+        } else if($this->options['language'] === 'en') {
+            $city = $entityManager->getRepository(City::class)->findOneBy(array('name_en' => $value));       
         }
-       
-        if ($this->options['city'] == null) {
+
+        if ($this->options['city'] == null)
             $isValid = ($city == null);
-        } elseif ($this->options['city']->getName() != $value && $city != null) {
-            $isValid = false;
-        } else {
-            $isValid = true;
+        else {
+            if($this->options['language'] === 'en') {
+                if ($this->options['city']->getNameEn() != $value && $city != null)
+                    $isValid = false;
+                else
+                    $isValid = true;
+            } else {
+                if ($this->options['city']->getName() != $value && $city != null)
+                    $isValid = false;
+                else
+                    $isValid = true;
+            }
         }
 
         // if there were an error, set error message.

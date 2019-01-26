@@ -6,7 +6,7 @@ export const localeOptions=[
 ];
 
 //api
-export const apiUrl = 'http://ecosv2.base.localhost/';
+export const apiUrl = 'http://localhost/api/v1/';
 
 //error code
 export const EC_SUCCESS = 1;

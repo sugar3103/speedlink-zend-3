@@ -44,18 +44,18 @@ class CountryController extends CoreController {
                 1 => 'status'
             ];
 
-            list($start, $limit, $sortField, $sortDirection, $filters) = $this->getRequestData($fieldsMap);                        
+            list($start, $limit, $sortField, $sortDirection, $filters, $fields) = $this->getRequestData($fieldsMap);                        
 
             //get list country by condition
             $dataCountry = $this->countryManager->getListCountryByCondition(
                 $start, $limit, $sortField, $sortDirection,$filters);
             
-            $result = ($dataCountry['listCountry']) ? $dataCountry['listCountry'] : [] ;
+            $results = $this->filterByField($dataCountry['listCountry'], $fields);
             
             $this->error_code = 1;
             $this->apiResponse =  array(
                 'message'   => "Get List Success",
-                'data'      => $result,
+                'data'      => $results,
                 'total'     => $dataCountry['totalCountry']
             );       
         }
