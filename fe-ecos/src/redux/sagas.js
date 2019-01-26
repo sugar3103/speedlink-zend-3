@@ -9,6 +9,7 @@ import wardSagas from './master-data/address/ward/saga';
 import userSagas from './users/user/saga';
 import roleSagas from './users/role/saga';
 import permissionSagas from './users/permission/saga';
+import carrierSagas from './master-data/service-shipment/carrier/saga';
 
 export default function* rootSaga(getState) {
   yield all([
@@ -21,6 +22,7 @@ export default function* rootSaga(getState) {
     wardSagas(),
     userSagas(),
     roleSagas(),
-    permissionSagas()
+    permissionSagas(),
+    carrierSagas(),
   ]);
 }

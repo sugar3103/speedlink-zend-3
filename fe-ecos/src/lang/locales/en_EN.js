@@ -1,5 +1,4 @@
 module.exports = {
-
   //Global
   'cancel': 'Cancel',
   'save': 'Save',
@@ -33,6 +32,10 @@ module.exports = {
   'menu.address_city': 'City',
   'menu.address_district': 'District',
   'menu.address_ward': 'Ward',
+  'menu.customer_service': 'Service/Shipment Type',
+  'menu.cs_carrier': 'Carrier',
+  'menu.cs_service': 'ServiceShipment',
+  'menu.cs_shipment_type': 'Shipment Type',
 
 
   //Menu Setting
@@ -303,4 +306,40 @@ module.exports = {
   'permission.update-success': 'You have modified permission!',
   'permission.delete-success': 'You have deleted permission!',
 
+//Carrier
+  'carrier.list-title': 'Carrier List',
+  'carrier.add-new': 'Add New Carrier',
+  'carrier.update': 'Update Carrier',
+  'carrier.name': 'Name',
+  'carrier.name-en': 'English Name',
+  'carrier.desc': 'Description',
+  'carrier.desc-en': 'English Description',
+  'carrier.status': 'Status',
+  'carrier.created-at': 'Created At',
+  'carrier.action': 'Action',
+  'carrier.code': 'Carrier Code',
+  'carrier.active': 'Enable',
+  'carrier.inactive': 'Disable',
+  'carrier.cancel': 'Cancel',
+  'carrier.save': 'Save',
+  'carrier.search': 'Search',
+  'carrier.clear': 'Clear',
+  'carrier.all': 'All',
+  'carrier.no-result': 'No result found',
+  'carrier.title-confirm': 'Delete Carrier',
+  'carrier.desc-confirm': 'Are you sure delete this carrier?',
+  'carrier.confirm-no': 'No',
+  'carrier.confirm-yes': 'Yes, delete it!',
+  'carrier.add-success': 'You have added a carrier!',
+  'carrier.update-success': 'You have modified carrier!',
+  'carrier.delete-success': 'You have deleted carrier!',
+  //validate
+  'carrier.validate-name-empty': 'Name shouldn’t be empty',
+  'carrier.validate-name-minlength': 'Name must be 5 characters or more',
+  'carrier.validate-name-maxlength': 'Name must be 60 characters or less',
+  'carrier.validate-name-exists': 'Name already exists',
+  'carrier.validate-nameEn-empty': 'English name shouldn’t be empty',
+  'carrier.validate-nameEn-minlength': 'English name must be 5 characters or more',
+  'carrier.validate-nameEn-maxlength': 'English name must be 60 characters or less',
+  'carrier.validate-nameEn-exists': 'English name already exists',
 };
