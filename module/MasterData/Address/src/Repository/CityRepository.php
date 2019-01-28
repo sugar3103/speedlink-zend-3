@@ -67,9 +67,9 @@ class CityRepository extends EntityRepository {
         try {
             $queryBuilder = $this->buildCityQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select(
-                "c.cityId,
+                "c.id,
                  c.name,
-                 c.nameEn,
+                 c.name_en,
                  c.status"                 
             )
             // ->groupBy('c.cityId')
@@ -113,10 +113,6 @@ class CityRepository extends EntityRepository {
             ],
             'status' => [
                 'alias' => 'c.status',
-                'operator' => 'eq'
-            ],
-            'city_id' => [
-                'alias' => 'c.cityId',
                 'operator' => 'eq'
             ]
 

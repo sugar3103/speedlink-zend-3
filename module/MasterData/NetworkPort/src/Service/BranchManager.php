@@ -90,7 +90,7 @@ class BranchManager {
         $this->entityManager->persist($branch);
         $this->entityManager->flush();        
         
-        $last_id = $branch->getBranchId();
+        // $last_id = $branch->getBranchId();
         $this->entityManager->commit();
         return $branch;
         }
@@ -121,7 +121,7 @@ class BranchManager {
             
             // apply changes to database.
             $this->entityManager->flush();
-            $last_id = $branch->getBranchId();
+            // $last_id = $branch->getBranchId();
             $this->entityManager->commit();
            return $branch;
         }
@@ -203,9 +203,9 @@ class BranchManager {
 
              foreach ($branches as &$branche) {
                 //set status
-                $branche['status'] = Branch::getIsActiveList($branche['status']);
+             //   $branche['status'] = Branch::getIsActiveList($branche['status']);
                 //set created_at
-                $branche['createdAt'] =  ($branche['createdAt']) ? $this->checkDateFormat($branche['createdAt'],'d/m/Y H:i:s') : '';
+                $branche['created_at'] =  ($branche['created_at']) ? $this->checkDateFormat($branche['created_at'],'d/m/Y H:i:s') : '';
                 $countRow++;
             }
 

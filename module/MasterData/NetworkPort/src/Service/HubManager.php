@@ -167,9 +167,9 @@ class HubManager {
 
             foreach ($hubs as &$hub) {
                 //set status
-                $hub['status'] = Hub::getIsActiveList($hub['status']);
+                // $hub['status'] = Hub::getIsActiveList($hub['status']);
                 //set created_at
-                $hub['createdAt'] =  ($hub['createdAt']) ? $this->checkDateFormat($hub['createdAt'],'d/m/Y H:i:s') : '';
+                $hub['created_at'] =  ($hub['created_at']) ? $this->checkDateFormat($hub['created_at'],'d/m/Y H:i:s') : '';
                 $countRow++;
             }
         }

@@ -4,6 +4,8 @@ import settings from './settings/reducer';
 import authUser from './auth/reducer';
 import status from './master-data/status/reducer';
 import address from './master-data/address/reducers';
+import hub from './master-data/hub/reducer';
+import branch from './master-data/branch/reducer';
 import users from './users/reducers';
 
 const reducers = combineReducers({
@@ -13,6 +15,8 @@ const reducers = combineReducers({
   status,
   address,
   users,
+  hub,
+  branch
 });
 
 export default reducers;

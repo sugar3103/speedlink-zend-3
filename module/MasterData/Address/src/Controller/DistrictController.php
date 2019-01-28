@@ -27,13 +27,6 @@ class DistrictController extends CoreController {
         $this->districtManager = $districtManager;
     }
 
-    // public function indexAction()
-    // {
-    //     $this->apiResponse['message'] = 'District';
-
-    //     return $this->createResponse();
-    // }
-
     public function indexAction()
     {
         if ($this->getRequest()->isPost()) {
@@ -43,9 +36,10 @@ class DistrictController extends CoreController {
                 1 => 'district',
                 2 => 'status'                
             ];
-
+// var_dump($fieldsMap);die;
             list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
             
+
             //get list district by condition
             $dataDistrict = $this->districtManager->getListDistrictByCondition(
                 $start, $limit, $sortField, $sortDirection,$filters);            
@@ -53,8 +47,8 @@ class DistrictController extends CoreController {
             $this->error_code = 1;
             $this->apiResponse =  array(
                 'message' => 'Get list success',
-                'data' => $dataDistrict['listDistrict'],
-                'total' => $dataDistrict['totalDistrict']
+                'total' => $dataDistrict['totalDistrict'],
+                'data' => $dataDistrict['listDistrict']
             );
         } 
         return $this->createResponse();
@@ -157,11 +151,11 @@ class DistrictController extends CoreController {
         if ($this->getRequest()->isPost()) {
             // get the filters
             $fieldsMap = [
-                0 => 'district_id',
+                0 => 'name',
                 1 => 'status',
                 2 => 'city_id'
             ];
-
+// var_dump($fieldsMap);die;
             list($sortField,$sortDirection,$filters) = $this->getRequestDataSelect($fieldsMap);
 
             //get list city by condition

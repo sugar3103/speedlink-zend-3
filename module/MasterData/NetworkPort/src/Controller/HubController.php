@@ -45,9 +45,10 @@ class HubController extends CoreController {
       if($this->getRequest()->isPost()) {
       // get the filters
       $fieldsMap = [
-          0 => 'hub_id',
+          0 => 'name',
           1 => 'status',
-          2 => 'code'
+          2 => 'code',
+          3 => 'city'
       ];
       
       list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);
@@ -157,7 +158,7 @@ class HubController extends CoreController {
         $data = $this->getRequestData();
         if(isset($data['id'])) {
             // Find existing status in the database.
-            $hub = $this->entityManager->getRepository(Hub::class)->findOneBy(array('hubId' => $data['id']));    
+            $hub = $this->entityManager->getRepository(Hub::class)->findOneBy(array('id' => $data['id']));    
             if ($hub == null) {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = "Hub Not Found";

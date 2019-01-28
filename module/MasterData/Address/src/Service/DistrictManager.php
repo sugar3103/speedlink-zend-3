@@ -168,10 +168,10 @@ class DistrictManager  {
             
             foreach ($cities as &$district) {//loop
                 //set status
-                $district['status'] = District::getIsActiveList($district['status']);
+               // $district['status'] = District::getIsActiveList($district['status']);
 
                 //set created_at
-                $district['createdAt'] =  ($district['createdAt']) ? Utils::checkDateFormat($district['createdAt'],'d/m/Y') : '';
+                $district['created_at'] =  ($district['created_at']) ? Utils::checkDateFormat($district['created_at'],'d/m/Y') : '';
 
                 $countRow++;
             }
@@ -185,50 +185,8 @@ class DistrictManager  {
         ];
         return $dataDistrict;
     }
-<<<<<<< HEAD
-    
-    /**
-     * Check date format
-     *
-     * @param $dateAction
-     * @param $dateFormat
-     * @return string
-     */
-    public function checkDateFormat($dateAction,$dateFormat)
-    {
-        $dateLast = '';
-        $dateCheck = ! empty($dateAction) ? $dateAction->format('Y-m-d H:i:s') : '';
-        if ($dateCheck) {
-            $datetime = new \DateTime($dateCheck, new \DateTimeZone('UTC'));
-            $laTime = new \DateTimeZone('Asia/Ho_Chi_Minh');
-            $datetime->setTimezone($laTime);
-            $dateLast = $datetime->format($dateFormat);
-        }
-        return $dateLast;
-    }
-
-     /**
-     * Get value filters search
-     *
-     * @param $params
-     * @param $fieldsMap
-     * @return array
-     */
-    public function getValueFiltersSearch($params,$fieldsMap)
-    {
-        $filters = [];
-        
-        if (isset($params['query']) && !empty($params['query'])){
-          
-            foreach ($fieldsMap as $field)
-            {
-                if(isset($params['query'][$field]) && $params['query'][$field] != -1)
-                    $filters [$field] = trim($params['query'][$field]);
-            }
-        }
-        return $filters;
-    }
-
+  
+   
      public function getListDistrictSelect(
         $sortField = 'd.name',
         $sortDirection = 'ASC',
@@ -254,7 +212,7 @@ class DistrictManager  {
             
             foreach ($districts as &$district) {//loop
                 //set status
-                $district['status'] = District::getIsActiveList($district['status']);
+              //  $district['status'] = District::getIsActiveList($district['status']);
                 $countRow++;
             }  
         }
@@ -266,6 +224,4 @@ class DistrictManager  {
         return $dataDistrict;
     }
 
-=======
->>>>>>> 3c59ad45ddc552e3caa01f597aab6f49311943b1
 }

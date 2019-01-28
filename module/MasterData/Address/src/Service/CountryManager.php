@@ -209,7 +209,7 @@ class CountryManager  {
             
             foreach ($countries as &$country) {//loop
                 //set status
-                $country['status'] = Country::getIsActiveList($country['status']);
+              //  $country['status'] = Country::getIsActiveList($country['status']);
                 $countRow++;
             }  
         }

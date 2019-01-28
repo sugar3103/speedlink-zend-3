@@ -102,7 +102,7 @@ class WardManager  {
                 $ward['status'] = Ward::getIsActiveList($ward['status']);
 
                 //set created_at
-                $ward['createdAt'] =  ($ward['createdAt']) ? $this->checkDateFormat($ward['createdAt'],'d/m/Y') : '';
+                $ward['created_at'] =  ($ward['created_at']) ? $this->checkDateFormat($ward['created_at'],'d/m/Y') : '';
 
                 $countRow++;
             }

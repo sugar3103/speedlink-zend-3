@@ -40,16 +40,16 @@ class WardController extends CoreController {
             
             // get the filters
             $fieldsMap = [
-                0 => 'name',
-                1 => 'ward',
+                0 => 'id',
+                1 => 'name',
                 2 => 'status'
             ];
 
-            list($currentPage,$totalPages,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
+            list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
            
             //get list ward by condition
             $dataWard = $this->wardManager->getListWardByCondition(
-                $currentPage, $limit, $sortField, $sortDirection,$filters);
+                $start,$limit,$sortField,$sortDirection,$filters);
             
             $result = [
                 "totalRecords" => $dataWard['totalWard'],
@@ -162,7 +162,7 @@ class WardController extends CoreController {
         if ($this->getRequest()->isPost()) {
             // get the filters
             $fieldsMap = [
-                0 => 'ward_id',
+                0 => 'id',
                 1 => 'status',
                 2 => 'district_id'
             ];

@@ -151,10 +151,8 @@ class CityController extends CoreController {
             // get the filters
             $fieldsMap = [
                 0 => 'name',
-                1 => 'city',
-                2 => 'status',
-                3 => 'city_id',
-                4 => 'country_id'
+                1 => 'status',
+                2 => 'country_id'
             ];
 
             list($sortField,$sortDirection,$filters) = $this->getRequestDataSelect($fieldsMap);

@@ -23,10 +23,10 @@ class WardRepository extends EntityRepository {
      * @return array|QueryBuilder
      */
     public function getListWardByCondition(
-        $sortField = 'w.name',
+        $sortField = 'w.id',
         $sortDirection = 'ASC',
         $filters = [],
-        $offset = 0,
+        $start = 1,
         $limit = 10
     )
     {
@@ -42,7 +42,7 @@ class WardRepository extends EntityRepository {
             ")->andWhere("w.is_deleted = 0")
             ->groupBy('w.id')
             ->setMaxResults($limit)
-            ->setFirstResult($offset);
+            ->setFirstResult(($start - 1) * $limit);
             return $queryBuilder;
 
         } catch (QueryException $e) {
@@ -53,7 +53,7 @@ class WardRepository extends EntityRepository {
     }
 
     public function getListWardSelect(
-        $sortField = 'w.name',
+        $sortField = 'w.id',
         $sortDirection = 'ASC',
         $filters = []
     )
@@ -61,9 +61,9 @@ class WardRepository extends EntityRepository {
         try {
             $queryBuilder = $this->buildWardQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select(
-                "w.wardId,
+                "w.id,
                  w.name,
-                 w.nameEn,
+                 w.name_en,
                  w.status"                 
             )
             // ->groupBy('c.cityId')
@@ -90,8 +90,8 @@ class WardRepository extends EntityRepository {
     {
 
         $operatorsMap = [
-            'district_id' => [
-                'alias' => 'w.district_id',
+            'id' => [
+                'alias' => 'w.id',
                 'operator' => 'eq'
             ],
             'name' => [
@@ -108,14 +108,14 @@ class WardRepository extends EntityRepository {
             ],
 
         ];
-
+// var_dump($sortField); die;
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(Ward::class, 'w');
 
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
         } else {
-            $queryBuilder->orderBy('w.name', 'ASC');
+            $queryBuilder->orderBy('w.id', 'ASC');
         }
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }

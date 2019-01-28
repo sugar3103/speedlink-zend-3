@@ -46,9 +46,14 @@ class BranchController extends CoreController {
       
       // get the filters
       $fieldsMap = [
-          0 => 'name',
-          1 => 'status',
-          2 => 'code'
+          0 => 'code',
+          1 => 'name',
+          2 => 'hub',
+          3 => 'district',
+          4 => 'ward',
+          5 => 'city',
+          6 => 'country',
+          7 => 'status'
       ];
 
       list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);
@@ -149,7 +154,7 @@ class BranchController extends CoreController {
         $data = $this->getRequestData();
         if(isset($data['id'])) {
             // Find existing status in the database.
-            $branch = $this->entityManager->getRepository(Branch::class)->findOneBy(array('branchId' => $data['id']));    
+            $branch = $this->entityManager->getRepository(Branch::class)->findOneBy(array('id' => $data['id']));    
             if ($branch == null) {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = "Branch Not Found";

@@ -61,9 +61,9 @@ class CountryRepository extends EntityRepository {
         try {
             $queryBuilder = $this->buildCountryQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select(
-                "c.countryId,
+                "c.id,
                  c.name,
-                 c.nameEn,
+                 c.name_en,
                  c.status"                 
             )
             // ->groupBy('c.cityId')

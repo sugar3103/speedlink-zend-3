@@ -80,6 +80,41 @@ class Hub
     private $updated_at;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=20, precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $name;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="name_en", type="string", length=50, precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $name_en;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=1000, precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $description;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="description_en", type="text", length=65535, precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $description_en;
+
+    /**
+     * 
+     * @ORM\OneToOne(targetEntity="\Address\Entity\City")
+     * @ORM\JoinColumn(name="city_id", referencedColumnName="id", nullable=true)
+     */
+    protected $city;
+
+    /**
      * @return int
      */
     public function getId()
@@ -221,6 +256,126 @@ class Hub
     public function setUpdatedAt($updated_at)
     {
         $this->updated_at = $updated_at;
+    }
+
+    /**
+     * Set name.
+     *
+     * @param string $name
+     *
+     * @return Hub
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set name_en.
+     *
+     * @param string|null $name_en
+     *
+     * @return ShipmentType
+     */
+    public function setNameEn($name_en = null)
+    {
+        $this->name_en = $name_en;
+
+        return $this;
+    }
+
+    /**
+     * Get name_en.
+     *
+     * @return string|null
+     */
+    public function getNameEn()
+    {
+        return $this->name_en;
+    }
+    
+    /**
+     * Set description.
+     *
+     * @param string $description
+     *
+     * @return Hub
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description.
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set description_en.
+     *
+     * @param string|null $description_en
+     *
+     * @return ShipmentType
+     */
+    public function setDescriptionEn($description_en = null)
+    {
+        $this->description_en = $description_en;
+
+        return $this;
+    }
+
+    /**
+     * Get description_en.
+     *
+     * @return string|null
+     */
+    public function getDescriptionEn()
+    {
+        return $this->descriptionen;
+    }
+
+    /**
+     * Set city.
+     *
+     * @param \Address\Entity\City|null $city
+     *
+     * @return Hub
+     */
+    public function setCity(\Address\Entity\City $city = null)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Get city.
+     *
+     * @return \Address\Entity\City|null
+     */
+    public function getCity()
+    {
+        return $this->city;
     }
 
     /**

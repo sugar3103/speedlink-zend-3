@@ -61,9 +61,9 @@ class DistrictRepository extends EntityRepository {
         try {
             $queryBuilder = $this->buildDistrictQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select(
-                "d.districtId,
+                "d.id,
                  d.name,
-                 d.nameEn,
+                 d.name_en,
                  d.status"                 
             )
             // ->groupBy('c.cityId')
@@ -107,7 +107,7 @@ class DistrictRepository extends EntityRepository {
             ],
 
         ];
-
+ // var_dump($sortField); die;
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(District::class, 'd');
 

@@ -173,10 +173,10 @@ class CityManager  {
             
             foreach ($cities as &$city) {//loop
                 //set status
-                $city['status'] = City::getIsActiveList($city['status']);
+                // $city['status'] = City::getIsActiveList($city['status']);
 
                 //set created_at
-                $city['createdAt'] =  ($city['createdAt']) ? Utils::checkDateFormat($city['createdAt'],'d/m/Y') : '';
+                $city['created_at'] =  ($city['created_at']) ? Utils::checkDateFormat($city['created_at'],'d/m/Y') : '';
                 
                 $countRow++;
             }
@@ -216,7 +216,7 @@ class CityManager  {
             
             foreach ($cities as &$city) {//loop
                 //set status
-                $city['status'] = City::getIsActiveList($city['status']);
+              //  $city['status'] = City::getIsActiveList($city['status']);
                 $countRow++;
             }  
         }
