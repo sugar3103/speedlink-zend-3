@@ -56,23 +56,19 @@ class BranchController extends CoreController {
           7 => 'status'
       ];
 
-      list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);
+      list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);
 
       $dataBranch = $this->branchManager->getListBranchByCondition(
                 $start, $limit, $sortField, $sortDirection, $filters);
 
-     $result = [
-        "data" => (($dataBranch['listBranch']) ? $dataBranch['listBranch'] : [] ) ,
-        "total" => $dataBranch['totalBranch']
-      ];
+      $results = $this->filterByField($dataBranch['listBranch'], $fields);
 
-        $this->error_code = 1;
-        $this->apiResponse['message'] = 'Success';
-        $this->apiResponse['total'] = $result['total'];
-        $this->apiResponse['data'] = $result['data'];
-      } else {
-        $this->error_code = 0;
-        $this->apiResponse['message'] = 'Failed';
+      $this->error_code = 1;
+      $this->apiResponse =  array(
+          'message' => 'Get list success',
+          'data' => $results,
+          'total' => $dataBranch['totalBranch']
+      );
       }
       return $this->createResponse();
     }
@@ -99,8 +95,7 @@ class BranchController extends CoreController {
               $this->apiResponse['message'] = "Success: You have added a branch!";
             }else {
               $this->error_code = 0;
-              $this->apiResponse['message'] = "Error";
-              $this->apiResponse = $form->getMessages();      
+              $this->apiResponse['message'] = $form->getMessages();      
             }     
         } else {
             $this->httpStatusCode = 404;
@@ -137,7 +132,7 @@ class BranchController extends CoreController {
               $this->apiResponse['message'] = "You have modified branch!";
             } else {
               $this->error_code = 0;
-              $this->apiResponse = $form->getMessages(); 
+              $this->apiResponse['message'] = $form->getMessages(); 
             }   
           } else {
             $this->error_code = 0;

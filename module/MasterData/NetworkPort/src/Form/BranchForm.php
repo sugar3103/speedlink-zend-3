@@ -105,7 +105,8 @@ class BranchForm extends Form {
                     'name' => BranchExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'branch' => $this->branch
+                        'branch' => $this->branch,
+                        'language' => 'en'
                     ]
                 ]
             ]

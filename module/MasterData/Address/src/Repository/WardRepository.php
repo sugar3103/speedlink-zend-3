@@ -44,9 +44,12 @@ class WardRepository extends EntityRepository {
                 w.created_by,
                 w.created_at
             ")->andWhere("w.is_deleted = 0")
-            ->groupBy('w.id')
-            ->setMaxResults($limit)
-            ->setFirstResult(($start - 1) * $limit);
+            ->groupBy('w.id');
+            if($limit){
+                $queryBuilder->setMaxResults($limit)
+                ->setFirstResult(($start - 1) * $limit);
+            }
+            
             return $queryBuilder;
 
         } catch (QueryException $e) {
@@ -96,7 +99,7 @@ class WardRepository extends EntityRepository {
         $operatorsMap = [
             'district' => [
                 'alias' => 'w.district_id',
-                'operator' => 'contains'
+                'operator' => 'eq'
             ],
             'name' => [
                 'alias' => 'w.name',

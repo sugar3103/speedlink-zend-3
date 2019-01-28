@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Col, Container, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
-import {List} from '../../../components/MasterData/Branch';
+import {List} from '../../../components/MasterData/NetworkPort/Branch';
 
 class Branch extends Component {
   render() {

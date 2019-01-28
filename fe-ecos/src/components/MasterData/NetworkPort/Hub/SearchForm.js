@@ -1,12 +1,52 @@
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
-import renderSelectField from '../../../containers/Shared/form/Select';
+import renderSelectField from '../../../../containers/Shared/form/Select';
 import { Button, Col } from 'reactstrap';
+import { getCityList } from '../../../../redux/actions';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 class SearchForm extends Component {
+  componentDidMount() {
+    const params = {
+      field: ['id', 'name'],
+      offset: {
+        limit: 10
+      }
+    }
+    this.props.getCityList(params);
+  }
+
+  showOptionCity = (items) => {
+    let result = [];
+    if (items.length > 0) {
+      result = items.map(item => {
+        return {
+          value: item.id,
+          label: item.name
+        }
+      })
+    }
+    return result;
+  }
+
+  onInputChange = value => {
+    const params = {
+      field: ['id', 'name'],
+      offset: {
+        limit: 0
+      },
+      query: {
+        name: value
+      }
+    }
+    this.props.getCityList(params);
+  }
+
+
   render() {
-    const { handleSubmit, reset } = this.props;
+    const { handleSubmit, reset, cities } = this.props;
     const { messages } = this.props.intl;
     return (
       <form className="form" onSubmit={handleSubmit}>
@@ -59,30 +99,15 @@ class SearchForm extends Component {
             <div className="form__form-group-field">
               <Field
                 name="city"
-                component="input"
+                component={renderSelectField}
                 type="text"
-                placeholder={messages['hub.city']}
+                options={cities && this.showOptionCity(cities)}
+                onInputChange={this.onInputChange}
+                placeholder={messages['hub.country']}
               />
             </div>
           </div>
         </Col>
-      {/*  <Col md={3}>
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['hub.city']}</span>
-            <div className="form__form-group-field">
-              <Field
-                name="city"
-                component={renderSelectField}
-                type="text"
-                options={[
-                  { value: -1, label: messages['hub.all'] },
-                  { value: 1, label: messages['hub.active'] },
-                  { value: 0, label: messages['hub.inactive'] }
-                ]}
-              />
-            </div>
-          </div>
-        </Col>*/}
         <div className="search-group-button">
           <Button 
             size="sm" 
@@ -105,12 +130,26 @@ class SearchForm extends Component {
   }
 }
 
+SearchForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
+  cities: PropTypes.array,
+  getCityList: PropTypes.func.isRequired
+}
+
+const mapStateToProps = ({ address }) => {
+  const cities = address.city.items;
+  return {
+    cities
+  }
+}
+
 export default reduxForm({
   form: 'hub_search_form',
   initialValues: {
     name: '',
-    code: '',
-    city: '',
     status: -1
   }
-})(injectIntl(SearchForm));
+})(injectIntl(connect(mapStateToProps, {
+  getCityList
+})(SearchForm)));

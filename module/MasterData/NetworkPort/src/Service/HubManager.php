@@ -16,7 +16,7 @@ use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator;
 use Zend\Authentication\Result;
-
+use Core\Utils\Utils;
 use Address\Entity\City;
 
 /**
@@ -68,7 +68,6 @@ class HubManager {
         $this->entityManager->beginTransaction();
         try {
         $hub = new Hub;
-        // var_dump($data);die;
         $hub->setCityId($data['city_id']);
         $hub->setCode($data['code']);
         $hub->setName($data['name']);
@@ -169,7 +168,7 @@ class HubManager {
                 //set status
                 // $hub['status'] = Hub::getIsActiveList($hub['status']);
                 //set created_at
-                $hub['created_at'] =  ($hub['created_at']) ? $this->checkDateFormat($hub['created_at'],'d/m/Y H:i:s') : '';
+                $hub['created_at'] =  ($hub['created_at']) ? Utils::checkDateFormat($hub['created_at'],'d/m/Y') : '';
                 $countRow++;
             }
         }
@@ -197,86 +196,6 @@ class HubManager {
             $this->entityManager->rollback();
             return FALSE;
         }
-    }
-
-    /**
-     * Check date format
-     *
-     * @param $dateAction
-     * @param $dateFormat
-     * @return string
-     */
-    public function checkDateFormat($dateAction,$dateFormat)
-    {
-        $dateLast = '';
-        $dateCheck = ! empty($dateAction) ? $dateAction->format('Y-m-d H:i:s') : '';
-        if ($dateCheck) {
-            $datetime = new \DateTime($dateCheck, new \DateTimeZone('UTC'));
-            $laTime = new \DateTimeZone('Asia/Ho_Chi_Minh');
-            $datetime->setTimezone($laTime);
-            $dateLast = $datetime->format($dateFormat);
-        }
-        return $dateLast;
-    }
-
-
-    /**
-     * Get value filters search
-     *
-     * @param $params
-     * @param $fieldsMap
-     * @return array
-     */
-    public function getValueFiltersSearch($params,$fieldsMap)
-    {
-        $filters = [];
-
-        if (isset($params['query']) && !empty($params['query'])){
-          foreach ($params['query'] as $key => $column) {
-              if(isset($fieldsMap[$key]) && !empty($column)) {
-                  $filters[$key] = $column;
-              }
-          }
-           
-        }
-        return $filters;
-    }
-
-    public function getListHubSelect(
-        $sortField = 'c.name',
-        $sortDirection = 'ASC',
-        $filters = []
-    ){
-
-        $hubs     = [];
-        $totalHub = 0;
-        
-        //get orm Hub
-        $ormHub = $this->entityManager->getRepository(Hub::class)
-            ->getListHubSelect($sortField, $sortDirection, $filters);
-
-        if($ormHub){
-            $ormPaginator = new ORMPaginator($ormHub, true);
-            $ormPaginator->setUseOutputWalkers(false);
-            $totalHub = $ormPaginator->count();
-
-            // $adapter = new DoctrineAdapter($ormPaginator);  
-            $hubs = $ormPaginator->getIterator()->getArrayCopy();
-            //set countRow default
-            $countRow = 1;
-            
-            foreach ($hubs as &$hub) {//loop
-                //set status
-                $hub['status'] = Hub::getIsActiveList($hub['status']);
-                $countRow++;
-            }  
-        }
-        //set data city
-        $dataHub = [
-            'listHub' => $hubs,
-            'totalHub' => $totalHub,
-        ];
-        return $dataHub;
     }
 
 }

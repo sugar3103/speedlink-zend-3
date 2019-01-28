@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import {  getHubList, getCityList, getCountryList, getWardList, getDistrictList } from '../../../redux/actions';
+import {  getHubList, getCityList, getCountryList, getWardList, getDistrictList } from '../../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
-import renderSelectField from '../../../containers/Shared/form/Select';
-import Select from '../../../containers/Shared/form/Select';
+import renderSelectField from '../../../../containers/Shared/form/Select';
+import Select from '../../../../containers/Shared/form/Select';
 import { Button, Col } from 'reactstrap';
+import PropTypes from 'prop-types';
 
 class SearchForm extends Component {
 
@@ -16,17 +17,54 @@ class SearchForm extends Component {
         limit: 0
       }
     }
-    this.props.getHubList();
-    this.props.getCityList();
-    this.props.getCountryList();
-    this.props.getWardList(params);
-    this.props.getDistrictList();
+    this.props.getHubList(params);
+    // this.props.getCityList();
+    this.props.getCountryList(params);
+    // this.props.getWardList(params);
+    // this.props.getDistrictList();
    // const data = this.props.modalData;      
    //  if (data) {
    //    this.props.initialize(data);
    //  }
   }
+  onChangeCountry = value => {
+    let params = {
+      field: ['id', 'name'],
+      offset: {
+        limit: 0
+      },
+      query: {
+        country_id: value
+      }
+    }
+    this.props.getCityList(params);
+  }
 
+  onChangeCity = value => {
+    let params = {
+      field: ['id', 'name'],
+      offset: {
+        limit: 0
+      },
+      query: {
+        city: value
+      }
+    }
+    this.props.getDistrictList(params);
+  }
+
+  onChangeDistrict = value => {
+    let params = {
+      field: ['id', 'name'],
+      offset: {
+        limit: 0
+      },
+      query: {
+        district: value
+      }
+    }
+    this.props.getWardList(params);
+  }
 
   showOptionsHub = (items) => {
     const hubs = items.map(item => {
@@ -80,12 +118,8 @@ class SearchForm extends Component {
 
   render() {
     const { handleSubmit, reset } = this.props;
-    const { items } = this.props.hub;
     const { messages } = this.props.intl;
-    const city_items = this.props.city_items;
-    const country_items = this.props.country_items;
-    const district_items = this.props.district_items;
-    const ward_items = this.props.ward_items;
+    const { cities, countries, districts, wards, hubs } = this.props;
 
     return (
       <form className="form" onSubmit={handleSubmit}>
@@ -132,43 +166,31 @@ class SearchForm extends Component {
             </div>
           </div>
         </Col>
-        {/*<Col md={3}>
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['branch.city']}</span>
-            <div className="form__form-group-field">
-              <Field
-                name="city"
-                component="input"
-                type="text"
-                placeholder={messages['branch.city']}
-              />
-            </div>
-          </div>
-        </Col>*/}
-
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['branch.hubcode']}</span>
+            <span className="form__form-group-label">{messages['branch.country']}</span>
             <div className="form__form-group-field">
                <Field
-                  name="hub"
-                  component={Select}
-                  options={items && this.showOptionsHub(items)}
-                  placeholder={messages['branch.hubcode']}       
+                        name="country"
+                        component={renderSelectField}
+                        options={countries && this.showOptionsCountry(countries)}
+                        placeholder={messages['branch.country']}
+                        onChange={this.onChangeCountry}  
                 />
             </div>
           </div>
-        </Col>        
+        </Col>
 
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['branch.ward']}</span>
+            <span className="form__form-group-label">{messages['branch.city']}</span>
             <div className="form__form-group-field">
                <Field
-                        name="hub"
-                        component={Select}
-                        options={ward_items && this.showOptionsWard(ward_items)}
-                        placeholder={messages['branch.ward']}       
+                        name="city"
+                        component={renderSelectField}
+                        options={cities && this.showOptionsCity(cities)}
+                        placeholder={messages['branch.city']}  
+                        onChange={this.onChangeCity}     
                 />
             </div>
           </div>
@@ -179,10 +201,11 @@ class SearchForm extends Component {
             <span className="form__form-group-label">{messages['branch.district']}</span>
             <div className="form__form-group-field">
                <Field
-                        name="hub"
-                        component={Select}
-                        options={district_items && this.showOptionsDistrict(district_items)}
-                        placeholder={messages['branch.district']}       
+                        name="district"
+                        component={renderSelectField}
+                        options={districts && this.showOptionsDistrict(districts)}
+                        placeholder={messages['branch.district']}
+                        onChange={this.onChangeDistrict}   
                 />
             </div>
           </div>
@@ -190,49 +213,32 @@ class SearchForm extends Component {
 
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['branch.city']}</span>
+            <span className="form__form-group-label">{messages['branch.ward']}</span>
             <div className="form__form-group-field">
                <Field
-                        name="hub"
-                        component={Select}
-                        options={city_items && this.showOptionsCity(city_items)}
-                        placeholder={messages['branch.city']}       
-                />
-            </div>
-          </div>
-        </Col>
-        
-        <Col md={3}>
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['branch.country']}</span>
-            <div className="form__form-group-field">
-               <Field
-                        name="hub"
-                        component={Select}
-                        options={country_items && this.showOptionsCountry(country_items)}
-                        placeholder={messages['branch.country']}       
+                        name="ward"
+                        component={renderSelectField}
+                        options={wards && this.showOptionsWard(wards)}
+                        placeholder={messages['branch.ward']}       
                 />
             </div>
           </div>
         </Col>
 
-      {/*  <Col md={3}>
+        <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['branch.city']}</span>
+            <span className="form__form-group-label">{messages['branch.hubcode']}</span>
             <div className="form__form-group-field">
-              <Field
-                name="city"
-                component={renderSelectField}
-                type="text"
-                options={[
-                  { value: -1, label: messages['branch.all'] },
-                  { value: 1, label: messages['branch.active'] },
-                  { value: 0, label: messages['branch.inactive'] }
-                ]}
-              />
+               <Field
+                  name="hub"
+                  component={renderSelectField}
+                  options={hubs && this.showOptionsHub(hubs)}
+                  placeholder={messages['branch.hubcode']}       
+                />
             </div>
           </div>
-        </Col>*/}
+        </Col>        
+
         <div className="search-group-button">
           <Button 
             size="sm" 
@@ -255,17 +261,28 @@ class SearchForm extends Component {
   }
 }
 
+SearchForm.propTypes = {
+  cities: PropTypes.array,
+  districts: PropTypes.array,
+  countries: PropTypes.array,
+  wards: PropTypes.array,
+  hubs: PropTypes.array,
+  getCityList: PropTypes.func.isRequired,
+  getDistrictList: PropTypes.func.isRequired,
+  getCountryList: PropTypes.func.isRequired,
+  getWardList: PropTypes.func.isRequired,
+  getHubList: PropTypes.func.isRequired,
+}
+
 const mapStateToProps = ({hub, address}) => {  
-  // const { city, country, district, ward } = address;
-  const city_items = address.city.items;
-  const country_items  = address.country.items;
-  const district_items  = address.district.items;
-  const ward_items = address.ward.items;
+  const cities  = address.city.items;
+  const districts  = address.district.items;
+  const countries  = address.country.items;
+  const wards  = address.ward.items;
+  const hubs  = hub.items;
 
   return {
-    hub,
-    city_items,
-    country_items, district_items, ward_items
+    cities, districts, countries, wards, hubs
   }
 }
 
@@ -273,9 +290,8 @@ export default reduxForm({
   form: 'branch_search_form',
   initialValues: {
     name: '',
-    code: '',
-    city: '',
-    status: -1
+    status: -1,
+
   }
 })(injectIntl(connect(mapStateToProps, {
   getHubList,

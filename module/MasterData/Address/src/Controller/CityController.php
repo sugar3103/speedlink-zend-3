@@ -41,7 +41,8 @@ class CityController extends CoreController {
                 0 => 'name',
                 1 => 'id',
                 2 => 'country',
-                3 => 'status'
+                3 => 'status',
+                4 => 'country_id'
             ];
 
             list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);                        

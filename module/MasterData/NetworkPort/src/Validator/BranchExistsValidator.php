@@ -13,6 +13,7 @@ class BranchExistsValidator extends AbstractValidator {
     protected $options = [
         'entityManager' => null,
         'branch' => null,
+        'language' => null
     ];
 
     /**
@@ -59,14 +60,27 @@ class BranchExistsValidator extends AbstractValidator {
         }
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
-        $branch = $entityManager->getRepository(Branch::class)->findOneByName($value);
+        if($this->options['language'] === NULL) {
+            $branch = $entityManager->getRepository(Branch::class)->findOneByName($value);
+        } else if($this->options['language'] === 'en') {
+            $branch = $entityManager->getRepository(Branch::class)->findOneBy(array('name_en' => $value));       
+        }
 
-        if ($this->options['branch'] == null) {
+        //English
+        if ($this->options['branch'] == null)
             $isValid = ($branch == null);
-        } elseif ($this->options['branch']->getName() != $value && $branch != null) {
-            $isValid = false;
-        } else {
-            $isValid = true;
+        else {
+            if($this->options['language'] === 'en') {
+                if ($this->options['branch']->getNameEn() != $value && $branch != null)
+                    $isValid = false;
+                else
+                    $isValid = true;
+            } else {
+                if ($this->options['branch']->getName() != $value && $branch != null)
+                    $isValid = false;
+                else
+                    $isValid = true;
+            }
         }
 
         // if there were an error, set error message.

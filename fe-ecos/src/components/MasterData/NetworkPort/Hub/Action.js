@@ -3,21 +3,22 @@ import { injectIntl } from 'react-intl';
 import { Modal } from 'reactstrap';
 import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
-import { addBranchItem, updateBranchItem, toggleBranchModal } from '../../../redux/actions';
+import { addHubItem, updateHubItem, toggleHubModal } from '../../../../redux/actions';
+import PropTypes from 'prop-types';
 
 class Action extends Component {
 
   handleSubmit = values => {
     const { messages } = this.props.intl;
     if (values.id) {
-      this.props.updateBranchItem(values, messages);
+      this.props.updateHubItem(values, messages);
     } else {
-      this.props.addBranchItem(values, messages);
+      this.props.addHubItem(values, messages);
     }
   }
 
   toggleModal = () => {
-    this.props.toggleBranchModal();
+    this.props.toggleHubModal();
   }
 
   render() {
@@ -35,15 +36,23 @@ class Action extends Component {
   }
 }
 
-const mapStateToProps = ({status}) => {
-  const { modalData } = status;
+Action.propTypes = {
+  modalData: PropTypes.object,
+  addHubItem: PropTypes.func.isRequired,
+  updateHubItem: PropTypes.func.isRequired,
+  toggleHubModal: PropTypes.func.isRequired,
+}
+
+
+const mapStateToProps = ({hub}) => {
+  const { modalData } = hub;
   return {
     modalData
   }
 }
 
 export default injectIntl(connect(mapStateToProps, {
-  addBranchItem,
-  updateBranchItem,
-  toggleBranchModal
+  addHubItem,
+  updateHubItem,
+  toggleHubModal
 })(Action));

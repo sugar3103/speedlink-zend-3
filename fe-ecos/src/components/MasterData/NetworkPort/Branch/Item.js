@@ -3,7 +3,7 @@ import { Button, Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
-import { toggleBranchModal, deleteBranchItem } from '../../../redux/actions';
+import { toggleBranchModal, deleteBranchItem } from '../../../../redux/actions';
 
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';

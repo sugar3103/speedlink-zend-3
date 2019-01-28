@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-
 import { connect } from 'react-redux';
-import { getHubList } from '../../../redux/actions';
+import { getBranchList } from '../../../../redux/actions';
 import SearchForm from './SearchForm';
-import  { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
+import  { SELECTED_PAGE_SIZE } from '../../../../constants/defaultValues';
 
 class Search extends Component {
 
@@ -18,8 +17,8 @@ class Search extends Component {
       },
       query: values
     }
-    // console.log(params);
-    this.props.getHubList(params, messages);
+    console.log(params);
+    this.props.getBranchList(params, messages);
   }
 
   render() {
@@ -27,7 +26,7 @@ class Search extends Component {
     return (
       <div className="mb-2">
         <fieldset className="scheduler-border">
-          <legend className="scheduler-border">{messages['hub.search']}</legend>
+          <legend className="scheduler-border">{messages['branch.search']}</legend>
           <SearchForm onSubmit={this.handleSubmit} />
         </fieldset>
       </div>
@@ -36,9 +35,9 @@ class Search extends Component {
 }
 
 Search.propTypes = {
-  getHubList: PropTypes.func.isRequired
+  getBranchList: PropTypes.func.isRequired
 }
 
 export default injectIntl(connect(null, {
-  getHubList
+  getBranchList
 })(Search));

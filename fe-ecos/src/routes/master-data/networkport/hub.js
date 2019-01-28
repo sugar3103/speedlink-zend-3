@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Col, Container, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
-import {List} from '../../../components/MasterData/Hub';
+import {List} from '../../../components/MasterData/NetworkPort/Hub';
 
 class Hub extends Component {
   render() {

@@ -13,6 +13,7 @@ class HubExistsValidator extends AbstractValidator {
     protected $options = [
         'entityManager' => null,
         'hub' => null,
+        'language' => null
     ];
 
     /**
@@ -60,14 +61,27 @@ class HubExistsValidator extends AbstractValidator {
 
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
-        $hub = $entityManager->getRepository(Hub::class)->findOneByName($value);
+        if($this->options['language'] === NULL) {
+            $hub = $entityManager->getRepository(Hub::class)->findOneByName($value);
+        } else if($this->options['language'] === 'en') {
+            $hub = $entityManager->getRepository(Hub::class)->findOneBy(array('name_en' => $value));       
+        }
 
-        if ($this->options['hub'] == null) {
+        //English
+        if ($this->options['hub'] == null)
             $isValid = ($hub == null);
-        } elseif ($this->options['hub']->getName() != $value && $hub != null) {
-            $isValid = false;
-        } else {
-            $isValid = true;
+        else {
+            if($this->options['language'] === 'en') {
+                if ($this->options['hub']->getNameEn() != $value && $hub != null)
+                    $isValid = false;
+                else
+                    $isValid = true;
+            } else {
+                if ($this->options['hub']->getName() != $value && $hub != null)
+                    $isValid = false;
+                else
+                    $isValid = true;
+            }
         }
 
         // if there were an error, set error message.
