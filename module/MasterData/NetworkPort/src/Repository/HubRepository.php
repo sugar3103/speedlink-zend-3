@@ -45,40 +45,16 @@ class HubRepository extends EntityRepository
                 h.description_en,
                 h.city_id,
                 c.name as city
-            ")->groupBy('h.id')
-            ->setMaxResults($limit)
-            ->setFirstResult(($start - 1) * $limit);
+            ")->andWhere("h.is_deleted = 0")
+            ->groupBy('h.id');
+            if($limit) {
+                $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
+            }
             return $queryBuilder;
         } catch (QueryException $e) {
             return [];
         }
     }
-
-    public function getListHubSelect(
-        $sortField = 'h.name',
-        $sortDirection = 'ASC',
-        $filters = []
-    )
-    {
-        try {
-            $queryBuilder = $this->buildHubQueryBuilder($sortField, $sortDirection, $filters);
-            $queryBuilder->select(
-                "h.id,
-                 h.name,
-                 h.name_en,
-                 h.status"                 
-            )
-            // ->groupBy('c.cityId')
-            // ->setMaxResults($limit)
-            // ->setFirstResult($offset)
-            ;
-            return $queryBuilder;
-
-        } catch (QueryException $e) {
-            return [];
-        }
-    }
-
 
     /**
      * Build query builder

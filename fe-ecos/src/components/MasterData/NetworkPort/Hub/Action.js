@@ -4,6 +4,7 @@ import { Modal } from 'reactstrap';
 import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
 import { addHubItem, updateHubItem, toggleHubModal } from '../../../../redux/actions';
+import PropTypes from 'prop-types';
 
 class Action extends Component {
 
@@ -35,8 +36,16 @@ class Action extends Component {
   }
 }
 
-const mapStateToProps = ({status}) => {
-  const { modalData } = status;
+Action.propTypes = {
+  modalData: PropTypes.object,
+  addHubItem: PropTypes.func.isRequired,
+  updateHubItem: PropTypes.func.isRequired,
+  toggleHubModal: PropTypes.func.isRequired,
+}
+
+
+const mapStateToProps = ({hub}) => {
+  const { modalData } = hub;
   return {
     modalData
   }

@@ -81,6 +81,7 @@ class HubForm extends Form {
                     'options' => [
                         'entityManager' => $this->entityManager,
                         'hub' => $this->hub
+                        
                     ]
                 ]
             ]
@@ -106,7 +107,9 @@ class HubForm extends Form {
                     'name' => HubExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'hub' => $this->hub
+                        'hub' => $this->hub,
+                        'language' => 'en'
+                        //options
                     ]
                 ]
             ]
@@ -185,6 +188,8 @@ class HubForm extends Form {
                 ]
             ]
         ]);
+
+
 
         $inputFilter->add([
             'name'  => 'description_en',

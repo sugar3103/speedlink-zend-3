@@ -18,7 +18,6 @@ class Search extends Component {
       },
       query: values
     }
-    // console.log(params);
     this.props.getHubList(params, messages);
   }
 

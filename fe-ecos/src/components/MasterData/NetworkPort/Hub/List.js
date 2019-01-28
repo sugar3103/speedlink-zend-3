@@ -111,19 +111,18 @@ class List extends Component {
       <Col md={12} lg={12}>
         <Card>
           <CardBody className="master-data-list">
-            <div className="card__title">
-              <h5 className="bold-text">{messages['hub.list-title']}</h5>
-              <ButtonToolbar className="master-data-list__btn-toolbar-top">
-                <Button 
-                  color="success" 
-                  className="master-data-list__btn-add"
-                  onClick={this.toggleModal}
-                >{messages['hub.add-new']}</Button>
-              </ButtonToolbar>
+          <Search />
+          <div className="mb-2">
+              <Button 
+                color="success" 
+                onClick={this.toggleModal}
+                className="master-data-btn"
+                size="sm"
+              >{messages['hub.add-new']}</Button>
               <Action modalOpen={modalOpen} />
+              <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
             </div>
-            <Search />
-            <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
+           
             <Table responsive bordered hover>
               <thead>
                 <tr>
@@ -155,15 +154,13 @@ class List extends Component {
 
 List.propTypes = {
   hub: PropTypes.object.isRequired,
-  modal: PropTypes.object,
   getHubList: PropTypes.func.isRequired,
   toggleHubModal: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ hub, modal }) => {
+const mapStateToProps = ({ hub }) => {
   return {
-    hub,
-    modal
+    hub
   };
 };
 
@@ -171,6 +168,6 @@ export default injectIntl(connect(
   mapStateToProps,
   {
     getHubList,
-    toggleHubModal,
+    toggleHubModal
   }
 )(List));

@@ -94,7 +94,7 @@ class HubController extends CoreController {
             }
             else {
                 $this->error_code = 0;
-                $this->apiResponse['data'] = $form->getMessages();    
+                $this->apiResponse['message'] = $form->getMessages();    
             }            
         }
         else {
@@ -134,11 +134,11 @@ class HubController extends CoreController {
               $this->apiResponse['message'] = "You have modified hub!";
             } else {
               $this->error_code = 0;
-              $this->apiResponse['data'] = $form->getMessages(); 
+              $this->apiResponse['message'] = $form->getMessages(); 
             }   
           } else {
             $this->error_code = 0;
-            $this->apiResponse['data'] = 'Hub Not Found';   
+            $this->apiResponse['message'] = 'Hub Not Found';   
           }
         } else {
           $this->httpStatusCode = 404;
@@ -167,37 +167,4 @@ class HubController extends CoreController {
         }
       return $this->createResponse();       
     }
-
-    public function listAction()
-    {
-        if ($this->getRequest()->isPost()) {
-            // get the filters
-            $fieldsMap = [
-                0 => 'hub_id',
-                1 => 'status',
-                2 => 'code'
-            ];
-
-            list($sortField,$sortDirection,$filters) = $this->getRequestDataSelect($fieldsMap);
-
-            //get list city by condition
-            $dataHub = $this->hubManager->getListHubSelect(
-              $sortField ,$sortDirection, $filters);
-            
-          $result = [
-            "data" => (($dataHub['listHub']) ? $dataHub['listHub'] : [] ) ,
-            "total" => $dataHub['totalHub']
-          ];
-
-        $this->error_code = 1;
-        $this->apiResponse['message'] = 'Success';
-        $this->apiResponse['total'] = $result['total'];
-        $this->apiResponse['data'] = $result['data'];   
-        } else {
-          $this->error_code = 0;
-          $this->apiResponse['message'] = 'Failed';
-        }
-        return $this->createResponse();
-    }
-
 }

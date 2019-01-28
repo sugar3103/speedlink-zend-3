@@ -35,6 +35,7 @@ class BranchRepository extends EntityRepository
                 b.id,
                 b.code,
                 b.name,
+                b.name_en,
                 b.status,
                 b.created_at,
                 b.created_by,
@@ -50,10 +51,14 @@ class BranchRepository extends EntityRepository
                 c.name AS city,
                 w.name AS ward,
                 co.name AS country,
-                b.description
-            ")->groupBy('b.id')
-            ->setMaxResults($limit)
-            ->setFirstResult(($start - 1) * $limit);
+                b.description,
+                b.description_en
+            ")->andWhere("h.is_deleted = 0")
+            ->groupBy('b.id');
+            
+            if($limit) {
+                $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
+            }
 
             return $queryBuilder;
         } catch (QueryException $e) {
@@ -82,23 +87,23 @@ class BranchRepository extends EntityRepository
                 'operator' => 'contains'
             ],
             'hub' => [
-                'alias' => 'h.name',
+                'alias' => 'b.hub_id',
                 'operator' => 'contains'
             ],
             'district' => [
-                'alias' => 'd.name',
+                'alias' => 'b.district_id',
                 'operator' => 'contains'
             ],
             'ward' => [
-                'alias' => 'w.name',
+                'alias' => 'b.ward_id',
                 'operator' => 'contains'
             ],
             'city' => [
-                'alias' => 'c.name',
+                'alias' => 'b.city_id',
                 'operator' => 'contains'
             ],
             'country' => [
-                'alias' => 'co.name',
+                'alias' => 'b.country_id',
                 'operator' => 'contains'
             ],
             'created_at' => [

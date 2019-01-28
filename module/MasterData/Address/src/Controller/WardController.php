@@ -45,16 +45,17 @@ class WardController extends CoreController {
                 2 => 'status'
             ];
 
-            list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
+            list($start,$limit,$sortField,$sortDirection,$filters,$fileds) = $this->getRequestData($fieldsMap);                        
             
             //get list ward by condition
             $dataWard = $this->wardManager->getListWardByCondition(
                 $start, $limit, $sortField, $sortDirection,$filters);            
             
+            $result = $this->filterByField($dataWard['listWard'],$fileds);
             $this->error_code = 1;
             $this->apiResponse =  array(
                 'message' => 'Get list success',
-                'data' => $dataWard['listWard'],
+                'data' => $result,
                 'total' => $dataWard['totalWard']
             );
 

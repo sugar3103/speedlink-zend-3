@@ -377,23 +377,4 @@ class Hub
     {
         return $this->city;
     }
-
-    /**
-     * Returns possible hubs as array.
-     * @return array
-     */
-    public static function getIsActiveList($value = null)
-    {
-        $hubs = [
-            self::ACTIVE => 'Active',
-            self::INACTIVE => 'Inactive'
-        ];
-
-        if(isset($value) && isset($hubs[$value])) {
-            return $hubs[$value];
-        }
-        return $hubs;
-    }
-
-
 }

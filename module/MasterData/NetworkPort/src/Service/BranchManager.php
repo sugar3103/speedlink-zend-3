@@ -17,7 +17,7 @@ use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator;
 use Zend\Authentication\Result;
-
+use Core\Utils\Utils;
 use Address\Entity\Country;
 use Address\Entity\City;
 use Address\Entity\District;
@@ -205,7 +205,7 @@ class BranchManager {
                 //set status
              //   $branche['status'] = Branch::getIsActiveList($branche['status']);
                 //set created_at
-                $branche['created_at'] =  ($branche['created_at']) ? $this->checkDateFormat($branche['created_at'],'d/m/Y H:i:s') : '';
+                $branche['created_at'] =  ($branche['created_at']) ?Utils::checkDateFormat($branche['created_at'],'d/m/Y') : '';
                 $countRow++;
             }
 
@@ -235,49 +235,6 @@ class BranchManager {
             $this->entityManager->rollback();
             return FALSE;
         }
-    }
-
-    /**
-     * Check date format
-     *
-     * @param $dateAction
-     * @param $dateFormat
-     * @return string
-     */
-    public function checkDateFormat($dateAction,$dateFormat)
-    {
-        $dateLast = '';
-        $dateCheck = ! empty($dateAction) ? $dateAction->format('Y-m-d H:i:s') : '';
-        if ($dateCheck) {
-            $datetime = new \DateTime($dateCheck, new \DateTimeZone('UTC'));
-            $laTime = new \DateTimeZone('Asia/Ho_Chi_Minh');
-            $datetime->setTimezone($laTime);
-            $dateLast = $datetime->format($dateFormat);
-        }
-        return $dateLast;
-    }
-
-    
-    /**
-     * Get value filters search
-     *
-     * @param $params
-     * @param $fieldsMap
-     * @return array
-     */
-    public function getValueFiltersSearch($params,$fieldsMap)
-    {
-        $filters = [];
-
-        if (isset($params['query']) && !empty($params['query'])){
-          foreach ($params['query'] as $key => $column) {
-              if(isset($fieldsMap[$key]) && !empty($column)) {
-                  $filters[$key] = $column;
-              }
-          }
-           
-        }
-        return $filters;
     }
 
 }
