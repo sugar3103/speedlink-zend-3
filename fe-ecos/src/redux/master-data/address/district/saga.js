@@ -1,0 +1,267 @@
+import axios from "axios";
+import { all, call, fork, put, takeEvery } from "redux-saga/effects";
+import { apiUrl, EC_SUCCESS, EC_FAILURE, EC_FAILURE_AUTHENCATION } from '../../../../constants/defaultValues';
+import { authHeader } from '../../../../util/auth-header';
+import history from '../../../../util/history';
+
+import {
+  DISTRICT_GET_LIST,
+  DISTRICT_ADD_ITEM,
+  DISTRICT_UPDATE_ITEM,
+  DISTRICT_DELETE_ITEM 
+} from "../../../../constants/actionTypes";
+
+import {
+  toggleDistrictModal,
+  getDistrictListSuccess,
+  getDistrictListError,
+  addDistrictItemSuccess,
+  addDistrictItemError,
+  updateDistrictItemSuccess,
+  updateDistrictItemError,
+  deleteDistrictItemSuccess,
+  deleteDistrictItemError,
+  getDistrictList,
+} from "./actions";
+
+import createNotification from '../../../../util/notifications';
+import { startSubmit, stopSubmit } from 'redux-form';
+
+//validate 
+function validateDistrict(errors) {
+  if (errors.name && errors.name.districtExists) {
+    return stopSubmit('district_action_form', {
+      name: 'district.validate-name-exists'
+    });
+  }
+  if (errors.name_en && errors.name_en.districtExists) {
+    return stopSubmit('district_action_form', {
+      name_en: 'district.validate-nameEn-exists'
+    });
+  }
+}
+
+//list district
+
+function getListApi(params) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}address/district`,
+    headers: authHeader(),
+    data: JSON.stringify(params)
+  });
+}
+
+const getDistrictListRequest = async (params) => {
+  return await getListApi(params).then(res => res.data).catch(err => err)
+};
+
+function* getDistrictListItems({ payload }) {
+  const { params, messages } = payload;
+  try {
+    const response = yield call(getDistrictListRequest, params);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(getDistrictListSuccess(response.data, response.total));
+        break;
+
+      case EC_FAILURE:
+        yield put(getDistrictListError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning', 
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+      default:
+        break;
+    }
+    
+  } catch (error) {
+    yield put(getDistrictListError(error));
+  }
+}
+
+//add district
+
+function addDistrictApi(item) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}address/district/add`,
+    headers: authHeader(),
+    data: item
+  });
+}
+
+const addDistrictItemRequest = async item => {
+  return await addDistrictApi(item).then(res => res.data).catch(err => err)
+};
+
+function* addDistrictItem({ payload }) {
+  const { item, messages } = payload;
+  yield put(startSubmit('district_action_form'));
+  try {
+    const response = yield call(addDistrictItemRequest, item);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(addDistrictItemSuccess());
+        yield put(getDistrictList(null, messages));
+        yield put(toggleDistrictModal());
+        createNotification({
+          type: 'success', 
+          message: messages['district.add-success'], 
+          title: messages['notification.success']
+        });
+        break;
+
+      case EC_FAILURE:
+        yield put(addDistrictItemError(response.data));
+        yield put(validateDistrict(response.data));
+        break;
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning', 
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(addDistrictItemError(error));
+  }
+}
+
+//update district
+
+function updateDistrictApi(item) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}address/district/edit`,
+    headers: authHeader(),
+    data: item
+  });
+}
+
+const updateDistrictItemRequest = async item => {
+  return await updateDistrictApi(item).then(res => res.data).catch(err => err)
+};
+
+function* updateDistrictItem({ payload }) {
+  const { item, messages } = payload;
+  yield put(startSubmit('district_action_form'));
+  try {
+    const response = yield call(updateDistrictItemRequest, item);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(updateDistrictItemSuccess());
+        yield put(getDistrictList(null, messages));
+        yield put(toggleDistrictModal());
+        createNotification({
+          type: 'success', 
+          message: messages['district.update-success'], 
+          title: messages['notification.success']
+        });
+        break;
+
+      case EC_FAILURE:
+        yield put(updateDistrictItemError(response.data));
+        yield put(validateDistrict(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning', 
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(updateDistrictItemError(error));
+  }
+}
+
+//delete district
+
+function deleteDistrictApi(id) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}address/district/delete`,
+    headers: authHeader(),
+    data: {  id: id }
+  });
+}
+
+const deleteDistrictItemRequest = async id => {
+  return await deleteDistrictApi(id).then(res => res.data).catch(err => err)
+};
+
+function* deleteDistrictItem({ payload }) {
+  const { id, messages } = payload;
+  try {
+    const response = yield call(deleteDistrictItemRequest, id);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(deleteDistrictItemSuccess());
+        yield put(getDistrictList(null, messages));
+        createNotification({
+          type: 'success', 
+          message: messages['district.delete-success'], 
+          title: messages['notification.success']
+        });
+        break;
+
+      case EC_FAILURE:
+        yield put(deleteDistrictItemError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning', 
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(deleteDistrictItemError(error));
+  }
+}
+
+export function* watchGetList() {
+  yield takeEvery(DISTRICT_GET_LIST, getDistrictListItems);
+}
+
+export function* wathcAddItem() {
+  yield takeEvery(DISTRICT_ADD_ITEM, addDistrictItem);
+}
+
+export function* wathcUpdateItem() {
+  yield takeEvery(DISTRICT_UPDATE_ITEM, updateDistrictItem);
+}
+
+export function* wathcDeleteItem() {
+  yield takeEvery(DISTRICT_DELETE_ITEM, deleteDistrictItem);
+}
+
+
+export default function* rootSaga() {
+  yield all([fork(watchGetList), fork(wathcAddItem), fork(wathcUpdateItem), fork(wathcDeleteItem)]);
+}

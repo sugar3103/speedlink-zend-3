@@ -1,0 +1,33 @@
+.idea/
+.vagrant/
+data/cache/*
+!data/cache/.gitkeep
+phpunit.xml
+
+
+### ZendFramework ###
+# Composer files
+composer.phar
+vendor/
+data/DoctrineORMModule/*
+
+# Local configs
+config/*
+
+# Binary gettext files
+*.mo
+
+# Data
+data/logs/
+data/cache/
+data/sessions/
+data/tmp/
+temp/
+
+# React JS
+fe-ecos/node_modules
+fe-ecos/package-lock.json
+
+#React-Redux
+fe-ecos/node_modules
+fe-ecos/package-lock.json
