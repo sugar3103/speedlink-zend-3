@@ -29,13 +29,6 @@ class DistrictController extends CoreController {
 
     public function indexAction()
     {
-        $this->apiResponse['message'] = 'District';
-
-        return $this->createResponse();
-    }
-
-    public function listAction()
-    {
         if ($this->getRequest()->isPost()) {
             // get the filters
             $fieldsMap = [
@@ -47,6 +40,7 @@ class DistrictController extends CoreController {
 
             list($start,$limit,$sortField,$sortDirection,$filters, $fields) = $this->getRequestData($fieldsMap);                        
             
+
             //get list district by condition
             $dataDistrict = $this->districtManager->getListDistrictByCondition(
                 $start, $limit, $sortField, $sortDirection,$filters); 
@@ -154,4 +148,37 @@ class DistrictController extends CoreController {
         }
         return $this->createResponse();
     }
+
+     public function listAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            // get the filters
+            $fieldsMap = [
+                0 => 'name',
+                1 => 'status',
+                2 => 'city_id'
+            ];
+// var_dump($fieldsMap);die;
+            list($sortField,$sortDirection,$filters) = $this->getRequestDataSelect($fieldsMap);
+
+            //get list city by condition
+            $dataDistrict = $this->districtManager->getListDistrictSelect(
+              $sortField ,$sortDirection, $filters);
+            
+          $result = [
+            "data" => (($dataDistrict['listDistrict']) ? $dataDistrict['listDistrict'] : [] ) ,
+            "total" => $dataDistrict['totalDistrict']
+          ];
+
+        $this->error_code = 1;
+        $this->apiResponse['message'] = 'Success';
+        $this->apiResponse['total'] = $result['total'];
+        $this->apiResponse['data'] = $result['data'];   
+        } else {
+          $this->error_code = 0;
+          $this->apiResponse['message'] = 'Failed';
+        }
+        return $this->createResponse();
+    }
+
 }

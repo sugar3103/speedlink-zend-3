@@ -27,13 +27,13 @@ class CityController extends CoreController {
         $this->cityManager = $cityManager;
     }
 
-    public function indexAction()
-    {
-        $this->apiResponse['message'] = 'City';
-        return $this->createResponse();
-    }
+    // public function indexAction()
+    // {
+    //     $this->apiResponse['message'] = 'City';
+    //     return $this->createResponse();
+    // }
 
-    public function listAction()
+    public function indexAction()
     {
         if ($this->getRequest()->isPost()) {
             // get the filters
@@ -51,6 +51,10 @@ class CityController extends CoreController {
 
             $results = $this->filterByField($dataCity['listCity'], $fields);
             
+            $result = [
+              "data" => (($dataCity['listCity']) ? $dataCity['listCity'] : [] ) ,
+              "total" => $dataCity['totalCity']
+            ];
             $this->error_code = 1;
             $this->apiResponse =  array(
                 'message'   => "Get List Success",
@@ -143,4 +147,37 @@ class CityController extends CoreController {
 
         return $this->createResponse();
     }
+
+    public function listAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            // get the filters
+            $fieldsMap = [
+                0 => 'name',
+                1 => 'status',
+                2 => 'country_id'
+            ];
+
+            list($sortField,$sortDirection,$filters) = $this->getRequestDataSelect($fieldsMap);
+
+            //get list city by condition
+            $dataCity = $this->cityManager->getListCitySelect(
+              $sortField ,$sortDirection, $filters);
+            
+          $result = [
+            "data" => (($dataCity['listCity']) ? $dataCity['listCity'] : [] ) ,
+            "total" => $dataCity['totalCity']
+          ];
+
+        $this->error_code = 1;
+        $this->apiResponse['message'] = 'Success';
+        $this->apiResponse['total'] = $result['total'];
+        $this->apiResponse['data'] = $result['data'];   
+        } else {
+          $this->error_code = 0;
+          $this->apiResponse['message'] = 'Failed';
+        }
+        return $this->createResponse();
+    }
+
 }

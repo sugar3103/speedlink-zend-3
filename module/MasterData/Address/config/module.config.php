@@ -38,7 +38,7 @@ $router = [
                         ],                       
                         'defaults' => [
                             'controller' => Controller\CountryController::class,
-                            'action' => 'list',
+                            'action' => 'index',
                             'isAuthorizationRequired' => true
                         ]
                     ]                    
@@ -52,7 +52,7 @@ $router = [
                         ],
                         'defaults' => [
                             'controller' => Controller\CityController::class,
-                            'action' => 'list',
+                            'action' => 'index',
                             'isAuthorizationRequired' => true
                         ]
                     ]                  
@@ -66,7 +66,7 @@ $router = [
                         ],
                         'defaults' => [
                             'controller' => Controller\DistrictController::class,
-                            'action' => 'list',
+                            'action' => 'index',
                             'isAuthorizationRequired' => true
                         ]
                     ]                  
@@ -80,7 +80,7 @@ $router = [
                         ],
                         'defaults' => [
                             'controller' => Controller\WardController::class,
-                            'action' => 'list',
+                            'action' => 'index',
                             'isAuthorizationRequired' => true
                         ]
                     ]                  

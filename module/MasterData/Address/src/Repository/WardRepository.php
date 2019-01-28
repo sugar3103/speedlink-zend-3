@@ -56,6 +56,31 @@ class WardRepository extends EntityRepository {
 
     }
 
+    public function getListWardSelect(
+        $sortField = 'w.id',
+        $sortDirection = 'ASC',
+        $filters = []
+    )
+    {
+        try {
+            $queryBuilder = $this->buildWardQueryBuilder($sortField, $sortDirection, $filters);
+            $queryBuilder->select(
+                "w.id,
+                 w.name,
+                 w.name_en,
+                 w.status"                 
+            )
+            // ->groupBy('c.cityId')
+             ->setMaxResults(100)
+            // ->setFirstResult($offset)
+            ;
+            return $queryBuilder;
+
+        } catch (QueryException $e) {
+            return [];
+        }
+    }
+
     /**
      * Build query builder
      *
@@ -87,14 +112,14 @@ class WardRepository extends EntityRepository {
             ],
 
         ];
-
+// var_dump($sortField); die;
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(Ward::class, 'w');
 
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
         } else {
-            $queryBuilder->orderBy('w.name', 'ASC');
+            $queryBuilder->orderBy('w.id', 'ASC');
         }
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }

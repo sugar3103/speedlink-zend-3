@@ -74,6 +74,7 @@ class BranchManager {
         // var_dump($data); die;
         $branch->setCode($data['code']);
         $branch->setName($data['name']);
+        $branch->setNameEn($data['name_en']);
         $branch->setHubId($data['hub_id']);
         $branch->setStatus($data['status']);
         $branch->setCreatedBy($data['created_by']);
@@ -83,18 +84,15 @@ class BranchManager {
         $branch->setDistrictId($data['district_id']);
         $branch->setWardId($data['ward_id']);
         $branch->setDescription($data['description']);
+        $branch->setDescriptionEn($data['description_en']);
         $this->getReferenced($branch, $data);
         
         $this->entityManager->persist($branch);
         $this->entityManager->flush();        
         
-        $last_id = $branch->getBranchId();
+        // $last_id = $branch->getBranchId();
         $this->entityManager->commit();
-        return new Result(
-                Result::SUCCESS,
-                $last_id,
-                ['Add branch successfully.']
-            );
+        return $branch;
         }
         catch (ORMException $e) {
             $this->entityManager->rollback();
@@ -106,9 +104,9 @@ class BranchManager {
 
         $this->entityManager->beginTransaction();
         try {
-
             $branch->setCode($data['code']);
             $branch->setName($data['name']);
+            $branch->setNameEn($data['name_en']);
             $branch->setHubId($data['hub_id']);
             $branch->setStatus($data['status']);
             $branch->setUpdatedBy($data['updated_by']);
@@ -118,17 +116,14 @@ class BranchManager {
             $branch->setDistrictId($data['district_id']);
             $branch->setWardId($data['ward_id']);
             $branch->setDescription($data['description']);
+            $branch->setDescriptionEn($data['description_en']);
             $this->getReferenced($branch, $data);
             
             // apply changes to database.
             $this->entityManager->flush();
-            $last_id = $branch->getBranchId();
+            // $last_id = $branch->getBranchId();
             $this->entityManager->commit();
-            return new Result(
-                Result::SUCCESS,
-                $last_id,
-                ['Update branch successfully.']
-            );
+           return $branch;
         }
         catch (ORMException $e) {
 
@@ -182,7 +177,7 @@ class BranchManager {
      * @throws ORMException
      */
     public function getListBranchByCondition(
-        $currentPage,
+        $start,
         $limit,
         $sortField = '',
         $sortDirection = 'asc',
@@ -194,26 +189,27 @@ class BranchManager {
 
         //get orm branch
         $ormBranch = $this->entityManager->getRepository(Branch::class)
-            ->getListBranchByCondition($sortField, $sortDirection, $filters);
+            ->getListBranchByCondition($start, $limit, $sortField, $sortDirection, $filters);
 
         if($ormBranch){
-
             //set offset,limit
             $ormPaginator = new ORMPaginator($ormBranch, true);
             $ormPaginator->setUseOutputWalkers(false);
-            $adapter = new DoctrineAdapter($ormPaginator);
-            $paginator = new Paginator($adapter);
-
-            //sets the current page number
-            $paginator->setCurrentPageNumber($currentPage);
-
-            //Sets the number of items per page
-            $paginator->setItemCountPerPage($limit);
+            $totalBranch = $ormPaginator->count();
 
             //get user list
-            $branches = $paginator->getIterator()->getArrayCopy();
+            $branches = $ormPaginator->getIterator()->getArrayCopy();
+            $countRow = 1;
 
-            $totalBranch = $paginator->getTotalItemCount();
+             foreach ($branches as &$branche) {
+                //set status
+             //   $branche['status'] = Branch::getIsActiveList($branche['status']);
+                //set created_at
+                $branche['created_at'] =  ($branche['created_at']) ? $this->checkDateFormat($branche['created_at'],'d/m/Y H:i:s') : '';
+                $countRow++;
+            }
+
+            // $totalBranch = $paginator->getTotalItemCount();
         }
 
         //set data user
@@ -223,38 +219,44 @@ class BranchManager {
         ];
         return $dataBranch;
     }
-    public function deleteBranch($id) {
+    public function deleteBranch($branch) {
 
         $this->entityManager->beginTransaction();
         try {
-            // Delete record in tbl role
-            $branch = $this->entityManager->getRepository(Branch::class)->find($id);
-
-            if($branch) {
+            
             $this->entityManager->remove($branch);
             $this->entityManager->flush();
 
             $this->entityManager->commit();
-            return new Result(
-                Result::SUCCESS,
-                null,
-                ['Delete branch successfully.']
-            );
-          }
-          else
-          {
-            return new Result(
-                Result::FAILURE,
-                null,
-                ['Hub not found. Delete branch failed!.']
-            );
-          }
+            return $branch;
+          
         } catch (ORMException $e) {
 
             $this->entityManager->rollback();
             return FALSE;
         }
     }
+
+    /**
+     * Check date format
+     *
+     * @param $dateAction
+     * @param $dateFormat
+     * @return string
+     */
+    public function checkDateFormat($dateAction,$dateFormat)
+    {
+        $dateLast = '';
+        $dateCheck = ! empty($dateAction) ? $dateAction->format('Y-m-d H:i:s') : '';
+        if ($dateCheck) {
+            $datetime = new \DateTime($dateCheck, new \DateTimeZone('UTC'));
+            $laTime = new \DateTimeZone('Asia/Ho_Chi_Minh');
+            $datetime->setTimezone($laTime);
+            $dateLast = $datetime->format($dateFormat);
+        }
+        return $dateLast;
+    }
+
     
     /**
      * Get value filters search

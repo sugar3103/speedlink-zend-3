@@ -53,6 +53,26 @@ class CoreController extends ApiController
         }        
     }
 
+    public function getRequestDataSelect($fieldsMap = array())
+    {
+        if ($this->getRequest()->isPost()) {
+            $payload = file_get_contents('php://input');
+            $params = !empty(json_decode($payload, true)) ? json_decode($payload, true) : array();
+            if(!empty($fieldsMap)) {
+                
+                //get and set sortField,sortDirection
+                $sortField = isset($params['sort']) ? $params['sort'] : $fieldsMap[0];
+                $sortDirection = isset($params['order']) ? $params['order'] : 'ASC';
+
+                $filters = $this->getValueFiltersSearch($params,$fieldsMap);
+                
+                return array($sortField,$sortDirection,$filters);    
+            } else {                
+                return $params;
+            }            
+        }        
+    }
+
      /**
      * Get value filters search
      *
