@@ -26,7 +26,9 @@
         "firebase\/php-jwt": "^5.0",
         "beberlei/DoctrineExtensions": "^1.1",
         "zendframework/zend-permissions-rbac": "^3.0",
-        "zendframework/zend-serializer": "^2.9"
+        "zendframework/zend-serializer": "^2.9",
+        "ocramius/proxy-manager": "2.1.0",
+        "zendframework/zend-cache": "^2.8"
     },
     "autoload": {
         "psr-4": {
