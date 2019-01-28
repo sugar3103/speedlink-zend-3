@@ -1,8 +1,17 @@
 import {
-  
+  DISTRICT_TOGGLE_MODAL,
   DISTRICT_GET_LIST,
   DISTRICT_GET_LIST_SUCCESS,
-  DISTRICT_GET_LIST_ERROR
+  DISTRICT_GET_LIST_ERROR,
+  DISTRICT_ADD_ITEM,
+  DISTRICT_ADD_ITEM_SUCCESS,
+  DISTRICT_ADD_ITEM_ERROR,
+  DISTRICT_UPDATE_ITEM,
+  DISTRICT_UPDATE_ITEM_SUCCESS,
+  DISTRICT_UPDATE_ITEM_ERROR,
+  DISTRICT_DELETE_ITEM,
+  DISTRICT_DELETE_ITEM_SUCCESS,
+  DISTRICT_DELETE_ITEM_ERROR
 } from '../../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -17,6 +26,14 @@ const INIT_STATE = {
 
 export default (state = INIT_STATE, action) => {
   switch (action.type) {
+
+    case DISTRICT_TOGGLE_MODAL:
+      return {
+        ...state,
+        modalOpen: !state.modalOpen,
+        modalData: action.payload,
+        errors: null
+      }
 
     case DISTRICT_GET_LIST:
       const { params } = action.payload;
@@ -39,6 +56,63 @@ export default (state = INIT_STATE, action) => {
       return { 
         ...state, 
         loading: false, 
+        errors: action.payload 
+      };
+
+    case DISTRICT_ADD_ITEM:
+			return { 
+        ...state, 
+        loading: false 
+      };
+
+		case DISTRICT_ADD_ITEM_SUCCESS:
+			return { 
+        ...state, 
+        loading: false, 
+        errors: null
+      };
+
+		case DISTRICT_ADD_ITEM_ERROR:
+			return { 
+        ...state, 
+        loading: false, 
+        errors: action.payload 
+      };
+
+    case DISTRICT_UPDATE_ITEM:
+			return { 
+        ...state, 
+        loading: false 
+      };
+
+		case DISTRICT_UPDATE_ITEM_SUCCESS:
+			return { 
+        ...state, 
+        loading: false, 
+        errors: null
+      };
+
+		case DISTRICT_UPDATE_ITEM_ERROR:
+			return { 
+        ...state, 
+        loading: false, 
+        errors: action.payload 
+      };
+
+    case DISTRICT_DELETE_ITEM:
+			return { 
+        ...state, 
+        loading: false 
+      };
+
+		case DISTRICT_DELETE_ITEM_SUCCESS:
+			return { 
+        ...state, 
+      };
+
+		case DISTRICT_DELETE_ITEM_ERROR:
+			return { 
+        ...state, 
         errors: action.payload 
       };
 

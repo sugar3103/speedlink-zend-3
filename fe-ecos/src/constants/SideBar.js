@@ -72,8 +72,8 @@ export default {
               icon: 'apartment'
             }
           ]
-        },
-        {
+          },
+          {
           id: 'networkport',
           title: 'menu.networkport',
           route: '/app/master-data/networkport',

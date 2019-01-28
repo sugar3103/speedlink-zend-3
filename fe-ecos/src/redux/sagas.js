@@ -13,7 +13,7 @@ import roleSagas from './users/role/saga';
 import permissionSagas from './users/permission/saga';
 import carrierSagas from './master-data/service-shipment/carrier/saga';
 
-export default function* rootSaga(getState) {
+export default function* rootSaga() {
   yield all([
     authSagas(),
     statusSagas(),

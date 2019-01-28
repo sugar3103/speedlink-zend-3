@@ -1,8 +1,17 @@
 import {
-  
+  WARD_TOGGLE_MODAL,
   WARD_GET_LIST,
   WARD_GET_LIST_SUCCESS,
-  WARD_GET_LIST_ERROR
+  WARD_GET_LIST_ERROR,
+  WARD_ADD_ITEM,
+  WARD_ADD_ITEM_SUCCESS,
+  WARD_ADD_ITEM_ERROR,
+  WARD_UPDATE_ITEM,
+  WARD_UPDATE_ITEM_SUCCESS,
+  WARD_UPDATE_ITEM_ERROR,
+  WARD_DELETE_ITEM,
+  WARD_DELETE_ITEM_SUCCESS,
+  WARD_DELETE_ITEM_ERROR
 } from '../../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -17,6 +26,14 @@ const INIT_STATE = {
 
 export default (state = INIT_STATE, action) => {
   switch (action.type) {
+
+    case WARD_TOGGLE_MODAL:
+      return {
+        ...state,
+        modalOpen: !state.modalOpen,
+        modalData: action.payload,
+        errors: null
+      }
 
     case WARD_GET_LIST:
       const { params } = action.payload;
@@ -39,6 +56,63 @@ export default (state = INIT_STATE, action) => {
       return { 
         ...state, 
         loading: false, 
+        errors: action.payload 
+      };
+
+    case WARD_ADD_ITEM:
+			return { 
+        ...state, 
+        loading: false 
+      };
+
+		case WARD_ADD_ITEM_SUCCESS:
+			return { 
+        ...state, 
+        loading: false, 
+        errors: null
+      };
+
+		case WARD_ADD_ITEM_ERROR:
+			return { 
+        ...state, 
+        loading: false, 
+        errors: action.payload 
+      };
+
+    case WARD_UPDATE_ITEM:
+			return { 
+        ...state, 
+        loading: false 
+      };
+
+		case WARD_UPDATE_ITEM_SUCCESS:
+			return { 
+        ...state, 
+        loading: false, 
+        errors: null
+      };
+
+		case WARD_UPDATE_ITEM_ERROR:
+			return { 
+        ...state, 
+        loading: false, 
+        errors: action.payload 
+      };
+
+    case WARD_DELETE_ITEM:
+			return { 
+        ...state, 
+        loading: false 
+      };
+
+		case WARD_DELETE_ITEM_SUCCESS:
+			return { 
+        ...state, 
+      };
+
+		case WARD_DELETE_ITEM_ERROR:
+			return { 
+        ...state, 
         errors: action.payload 
       };
 

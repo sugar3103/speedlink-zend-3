@@ -16,7 +16,7 @@ const reducers = combineReducers({
   status,
   address,
   users,
-  carrier
+  carrier,
   hub,
   branch
 });
