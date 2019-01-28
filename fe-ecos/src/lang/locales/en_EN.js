@@ -350,8 +350,6 @@ module.exports = {
   'carrier.validate-nameEn-minlength': 'English name must be 5 characters or more',
   'carrier.validate-nameEn-maxlength': 'English name must be 60 characters or less',
   'carrier.validate-nameEn-exists': 'English name already exists',
-  'permission.add-new': 'Add New Permisson',
-  'permission.update': 'Edit Permisson',
 
   //master-data --- Hub
   'hub.list-title': 'Hub List',
