@@ -229,6 +229,7 @@ module.exports = {
   'district.validate-nameEn-minlength': 'English name must be 5 characters or more',
   'district.validate-nameEn-maxlength': 'English name must be 60 characters or less',
   'district.validate-nameEn-exists': 'English name already exists',
+  'district.validate-city-empty': 'City shouldn’t be empty',
   //Master-data --- Address --- Ward
   'ward.list-title': 'Ward List',
   'ward.add-new': 'Add New Ward',
@@ -266,6 +267,8 @@ module.exports = {
   'ward.validate-nameEn-minlength': 'English name must be 5 characters or more',
   'ward.validate-nameEn-maxlength': 'English name must be 60 characters or less',
   'ward.validate-nameEn-exists': 'English name already exists',
+  'ward.validate-postal-code-empty': 'Postal Code shouldn’t be empty',
+  'ward.validate-district-empty': 'District shouldn’t be empty',
 
   //User
   'user.avatar': 'Avatar',

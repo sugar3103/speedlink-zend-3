@@ -84,7 +84,7 @@ class WardController extends CoreController {
                 $this->apiResponse['message'] = "You have modified Wards!";
             } else {
                 $this->error_code = 0;
-                $this->apiResponse = $form->getMessages(); 
+                $this->apiResponse['data'] = $form->getMessages(); 
                 
             }            
         } else {
@@ -115,11 +115,11 @@ class WardController extends CoreController {
                    $this->apiResponse['message'] = "You have modified ward!";
                 }  else {
                    $this->error_code = 0;
-                   $this->apiResponse = $form->getMessages(); 
+                   $this->apiResponse['data'] = $form->getMessages(); 
                 }   
             }   else {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = 'Ward Not Found'; 
+                $this->apiResponse['data'] = 'Ward Not Found'; 
             }         
              
         } else {
@@ -147,7 +147,7 @@ class WardController extends CoreController {
             } else {
                 $this->httpStatusCode = 200;
                 $this->error_code = 0;
-                $this->apiResponse['message'] = "Not Found Ward";
+                $this->apiResponse['data'] = "Not Found Ward";
             }
         } else {
             $this->httpStatusCode = 404;

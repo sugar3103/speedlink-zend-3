@@ -217,6 +217,7 @@ module.exports = {
   'district.validate-nameEn-minlength': 'Tên tiếng anh phải có trên 5 ký tự',
   'district.validate-nameEn-maxlength': 'Tên tiếng anh phải có dưới 60 ký tự',
   'district.validate-nameEn-exists': 'Tên tiếng anh đã tồn tại',
+  'district.validate-city-empty': 'Tỉnh/Thành phố không được bỏ trống',
   //Master-data --- Address --- Ward
   'ward.list-title': 'Danh sách phường/xã',
   'ward.add-new': 'Tạo phường/xã mới',
@@ -254,4 +255,6 @@ module.exports = {
   'ward.validate-nameEn-minlength': 'Tên tiếng anh phải có trên 5 ký tự',
   'ward.validate-nameEn-maxlength': 'Tên tiếng anh phải có dưới 60 ký tự',
   'ward.validate-nameEn-exists': 'Tên tiếng anh đã tồn tại',
+  'ward.validate-postal-code-empty': 'Postal Code không được bỏ trống',
+  'ward.validate-district-empty': 'Quận/Huyện không được bỏ trống',
 };

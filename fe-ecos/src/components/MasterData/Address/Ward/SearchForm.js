@@ -42,8 +42,6 @@ class SearchForm extends Component {
         name: value
       }
     }
-    console.log(params);
-    
     this.props.getDistrictList(params);
   }
 

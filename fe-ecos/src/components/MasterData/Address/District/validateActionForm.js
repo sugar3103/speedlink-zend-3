@@ -16,6 +16,10 @@ const validate = (values) => {
       errors.name_en = 'district.validate-nameEn-maxlength';
     }
 
+    if (!values.city_id) {
+      errors.city_id = 'district.validate-city-empty';
+    }
+
     return errors;
   };
   

@@ -166,6 +166,7 @@ class ActionForm extends Component {
                 component={CustomField}
                 type="text"
                 placeholder={messages['city.zip_code']}
+                messages={messages}
               />
             </div>
           </div>

@@ -127,7 +127,7 @@ class ActionForm extends Component {
                 component={CustomField}
                 type="text"
                 placeholder={messages['country.iso_code']}
-                onChange={this.onChange}
+                messages={messages}
               />
             </div>
           </div>

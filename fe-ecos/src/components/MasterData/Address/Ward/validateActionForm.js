@@ -16,6 +16,14 @@ const validate = (values) => {
       errors.name_en = 'ward.validate-nameEn-maxlength';
     }
 
+    if (!values.district_id) {
+      errors.district_id = 'ward.validate-district-empty';
+    }
+
+    if (!values.postal_code) {
+      errors.postal_code = 'ward.validate-postal-code-empty';
+    }
+
     return errors;
   };
   
