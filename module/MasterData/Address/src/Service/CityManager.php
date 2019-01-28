@@ -2,6 +2,7 @@
 namespace Address\Service;
 
 use Address\Entity\City;
+use Address\Entity\Country;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Core\Utils\Utils;
@@ -17,6 +18,12 @@ class CityManager  {
         $this->entityManager = $entityManager;        
     }
 
+    private function getReferenced(&$city,$data) {
+        $country = $this->entityManager->getRepository(Country::class)->find($data['country_id']);
+        if ($country == null)
+            throw new \Exception('Not found Country by ID');
+        $city->setCountry($country);
+    }
      /**
      * Add City
      *
@@ -25,7 +32,7 @@ class CityManager  {
      * @throws \Exception
      */
     public function addCity($data,$user) {
-
+        
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
@@ -38,13 +45,15 @@ class CityManager  {
             $city->setStatus($data['status']);
             $city->setZipCode($data['zip_code']);
             $city->setCountryId($data['country_id']);
-            $city->setRefAsBy($data['ref_as_by']);
-
+            // $city->setRefAsBy($data['ref_as_by']);
+            
             $currentDate = date('Y-m-d H:i:s');
             $city->setCreatedAt($currentDate);
             $city->setCreatedBy($user->id);
-
+            
+            $this->getReferenced($city,$data);
             // add the entity to the entity manager.
+            
             $this->entityManager->persist($city);
 
             // apply changes to database.
@@ -82,15 +91,14 @@ class CityManager  {
             $city->setStatus($data['status']);
             $city->setZipCode($data['zip_code']);
             $city->setCountryId($data['country_id']);
-            $city->setRefAsBy($data['ref_as_by']);
+            // $city->setRefAsBy($data['ref_as_by']);
 
             $currentDate = date('Y-m-d H:i:s');
             $city->setUpdatedAt($currentDate);
             $city->setUpdatedBy($user->id);
-           
-            // add the entity to the entity manager.
-            $this->entityManager->persist($city);
 
+            $this->getReferenced($city,$data);
+           
             // apply changes to database.
             $this->entityManager->flush();
 
@@ -145,7 +153,7 @@ class CityManager  {
      * @throws ORMException
      */
     public function getListCityByCondition(
-        $currentPage,
+        $start,
         $limit,
         $sortField = 'c.name',
         $sortDirection = 'ASC',
@@ -153,12 +161,11 @@ class CityManager  {
     ){
 
         $cities     = [];
-        $totalCity = 0;
-        $offset = ($currentPage * $limit) - $limit;     
+        $totalCity = 0;        
         
         //get orm city
         $ormCity = $this->entityManager->getRepository(City::class)
-            ->getListCityByCondition($sortField, $sortDirection, $filters,$offset,$limit);
+            ->getListCityByCondition($start, $limit, $sortField, $sortDirection, $filters);
 
         if($ormCity){
             $ormPaginator = new ORMPaginator($ormCity, true);
@@ -172,8 +179,6 @@ class CityManager  {
             $countRow = 1;
             
             foreach ($cities as &$city) {//loop
-                //set status
-                // $city['status'] = City::getIsActiveList($city['status']);
 
                 //set created_at
                 $city['created_at'] =  ($city['created_at']) ? Utils::checkDateFormat($city['created_at'],'d/m/Y') : '';

@@ -33,7 +33,7 @@
             "Core\\": "module\/Core\/src\/",
             "OAuth\\": "module\/OAuth\/src\/",
             "Address\\": "module\/MasterData\/Address\/src\/",
-            "CustomerService\\": "module\/MasterData\/CustomerService\/src\/",
+            "ServiceShipment\\": "module\/MasterData\/ServiceShipment\/src\/",
             "NetworkPort\\": "module\/MasterData\/NetworkPort\/src\/",
             "Status\\": "module\/MasterData\/Status\/src\/"
         }

@@ -39,30 +39,33 @@ class CityController extends CoreController {
             // get the filters
             $fieldsMap = [
                 0 => 'name',
-                1 => 'city',
-                2 => 'status'
+                1 => 'id',
+                2 => 'country',
+                3 => 'status'
             ];
 
-            list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
+            list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);                        
             
             //get list city by condition
+            $dataCity = $this->cityManager->getListCityByCondition($start, $limit, $sortField, $sortDirection,$filters);            
 
-            $dataCity = $this->cityManager->getListCityByCondition(
-                $start, $limit, $sortField, $sortDirection,$filters);            
+            $results = $this->filterByField($dataCity['listCity'], $fields);
             
             $result = [
               "data" => (($dataCity['listCity']) ? $dataCity['listCity'] : [] ) ,
               "total" => $dataCity['totalCity']
             ];
             $this->error_code = 1;
-        $this->apiResponse['message'] = 'Success';
-        $this->apiResponse['total'] = $result['total'];
-        $this->apiResponse['data'] = $result['data'];
-      } else {
-        $this->error_code = 0;
-        $this->apiResponse['message'] = 'Failed';
-      }
-      return $this->createResponse();
+            $this->apiResponse =  array(
+                'message'   => "Get List Success",
+                'data'      => $results,
+                'total'     => $dataCity['totalCity']
+            );          
+        } else {
+            $this->apiResponse['message'] = 'City List';
+        }
+
+        return $this->createResponse();
     }
 
     public function addAction()
@@ -82,10 +85,10 @@ class CityController extends CoreController {
                 // add user.
                 $city = $this->cityManager->addCity($data,$user);
                 $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have modified Cities!";
+                $this->apiResponse['message'] = "You have add Cities!";
             } else {
-                $this->error_code = -1;
-                $this->apiResponse['message'] = $form->getMessages(); 
+                $this->error_code = 0;
+                $this->apiResponse['data'] = $form->getMessages(); 
                 
             }            
         } 
@@ -98,9 +101,9 @@ class CityController extends CoreController {
              $data = $this->getRequestData();
              $user = $this->tokenPayload;
 
-            $city = $this->entityManager->getRepository(City::class)->findOneBy(array('cityId' => $data['city_id']));
+            $city = $this->entityManager->getRepository(City::class)->findOneBy(array('id' => $data['id']));
             
-            if(isset($data['city_id']) && $city) {
+            if(isset($data['id']) && $city) {
                 //Create New Form City
                 $form = new CityForm('update', $this->entityManager, $city);
                 $form->setData($data);
@@ -109,14 +112,14 @@ class CityController extends CoreController {
                    
                    $this->cityManager->updateCity($city, $data,$user);
                    $this->error_code = 1;
-                   $this->apiResponse['message'] = "Success: You have modified city!";
+                   $this->apiResponse['message'] = "You have modified city!";
                 }  else {
-                   $this->error_code = -1;
-                   $this->apiResponse['message'] = $form->getMessages(); 
+                   $this->error_code = 0;
+                   $this->apiResponse['data'] = $form->getMessages(); 
                 }   
             }   else {
-                $this->error_code = -1;
-                $this->apiResponse['message'] = 'City Not Found'; 
+                $this->error_code = 0;
+                $this->apiResponse['data'] = 'City Not Found'; 
             }         
              
         } 
@@ -131,14 +134,14 @@ class CityController extends CoreController {
 
               $user = $this->tokenPayload;
               $city = $this->entityManager->getRepository(City::class)
-                 ->findOneBy(array('cityId' => $data['city_id']));
+                 ->findOneBy(array('id' => $data['id']));
             if($city) {
                 $this->cityManager->deleteCity($city);
                 $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have deleted city!";
+                $this->apiResponse['message'] = "You have deleted city!";
             } else {
-                $this->error_code = -1;
-                $this->apiResponse['message'] = "Not Found City";
+                $this->error_code = 0;
+                $this->apiResponse['data'] = "Not Found City";
             }
         } 
 

@@ -1,9 +1,11 @@
 <?php
 namespace Address\Service;
 
+use Address\Entity\District;
 use Address\Entity\Ward;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
+use Core\Utils\Utils;
 class WardManager  {
     
     /**
@@ -14,6 +16,13 @@ class WardManager  {
     public function __construct($entityManager)
     {
         $this->entityManager = $entityManager;        
+    }
+
+    private function getReferenced(&$ward,$data) {
+        $district = $this->entityManager->getRepository(District::class)->find($data['district_id']);
+        if ($district == null)
+            throw new \Exception('Not found District by ID');
+        $ward->setDistrict($district);
     }
 
      /**
@@ -31,17 +40,18 @@ class WardManager  {
 
             $ward = new Ward();
             $ward->setName($data['name']);
+            $ward->setNameEn($data['name_en']);
             $ward->setDescription($data['description']);
+            $ward->setDescriptionEn($data['description_en']);
             $ward->setStatus($data['status']);
-            $ward->setZipCode($data['zip_code']);
-            $ward->setCountryId($data['country_id']);
+            $ward->setPostalCode($data['postal_code']);
+            $ward->setDistrictId($data['district_id']);
 
             $currentDate = date('Y-m-d H:i:s');
             $ward->setCreatedAt($currentDate);
             $ward->setCreatedBy($user->id);
 
-            $ward->setCreatedAt($currentDate);
-            $ward->setCreatedBy($user->id);
+            $this->getReferenced($ward,$data);
            
             // add the entity to the entity manager.
             $this->entityManager->persist($ward);
@@ -62,9 +72,78 @@ class WardManager  {
     }
 
     /**
+     * Update Ward
+     * 
+     * @param $data
+     * @return Ward|bool
+     * @throws \Exception
+     */
+    public function updateWard($ward, $data, $user)
+    {
+        // begin transaction
+        $this->entityManager->beginTransaction();
+        try {
+
+            $ward->setName($data['name']);
+            $ward->setNameEn($data['name_en']);
+            $ward->setDescription($data['description']);
+            $ward->setDescriptionEn($data['description_en']);
+            $ward->setStatus($data['status']);
+            $ward->setDistrictId($data['district_id']);
+            $ward->setPostalCode($data['postal_code']);
+            // $ward->setRefAsBy($data['ref_as_by']);
+
+            $currentDate = date('Y-m-d H:i:s');
+            $ward->setUpdatedAt($currentDate);
+            $ward->setUpdatedBy($user->id);
+           
+            $this->getReferenced($ward,$data);
+
+            // apply changes to database.
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+
+            return $ward;
+        }
+        catch (ORMException $e) {
+
+            $this->entityManager->rollback();
+            return FALSE;
+        }
+    }
+
+    /**
+     * Remove Ward
+     *
+     * @param $ward
+     * @return Ward|bool
+     * @throws \Exception
+     */
+    public function deleteWard($ward) {
+        // begin transaction
+        $this->entityManager->beginTransaction();
+        try {
+
+            $this->entityManager->remove($ward);
+        
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+
+            return $ward;
+        }
+        catch (ORMException $e) {
+
+            $this->entityManager->rollback();
+            return FALSE;
+        }
+    }
+
+    /**
      * Get list ward by condition
      *
-     * @param $currentPage
+     * @param $start
      * @param $limit
      * @param string $sortField
      * @param string $sortDirection
@@ -73,19 +152,19 @@ class WardManager  {
      * @throws ORMException
      */
     public function getListWardByCondition(
-        $offset,
+        $start,
         $limit,
         $sortField = 'w.name',
         $sortDirection = 'ASC',
         $filters = []
     ){
 
-        $cities     = [];
-        $totalWard = 0;
-        
+        $wards     = [];
+        $totalWard = 0;                
+
         //get orm ward
         $ormWard = $this->entityManager->getRepository(Ward::class)
-            ->getListWardByCondition($sortField, $sortDirection, $filters,$offset,$limit);
+            ->getListWardByCondition($start,$limit,$sortField, $sortDirection, $filters);
 
         if($ormWard){
             $ormPaginator = new ORMPaginator($ormWard, true);
@@ -93,16 +172,14 @@ class WardManager  {
             $totalWard = $ormPaginator->count();
 
             // $adapter = new DoctrineAdapter($ormPaginator);  
-            $cities = $ormPaginator->getIterator()->getArrayCopy();
+            $wards = $ormPaginator->getIterator()->getArrayCopy();
             //set countRow default
             $countRow = 1;
             
-            foreach ($cities as &$ward) {//loop
-                //set status
-                $ward['status'] = Ward::getIsActiveList($ward['status']);
+            foreach ($wards as &$ward) {//loop
 
                 //set created_at
-                $ward['created_at'] =  ($ward['created_at']) ? $this->checkDateFormat($ward['created_at'],'d/m/Y') : '';
+                $ward['created_at'] =  ($ward['created_at']) ? Utils::checkDateFormat($ward['created_at'],'d/m/Y') : '';
 
                 $countRow++;
             }
@@ -111,12 +188,12 @@ class WardManager  {
 
         //set data ward
         $dataWard = [
-            'listWard' => $cities,
+            'listWard' => $wards,
             'totalWard' => $totalWard,
         ];
         return $dataWard;
     }
-    
+
     /**
      * Check date format
      *

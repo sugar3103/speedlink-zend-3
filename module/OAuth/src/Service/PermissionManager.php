@@ -154,7 +154,6 @@ class PermissionManager {
         foreach ($defaultPermissions as $name => $description) {
             $permission = new Permission();
             $permission->setName($name);
-            $permission->setNameEn($name);
             $permission->setDescription($description);
             $permission->setDescriptionEn($description);
             $permission->setCreatedAt(date('Y-m-d H:i:s'));

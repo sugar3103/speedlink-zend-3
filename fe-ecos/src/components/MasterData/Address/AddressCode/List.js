@@ -95,11 +95,10 @@ class List extends Component {
       <Col md={12} lg={12}>
         <Card>
           <CardBody className="master-data-list">
-            <div className="card__title">
-              <h5 className="bold-text">{messages['code.list-title']}</h5>
-            </div>
             <Search />
-            <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
+            <div className="mb-2">
+              <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
+            </div>
             <Table responsive bordered hover>
               <thead>
                 <tr>

@@ -23,11 +23,11 @@ class WardRepository extends EntityRepository {
      * @return array|QueryBuilder
      */
     public function getListWardByCondition(
-        $sortField = 'w.id',
-        $sortDirection = 'ASC',
-        $filters = [],
         $start = 1,
-        $limit = 10
+        $limit = 10,
+        $sortField = 'w.name',
+        $sortDirection = 'ASC',
+        $filters = []
     )
     {
         try {
@@ -35,7 +35,11 @@ class WardRepository extends EntityRepository {
             $queryBuilder->select("
                 w.id,
                 w.name,
+                w.name_en,
                 w.description,
+                w.description_en,
+                w.district_id,
+                w.postal_code,
                 w.status,
                 w.created_by,
                 w.created_at
@@ -90,9 +94,9 @@ class WardRepository extends EntityRepository {
     {
 
         $operatorsMap = [
-            'id' => [
-                'alias' => 'w.id',
-                'operator' => 'eq'
+            'district' => [
+                'alias' => 'w.district_id',
+                'operator' => 'contains'
             ],
             'name' => [
                 'alias' => 'w.name',

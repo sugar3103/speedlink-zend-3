@@ -22,11 +22,11 @@ class CityRepository extends EntityRepository {
      * @return array|QueryBuilder
      */
     public function getListCityByCondition(
+        $start = 1,
+        $limit = 10,
         $sortField = 'c.name',
         $sortDirection = 'ASC',
-        $filters = [],
-        $offset = 0,
-        $limit = 10
+        $filters = []
     )
     {
         try {
@@ -34,14 +34,21 @@ class CityRepository extends EntityRepository {
             $queryBuilder->select("
                 c.id,
                 c.name,
+                c.name_en,
                 c.description,
+                c.description_en,
                 c.status,
+                c.zip_code,
+                c.country_id,
                 c.created_by,
                 c.created_at
             ")->andWhere("c.is_deleted = 0")
-            ->groupBy('c.id')
-            ->setMaxResults($limit)
-            ->setFirstResult($offset);
+            ->groupBy('c.id');
+            
+            if($limit) {
+                $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
+            }
+            
 
             return $queryBuilder;
         } catch (QueryException $e) {
@@ -97,11 +104,14 @@ class CityRepository extends EntityRepository {
     {
 
         $operatorsMap = [
-            'country_id' => [
+            'country' => [
                 'alias' => 'c.country_id',
                 'operator' => 'eq'
             ],
-            
+            'id' => [
+                'alias' => 'c.id',
+                'operator' => 'eq'
+            ],
             'name' => [
                 'alias' => 'c.name',
                 'operator' => 'contains'
@@ -115,7 +125,6 @@ class CityRepository extends EntityRepository {
                 'alias' => 'c.status',
                 'operator' => 'eq'
             ]
-
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();

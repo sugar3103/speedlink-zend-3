@@ -33,22 +33,25 @@ class DistrictController extends CoreController {
             // get the filters
             $fieldsMap = [
                 0 => 'name',
-                1 => 'district',
-                2 => 'status'                
+                1 => 'id',
+                2 => 'city',
+                3 => 'status'                
             ];
-// var_dump($fieldsMap);die;
-            list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
+
+            list($start,$limit,$sortField,$sortDirection,$filters, $fields) = $this->getRequestData($fieldsMap);                        
             
 
             //get list district by condition
             $dataDistrict = $this->districtManager->getListDistrictByCondition(
-                $start, $limit, $sortField, $sortDirection,$filters);            
+                $start, $limit, $sortField, $sortDirection,$filters); 
+                
+            $results = $this->filterByField($dataDistrict['listDistrict'], $fields);
             
             $this->error_code = 1;
             $this->apiResponse =  array(
                 'message' => 'Get list success',
-                'total' => $dataDistrict['totalDistrict'],
-                'data' => $dataDistrict['listDistrict']
+                'data' => $results,
+                'total' => $dataDistrict['totalDistrict']
             );
         } 
         return $this->createResponse();
@@ -71,10 +74,10 @@ class DistrictController extends CoreController {
                 // add user.
                 $district = $this->districtManager->addDistrict($data,$user);
                 $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have modified Districts!";
+                $this->apiResponse['message'] = "You added new a Districts!";
             } else {
                 $this->error_code = 0;
-                $this->apiResponse = $form->getMessages(); 
+                $this->apiResponse['data'] = $form->getMessages(); 
                 
             }            
         } else {
@@ -92,8 +95,8 @@ class DistrictController extends CoreController {
              $data = json_decode($payload, true);
              $user = $this->tokenPayload;
              $district = $this->entityManager->getRepository(District::class)
-                ->findOneBy(array('districtId' => $data['district_id']));
-            if(isset($data['district_id']) && $district) {
+                ->findOneBy(array('id' => $data['id']));
+            if(isset($data['id']) && $district) {
                 //Create New Form District
                 $form = new DistrictForm('update', $this->entityManager, $district);
                 $form->setData($data);
@@ -102,14 +105,14 @@ class DistrictController extends CoreController {
                    
                    $this->districtManager->updateDistrict($district, $data,$user);
                    $this->error_code = 1;
-                   $this->apiResponse['message'] = "Success: You have modified district!";
+                   $this->apiResponse['message'] = "You have modified district!";
                 }  else {
                    $this->error_code = 0;
-                   $this->apiResponse = $form->getMessages(); 
+                   $this->apiResponse['data'] = $form->getMessages(); 
                 }   
             }   else {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = 'District Not Found'; 
+                $this->apiResponse['data'] = 'District Not Found'; 
             }         
              
         } else {
@@ -129,15 +132,15 @@ class DistrictController extends CoreController {
  
               $user = $this->tokenPayload;
               $district = $this->entityManager->getRepository(District::class)
-                 ->findOneBy(array('districtId' => $data['district_id']));
+                 ->findOneBy(array('id' => $data['id']));
             if($district) {
                 $this->districtManager->deleteDistrict($district);
                 $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have deleted district!";
+                $this->apiResponse['message'] = "You have deleted district!";
             } else {
                 $this->httpStatusCode = 200;
-                $this->error_code = -1;
-                $this->apiResponse['message'] = "Not Found District";
+                $this->error_code = 0;
+                $this->apiResponse['data'] = "Not Found District";
             }
         } else {
             $this->httpStatusCode = 404;

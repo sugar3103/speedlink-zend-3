@@ -3,6 +3,7 @@ import { injectIntl } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
 import renderSelectField from '../../../../containers/Shared/form/Select';
 import { Button } from 'reactstrap';
+import PropTypes from 'prop-types';
 
 class SearchForm extends Component {
   render() {
@@ -31,6 +32,7 @@ class SearchForm extends Component {
                 name="status"
                 component={renderSelectField}
                 type="text"
+                placeholder={messages['country.status']}
                 options={[
                   { value: -1, label: messages['country.all'] },
                   { value: 1, label: messages['country.active'] },
@@ -60,6 +62,11 @@ class SearchForm extends Component {
       </form>
     );
   }
+}
+
+SearchForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
 }
 
 export default reduxForm({

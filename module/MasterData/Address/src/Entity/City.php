@@ -58,7 +58,7 @@ class City
     /**
      * @var bool
      *
-     * @ORM\Column(name="status", type="boolean", nullable=false)
+     * @ORM\Column(name="status", type="integer", nullable=false)
      */
     private $status;
 
@@ -111,6 +111,16 @@ class City
      */
     private $ref_as_by;
 
+    /**
+     * @var \Address\Entity\Country
+     *
+     * @ORM\OneToOne(targetEntity="Address\Entity\Country")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="country_id", referencedColumnName="id", unique=true, nullable=true)
+     * })
+     */
+    private $country;
+    
     /**
      * @return int
      */
@@ -335,4 +345,23 @@ class City
         $this->ref_as_by = $ref_as_by;
     }
 
+    /**
+     * 
+     * @return Address\Entity\Country
+     */
+
+     public function getCountry()
+     {
+        return $this->country;
+     }
+
+    /**
+     * 
+     * @param Address\Entity\Country
+     */
+
+    public function setCountry($country)
+    {
+       $this->country = $country;
+    }
 }

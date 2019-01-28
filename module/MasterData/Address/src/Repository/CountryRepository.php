@@ -24,7 +24,7 @@ class CountryRepository extends EntityRepository {
     public function getListCountryByCondition(
         $start = 1,
         $limit = 10,
-        $sortField = 'c.name',
+        $sortField = 'ct.name',
         $sortDirection = 'ASC',
         $filters = []
     )
@@ -32,19 +32,21 @@ class CountryRepository extends EntityRepository {
         try {
             $queryBuilder = $this->buildCountryQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select("
-                c.id,
-                 c.name,
-                 c.name_en,
-                 c.description,
-                 c.description_en,
-                 c.iso_code,
-                 c.status,
-                 c.created_by,
-                 c.created_at
-            ")->andWhere("c.is_deleted = 0")
-            ->groupBy('c.id')
-            ->setMaxResults($limit)
-            ->setFirstResult(($start - 1) * $limit);
+                ct.id,
+                ct.name,
+                ct.name_en,
+                ct.description,
+                ct.description_en,
+                ct.iso_code,
+                ct.status,
+                ct.created_by,
+                ct.created_at
+            ")->andWhere("ct.is_deleted = 0")
+            ->groupBy('ct.id');
+
+            if($limit) {
+                $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
+            }
 
             return $queryBuilder;
         } catch (QueryException $e) {
@@ -87,31 +89,35 @@ class CountryRepository extends EntityRepository {
      * @return QueryBuilder
      * @throws QueryException
      */
-    public function buildCountryQueryBuilder($sortField = 'c.name', $sortDirection = 'asc', $filters)
+    public function buildCountryQueryBuilder($sortField = 'ct.name', $sortDirection = 'asc', $filters)
     {
         
         $operatorsMap = [
+            'id' => [
+                'alias' => 'ct.id',
+                'operator' => 'eq'
+            ],
             'name' => [
-                'alias' => 'c.name',
+                'alias' => 'ct.name',
                 'operator' => 'contains'
             ],
             'created_at' => [
-                'alias' => 'c.created_at',
+                'alias' => 'ct.created_at',
                 'operator' => 'contains'
             ],
             'status' => [
-                'alias' => 'c.status',
+                'alias' => 'ct.status',
                 'operator' => 'eq'
             ],
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(Country::class, 'c');
+        $queryBuilder->from(Country::class, 'ct');
 
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
         } else {
-            $queryBuilder->orderBy('c.name', 'ASC');
+            $queryBuilder->orderBy('ct.name', 'ASC');
         }
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }

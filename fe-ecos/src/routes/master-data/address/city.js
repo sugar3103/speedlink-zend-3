@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Col, Container, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
+import { List } from '../../../components/MasterData/Address/City';
 
 class City extends Component {
   render() {
@@ -16,7 +17,7 @@ class City extends Component {
           </Col>
         </Row>
         <Row>
-          
+          <List />
         </Row>
       </Container>
     )
