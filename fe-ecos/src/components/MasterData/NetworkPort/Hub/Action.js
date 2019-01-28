@@ -3,7 +3,7 @@ import { injectIntl } from 'react-intl';
 import { Modal } from 'reactstrap';
 import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
-import { addHubItem, updateHubItem, toggleHubModal } from '../../../redux/actions';
+import { addHubItem, updateHubItem, toggleHubModal } from '../../../../redux/actions';
 
 class Action extends Component {
 

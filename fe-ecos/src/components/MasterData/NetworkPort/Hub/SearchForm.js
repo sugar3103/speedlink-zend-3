@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
-import renderSelectField from '../../../containers/Shared/form/Select';
+import renderSelectField from '../../../../containers/Shared/form/Select';
 import { Button, Col } from 'reactstrap';
 
 class SearchForm extends Component {

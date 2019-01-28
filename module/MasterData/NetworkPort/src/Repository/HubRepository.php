@@ -126,7 +126,6 @@ class HubRepository extends EntityRepository
         } else {
             $queryBuilder->orderBy('h.id', 'DESC');
         }
-        // var_dump($filters); die;
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
 

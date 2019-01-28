@@ -3,7 +3,7 @@ import { injectIntl } from 'react-intl';
 import { Modal } from 'reactstrap';
 import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
-import { addBranchItem, updateBranchItem, toggleBranchModal } from '../../../redux/actions';
+import { addBranchItem, updateBranchItem, toggleBranchModal } from '../../../../redux/actions';
 
 class Action extends Component {
 

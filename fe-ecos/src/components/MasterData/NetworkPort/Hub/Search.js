@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 
 import { connect } from 'react-redux';
-import { getHubList } from '../../../redux/actions';
+import { getHubList } from '../../../../redux/actions';
 import SearchForm from './SearchForm';
-import  { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
+import  { SELECTED_PAGE_SIZE } from '../../../../constants/defaultValues';
 
 class Search extends Component {
 

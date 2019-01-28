@@ -3,26 +3,26 @@ import React, { Component } from 'react';
 import { ButtonToolbar, Card, CardBody, Col, Table, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Item from './Item';
-import Pagination from '../../../containers/Shared/pagination/Pagination';
-import ItemPerPage from '../../../containers/Shared/pagination/ItemPerPage';
-import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
+import Pagination from '../../../../containers/Shared/pagination/Pagination';
+import ItemPerPage from '../../../../containers/Shared/pagination/ItemPerPage';
+import { SELECTED_PAGE_SIZE } from '../../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import Action from './Action';
 import Search from './Search';
 
 import {
-  getBranchList,
-  toggleBranchModal
-} from "../../../redux/actions";
+  getHubList,
+  toggleHubModal
+} from "../../../../redux/actions";
 
 
-const BranchFormatter = ({ value }) => (
+const HubFormatter = ({ value }) => (
   value === 'Enabled' ? <span className="badge badge-success">Enabled</span> :
     <span className="badge badge-disabled">Disabled</span>
 );
 
-BranchFormatter.propTypes = {
+HubFormatter.propTypes = {
   value: PropTypes.string.isRequired,
 };
 
@@ -45,10 +45,10 @@ class List extends Component {
       }
     }
 
-    if (this.props.branch.paramSearch) {
-      Object.assign(params, { "query": this.props.branch.paramSearch})
+    if (this.props.hub.paramSearch) {
+      Object.assign(params, { "query": this.props.hub.paramSearch})
     };
-    this.props.getBranchList(params, messages);
+    this.props.getHubList(params, messages);
 
     this.setState({
       currentPage: 1,
@@ -57,7 +57,7 @@ class List extends Component {
   }
 
   toggleModal = () => {    
-    this.props.toggleBranchModal();
+    this.props.toggleHubModal();
   }
 
   onChangePage = (page) => {
@@ -69,10 +69,10 @@ class List extends Component {
       }
     }
 
-    if (this.props.branch.paramSearch) {
-      Object.assign(params, { "query": this.props.branch.paramSearch })
+    if (this.props.hub.paramSearch) {
+      Object.assign(params, { "query": this.props.hub.paramSearch })
     };
-    this.props.getBranchList(params, messages);
+    this.props.getHubList(params, messages);
 
     this.setState({
       currentPage: page
@@ -81,10 +81,10 @@ class List extends Component {
 
   componentDidMount() {
     const { messages } = this.props.intl;
-    this.props.getBranchList(null, messages);
+    this.props.getHubList(null, messages);
   }
 
-  showBranchItem = (items) => {
+  showHubItem = (items) => {
     const { messages } = this.props.intl;
     let result = null;
     if (items.length > 0) {
@@ -92,33 +92,33 @@ class List extends Component {
         return (
           <Item 
             key={index}
-            branch={item}
+            hub={item}
           />
         )
       })
     } else {
       result = (
-        <tr><td colSpan={8} className="text-center">{messages['branch.no-result']}</td></tr>
+        <tr><td colSpan={8} className="text-center">{messages['hub.no-result']}</td></tr>
       )
     }
     return result;
   }
 
   render() {
-    const { items, loading, modalOpen, total } = this.props.branch;
+    const { items, loading, modalOpen, total } = this.props.hub;
     const { messages } = this.props.intl;
     return (
       <Col md={12} lg={12}>
         <Card>
           <CardBody className="master-data-list">
             <div className="card__title">
-              <h5 className="bold-text">{messages['branch.list-title']}</h5>
+              <h5 className="bold-text">{messages['hub.list-title']}</h5>
               <ButtonToolbar className="master-data-list__btn-toolbar-top">
                 <Button 
                   color="success" 
                   className="master-data-list__btn-add"
                   onClick={this.toggleModal}
-                >{messages['branch.add-new']}</Button>
+                >{messages['hub.add-new']}</Button>
               </ButtonToolbar>
               <Action modalOpen={modalOpen} />
             </div>
@@ -128,20 +128,20 @@ class List extends Component {
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>{messages['branch.code']}</th>
-                  <th>{messages['branch.name']}<br/>{messages['branch.name-en']}</th>
-                  <th>{messages['branch.desc']}<br/>{messages['branch.desc-en']}</th>
-                  <th>{messages['branch.city']}</th>
-                  <th>{messages['branch.status']}</th>
-                  <th>{messages['branch.created-at']}</th>
-                  <th>{messages['branch.action']}</th>
+                  <th>{messages['hub.code']}</th>
+                  <th>{messages['hub.name']}<br/>{messages['hub.name-en']}</th>
+                  <th>{messages['hub.desc']}<br/>{messages['hub.desc-en']}</th>
+                  <th>{messages['hub.city']}</th>
+                  <th>{messages['hub.status']}</th>
+                  <th>{messages['hub.created-at']}</th>
+                  <th>{messages['hub.action']}</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
                   <tr><td colSpan={9} className="text-center"><div className="loading-table" /></td></tr>
                 ) : (
-                    this.showBranchItem(items)
+                    this.showHubItem(items)
                   )}
               </tbody>
             </Table>
@@ -154,15 +154,15 @@ class List extends Component {
 }
 
 List.propTypes = {
-  status: PropTypes.object.isRequired,
+  hub: PropTypes.object.isRequired,
   modal: PropTypes.object,
-  getBranchList: PropTypes.func.isRequired,
-  toggleBranchModal: PropTypes.func.isRequired
+  getHubList: PropTypes.func.isRequired,
+  toggleHubModal: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ branch, modal }) => {
+const mapStateToProps = ({ hub, modal }) => {
   return {
-    branch,
+    hub,
     modal
   };
 };
@@ -170,7 +170,7 @@ const mapStateToProps = ({ branch, modal }) => {
 export default injectIntl(connect(
   mapStateToProps,
   {
-    getBranchList,
-    toggleBranchModal,
+    getHubList,
+    toggleHubModal,
   }
 )(List));

@@ -40,7 +40,6 @@ class DistrictController extends CoreController {
 
             list($start,$limit,$sortField,$sortDirection,$filters, $fields) = $this->getRequestData($fieldsMap);                        
             
-
             //get list district by condition
             $dataDistrict = $this->districtManager->getListDistrictByCondition(
                 $start, $limit, $sortField, $sortDirection,$filters); 

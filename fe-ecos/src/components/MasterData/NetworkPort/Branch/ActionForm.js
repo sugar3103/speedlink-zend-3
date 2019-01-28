@@ -2,14 +2,14 @@ import React, { PureComponent } from 'react';
 import { Button, ButtonToolbar, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleHubModal, getCityList } from '../../../redux/actions';
+import { toggleBranchModal, getCityList } from '../../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
-import CustomField from '../../../containers/Shared/form/CustomField';
-import renderRadioButtonField from '../../../containers/Shared/form/RadioButton';
-import Select from '../../../containers/Shared/form/Select';
+import CustomField from '../../../../containers/Shared/form/CustomField';
+import renderRadioButtonField from '../../../../containers/Shared/form/RadioButton';
+import Select from '../../../../containers/Shared/form/Select';
 import classnames from 'classnames';
 import validate from './validateActionForm';
-import PropTypes from 'prop-types';
+
 
 class Action extends PureComponent {
 
@@ -17,23 +17,7 @@ class Action extends PureComponent {
     super();
     this.state = {
       activeTab: '1',
-      errors: {}
     };
-  }
-
-  onChange = (e) => {
-    this.setState({
-      errors: {}
-    });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.errors) {
-      const { errors } = nextProps;
-      this.setState({
-        errors: errors
-      });
-    }
   }
 
   componentDidMount() {
@@ -64,7 +48,7 @@ class Action extends PureComponent {
   };
 
   toggleModal = () => {
-    this.props.toggleHubModal();
+    this.props.toggleBranchModal();
   }
   componentWillReceiveProps(nextProps) {
       if (nextProps && nextProps.modalData) {
@@ -120,7 +104,7 @@ class Action extends PureComponent {
                         component={CustomField}
                         type="text"
                         placeholder={messages['hub.name']}
-                        onChange={this.onChange}
+                        messages={messages}
                       />
                     </div>
                     {errors && errors.name && errors.name.hubExists && <span className="form__form-group-error">{messages['hub.validate-name-exists']}</span>}
@@ -145,7 +129,7 @@ class Action extends PureComponent {
                         component={CustomField}
                         type="text"
                         placeholder={messages['hub.name-en']}
-                        onChange={this.onChange}
+                        messages={messages}
                       />
                     </div>
                     {errors && errors.name_en && errors.name_en.hubExists && <span className="form__form-group-error">{messages['hub.validate-nameEn-exists']}</span>}
@@ -170,7 +154,7 @@ class Action extends PureComponent {
                         component={CustomField}
                         type="text"
                         placeholder={messages['hub.code']}
-                        onChange={this.onChange}
+                        messages={messages}
                       />
                     </div>
                     {errors && errors.code && errors.code.hubExists && <span className="form__form-group-error">{messages['hub.validate-code-exists']}</span>}
@@ -184,7 +168,7 @@ class Action extends PureComponent {
                         component={Select}
                         options={items && this.showOptions(items)}
                         placeholder={messages['hub.name']}
-                        onChange={this.onChange}
+                        messages={messages}
                       />
                 </div>
               </div>
@@ -220,20 +204,19 @@ class Action extends PureComponent {
   }
 }
 
-const mapStateToProps = ({hub, address}) => {  
-  const { errors, modalData } = hub;
+const mapStateToProps = ({branch, address}) => {  
+  const { modalData } = branch;
   const { city } = address;
   return {
-    errors,
     modalData,
     city
   }
 }
 
 export default reduxForm({
-  form: 'hub_action_form',
+  form: 'branch_action_form',
   validate  
 })(injectIntl(connect(mapStateToProps, {
-  toggleHubModal,
+  toggleBranchModal,
   getCityList
 })(Action)));

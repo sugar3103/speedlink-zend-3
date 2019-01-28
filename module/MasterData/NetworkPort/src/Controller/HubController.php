@@ -51,29 +51,25 @@ class HubController extends CoreController {
           3 => 'city'
       ];
       
-      list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);
+      list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);
 
       $dataHub = $this->hubManager->getListHubByCondition(
                 $start, $limit, $sortField, $sortDirection, $filters);
 
-      $result = [
-        "data" => (($dataHub['listHub']) ? $dataHub['listHub'] : [] ) ,
-        "total" => $dataHub['totalHub']
-      ];
-        
-        $this->error_code = 1;
-        $this->apiResponse['message'] = 'Success';
-        $this->apiResponse['total'] = $result['total'];
-        $this->apiResponse['data'] = $result['data'];
-      } else {
-        $this->error_code = 0;
-        $this->apiResponse['message'] = 'Failed';
-      }
+      $results = $this->filterByField($dataHub['listHub'], $fields);
+
+      $this->error_code = 1;
+      $this->apiResponse =  array(
+          'message' => 'Get list success',
+          'data' => $results,
+          'total' => $dataHub['totalHub']
+      );
+       }
       return $this->createResponse();
     }
 
     /**
-    * Add Branch Action
+    * Add Hub Action
     * @throws \Exception
     */
     public function addAction() {     
@@ -91,8 +87,6 @@ class HubController extends CoreController {
               $data = $form->getData();
 
               $result = $this->hubManager->addHub($data,$user); 
-
-              $this->error_code = $result->getCode();
                 // Check result
               
               $this->error_code = 1;
@@ -100,8 +94,7 @@ class HubController extends CoreController {
             }
             else {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = "Error";
-                $this->apiResponse = $form->getMessages();       
+                $this->apiResponse['data'] = $form->getMessages();    
             }            
         }
         else {
@@ -141,11 +134,11 @@ class HubController extends CoreController {
               $this->apiResponse['message'] = "You have modified hub!";
             } else {
               $this->error_code = 0;
-              $this->apiResponse = $form->getMessages(); 
+              $this->apiResponse['data'] = $form->getMessages(); 
             }   
           } else {
             $this->error_code = 0;
-            $this->apiResponse['message'] = 'Hub Not Found';   
+            $this->apiResponse['data'] = 'Hub Not Found';   
           }
         } else {
           $this->httpStatusCode = 404;
@@ -165,7 +158,6 @@ class HubController extends CoreController {
             } else {
                 //remove status
                 $this->hubManager->deleteHub($hub);
-    
                 $this->error_code = 1;
                 $this->apiResponse['message'] = "Success: You have deleted hub!";
             }          
