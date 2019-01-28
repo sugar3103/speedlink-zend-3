@@ -68,6 +68,7 @@ class Action extends PureComponent {
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['permission.name']}</span>
             <div className="form__form-group-field">
+
               <Field
                 name="name"
                 component={CustomField}
@@ -78,57 +79,30 @@ class Action extends PureComponent {
             </div>
             {errors && errors.name && errors.name.permissionExists && <span className="form__form-group-error">{messages['permission.validate-name-exists']}</span>}
           </div>
-          <div className="tabs">
-            <div className="tabs__wrap">
-              <Nav tabs>
-                <NavItem>
-                  <NavLink
-                    className={classnames({ active: this.state.activeTab === '1' })}
-                    onClick={() => {
-                      this.toggleTab('1');
-                    }}
-                  >
-                    {messages['layout.locale-vie']}
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink
-                    className={classnames({ active: this.state.activeTab === '2' })}
-                    onClick={() => {
-                      this.toggleTab('2');
-                    }}
-                  >
-                    {messages['layout.locale-eng']}
-                  </NavLink>
-                </NavItem>
-              </Nav>
-              <TabContent activeTab={this.state.activeTab}>
-                <TabPane tabId="1">
-
-                  <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['permissions.desc']}</span>
-                    <div className="form__form-group-field">
-                      <Field
-                        name="description"
-                        component="textarea"
-                        type="text"
-                      />
-                    </div>
-                  </div>
-                </TabPane>
-                <TabPane tabId="2">                  
-                  <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['permissions.desc-en']}</span>
-                    <div className="form__form-group-field">
-                      <Field
-                        name="description_en"
-                        component="textarea"
-                        type="text"
-                      />
-                    </div>
-                  </div>
-                </TabPane>
-              </TabContent>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['description']}</span>
+            <div className="form__form-group-field">
+              <div className="form__form-group-icon">
+                <div className="flag vn"></div>
+              </div>
+              <Field
+                name="description"
+                component="textarea"
+                type="text"
+              />
+            </div>
+          </div>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['permissions.desc-en']}</span>
+            <div className="form__form-group-field">
+              <div className="form__form-group-icon">
+                <div className="flag us"></div>
+              </div>
+              <Field
+                name="description_en"
+                component="textarea"
+                type="text"
+              />
             </div>
           </div>
         </div>

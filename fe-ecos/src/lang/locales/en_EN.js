@@ -7,6 +7,7 @@ module.exports = {
   'desc-confirm': 'Are you sure delete this?',
   'confirm-no': 'No',
   'confirm-yes': 'Yes, delete it!',
+  'description': 'Description',
  
   //theme
   'theme.title-setting': 'Theme Customizer',
@@ -312,7 +313,8 @@ module.exports = {
   'permission.validate-name-exists': 'Another permission with such nam already exists',
   'permission.add-success': 'You have added a permission!',
   'permission.update-success': 'You have modified permission!',
-  'permission.delete-success': 'You have deleted permission!',
+  'permission.delete-success': 'You have deleted permission!',  
+  'permission.validate-name-empty': 'Name shouldn’t be empty',
 
 //Carrier
   'carrier.list-title': 'Carrier List',

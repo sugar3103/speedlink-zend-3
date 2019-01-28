@@ -129,17 +129,18 @@ class List extends Component {
             <div className="card__title">
               <h5 className="bold-text">{messages['permission.list-title']}</h5>
               <ButtonToolbar className="master-data-list__btn-toolbar-top">
-                <form className="form" onSubmit={this.handleSearch}>
+               
+                <Button 
+                  color="success" 
+                  className="master-data-list__btn-add btn-sm"
+                  onClick={this.toggleModal}
+                >{messages['permission.add-new']}</Button>
+                 <form className="form" onSubmit={this.handleSearch}>
                   <div className="form__form-group products-list__search">
                     <input placeholder="Search..." name="search" value={this.state.searchPermission} onChange={this.handleChange}/>
                     <MagnifyIcon />
                   </div>
                 </form>
-                <Button 
-                  color="success" 
-                  className="master-data-list__btn-add"
-                  onClick={this.toggleModal}
-                >{messages['permission.add-new']}</Button>
               </ButtonToolbar>
               <Action modalOpen={modalOpen} />
             </div>
