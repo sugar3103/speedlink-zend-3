@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
-import { ButtonToolbar, Card, CardBody, Col, Table, Button } from 'reactstrap';
+import { Card, CardBody, Col, Table, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Item from './Item';
 import Pagination from '../../../containers/Shared/pagination/Pagination';
@@ -46,7 +46,7 @@ class List extends Component {
     }
 
     if (this.props.status.paramSearch) {
-      Object.assign(params, { "query": this.props.status.paramSearch})
+      Object.assign(params, { "query": this.props.status.paramSearch })
     };
     this.props.getStatusList(params, messages);
 
@@ -56,7 +56,7 @@ class List extends Component {
     });
   }
 
-  toggleModal = () => {    
+  toggleModal = () => {
     this.props.toggleStatusModal();
   }
 
@@ -90,7 +90,7 @@ class List extends Component {
     if (items.length > 0) {
       result = items.map((item, index) => {
         return (
-          <Item 
+          <Item
             key={index}
             status={item}
           />
@@ -111,19 +111,17 @@ class List extends Component {
       <Col md={12} lg={12}>
         <Card>
           <CardBody className="master-data-list">
-            <div className="card__title">
-              <h5 className="bold-text">{messages['status.list-title']}</h5>
-              <ButtonToolbar className="master-data-list__btn-toolbar-top">
-                <Button 
-                  color="success" 
-                  className="master-data-list__btn-add"
-                  onClick={this.toggleModal}
-                >{messages['status.add-new']}</Button>
-              </ButtonToolbar>
-              <Action modalOpen={modalOpen} />
-            </div>
             <Search />
-            <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
+            <div className="mb-2">
+              <Button 
+                color="success" 
+                onClick={this.toggleModal}
+                className="master-data-btn"
+                size="sm"
+              >{messages['status.add-new']}</Button>
+              <Action modalOpen={modalOpen} />
+              <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
+            </div>
             <Table responsive bordered hover>
               <thead>
                 <tr>

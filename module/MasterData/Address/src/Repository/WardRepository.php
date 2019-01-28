@@ -23,11 +23,11 @@ class WardRepository extends EntityRepository {
      * @return array|QueryBuilder
      */
     public function getListWardByCondition(
+        $start = 1,
+        $limit = 10,
         $sortField = 'w.name',
         $sortDirection = 'ASC',
-        $filters = [],
-        $offset = 0,
-        $limit = 10
+        $filters = []
     )
     {
         try {
@@ -35,14 +35,18 @@ class WardRepository extends EntityRepository {
             $queryBuilder->select("
                 w.id,
                 w.name,
+                w.name_en,
                 w.description,
+                w.description_en,
+                w.district_id,
+                w.postal_code,
                 w.status,
                 w.created_by,
                 w.created_at
             ")->andWhere("w.is_deleted = 0")
             ->groupBy('w.id')
             ->setMaxResults($limit)
-            ->setFirstResult($offset);
+            ->setFirstResult(($start - 1) * $limit);
             return $queryBuilder;
 
         } catch (QueryException $e) {
@@ -50,6 +54,31 @@ class WardRepository extends EntityRepository {
             return [];
         }
 
+    }
+
+    public function getListWardSelect(
+        $sortField = 'w.id',
+        $sortDirection = 'ASC',
+        $filters = []
+    )
+    {
+        try {
+            $queryBuilder = $this->buildWardQueryBuilder($sortField, $sortDirection, $filters);
+            $queryBuilder->select(
+                "w.id,
+                 w.name,
+                 w.name_en,
+                 w.status"                 
+            )
+            // ->groupBy('c.cityId')
+             ->setMaxResults(100)
+            // ->setFirstResult($offset)
+            ;
+            return $queryBuilder;
+
+        } catch (QueryException $e) {
+            return [];
+        }
     }
 
     /**
@@ -65,9 +94,9 @@ class WardRepository extends EntityRepository {
     {
 
         $operatorsMap = [
-            'district_id' => [
+            'district' => [
                 'alias' => 'w.district_id',
-                'operator' => 'eq'
+                'operator' => 'contains'
             ],
             'name' => [
                 'alias' => 'w.name',
@@ -83,14 +112,14 @@ class WardRepository extends EntityRepository {
             ],
 
         ];
-
+// var_dump($sortField); die;
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(Ward::class, 'w');
 
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
         } else {
-            $queryBuilder->orderBy('w.name', 'ASC');
+            $queryBuilder->orderBy('w.id', 'ASC');
         }
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }

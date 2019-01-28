@@ -3,6 +3,7 @@ import { Col } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
 import { Button } from 'reactstrap';
+import PropTypes from 'prop-types';
 
 class SearchForm extends Component {
   render() {
@@ -72,26 +73,31 @@ class SearchForm extends Component {
           </div>
         </Col>
 
-        <div className="search-group-button">
-          <Button
-            size="sm"
-            outline
-            onClick={(e) => {
-              reset();
-              setTimeout(() => {
-                handleSubmit();
-              }, 200);
-            }}
-          >{messages['code.clear']}</Button>{' '}
-          <Button
-            size="sm"
-            color="primary"
-            id="search"
-          >{messages['code.search']}</Button>
-        </div>
+        <Col md={12} className="text-right search-group-button">
+            <Button 
+              size="sm" 
+              outline 
+              onClick={(e)=> {
+                reset();
+                setTimeout(() => {
+                  handleSubmit();  
+                }, 200);
+              }}
+            >{messages['code.clear']}</Button>{' '}
+            <Button 
+              size="sm" 
+              color="primary"
+              id="search" 
+            >{ messages['code.search'] }</Button>
+        </Col>
       </form>
     );
   }
+}
+
+SearchForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
 }
 
 export default reduxForm({

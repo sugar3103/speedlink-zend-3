@@ -38,18 +38,46 @@ class DistrictRepository extends EntityRepository {
                 d.description,
                 d.description_en,
                 d.status,
+                d.city_id,
                 d.created_by,
                 d.created_at
             ")->andWhere("d.is_deleted = 0")
-            ->groupBy('d.id')
-            ->setMaxResults($limit)
-            ->setFirstResult(($start - 1) * $limit);
+            ->groupBy('d.id');
+            
+            if($limit) {
+                $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
+            }
 
             return $queryBuilder;
         } catch (QueryException $e) {
             return [];
         }
 
+    }
+
+    public function getListDistrictSelect(
+        $sortField = 'd.name',
+        $sortDirection = 'ASC',
+        $filters = []
+    )
+    {
+        try {
+            $queryBuilder = $this->buildDistrictQueryBuilder($sortField, $sortDirection, $filters);
+            $queryBuilder->select(
+                "d.id,
+                 d.name,
+                 d.name_en,
+                 d.status"                 
+            )
+            // ->groupBy('c.cityId')
+             // ->setMaxResults(100)
+            // ->setFirstResult($offset)
+            ;
+            return $queryBuilder;
+
+        } catch (QueryException $e) {
+            return [];
+        }
     }
 
     /**
@@ -64,8 +92,12 @@ class DistrictRepository extends EntityRepository {
     public function buildDistrictQueryBuilder($sortField = 'd.name', $sortDirection = 'asc', $filters)
     {
         $operatorsMap = [
-            'city_id' => [
+            'city' => [
                 'alias' => 'd.city_id',
+                'operator' => 'eq'
+            ],
+            'id' => [
+                'alias' => 'd.id',
                 'operator' => 'eq'
             ],
             'name' => [
@@ -82,7 +114,7 @@ class DistrictRepository extends EntityRepository {
             ],
 
         ];
-
+ // var_dump($sortField); die;
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(District::class, 'd');
 

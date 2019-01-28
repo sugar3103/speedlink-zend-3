@@ -1,6 +1,7 @@
 <?php
 namespace Address\Service;
 
+use Address\Entity\City;
 use Address\Entity\District;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
@@ -16,6 +17,13 @@ class DistrictManager  {
     public function __construct($entityManager)
     {
         $this->entityManager = $entityManager;        
+    }
+
+    private function getReferenced(&$district,$data) {
+        $city = $this->entityManager->getRepository(City::class)->find($data['city_id']);
+        if ($city == null)
+            throw new \Exception('Not found City by ID');
+        $district->setCity($city);
     }
 
      /**
@@ -37,11 +45,13 @@ class DistrictManager  {
             $district->setDescription($data['description']);
             $district->setDescriptionEn($data['description_en']);
             $district->setStatus($data['status']);            
-            $district->setCountryId($data['district_id']);
+            $district->setCityId($data['city_id']);
 
             $currentDate = date('Y-m-d H:i:s');
             $district->setCreatedAt($currentDate);
             $district->setCreatedBy($user->id);
+
+            $this->getReferenced($district,$data);
            
             // add the entity to the entity manager.
             $this->entityManager->persist($district);
@@ -80,14 +90,13 @@ class DistrictManager  {
             $district->setDescriptionEn($data['description_en']);
             $district->setStatus($data['status']);
             $district->setCityId($data['city_id']);
-            $district->setRefAsBy($data['ref_as_by']);
+            // $district->setRefAsBy($data['ref_as_by']);
 
             $currentDate = date('Y-m-d H:i:s');
             $district->setUpdatedAt($currentDate);
             $district->setUpdatedBy($user->id);
            
-            // add the entity to the entity manager.
-            $this->entityManager->persist($district);
+            $this->getReferenced($district,$data);
 
             // apply changes to database.
             $this->entityManager->flush();
@@ -149,7 +158,7 @@ class DistrictManager  {
         $filters = []
     ){
 
-        $cities     = [];
+        $districts     = [];
         $totalDistrict = 0;                
 
         //get orm district
@@ -162,16 +171,14 @@ class DistrictManager  {
             $totalDistrict = $ormPaginator->count();
 
             // $adapter = new DoctrineAdapter($ormPaginator);  
-            $cities = $ormPaginator->getIterator()->getArrayCopy();
+            $districts = $ormPaginator->getIterator()->getArrayCopy();
             //set countRow default
             $countRow = 1;
             
-            foreach ($cities as &$district) {//loop
-                //set status
-                $district['status'] = District::getIsActiveList($district['status']);
+            foreach ($districts as &$district) {//loop
 
                 //set created_at
-                $district['createdAt'] =  ($district['createdAt']) ? Utils::checkDateFormat($district['createdAt'],'d/m/Y') : '';
+                $district['created_at'] =  ($district['created_at']) ? Utils::checkDateFormat($district['created_at'],'d/m/Y') : '';
 
                 $countRow++;
             }
@@ -180,9 +187,48 @@ class DistrictManager  {
 
         //set data district
         $dataDistrict = [
-            'listDistrict' => $cities,
+            'listDistrict' => $districts,
             'totalDistrict' => $totalDistrict,
         ];
         return $dataDistrict;
     }
+  
+   
+     public function getListDistrictSelect(
+        $sortField = 'd.name',
+        $sortDirection = 'ASC',
+        $filters = []
+    ){
+
+        $districts     = [];
+        $totalDistrict = 0;
+        
+        //get orm Hub
+        $ormDistrict = $this->entityManager->getRepository(District::class)
+            ->getListDistrictSelect($sortField, $sortDirection, $filters);
+
+        if($ormDistrict){
+            $ormPaginator = new ORMPaginator($ormDistrict, true);
+            $ormPaginator->setUseOutputWalkers(false);
+            $totalDistrict = $ormPaginator->count();
+
+            // $adapter = new DoctrineAdapter($ormPaginator);  
+            $districts = $ormPaginator->getIterator()->getArrayCopy();
+            //set countRow default
+            $countRow = 1;
+            
+            foreach ($districts as &$district) {//loop
+                //set status
+              //  $district['status'] = District::getIsActiveList($district['status']);
+                $countRow++;
+            }  
+        }
+        //set data district
+        $dataDistrict = [
+            'listDistrict' => $districts,
+            'totalDistrict' => $totalDistrict,
+        ];
+        return $dataDistrict;
+    }
+
 }

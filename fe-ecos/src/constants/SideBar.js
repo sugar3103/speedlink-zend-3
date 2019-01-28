@@ -50,6 +50,47 @@ export default {
             }
           ]
         },
+        {
+          id: 'customer_service',
+          title: 'menu.customer_service',
+          route: '/app/master-data/service-shipment',
+          icon: 'store',
+          childrens: [
+            {
+              title: 'menu.cs_carrier',
+              route: '/app/master-data/service-shipment/carrier',
+              icon: 'license'
+            },
+            {
+              title: 'menu.cs_service',
+              route: '/app/master-data/service-shipment/service',
+              icon: 'map'
+            },
+            {
+              title: 'menu.cs_shipment_type',
+              route: '/app/master-data/service-shipment/shipment-type',
+              icon: 'apartment'
+            }
+          ]
+        },
+        {
+          id: 'networkport',
+          title: 'menu.networkport',
+          route: '/app/master-data/networkport',
+          icon: 'store',
+          childrens: [
+            {
+              title: 'menu.branch',
+              route: '/app/master-data/networkport/branch',
+              icon: 'license'
+            },
+            {
+              title: 'menu.hub',
+              route: '/app/master-data/networkport/hub',
+              icon: 'map'
+            }
+          ]
+        },
       ]
     },{
       id: 'setting',
@@ -73,13 +114,13 @@ export default {
               id: 'role',
               title: 'menu.user.role',
               route: '/app/setting/user/role',
-              icon: 'users'
+              icon: 'link'
             },
             {
               id: 'permission',
               title: 'menu.user.permission',
               route: '/app/setting/user/permission',
-              icon: 'users'
+              icon: 'lock'
             }
           ]
         }

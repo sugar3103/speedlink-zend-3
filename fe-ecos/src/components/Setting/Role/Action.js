@@ -24,7 +24,7 @@ class Action extends Component {
       <Modal
         isOpen={this.props.modalOpen}
         toggle={this.toggleModal}
-        className={`modal-dialog--success modal-dialog--header`}
+        className={`modal-dialog--success modal-dialog--header modal-lg`}
       >
         <ActionForm onSubmit={this.handleSubmit} />
       </Modal>

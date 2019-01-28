@@ -4,6 +4,7 @@ import { Modal } from 'reactstrap';
 import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
 import { addCountryItem, updateCountryItem, toggleCountryModal } from '../../../../redux/actions';
+import PropTypes from 'prop-types';
 
 class Action extends Component {
 
@@ -34,6 +35,14 @@ class Action extends Component {
     );
   }
 }
+
+Action.propTypes = {
+  modalData: PropTypes.object,
+  addCountryItem: PropTypes.func.isRequired,
+  updateCountryItem: PropTypes.func.isRequired,
+  toggleCountryModal: PropTypes.func.isRequired,
+}
+
 
 const mapStateToProps = ({address}) => {
   const { modalData } = address.country;

@@ -63,7 +63,7 @@ class HubManager {
      * @throws \Exception
      */
     // public function add($code, $name, $hubId, $status, $createdBy, $createdAt, $countryId, $cityId, $districtId, $wardId, $includingWardIds, $description )
-    public function addHub($data)
+    public function addHub($data,$user)
     {
         $this->entityManager->beginTransaction();
         try {
@@ -72,24 +72,23 @@ class HubManager {
         $hub->setCityId($data['city_id']);
         $hub->setCode($data['code']);
         $hub->setName($data['name']);
+        $hub->setNameEn($data['name_en']);
         $hub->setStatus($data['status']);
-        $hub->setCreatedBy($data['created_by']);
+        $hub->setCreatedBy($user->id);
         $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
         $hub->setCreatedAt($addTime->format('Y-m-d H:i:s'));
         // $hub->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
         $hub->setDescription($data['description']);
+        $hub->setDescriptionEn($data['description_en']);
 
         $this->getReferenced($hub, $data);
 
         $this->entityManager->persist($hub);
         $this->entityManager->flush();
-        $last_id = $hub->getHubId();
+        // $last_id = $hub->getHubId();
         $this->entityManager->commit();
-        return new Result(
-                Result::SUCCESS,
-                $last_id,
-                ['Add Hub Successfully']
-            );
+
+        return $hub;
         }
         catch (ORMException $e) {
             $this->entityManager->rollback();
@@ -101,24 +100,21 @@ class HubManager {
 
         $this->entityManager->beginTransaction();
         try {
-
             $hub->setCityId($data['city_id']);
             $hub->setCode($data['code']);
             $hub->setName($data['name']);
+            $hub->setNameEn($data['name_en']);
             $hub->setStatus($data['status']);
             $hub->setUpdatedBy($data['updated_by']);
             $hub->setUpdatedAt(date('Y-m-d H:i:s'));
             $hub->setDescription($data['description']);
+            $hub->setDescriptionEn($data['description_en']);
             $this->getReferenced($hub, $data);
             // apply changes to database.
             $this->entityManager->flush();
-            $last_id = $hub->getHubId();
+            // $last_id = $hub->getHubId();
             $this->entityManager->commit();
-            return new Result(
-                Result::SUCCESS,
-                $last_id,
-                ['Update Hub Successfully']
-            );
+            return $hub;
         }
         catch (ORMException $e) {
             $this->entityManager->rollback();
@@ -146,7 +142,7 @@ class HubManager {
      * @throws ORMException
      */
     public function getListHubByCondition(
-        $currentPage,
+        $start,
         $limit,
         $sortField = '',
         $sortDirection = 'asc',
@@ -158,26 +154,24 @@ class HubManager {
 
         //get orm branch
         $ormHub = $this->entityManager->getRepository(Hub::class)
-            ->getListHubByCondition($sortField, $sortDirection, $filters);
+            ->getListHubByCondition($start, $limit, $sortField, $sortDirection, $filters);
 
         if($ormHub){
-            //set offset,limit
             $ormPaginator = new ORMPaginator($ormHub, true);
             $ormPaginator->setUseOutputWalkers(false);
-            $adapter = new DoctrineAdapter($ormPaginator);
-            $paginator = new Paginator($adapter);
+            $totalHub = $ormPaginator->count();
 
-            //sets the current page number
-            $paginator->setCurrentPageNumber($currentPage);
+            //get hub list
+            $hubs = $ormPaginator->getIterator()->getArrayCopy();
+            $countRow = 1;
 
-            //Sets the number of items per page
-            $paginator->setItemCountPerPage($limit);
-
-            //get user list
-            $hubs = $paginator->getIterator()->getArrayCopy();
-
-            //get and set total user
-            $totalHub = $paginator->getTotalItemCount();
+            foreach ($hubs as &$hub) {
+                //set status
+                // $hub['status'] = Hub::getIsActiveList($hub['status']);
+                //set created_at
+                $hub['created_at'] =  ($hub['created_at']) ? $this->checkDateFormat($hub['created_at'],'d/m/Y H:i:s') : '';
+                $countRow++;
+            }
         }
 
         //set data user
@@ -188,39 +182,43 @@ class HubManager {
         return $dataHub;
     }
 
-     public function deleteHub($id) {
+     public function deleteHub($hub) {
 
         $this->entityManager->beginTransaction();
         try {
-
-            // Delete record in tbl role
-            $hub = $this->entityManager->getRepository(Hub::class)->find($id);
-
-            if($hub) {
             $this->entityManager->remove($hub);
             $this->entityManager->flush();
 
             $this->entityManager->commit();
-            return new Result(
-                Result::SUCCESS,
-                null,
-                ['Delete hub successfully.']
-            );
-          }
-          else
-          {
-            return new Result(
-                Result::FAILURE,
-                null,
-                ['Hub not found. Delete hub failed!.']
-            );
-          }
+            return $hub;
+          
         } catch (ORMException $e) {
 
             $this->entityManager->rollback();
             return FALSE;
         }
     }
+
+    /**
+     * Check date format
+     *
+     * @param $dateAction
+     * @param $dateFormat
+     * @return string
+     */
+    public function checkDateFormat($dateAction,$dateFormat)
+    {
+        $dateLast = '';
+        $dateCheck = ! empty($dateAction) ? $dateAction->format('Y-m-d H:i:s') : '';
+        if ($dateCheck) {
+            $datetime = new \DateTime($dateCheck, new \DateTimeZone('UTC'));
+            $laTime = new \DateTimeZone('Asia/Ho_Chi_Minh');
+            $datetime->setTimezone($laTime);
+            $dateLast = $datetime->format($dateFormat);
+        }
+        return $dateLast;
+    }
+
 
     /**
      * Get value filters search
@@ -243,6 +241,42 @@ class HubManager {
         }
         return $filters;
     }
-    
+
+    public function getListHubSelect(
+        $sortField = 'c.name',
+        $sortDirection = 'ASC',
+        $filters = []
+    ){
+
+        $hubs     = [];
+        $totalHub = 0;
+        
+        //get orm Hub
+        $ormHub = $this->entityManager->getRepository(Hub::class)
+            ->getListHubSelect($sortField, $sortDirection, $filters);
+
+        if($ormHub){
+            $ormPaginator = new ORMPaginator($ormHub, true);
+            $ormPaginator->setUseOutputWalkers(false);
+            $totalHub = $ormPaginator->count();
+
+            // $adapter = new DoctrineAdapter($ormPaginator);  
+            $hubs = $ormPaginator->getIterator()->getArrayCopy();
+            //set countRow default
+            $countRow = 1;
+            
+            foreach ($hubs as &$hub) {//loop
+                //set status
+                $hub['status'] = Hub::getIsActiveList($hub['status']);
+                $countRow++;
+            }  
+        }
+        //set data city
+        $dataHub = [
+            'listHub' => $hubs,
+            'totalHub' => $totalHub,
+        ];
+        return $dataHub;
+    }
 
 }

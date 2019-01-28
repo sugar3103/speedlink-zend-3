@@ -25,6 +25,22 @@ import {
 } from "./actions";
 
 import createNotification from '../../../util/notifications';
+import { startSubmit, stopSubmit } from 'redux-form';
+
+//validate
+
+function validateStatus(errors) {
+  if (errors.name && errors.name.statusExists) {
+    return stopSubmit('status_action_form', {
+      name: 'status.validate-name-exists'
+    });
+  }
+  if (errors.name_en && errors.name_en.statusExists) {
+    return stopSubmit('status_action_form', {
+      name_en: 'status.validate-nameEn-exists'
+    });
+  }
+}
 
 //list status
 
@@ -89,6 +105,7 @@ const addStatusItemRequest = async item => {
 
 function* addStatusItem({ payload }) {
   const { item, messages } = payload;
+  yield put(startSubmit('status_action_form'));
   try {
     const response = yield call(addStatusItemRequest, item);
     switch (response.error_code) {
@@ -105,6 +122,7 @@ function* addStatusItem({ payload }) {
 
       case EC_FAILURE:
         yield put(addStatusItemError(response.data));
+        yield put(validateStatus(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('user');
@@ -140,6 +158,7 @@ const updateStatusItemRequest = async item => {
 
 function* updateStatusItem({ payload }) {
   const { item, messages } = payload;
+  yield put(startSubmit('status_action_form'));
   try {
     const response = yield call(updateStatusItemRequest, item);
     switch (response.error_code) {
@@ -156,6 +175,7 @@ function* updateStatusItem({ payload }) {
 
       case EC_FAILURE:
         yield put(updateStatusItemError(response.data));
+        yield put(validateStatus(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:

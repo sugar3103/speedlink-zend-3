@@ -53,14 +53,16 @@ final class Version20181108064727 extends AbstractMigration
                 primary key,
               name        varchar(100) not null,
               name_en     varchar(100) not null,
+              status int(1) not null,
+              is_deleted int(1) not null,
+              description text null,
+              description_en text null,
               created_by  int(11)  not null,
               created_at  timestamp default current_timestamp() not null
               on update current_timestamp(),              
               updated_by  int(11)  null,
               updated_at  timestamp default current_timestamp() null
-              on update current_timestamp(),              
-              description text null,
-              description_en text null,
+              on update current_timestamp(),                            
               constraint role_id_uindex
               unique (id)
             )
@@ -95,6 +97,8 @@ final class Version20181108064727 extends AbstractMigration
                 primary key,
               name        varchar(100)                            not null,
               model       text                                    null,
+              status int(1) not null,
+              is_deleted int(1) not null,
               description text                                    null,
               description_en text                                    null,
               created_by int(11) not null,

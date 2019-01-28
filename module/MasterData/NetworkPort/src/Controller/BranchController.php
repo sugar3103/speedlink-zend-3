@@ -43,73 +43,63 @@ class BranchController extends CoreController {
     public function indexAction()
     {
       if($this->getRequest()->isPost()) {
-      // $data = $this->params()->fromPost();
-
-      $payload = file_get_contents('php://input');
-      $params = json_decode($payload, true);
-
-      //the current page number.
-      $offset = isset($params['start']) ? $params['start'] : 0;
-        
-      //total number of pages available in the server.
-      $totalPages = 1;
-
-      //set limit
-      $limit  = isset($params['length']) ? $params['length'] : 10;
-
+      
       // get the filters
       $fieldsMap = [
-          0 => 'name',
-          1 => 'status',
+          0 => 'code',
+          1 => 'name',
+          2 => 'hub',
+          3 => 'district',
+          4 => 'ward',
+          5 => 'city',
+          6 => 'country',
+          7 => 'status'
       ];
-      //get and set sortField,sortDirection
-      $sortField = isset($params['sort']) ? $params['sort'] : $fieldsMap[0];
-      $sortDirection = isset($params['order']) ? $params['order'] : 'ASC';
 
-      $filters = $this->branchManager->getValueFiltersSearch($params,$fieldsMap);
+      list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);
 
       $dataBranch = $this->branchManager->getListBranchByCondition(
-                $offset, $limit, $sortField, $sortDirection, $filters);
+                $start, $limit, $sortField, $sortDirection, $filters);
 
-      return new JsonModel([
-          "meta" => [
-              "page" => $offset,
-              "pages" => $totalPages,
-              "perpage"=> $limit,
-              "total" => $dataBranch['totalBranch'],//total all records number available in the server
-          ],
-          "data" => ($dataBranch['listBranch']) ? $dataBranch['listBranch'] : []
-       ]);
+     $result = [
+        "data" => (($dataBranch['listBranch']) ? $dataBranch['listBranch'] : [] ) ,
+        "total" => $dataBranch['totalBranch']
+      ];
+
+        $this->error_code = 1;
+        $this->apiResponse['message'] = 'Success';
+        $this->apiResponse['total'] = $result['total'];
+        $this->apiResponse['data'] = $result['data'];
+      } else {
+        $this->error_code = 0;
+        $this->apiResponse['message'] = 'Failed';
       }
+      return $this->createResponse();
     }
 
-    public function addbranchAction() {
-
-        $form = new BranchForm('create', $this->entityManager);      
+    public function addAction() {  
         // check if user has submitted the form.
         if ($this->getRequest()->isPost()) {
-            // fill in the form with POST data.
-            $payload = file_get_contents('php://input');
-            $data = json_decode($payload, true);
+           
             $user = $this->tokenPayload;
-            $data['created_by'] = $user->id;
 
-            $form->setData($data);
+            $form = new BranchForm('create', $this->entityManager);   
+
+            $form->setData($this->getRequestData());
+           // var_dump($this->getRequestData());die();
+
             //validate form
             if ($form->isValid()) {
               $data = $form->getData();
-
+              $data['created_by'] = $user->id;
               $result = $this->branchManager->addBranch($data);                
               // Check result
-              if ($result->getCode() == Result::SUCCESS) {
-                $this->apiResponse['message']   = $result->getMessages();                        
-                $this->apiResponse['out_input'] = $result->getIdentity();                        
-              } else {
-                $this->error_code = 0;
-                $this->apiResponse = $result->getMessages();                        
-              }
+
+              $this->error_code = 1;
+              $this->apiResponse['message'] = "Success: You have added a branch!";
             }else {
               $this->error_code = 0;
+              $this->apiResponse['message'] = "Error";
               $this->apiResponse = $form->getMessages();      
             }     
         } else {
@@ -123,12 +113,11 @@ class BranchController extends CoreController {
     * Update Branch Action
     * @throws \Exception
     */
-    public function updatebranchAction() {
-        $payload = file_get_contents('php://input');
-        $data = json_decode($payload, true);
+    public function editAction() {
+        $data = $this->getRequestData();
         $user = $this->tokenPayload;
         $data['updated_by'] = $user->id;
-        $this->apiResponse['message'] = 'Action Update Branch';        
+        $this->apiResponse['message'] = 'Action Update Branch';       
         
         if ( $data['id'] < 1 ) {
           //bao loi k tim thay branch
@@ -144,20 +133,14 @@ class BranchController extends CoreController {
             if ($form->isValid()) {
               $result = $this->branchManager->updateBranch($branch, $data);                
                 // Check result
-              if ($result->getCode() == Result::SUCCESS) {
-                $this->error_code = 1;
-                $this->apiResponse['message']   = $result->getMessages();                        
-                $this->apiResponse['out_input'] = $result->getIdentity();                        
-              } else {
-                $this->error_code = 0;
-                $this->apiResponse = $result->getMessages();                        
-              }
+              $this->error_code = 1;
+              $this->apiResponse['message'] = "You have modified branch!";
             } else {
               $this->error_code = 0;
               $this->apiResponse = $form->getMessages(); 
             }   
           } else {
-            $this->apiResponse['error_code'] = 0;
+            $this->error_code = 0;
             $this->apiResponse['message'] = 'Branch Not Found';   
           }            
         } else {
@@ -168,25 +151,24 @@ class BranchController extends CoreController {
       }
 
       public function deleteAction() {
-
-        $payload = file_get_contents('php://input');
-        $data = json_decode($payload, true);
-        $this->apiResponse['message'] = 'Action Delete Branch';        
-        if($data['id'] < 1) {
-          //bao loi
-          $this->apiResponse['error_code'] = 0;     
-          $this->apiResponse['message'] = 'Branch_id not found!';     
-          return $this->createResponse();
+        $data = $this->getRequestData();
+        if(isset($data['id'])) {
+            // Find existing status in the database.
+            $branch = $this->entityManager->getRepository(Branch::class)->findOneBy(array('id' => $data['id']));    
+            if ($branch == null) {
+                $this->error_code = 0;
+                $this->apiResponse['message'] = "Branch Not Found";
+            } else {
+                //remove status
+                $this->branchManager->deleteBranch($branch);
+    
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have deleted branch!";
+            }          
+        } else {
+            $this->error_code = 0;
+            $this->apiResponse['message'] = "Branch request id !";
         }
-        // delete hub.
-        $result = $this->branchManager->deleteBranch($data['id']);
-
-       if ($result->getCode() == Result::SUCCESS) {
-                  $this->apiResponse['message']   = $result->getMessages();                        
-                  $this->apiResponse['out_input'] = $result->getIdentity();                        
-                } else {
-                  $this->apiResponse = $result->getMessages();                        
-                }
         return $this->createResponse();       
     }
    

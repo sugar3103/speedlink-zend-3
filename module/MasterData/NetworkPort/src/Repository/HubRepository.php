@@ -22,7 +22,9 @@ class HubRepository extends EntityRepository
      * @return array|QueryBuilder
      */
     public function getListHubByCondition(
-        $sortField = 'h.id',
+        $start = 1,
+        $limit = 10,
+        $sortField = 'h.hubId',
         $sortDirection = 'asc',
         $filters = []
     )
@@ -33,20 +35,50 @@ class HubRepository extends EntityRepository
                 h.id,
                 h.code,
                 h.name,
+                h.name_en,
                 h.status,
                 h.created_at,
                 h.created_by,
                 h.updated_at,
                 h.updated_by,
                 h.description,
-                c.name as city_name
-            ")->where('h.is_deleted = 0');
-
+                h.description_en,
+                h.city_id,
+                c.name as city
+            ")->groupBy('h.id')
+            ->setMaxResults($limit)
+            ->setFirstResult(($start - 1) * $limit);
             return $queryBuilder;
         } catch (QueryException $e) {
             return [];
         }
     }
+
+    public function getListHubSelect(
+        $sortField = 'h.name',
+        $sortDirection = 'ASC',
+        $filters = []
+    )
+    {
+        try {
+            $queryBuilder = $this->buildHubQueryBuilder($sortField, $sortDirection, $filters);
+            $queryBuilder->select(
+                "h.id,
+                 h.name,
+                 h.name_en,
+                 h.status"                 
+            )
+            // ->groupBy('c.cityId')
+            // ->setMaxResults($limit)
+            // ->setFirstResult($offset)
+            ;
+            return $queryBuilder;
+
+        } catch (QueryException $e) {
+            return [];
+        }
+    }
+
 
     /**
      * Build query builder
@@ -60,9 +92,9 @@ class HubRepository extends EntityRepository
     public function buildHubQueryBuilder($sortField = 'h.id', $sortDirection = 'asc', $filters)
     {
         $operatorsMap = [
-            'hub_id' => [
-                'alias' => 'u.id',
-                'operator' => 'eq'
+            'name' => [
+                'alias' => 'h.name',
+                'operator' => 'contains'
             ],
             'created_at' => [
                 'alias' => 'h.created_at',
@@ -71,6 +103,14 @@ class HubRepository extends EntityRepository
             'status' => [
                 'alias' => 'h.status',
                 'operator' => 'eq'
+            ],
+            'code' => [
+                'alias' => 'h.code',
+                'operator' => 'contains'
+            ],
+            'city' => [
+                'alias' => 'c.name',
+                'operator' => 'contains'
             ],
         ];
 
@@ -86,6 +126,7 @@ class HubRepository extends EntityRepository
         } else {
             $queryBuilder->orderBy('h.id', 'DESC');
         }
+        // var_dump($filters); die;
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
 

@@ -75,7 +75,6 @@ legend.scheduler-border {
     .form__form-group {
         margin-bottom: 0px;
     }
-    
     .products-list__search {
         svg {
             position: absolute;
@@ -86,4 +85,33 @@ legend.scheduler-border {
             width: 14px;
         }
     }
+    .master-data-btn {
+        margin-bottom: 0;
+    }
+    .master-data-perpage {
+        float: right;
+        margin: 0;
+    }
 }
+
+//Flag
+.flag {
+    width: 25px;
+    height: 17px;
+    &.vn {
+        background: url('images/flag/vn.png');
+        background-size: cover;
+    }
+    &.us {
+        background: url('images/flag/us.png');
+        background-size: cover;
+    }
+}
+.form__form-group-field {
+    margin-bottom: 5px;
+}
+
+    .form__form-group-icon {
+        background: #f2f4f7;
+        border: 1px solid #f2f4f7;
+    }
