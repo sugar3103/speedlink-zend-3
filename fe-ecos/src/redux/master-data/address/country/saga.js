@@ -25,6 +25,22 @@ import {
 } from "./actions";
 
 import createNotification from '../../../../util/notifications';
+import { startSubmit, stopSubmit } from 'redux-form';
+
+//validate
+
+function validateCountry(errors) {
+  if (errors.name && errors.name.countryExists) {
+    return stopSubmit('country_action_form', {
+      name: 'country.validate-name-exists'
+    });
+  }
+  if (errors.name_en && errors.name_en.countryExists) {
+    return stopSubmit('country_action_form', {
+      name_en: 'country.validate-nameEn-exists'
+    });
+  }
+}
 
 //list country
 
@@ -89,6 +105,7 @@ const addCountryItemRequest = async item => {
 
 function* addCountryItem({ payload }) {
   const { item, messages } = payload;
+  yield put(startSubmit('country_action_form'));
   try {
     const response = yield call(addCountryItemRequest, item);
     switch (response.error_code) {
@@ -105,6 +122,7 @@ function* addCountryItem({ payload }) {
 
       case EC_FAILURE:
         yield put(addCountryItemError(response.data));
+        yield put(validateCountry(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('user');
@@ -140,6 +158,7 @@ const updateCountryItemRequest = async item => {
 
 function* updateCountryItem({ payload }) {
   const { item, messages } = payload;
+  yield put(startSubmit('country_action_form'));
   try {
     const response = yield call(updateCountryItemRequest, item);
     switch (response.error_code) {
@@ -156,6 +175,7 @@ function* updateCountryItem({ payload }) {
 
       case EC_FAILURE:
         yield put(updateCountryItemError(response.data));
+        yield put(validateCountry(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:

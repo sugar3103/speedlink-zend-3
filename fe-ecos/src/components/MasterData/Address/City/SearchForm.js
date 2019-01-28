@@ -5,6 +5,7 @@ import renderSelectField from '../../../../containers/Shared/form/Select';
 import { Button, Col } from 'reactstrap';
 import { getCountryList } from '../../../../redux/actions';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 class SearchForm extends Component {
 
@@ -116,6 +117,13 @@ class SearchForm extends Component {
       </form>
     );
   }
+}
+
+SearchForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
+  countries: PropTypes.array,
+  getCountryList: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ address }) => {

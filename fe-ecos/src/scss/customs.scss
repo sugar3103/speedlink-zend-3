@@ -75,7 +75,6 @@ legend.scheduler-border {
     .form__form-group {
         margin-bottom: 0px;
     }
-    
     .products-list__search {
         svg {
             position: absolute;
@@ -85,6 +84,13 @@ legend.scheduler-border {
             height: 14px;
             width: 14px;
         }
+    }
+    .master-data-btn {
+        margin-bottom: 0;
+    }
+    .master-data-perpage {
+        float: right;
+        margin: 0;
     }
 }
 
@@ -108,5 +114,4 @@ legend.scheduler-border {
     .form__form-group-icon {
         background: #f2f4f7;
         border: 1px solid #f2f4f7;
-        height: auto;
     }

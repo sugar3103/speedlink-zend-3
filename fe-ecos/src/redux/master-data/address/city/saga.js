@@ -25,6 +25,22 @@ import {
 } from "./actions";
 
 import createNotification from '../../../../util/notifications';
+import { startSubmit, stopSubmit } from 'redux-form';
+
+//validate
+
+function validateCity(errors) {
+  if (errors.name && errors.name.cityExists) {
+    return stopSubmit('city_action_form', {
+      name: 'city.validate-name-exists'
+    });
+  }
+  if (errors.name_en && errors.name_en.cityExists) {
+    return stopSubmit('city_action_form', {
+      name_en: 'city.validate-nameEn-exists'
+    });
+  }
+}
 
 //list city
 
@@ -89,6 +105,7 @@ const addCityItemRequest = async item => {
 
 function* addCityItem({ payload }) {
   const { item, messages } = payload;
+  yield put(startSubmit('city_action_form'));
   try {
     const response = yield call(addCityItemRequest, item);
     switch (response.error_code) {
@@ -105,6 +122,7 @@ function* addCityItem({ payload }) {
 
       case EC_FAILURE:
         yield put(addCityItemError(response.data));
+        yield put(validateCity(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('user');
@@ -140,6 +158,7 @@ const updateCityItemRequest = async item => {
 
 function* updateCityItem({ payload }) {
   const { item, messages } = payload;
+  yield put(startSubmit('city_action_form'));
   try {
     const response = yield call(updateCityItemRequest, item);
     switch (response.error_code) {
@@ -156,6 +175,7 @@ function* updateCityItem({ payload }) {
 
       case EC_FAILURE:
         yield put(updateCityItemError(response.data));
+        yield put(validateCity(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:

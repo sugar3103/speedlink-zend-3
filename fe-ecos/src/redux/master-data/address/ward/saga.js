@@ -25,6 +25,22 @@ import {
 } from "./actions";
 
 import createNotification from '../../../../util/notifications';
+import { startSubmit, stopSubmit } from 'redux-form';
+
+//validate
+
+function validateWard(errors) {
+  if (errors.name && errors.name.wardExists) {
+    return stopSubmit('ward_action_form', {
+      name: 'ward.validate-name-exists'
+    });
+  }
+  if (errors.name_en && errors.name_en.wardExists) {
+    return stopSubmit('ward_action_form', {
+      name_en: 'ward.validate-nameEn-exists'
+    });
+  }
+}
 
 //list ward
 
@@ -89,6 +105,7 @@ const addWardItemRequest = async item => {
 
 function* addWardItem({ payload }) {
   const { item, messages } = payload;
+  yield put(startSubmit('ward_action_form'));
   try {
     const response = yield call(addWardItemRequest, item);
     switch (response.error_code) {
@@ -105,6 +122,7 @@ function* addWardItem({ payload }) {
 
       case EC_FAILURE:
         yield put(addWardItemError(response.data));
+        yield put(validateWard(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('user');
@@ -140,6 +158,7 @@ const updateWardItemRequest = async item => {
 
 function* updateWardItem({ payload }) {
   const { item, messages } = payload;
+  yield put(startSubmit('ward_action_form'));
   try {
     const response = yield call(updateWardItemRequest, item);
     switch (response.error_code) {
@@ -156,6 +175,7 @@ function* updateWardItem({ payload }) {
 
       case EC_FAILURE:
         yield put(updateWardItemError(response.data));
+        yield put(validateWard(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:

@@ -25,6 +25,21 @@ import {
 } from "./actions";
 
 import createNotification from '../../../../util/notifications';
+import { startSubmit, stopSubmit } from 'redux-form';
+
+//validate 
+function validateDistrict(errors) {
+  if (errors.name && errors.name.districtExists) {
+    return stopSubmit('district_action_form', {
+      name: 'district.validate-name-exists'
+    });
+  }
+  if (errors.name_en && errors.name_en.districtExists) {
+    return stopSubmit('district_action_form', {
+      name_en: 'district.validate-nameEn-exists'
+    });
+  }
+}
 
 //list district
 
@@ -89,6 +104,7 @@ const addDistrictItemRequest = async item => {
 
 function* addDistrictItem({ payload }) {
   const { item, messages } = payload;
+  yield put(startSubmit('district_action_form'));
   try {
     const response = yield call(addDistrictItemRequest, item);
     switch (response.error_code) {
@@ -105,6 +121,7 @@ function* addDistrictItem({ payload }) {
 
       case EC_FAILURE:
         yield put(addDistrictItemError(response.data));
+        yield put(validateDistrict(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('user');
@@ -140,6 +157,7 @@ const updateDistrictItemRequest = async item => {
 
 function* updateDistrictItem({ payload }) {
   const { item, messages } = payload;
+  yield put(startSubmit('district_action_form'));
   try {
     const response = yield call(updateDistrictItemRequest, item);
     switch (response.error_code) {
@@ -156,6 +174,7 @@ function* updateDistrictItem({ payload }) {
 
       case EC_FAILURE:
         yield put(updateDistrictItemError(response.data));
+        yield put(validateDistrict(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:

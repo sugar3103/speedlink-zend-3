@@ -3,6 +3,7 @@ import { Col } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
 import { Button } from 'reactstrap';
+import PropTypes from 'prop-types';
 
 class SearchForm extends Component {
   render() {
@@ -92,6 +93,11 @@ class SearchForm extends Component {
       </form>
     );
   }
+}
+
+SearchForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
 }
 
 export default reduxForm({

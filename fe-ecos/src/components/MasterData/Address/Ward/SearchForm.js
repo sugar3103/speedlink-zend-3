@@ -5,6 +5,7 @@ import renderSelectField from '../../../../containers/Shared/form/Select';
 import { Button, Col } from 'reactstrap';
 import { getDistrictList } from '../../../../redux/actions';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 class SearchForm extends Component {
 
@@ -117,6 +118,13 @@ class SearchForm extends Component {
       </form>
     );
   }
+}
+
+SearchForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
+  districts: PropTypes.array,
+  getDistrictList: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ address }) => {
