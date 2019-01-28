@@ -12,7 +12,7 @@ vendor/
 data/DoctrineORMModule/*
 
 # Local configs
-config/*
+# config/*
 
 # Binary gettext files
 *.mo

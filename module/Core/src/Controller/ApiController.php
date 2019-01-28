@@ -25,7 +25,7 @@ class ApiController extends AbstractRestfulController
     /**
      * @var array $apiResponse Define response for api
      */
-    public $apiResponse;
+    public $apiResponse= [];
     
     /**
      *
@@ -80,7 +80,11 @@ class ApiController extends AbstractRestfulController
         $config = $event->getApplication()->getServiceManager()->get('Config');
         
         $event->setParam('config', $config);
-        
+
+	if($request->isOptions()) {
+		return;
+	}
+
         if (isset($config['ApiRequest'])) { 
             $responseStatusKey = $config['ApiRequest']['responseFormat']['statusKey'];
             

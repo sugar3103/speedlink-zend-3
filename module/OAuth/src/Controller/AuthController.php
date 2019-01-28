@@ -68,6 +68,8 @@ class AuthController extends CoreController {
      * @throws \Exception
      */
     public function loginAction() {
+        $this->apiResponse['message'] = 'Action Auth Login';
+
         // check if we do not have users in database at all. If so, create
         // the 'Admin' user.
         $this->userManager->createAdminUserIfNotExists();
