@@ -17,7 +17,6 @@ class Search extends Component {
       },
       query: values
     }
-    console.log(params);
     this.props.getBranchList(params, messages);
   }
 
