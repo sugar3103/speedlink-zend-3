@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, ButtonToolbar, Nav, NavItem, NavLink, TabContent, TabPane  } from 'reactstrap';
+import { Button, ButtonToolbar, Card, CardBody, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { toggleHubModal, getCityList } from '../../../../redux/actions';
@@ -85,9 +85,18 @@ class ActionForm extends Component {
     return (
       <form className="form" onSubmit={handleSubmit}>
         <div className="modal__header">
+          <button className="lnr lnr-cross modal__close-btn" onClick={this.toggleModal} />
           <h4 className="bold-text  modal__title">{title}</h4>
         </div>
         <div className="modal__body">
+        <Row>
+            <Col md={12} lg={6} xl={6} xs={12}>
+              <Card>
+                <CardBody>
+                  <div className="card__title">
+                    <h5 className="bold-text">Generate</h5>
+                    <h5 className="subhead">Use default modal with property <span className="red-text">colored</span></h5>
+                  </div>
           
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['hub.name']}</span>
@@ -155,8 +164,17 @@ class ActionForm extends Component {
               />
             </div>
           </div>
-
-              <div className="form__form-group">
+                </CardBody>
+              </Card>
+            </Col>
+            <Col md={12} lg={6} xl={6} xs={12}>
+              <Card>
+                <CardBody>
+                  <div className="card__title">
+                    <h5 className="bold-text">Data</h5>
+                    <h5 className="subhead">Use default modal with property <span className="red-text">colored</span></h5>
+                  </div>
+                  <div className="form__form-group">
                 <span className="form__form-group-label">{messages['hub.city']}</span>
                 <div className="form__form-group-field">
                   <Field
@@ -189,6 +207,11 @@ class ActionForm extends Component {
                   />
                 </div>
               </div>
+              
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
         </div>
         <ButtonToolbar className="modal__footer">
           <Button outline onClick={this.toggleModal}>{messages['hub.cancel']}</Button>{' '}

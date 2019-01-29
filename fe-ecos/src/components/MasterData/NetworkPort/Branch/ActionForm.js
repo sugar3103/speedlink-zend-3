@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Button, ButtonToolbar, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
+import { Button, ButtonToolbar, Card, CardBody, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { toggleBranchModal, getCityList, getDistrictList, getWardList, getCountryList, getHubList } from '../../../../redux/actions';
@@ -21,16 +21,17 @@ class ActionForm extends PureComponent {
 
   componentDidMount() {
     const data = this.props.modalData;
-    this.props.initialize(data);
-console.log(data);
+    if (data) {
+      this.props.initialize(data);
+    }
     let paramsCountry = {
       field: ['id', 'name'],
       offset: {
         limit: 10
       }
     }
-    if (data.country_id) {
-      paramsCountry = {
+    if (data && data.country_id) {
+      let paramsCountry = {
         ...paramsCountry,
         offset: {
           limit: 0
@@ -41,33 +42,44 @@ console.log(data);
       }
       this.props.getCountryList(paramsCountry);
     }
-    // this.props.getCountryList(params);
-    // if (data) {
-    //   this.props.initialize(data);
-    //   params = {
-    //     ...params,
-    //     offset: {
-    //       limit: 0
-    //     },
-    //     query: {
-    //       id: data.country_id
-    //     }
-    //   }
-    //   this.props.getCountryList(params);
+    if (data && data.city_id) {
+      let paramsCity = {
+        field: ['id', 'name'],
+        offset: {
+          limit: 0
+        },
+        query: {
+          country: data.country_id
+        }
+      }
+      this.props.getCityList(paramsCity);
+    }
 
-    //   if (data.country_id) {
-    //     const paramsCity = {
-    //       field: ['id', 'name'],
-    //       offset: {
-    //         limit: 10
-    //       },
-    //       query: {
-    //         country: data.country_id
-    //       }
-    //     }
-    //     this.props.getCityList(paramsCity);
-    //   }
-    // }
+    if (data && data.district_id) {
+      let paramsDistrict = {
+        field: ['id', 'name'],
+        offset: {
+          limit: 0
+        },
+        query: {
+          city: data.city_id
+        }
+      }
+      this.props.getDistrictList(paramsDistrict);
+    }
+
+    if (data && data.ward_id) {
+      let paramsWard = {
+        field: ['id', 'name'],
+        offset: {
+          limit: 0
+        },
+        query: {
+          district: data.district_id
+        }
+      }
+      this.props.getWardList(paramsWard);
+    }
   }
 
   onChangeCountry = values => {
@@ -180,11 +192,20 @@ console.log(data);
     return (
       <form className="form" onSubmit={handleSubmit}>
         <div className="modal__header">
+          <button className="lnr lnr-cross modal__close-btn" onClick={this.toggleModal} />
           <h4 className="bold-text  modal__title">{title}</h4>
         </div>
         <div className="modal__body">
 
-          <div className="form__form-group">
+        <Row>
+            <Col md={12} lg={6} xl={6} xs={12}>
+              <Card>
+                <CardBody>
+                  <div className="card__title">
+                    <h5 className="bold-text">Generate</h5>
+                    <h5 className="subhead">Use default modal with property <span className="red-text">colored</span></h5>
+                  </div>
+                  <div className="form__form-group">
             <span className="form__form-group-label">{messages['branch.name']}</span>
             <div className="form__form-group-field">
               <div className="form__form-group-icon">
@@ -251,7 +272,17 @@ console.log(data);
             </div>
           </div>
 
-          <div className="form__form-group">
+                </CardBody>
+              </Card>
+            </Col>
+            <Col md={12} lg={6} xl={6} xs={12}>
+              <Card>
+                <CardBody>
+                  <div className="card__title">
+                    <h5 className="bold-text">Data</h5>
+                    <h5 className="subhead">Use default modal with property <span className="red-text">colored</span></h5>
+                  </div>
+                  <div className="form__form-group">
             <span className="form__form-group-label">{messages['branch.country']}</span>
             <div className="form__form-group-field">
               <Field
@@ -348,6 +379,10 @@ console.log(data);
               />
             </div>
           </div>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>          
         </div>
         <ButtonToolbar className="modal__footer">
           <Button outline onClick={this.toggleModal}>{messages['branch.cancel']}</Button>{' '}
