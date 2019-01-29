@@ -124,10 +124,6 @@ class CityRepository extends EntityRepository {
             'status' => [
                 'alias' => 'c.status',
                 'operator' => 'eq'
-            ],
-            'country_id' => [
-                'alias' => 'c.country_id',
-                'operator' => 'eq'
             ]
         ];
 
