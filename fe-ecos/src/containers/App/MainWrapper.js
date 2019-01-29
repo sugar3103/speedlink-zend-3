@@ -10,17 +10,23 @@ class MainWrapper extends PureComponent {
   };
   
   addClassBody(theme) {
-    document.body.classList.add(theme.className);
+    if(theme.className === "theme-light") {
+      document.body.classList.remove('theme-dark');
+      document.body.classList.add(theme.className);
+    } else {
+      document.body.classList.remove('theme-light');
+      document.body.classList.add(theme.className);
+    }
+    
   }
   render() {
     const { theme } = this.props;
-    { this.addClassBody(theme)}
+    this.addClassBody(theme)
     return (      
-      // <div className={theme.className}>
         <div className="wrapper">
           {this.props.children}
         </div>
-      // </div>
+    
     );
   }
 }

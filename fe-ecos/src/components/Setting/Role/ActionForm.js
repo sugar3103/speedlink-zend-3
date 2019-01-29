@@ -6,7 +6,7 @@ import { toggleRoleModal, getPermissionList, getRoleList } from '../../../redux/
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../containers/Shared/form/CustomField';
 import renderCheckBoxField from '../../../containers/Shared/form/CheckBox';
-import renderMultiSelectField from '../../../containers/Shared/form/MultiSelect';
+import renderRadioButtonField from '../../../containers/Shared/form/RadioButton';
 
 import validate from './validateActionForm';
 import classnames from 'classnames';
@@ -57,7 +57,7 @@ class Action extends PureComponent {
     return roles;
   }
 
-  
+
   toggleModal = () => {
     this.props.toggleRoleModal();
   }
@@ -146,6 +146,48 @@ class Action extends PureComponent {
                   <div className="card__title">
                     <h5 className="bold-text">Data</h5>
                     {/* <h5 className="subhead">Use default modal with property <span className="red-text">colored</span></h5> */}
+                  </div>
+                  <div>
+                    <div className="form__form-group">
+                      <div className="form__form-group-field">
+                        <Field
+                          name="checkbox_one"
+                          component={renderCheckBoxField}
+                          label="Checkbox 1"
+                          defaultChecked
+                          className="button"
+                        />
+                      </div>
+                    </div>
+                    <div className="form__form-group">
+                      <div className="form__form-group-field">
+                        <Field
+                          name="checkbox_two"
+                          component={renderCheckBoxField}
+                          label="Checkbox 2"
+                          className="button"
+                        />
+                      </div>
+                    </div>
+                    
+                  </div>
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">{messages['status.status']}</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="status"
+                        component={renderRadioButtonField}
+                        label={messages['status.active']}
+                        radioValue={1}
+                        defaultChecked
+                      />
+                      <Field
+                        name="status"
+                        component={renderRadioButtonField}
+                        label={messages['status.inactive']}
+                        radioValue={0}
+                      />
+                    </div>
                   </div>
                 </CardBody>
               </Card>
