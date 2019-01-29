@@ -100,7 +100,7 @@ class ApiController extends AbstractRestfulController
                         $response->setStatusCode(200);
                         $jsonModelArr = [
                             $responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'],                             
-                            'error_code' => -5,
+                            $config['ApiRequest']['responseFormat']['errorKey'] => -5,
                             $config['ApiRequest']['responseFormat']['dataKey'] => [],
                             $config['ApiRequest']['responseFormat']['messageKey'] => 'Your API key is wrong'
                         ];
@@ -109,14 +109,14 @@ class ApiController extends AbstractRestfulController
                     $response->setStatusCode(200);
                     $jsonModelArr = [
                         $responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'],
-                        'error_code' => -5,
+                        $config['ApiRequest']['responseFormat']['errorKey'] => -5,
                         $config['ApiRequest']['responseFormat']['messageKey'] => $config['ApiRequest']['responseFormat']['authenticationRequireText']];
                 }
             } else {
                 $response->setStatusCode(200);
                 $jsonModelArr = [
                     $responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'],
-                    'error_code' => 405,                    
+                    $config['ApiRequest']['responseFormat']['errorKey'] => 405,
                     $config['ApiRequest']['responseFormat']['messageKey'] => $config['ApiRequest']['responseFormat']['methodNotAllowedKey']
                 ];
             }
