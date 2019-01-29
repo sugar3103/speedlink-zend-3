@@ -8,15 +8,19 @@ class MainWrapper extends PureComponent {
     theme: ThemeProps.isRequired,
     children: PropTypes.element.isRequired,
   };
-
+  
+  addClassBody(theme) {
+    document.body.classList.add(theme.className);
+  }
   render() {
     const { theme } = this.props;
-    return (
-      <div className={theme.className}>
+    { this.addClassBody(theme)}
+    return (      
+      // <div className={theme.className}>
         <div className="wrapper">
           {this.props.children}
         </div>
-      </div>
+      // </div>
     );
   }
 }

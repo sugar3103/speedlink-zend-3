@@ -2,11 +2,12 @@ import React, { PureComponent } from 'react';
 import { Button, ButtonToolbar, Card, CardBody, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleRoleModal, getPermissionList,getRoleList } from '../../../redux/actions';
+import { toggleRoleModal, getPermissionList, getRoleList } from '../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../containers/Shared/form/CustomField';
-import renderRadioButtonField from '../../../containers/Shared/form/RadioButton';
+import renderCheckBoxField from '../../../containers/Shared/form/CheckBox';
 import renderMultiSelectField from '../../../containers/Shared/form/MultiSelect';
+
 import validate from './validateActionForm';
 import classnames from 'classnames';
 
@@ -15,7 +16,6 @@ class Action extends PureComponent {
   constructor() {
     super();
     this.state = {
-      activeTab: '1',
       errors: {}
     };
   }
@@ -57,14 +57,7 @@ class Action extends PureComponent {
     return roles;
   }
 
-  toggleTab = (tab) => {
-    if (this.state.activeTab !== tab) {
-      this.setState({
-        activeTab: tab,
-      });
-    }
-  };
-
+  
   toggleModal = () => {
     this.props.toggleRoleModal();
   }
@@ -88,7 +81,7 @@ class Action extends PureComponent {
                 <CardBody>
                   <div className="card__title">
                     <h5 className="bold-text">Generate</h5>
-                    <h5 className="subhead">Use default modal with property <span className="red-text">colored</span></h5>
+                    {/* <h5 className="subhead">Use default modal with property <span className="red-text">colored</span></h5> */}
                   </div>
                   <div className="form__form-group">
                     <span className="form__form-group-label">{messages['role.name']}</span>
@@ -112,14 +105,14 @@ class Action extends PureComponent {
                         name="name_en"
                         component="input"
                         type="text"
-                        placeholder={messages['role.name_en']}
+                        placeholder={messages['role.name']}
                       />
                       {errors && errors.name_en && errors.name_en.roleExists && <span className="form__form-group-error">{messages['role.validate-name-exists']}</span>}
                     </div>
                   </div>
 
                   <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['role.desc']}</span>
+                    <span className="form__form-group-label">{messages['description']}</span>
                     <div className="form__form-group-field">
                       <div className="form__form-group-icon" align="center">
                         <div className="flag vn"></div>
@@ -152,7 +145,7 @@ class Action extends PureComponent {
                 <CardBody>
                   <div className="card__title">
                     <h5 className="bold-text">Data</h5>
-                    <h5 className="subhead">Use default modal with property <span className="red-text">colored</span></h5>
+                    {/* <h5 className="subhead">Use default modal with property <span className="red-text">colored</span></h5> */}
                   </div>
                 </CardBody>
               </Card>

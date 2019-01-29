@@ -102,7 +102,7 @@ class ApiController extends AbstractRestfulController
                             $responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'],                             
                             'error_code' => -5,
                             $config['ApiRequest']['responseFormat']['dataKey'] => [],
-                            $config['ApiRequest']['responseFormat']['errorKey'] => 'Your API key is wrong'
+                            $config['ApiRequest']['responseFormat']['messageKey'] => 'Your API key is wrong'
                         ];
                     } else { return; }
                 } else {
