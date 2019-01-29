@@ -259,19 +259,6 @@ class ActionForm extends PureComponent {
             </div>
           </div>
 
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['branch.code']}</span>
-            <div className="form__form-group-field">
-              <Field
-                name="code"
-                component={CustomField}
-                type="text"
-                placeholder={messages['branch.code']}
-                messages={messages}
-              />
-            </div>
-          </div>
-
                 </CardBody>
               </Card>
             </Col>
@@ -282,7 +269,20 @@ class ActionForm extends PureComponent {
                     <h5 className="bold-text">Data</h5>
                     <h5 className="subhead">Use default modal with property <span className="red-text">colored</span></h5>
                   </div>
-                  <div className="form__form-group">
+            <div className="form__form-group">
+              <span className="form__form-group-label">{messages['branch.code']}</span>
+              <div className="form__form-group-field">
+                <Field
+                  name="code"
+                  component={CustomField}
+                  type="text"
+                  placeholder={messages['branch.code']}
+                  messages={messages}
+                />
+              </div>
+            </div>
+
+          <div className="form__form-group">
             <span className="form__form-group-label">{messages['branch.country']}</span>
             <div className="form__form-group-field">
               <Field

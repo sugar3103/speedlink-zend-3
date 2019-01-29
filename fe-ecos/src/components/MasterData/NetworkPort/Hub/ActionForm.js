@@ -152,18 +152,7 @@ class ActionForm extends Component {
             </div>
           </div>
 
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['hub.code']}</span>
-            <div className="form__form-group-field">
-              <Field
-                name="code"
-                component={CustomField}
-                type="text"
-                placeholder={messages['hub.code']}
-                messages={messages}
-              />
-            </div>
-          </div>
+         
                 </CardBody>
               </Card>
             </Col>
@@ -174,7 +163,21 @@ class ActionForm extends Component {
                     <h5 className="bold-text">Data</h5>
                     <h5 className="subhead">Use default modal with property <span className="red-text">colored</span></h5>
                   </div>
-                  <div className="form__form-group">
+
+            <div className="form__form-group">
+              <span className="form__form-group-label">{messages['hub.code']}</span>
+              <div className="form__form-group-field">
+                <Field
+                  name="code"
+                  component={CustomField}
+                  type="text"
+                  placeholder={messages['hub.code']}
+                  messages={messages}
+                />
+              </div>
+            </div>
+
+              <div className="form__form-group">
                 <span className="form__form-group-label">{messages['hub.city']}</span>
                 <div className="form__form-group-field">
                   <Field
