@@ -76,7 +76,7 @@ class DistrictController extends CoreController {
                 $this->apiResponse['message'] = "You added new a Districts!";
             } else {
                 $this->error_code = 0;
-                $this->apiResponse['data'] = $form->getMessages(); 
+                $this->apiResponse['message'] = $form->getMessages(); 
                 
             }            
         } else {
@@ -107,11 +107,11 @@ class DistrictController extends CoreController {
                    $this->apiResponse['message'] = "You have modified district!";
                 }  else {
                    $this->error_code = 0;
-                   $this->apiResponse['data'] = $form->getMessages(); 
+                   $this->apiResponse['message'] = $form->getMessages(); 
                 }   
             }   else {
                 $this->error_code = 0;
-                $this->apiResponse['data'] = 'District Not Found'; 
+                $this->apiResponse['message'] = 'District Not Found'; 
             }         
              
         } else {
@@ -139,7 +139,7 @@ class DistrictController extends CoreController {
             } else {
                 $this->httpStatusCode = 200;
                 $this->error_code = 0;
-                $this->apiResponse['data'] = "Not Found District";
+                $this->apiResponse['message'] = "Not Found District";
             }
         } else {
             $this->httpStatusCode = 404;
@@ -147,37 +147,4 @@ class DistrictController extends CoreController {
         }
         return $this->createResponse();
     }
-
-     public function listAction()
-    {
-        if ($this->getRequest()->isPost()) {
-            // get the filters
-            $fieldsMap = [
-                0 => 'name',
-                1 => 'status',
-                2 => 'city_id'
-            ];
-// var_dump($fieldsMap);die;
-            list($sortField,$sortDirection,$filters) = $this->getRequestDataSelect($fieldsMap);
-
-            //get list city by condition
-            $dataDistrict = $this->districtManager->getListDistrictSelect(
-              $sortField ,$sortDirection, $filters);
-            
-          $result = [
-            "data" => (($dataDistrict['listDistrict']) ? $dataDistrict['listDistrict'] : [] ) ,
-            "total" => $dataDistrict['totalDistrict']
-          ];
-
-        $this->error_code = 1;
-        $this->apiResponse['message'] = 'Success';
-        $this->apiResponse['total'] = $result['total'];
-        $this->apiResponse['data'] = $result['data'];   
-        } else {
-          $this->error_code = 0;
-          $this->apiResponse['message'] = 'Failed';
-        }
-        return $this->createResponse();
-    }
-
 }

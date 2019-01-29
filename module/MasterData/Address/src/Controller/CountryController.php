@@ -28,13 +28,6 @@ class CountryController extends CoreController {
         $this->countryManager = $countryManager;
     }
 
-    // public function indexAction()
-    // {
-    //     $this->apiResponse['message'] = 'Country';
-
-    //     return $this->createResponse();
-    // }
-
     public function indexAction() {
         if ($this->getRequest()->isPost()) {
             
@@ -83,7 +76,7 @@ class CountryController extends CoreController {
                 $this->apiResponse['message'] = "You have added a country!";
             } else {
                 $this->error_code = 0;                
-                $this->apiResponse['data'] = $form->getMessages();  
+                $this->apiResponse['message'] = $form->getMessages();  
             } 
         } 
 
@@ -112,15 +105,15 @@ class CountryController extends CoreController {
                     $this->apiResponse['message'] = "You have modified country!";
                 } else {
                     $this->error_code = 0;
-                    $this->apiResponse['data'] = $form->getMessages(); 
+                    $this->apiResponse['message'] = $form->getMessages(); 
                 }      
             } else {
                 $this->error_code = 0;
-                $this->apiResponse['data'] = "Country Not Found";
+                $this->apiResponse['message'] = "Country Not Found";
             }
         } else {
             $this->error_code = 0;
-            $this->apiResponse['data'] = "Country request Id!";
+            $this->apiResponse['message'] = "Country request Id!";
         }
 
         return $this->createResponse();
@@ -134,7 +127,7 @@ class CountryController extends CoreController {
             $country = $this->entityManager->getRepository(Country::class)->findOneBy(array('id' => $data['id']));    
             if ($country == null) {
                 $this->error_code = 0;
-                $this->apiResponse['data'] = "Country Not Found";
+                $this->apiResponse['message'] = "Country Not Found";
             } else {
                 //remove country
                 $this->countryManager->deleteCountry($country);
@@ -144,40 +137,9 @@ class CountryController extends CoreController {
             }          
         } else {
             $this->error_code = 0;
-            $this->apiResponse['data'] = "Country request Id!";
+            $this->apiResponse['message'] = "Country request Id!";
         }
         return $this->createResponse();        
-    }
-
-    public function listAction()
-    {
-        if ($this->getRequest()->isPost()) {
-            // get the filters
-            $fieldsMap = [
-                0 => 'name',
-                1 => 'status'
-            ];
-
-            list($sortField,$sortDirection,$filters) = $this->getRequestDataSelect($fieldsMap);
-
-            //get list city by condition
-            $dataCountry = $this->countryManager->getListCountrySelect(
-              $sortField ,$sortDirection, $filters);
-            
-          $result = [
-            "data" => (($dataCountry['listCountry']) ? $dataCountry['listCountry'] : [] ) ,
-            "total" => $dataCountry['totalCountry']
-          ];
-
-        $this->error_code = 1;
-        $this->apiResponse['message'] = 'Success';
-        $this->apiResponse['total'] = $result['total'];
-        $this->apiResponse['data'] = $result['data'];   
-        } else {
-          $this->error_code = 0;
-          $this->apiResponse['message'] = 'Failed';
-        }
-        return $this->createResponse();
     }
 
 }

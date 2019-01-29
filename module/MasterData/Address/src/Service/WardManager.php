@@ -6,6 +6,7 @@ use Address\Entity\Ward;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Core\Utils\Utils;
+
 class WardManager  {
     
     /**
@@ -179,7 +180,7 @@ class WardManager  {
             foreach ($wards as &$ward) {//loop
 
                 //set created_at
-                $ward['created_at'] =  ($ward['created_at']) ? $this->checkDateFormat($ward['created_at'],'d/m/Y') : '';
+                $ward['created_at'] =  ($ward['created_at']) ? Utils::checkDateFormat($district['created_at'],'d/m/Y') : '';
 
                 $countRow++;
             }
@@ -192,89 +193,6 @@ class WardManager  {
             'totalWard' => $totalWard,
         ];
         return $dataWard;
-    }
-
-    /**
-     * Check date format
-     *
-     * @param $dateAction
-     * @param $dateFormat
-     * @return string
-     */
-    public function checkDateFormat($dateAction,$dateFormat)
-    {
-        $dateLast = '';
-        $dateCheck = ! empty($dateAction) ? $dateAction->format('Y-m-d H:i:s') : '';
-        if ($dateCheck) {
-            $datetime = new \DateTime($dateCheck, new \DateTimeZone('UTC'));
-            $laTime = new \DateTimeZone('Asia/Ho_Chi_Minh');
-            $datetime->setTimezone($laTime);
-            $dateLast = $datetime->format($dateFormat);
-        }
-        return $dateLast;
-    }
-
-     /**
-     * Get value filters search
-     *
-     * @param $params
-     * @param $fieldsMap
-     * @return array
-     */
-    public function getValueFiltersSearch($params,$fieldsMap)
-    {
-        $filters = [];
-
-        if (isset($params['query']) && !empty($params['query'])){
-          
-            if (isset($params['query']) && !empty($params['query'])){
-                foreach ($params['query'] as $key => $column) {
-                    if(isset($fieldsMap[$key]) && !empty($column)) {
-                        $filters[$key] = $column;
-                    }
-                }
-                 
-              }
-        }
-       
-        return $filters;
-    }
-
-    public function getListWardSelect(
-        $sortField = 'w.name',
-        $sortDirection = 'ASC',
-        $filters = []
-    ){
-
-        $wards     = [];
-        $totalWard = 0;
-        
-        //get orm Hub
-        $ormHub = $this->entityManager->getRepository(Ward::class)
-            ->getListWardSelect($sortField, $sortDirection, $filters);
-
-        if($ormHub){
-            $ormPaginator = new ORMPaginator($ormHub, true);
-            $ormPaginator->setUseOutputWalkers(false);
-            $totalWard = $ormPaginator->count();
-
-            // $adapter = new DoctrineAdapter($ormPaginator);  
-            $wards = $ormPaginator->getIterator()->getArrayCopy();
-            //set countRow default
-            $countRow = 1;
-            
-            foreach ($wards as &$ward) {//loop
-                //set status
-                $ward['status'] = Ward::getIsActiveList($ward['status']);
-                $countRow++;
-            }  
-        }
-        //set data ward
-        $dataWard = [
-            'listWard' => $wards,
-            'totalWard' => $totalWard,
-        ];
-        return $dataWard;
-    }
+    }    
 
 }
