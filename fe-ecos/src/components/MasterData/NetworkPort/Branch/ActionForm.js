@@ -20,95 +20,95 @@ class ActionForm extends PureComponent {
   }
 
   componentDidMount() {
-    const data = this.props.modalData;     
-    if (data) {
-      this.props.initialize(data);
-    }
-    let params = {
+    const data = this.props.modalData;
+    this.props.initialize(data);
+console.log(data);
+    let paramsCountry = {
       field: ['id', 'name'],
       offset: {
-        limit: 5
+        limit: 10
       }
     }
-    // if (data && data.city_id) {
-    //   params = { ...params, query: { id: data.city_id } }
-    //   this.props.getCityList(params);
-    // }
-    // if (data && data.district_id) {
-    //   params = { ...params, query: { id: data.district_id } }
-    //   this.props.getDistrictList(params);
-    // }
-    // if (data && data.ward_id) {
-    //   params = { ...params, query: { id: data.ward_id } }
-    //   this.props.getWardList(params);
-    // }
-    // if (data && data.country_id) {
-    //   params = { ...params, query: { id: data.country_id } }
+    if (data.country_id) {
+      paramsCountry = {
+        ...paramsCountry,
+        offset: {
+          limit: 0
+        },
+        query: {
+          id: data.country_id
+        }
+      }
+      this.props.getCountryList(paramsCountry);
+    }
+    // this.props.getCountryList(params);
+    // if (data) {
+    //   this.props.initialize(data);
+    //   params = {
+    //     ...params,
+    //     offset: {
+    //       limit: 0
+    //     },
+    //     query: {
+    //       id: data.country_id
+    //     }
+    //   }
     //   this.props.getCountryList(params);
-    // }
-    // if (data && data.hub_id) {
-    //   params = { ...params, query: { id: data.hub_id } }
-    //   this.props.getHubList(params);
+
+    //   if (data.country_id) {
+    //     const paramsCity = {
+    //       field: ['id', 'name'],
+    //       offset: {
+    //         limit: 10
+    //       },
+    //       query: {
+    //         country: data.country_id
+    //       }
+    //     }
+    //     this.props.getCityList(paramsCity);
+    //   }
     // }
   }
 
-  onInputChange = value => {
-    const params = {
-      field: ['id', 'name'],
-      offset: {
-        limit: 0
-      },
-      query: {
-        name: value
-      }
-    }
-    // tam thoi hien all hub 
-    this.props.getHubList(params);
-  }
-
-  onChangeCountry = value => {
+  onChangeCountry = values => {
     let params = {
       field: ['id', 'name'],
       offset: {
         limit: 0
       },
       query: {
-        country_id: value
+        country: values
       }
     }
     this.props.getCityList(params);
   }
 
-  onChangeCity = value => {
+  onChangeCity = values => {
     let params = {
       field: ['id', 'name'],
       offset: {
         limit: 0
       },
       query: {
-        city: value
+        city: values
       }
     }
     this.props.getDistrictList(params);
   }
 
-  onChangeDistrict = value => {
+  onChangeDistrict = values => {
     let params = {
       field: ['id', 'name'],
       offset: {
         limit: 0
       },
       query: {
-        district: value
+        district: values
       }
     }
     this.props.getWardList(params);
   }
 
-  onChangeWard = value => {
-    // console.log(value);
-  }
-  
   showOptionsCity = (items) => {
     const cities = items.map(item => {
       return {
@@ -170,7 +170,7 @@ class ActionForm extends PureComponent {
   toggleModal = () => {
     this.props.toggleBranchModal();
   }
-  
+
   render() {
     const { messages } = this.props.intl;
     const { handleSubmit, modalData, cities, countries, districts, wards, hubs } = this.props;
@@ -184,7 +184,7 @@ class ActionForm extends PureComponent {
         </div>
         <div className="modal__body">
 
-        <div className="form__form-group">
+          <div className="form__form-group">
             <span className="form__form-group-label">{messages['branch.name']}</span>
             <div className="form__form-group-field">
               <div className="form__form-group-icon">
@@ -238,111 +238,114 @@ class ActionForm extends PureComponent {
             </div>
           </div>
 
-              <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['branch.code']}</span>
-                    <div className="form__form-group-field">
-                      <Field
-                        name="code"
-                        component={CustomField}
-                        type="text"
-                        placeholder={messages['branch.code']}
-                        messages={messages}
-                      />
-                    </div>
-                  </div>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['branch.code']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="code"
+                component={CustomField}
+                type="text"
+                placeholder={messages['branch.code']}
+                messages={messages}
+              />
+            </div>
+          </div>
 
-              <div className="form__form-group">
-                <span className="form__form-group-label">{messages['branch.country']}</span>
-                <div className="form__form-group-field">
-                  <Field
-                        name="country_id"
-                        component={renderSelectField}
-                        type="text"
-                        options={countries && this.showOptionsCountry(countries)}
-                        placeholder={messages['branch.country']}
-                        onChange={this.onChangeCountry}
-                        messages={messages}
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['branch.country']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="country_id"
+                component={renderSelectField}
+                type="text"
+                options={countries && this.showOptionsCountry(countries)}
+                placeholder={messages['branch.country']}
+                onChange={this.onChangeCountry}
+                messages={messages}
 
-                      />
-                </div>
-              </div>
+              />
+            </div>
+          </div>
 
-              <div className="form__form-group">
-                <span className="form__form-group-label">{messages['branch.city']}</span>
-                <div className="form__form-group-field">
-                  <Field
-                        name="city_id"
-                        component={renderSelectField}
-                        type="text"
-                        options={cities && this.showOptionsCity(cities)}
-                        placeholder={messages['branch.city']}
-                        onChange={this.onChangeCity}
-                        messages={messages}
-                      />
-                </div>
-              </div>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['branch.city']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="city_id"
+                component={renderSelectField}
+                type="text"
+                options={cities && this.showOptionsCity(cities)}
+                placeholder={messages['branch.city']}
+                onChange={this.onChangeCity}
+                onInputChange={this.onInputChangeCity}
+                messages={messages}
+              />
+            </div>
+          </div>
 
-              <div className="form__form-group">
-                <span className="form__form-group-label">{messages['branch.district']}</span>
-                <div className="form__form-group-field">
-                  <Field
-                        name="district_id"
-                        component={renderSelectField}
-                        type="text"
-                        options={districts && this.showOptionsDistrict(districts)}
-                        placeholder={messages['branch.district']}
-                        onChange={this.onChangeDistrict}
-                        messages={messages}
-                      />
-                </div>
-              </div>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['branch.district']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="district_id"
+                component={renderSelectField}
+                type="text"
+                options={districts && this.showOptionsDistrict(districts)}
+                placeholder={messages['branch.district']}
+                onChange={this.onChangeDistrict}
+                onInputChange={this.onInputChangeDistrict}
+                messages={messages}
+              />
+            </div>
+          </div>
 
-              <div className="form__form-group">
-                <span className="form__form-group-label">{messages['branch.ward']}</span>
-                <div className="form__form-group-field">
-                  <Field
-                        name="ward_id"
-                        component={renderSelectField}
-                        type="text"
-                        options={wards && this.showOptionsWard(wards)}
-                        placeholder={messages['branch.ward']}
-                        onChange={this.onChangeWard}
-                        messages={messages}
-                      />
-                </div>
-              </div>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['branch.ward']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="ward_id"
+                component={renderSelectField}
+                type="text"
+                options={wards && this.showOptionsWard(wards)}
+                placeholder={messages['branch.ward']}
+                onChange={this.onChangeWard}
+                // onInputChange={this.onInputChangeWard}
+                messages={messages}
+              />
+            </div>
+          </div>
 
-              <div className="form__form-group">
-                <span className="form__form-group-label">{messages['branch.hubcode']}</span>
-                <div className="form__form-group-field">
-                  <Field
-                        name="hub_id"
-                        component={renderSelectField}
-                        type="text"
-                        options={hubs && this.showOptionsHub(hubs)}
-                        placeholder={messages['branch.hubcode']}
-                        onInputChange={this.onInputChange}
-                        messages={messages}
-                      />
-                </div>
-              </div>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['branch.hubcode']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="hub_id"
+                component={renderSelectField}
+                type="text"
+                options={hubs && this.showOptionsHub(hubs)}
+                placeholder={messages['branch.hubcode']}
+                onInputChange={this.onInputChange}
+                messages={messages}
+              />
+            </div>
+          </div>
 
-              <div className="form__form-group">
-                <span className="form__form-group-label">{messages['branch.status']}</span>
-                <div className="form__form-group-field">
-                  <Field
-                    name="status"
-                    component={renderRadioButtonField}
-                    label={messages['branch.active']}
-                    radioValue={1}
-                    defaultChecked
-                  />
-                  <Field
-                    name="status"
-                    component={renderRadioButtonField}
-                    label={messages['branch.inactive']}
-                    radioValue={0}                    
-                  />
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['branch.status']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="status"
+                component={renderRadioButtonField}
+                label={messages['branch.active']}
+                radioValue={1}
+                defaultChecked
+              />
+              <Field
+                name="status"
+                component={renderRadioButtonField}
+                label={messages['branch.inactive']}
+                radioValue={0}
+              />
             </div>
           </div>
         </div>
@@ -370,13 +373,14 @@ ActionForm.propTypes = {
   getWardList: PropTypes.func.isRequired,
   getHubList: PropTypes.func.isRequired,
 }
-const mapStateToProps = ({branch, address, hub}) => {  
+
+const mapStateToProps = ({ branch, address, hub }) => {
   const { modalData } = branch;
-  const cities  = address.city.items;
-  const districts  = address.district.items;
-  const countries  = address.country.items;
-  const wards  = address.ward.items;
-  const hubs  = hub.items;
+  const cities = address.city.items;
+  const districts = address.district.items;
+  const countries = address.country.items;
+  const wards = address.ward.items;
+  const hubs = hub.items;
 
   return {
     modalData,
@@ -386,7 +390,7 @@ const mapStateToProps = ({branch, address, hub}) => {
 
 export default reduxForm({
   form: 'branch_action_form',
-  validate  
+  validate
 })(injectIntl(connect(mapStateToProps, {
   toggleBranchModal,
   getCityList,
