@@ -36,14 +36,15 @@ class Item extends Component {
   }
 
   render() {
-    const { branch } = this.props;
+    const { branch, locale } = this.props;
     const { messages } = this.props.intl;
+
     return (
       <tr>
         <th scope="row">{branch.id}</th>
         <td>{branch.code}</td>
-        <td>{branch.name} <br/>{branch.name_en}</td>
-        <td>{branch.description}<br/>{branch.description_en}</td>
+        <td>{ locale==='vi' ? branch.name : branch.name_en }</td>
+        <td>{ locale==='vi' ? branch.description : branch.description_en }</td>
         <td>{branch.city}</td>
         <td>{branch.status === 1 ? <Badge color="success">{messages['branch.active']}</Badge> : <Badge color="dark">{messages['branch.inactive']}</Badge>}</td>
         <td>{branch.created_at}</td>
@@ -62,7 +63,14 @@ Item.propTypes = {
   deleteBranchItem: PropTypes.func.isRequired
 }
 
-export default injectIntl(connect(null, {
+const mapStateToProps = ({ settings }) => {
+  const { locale } = settings;
+  return {
+    locale
+  }
+}
+
+export default injectIntl(connect(mapStateToProps, {
   toggleBranchModal,
   deleteBranchItem
 })(Item));

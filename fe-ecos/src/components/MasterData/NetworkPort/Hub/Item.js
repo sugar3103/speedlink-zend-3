@@ -36,14 +36,14 @@ class Item extends Component {
   }
 
   render() {
-    const { hub } = this.props;
+    const { hub, locale } = this.props;
     const { messages } = this.props.intl;
     return (
       <tr>
         <th scope="row">{hub.id}</th>
         <td>{hub.code}</td>
-        <td>{hub.name} <br/>{hub.name_en}</td>
-        <td>{hub.description}<br/>{hub.description_en}</td>
+        <td>{ locale==='vi' ? hub.name : hub.name_en }</td>
+        <td>{ locale==='vi' ? hub.description : hub.description_en }</td>
         <td>{hub.city}</td>
         <td>{hub.status === 1 ? <Badge color="success">{messages['hub.active']}</Badge> : <Badge color="dark">{messages['hub.inactive']}</Badge>}</td>
         <td>{hub.created_at}</td>
@@ -61,8 +61,13 @@ Item.propTypes = {
   toggleHubModal: PropTypes.func.isRequired,
   deleteHubItem: PropTypes.func.isRequired
 }
-
-export default injectIntl(connect(null, {
+const mapStateToProps = ({ settings }) => {
+  const { locale } = settings;
+  return {
+    locale
+  }
+}
+export default injectIntl(connect(mapStateToProps, {
   toggleHubModal,
   deleteHubItem
 })(Item));

@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
-import { ButtonToolbar, Card, CardBody, Col, Table, Button } from 'reactstrap';
+import { Card, CardBody, Col, Table, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Item from './Item';
 import Pagination from '../../../../containers/Shared/pagination/Pagination';
@@ -128,8 +128,8 @@ class List extends Component {
                 <tr>
                   <th>#</th>
                   <th>{messages['hub.code']}</th>
-                  <th>{messages['hub.name']}<br/>{messages['hub.name-en']}</th>
-                  <th>{messages['hub.desc']}<br/>{messages['hub.desc-en']}</th>
+                  <th>{messages['hub.name']}</th>
+                  <th>{messages['hub.desc']}</th>
                   <th>{messages['hub.city']}</th>
                   <th>{messages['hub.status']}</th>
                   <th>{messages['hub.created-at']}</th>
