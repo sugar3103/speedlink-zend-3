@@ -24,12 +24,12 @@ class ActionForm extends PureComponent {
     if (data) {
       this.props.initialize(data);
     }
-    let paramsCountry = {
-      field: ['id', 'name'],
-      offset: {
-        limit: 10
-      }
-    }
+    // let paramsCountry = {
+    //   field: ['id', 'name'],
+    //   offset: {
+    //     limit: 10
+    //   }
+    // }
     if (data && data.country_id) {
       let paramsCountry = {
         ...paramsCountry,

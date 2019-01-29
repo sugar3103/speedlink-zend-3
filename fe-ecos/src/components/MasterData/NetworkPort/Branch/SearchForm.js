@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import {  getHubList, getCityList, getCountryList, getWardList, getDistrictList } from '../../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import renderSelectField from '../../../../containers/Shared/form/Select';
-import Select from '../../../../containers/Shared/form/Select';
 import { Button, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
 
