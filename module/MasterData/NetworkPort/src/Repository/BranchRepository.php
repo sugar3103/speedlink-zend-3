@@ -88,23 +88,23 @@ class BranchRepository extends EntityRepository
             ],
             'hub' => [
                 'alias' => 'b.hub_id',
-                'operator' => 'contains'
+                'operator' => 'eq'
             ],
             'district' => [
                 'alias' => 'b.district_id',
-                'operator' => 'contains'
+                'operator' => 'eq'
             ],
             'ward' => [
                 'alias' => 'b.ward_id',
-                'operator' => 'contains'
+                'operator' => 'eq'
             ],
             'city' => [
                 'alias' => 'b.city_id',
-                'operator' => 'contains'
+                'operator' => 'eq'
             ],
             'country' => [
                 'alias' => 'b.country_id',
-                'operator' => 'contains'
+                'operator' => 'eq'
             ],
             'created_at' => [
                 'alias' => 'b.created_at',

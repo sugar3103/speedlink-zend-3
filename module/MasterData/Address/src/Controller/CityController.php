@@ -88,7 +88,7 @@ class CityController extends CoreController {
                 $this->apiResponse['message'] = "You have add Cities!";
             } else {
                 $this->error_code = 0;
-                $this->apiResponse['data'] = $form->getMessages(); 
+                $this->apiResponse['message'] = $form->getMessages(); 
                 
             }            
         } 
@@ -115,11 +115,11 @@ class CityController extends CoreController {
                    $this->apiResponse['message'] = "You have modified city!";
                 }  else {
                    $this->error_code = 0;
-                   $this->apiResponse['data'] = $form->getMessages(); 
+                   $this->apiResponse['message'] = $form->getMessages(); 
                 }   
             }   else {
                 $this->error_code = 0;
-                $this->apiResponse['data'] = 'City Not Found'; 
+                $this->apiResponse['message'] = 'City Not Found'; 
             }         
              
         } 
@@ -141,42 +141,10 @@ class CityController extends CoreController {
                 $this->apiResponse['message'] = "You have deleted city!";
             } else {
                 $this->error_code = 0;
-                $this->apiResponse['data'] = "Not Found City";
+                $this->apiResponse['message'] = "Not Found City";
             }
         } 
 
-        return $this->createResponse();
-    }
-
-    public function listAction()
-    {
-        if ($this->getRequest()->isPost()) {
-            // get the filters
-            $fieldsMap = [
-                0 => 'name',
-                1 => 'status',
-                2 => 'country_id'
-            ];
-
-            list($sortField,$sortDirection,$filters) = $this->getRequestDataSelect($fieldsMap);
-
-            //get list city by condition
-            $dataCity = $this->cityManager->getListCitySelect(
-              $sortField ,$sortDirection, $filters);
-            
-          $result = [
-            "data" => (($dataCity['listCity']) ? $dataCity['listCity'] : [] ) ,
-            "total" => $dataCity['totalCity']
-          ];
-
-        $this->error_code = 1;
-        $this->apiResponse['message'] = 'Success';
-        $this->apiResponse['total'] = $result['total'];
-        $this->apiResponse['data'] = $result['data'];   
-        } else {
-          $this->error_code = 0;
-          $this->apiResponse['message'] = 'Failed';
-        }
         return $this->createResponse();
     }
 
