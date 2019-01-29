@@ -27,14 +27,14 @@ class WardController extends CoreController {
         $this->wardManager = $wardManager;
     }
 
+    // public function indexAction()
+    // {
+    //     $this->apiResponse['message'] = 'Ward';
+
+    //     return $this->createResponse();
+    // }
+
     public function indexAction()
-    {
-        $this->apiResponse['message'] = 'Ward';
-
-        return $this->createResponse();
-    }
-
-    public function listAction()
     {
         if ($this->getRequest()->isPost()) {
             
@@ -45,16 +45,17 @@ class WardController extends CoreController {
                 2 => 'status'
             ];
 
-            list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
+            list($start,$limit,$sortField,$sortDirection,$filters,$fileds) = $this->getRequestData($fieldsMap);                        
             
             //get list ward by condition
             $dataWard = $this->wardManager->getListWardByCondition(
                 $start, $limit, $sortField, $sortDirection,$filters);            
             
+            $result = $this->filterByField($dataWard['listWard'],$fileds);
             $this->error_code = 1;
             $this->apiResponse =  array(
                 'message' => 'Get list success',
-                'data' => $dataWard['listWard'],
+                'data' => $result,
                 'total' => $dataWard['totalWard']
             );
 
@@ -155,4 +156,37 @@ class WardController extends CoreController {
         }
         return $this->createResponse();
     }
+
+    public function listAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            // get the filters
+            $fieldsMap = [
+                0 => 'id',
+                1 => 'status',
+                2 => 'district_id'
+            ];
+
+            list($sortField,$sortDirection,$filters) = $this->getRequestDataSelect($fieldsMap);
+
+            //get list city by condition
+            $dataHub = $this->wardManager->getListWardSelect(
+              $sortField ,$sortDirection, $filters);
+            
+          $result = [
+            "data" => (($dataHub['listWard']) ? $dataHub['listWard'] : [] ) ,
+            "total" => $dataHub['totalWard']
+          ];
+
+        $this->error_code = 1;
+        $this->apiResponse['message'] = 'Success';
+        $this->apiResponse['total'] = $result['total'];
+        $this->apiResponse['data'] = $result['data'];   
+        } else {
+          $this->error_code = 0;
+          $this->apiResponse['message'] = 'Failed';
+        }
+        return $this->createResponse();
+    }
+
 }

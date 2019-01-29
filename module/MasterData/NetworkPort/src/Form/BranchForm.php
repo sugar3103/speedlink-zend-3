@@ -86,6 +86,33 @@ class BranchForm extends Form {
         ]);
 
         $inputFilter->add([
+            'name' => 'name_en',
+            'required' => true,
+            'filters' => [
+                [
+                    'name' => StringTrim::class
+                ]
+            ],
+            'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'min' => 4,
+                        'max' => 50
+                    ]
+                ],
+                [
+                    'name' => BranchExistsValidator::class,
+                    'options' => [
+                        'entityManager' => $this->entityManager,
+                        'branch' => $this->branch,
+                        'language' => 'en'
+                    ]
+                ]
+            ]
+        ]);
+
+        $inputFilter->add([
             'name' => 'code',
             'required' => true,
             'filters' => [
@@ -159,7 +186,7 @@ class BranchForm extends Form {
         ]); 
          $inputFilter->add([
             'name' => 'country_id',
-            'required'  => false,
+            'required'  => true,
             'filters' => [
                 [
                     'name' => ToInt::class
@@ -188,6 +215,16 @@ class BranchForm extends Form {
 
         $inputFilter->add([
             'name'  => 'description',
+            'required' => false,
+            'filters' => [
+                [
+                    'name' => StringTrim::class
+                ]
+            ]
+        ]);
+
+        $inputFilter->add([
+            'name'  => 'description_en',
             'required' => false,
             'filters' => [
                 [

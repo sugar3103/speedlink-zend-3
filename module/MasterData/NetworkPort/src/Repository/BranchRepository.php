@@ -22,6 +22,8 @@ class BranchRepository extends EntityRepository
      * @return array|QueryBuilder
      */
     public function getListBranchByCondition(
+        $start = 1,
+        $limit = 10,
         $sortField = 'b.id',
         $sortDirection = 'asc',
         $filters = []
@@ -33,19 +35,30 @@ class BranchRepository extends EntityRepository
                 b.id,
                 b.code,
                 b.name,
+                b.name_en,
                 b.status,
                 b.created_at,
                 b.created_by,
                 b.updated_at,
                 b.updated_by,
                 b.hub_id,
+                b.district_id,
+                b.city_id,
+                b.ward_id,
+                b.country_id,
                 h.name AS hub_name,
                 d.name AS district,
                 c.name AS city,
                 w.name AS ward,
                 co.name AS country,
-                b.description
-            ")->where('b.is_deleted = 0');
+                b.description,
+                b.description_en
+            ")->andWhere("h.is_deleted = 0")
+            ->groupBy('b.id');
+            
+            if($limit) {
+                $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
+            }
 
             return $queryBuilder;
         } catch (QueryException $e) {
@@ -65,9 +78,33 @@ class BranchRepository extends EntityRepository
     public function buildBranchQueryBuilder($sortField = 'b.id', $sortDirection = 'asc', $filters)
     {
         $operatorsMap = [
-            'branch_id' => [
-                'alias' => 'b.id',
-                'operator' => 'eq'
+            'code' => [
+                'alias' => 'b.code',
+                'operator' => 'contains'
+            ],
+            'name' => [
+                'alias' => 'b.name',
+                'operator' => 'contains'
+            ],
+            'hub' => [
+                'alias' => 'b.hub_id',
+                'operator' => 'contains'
+            ],
+            'district' => [
+                'alias' => 'b.district_id',
+                'operator' => 'contains'
+            ],
+            'ward' => [
+                'alias' => 'b.ward_id',
+                'operator' => 'contains'
+            ],
+            'city' => [
+                'alias' => 'b.city_id',
+                'operator' => 'contains'
+            ],
+            'country' => [
+                'alias' => 'b.country_id',
+                'operator' => 'contains'
             ],
             'created_at' => [
                 'alias' => 'b.created_at',
@@ -76,11 +113,7 @@ class BranchRepository extends EntityRepository
             'status' => [
                 'alias' => 'b.status',
                 'operator' => 'eq'
-            ],
-            'country' => [
-                'alias' => 'b.country',
-                'operator' => 'eq'
-            ],
+            ]
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();

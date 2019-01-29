@@ -78,11 +78,12 @@ class ApiController extends AbstractRestfulController
         $response = $event->getResponse();
         $isAuthorizationRequired = $event->getRouteMatch()->getParam('isAuthorizationRequired');
         $config = $event->getApplication()->getServiceManager()->get('Config');
+        
         $event->setParam('config', $config);
 
-	if($request->isOptions()) {
-		return;
-	}
+        if($request->isOptions()) {
+            return;
+        }
 
         if (isset($config['ApiRequest'])) { 
             $responseStatusKey = $config['ApiRequest']['responseFormat']['statusKey'];
@@ -96,26 +97,26 @@ class ApiController extends AbstractRestfulController
                     $this->token = $jwtToken;
                     $this->decodeJwtToken();
                     if (is_object($this->tokenPayload) && !$this->checkAuthenticity()) {
-                        $response->setStatusCode(401);
+                        $response->setStatusCode(200);
                         $jsonModelArr = [
                             $responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'],                             
-                            'error_code' => 401,
+                            $config['ApiRequest']['responseFormat']['errorKey'] => -5,
                             $config['ApiRequest']['responseFormat']['dataKey'] => [],
-                            $config['ApiRequest']['responseFormat']['errorKey'] => 'Your API key is wrong'
+                            $config['ApiRequest']['responseFormat']['messageKey'] => 'Your API key is wrong'
                         ];
                     } else { return; }
                 } else {
-                    $response->setStatusCode(401);
+                    $response->setStatusCode(200);
                     $jsonModelArr = [
                         $responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'],
-                        'error_code' => 405,
+                        $config['ApiRequest']['responseFormat']['errorKey'] => -5,
                         $config['ApiRequest']['responseFormat']['messageKey'] => $config['ApiRequest']['responseFormat']['authenticationRequireText']];
                 }
             } else {
-                $response->setStatusCode(405);
+                $response->setStatusCode(200);
                 $jsonModelArr = [
                     $responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'],
-                    'error_code' => 405,                    
+                    $config['ApiRequest']['responseFormat']['errorKey'] => 405,
                     $config['ApiRequest']['responseFormat']['messageKey'] => $config['ApiRequest']['responseFormat']['methodNotAllowedKey']
                 ];
             }

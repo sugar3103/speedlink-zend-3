@@ -34,9 +34,7 @@ class App extends Component {
           </div>
         </div>
         }
-        <div>
-          <Router />
-        </div>
+        <Router />
       </ScrollToTop>
     );
   }

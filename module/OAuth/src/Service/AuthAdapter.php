@@ -93,6 +93,8 @@ class AuthAdapter extends Ldap
                 $ldapUser->setCreatedAt($currentDate);
                 $ldapUser->setIsActive(User::ACTIVE);
                 $ldapUser->setIsLdap(User::LDAP_USER);
+                $ldapUser->setLanguage('en_US');
+                $ldapUser->setIsAdmin(0);
 
                 $this->entityManager->persist($ldapUser);
                 $this->entityManager->flush();

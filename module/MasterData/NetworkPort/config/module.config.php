@@ -13,29 +13,20 @@ use Zend\Log\Logger;
 use Zend\Log\LoggerAbstractServiceFactory;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
+use Core\Route\StaticRoute;
 
 
 use Core\DBAL\Types\UTCDateTimeType;
 
 $router = [
     'routes' => [
-      'home_branch' => [
-            'type' => Segment::class,
-            'options' => [
-                'route' => '/branch',
-                'defaults' => [
-                    'controller' => Controller\BranchController::class,
-                    'action' => 'index',
-                ],
-            ],
-      ],
         'branch' => [
-            'type' => Segment::class,
+            'type' => StaticRoute::class,
             'options' => [
-                'route' => '/branch[/:action[/:id]]',
+                'verb' => 'POST',
+                'route' => '/branch[/:action]',
                 'constraints' => [
-                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                    'id' => '[a-zA-Z0-9_-]*',
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
                 ],
                 'defaults' => [
                     'controller' => Controller\BranchController::class,
@@ -45,12 +36,12 @@ $router = [
             ]
         ],
       'hub' => [
-            'type' => Segment::class,
+            'type' => StaticRoute::class,
             'options' => [
-                'route' => '/hub[/:action[/:id]]',
+                'verb' => 'POST',
+                'route' => '/hub[/:action]',
                 'constraints' => [
-                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                    'id' => '[a-zA-Z0-9_-]*',
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
                 ],
                 'defaults' => [
                     'controller' => Controller\HubController::class,

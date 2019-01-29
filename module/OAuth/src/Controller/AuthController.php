@@ -76,6 +76,7 @@ class AuthController extends CoreController {
 
         // check if user has submitted the form.
         if ($this->getRequest()->isPost()) {
+            // create login form
             $form = new LoginForm();
 
             // store login status.
@@ -84,6 +85,7 @@ class AuthController extends CoreController {
             $data = $this->getRequestData();  
             $data['remember_me'] = $data['remember_me'] ? 1 : 0;          
             $form->setData($data);            
+
             // Validate From
             if ($form->isValid()) {
 

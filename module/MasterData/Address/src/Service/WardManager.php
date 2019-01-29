@@ -179,7 +179,7 @@ class WardManager  {
             foreach ($wards as &$ward) {//loop
 
                 //set created_at
-                $ward['created_at'] =  ($ward['created_at']) ? Utils::checkDateFormat($ward['created_at'],'d/m/Y') : '';
+                $ward['created_at'] =  ($ward['created_at']) ? $this->checkDateFormat($ward['created_at'],'d/m/Y') : '';
 
                 $countRow++;
             }
@@ -239,4 +239,42 @@ class WardManager  {
        
         return $filters;
     }
+
+    public function getListWardSelect(
+        $sortField = 'w.name',
+        $sortDirection = 'ASC',
+        $filters = []
+    ){
+
+        $wards     = [];
+        $totalWard = 0;
+        
+        //get orm Hub
+        $ormHub = $this->entityManager->getRepository(Ward::class)
+            ->getListWardSelect($sortField, $sortDirection, $filters);
+
+        if($ormHub){
+            $ormPaginator = new ORMPaginator($ormHub, true);
+            $ormPaginator->setUseOutputWalkers(false);
+            $totalWard = $ormPaginator->count();
+
+            // $adapter = new DoctrineAdapter($ormPaginator);  
+            $wards = $ormPaginator->getIterator()->getArrayCopy();
+            //set countRow default
+            $countRow = 1;
+            
+            foreach ($wards as &$ward) {//loop
+                //set status
+                $ward['status'] = Ward::getIsActiveList($ward['status']);
+                $countRow++;
+            }  
+        }
+        //set data ward
+        $dataWard = [
+            'listWard' => $wards,
+            'totalWard' => $totalWard,
+        ];
+        return $dataWard;
+    }
+
 }

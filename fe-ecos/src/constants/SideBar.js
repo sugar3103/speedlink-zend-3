@@ -72,6 +72,24 @@ export default {
               icon: 'apartment'
             }
           ]
+          },
+          {
+          id: 'networkport',
+          title: 'menu.networkport',
+          route: '/app/master-data/networkport',
+          icon: 'store',
+          childrens: [
+            {
+              title: 'menu.branch',
+              route: '/app/master-data/networkport/branch',
+              icon: 'license'
+            },
+            {
+              title: 'menu.hub',
+              route: '/app/master-data/networkport/hub',
+              icon: 'map'
+            }
+          ]
         },
       ]
     },{

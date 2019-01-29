@@ -183,4 +183,42 @@ class CountryManager  {
 
         return $dataCountry;
     }
+
+    public function getListCountrySelect(
+        $sortField = 'c.name',
+        $sortDirection = 'ASC',
+        $filters = []
+    ){
+
+        $countries     = [];
+        $totalCountry = 0;
+        
+        //get orm Hub
+        $ormCountry = $this->entityManager->getRepository(Country::class)
+            ->getListCountrySelect($sortField, $sortDirection, $filters);
+
+        if($ormCountry){
+            $ormPaginator = new ORMPaginator($ormCountry, true);
+            $ormPaginator->setUseOutputWalkers(false);
+            $totalCountry = $ormPaginator->count();
+
+            // $adapter = new DoctrineAdapter($ormPaginator);  
+            $countries = $ormPaginator->getIterator()->getArrayCopy();
+            //set countRow default
+            $countRow = 1;
+            
+            foreach ($countries as &$country) {//loop
+                //set status
+              //  $country['status'] = Country::getIsActiveList($country['status']);
+                $countRow++;
+            }  
+        }
+        //set data country
+        $dataCountry = [
+            'listCountry' => $countries,
+            'totalCountry' => $totalCountry,
+        ];
+        return $dataCountry;
+    }
+
 }

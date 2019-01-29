@@ -8,15 +8,25 @@ class MainWrapper extends PureComponent {
     theme: ThemeProps.isRequired,
     children: PropTypes.element.isRequired,
   };
-
+  
+  addClassBody(theme) {
+    if(theme.className === "theme-light") {
+      document.body.classList.remove('theme-dark');
+      document.body.classList.add(theme.className);
+    } else {
+      document.body.classList.remove('theme-light');
+      document.body.classList.add(theme.className);
+    }
+    
+  }
   render() {
     const { theme } = this.props;
-    return (
-      <div className={theme.className}>
+    this.addClassBody(theme)
+    return (      
         <div className="wrapper">
           {this.props.children}
         </div>
-      </div>
+    
     );
   }
 }

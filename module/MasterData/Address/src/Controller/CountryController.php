@@ -28,14 +28,14 @@ class CountryController extends CoreController {
         $this->countryManager = $countryManager;
     }
 
-    public function indexAction()
-    {
-        $this->apiResponse['message'] = 'Country';
+    // public function indexAction()
+    // {
+    //     $this->apiResponse['message'] = 'Country';
 
-        return $this->createResponse();
-    }
+    //     return $this->createResponse();
+    // }
 
-    public function listAction() {
+    public function indexAction() {
         if ($this->getRequest()->isPost()) {
             
             // get the filters
@@ -148,4 +148,36 @@ class CountryController extends CoreController {
         }
         return $this->createResponse();        
     }
+
+    public function listAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            // get the filters
+            $fieldsMap = [
+                0 => 'name',
+                1 => 'status'
+            ];
+
+            list($sortField,$sortDirection,$filters) = $this->getRequestDataSelect($fieldsMap);
+
+            //get list city by condition
+            $dataCountry = $this->countryManager->getListCountrySelect(
+              $sortField ,$sortDirection, $filters);
+            
+          $result = [
+            "data" => (($dataCountry['listCountry']) ? $dataCountry['listCountry'] : [] ) ,
+            "total" => $dataCountry['totalCountry']
+          ];
+
+        $this->error_code = 1;
+        $this->apiResponse['message'] = 'Success';
+        $this->apiResponse['total'] = $result['total'];
+        $this->apiResponse['data'] = $result['data'];   
+        } else {
+          $this->error_code = 0;
+          $this->apiResponse['message'] = 'Failed';
+        }
+        return $this->createResponse();
+    }
+
 }

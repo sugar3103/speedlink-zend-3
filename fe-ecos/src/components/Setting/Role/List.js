@@ -8,7 +8,7 @@ import ItemPerPage from '../../../containers/Shared/pagination/ItemPerPage';
 import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
-// import Action from './Action';
+import MagnifyIcon from 'mdi-react/MagnifyIcon';
 
 import {
   getRoleList,
@@ -32,7 +32,8 @@ class List extends Component {
     this.state = {
       selectedPageSize: SELECTED_PAGE_SIZE,
       currentPage: 1,
-      total: 20
+      total: 20,
+      searchRole: ''
     };
   }
 
@@ -46,7 +47,7 @@ class List extends Component {
     }
 
     if (this.props.role.paramSearch) {
-      Object.assign(params, { "query": this.props.role.paramSearch})
+      Object.assign(params, { "query": this.props.role.paramSearch })
     };
     this.props.getRoleList(params, this.props.history);
 
@@ -94,7 +95,7 @@ class List extends Component {
     if (items.length > 0) {
       result = items.map((item, index) => {
         return (
-          <Item 
+          <Item
             key={index}
             role={item}
           />
@@ -104,8 +105,25 @@ class List extends Component {
     return result;
   }
 
+  handleSearch = (e) => {
+    e.preventDefault();
+    
+    let params = {
+      offset: {
+        start: 1,
+        limit: this.state.selectedPageSize
+      }
+    }
+    Object.assign(params, { "query": {"name": this.state.searchRole}});
+    this.props.getRoleList(params);
+  }
+
+  handleChange = (e) => {
+    this.setState({searchRole: e.target.value});
+  }
+
   render() {
-    const { items, loading, modalOpen ,total} = this.props.role;
+    const { items, loading, modalOpen, total } = this.props.role;
     const { messages } = this.props.intl;
     return (
       <Col md={12} lg={12}>
@@ -114,11 +132,17 @@ class List extends Component {
             <div className="card__title">
               <h5 className="bold-text">{messages['role.list-title']}</h5>
               <ButtonToolbar className="master-data-list__btn-toolbar-top">
-                <Button 
-                  color="success" 
-                  className="master-data-list__btn-add"
+                <Button
+                  color="success"
+                  className="master-data-list__btn-add btn-sm"
                   onClick={this.toggleModal}
                 >{messages['role.add-new']}</Button>
+                <form className="form" onSubmit={this.handleSearch}>
+                  <div className="form__form-group products-list__search">
+                    <input placeholder="Search..." name="search" value={this.state.searchPermission} onChange={this.handleChange} />
+                    <MagnifyIcon />
+                  </div>
+                </form>
               </ButtonToolbar>
               <Action modalOpen={modalOpen} />
             </div>
@@ -127,7 +151,7 @@ class List extends Component {
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>{messages['role.name']}</th>                  
+                  <th>{messages['role.name']}</th>
                   <th>{messages['role.status']}</th>
                   <th>{messages['role.created-at']}</th>
                   <th className="text-center">{messages['role.action']}</th>

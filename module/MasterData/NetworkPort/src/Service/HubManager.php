@@ -16,7 +16,7 @@ use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator;
 use Zend\Authentication\Result;
-
+use Core\Utils\Utils;
 use Address\Entity\City;
 
 /**
@@ -63,33 +63,31 @@ class HubManager {
      * @throws \Exception
      */
     // public function add($code, $name, $hubId, $status, $createdBy, $createdAt, $countryId, $cityId, $districtId, $wardId, $includingWardIds, $description )
-    public function addHub($data)
+    public function addHub($data,$user)
     {
         $this->entityManager->beginTransaction();
         try {
         $hub = new Hub;
-        // var_dump($data);die;
         $hub->setCityId($data['city_id']);
         $hub->setCode($data['code']);
         $hub->setName($data['name']);
+        $hub->setNameEn($data['name_en']);
         $hub->setStatus($data['status']);
-        $hub->setCreatedBy($data['created_by']);
+        $hub->setCreatedBy($user->id);
         $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
         $hub->setCreatedAt($addTime->format('Y-m-d H:i:s'));
         // $hub->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
         $hub->setDescription($data['description']);
+        $hub->setDescriptionEn($data['description_en']);
 
         $this->getReferenced($hub, $data);
 
         $this->entityManager->persist($hub);
         $this->entityManager->flush();
-        $last_id = $hub->getHubId();
+        // $last_id = $hub->getHubId();
         $this->entityManager->commit();
-        return new Result(
-                Result::SUCCESS,
-                $last_id,
-                ['Add Hub Successfully']
-            );
+
+        return $hub;
         }
         catch (ORMException $e) {
             $this->entityManager->rollback();
@@ -101,24 +99,21 @@ class HubManager {
 
         $this->entityManager->beginTransaction();
         try {
-
             $hub->setCityId($data['city_id']);
             $hub->setCode($data['code']);
             $hub->setName($data['name']);
+            $hub->setNameEn($data['name_en']);
             $hub->setStatus($data['status']);
             $hub->setUpdatedBy($data['updated_by']);
             $hub->setUpdatedAt(date('Y-m-d H:i:s'));
             $hub->setDescription($data['description']);
+            $hub->setDescriptionEn($data['description_en']);
             $this->getReferenced($hub, $data);
             // apply changes to database.
             $this->entityManager->flush();
-            $last_id = $hub->getHubId();
+            // $last_id = $hub->getHubId();
             $this->entityManager->commit();
-            return new Result(
-                Result::SUCCESS,
-                $last_id,
-                ['Update Hub Successfully']
-            );
+            return $hub;
         }
         catch (ORMException $e) {
             $this->entityManager->rollback();
@@ -146,7 +141,7 @@ class HubManager {
      * @throws ORMException
      */
     public function getListHubByCondition(
-        $currentPage,
+        $start,
         $limit,
         $sortField = '',
         $sortDirection = 'asc',
@@ -158,26 +153,24 @@ class HubManager {
 
         //get orm branch
         $ormHub = $this->entityManager->getRepository(Hub::class)
-            ->getListHubByCondition($sortField, $sortDirection, $filters);
+            ->getListHubByCondition($start, $limit, $sortField, $sortDirection, $filters);
 
         if($ormHub){
-            //set offset,limit
             $ormPaginator = new ORMPaginator($ormHub, true);
             $ormPaginator->setUseOutputWalkers(false);
-            $adapter = new DoctrineAdapter($ormPaginator);
-            $paginator = new Paginator($adapter);
+            $totalHub = $ormPaginator->count();
 
-            //sets the current page number
-            $paginator->setCurrentPageNumber($currentPage);
+            //get hub list
+            $hubs = $ormPaginator->getIterator()->getArrayCopy();
+            $countRow = 1;
 
-            //Sets the number of items per page
-            $paginator->setItemCountPerPage($limit);
-
-            //get user list
-            $hubs = $paginator->getIterator()->getArrayCopy();
-
-            //get and set total user
-            $totalHub = $paginator->getTotalItemCount();
+            foreach ($hubs as &$hub) {
+                //set status
+                // $hub['status'] = Hub::getIsActiveList($hub['status']);
+                //set created_at
+                $hub['created_at'] =  ($hub['created_at']) ? Utils::checkDateFormat($hub['created_at'],'d/m/Y') : '';
+                $countRow++;
+            }
         }
 
         //set data user
@@ -188,61 +181,21 @@ class HubManager {
         return $dataHub;
     }
 
-     public function deleteHub($id) {
+     public function deleteHub($hub) {
 
         $this->entityManager->beginTransaction();
         try {
-
-            // Delete record in tbl role
-            $hub = $this->entityManager->getRepository(Hub::class)->find($id);
-
-            if($hub) {
             $this->entityManager->remove($hub);
             $this->entityManager->flush();
 
             $this->entityManager->commit();
-            return new Result(
-                Result::SUCCESS,
-                null,
-                ['Delete hub successfully.']
-            );
-          }
-          else
-          {
-            return new Result(
-                Result::FAILURE,
-                null,
-                ['Hub not found. Delete hub failed!.']
-            );
-          }
+            return $hub;
+          
         } catch (ORMException $e) {
 
             $this->entityManager->rollback();
             return FALSE;
         }
     }
-
-    /**
-     * Get value filters search
-     *
-     * @param $params
-     * @param $fieldsMap
-     * @return array
-     */
-    public function getValueFiltersSearch($params,$fieldsMap)
-    {
-        $filters = [];
-
-        if (isset($params['query']) && !empty($params['query'])){
-          foreach ($params['query'] as $key => $column) {
-              if(isset($fieldsMap[$key]) && !empty($column)) {
-                  $filters[$key] = $column;
-              }
-          }
-           
-        }
-        return $filters;
-    }
-    
 
 }
