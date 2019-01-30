@@ -10,13 +10,13 @@ const Sidebar = ({changeMobileSidebarVisibility, sidebar}) => {
     'sidebar--show': sidebar.show,
     'sidebar--collapse': sidebar.collapse,
   });
-
+  
   return (
     <div className={sidebarClass}>
       <button className="sidebar__back" onClick={changeMobileSidebarVisibility} />
       <Scrollbar className="sidebar__scroll scroll">
         <div className="sidebar__wrapper sidebar__wrapper--desktop">
-          <SidebarContent onClick={() => {}} />
+          <SidebarContent onClick={(e) => {}}/>
         </div>
         <div className="sidebar__wrapper sidebar__wrapper--mobile">
           <SidebarContent onClick={changeMobileSidebarVisibility} />
