@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
 import { addPermissionItem, updatePermissionItem, togglePermissionModal } from '../../../redux/actions';
 import { injectIntl } from 'react-intl';
+import PropTypes from 'prop-types';
+
 class Action extends Component {
 
   handleSubmit = values => {
@@ -30,6 +32,13 @@ class Action extends Component {
       </Modal>
     );
   }
+}
+
+Action.propTypes = {
+  modalData: PropTypes.object,
+  addPermissionItem: PropTypes.func.isRequired,
+  updatePermissionItem: PropTypes.func.isRequired,
+  togglePermissionModal: PropTypes.func.isRequired,
 }
 
 export default injectIntl(connect(null, {

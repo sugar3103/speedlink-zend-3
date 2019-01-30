@@ -10,6 +10,7 @@ import validate from './validateActionForm';
 import PropTypes from 'prop-types';
 
 class ActionForm extends Component {
+  
   componentDidMount() {
     const data = this.props.modalData;
     if (data) {

@@ -98,7 +98,7 @@ class List extends Component {
       })
     } else {
       result = (
-        <tr><td colSpan={8} className="text-center">{messages['no-result']}</td></tr>
+        <tr><td colSpan={7} className="text-center">{messages['no-result']}</td></tr>
       )
     }
     return result;
@@ -136,7 +136,7 @@ class List extends Component {
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={8} className="text-center"><div className="loading-table" /></td></tr>
+                  <tr><td colSpan={7} className="text-center"><div className="loading-table" /></td></tr>
                 ) : (
                     this.showWardItem(items)
                   )}

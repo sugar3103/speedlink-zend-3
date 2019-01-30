@@ -8,7 +8,6 @@ class Action extends Component {
 
   handleSubmit = values => {
     const { messages } = this.props.intl;
-    console.log(values.roles);
     if (values.id) {
       this.props.updateUserItem(values,messages);
     } else {
