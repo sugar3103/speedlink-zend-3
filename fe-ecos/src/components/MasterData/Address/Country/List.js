@@ -126,19 +126,17 @@ class List extends Component {
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>{messages['country.name']}</th>
-                  <th>{messages['country.name-en']}</th>
-                  <th>{messages['country.desc']}</th>
-                  <th>{messages['country.desc-en']}</th>
+                  <th>{messages['name']}</th>
+                  <th>{messages['description']}</th>
                   <th>{messages['country.iso-code']}</th>
-                  <th>{messages['country.status']}</th>
-                  <th>{messages['country.created-at']}</th>
-                  <th>{messages['country.action']}</th>
+                  <th>{messages['status']}</th>
+                  <th>{messages['created-at']}</th>
+                  <th>{messages['action']}</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={8} className="text-center"><div className="loading-table" /></td></tr>
+                  <tr><td colSpan={7} className="text-center"><div className="loading-table" /></td></tr>
                 ) : (
                     this.showCountryItem(items)
                   )}

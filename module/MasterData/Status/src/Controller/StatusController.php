@@ -39,7 +39,8 @@ class StatusController extends CoreController {
         if ($this->getRequest()->isPost()) {
             // get the filters
             $fieldsMap = [
-                0 => 'name',                
+                0 => 'name',
+                2 => 'name_en',                
                 1 => 'status'
             ];
 

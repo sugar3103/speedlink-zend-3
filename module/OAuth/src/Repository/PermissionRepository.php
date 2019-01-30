@@ -40,9 +40,12 @@ class PermissionRepository extends EntityRepository
                  p.description,
                  p.description_en,
                  p.created_at"
-            ])->andWhere('p.id <> 0')->groupBy('p.id')
-            ->setMaxResults($limit)
-            ->setFirstResult(($start - 1) * $limit);
+            ])->andWhere('p.id <> 0')->groupBy('p.id');
+            if($limit) {
+                $queryBuilder->setMaxResults($limit)
+                    ->setFirstResult(($start - 1) * $limit);
+            }
+            
 
             return $queryBuilder;
 

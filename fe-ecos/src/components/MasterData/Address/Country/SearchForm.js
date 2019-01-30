@@ -13,30 +13,30 @@ class SearchForm extends Component {
       <form className="form" onSubmit={handleSubmit}>
         <div className="form__half">
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['country.name']}</span>
+            <span className="form__form-group-label">{messages['name']}</span>
             <div className="form__form-group-field">
               <Field
                 name="name"
                 component="input"
                 type="text"
-                placeholder={messages['country.name']}
+                placeholder={messages['name']}
               />
             </div>
           </div>
         </div>
         <div className="form__half">
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['country.status']}</span>
+            <span className="form__form-group-label">{messages['status']}</span>
             <div className="form__form-group-field">
               <Field
                 name="status"
                 component={renderSelectField}
                 type="text"
-                placeholder={messages['country.status']}
+                placeholder={messages['status']}
                 options={[
-                  { value: -1, label: messages['country.all'] },
-                  { value: 1, label: messages['country.active'] },
-                  { value: 0, label: messages['country.inactive'] }
+                  { value: -1, label: messages['all'] },
+                  { value: 1, label: messages['active'] },
+                  { value: 0, label: messages['inactive'] }
                 ]}
               />
             </div>
@@ -52,12 +52,12 @@ class SearchForm extends Component {
                 handleSubmit();  
               }, 200);
             }}
-          >{messages['country.clear']}</Button>{' '}
+          >{messages['clear']}</Button>{' '}
           <Button 
             size="sm" 
             color="primary"
             id="search" 
-          >{ messages['country.search'] }</Button>
+          >{ messages['search'] }</Button>
         </div>
       </form>
     );

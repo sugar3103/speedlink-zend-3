@@ -48,12 +48,12 @@ class PermissionController extends CoreController {
                 0 => 'name'                
             ];
 
-            list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
+            list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);                        
             
             //get list by condition
             $permissions = $this->permissionManager->getListPermissionByCondition($start, $limit, $sortField, $sortDirection,$filters);            
             
-            $result = ($permissions['listPermissions']) ? $permissions['listPermissions'] : [] ;
+            $result = $this->filterByField($permissions['listPermissions'],$fields);
             
             $this->error_code = 1;
             $this->apiResponse =  array(

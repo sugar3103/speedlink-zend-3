@@ -22,13 +22,13 @@ class Item extends Component {
       customUI: ({ onClose }) => {
         return (
           <div className='custom-ui-confirm'>
-            <h2>{messages["district.title-confirm"]}</h2>
-            <p>{messages["district.desc-confirm"]}</p>
-            <Button color="light" size="sm" onClick={onClose}>{messages["district.confirm-no"]}</Button> &nbsp;
+            <h2>{messages["title-confirm"]}</h2>
+            <p>{messages["desc-confirm"]}</p>
+            <Button color="light" size="sm" onClick={onClose}>{messages["confirm-no"]}</Button> &nbsp;
             <Button color="danger" size="sm" onClick={() => {
               this.props.deleteDistrictItem(id, messages)
               onClose()
-            }}>{messages["district.confirm-yes"]}</Button>
+            }}>{messages["confirm-yes"]}</Button>
           </div>
         )
       }
@@ -37,15 +37,13 @@ class Item extends Component {
 
   render() {
     const { district } = this.props;
-    const { messages } = this.props.intl;
+    const { messages,locale } = this.props.intl;
     return (
       <tr>
         <th scope="row">{district.id}</th>
-        <td>{district.name}</td>
-        <td>{district.name_en}</td>
-        <td>{district.description}</td>
-        <td>{district.description_en}</td>
-        <td>{district.status === 1 ? <Badge color="success">{messages['district.active']}</Badge> : <Badge color="dark">{messages['district.inactive']}</Badge>}</td>
+        <td>{(locale=== 'en-US' && district.name_en) ? district.name_en : district.name}</td>
+        <td>{(locale=== 'en-US' && district.description_en) ? district.description_en : district.description}</td>
+        <td>{district.status === 1 ? <Badge color="success">{messages['active']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>}</td>
         <td>{district.created_at}</td>
         <td className="text-center">
           <Button color="info" size="sm" onClick={() => this.toggleModal(district)}><span className="lnr lnr-pencil" /></Button> &nbsp;

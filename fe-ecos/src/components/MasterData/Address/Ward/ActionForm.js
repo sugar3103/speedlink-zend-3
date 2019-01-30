@@ -89,7 +89,7 @@ class ActionForm extends Component {
         </div>
         <div className="modal__body">
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['ward.name']}</span>
+            <span className="form__form-group-label">{messages['name']}</span>
             <div className="form__form-group-field">
               <div className="form__form-group-icon">
                 <div className="flag vn"></div>
@@ -98,7 +98,7 @@ class ActionForm extends Component {
                 name="name"
                 component={CustomField}
                 type="text"
-                placeholder={messages['ward.name']}
+                placeholder={messages['name']}
                 messages={messages}
               />
             </div>

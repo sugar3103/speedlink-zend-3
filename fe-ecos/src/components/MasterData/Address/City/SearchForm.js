@@ -47,6 +47,7 @@ class SearchForm extends Component {
   }
 
   render() {
+    
     const { handleSubmit, reset, countries } = this.props;
     const { messages } = this.props.intl;
     return (

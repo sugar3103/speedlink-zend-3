@@ -108,7 +108,7 @@ class List extends Component {
                   <th>{messages['code.city']}</th>
                   <th>{messages['code.district']}</th>
                   <th>{messages['code.ward']}</th>
-                  <th>{messages['code.created-at']}</th>
+                  <th>{messages['created-at']}</th>
                 </tr>
               </thead>
               <tbody>

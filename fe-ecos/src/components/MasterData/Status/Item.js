@@ -22,13 +22,13 @@ class Item extends Component {
       customUI: ({ onClose }) => {
         return (
           <div className='custom-ui-confirm'>
-            <h2>{messages["status.title-confirm"]}</h2>
-            <p>{messages["status.desc-confirm"]}</p>
-            <Button color="light" size="sm" onClick={onClose}>{messages["status.confirm-no"]}</Button> &nbsp;
+            <h2>{messages["title-confirm"]}</h2>
+            <p>{messages["desc-confirm"]}</p>
+            <Button color="light" size="sm" onClick={onClose}>{messages["confirm-no"]}</Button> &nbsp;
             <Button color="danger" size="sm" onClick={() => {
               this.props.deleteStatusItem(id, messages)
               onClose()
-            }}>{messages["status.confirm-yes"]}</Button>
+            }}>{messages["confirm-yes"]}</Button>
           </div>
         )
       }
@@ -37,15 +37,13 @@ class Item extends Component {
 
   render() {
     const { status } = this.props;
-    const { messages } = this.props.intl;
+    const { messages,locale } = this.props.intl;
     return (
       <tr>
-        <th scope="row">{status.id}</th>
-        <td>{status.name}</td>
-        <td>{status.name_en}</td>
-        <td>{status.description}</td>
-        <td>{status.description_en}</td>
-        <td>{status.status === 1 ? <Badge color="success">{messages['status.active']}</Badge> : <Badge color="dark">{messages['status.inactive']}</Badge>}</td>
+        <th scope="row">{status.id}</th>        
+        <td>{locale === 'en-Us' ? status.name_en : status.name}</td>
+        <td>{locale === 'en-Us' ? status.description_en : status.description}</td>        
+        <td>{status.status === 1 ? <Badge color="success">{messages['active']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>}</td>
         <td>{status.created_at}</td>
         <td className="text-center">
           <Button color="info" size="sm" onClick={() => this.toggleModal(status)}><span className="lnr lnr-pencil" /></Button> &nbsp;

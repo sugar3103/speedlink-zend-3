@@ -126,13 +126,11 @@ class List extends Component {
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>{messages['status.name']}</th>
-                  <th>{messages['status.name-en']}</th>
-                  <th>{messages['status.desc']}</th>
-                  <th>{messages['status.desc-en']}</th>
-                  <th>{messages['status.status']}</th>
-                  <th>{messages['status.created-at']}</th>
-                  <th>{messages['status.action']}</th>
+                  <th>{messages['name']}</th>                  
+                  <th>{messages['description']}</th>
+                  <th>{messages['status']}</th>
+                  <th>{messages['created-at']}</th>
+                  <th>{messages['action']}</th>
                 </tr>
               </thead>
               <tbody>
