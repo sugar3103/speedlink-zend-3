@@ -1,19 +1,27 @@
 const validate = (values) => {
     const errors = {};
-    if (!values.name) {
-      errors.name = 'status.validate-name-empty';
-    } else if (values.name.length < 5) {
-      errors.name = 'status.validate-name-minlength';
-    } else if (values.name.length > 60) {
-      errors.name = 'status.validate-name-maxlength';
+    if (!values.username) {
+      errors.username = 'user.validate-username-empty';
+    } else if (values.username.length < 5) {
+      errors.username = 'user.validate-username-minlength';
+    } else if (values.username.length > 60) {
+      errors.username = 'user.validate-username-maxlength';
     }
 
-    if (!values.name_en) {
-      errors.name_en = 'status.validate-nameEn-empty';
-    } else if (values.name_en.length < 5) {
-      errors.name_en = 'status.validate-nameEn-minlength';
-    } else if (values.name_en.length > 60) {
-      errors.name_en = 'status.validate-nameEn-maxlength';
+    if (values.password) {
+      if (values.password.length < 5) {
+        errors.password = 'user.validate-password-minlength';
+      } else if (values.password.length > 60) {
+        errors.password = 'user.validate-password-maxlength';
+      }
+    }
+
+    if (values.confirm_password !== values.password) {
+      errors.confirm_password = 'user.validate-confirm-password-mismatched';
+    }
+
+    if (!values.roles) {
+      errors.roles = 'user.validate-roles-empty';
     }
 
     return errors;

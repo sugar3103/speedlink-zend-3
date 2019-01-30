@@ -56,6 +56,8 @@ class UserRepository extends EntityRepository {
                  u.email,
                  u.username,
                  u.is_active,
+                 u.first_name,
+                 u.last_name,
                  CONCAT(COALESCE(u.first_name,''), COALESCE(u.last_name,'')) as full_name,
                  u.created_at,
                  GROUP_CONCAT(r.id) AS roles"
