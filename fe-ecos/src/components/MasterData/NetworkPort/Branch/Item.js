@@ -22,13 +22,13 @@ class Item extends Component {
       customUI: ({ onClose }) => {
         return (
           <div className='custom-ui-confirm'>
-            <h2>{messages["branch.title-confirm"]}</h2>
-            <p>{messages["branch.desc-confirm"]}</p>
-            <Button color="light" size="sm" onClick={onClose}>{messages["branch.confirm-no"]}</Button> &nbsp;
+            <h2>{messages["title-confirm"]}</h2>
+            <p>{messages["desc-confirm"]}</p>
+            <Button color="light" size="sm" onClick={onClose}>{messages["confirm-no"]}</Button> &nbsp;
             <Button color="danger" size="sm" onClick={() => {
               this.props.deleteBranchItem(id, messages)
               onClose()
-            }}>{messages["branch.confirm-yes"]}</Button>
+            }}>{messages["confirm-yes"]}</Button>
           </div>
         )
       }
@@ -37,13 +37,14 @@ class Item extends Component {
 
   render() {
     const { branch } = this.props;
-    const { messages } = this.props.intl;
+    const { messages,locale } = this.props.intl;
+
     return (
       <tr>
         <th scope="row">{branch.id}</th>
         <td>{branch.code}</td>
-        <td>{branch.name} <br/>{branch.name_en}</td>
-        <td>{branch.description}<br/>{branch.description_en}</td>
+        <td>{ (locale === 'en-US' && branch.name_en) ? branch.name_en : branch.name }</td>
+        <td>{ (locale === 'en-US' && branch.description_en) ? branch.description_en : branch.description }</td>
         <td>{branch.city}</td>
         <td>{branch.status === 1 ? <Badge color="success">{messages['branch.active']}</Badge> : <Badge color="dark">{messages['branch.inactive']}</Badge>}</td>
         <td>{branch.created_at}</td>
@@ -62,7 +63,14 @@ Item.propTypes = {
   deleteBranchItem: PropTypes.func.isRequired
 }
 
-export default injectIntl(connect(null, {
+const mapStateToProps = ({ settings }) => {
+  const { locale } = settings;
+  return {
+    locale
+  }
+}
+
+export default injectIntl(connect(mapStateToProps, {
   toggleBranchModal,
   deleteBranchItem
 })(Item));

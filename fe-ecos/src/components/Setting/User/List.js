@@ -123,7 +123,7 @@ class List extends Component {
                 </form>
                 <Button 
                   color="success" 
-                  className="master-data-list__btn-add"
+                  className="master-data-list__btn-add btn-sm"
                   onClick={this.toggleModal}
                 >{messages['user.add-new']}</Button>
               </ButtonToolbar>

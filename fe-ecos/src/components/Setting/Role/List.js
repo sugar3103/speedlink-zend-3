@@ -90,7 +90,7 @@ class List extends Component {
     this.props.getRoleList();
   }
 
-  showRoleItem = (items) => {
+  showRoleItem = (items,messages) => {
     let result = null;
     if (items.length > 0) {
       result = items.map((item, index) => {
@@ -101,6 +101,10 @@ class List extends Component {
           />
         )
       })
+    } else {
+      result = (
+        <tr><td colSpan={8} className="text-center">{messages['no-result']}</td></tr>
+      )
     }
     return result;
   }
@@ -152,16 +156,17 @@ class List extends Component {
                 <tr>
                   <th>#</th>
                   <th>{messages['role.name']}</th>
-                  <th>{messages['role.status']}</th>
-                  <th>{messages['role.created-at']}</th>
-                  <th className="text-center">{messages['role.action']}</th>
+                  <th>{messages['description']}</th>
+                  <th>{messages['status']}</th>
+                  <th>{messages['created-at']}</th>
+                  <th className="text-center">{messages['action']}</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
                   <tr><td colSpan={5} className="text-center"><div className="loading-table" /></td></tr>
                 ) : (
-                    this.showRoleItem(items)
+                    this.showRoleItem(items,messages)
                   )}
               </tbody>
             </Table>

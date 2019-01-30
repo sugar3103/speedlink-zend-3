@@ -22,13 +22,13 @@ class Item extends Component {
       customUI: ({ onClose }) => {
         return (
           <div className='custom-ui-confirm'>
-            <h2>{messages["country.title-confirm"]}</h2>
-            <p>{messages["country.desc-confirm"]}</p>
-            <Button color="light" size="sm" onClick={onClose}>{messages["country.confirm-no"]}</Button> &nbsp;
+            <h2>{messages["title-confirm"]}</h2>
+            <p>{messages["desc-confirm"]}</p>
+            <Button color="light" size="sm" onClick={onClose}>{messages["confirm-no"]}</Button> &nbsp;
             <Button color="danger" size="sm" onClick={() => {
               this.props.deleteCountryItem(id, messages)
               onClose()
-            }}>{messages["country.confirm-yes"]}</Button>
+            }}>{messages["confirm-yes"]}</Button>
           </div>
         )
       }
@@ -37,16 +37,14 @@ class Item extends Component {
 
   render() {
     const { country } = this.props;
-    const { messages } = this.props.intl;
+    const { messages,locale } = this.props.intl;
     return (
       <tr>
         <th scope="row">{country.id}</th>
-        <td>{country.name}</td>
-        <td>{country.name_en}</td>
-        <td>{country.description}</td>
-        <td>{country.description_en}</td>
+        <td>{locale === 'en-US' ? country.name_en : country.name}</td>
+        <td>{locale === 'en-US' ? country.description_en : country.description}</td>
         <td>{country.iso_code}</td>
-        <td>{country.status === 1 ? <Badge color="success">{messages['country.active']}</Badge> : <Badge color="dark">{messages['country.inactive']}</Badge>}</td>
+        <td>{country.status === 1 ? <Badge color="success">{messages['active']}</Badge> : <Badge color="dark">{messages['country.inactive']}</Badge>}</td>
         <td>{country.created_at}</td>
         <td className="text-center">
           <Button color="info" size="sm" onClick={() => this.toggleModal(country)}><span className="lnr lnr-pencil" /></Button> &nbsp;

@@ -83,12 +83,12 @@ class SearchForm extends Component {
                   handleSubmit();  
                 }, 200);
               }}
-            >{messages['code.clear']}</Button>{' '}
+            >{messages['clear']}</Button>{' '}
             <Button 
               size="sm" 
               color="primary"
               id="search" 
-            >{ messages['code.search'] }</Button>
+            >{ messages['search'] }</Button>
         </Col>
       </form>
     );

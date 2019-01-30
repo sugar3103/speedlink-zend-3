@@ -10,28 +10,12 @@ import validate from './validateActionForm';
 import PropTypes from 'prop-types';
 
 class ActionForm extends Component {
-
-  constructor() {
-    super();
-    this.state = {
-      activeTab: '1',
-    };
-  }
-
   componentDidMount() {
     const data = this.props.modalData;
     if (data) {
       this.props.initialize(data);
     }
   }
-
-  toggleTab = (tab) => {
-    if (this.state.activeTab !== tab) {
-      this.setState({
-        activeTab: tab,
-      });
-    }
-  };
 
   toggleModal = () => {
     this.props.toggleCountryModal();
@@ -50,7 +34,7 @@ class ActionForm extends Component {
         </div>
         <div className="modal__body">
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['country.name']}</span>
+            <span className="form__form-group-label">{messages['name']}</span>
             <div className="form__form-group-field">
               <div className="form__form-group-icon">
                 <div className="flag vn"></div>
@@ -59,7 +43,7 @@ class ActionForm extends Component {
                 name="name"
                 component={CustomField}
                 type="text"
-                placeholder={messages['country.name']}
+                placeholder={messages['name']}
                 messages={messages}
               />
             </div>
@@ -71,13 +55,13 @@ class ActionForm extends Component {
                 name="name_en"
                 component={CustomField}
                 type="text"
-                placeholder={messages['country.name-en']}
+                placeholder={messages['name']}
                 messages={messages}
               />
             </div>
           </div>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['country.desc']}</span>
+            <span className="form__form-group-label">{messages['description']}</span>
             <div className="form__form-group-field">
               <div className="form__form-group-icon">
                 <div className="flag vn"></div>
@@ -86,7 +70,7 @@ class ActionForm extends Component {
                 name="description"
                 component="textarea"
                 type="text"
-                placeholder={messages['country.desc']}
+                placeholder={messages['description']}
               />
             </div>
             <div className="form__form-group-field">
@@ -97,24 +81,24 @@ class ActionForm extends Component {
                 name="description_en"
                 component="textarea"
                 type="text"
-                placeholder={messages['country.desc-en']}
+                placeholder={messages['description']}
               />
             </div>
           </div>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['country.status']}</span>
+            <span className="form__form-group-label">{messages['status']}</span>
             <div className="form__form-group-field">
               <Field
                 name="status"
                 component={renderRadioButtonField}
-                label={messages['country.active']}
+                label={messages['active']}
                 radioValue={1}
                 defaultChecked
               />
               <Field
                 name="status"
                 component={renderRadioButtonField}
-                label={messages['country.inactive']}
+                label={messages['inactive']}
                 radioValue={0}
               />
             </div>
@@ -133,8 +117,8 @@ class ActionForm extends Component {
           </div>
         </div>
         <ButtonToolbar className="modal__footer">
-          <Button outline onClick={this.toggleModal}>{messages['country.cancel']}</Button>{' '}
-          <Button color={className} type="submit">{messages['country.save']}</Button>
+          <Button outline onClick={this.toggleModal}>{messages['cancel']}</Button>{' '}
+          <Button color={className} type="submit">{messages['save']}</Button>
         </ButtonToolbar>
       </form>
     );

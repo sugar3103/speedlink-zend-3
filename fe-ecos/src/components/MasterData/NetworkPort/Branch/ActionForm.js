@@ -11,28 +11,14 @@ import validate from './validateActionForm';
 import PropTypes from 'prop-types';
 
 class ActionForm extends PureComponent {
-
-  constructor() {
-    super();
-    this.state = {
-      activeTab: '1',
-    };
-  }
-
   componentDidMount() {
     const data = this.props.modalData;
     if (data) {
       this.props.initialize(data);
     }
-    let paramsCountry = {
-      field: ['id', 'name'],
-      offset: {
-        limit: 10
-      }
-    }
+
     if (data && data.country_id) {
       let paramsCountry = {
-        ...paramsCountry,
         offset: {
           limit: 0
         },
@@ -171,14 +157,6 @@ class ActionForm extends PureComponent {
     return hubs;
   }
 
-  toggleTab = (tab) => {
-    if (this.state.activeTab !== tab) {
-      this.setState({
-        activeTab: tab,
-      });
-    }
-  };
-
   toggleModal = () => {
     this.props.toggleBranchModal();
   }
@@ -197,7 +175,7 @@ class ActionForm extends PureComponent {
         </div>
         <div className="modal__body">
 
-        <Row>
+          <Row>
             <Col md={12} lg={6} xl={6} xs={12}>
               <Card>
                 <CardBody>
@@ -206,71 +184,58 @@ class ActionForm extends PureComponent {
                     <h5 className="subhead">Use default modal with property <span className="red-text">colored</span></h5>
                   </div>
                   <div className="form__form-group">
-            <span className="form__form-group-label">{messages['branch.name']}</span>
-            <div className="form__form-group-field">
-              <div className="form__form-group-icon">
-                <div className="flag vn"></div>
-              </div>
-              <Field
-                name="name"
-                component={CustomField}
-                type="text"
-                placeholder={messages['branch.name']}
-                messages={messages}
-              />
-            </div>
-            <div className="form__form-group-field">
-              <div className="form__form-group-icon">
-                <div className="flag us"></div>
-              </div>
-              <Field
-                name="name_en"
-                component={CustomField}
-                type="text"
-                placeholder={messages['branch.name-en']}
-                messages={messages}
-              />
-            </div>
-          </div>
+                    <span className="form__form-group-label">{messages['name']}</span>
+                    <div className="form__form-group-field">
+                      <div className="form__form-group-icon">
+                        <div className="flag vn"></div>
+                      </div>
+                      <Field
+                        name='name'
+                        component={CustomField}
+                        type="text"
+                        placeholder={messages['name']}
+                        messages={messages}
+                      />
+                    </div>
+                    <div className="form__form-group-field">
+                      <div className="form__form-group-icon">
+                        <div className="flag us"></div>
+                      </div>
+                      <Field
+                        name="name_en"
+                        component={CustomField}
+                        type="text"
+                        placeholder={messages['branch.name-en']}
+                        messages={messages}
+                      />
+                    </div>
+                  </div>
 
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['branch.desc']}</span>
-            <div className="form__form-group-field">
-              <div className="form__form-group-icon">
-                <div className="flag vn"></div>
-              </div>
-              <Field
-                name="description"
-                component="textarea"
-                type="text"
-                placeholder={messages['branch.desc']}
-              />
-            </div>
-            <div className="form__form-group-field">
-              <div className="form__form-group-icon">
-                <div className="flag us"></div>
-              </div>
-              <Field
-                name="description_en"
-                component="textarea"
-                type="text"
-                placeholder={messages['branch.desc-en']}
-              />
-            </div>
-          </div>
-
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['branch.code']}</span>
-            <div className="form__form-group-field">
-              <Field
-                name="code"
-                component={CustomField}
-                type="text"
-                placeholder={messages['branch.code']}
-                messages={messages}
-              />
-            </div>
-          </div>
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">{messages['description']}</span>
+                    <div className="form__form-group-field">
+                      <div className="form__form-group-icon">
+                        <div className="flag vn"></div>
+                      </div>
+                      <Field
+                        name="description"
+                        component="textarea"
+                        type="text"
+                        placeholder={messages['description']}
+                      />
+                    </div>
+                    <div className="form__form-group-field">
+                      <div className="form__form-group-icon">
+                        <div className="flag us"></div>
+                      </div>
+                      <Field
+                        name="description_en"
+                        component="textarea"
+                        type="text"
+                        placeholder={messages['description']}
+                      />
+                    </div>
+                  </div>
 
                 </CardBody>
               </Card>
@@ -283,110 +248,123 @@ class ActionForm extends PureComponent {
                     <h5 className="subhead">Use default modal with property <span className="red-text">colored</span></h5>
                   </div>
                   <div className="form__form-group">
-            <span className="form__form-group-label">{messages['branch.country']}</span>
-            <div className="form__form-group-field">
-              <Field
-                name="country_id"
-                component={renderSelectField}
-                type="text"
-                options={countries && this.showOptionsCountry(countries)}
-                placeholder={messages['branch.country']}
-                onChange={this.onChangeCountry}
-                messages={messages}
+                    <span className="form__form-group-label">{messages['branch.code']}</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="code"
+                        component={CustomField}
+                        type="text"
+                        placeholder={messages['branch.code']}
+                        messages={messages}
+                      />
+                    </div>
+                  </div>
 
-              />
-            </div>
-          </div>
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">{messages['branch.country']}</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="country_id"
+                        component={renderSelectField}
+                        type="text"
+                        options={countries && this.showOptionsCountry(countries)}
+                        placeholder={messages['branch.country']}
+                        onChange={this.onChangeCountry}
+                        messages={messages}
 
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['branch.city']}</span>
-            <div className="form__form-group-field">
-              <Field
-                name="city_id"
-                component={renderSelectField}
-                type="text"
-                options={cities && this.showOptionsCity(cities)}
-                placeholder={messages['branch.city']}
-                onChange={this.onChangeCity}
-                onInputChange={this.onInputChangeCity}
-                messages={messages}
-              />
-            </div>
-          </div>
+                      />
+                    </div>
+                  </div>
 
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['branch.district']}</span>
-            <div className="form__form-group-field">
-              <Field
-                name="district_id"
-                component={renderSelectField}
-                type="text"
-                options={districts && this.showOptionsDistrict(districts)}
-                placeholder={messages['branch.district']}
-                onChange={this.onChangeDistrict}
-                onInputChange={this.onInputChangeDistrict}
-                messages={messages}
-              />
-            </div>
-          </div>
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">{messages['branch.city']}</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="city_id"
+                        component={renderSelectField}
+                        type="text"
+                        options={cities && this.showOptionsCity(cities)}
+                        placeholder={messages['branch.city']}
+                        onChange={this.onChangeCity}
+                        onInputChange={this.onInputChangeCity}
+                        messages={messages}
+                      />
+                    </div>
+                  </div>
 
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['branch.ward']}</span>
-            <div className="form__form-group-field">
-              <Field
-                name="ward_id"
-                component={renderSelectField}
-                type="text"
-                options={wards && this.showOptionsWard(wards)}
-                placeholder={messages['branch.ward']}
-                onChange={this.onChangeWard}
-                // onInputChange={this.onInputChangeWard}
-                messages={messages}
-              />
-            </div>
-          </div>
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">{messages['branch.district']}</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="district_id"
+                        component={renderSelectField}
+                        type="text"
+                        options={districts && this.showOptionsDistrict(districts)}
+                        placeholder={messages['branch.district']}
+                        onChange={this.onChangeDistrict}
+                        onInputChange={this.onInputChangeDistrict}
+                        messages={messages}
+                      />
+                    </div>
+                  </div>
 
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['branch.hubcode']}</span>
-            <div className="form__form-group-field">
-              <Field
-                name="hub_id"
-                component={renderSelectField}
-                type="text"
-                options={hubs && this.showOptionsHub(hubs)}
-                placeholder={messages['branch.hubcode']}
-                onInputChange={this.onInputChange}
-                messages={messages}
-              />
-            </div>
-          </div>
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">{messages['branch.ward']}</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="ward_id"
+                        component={renderSelectField}
+                        type="text"
+                        options={wards && this.showOptionsWard(wards)}
+                        placeholder={messages['branch.ward']}
+                        onChange={this.onChangeWard}
+                        // onInputChange={this.onInputChangeWard}
+                        messages={messages}
+                      />
+                    </div>
+                  </div>
 
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['branch.status']}</span>
-            <div className="form__form-group-field">
-              <Field
-                name="status"
-                component={renderRadioButtonField}
-                label={messages['branch.active']}
-                radioValue={1}
-                defaultChecked
-              />
-              <Field
-                name="status"
-                component={renderRadioButtonField}
-                label={messages['branch.inactive']}
-                radioValue={0}
-              />
-            </div>
-          </div>
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">{messages['branch.hubcode']}</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="hub_id"
+                        component={renderSelectField}
+                        type="text"
+                        options={hubs && this.showOptionsHub(hubs)}
+                        placeholder={messages['branch.hubcode']}
+                        onInputChange={this.onInputChange}
+                        messages={messages}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">{messages['status']}</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="status"
+                        component={renderRadioButtonField}
+                        label={messages['active']}
+                        radioValue={1}
+                        defaultChecked
+                      />
+                      <Field
+                        name="status"
+                        component={renderRadioButtonField}
+                        label={messages['inactive']}
+                        radioValue={0}
+                      />
+                    </div>
+                  </div>
                 </CardBody>
               </Card>
             </Col>
-          </Row>          
+          </Row>
         </div>
         <ButtonToolbar className="modal__footer">
-          <Button outline onClick={this.toggleModal}>{messages['branch.cancel']}</Button>{' '}
-          <Button color={className} type="submit">{messages['branch.save']}</Button>
+          <Button outline onClick={this.toggleModal}>{messages['cancel']}</Button>{' '}
+          <Button color={className} type="submit">{messages['save']}</Button>
         </ButtonToolbar>
       </form>
     );

@@ -22,13 +22,13 @@ class Item extends Component {
       customUI: ({ onClose }) => {
         return (
           <div className='custom-ui-confirm'>
-            <h2>{messages["city.title-confirm"]}</h2>
-            <p>{messages["city.desc-confirm"]}</p>
-            <Button color="light" size="sm" onClick={onClose}>{messages["city.confirm-no"]}</Button> &nbsp;
+            <h2>{messages["title-confirm"]}</h2>
+            <p>{messages["desc-confirm"]}</p>
+            <Button color="light" size="sm" onClick={onClose}>{messages["confirm-no"]}</Button> &nbsp;
             <Button color="danger" size="sm" onClick={() => {
               this.props.deleteCityItem(id, messages)
               onClose()
-            }}>{messages["city.confirm-yes"]}</Button>
+            }}>{messages["confirm-yes"]}</Button>
           </div>
         )
       }
@@ -37,16 +37,14 @@ class Item extends Component {
 
   render() {
     const { city } = this.props;
-    const { messages } = this.props.intl;
+    const { messages, locale } = this.props.intl;
     return (
       <tr>
         <th scope="row">{city.id}</th>
-        <td>{city.name}</td>
-        <td>{city.name_en}</td>
-        <td>{city.description}</td>
-        <td>{city.description_en}</td>
+        <td>{(locale === 'en-US' && city.name_en) ? city.name_en : city.name}</td>
+        <td>{locale === 'en-US' ? city.description_en : city.description}</td>
         <td>{city.zip_code}</td>
-        <td>{city.status === 1 ? <Badge color="success">{messages['city.active']}</Badge> : <Badge color="dark">{messages['city.inactive']}</Badge>}</td>
+        <td>{city.status === 1 ? <Badge color="success">{messages['active']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>}</td>
         <td>{city.created_at}</td>
         <td className="text-center">
           <Button color="info" size="sm" onClick={() => this.toggleModal(city)}><span className="lnr lnr-pencil" /></Button> &nbsp;

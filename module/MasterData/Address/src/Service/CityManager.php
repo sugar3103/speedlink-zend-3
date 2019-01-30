@@ -196,40 +196,4 @@ class CityManager  {
         return $dataCity;
     }
 
-    public function getListCitySelect(
-        $sortField = 'c.name',
-        $sortDirection = 'ASC',
-        $filters = []
-    ){
-
-        $cities     = [];
-        $totalCity = 0;
-        
-        //get orm city
-        $ormCity = $this->entityManager->getRepository(City::class)
-            ->getListCitySelect($sortField, $sortDirection, $filters);
-
-        if($ormCity){
-            $ormPaginator = new ORMPaginator($ormCity, true);
-            $ormPaginator->setUseOutputWalkers(false);
-            $totalCity = $ormPaginator->count();
-
-            // $adapter = new DoctrineAdapter($ormPaginator);  
-            $cities = $ormPaginator->getIterator()->getArrayCopy();
-            //set countRow default
-            $countRow = 1;
-            
-            foreach ($cities as &$city) {//loop
-                //set status
-              //  $city['status'] = City::getIsActiveList($city['status']);
-                $countRow++;
-            }  
-        }
-        //set data city
-        $dataCity = [
-            'listCity' => $cities,
-            'totalCity' => $totalCity,
-        ];
-        return $dataCity;
-    }
 }

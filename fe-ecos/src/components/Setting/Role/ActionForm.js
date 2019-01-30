@@ -2,14 +2,12 @@ import React, { PureComponent } from 'react';
 import { Button, ButtonToolbar, Card, CardBody, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleRoleModal, getPermissionList, getRoleList } from '../../../redux/actions';
+import { toggleRoleModal, getPermissionList, getRoleListAll } from '../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
-import CustomField from '../../../containers/Shared/form/CustomField';
 import renderCheckBoxField from '../../../containers/Shared/form/CheckBox';
 import renderRadioButtonField from '../../../containers/Shared/form/RadioButton';
 
 import validate from './validateActionForm';
-import classnames from 'classnames';
 
 class Action extends PureComponent {
 
@@ -37,26 +35,40 @@ class Action extends PureComponent {
 
   componentDidMount() {
     //Param Permission
-    this.props.getPermissionList();
+    let param = {
+      field: ['id', 'name', 'name_en'],
+      offset: {
+        limit: 0
+      }
+    };
+    this.props.getPermissionList(param);
     //Paran Role
-    this.props.getRoleList();
+    this.props.getRoleListAll(param);
+
     const data = this.props.modalData;
     if (data) {
       this.props.initialize(data);
     }
   }
 
-  showOptions = (items) => {
-    const roles = items.map(item => {
-      return {
-        'value': item.id,
-        'label': item.name
-      }
-    });
+  showPermissions = (permissions) => {
+    
+    const result = permissions.map(permission => {
+      return (
+        <div className="form__form-group">
+          <div className="form__form-group-field">
+            <Field
+              name={"permission["+ permission.name +"]"}
+              component={renderCheckBoxField}
+              label={permission.name}
+            /><br/>
+          </div>
+        </div>
+      )
+    })
 
-    return roles;
+    return result;
   }
-
 
   toggleModal = () => {
     this.props.toggleRoleModal();
@@ -65,9 +77,10 @@ class Action extends PureComponent {
   render() {
     const { messages } = this.props.intl;
     const { handleSubmit, modalData } = this.props;
+    const { permission } = this.props;
     const { errors } = this.state;
-    const className = modalData ? 'primary' : 'success';
     const title = modalData ? messages['role.update'] : messages['role.add-new'];
+    
     return (
       <form className="form" onSubmit={handleSubmit}>
         <div className="modal__header">
@@ -121,6 +134,7 @@ class Action extends PureComponent {
                         name="description"
                         component="textarea"
                         type="text"
+                        placeholder={messages['description']}
                       />
 
                     </div>
@@ -132,6 +146,7 @@ class Action extends PureComponent {
                         name="description"
                         component="textarea"
                         type="text"
+                        placeholder={messages['description']}
                       />
 
                     </div>
@@ -147,44 +162,25 @@ class Action extends PureComponent {
                     <h5 className="bold-text">Data</h5>
                     {/* <h5 className="subhead">Use default modal with property <span className="red-text">colored</span></h5> */}
                   </div>
-                  <div>
-                    <div className="form__form-group">
-                      <div className="form__form-group-field">
-                        <Field
-                          name="checkbox_one"
-                          component={renderCheckBoxField}
-                          label="Checkbox 1"
-                          defaultChecked
-                          className="button"
-                        />
-                      </div>
-                    </div>
-                    <div className="form__form-group">
-                      <div className="form__form-group-field">
-                        <Field
-                          name="checkbox_two"
-                          component={renderCheckBoxField}
-                          label="Checkbox 2"
-                          className="button"
-                        />
-                      </div>
-                    </div>
-                    
-                  </div>
                   <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['status.status']}</span>
+                    <span className="form__form-group-label">{messages['permission.list']}</span>                    
+                  </div>
+                  {permission.items && this.showPermissions(permission.items)}
+                  
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">{messages['status']}</span>
                     <div className="form__form-group-field">
                       <Field
                         name="status"
                         component={renderRadioButtonField}
-                        label={messages['status.active']}
+                        label={messages['active']}
                         radioValue={1}
                         defaultChecked
                       />
                       <Field
                         name="status"
                         component={renderRadioButtonField}
-                        label={messages['status.inactive']}
+                        label={messages['inactive']}
                         radioValue={0}
                       />
                     </div>
@@ -220,5 +216,5 @@ export default reduxForm({
 })(injectIntl(connect(mapStateToProps, {
   toggleRoleModal,
   getPermissionList,
-  getRoleList
+  getRoleListAll
 })(Action)));

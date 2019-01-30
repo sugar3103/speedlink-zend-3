@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
-import { ButtonToolbar, Card, CardBody, Col, Table, Button } from 'reactstrap';
+import { Card, CardBody, Col, Table, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Item from './Item';
 import Pagination from '../../../../containers/Shared/pagination/Pagination';
@@ -98,7 +98,7 @@ class List extends Component {
       })
     } else {
       result = (
-        <tr><td colSpan={8} className="text-center">{messages['branch.no-result']}</td></tr>
+        <tr><td colSpan={8} className="text-center">{messages['no-result']}</td></tr>
       )
     }
     return result;
@@ -128,12 +128,12 @@ class List extends Component {
                 <tr>
                   <th>#</th>
                   <th>{messages['branch.code']}</th>
-                  <th>{messages['branch.name']}<br/>{messages['branch.name-en']}</th>
-                  <th>{messages['branch.desc']}<br/>{messages['branch.desc-en']}</th>
+                  <th>{messages['name']}</th>
+                  <th>{messages['description']}</th>
                   <th>{messages['branch.city']}</th>
-                  <th>{messages['branch.status']}</th>
-                  <th>{messages['branch.created-at']}</th>
-                  <th>{messages['branch.action']}</th>
+                  <th>{messages['status']}</th>
+                  <th>{messages['created-at']}</th>
+                  <th>{messages['action']}</th>
                 </tr>
               </thead>
               <tbody>

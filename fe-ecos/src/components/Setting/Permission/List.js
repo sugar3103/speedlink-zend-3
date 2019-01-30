@@ -149,10 +149,10 @@ class List extends Component {
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>{messages['permission.name']}</th>
-                  <th>{messages['permission.fullname']}</th>
-                  <th>{messages['permission.created-at']}</th>
-                  <th className="text-center">{messages['permission.action']}</th>
+                  <th>{messages['name']}</th>
+                  <th>{messages['description']}</th>
+                  <th>{messages['created-at']}</th>
+                  <th className="text-center">{messages['action']}</th>
                 </tr>
               </thead>
               <tbody>

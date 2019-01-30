@@ -72,6 +72,10 @@ class HubRepository extends EntityRepository
                 'alias' => 'h.name',
                 'operator' => 'contains'
             ],
+            'name_en' => [
+                'alias' => 'h.name_en',
+                'operator' => 'contains'
+            ],
             'created_at' => [
                 'alias' => 'h.created_at',
                 'operator' => 'contains'
@@ -85,8 +89,8 @@ class HubRepository extends EntityRepository
                 'operator' => 'contains'
             ],
             'city' => [
-                'alias' => 'c.name',
-                'operator' => 'contains'
+                'alias' => 'h.city_id',
+                'operator' => 'eq'
             ],
         ];
 

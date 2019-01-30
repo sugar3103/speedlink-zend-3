@@ -52,7 +52,7 @@ class SearchForm extends Component {
       <form className="form" onSubmit={handleSubmit}>
         <Col md={4}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['ward.district']}</span>
+            <span className="form__form-group-label">{messages['district.list']}</span>
             <div className="form__form-group-field">
               <Field
                 name="district"
@@ -67,30 +67,30 @@ class SearchForm extends Component {
         </Col>
         <Col md={4}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['ward.name']}</span>
+            <span className="form__form-group-label">{messages['name']}</span>
             <div className="form__form-group-field">
               <Field
                 name="name"
                 component="input"
                 type="text"
-                placeholder={messages['ward.name']}
+                placeholder={messages['name']}
               />
             </div>
           </div>
         </Col>
         <Col md={4}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['ward.status']}</span>
+            <span className="form__form-group-label">{messages['status']}</span>
             <div className="form__form-group-field">
               <Field
                 name="status"
                 component={renderSelectField}
                 type="text"
-                placeholder={messages['ward.status']}
+                placeholder={messages['status']}
                 options={[
-                  { value: -1, label: messages['ward.all'] },
-                  { value: 1, label: messages['ward.active'] },
-                  { value: 0, label: messages['ward.inactive'] }
+                  { value: -1, label: messages['all'] },
+                  { value: 1, label: messages['active'] },
+                  { value: 0, label: messages['inactive'] }
                 ]}
               />
             </div>
@@ -106,12 +106,12 @@ class SearchForm extends Component {
                 handleSubmit();
               }, 200);
             }}
-          >{messages['ward.clear']}</Button>{' '}
+          >{messages['clear']}</Button>{' '}
           <Button
             size="sm"
             color="primary"
             id="search"
-          >{messages['ward.search']}</Button>
+          >{messages['search']}</Button>
         </Col>
       </form>
     );

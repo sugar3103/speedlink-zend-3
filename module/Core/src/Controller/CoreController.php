@@ -102,7 +102,8 @@ class CoreController extends ApiController
             foreach ($data as $value) {            
                 $result = array();
                 foreach ($fields as $field) {
-                    $result[$field] = $value[$field];
+                    if(isset($value[$field]))
+                        $result[$field] = $value[$field];
                 }
                 $results[] = $result;
             }

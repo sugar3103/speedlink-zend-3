@@ -1,6 +1,7 @@
 import {
   ROLE_TOGGLE_MODAL,
   ROLE_GET_LIST,
+  ROLE_GET_LIST_ALL,
   ROLE_GET_LIST_SUCCESS,
   ROLE_GET_LIST_ERROR,
   ROLE_ADD_ITEM,
@@ -23,6 +24,13 @@ export const getRoleList = (params) => ({
   type: ROLE_GET_LIST,
   payload: params
 });
+
+
+export const getRoleListAll = (params) => ({
+  type: ROLE_GET_LIST_ALL,
+  payload: params
+});
+
 
 export const getRoleListSuccess = (items, total) => ({
   type: ROLE_GET_LIST_SUCCESS,

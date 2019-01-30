@@ -22,13 +22,13 @@ class Item extends Component {
       customUI: ({ onClose }) => {
         return (
           <div className='custom-ui-confirm'>
-            <h2>{messages["hub.title-confirm"]}</h2>
-            <p>{messages["hub.desc-confirm"]}</p>
-            <Button color="light" size="sm" onClick={onClose}>{messages["hub.confirm-no"]}</Button> &nbsp;
+            <h2>{messages["title-confirm"]}</h2>
+            <p>{messages["desc-confirm"]}</p>
+            <Button color="light" size="sm" onClick={onClose}>{messages["confirm-no"]}</Button> &nbsp;
             <Button color="danger" size="sm" onClick={() => {
               this.props.deleteHubItem(id, messages)
               onClose()
-            }}>{messages["hub.confirm-yes"]}</Button>
+            }}>{messages["confirm-yes"]}</Button>
           </div>
         )
       }
@@ -37,15 +37,15 @@ class Item extends Component {
 
   render() {
     const { hub } = this.props;
-    const { messages } = this.props.intl;
+    const { messages,locale } = this.props.intl;
     return (
       <tr>
         <th scope="row">{hub.id}</th>
         <td>{hub.code}</td>
-        <td>{hub.name} <br/>{hub.name_en}</td>
-        <td>{hub.description}<br/>{hub.description_en}</td>
+        <td>{ (locale ==='en-US' && hub.name_en) ? hub.name_en : hub.name }</td>
+        <td>{ (locale ==='en-US' && hub.description_en) ? hub.description_en : hub.description }</td>
         <td>{hub.city}</td>
-        <td>{hub.status === 1 ? <Badge color="success">{messages['hub.active']}</Badge> : <Badge color="dark">{messages['hub.inactive']}</Badge>}</td>
+        <td>{hub.status === 1 ? <Badge color="success">{messages['active']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>}</td>
         <td>{hub.created_at}</td>
         <td className="text-center">
           <Button color="info" size="sm" onClick={() => this.toggleModal(hub)}><span className="lnr lnr-pencil" /></Button> &nbsp;
@@ -61,8 +61,13 @@ Item.propTypes = {
   toggleHubModal: PropTypes.func.isRequired,
   deleteHubItem: PropTypes.func.isRequired
 }
-
-export default injectIntl(connect(null, {
+const mapStateToProps = ({ settings }) => {
+  const { locale } = settings;
+  return {
+    locale
+  }
+}
+export default injectIntl(connect(mapStateToProps, {
   toggleHubModal,
   deleteHubItem
 })(Item));

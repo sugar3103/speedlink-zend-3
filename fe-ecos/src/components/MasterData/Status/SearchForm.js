@@ -8,34 +8,35 @@ import PropTypes from 'prop-types';
 class SearchForm extends Component {
   render() {
     const { handleSubmit, reset } = this.props;
-    const { messages } = this.props.intl;
+    const { messages,locale } = this.props.intl;    
     return (
       <form className="form" onSubmit={handleSubmit}>
         <div className="form__half">
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['status.name']}</span>
+            <span className="form__form-group-label">{messages['name']}</span>
             <div className="form__form-group-field">
+              
               <Field
-                name="name"
+                name={locale === 'en-US' ? 'name_en' : 'name'}
                 component="input"
                 type="text"
-                placeholder={messages['status.name']}
+                placeholder={messages['name']}
               />
             </div>
           </div>
         </div>
         <div className="form__half">
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['status.status']}</span>
+            <span className="form__form-group-label">{messages['status']}</span>
             <div className="form__form-group-field">
               <Field
                 name="status"
                 component={renderSelectField}
                 type="text"
                 options={[
-                  { value: -1, label: messages['status.all'] },
-                  { value: 1, label: messages['status.active'] },
-                  { value: 0, label: messages['status.inactive'] }
+                  { value: -1, label: messages['all'] },
+                  { value: 1, label: messages['active'] },
+                  { value: 0, label: messages['inactive'] }
                 ]}
               />
             </div>
@@ -51,12 +52,12 @@ class SearchForm extends Component {
                 handleSubmit();  
               }, 200);
             }}
-          >{messages['status.clear']}</Button>{' '}
+          >{messages['clear']}</Button>{' '}
           <Button 
             size="sm" 
             color="primary"
             id="search" 
-          >{ messages['status.search'] }</Button>
+          >{ messages['search'] }</Button>
         </div>
       </form>
     );

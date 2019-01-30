@@ -1,11 +1,10 @@
 import React, { PureComponent } from 'react';
-import { Button, ButtonToolbar, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
+import { Button, ButtonToolbar } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { togglePermissionModal } from '../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../containers/Shared/form/CustomField';
-import classnames from 'classnames';
 import validate from './validateActionForm';
 
 class Action extends PureComponent {
@@ -93,7 +92,7 @@ class Action extends PureComponent {
             </div>
           </div>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['permissions.desc-en']}</span>
+            <span className="form__form-group-label">{messages['description']}</span>
             <div className="form__form-group-field">
               <div className="form__form-group-icon">
                 <div className="flag us"></div>

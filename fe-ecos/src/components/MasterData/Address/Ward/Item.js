@@ -22,13 +22,13 @@ class Item extends Component {
       customUI: ({ onClose }) => {
         return (
           <div className='custom-ui-confirm'>
-            <h2>{messages["ward.title-confirm"]}</h2>
-            <p>{messages["ward.desc-confirm"]}</p>
-            <Button color="light" size="sm" onClick={onClose}>{messages["ward.confirm-no"]}</Button> &nbsp;
+            <h2>{messages["title-confirm"]}</h2>
+            <p>{messages["desc-confirm"]}</p>
+            <Button color="light" size="sm" onClick={onClose}>{messages["confirm-no"]}</Button> &nbsp;
             <Button color="danger" size="sm" onClick={() => {
               this.props.deleteWardItem(id, messages)
               onClose()
-            }}>{messages["ward.confirm-yes"]}</Button>
+            }}>{messages["confirm-yes"]}</Button>
           </div>
         )
       }
@@ -37,16 +37,14 @@ class Item extends Component {
 
   render() {
     const { ward } = this.props;
-    const { messages } = this.props.intl;
+    const { messages,locale } = this.props.intl;
     return (
       <tr>
         <th scope="row">{ward.id}</th>
-        <td>{ward.name}</td>
-        <td>{ward.name_en}</td>
-        <td>{ward.description}</td>
-        <td>{ward.description_en}</td>
+        <td>{(locale === 'es-US' && ward.name_en) ? ward.name_en : ward.name}</td>
+        <td>{(locale === 'es-US' && ward.description_en) ? ward.description_en : ward.description}</td>
         <td>{ward.postal_code}</td>
-        <td>{ward.status === 1 ? <Badge color="success">{messages['ward.active']}</Badge> : <Badge color="dark">{messages['ward.inactive']}</Badge>}</td>
+        <td>{ward.status === 1 ? <Badge color="success">{messages['active']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>}</td>
         <td>{ward.created_at}</td>
         <td className="text-center">
           <Button color="info" size="sm" onClick={() => this.toggleModal(ward)}><span className="lnr lnr-pencil" /></Button> &nbsp;

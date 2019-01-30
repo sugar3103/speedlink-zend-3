@@ -67,30 +67,30 @@ class SearchForm extends Component {
         </Col>
         <Col md={4}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['district.name']}</span>
+            <span className="form__form-group-label">{messages['name']}</span>
             <div className="form__form-group-field">
               <Field
                 name="name"
                 component="input"
                 type="text"
-                placeholder={messages['district.name']}
+                placeholder={messages['name']}
               />
             </div>
           </div>
         </Col>
         <Col md={4}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['district.status']}</span>
+            <span className="form__form-group-label">{messages['status']}</span>
             <div className="form__form-group-field">
               <Field
                 name="status"
                 component={renderSelectField}
                 type="text"
-                placeholder={messages['district.status']}
+                placeholder={messages['status']}
                 options={[
-                  { value: -1, label: messages['district.all'] },
-                  { value: 1, label: messages['district.active'] },
-                  { value: 0, label: messages['district.inactive'] }
+                  { value: -1, label: messages['all'] },
+                  { value: 1, label: messages['active'] },
+                  { value: 0, label: messages['inactive'] }
                 ]}
               />
             </div>
@@ -106,12 +106,12 @@ class SearchForm extends Component {
                 handleSubmit();
               }, 200);
             }}
-          >{messages['district.clear']}</Button>{' '}
+          >{messages['clear']}</Button>{' '}
           <Button
             size="sm"
             color="primary"
             id="search"
-          >{messages['district.search']}</Button>
+          >{messages['search']}</Button>
         </Col>
       </form>
     );
