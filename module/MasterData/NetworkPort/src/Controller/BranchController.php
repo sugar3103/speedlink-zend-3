@@ -48,12 +48,13 @@ class BranchController extends CoreController {
       $fieldsMap = [
           0 => 'code',
           1 => 'name',
-          2 => 'hub',
-          3 => 'district',
-          4 => 'ward',
-          5 => 'city',
-          6 => 'country',
-          7 => 'status'
+          2 => 'name_en',
+          3 => 'hub',
+          4 => 'district',
+          5 => 'ward',
+          6 => 'city',
+          7 => 'country',
+          8 => 'status'
       ];
 
       list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);
