@@ -2,8 +2,8 @@ import appLocaleData from 'react-intl/locale-data/en';
 import enMessages from '../locales/en_EN';
 
 const _languagues = [];
-Object.keys(enMessages).map(languague => {
-  Object.keys(enMessages[languague]).map(lang => {
+Object.keys(enMessages).forEach(languague => {
+  Object.keys(enMessages[languague]).forEach(lang => {
     _languagues[lang] = enMessages[languague][lang];
   });
 })

@@ -133,7 +133,7 @@ class SearchForm extends Component {
             <span className="form__form-group-label">{messages['name']}</span>
             <div className="form__form-group-field">
               <Field
-                name={locale == 'es-US' ? 'name_en' : 'name'}
+                name={locale === 'es-US' ? 'name_en' : 'name'}
                 component="input"
                 type="text"
                 placeholder={messages['name']}

@@ -1,11 +1,10 @@
 import React, { PureComponent } from 'react';
-import { Button, ButtonToolbar, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
+import { Button, ButtonToolbar } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { togglePermissionModal } from '../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../containers/Shared/form/CustomField';
-import classnames from 'classnames';
 import validate from './validateActionForm';
 
 class Action extends PureComponent {

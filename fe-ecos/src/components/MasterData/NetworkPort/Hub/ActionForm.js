@@ -12,9 +12,7 @@ import PropTypes from 'prop-types';
 
 class ActionForm extends Component {
 
-  constructor() {
-    super();
-  }
+  
 
 
   componentDidMount() {

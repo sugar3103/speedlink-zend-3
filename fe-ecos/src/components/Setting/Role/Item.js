@@ -42,7 +42,7 @@ class Item extends Component {
       <tr>
         <th scope="row">{role.id}</th>
         <td>{role.name}</td>
-        <td>{(locale == 'es-US' && role.description_en) ? role.description : role.description}</td>
+        <td>{(locale === 'es-US' && role.description_en) ? role.description : role.description}</td>
         <td>{role.is_active === 1 ? <Badge color="success">{messages['active']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>}</td>
         <td>{role.created_at}</td>
         <td className="text-center">

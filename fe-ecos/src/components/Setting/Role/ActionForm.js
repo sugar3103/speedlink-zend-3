@@ -8,7 +8,6 @@ import renderCheckBoxField from '../../../containers/Shared/form/CheckBox';
 import renderRadioButtonField from '../../../containers/Shared/form/RadioButton';
 
 import validate from './validateActionForm';
-import classnames from 'classnames';
 
 class Action extends PureComponent {
 

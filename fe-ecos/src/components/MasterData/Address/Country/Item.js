@@ -17,7 +17,7 @@ class Item extends Component {
   }
 
   onDelete = (id) => {
-    const { messages, locale } = this.props.intl;
+    const { messages } = this.props.intl;
     confirmAlert({
       customUI: ({ onClose }) => {
         return (

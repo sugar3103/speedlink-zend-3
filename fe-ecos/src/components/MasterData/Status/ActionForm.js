@@ -11,10 +11,6 @@ import PropTypes from 'prop-types';
 
 class ActionForm extends Component {
 
-  constructor() {
-    super();    
-  }
-
   componentDidMount() {
     const data = this.props.modalData;
     if (data) {
@@ -26,11 +22,11 @@ class ActionForm extends Component {
     this.props.toggleStatusModal();
   }
 
-  componentWillReceiveProps(nextProps) {
-      if (nextProps && nextProps.modalData) {
-      const data = nextProps.modalData;
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //     if (nextProps && nextProps.modalData) {
+  //       const data = nextProps.modalData;
+  //   }
+  // }
   render() {
     const { messages } = this.props.intl;
     const { handleSubmit, modalData } = this.props;

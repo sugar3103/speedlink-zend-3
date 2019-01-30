@@ -11,11 +11,6 @@ import validate from './validateActionForm';
 import PropTypes from 'prop-types';
 
 class ActionForm extends PureComponent {
-
-  constructor() {
-    super();
-  }
-
   componentDidMount() {
     const data = this.props.modalData;
     if (data) {
@@ -24,7 +19,6 @@ class ActionForm extends PureComponent {
 
     if (data && data.country_id) {
       let paramsCountry = {
-        ...paramsCountry,
         offset: {
           limit: 0
         },
@@ -168,7 +162,7 @@ class ActionForm extends PureComponent {
   }
 
   render() {
-    const { messages, locale } = this.props.intl;
+    const { messages } = this.props.intl;
     const { handleSubmit, modalData, cities, countries, districts, wards, hubs } = this.props;
     const className = modalData ? 'primary' : 'success';
     const title = modalData ? messages['branch.update'] : messages['branch.add-new'];
