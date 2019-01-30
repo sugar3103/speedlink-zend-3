@@ -63,7 +63,7 @@ const renderMultiSelectField = props => (
       options={props.options}
       placeholder={props.placeholder}
     />    
-    {props.meta.touched && props.meta.error && <span className="form__form-group-error">{props.meta.error}</span>}
+    {props.meta.touched && props.meta.error && <span className="form__form-group-error">{props.messages[props.meta.error]}</span>}
   </div>
 );
 

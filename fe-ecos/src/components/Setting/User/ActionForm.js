@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
 import { Button, ButtonToolbar, Row, Col } from 'reactstrap';
+import EyeIcon from 'mdi-react/EyeIcon';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleUserModal,getRoleList } from '../../../redux/actions';
+import { toggleUserModal, getRoleList } from '../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../containers/Shared/form/CustomField';
 import renderRadioButtonField from '../../../containers/Shared/form/RadioButton';
@@ -14,34 +15,33 @@ class Action extends PureComponent {
   constructor() {
     super();
     this.state = {
-      activeTab: '1',
-      errors: {}      
+      showPassword: false,
+      showConfirmPassword: false,
     };
-  }
-
-  onChange = (e) => {
-    this.setState({
-      errors: {}
-    });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.errors) {
-      const { errors } = nextProps;
-      this.setState({
-        errors: errors
-      });
-    }
   }
 
   componentDidMount() {
     this.props.getRoleList();
-    const data = this.props.modalData;    
+    const data = this.props.modalData;
     if (data) {
       data.user = data.user === 'Active' ? 1 : 0;
       this.props.initialize(data);
     }
   }
+
+  showPassword = (e) => {
+    e.preventDefault();
+    this.setState({
+      showPassword: !this.state.showPassword,
+    });
+  };
+
+  showConfirmPassword = (e) => {
+    e.preventDefault();
+    this.setState({
+      showConfirmPassword: !this.state.showConfirmPassword,
+    });
+  };
 
   showOptions = (items) => {
     const roles = items.map(item => {
@@ -54,23 +54,14 @@ class Action extends PureComponent {
     return roles;
   }
 
-  toggleTab = (tab) => {
-    if (this.state.activeTab !== tab) {
-      this.setState({
-        activeTab: tab,
-      });
-    }
-  };
-
   toggleModal = () => {
     this.props.toggleUserModal();
   }
-  
+
   render() {
     const { messages } = this.props.intl;
     const { handleSubmit } = this.props;
-    const { errors } = this.state;    
-    const {items} = this.props.role;
+    const { items } = this.props.role;
     return (
       <form className="form" onSubmit={handleSubmit}>
         <div className="modal__header">
@@ -88,10 +79,9 @@ class Action extends PureComponent {
                     component={CustomField}
                     type="text"
                     placeholder={messages['user.username']}
-                    onChange={this.onChange}
+                    messages={messages}
                   />
                 </div>
-                {errors && errors.username && errors.username.userExists && <span className="form__form-group-error">{messages['user.validate-user-exists']}</span>}
               </div>
             </Col>
           </Row>
@@ -105,10 +95,8 @@ class Action extends PureComponent {
                     component={CustomField}
                     type="text"
                     placeholder={messages['user.firstname']}
-                    onChange={this.onChange}
                   />
                 </div>
-                {errors && errors.username && errors.username.userExists && <span className="form__form-group-error">{messages['user.validate-user-exists']}</span>}
               </div>
             </Col>
             <Col md={6}>
@@ -120,10 +108,8 @@ class Action extends PureComponent {
                     component={CustomField}
                     type="text"
                     placeholder={messages['user.lastname']}
-                    onChange={this.onChange}
                   />
                 </div>
-                {errors && errors.username && errors.username.userExists && <span className="form__form-group-error">{messages['user.validate-user-exists']}</span>}
               </div>
             </Col>
           </Row>
@@ -135,12 +121,16 @@ class Action extends PureComponent {
                   <Field
                     name="password"
                     component={CustomField}
-                    type="text"
+                    type={this.state.showPassword ? 'text' : 'password'}
                     placeholder={messages['user.password']}
-                    onChange={this.onChange}
+                    messages={messages}
                   />
+                  <button
+                    className={`form__form-group-button${this.state.showPassword ? ' active' : ''}`}
+                    onClick={e => this.showPassword(e)}
+                  ><EyeIcon />
+                  </button>
                 </div>
-                {errors && errors.password && <span className="form__form-group-error">{messages['user.validate-password']}</span>}
               </div>
               <div className="form__form-group">
                 <span className="form__form-group-label">{messages['user.confirm_password']}</span>
@@ -148,12 +138,16 @@ class Action extends PureComponent {
                   <Field
                     name="confirm_password"
                     component={CustomField}
-                    type="text"
-                    placeholder={messages['user.confirm_password']}
-                    onChange={this.onChange}
+                    type={this.state.showConfirmPassword ? 'text' : 'password'}
+                    placeholder={messages['user.password']}
+                    messages={messages}
                   />
+                  <button
+                    className={`form__form-group-button${this.state.showConfirmPassword ? ' active' : ''}`}
+                    onClick={e => this.showConfirmPassword(e)}
+                  ><EyeIcon />
+                  </button>
                 </div>
-                {errors && errors.password && <span className="form__form-group-error">{messages['user.validate-confirm-password']}</span>}
               </div>
 
               <div className="form__form-group">
@@ -170,7 +164,7 @@ class Action extends PureComponent {
                     name="status"
                     component={renderRadioButtonField}
                     label={messages['user.inactive']}
-                    radioValue={0}                    
+                    radioValue={0}
                   />
                 </div>
               </div>
@@ -178,11 +172,11 @@ class Action extends PureComponent {
               <div className="form__form-group">
                 <span className="form__form-group-label">{messages['role.list']}</span>
                 <div className="form__form-group-field">
-                <Field
+                  <Field
                     name="roles"
                     component={renderMultiSelectField}
                     options={items && this.showOptions(items)}
-                    onChange={this.onChange}
+                    messages={messages}
                   />
                 </div>
               </div>
@@ -200,9 +194,8 @@ class Action extends PureComponent {
 
 const mapStateToProps = ({ users }) => {
   const { user, role } = users;
-  const { errors, modalData } = user;
+  const { modalData } = user;
   return {
-    errors,
     modalData,
     role
   }

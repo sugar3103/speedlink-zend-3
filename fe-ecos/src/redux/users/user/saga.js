@@ -19,6 +19,17 @@ import {
 } from "./actions";
 
 import createNotification from '../../../util/notifications';
+import { startSubmit, stopSubmit } from 'redux-form';
+
+//validate
+
+function validateUser(errors) {
+  if (errors.username && errors.username.userExists) {
+    return stopSubmit('user_action_form', {
+      name: 'user.validate-username-exists'
+    });
+  }
+}
 
 //list user
 
@@ -83,6 +94,7 @@ const updateUserItemRequest = async item => {
 
 function* updateUserItem({ payload }) {
   const { item, messages } = payload;
+  yield put(startSubmit('user_action_form'));
   try {
     const response = yield call(updateUserItemRequest, item);
     switch (response.error_code) {
@@ -99,6 +111,7 @@ function* updateUserItem({ payload }) {
 
       case EC_FAILURE:
         yield put(updateUserItemError(response.data));
+        yield put(validateUser(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:
