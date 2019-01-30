@@ -98,7 +98,7 @@ class List extends Component {
       })
     } else {
       result = (
-        <tr><td colSpan={8} className="text-center">{messages['hub.no-result']}</td></tr>
+        <tr><td colSpan={8} className="text-center">{messages['no-result']}</td></tr>
       )
     }
     return result;
@@ -128,12 +128,12 @@ class List extends Component {
                 <tr>
                   <th>#</th>
                   <th>{messages['hub.code']}</th>
-                  <th>{messages['hub.name']}</th>
-                  <th>{messages['hub.desc']}</th>
+                  <th>{messages['name']}</th>
+                  <th>{messages['description']}</th>
                   <th>{messages['hub.city']}</th>
-                  <th>{messages['hub.status']}</th>
-                  <th>{messages['hub.created-at']}</th>
-                  <th>{messages['hub.action']}</th>
+                  <th>{messages['status']}</th>
+                  <th>{messages['created-at']}</th>
+                  <th>{messages['action']}</th>
                 </tr>
               </thead>
               <tbody>

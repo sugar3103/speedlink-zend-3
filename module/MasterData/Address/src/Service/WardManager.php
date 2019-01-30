@@ -180,7 +180,7 @@ class WardManager  {
             foreach ($wards as &$ward) {//loop
 
                 //set created_at
-                $ward['created_at'] =  ($ward['created_at']) ? Utils::checkDateFormat($district['created_at'],'d/m/Y') : '';
+                $ward['created_at'] =  ($ward['created_at']) ? Utils::checkDateFormat($ward['created_at'],'d/m/Y') : '';
 
                 $countRow++;
             }

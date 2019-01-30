@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 class SearchForm extends Component {
   render() {
     const { handleSubmit, reset } = this.props;
-    const { messages } = this.props.intl;
+    const { messages,locale } = this.props.intl;
     return (
       <form className="form" onSubmit={handleSubmit}>
         <div className="form__half">
@@ -16,7 +16,7 @@ class SearchForm extends Component {
             <span className="form__form-group-label">{messages['name']}</span>
             <div className="form__form-group-field">
               <Field
-                name="name"
+                name={locale === 'es-US' ? 'name_en' : 'name'}
                 component="input"
                 type="text"
                 placeholder={messages['name']}

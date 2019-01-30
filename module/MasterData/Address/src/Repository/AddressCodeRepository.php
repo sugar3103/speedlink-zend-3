@@ -35,6 +35,7 @@ class AddressCodeRepository extends EntityRepository
             $queryBuilder->select("
                 ac.id,
                 ac.code,
+                c.zip_code as zip_code,
                 ct.name AS country,
                 c.name AS city,
                 d.name AS district,

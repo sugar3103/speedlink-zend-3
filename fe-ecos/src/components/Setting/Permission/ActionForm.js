@@ -93,7 +93,7 @@ class Action extends PureComponent {
             </div>
           </div>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['permissions.desc-en']}</span>
+            <span className="form__form-group-label">{messages['description']}</span>
             <div className="form__form-group-field">
               <div className="form__form-group-icon">
                 <div className="flag us"></div>

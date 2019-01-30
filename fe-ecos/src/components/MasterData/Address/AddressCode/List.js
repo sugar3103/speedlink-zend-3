@@ -82,7 +82,7 @@ class List extends Component {
       })
     } else {
       result = (
-        <tr><td colSpan={8} className="text-center">{messages['code.no-result']}</td></tr>
+        <tr><td colSpan={8} className="text-center">{messages['no-result']}</td></tr>
       )
     }
     return result;
@@ -104,6 +104,7 @@ class List extends Component {
                 <tr>
                   <th>#</th>
                   <th>{messages['code.code']}</th>
+                  <th>{messages['city.zip-code']}</th>
                   <th>{messages['code.country']}</th>
                   <th>{messages['code.city']}</th>
                   <th>{messages['code.district']}</th>

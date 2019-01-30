@@ -32,8 +32,8 @@ module.exports = {
   //Role
   'role.list': 'Roles',
   'role.name': 'Role',
-  'role.add-new': 'Add New Role',
-  'role.desc': 'Description',
+  'role.add-new': 'Add New Role',  
+  'role.title-confirm': 'Delete Role',  
 
   //Role
   'permission.list': 'Permissions',

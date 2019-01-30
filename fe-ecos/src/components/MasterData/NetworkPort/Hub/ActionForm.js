@@ -14,14 +14,11 @@ class ActionForm extends Component {
 
   constructor() {
     super();
-    this.state = {
-      activeTab: '1',
-    };
   }
 
 
   componentDidMount() {
-    const data = this.props.modalData;     
+    const data = this.props.modalData;
     if (data) {
       this.props.initialize(data);
     }
@@ -36,7 +33,7 @@ class ActionForm extends Component {
     }
     this.props.getCityList(params);
   }
-  
+
   onInputChange = value => {
     const params = {
       field: ['id', 'name'],
@@ -55,22 +52,16 @@ class ActionForm extends Component {
     let result = [];
     if (items.length > 0) {
       result = items.map(item => {
-      return {
-        value: item.id,
-        label: item.name
-      }
-    });
-  }
-  return result;
-}
-
-  toggleTab = (tab) => {
-    if (this.state.activeTab !== tab) {
-      this.setState({
-        activeTab: tab,
+        return {
+          value: item.id,
+          label: item.name
+        }
       });
     }
-  };
+    return result;
+  }
+
+
 
   toggleModal = () => {
     this.props.toggleHubModal();
@@ -89,7 +80,7 @@ class ActionForm extends Component {
           <h4 className="bold-text  modal__title">{title}</h4>
         </div>
         <div className="modal__body">
-        <Row>
+          <Row>
             <Col md={12} lg={6} xl={6} xs={12}>
               <Card>
                 <CardBody>
@@ -97,62 +88,62 @@ class ActionForm extends Component {
                     <h5 className="bold-text">Generate</h5>
                     <h5 className="subhead">Use default modal with property <span className="red-text">colored</span></h5>
                   </div>
-          
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['hub.name']}</span>
-            <div className="form__form-group-field">
-              <div className="form__form-group-icon">
-                <div className="flag vn"></div>
-              </div>
-              <Field
-                name="name"
-                component={CustomField}
-                type="text"
-                placeholder={messages['hub.name']}
-                messages={messages}
-              />
-            </div>
-            <div className="form__form-group-field">
-              <div className="form__form-group-icon">
-                <div className="flag us"></div>
-              </div>
-              <Field
-                name="name_en"
-                component={CustomField}
-                type="text"
-                placeholder={messages['hub.name-en']}
-                messages={messages}
-              />
-            </div>
-          </div>
 
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['hub.desc']}</span>
-            <div className="form__form-group-field">
-              <div className="form__form-group-icon">
-                <div className="flag vn"></div>
-              </div>
-              <Field
-                name="description"
-                component="textarea"
-                type="text"
-                placeholder={messages['hub.desc']}
-              />
-            </div>
-            <div className="form__form-group-field">
-              <div className="form__form-group-icon">
-                <div className="flag us"></div>
-              </div>
-              <Field
-                name="description_en"
-                component="textarea"
-                type="text"
-                placeholder={messages['hub.desc-en']}
-              />
-            </div>
-          </div>
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">{messages['name']}</span>
+                    <div className="form__form-group-field">
+                      <div className="form__form-group-icon">
+                        <div className="flag vn"></div>
+                      </div>
+                      <Field
+                        name="name"
+                        component={CustomField}
+                        type="text"
+                        placeholder={messages['name']}
+                        messages={messages}
+                      />
+                    </div>
+                    <div className="form__form-group-field">
+                      <div className="form__form-group-icon">
+                        <div className="flag us"></div>
+                      </div>
+                      <Field
+                        name="name_en"
+                        component={CustomField}
+                        type="text"
+                        placeholder={messages['name']}
+                        messages={messages}
+                      />
+                    </div>
+                  </div>
 
-         
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">{messages['description']}</span>
+                    <div className="form__form-group-field">
+                      <div className="form__form-group-icon">
+                        <div className="flag vn"></div>
+                      </div>
+                      <Field
+                        name="description"
+                        component="textarea"
+                        type="text"
+                        placeholder={messages['description']}
+                      />
+                    </div>
+                    <div className="form__form-group-field">
+                      <div className="form__form-group-icon">
+                        <div className="flag us"></div>
+                      </div>
+                      <Field
+                        name="description_en"
+                        component="textarea"
+                        type="text"
+                        placeholder={messages['description']}
+                      />
+                    </div>
+                  </div>
+
+
                 </CardBody>
               </Card>
             </Col>
@@ -164,23 +155,23 @@ class ActionForm extends Component {
                     <h5 className="subhead">Use default modal with property <span className="red-text">colored</span></h5>
                   </div>
 
-            <div className="form__form-group">
-              <span className="form__form-group-label">{messages['hub.code']}</span>
-              <div className="form__form-group-field">
-                <Field
-                  name="code"
-                  component={CustomField}
-                  type="text"
-                  placeholder={messages['hub.code']}
-                  messages={messages}
-                />
-              </div>
-            </div>
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">{messages['hub.code']}</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="code"
+                        component={CustomField}
+                        type="text"
+                        placeholder={messages['hub.code']}
+                        messages={messages}
+                      />
+                    </div>
+                  </div>
 
-              <div className="form__form-group">
-                <span className="form__form-group-label">{messages['hub.city']}</span>
-                <div className="form__form-group-field">
-                  <Field
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">{messages['hub.city']}</span>
+                    <div className="form__form-group-field">
+                      <Field
                         name="city_id"
                         component={renderSelectField}
                         type="text"
@@ -189,36 +180,36 @@ class ActionForm extends Component {
                         onInputChange={this.onInputChange}
                         messages={messages}
                       />
-                </div>
-              </div>
+                    </div>
+                  </div>
 
-              <div className="form__form-group">
-                <span className="form__form-group-label">{messages['hub.status']}</span>
-                <div className="form__form-group-field">
-                  <Field
-                    name="status"
-                    component={renderRadioButtonField}
-                    label={messages['hub.active']}
-                    radioValue={1}
-                    defaultChecked
-                  />
-                  <Field
-                    name="status"
-                    component={renderRadioButtonField}
-                    label={messages['hub.inactive']}
-                    radioValue={0}                    
-                  />
-                </div>
-              </div>
-              
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">{messages['status']}</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="status"
+                        component={renderRadioButtonField}
+                        label={messages['active']}
+                        radioValue={1}
+                        defaultChecked
+                      />
+                      <Field
+                        name="status"
+                        component={renderRadioButtonField}
+                        label={messages['inactive']}
+                        radioValue={0}
+                      />
+                    </div>
+                  </div>
+
                 </CardBody>
               </Card>
             </Col>
           </Row>
         </div>
         <ButtonToolbar className="modal__footer">
-          <Button outline onClick={this.toggleModal}>{messages['hub.cancel']}</Button>{' '}
-          <Button color={className} type="submit">{messages['hub.save']}</Button>
+          <Button outline onClick={this.toggleModal}>{messages['cancel']}</Button>{' '}
+          <Button color={className} type="submit">{messages['save']}</Button>
         </ButtonToolbar>
       </form>
     );
@@ -233,9 +224,9 @@ ActionForm.propTypes = {
   getCityList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({hub, address}) => {  
+const mapStateToProps = ({ hub, address }) => {
   const { modalData } = hub;
-  const cities  = address.city.items;
+  const cities = address.city.items;
   return {
     modalData,
     cities
@@ -244,7 +235,7 @@ const mapStateToProps = ({hub, address}) => {
 
 export default reduxForm({
   form: 'hub_action_form',
-  validate  
+  validate
 })(injectIntl(connect(mapStateToProps, {
   toggleHubModal,
   getCityList

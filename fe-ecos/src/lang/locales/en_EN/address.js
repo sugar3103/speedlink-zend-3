@@ -65,7 +65,7 @@ module.exports = {
   'city.validate-country-empty': 'Country shouldn’t be empty',
   
   //Master-data --- Address --- District
-  'district.list-title': 'District List',
+  'district.list': 'Districts',
   'district.add-new': 'Add New District',
   'district.update': 'Update District',
   'district.city': 'City',

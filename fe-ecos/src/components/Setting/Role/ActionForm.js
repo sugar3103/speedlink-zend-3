@@ -135,6 +135,7 @@ class Action extends PureComponent {
                         name="description"
                         component="textarea"
                         type="text"
+                        placeholder={messages['description']}
                       />
 
                     </div>
@@ -146,6 +147,7 @@ class Action extends PureComponent {
                         name="description"
                         component="textarea"
                         type="text"
+                        placeholder={messages['description']}
                       />
 
                     </div>
@@ -167,19 +169,19 @@ class Action extends PureComponent {
                   {permission.items && this.showPermissions(permission.items)}
                   
                   <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['status.status']}</span>
+                    <span className="form__form-group-label">{messages['status']}</span>
                     <div className="form__form-group-field">
                       <Field
                         name="status"
                         component={renderRadioButtonField}
-                        label={messages['status.active']}
+                        label={messages['active']}
                         radioValue={1}
                         defaultChecked
                       />
                       <Field
                         name="status"
                         component={renderRadioButtonField}
-                        label={messages['status.inactive']}
+                        label={messages['inactive']}
                         radioValue={0}
                       />
                     </div>

@@ -47,7 +47,7 @@ class SearchForm extends Component {
 
   render() {
     const { handleSubmit, reset, cities } = this.props;
-    const { messages } = this.props.intl;
+    const { messages,locale } = this.props.intl;
     return (
       <form className="form" onSubmit={handleSubmit}>
         <Col md={3}>
@@ -65,29 +65,29 @@ class SearchForm extends Component {
         </Col>
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['hub.name']}</span>
+            <span className="form__form-group-label">{messages['name']}</span>
             <div className="form__form-group-field">
               <Field
-                name="name"
+                name={locale == 'en-US' ? 'name_en' : 'name'}
                 component="input"
                 type="text"
-                placeholder={messages['hub.name']}
+                placeholder={messages['name']}
               />
             </div>
           </div>
         </Col>
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['hub.status']}</span>
+            <span className="form__form-group-label">{messages['status']}</span>
             <div className="form__form-group-field">
               <Field
                 name="status"
                 component={renderSelectField}
                 type="text"
                 options={[
-                  { value: -1, label: messages['hub.all'] },
-                  { value: 1, label: messages['hub.active'] },
-                  { value: 0, label: messages['hub.inactive'] }
+                  { value: -1, label: messages['all'] },
+                  { value: 1, label: messages['active'] },
+                  { value: 0, label: messages['inactive'] }
                 ]}
               />
             </div>
@@ -118,12 +118,12 @@ class SearchForm extends Component {
                 handleSubmit();  
               }, 200);
             }}
-          >{messages['hub.clear']}</Button>{' '}
+          >{messages['clear']}</Button>{' '}
           <Button 
             size="sm" 
             color="primary"
             id="search" 
-          >{ messages['hub.search'] }</Button>
+          >{ messages['search'] }</Button>
         </div>
       </form>
     );

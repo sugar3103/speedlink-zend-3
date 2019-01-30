@@ -9,6 +9,7 @@ class Item extends Component {
       <tr>
         <th scope="row">{code.id}</th>
         <td>{code.code}</td>
+        <td>{code.zip_code}</td>
         <td>{code.country}</td>
         <td>{code.city}</td>
         <td>{code.district}</td>
