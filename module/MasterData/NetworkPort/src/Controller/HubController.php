@@ -46,9 +46,10 @@ class HubController extends CoreController {
       // get the filters
       $fieldsMap = [
           0 => 'name',
-          1 => 'status',
-          2 => 'code',
-          3 => 'city'
+          1 => 'name_en',
+          2 => 'status',
+          3 => 'code',
+          4 => 'city'
       ];
       
       list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);

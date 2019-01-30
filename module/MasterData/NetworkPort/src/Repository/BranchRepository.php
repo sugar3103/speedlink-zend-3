@@ -86,6 +86,10 @@ class BranchRepository extends EntityRepository
                 'alias' => 'b.name',
                 'operator' => 'contains'
             ],
+            'name_en' => [
+                'alias' => 'b.name_en',
+                'operator' => 'contains'
+            ],
             'hub' => [
                 'alias' => 'b.hub_id',
                 'operator' => 'eq'
