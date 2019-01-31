@@ -6,8 +6,8 @@ import { toggleRoleModal, getPermissionList, getRoleListAll } from '../../../../
 import { Field, reduxForm } from 'redux-form';
 
 import renderRadioButtonField from '../../../../containers/Shared/form/RadioButton';
-import CustomField from '../../../containers/Shared/form/CustomField';
-import CheckBoxGroup from '../../../containers/Shared/form/CheckBoxGroup';
+import CustomField from '../../../../containers/Shared/form/CustomField';
+import CheckBoxGroup from '../../../../containers/Shared/form/CheckBoxGroup';
 
 import validate from './validateActionForm';
 
