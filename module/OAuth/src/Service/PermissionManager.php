@@ -158,8 +158,7 @@ class PermissionManager {
             $permission->setDescriptionEn($description);
             $permission->setCreatedAt(date('Y-m-d H:i:s'));
             $permission->setCreatedBy(1);
-            $permission->setStatus(1);
-
+            
             $this->entityManager->persist($permission);
         }
 

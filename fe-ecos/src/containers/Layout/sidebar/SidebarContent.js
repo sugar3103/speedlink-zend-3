@@ -12,8 +12,7 @@ class SidebarContent extends Component {
     onClick: PropTypes.func.isRequired,
   };
 
-  hideSidebar = (e) => {
-    console.log(e.target);
+  hideSidebar = (e) => {    
     this.props.onClick();
   };
   renderNavigation = (items) => {

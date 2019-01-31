@@ -18,7 +18,8 @@ module.exports = {
   'menu.cs_shipment_type': 'Shipment Type',
 
   //Menu Setting
-  'menu.setting': 'Settings',
+  'menu.setting': 'Setting',
+  'menu.system': 'System',
   'menu.user': 'Users',
   'menu.user.list': 'User',
   'menu.user.role': 'Roles',

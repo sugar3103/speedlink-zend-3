@@ -27,13 +27,14 @@ return [
                     ],
                 ],
             ],
-            'application' => [
+            'setting' => [
                 'type'    => StaticRoute::class,
                 'options' => [
-                    'route'    => '/application[/:action]',
+                    'route'    => '/setting',
                     'defaults' => [
-                        'controller' => Controller\CoreController::class,
+                        'controller' => Controller\SettingController::class,
                         'action'     => 'index',
+                        'isAuthorizationRequired' => true
                     ],
                 ],
             ],
@@ -44,8 +45,15 @@ return [
         'factories' => [
             Controller\CoreController::class => Factory\CoreControllerFactory::class,
             Controller\ApiController::class => Factory\ApiControllerFactory::class,
+            Controller\SettingController::class => Factory\SettingControllerFactory::class,
             Controller\RouteNotFoundController::class => Factory\RouteNotFoundControllerFactory::class,
         ],
+    ],
+
+    'service_manager' => [
+        'factories' => [
+            Service\SettingManager::class => Factory\SettingManagerFactory::class
+        ]
     ],
 
     'view_manager' => [

@@ -84,6 +84,7 @@ class PermissionController extends CoreController {
             if ($form->isValid()) {
                 // get filtered and validated data
                 $data = $form->getData();
+                
                 // add user.
                 $permission = $this->permissionManager->addPermission($data,$user);
                 $this->error_code = 1;

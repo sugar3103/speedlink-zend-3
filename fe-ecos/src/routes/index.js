@@ -4,7 +4,7 @@ import { Route, withRouter, Switch, Redirect } from 'react-router-dom';
 import Layout from '../containers/Layout';
 import Dashboards from './dashboards';
 import MasterData from './master-data';
-import Setting from './setting';
+import System from './system';
 
 class MainApp extends Component {
 
@@ -17,7 +17,7 @@ class MainApp extends Component {
           <Switch>
             <Route path={`${match.url}/dashboards`} component={Dashboards} />
             <Route path={`${match.url}/master-data`} component={MasterData} />
-            <Route path={`${match.url}/setting`} component={Setting} />
+            <Route path={`${match.url}/system`} component={System} />
             <Redirect to="/error" />
           </Switch>
         </div>
