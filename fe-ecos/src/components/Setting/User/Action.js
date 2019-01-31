@@ -7,6 +7,9 @@ import { injectIntl } from 'react-intl';
 class Action extends Component {
 
   handleSubmit = values => {
+    if (!Array.isArray(values.roles)) {
+      values.roles = values.roles.split(',');
+    } 
     const { messages } = this.props.intl;
     if (values.id) {
       this.props.updateUserItem(values,messages);

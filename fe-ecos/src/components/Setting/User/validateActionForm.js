@@ -20,7 +20,7 @@ const validate = (values) => {
       errors.confirm_password = 'user.validate-confirm-password-mismatched';
     }
 
-    if (!values.roles) {
+    if (!values.roles || !values.roles.length) {
       errors.roles = 'user.validate-roles-empty';
     }
 
