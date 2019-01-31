@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { Button, Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { toggleCarrierModal, deleteCarrierItem } from '../../../../redux/actions';
+import { toggleServiceModal, deleteServiceItem } from '../../../../redux/actions';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { injectIntl } from 'react-intl';
 
 class Item extends Component {
-  toggleModal = (carrier) => {
-    this.props.toggleCarrierModal(carrier);
+  toggleModal = (service) => {
+    this.props.toggleServiceModal(service);
   };
 
   onDelete = (id) => {
@@ -18,10 +18,10 @@ class Item extends Component {
       customUI: ({ onClose }) => {
         return (
           <div className='custom-ui-confirm'>
-            <h2>{messages["carrier.title-confirm"]}</h2>
-            <p>{messages["carrier.desc-confirm"]}</p>
+            <h2>{messages["service.title-confirm"]}</h2>
+            <p>{messages["service.desc-confirm"]}</p>
             <Button color="light" size="sm" onClick={onClose}>{messages["confirm-no"]}</Button>&nbsp;
-            <Button color="danger" size="sm" onClick={() => { this.props.deleteCarrierItem(id); onClose();}}>
+            <Button color="danger" size="sm" onClick={() => { this.props.deleteServiceItem(id); onClose();}}>
               {messages["confirm-yes"]}
             </Button>
           </div>
@@ -31,31 +31,31 @@ class Item extends Component {
   };
 
   render() {
-    const { carrier } = this.props;
+    const { service } = this.props;
     const { messages, locale } = this.props.intl;
     return (
       <tr>
-        <th scope="row">{carrier.id}</th>
-        <td>{carrier.code}</td>
+        <th scope="row">{service.id}</th>
+        <td>{service.code}</td>
         {locale === 'en-US' ? (
-          <td>{carrier.name_en}</td>
+          <td>{service.name_en}</td>
         ) : (
-          <td>{carrier.name}</td>
+          <td>{service.name}</td>
         )}
-        <td>{carrier.status === 1 ?
+        <td>{service.status === 1 ?
           <Badge color="success">
             {messages['active']}
           </Badge> : <Badge color="dark">
             {messages['inactive']}
           </Badge>
         }</td>
-        <td>{carrier.created_at} by {carrier.created_by}</td>
-        <td>{carrier.updated_at} by {carrier.updated_by}</td>
+        <td>{service.created_at} by {service.created_by}</td>
+        <td>{service.updated_at} by {service.updated_by}</td>
         <td className="text-center">
-          <Button color="info" size="sm" onClick={() => this.toggleModal(carrier)}>
+          <Button color="info" size="sm" onClick={() => this.toggleModal(service)}>
             <span className="lnr lnr-pencil" />
           </Button> &nbsp;
-          <Button color="danger" size="sm" onClick={() => this.onDelete(carrier.id)}>
+          <Button color="danger" size="sm" onClick={() => this.onDelete(service.id)}>
             <span className="lnr lnr-trash" />
           </Button>
         </td>
@@ -65,12 +65,12 @@ class Item extends Component {
 }
 
 Item.propTypes = {
-  carrier: PropTypes.object.isRequired,
-  toggleCarrierModal: PropTypes.func.isRequired,
-  deleteCarrierItem: PropTypes.func.isRequired
+  service: PropTypes.object.isRequired,
+  toggleServiceModal: PropTypes.func.isRequired,
+  deleteServiceItem: PropTypes.func.isRequired
 };
 
 export default injectIntl(connect(null, {
-  toggleCarrierModal,
-  deleteCarrierItem
+  toggleServiceModal,
+  deleteServiceItem
 })(Item));

@@ -1,26 +1,24 @@
 <?php
 namespace ServiceShipment;
 
+use Core\Route\StaticRoute;
 use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use DoctrineExtensions\Query\Mysql\GroupConcat;
 use Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter;
 use Gedmo\SoftDeleteable\SoftDeleteableListener;
 use Gedmo\Timestampable\TimestampableListener;
-use Zend\Authentication\AuthenticationService;
 use Zend\Cache\Storage\Adapter\Filesystem;
 use Zend\Log\Formatter\Simple;
 use Zend\Log\Logger;
 use Zend\Log\LoggerAbstractServiceFactory;
-use Zend\Router\Http\Segment;
-
 
 use Core\DBAL\Types\UTCDateTimeType;
 
 $router = [
     'routes' => [
         'carrier' => [
-            'type' => Segment::class,
+            'type' => StaticRoute::class,
             'options' => [
                 'route' => '/carrier[/:action[/:id]]',
                 'constraints' => [
@@ -35,7 +33,7 @@ $router = [
             ]
         ],
         'service' => [
-            'type' => Segment::class,
+            'type' => StaticRoute::class,
             'options' => [
                 'route' => '/service[/:action[/:id]]',
                 'constraints' => [
@@ -50,7 +48,7 @@ $router = [
             ]
         ],
         'shipmnet_type' => [
-            'type' => Segment::class,
+            'type' => StaticRoute::class,
             'options' => [
                 'route' => '/shipmnet_type[/:action[/:id]]',
                 'constraints' => [

@@ -10,14 +10,14 @@ import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import Action from './Action';
 import Search from './Search';
-import { getCarrierList, toggleCarrierModal } from "../../../../redux/actions";
+import { getServiceList, toggleServiceModal } from "../../../../redux/actions";
 
-const CarrierFormatter = ({ value }) => (
+const ServiceFormatter = ({ value }) => (
   value === 'Enabled' ? <span className="badge badge-success">Enabled</span> :
     <span className="badge badge-disabled">Disabled</span>
 );
 
-CarrierFormatter.propTypes = {
+ServiceFormatter.propTypes = {
   value: PropTypes.string.isRequired,
 };
 
@@ -40,10 +40,10 @@ class List extends Component {
       }
     };
 
-    if (this.props.carrier.paramSearch) {
-      Object.assign(params, { "query": this.props.carrier.paramSearch})
+    if (this.props.service.paramSearch) {
+      Object.assign(params, { "query": this.props.service.paramSearch})
     }
-    this.props.getCarrierList(params, messages);
+    this.props.getServiceList(params, messages);
 
     this.setState({
       currentPage: 1,
@@ -52,7 +52,7 @@ class List extends Component {
   };
 
 toggleModal = () => {
-  this.props.toggleCarrierModal();
+  this.props.toggleServiceModal();
 };
 
   onChangePage = (page) => {
@@ -64,10 +64,10 @@ toggleModal = () => {
       }
     };
 
-    if (this.props.carrier.paramSearch) {
-      Object.assign(params, { "query": this.props.carrier.paramSearch })
+    if (this.props.service.paramSearch) {
+      Object.assign(params, { "query": this.props.service.paramSearch })
     }
-    this.props.getCarrierList(params, messages);
+    this.props.getServiceList(params, messages);
 
     this.setState({
       currentPage: page
@@ -76,16 +76,16 @@ toggleModal = () => {
 
   componentDidMount() {
     const { messages } = this.props.intl;
-    this.props.getCarrierList(null, messages);
+    this.props.getServiceList(null, messages);
   }
 
-  showCarrierItem = (items) => {
+  showServiceItem = (items) => {
     const { messages } = this.props.intl;
     let result = null;
     if (items != null && items.length > 0) {
       result = items.map((item, index) => {
         return (
-          <Item key={index} carrier={item} />
+          <Item key={index} service={item} />
         );
       })
     } else {
@@ -98,7 +98,7 @@ toggleModal = () => {
 
 
   render() {
-    const { items, loading, modalOpen, total } = this.props.carrier;
+    const { items, loading, modalOpen, total } = this.props.service;
     const { messages, locale } = this.props.intl;
     return (
       <Col md={12} lg={12}>
@@ -119,15 +119,15 @@ toggleModal = () => {
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>{messages['carrier.code']}</th>
+                  <th>{messages['service.code']}</th>
                   {locale === 'en-US' ? (
-                    <th>{messages['carrier.name-en']}</th>
+                    <th>{messages['service.name-en']}</th>
                   ) : (
-                    <th>{messages['carrier.name']}</th>
+                    <th>{messages['service.name']}</th>
                   )}
-                  <th>{messages['carrier.status']}</th>
-                  <th>{messages['carrier.created-at']}</th>
-                  <th>{messages['carrier.updated-at']}</th>
+                  <th>{messages['service.status']}</th>
+                  <th>{messages['service.created-at']}</th>
+                  <th>{messages['service.updated-at']}</th>
                   <th>{messages['action']}</th>
                 </tr>
                 </thead>
@@ -135,7 +135,7 @@ toggleModal = () => {
                 {loading ? (
                   <tr><td colSpan={8} className="text-center"><div className="loading-table" /></td></tr>
                 ) : (
-                  this.showCarrierItem(items)
+                  this.showServiceItem(items)
                 )}
                 </tbody>
               </Table>
@@ -148,20 +148,20 @@ toggleModal = () => {
 }
 
 List.propTypes = {
-  carrier: PropTypes.object.isRequired,
+  service: PropTypes.object.isRequired,
   modal: PropTypes.object,
-  getCarrierList: PropTypes.func.isRequired,
-  toggleCarrierModal: PropTypes.func.isRequired
+  getServiceList: PropTypes.func.isRequired,
+  toggleServiceModal: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({ carrier, modal }) => {
+const mapStateToProps = ({ service, modal }) => {
   return {
-    carrier,
+    service,
     modal
   };
 };
 
 export default injectIntl(connect(mapStateToProps, {
-  getCarrierList,
-  toggleCarrierModal
+  getServiceList,
+  toggleServiceModal
 })(List));

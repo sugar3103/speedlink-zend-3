@@ -47,17 +47,32 @@ class ServiceController extends CoreController
             "data" => []
         ];
 
-        $currentPage = $this->params()->fromPost('current_page','10');
-        $limit = $this->params()->fromPost('limit','10');
-        $sortField = $this->params()->fromPost('field',null);
-        $sortDirection = $this->params()->fromPost('sort',null);
-        $filters =  $this->params()->fromPost('filters','{}');
-        $filters = json_decode($filters, true);
-
-        $dataService = $this->serviceManager->getListServiceByCondition($currentPage, $limit, $sortField, $sortDirection, $filters);
+        $fieldsMap = ['code', 'name', 'name_en', 'status'];
+        list($start, $limit, $sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);
+        $dataService = $this->serviceManager->getListServiceByCondition($start, $limit, $sortField, $sortDirection, $filters);
 
         $result['message'] = 'Success';
         $result["total"] = $dataService['totalService'];
+        $result["data"] = !empty($dataService['listService']) ? $dataService['listService'] : [];
+        $this->apiResponse = $result;
+
+        return $this->createResponse();
+    }
+
+    public function codeAction()
+    {
+        if (!$this->getRequest()->isPost()) {
+            // TODO: Check error_code
+            $this->httpStatusCode = 405;
+            $this->apiResponse['message'] = 'Request not allow';
+            return $this->createResponse();
+        }
+
+        $result = array("data" => []);
+        $dataService = $this->serviceManager->getListServiceCodeByCondition();
+
+        $result['error_code'] = 1;
+        $result['message'] = 'Success';
         $result["data"] = !empty($dataService['listService']) ? $dataService['listService'] : [];
         $this->apiResponse = $result;
 
@@ -74,7 +89,7 @@ class ServiceController extends CoreController
         }
 
         $user = $this->tokenPayload;
-        $data = $this->params()->fromPost();
+        $data = $this->getRequestData();
         if (empty($data)) {
             // TODO: Check error_code
             $this->error_code = -1;
@@ -113,7 +128,7 @@ class ServiceController extends CoreController
         }
 
         $user = $this->tokenPayload;
-        $data = $this->params()->fromPost();
+        $data = $this->getRequestData();
         if (empty($data)) {
             // TODO: Check error_code
             $this->error_code = -1;
@@ -121,7 +136,7 @@ class ServiceController extends CoreController
             return $this->createResponse();
         }
         //Create New Form Service
-        $service = $this->entityManager->getRepository(Service::class)->findOneBy(array('id' => $data['id']));
+        $service = $this->entityManager->getRepository(Service::class)->find($data['id']);
         $form = new ServiceForm('update', $this->entityManager, $service);
         $form->setData($data);
 
@@ -153,7 +168,7 @@ class ServiceController extends CoreController
         }
 
         $user = $this->tokenPayload;
-        $data = $this->params()->fromPost();
+        $data = $this->getRequestData();
         if (empty($data)) {
             // TODO: Check error_code
             $this->error_code = -1;
@@ -165,7 +180,7 @@ class ServiceController extends CoreController
 
         //validate form
         if(!empty($service)) {
-            $this->serviceManager->deleteService($service);
+            $this->serviceManager->deleteService($service, $user);
             $this->error_code = 0;
             $this->apiResponse['message'] = "Success: You have deleted service!";
         } else {

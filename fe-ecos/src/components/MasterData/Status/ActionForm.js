@@ -21,6 +21,11 @@ class ActionForm extends Component {
   toggleModal = () => {
     this.props.toggleStatusModal();
   }
+  componentWillReceiveProps(nextProps) {
+      if (nextProps && nextProps.modalData) {
+      const data = nextProps.modalData;
+    }
+  }
 
   render() {
     const { messages } = this.props.intl;

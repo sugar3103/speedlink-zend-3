@@ -5,7 +5,7 @@ use Address\Entity\Country;
 use ServiceShipment\Entity\Carrier;
 use Zend\Validator\AbstractValidator;
 
-class CarrierExistsValidator extends AbstractValidator {
+class CarrierNameExistsValidator extends AbstractValidator {
 
     /**
      * Available validator options.
@@ -14,6 +14,7 @@ class CarrierExistsValidator extends AbstractValidator {
     protected $options = [
         'entityManager' => null,
         'carrier' => null,
+        'language' => null
     ];
 
     /**
@@ -69,10 +70,20 @@ class CarrierExistsValidator extends AbstractValidator {
 
         if ($this->options['carrier'] == null) {
             $isValid = ($carrier == null);
-        } elseif ($this->options['carrier']->getName() != $value && $carrier != null) {
-            $isValid = false;
         } else {
-            $isValid = true;
+            if($this->options['language'] === 'en') {
+                if ($this->options['carrier']->getNameEn() != $value && $carrier != null) {
+                    $isValid = false;
+                } else {
+                    $isValid = true;
+                }
+            } else {
+                if ($this->options['carrier']->getName() != $value && $carrier != null) {
+                    $isValid = false;
+                } else {
+                    $isValid = true;
+                }
+            }
         }
 
         // if there were an error, set error message.

@@ -1,23 +1,13 @@
 <?php
 namespace ServiceShipment\Form;
 
-use Address\Entity\Country;
-use Address\Validator\CountryExistsValidator;
 use ServiceShipment\Entity\Carrier;
 use Doctrine\ORM\EntityManager;
+use ServiceShipment\Validator\CarrierCodeExistsValidator;
+use ServiceShipment\Validator\CarrierNameExistsValidator;
 use Zend\Filter\StringTrim;
 use Zend\Filter\ToInt;
-use Zend\Form\Element\Button;
-use Zend\Form\Element\Csrf;
-use Zend\Form\Element\Password;
-use Zend\Form\Element\Select;
-use Zend\Form\Element\Submit;
-use Zend\Form\Element\Text;
 use Zend\Form\Form;
-use Zend\InputFilter\ArrayInput;
-use Zend\Validator\GreaterThan;
-use Zend\Validator\Identical;
-use Zend\Validator\InArray;
 use Zend\Validator\StringLength;
 
 class CarrierForm extends Form {
@@ -44,7 +34,6 @@ class CarrierForm extends Form {
     {
         // Define form name.
         parent::__construct('carrier-form');
-
         // Save parameters for internal use.
         $this->scenario = $scenario;
         $this->entityManager = $entityManager;
@@ -75,10 +64,10 @@ class CarrierForm extends Form {
                         'max' => 50
                     ]
                 ], [
-                    'name' => Carrier::class,
+                    'name' => CarrierNameExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'country' => $this->carrier
+                        'carrier' => $this->carrier
                     ]
                 ]
             ]
@@ -99,10 +88,10 @@ class CarrierForm extends Form {
                         'max' => 50
                     ]
                 ], [
-                    'name' => Carrier::class,
+                    'name' => CarrierNameExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'country' => $this->carrier
+                        'carrier' => $this->carrier
                     ]
                 ]
             ]
@@ -145,7 +134,21 @@ class CarrierForm extends Form {
                 [
                     'name' => StringTrim::class
                 ]
-            ] 
+            ],
+            'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'max' => 50
+                    ]
+                ], [
+                    'name' => CarrierCodeExistsValidator::class,
+                    'options' => [
+                        'entityManager' => $this->entityManager,
+                        'carrier' => $this->carrier
+                    ]
+                ]
+            ]
         ]);
         
     }
