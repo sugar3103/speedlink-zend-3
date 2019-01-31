@@ -91,7 +91,7 @@ class Action extends PureComponent {
                 <span className="form__form-group-label">{messages['user.firstname']}</span>
                 <div className="form__form-group-field">
                   <Field
-                    name="firstname"
+                    name="first_name"
                     component={CustomField}
                     type="text"
                     placeholder={messages['user.firstname']}
@@ -104,7 +104,7 @@ class Action extends PureComponent {
                 <span className="form__form-group-label">{messages['user.lastname']}</span>
                 <div className="form__form-group-field">
                   <Field
-                    name="lastname"
+                    name="last_name"
                     component={CustomField}
                     type="text"
                     placeholder={messages['user.lastname']}

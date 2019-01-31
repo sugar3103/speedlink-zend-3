@@ -14,16 +14,6 @@ class MultiSelectField extends PureComponent {
       ]),
       label: PropTypes.string,
     })),
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.arrayOf(PropTypes.shape({
-        value: PropTypes.oneOfType([
-          PropTypes.number,
-          PropTypes.string
-        ]),
-        label: PropTypes.string,
-      })),
-    ]).isRequired,
   };
 
   static defaultProps = {
