@@ -32,7 +32,6 @@ class List extends Component {
     this.state = {
       selectedPageSize: SELECTED_PAGE_SIZE,
       currentPage: 1,
-      total: 20
     };
   }
 
@@ -78,19 +77,12 @@ class List extends Component {
     });
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps && nextProps.user && nextProps.user.total) {
-      this.setState({
-        total: nextProps.user.total
-      });
-    }
-  }
-
   componentDidMount() {
     this.props.getUserList();
   }
 
   showUserItem = (items) => {
+    const { messages } = this.props.intl;
     let result = null;
     if (items.length > 0) {
       result = items.map((item, index) => {
@@ -101,12 +93,16 @@ class List extends Component {
           />
         )
       })
+    } else {
+      result = (
+        <tr><td colSpan={7} className="text-center">{messages['no-result']}</td></tr>
+      )
     }
     return result;
   }
 
   render() {
-    const { items, loading, modalOpen,total } = this.props.user;
+    const { items, loading, modalOpen, total } = this.props.user;
     const { messages } = this.props.intl;
     return (
       <Col md={12} lg={12}>
@@ -144,7 +140,7 @@ class List extends Component {
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={5} className="text-center"><div className="loading-table" /></td></tr>
+                  <tr><td colSpan={7} className="text-center"><div className="loading-table" /></td></tr>
                 ) : (
                     this.showUserItem(items)
                   )}
