@@ -43,7 +43,7 @@ class Item extends Component {
       <tr>
         <th scope="row">{permission.id}</th>
         <td>{permission.name}</td>
-        <td>{(locale === 'es-US' && permission.description_en) ? permission.description_en : permission.description }</td>
+        <td>{(locale === 'en-US' && permission.description_en) ? permission.description_en : permission.description }</td>
         <td>{permission.created_at}</td>
         <td className="text-center">
           <Button color="info" size="sm" onClick={() => this.toggleModal(permission)}><span className="lnr lnr-pencil" /></Button> &nbsp;

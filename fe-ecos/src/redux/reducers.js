@@ -8,10 +8,11 @@ import hub from './master-data/hub/reducer';
 import branch from './master-data/branch/reducer';
 import users from './system/users/reducers';
 import carrier from './master-data/service-shipment/carrier/reducer';
-
+import setting from './system/setting/reducer';
 const reducers = combineReducers({
   form: reduxFormReducer,
   settings,
+  setting,
   authUser,
   status,
   address,

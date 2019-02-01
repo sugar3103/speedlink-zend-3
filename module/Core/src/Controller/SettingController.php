@@ -1,10 +1,10 @@
 <?php
 namespace Core\Controller;
 
-use Core\Controller\ApiController;
+use Core\Controller\CoreController;
 use Doctrine\ORM\EntityManager;
 
-class SettingController extends ApiController
+class SettingController extends CoreController
 {
      /**
      * @var EntityManager
@@ -24,9 +24,24 @@ class SettingController extends ApiController
 
     public function indexAction()
     {
-        $this->apiResponse = [
-            'message' => 'ECos System Setting'
-        ];
+        if ( $this->getRequest()->isPost()) {
+             // get the filters
+             $fieldsMap = [
+                0 => 'code',
+                1 => 'key'
+            ];
+            list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);
+             //get list by condition
+            $dataSetting = $this->settingManager->getListSettingByCondition($sortField, $sortDirection,$filters);
+
+            $result = $this->filterByField($dataSetting['listSetting'],$fields);
+            $this->error_code = 1;
+            $this->apiResponse =  array(
+                'message'   => "Get List Success",
+                'data'      => $result
+            );
+             
+        }
 
         return $this->createResponse();
     }

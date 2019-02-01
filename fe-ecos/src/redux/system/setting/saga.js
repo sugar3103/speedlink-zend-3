@@ -1,23 +1,23 @@
 import axios from "axios";
 import { all, call, fork, put, takeEvery } from "redux-saga/effects";
-import { apiUrl, EC_SUCCESS, EC_FAILURE, EC_FAILURE_AUTHENCATION } from '../../../../constants/defaultValues';
-import { authHeader } from '../../../../util/auth-header';
-import history from '../../../../util/history';
+import { apiUrl, EC_SUCCESS, EC_FAILURE, EC_FAILURE_AUTHENCATION } from '../../../constants/defaultValues';
+import { authHeader } from '../../../util/auth-header';
+import history from '../../../util/history';
 
 import {
-  SYSTEM_GET_LIST,
-} from "../../../../constants/actionTypes";
+  SETTING_GET,
+} from "../../../constants/actionTypes";
 
 import {
-  getSystemListSuccess,
-  getSystemListError,
-} from "./actions";
+  getSettingSuccess,
+  getSettingError,
+} from "./action";
 
-import createNotification from '../../../../util/notifications';
+import createNotification from '../../../util/notifications';
 
 //list code
 
-function getListApi(params) {
+function getApi(params) {
   return axios.request({
     method: 'post',
     url: `${apiUrl}setting`,
@@ -26,21 +26,21 @@ function getListApi(params) {
   });
 }
 
-const getSystemListRequest = async (params) => {
-  return await getListApi(params).then(res => res.data).catch(err => err)
+const getSettingRequest = async (params) => {
+  return await getApi(params).then(res => res.data).catch(err => err)
 };
 
-function* getSystemListItems({ payload }) {
+function* getSettingItems({ payload }) {
   const { params, messages } = payload;
   try {
-    const response = yield call(getSystemListRequest, params);
+    const response = yield call(getSettingRequest, params);
     switch (response.error_code) {
       case EC_SUCCESS:
-        yield put(getSystemListSuccess(response.data, response.total));
+        yield put(getSettingSuccess(response.data));
         break;
 
       case EC_FAILURE:
-        yield put(getSystemListError(response.data));
+        yield put(getSettingError(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -57,14 +57,14 @@ function* getSystemListItems({ payload }) {
     }
     
   } catch (error) {
-    yield put(getSystemListError(error));
+    yield put(getSettingError(error));
   }
 }
 
-export function* watchGetList() {
-  yield takeEvery(SYSTEM_GET_LIST, getSystemListItems);
+export function* watchGet() {
+  yield takeEvery(SETTING_GET, getSettingItems);
 }
 
 export default function* rootSaga() {
-  yield all([fork(watchGetList)]);
+  yield all([fork(watchGet)]);
 }

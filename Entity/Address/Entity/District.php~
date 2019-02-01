@@ -1,16 +1,16 @@
 <?php
 
-namespace OAuth\Entity;
+namespace Address\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Permission
+ * District
  *
- * @ORM\Table(name="permission")
- * @ORM\Entity(repositoryClass="\OAuth\Repository\PermissionRepository")
+ * @ORM\Table(name="district", uniqueConstraints={@ORM\UniqueConstraint(name="unique_district_id", columns={"id"})})
+ * @ORM\Entity(repositoryClass="\Address\Repository\DistrictRepository")
  */
-class Permission
+class District
 {
     /**
      * @var int
@@ -22,18 +22,25 @@ class Permission
     private $id;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="city_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $city_id;
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=100, precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="name", type="string", length=50, precision=0, scale=0, nullable=false, unique=false)
      */
     private $name;
 
     /**
-     * @var string|null
+     * @var string
      *
-     * @ORM\Column(name="model", type="text", length=65535, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="name_en", type="string", length=50, precision=0, scale=0, nullable=false, unique=false)
      */
-    private $model;
+    private $name_en;
 
     /**
      * @var string|null
@@ -50,6 +57,20 @@ class Permission
     private $description_en;
 
     /**
+     * @var int|null
+     *
+     * @ORM\Column(name="status", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $status;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_deleted", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $is_deleted;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="created_by", type="integer", precision=0, scale=0, nullable=false, unique=false)
@@ -59,9 +80,9 @@ class Permission
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="created_at", type="datetime", precision=0, scale=0, nullable=false, options={"default"="CURRENT_TIMESTAMP"}, unique=false)
+     * @ORM\Column(name="created_at", type="datetime", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $created_at = 'CURRENT_TIMESTAMP';
+    private $created_at;
 
     /**
      * @var int|null
@@ -71,34 +92,29 @@ class Permission
     private $updated_by;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      *
-     * @ORM\Column(name="updated_at", type="datetime", precision=0, scale=0, nullable=false, options={"default"="CURRENT_TIMESTAMP"}, unique=false)
+     * @ORM\Column(name="updated_at", type="datetime", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $updated_at = 'CURRENT_TIMESTAMP';
+    private $updated_at;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var int|null
      *
-     * @ORM\ManyToMany(targetEntity="OAuth\Entity\Role", mappedBy="permissions")
-     * @ORM\JoinTable(name="role_permission",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="permission_id", referencedColumnName="id", nullable=true)
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="role_id", referencedColumnName="id", nullable=true)
-     *   }
-     * )
+     * @ORM\Column(name="ref_as_by", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $roles;
+    private $ref_as_by;
 
     /**
-     * Constructor
+     * @var \Address\Entity\City
+     *
+     * @ORM\OneToOne(targetEntity="Address\Entity\City", fetch="EAGER")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="city_id", referencedColumnName="id", unique=true, nullable=true)
+     * })
      */
-    public function __construct()
-    {
-        $this->roles = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+    private $city;
+
 
     /**
      * Get id.
@@ -111,11 +127,35 @@ class Permission
     }
 
     /**
+     * Set cityId.
+     *
+     * @param int $cityId
+     *
+     * @return District
+     */
+    public function setCityId($cityId)
+    {
+        $this->city_id = $cityId;
+
+        return $this;
+    }
+
+    /**
+     * Get cityId.
+     *
+     * @return int
+     */
+    public function getCityId()
+    {
+        return $this->city_id;
+    }
+
+    /**
      * Set name.
      *
      * @param string $name
      *
-     * @return Permission
+     * @return District
      */
     public function setName($name)
     {
@@ -135,27 +175,27 @@ class Permission
     }
 
     /**
-     * Set model.
+     * Set nameEn.
      *
-     * @param string|null $model
+     * @param string $nameEn
      *
-     * @return Permission
+     * @return District
      */
-    public function setModel($model = null)
+    public function setNameEn($nameEn)
     {
-        $this->model = $model;
+        $this->name_en = $nameEn;
 
         return $this;
     }
 
     /**
-     * Get model.
+     * Get nameEn.
      *
-     * @return string|null
+     * @return string
      */
-    public function getModel()
+    public function getNameEn()
     {
-        return $this->model;
+        return $this->name_en;
     }
 
     /**
@@ -163,7 +203,7 @@ class Permission
      *
      * @param string|null $description
      *
-     * @return Permission
+     * @return District
      */
     public function setDescription($description = null)
     {
@@ -187,7 +227,7 @@ class Permission
      *
      * @param string|null $descriptionEn
      *
-     * @return Permission
+     * @return District
      */
     public function setDescriptionEn($descriptionEn = null)
     {
@@ -207,11 +247,59 @@ class Permission
     }
 
     /**
+     * Set status.
+     *
+     * @param int|null $status
+     *
+     * @return District
+     */
+    public function setStatus($status = null)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status.
+     *
+     * @return int|null
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set isDeleted.
+     *
+     * @param bool $isDeleted
+     *
+     * @return District
+     */
+    public function setIsDeleted($isDeleted)
+    {
+        $this->is_deleted = $isDeleted;
+
+        return $this;
+    }
+
+    /**
+     * Get isDeleted.
+     *
+     * @return bool
+     */
+    public function getIsDeleted()
+    {
+        return $this->is_deleted;
+    }
+
+    /**
      * Set createdBy.
      *
      * @param int $createdBy
      *
-     * @return Permission
+     * @return District
      */
     public function setCreatedBy($createdBy)
     {
@@ -235,7 +323,7 @@ class Permission
      *
      * @param \DateTime $createdAt
      *
-     * @return Permission
+     * @return District
      */
     public function setCreatedAt($createdAt)
     {
@@ -259,7 +347,7 @@ class Permission
      *
      * @param int|null $updatedBy
      *
-     * @return Permission
+     * @return District
      */
     public function setUpdatedBy($updatedBy = null)
     {
@@ -281,11 +369,11 @@ class Permission
     /**
      * Set updatedAt.
      *
-     * @param \DateTime $updatedAt
+     * @param \DateTime|null $updatedAt
      *
-     * @return Permission
+     * @return District
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updatedAt = null)
     {
         $this->updated_at = $updatedAt;
 
@@ -295,7 +383,7 @@ class Permission
     /**
      * Get updatedAt.
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getUpdatedAt()
     {
@@ -303,48 +391,50 @@ class Permission
     }
 
     /**
-     * Add role.
+     * Set refAsBy.
      *
-     * @param \OAuth\Entity\Role $role
+     * @param int|null $refAsBy
      *
-     * @return Permission
+     * @return District
      */
-    public function addRole(\OAuth\Entity\Role $role)
+    public function setRefAsBy($refAsBy = null)
     {
-        $this->roles[] = $role;
+        $this->ref_as_by = $refAsBy;
 
         return $this;
     }
 
     /**
-     * Remove role.
+     * Get refAsBy.
      *
-     * @param \OAuth\Entity\Role $role
-     *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return int|null
      */
-    public function removeRole(\OAuth\Entity\Role $role)
+    public function getRefAsBy()
     {
-        return $this->roles->removeElement($role);
+        return $this->ref_as_by;
     }
 
     /**
-     * Get roles.
+     * Set city.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @param \Address\Entity\City|null $city
+     *
+     * @return District
      */
-    public function getRoles()
+    public function setCity(\Address\Entity\City $city = null)
     {
-        return $this->roles;
+        $this->city = $city;
+
+        return $this;
     }
 
     /**
-     * Get isDeleted.
+     * Get city.
      *
-     * @return bool
+     * @return \Address\Entity\City|null
      */
-    public function getIsDeleted()
+    public function getCity()
     {
-        return $this->is_deleted;
+        return $this->city;
     }
 }
