@@ -1,20 +1,20 @@
 import {
-    SYSTEM_GET_LIST,
-    SYSTEM_GET_LIST_SUCCESS,
-    SYSTEM_GET_LIST_ERROR,
-  } from '../../../../constants/actionTypes';
+    SETTING_GET,
+    SETTING_GET_SUCCESS,
+    SETTING_GET_ERROR,
+  } from '../../../constants/actionTypes';
   
-  export const getSystemList = (params, messages) => ({
-    type: SYSTEM_GET_LIST,
+  export const getSetting = (params, messages) => ({
+    type: SETTING_GET,
     payload: { params, messages }
   });
   
-  export const getSystemListSuccess = (items) => ({
-    type: SYSTEM_GET_LIST_SUCCESS,
-    payload: items
+  export const getSettingSuccess = (items) => ({
+    type: SETTING_GET_SUCCESS,
+    payload: {items}
   });
   
-  export const getSystemListError = (error) => ({
-    type: SYSTEM_GET_LIST_ERROR,
+  export const getSettingError = (error) => ({
+    type: SETTING_GET_ERROR,
     payload: error
   });

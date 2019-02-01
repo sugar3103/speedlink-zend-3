@@ -1,11 +1,13 @@
 <?php
+namespace Core\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Setting
  *
- * @ORM\Table(name="setting", uniqueConstraints={@ORM\UniqueConstraint(name="unique_id", columns={"id"})})
- * @ORM\Entity(repositoryClass="\Address\Repository\SettingRepository")
+ * @ORM\Table(name="setting")
+ * @ORM\Entity(repositoryClass="\Core\Repository\SettingRepository")
  */
 class Setting
 {

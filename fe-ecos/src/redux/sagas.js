@@ -12,6 +12,7 @@ import carrierSagas from './master-data/service-shipment/carrier/saga';
 import userSagas from './system/users/user/saga'
 import roleSagas from './system/users/role/saga';
 import permissionSagas from './system/users/permission/saga';
+import settingSagas from './system/setting/saga';
 
 export default function* rootSaga() {
   yield all([
@@ -28,5 +29,6 @@ export default function* rootSaga() {
     roleSagas(),
     permissionSagas(),
     carrierSagas(),
+    settingSagas()
   ]);
 }

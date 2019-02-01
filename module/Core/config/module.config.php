@@ -1,6 +1,12 @@
 <?php
 namespace Core;
 
+use Doctrine\Common\Cache\FilesystemCache;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use DoctrineExtensions\Query\Mysql\GroupConcat;
+use Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter;
+use Gedmo\SoftDeleteable\SoftDeleteableListener;
+use Gedmo\Timestampable\TimestampableListener;
 use Core\Route\StaticRoute;
 
 return [
@@ -53,6 +59,90 @@ return [
     'service_manager' => [
         'factories' => [
             Service\SettingManager::class => Factory\SettingManagerFactory::class
+        ]
+    ],
+    'doctrine' => [
+        'driver' => [
+            __NAMESPACE__ . '_driver' => [
+                'class' => AnnotationDriver::class,
+                'cache' => 'array',
+                'paths' => [
+                    __DIR__ . '/../src/Entity'
+                ]
+            ],
+            'orm_default' => [
+                'drivers' => [
+                    __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
+                ]
+            ],
+            'orm_report' => [
+                'drivers' => [
+                    __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
+                ]
+            ],
+            'orm_read_only' => [
+                'drivers' => [
+                    __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
+                ]
+            ]
+        ],
+        'eventmanager' => [
+            'orm_default' => [
+                'subscribers' => [
+                    SoftDeleteableListener::class,
+                    TimestampableListener::class,
+                ],
+            ],
+            'orm_report' => [
+                'subscribers' => [
+                    SoftDeleteableListener::class,
+                    TimestampableListener::class,
+                ],
+            ],
+            'orm_read_only' => [
+                'subscribers' => [
+                    SoftDeleteableListener::class,
+                    TimestampableListener::class,
+                ],
+            ],
+        ],
+        'configuration' => [
+            'orm_default' => [
+                'datetime_functions' => [
+                    'DATE' => \Zend\Validator\Date::class,
+                ],
+                'filters' => [
+                    'soft-deletable' => SoftDeleteableFilter::class,
+                ],
+                'types' => [
+                    'datetime' => UTCDateTimeType::class,
+                ],
+                'string_functions' => [
+                    'GROUP_CONCAT' => GroupConcat::class
+                ]
+            ],
+            'orm_read_only' => [
+                'datetime_functions' => [
+                    'DATE' => Date::class,
+                ],
+                'filters' => [
+                    'soft-deletable' => SoftDeleteableFilter::class,
+                ],
+                'types' => [
+                    'datetime' => UTCDateTimeType::class,
+                ],
+            ],
+            'orm_report' => [
+                'datetime_functions' => [
+                    'DATE' => Date::class,
+                ],
+                'filters' => [
+                    'soft-deletable' => SoftDeleteableFilter::class,
+                ],
+                'types' => [
+                    'datetime' => UTCDateTimeType::class,
+                ],
+            ]
         ]
     ],
 

@@ -12,3 +12,4 @@ export * from './master-data/service-shipment/carrier/actions';
 export * from './system/users/permission/actions';
 export * from './system/users/role/actions';
 export * from './system/users/user/actions';
+export * from './system/setting/action';

@@ -41,8 +41,8 @@ class Item extends Component {
     return (
       <tr>
         <th scope="row">{ward.id}</th>
-        <td>{(locale === 'es-US' && ward.name_en) ? ward.name_en : ward.name}</td>
-        <td>{(locale === 'es-US' && ward.description_en) ? ward.description_en : ward.description}</td>
+        <td>{(locale === 'en-US' && ward.name_en) ? ward.name_en : ward.name}</td>
+        <td>{(locale === 'en-US' && ward.description_en) ? ward.description_en : ward.description}</td>
         <td>{ward.postal_code}</td>
         <td>{ward.status === 1 ? <Badge color="success">{messages['active']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>}</td>
         <td>{ward.created_at}</td>
