@@ -45,7 +45,15 @@ module.exports = {
   'role.list': 'Roles',
   'role.name': 'Role',
   'role.add-new': 'Add New Role',  
+  'role.update': 'Update Role',  
   'role.title-confirm': 'Delete Role',  
+  //validate
+  'role.validate-name-empty': 'Name shouldn’t be empty',
+  'role.validate-name-minlength': 'Name must be 2 characters or more',
+  'role.validate-name-maxlength': 'Name must be 128 characters or less',
+  'role.validate-nameEn-empty': 'English name shouldn’t be empty',
+  'role.validate-nameEn-minlength': 'English name must be 2 characters or more',
+  'role.validate-nameEn-maxlength': 'English name must be 128 characters or less',
 
   //Role
   'permission.list': 'Permissions',

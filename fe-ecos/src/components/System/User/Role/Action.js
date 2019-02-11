@@ -4,10 +4,12 @@ import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
 import { addRoleItem, updateRoleItem, toggleRoleModal } from '../../../../redux/actions';
 import { injectIntl } from 'react-intl';
+import PropTypes from 'prop-types';
+
 class Action extends Component {
 
   handleSubmit = values => {
-    const { messages } = this.props.intl;    
+    const { messages } = this.props.intl;   
     if (values.id) {
       this.props.updateRoleItem(values,messages);
     } else {
@@ -20,11 +22,13 @@ class Action extends Component {
   }
 
   render() {
+    const { modalData } = this.props;
+    const className = modalData ? 'primary' : 'success';
     return (
       <Modal
         isOpen={this.props.modalOpen}
         toggle={this.toggleModal}
-        className={`modal-dialog--success modal-dialog--header modal-lg`}
+        className={`modal-dialog--${className} modal-dialog--header modal-lg`}
       >
         <ActionForm onSubmit={this.handleSubmit} />
       </Modal>
@@ -32,7 +36,21 @@ class Action extends Component {
   }
 }
 
-export default injectIntl(connect(null, {
+Action.propTypes = {
+  modalData: PropTypes.object,
+  addRoleItem: PropTypes.func.isRequired,
+  updateRoleItem: PropTypes.func.isRequired,
+  toggleRoleModal: PropTypes.func.isRequired,
+}
+
+const mapStateToProps = ({users}) => {
+  const { modalData } = users.role;
+  return {
+    modalData
+  }
+}
+
+export default injectIntl(connect(mapStateToProps, {
   addRoleItem,
   updateRoleItem,
   toggleRoleModal

@@ -32,7 +32,6 @@ class List extends Component {
     this.state = {
       selectedPageSize: SELECTED_PAGE_SIZE,
       currentPage: 1,
-      total: 20,
       searchRole: ''
     };
   }
@@ -78,14 +77,6 @@ class List extends Component {
     });
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps && nextProps.role && nextProps.role.total) {
-      this.setState({
-        total: nextProps.role.total
-      });
-    }
-  }
-
   componentDidMount() {
     this.props.getRoleList();
   }
@@ -103,7 +94,7 @@ class List extends Component {
       })
     } else {
       result = (
-        <tr><td colSpan={8} className="text-center">{messages['no-result']}</td></tr>
+        <tr><td colSpan={6} className="text-center">{messages['no-result']}</td></tr>
       )
     }
     return result;
@@ -164,7 +155,7 @@ class List extends Component {
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={5} className="text-center"><div className="loading-table" /></td></tr>
+                  <tr><td colSpan={6} className="text-center"><div className="loading-table" /></td></tr>
                 ) : (
                     this.showRoleItem(items,messages)
                   )}

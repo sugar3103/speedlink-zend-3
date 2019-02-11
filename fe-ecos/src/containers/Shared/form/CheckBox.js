@@ -4,7 +4,6 @@ import CloseIcon from 'mdi-react/CloseIcon';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-
 class CheckBoxField extends PureComponent {
   static propTypes = {
     onChange: PropTypes.func.isRequired,

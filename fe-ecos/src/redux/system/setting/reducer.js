@@ -1,8 +1,8 @@
 import {
-    SYSTEM_GET_LIST,
-    SYSTEM_GET_LIST_SUCCESS,
-    SYSTEM_GET_LIST_ERROR,
-  } from '../../../../constants/actionTypes';
+    SETTING_GET,
+    SETTING_GET_SUCCESS,
+    SETTING_GET_ERROR,
+  } from '../../../constants/actionTypes';
   
   const INIT_STATE = {
     items: null,
@@ -13,7 +13,7 @@ import {
   
   export default (state = INIT_STATE, action) => {
     switch (action.type) {
-      case SYSTEM_GET_LIST:
+      case SETTING_GET:
         const { params } = action.payload;
         return { 
           ...state, 
@@ -21,7 +21,7 @@ import {
           paramSearch: (params && params.query) ? params.query : null
         };
   
-      case SYSTEM_GET_LIST_SUCCESS:
+      case SETTING_GET_SUCCESS:
         const { items } = action.payload;
         return { 
           ...state, 
@@ -29,7 +29,7 @@ import {
           items
         };
   
-      case SYSTEM_GET_LIST_ERROR:
+      case SETTING_GET_ERROR:
         return { 
           ...state, 
           loading: false, 

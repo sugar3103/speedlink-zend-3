@@ -113,41 +113,13 @@ class RoleForm extends Form {
         // Add input for "description" field
         $inputFilter->add([
             'name' => 'description',
-            'required' => true,
-            'filters' => [
-                [
-                    'name' => StringTrim::class,
-                ]
-            ],
-            'validators' => [
-                [
-                    'name' => StringLength::class,
-                    'options' => [
-                        'min' => 0,
-                        'max' => 1024
-                    ]
-                ]
-            ]
+            'required' => false,
         ]);
 
         // Add input for "description" field
         $inputFilter->add([
             'name' => 'description_en',
-            'required' => true,
-            'filters' => [
-                [
-                    'name' => StringTrim::class,
-                ]
-            ],
-            'validators' => [
-                [
-                    'name' => StringLength::class,
-                    'options' => [
-                        'min' => 0,
-                        'max' => 1024
-                    ]
-                ]
-            ]
+            'required' => false,
         ]);
 
         // Add input for "inherit_roles" field.
