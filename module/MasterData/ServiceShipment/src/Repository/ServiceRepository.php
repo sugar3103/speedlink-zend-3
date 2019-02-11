@@ -1,6 +1,7 @@
 <?php
 namespace ServiceShipment\Repository;
 
+use Core\Utils\Utils;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
@@ -12,7 +13,7 @@ use ServiceShipment\Entity\Service;
  */
 class ServiceRepository extends EntityRepository
 {
-    public function getListServiceByCondition($sortField = 's.id', $sortDirection = 'asc', $filters = [])
+    public function getListServiceByCondition($start, $limit, $sortField = 's.id', $sortDirection = 'asc', $filters = [])
     {
         try {
             $queryBuilder = $this->buildServiceQueryBuilder($sortField, $sortDirection, $filters);
@@ -23,8 +24,32 @@ class ServiceRepository extends EntityRepository
                 s.description,
                 s.description_en,
                 s.code,
-                s.status
-            ");
+                s.status,
+                s.created_at,
+                cr.username as created_by,
+                s.updated_at,
+                up.username as updated_by
+            ")->andWhere('s.is_deleted = 0');
+
+            if($limit) {
+                $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
+            }
+
+            return $queryBuilder;
+
+        } catch (QueryException $e) {
+            return [];
+        }
+    }
+
+    public function getListServiceCodeByCondition($sortField = 'code', $sortDirection = 'asc', $filters = [])
+    {
+        try {
+            $queryBuilder = $this->buildServiceQueryBuilder($sortField, $sortDirection, $filters);
+            $queryBuilder->select("
+                s.id,
+                s.code
+            ")->andwhere('s.is_deleted = 0');
             return $queryBuilder;
 
         } catch (QueryException $e) {
@@ -55,15 +80,15 @@ class ServiceRepository extends EntityRepository
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(Service::class, 's')->where('s.is_deleted = 0');
+        $queryBuilder->from(Service::class, 's')
+            ->leftJoin('s.join_created', 'cr')
+            ->leftJoin('s.join_updated', 'up');
 
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
         } else {
             $queryBuilder->orderBy('s.id', 'ASC');
         }
-
-        $utils = new Utils();
-        return $utils->setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
+        return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
 }

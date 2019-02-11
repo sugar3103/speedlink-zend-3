@@ -5,71 +5,71 @@ import { authHeader } from '../../../../util/auth-header';
 import history from '../../../../util/history';
 
 import {
-  CARRIER_GET_LIST,
-  CARRIER_ADD_ITEM,
-  CARRIER_UPDATE_ITEM,
-  CARRIER_DELETE_ITEM ,
-  CARRIER_CODE_GET_LIST
+  SERVICE_GET_LIST,
+  SERVICE_ADD_ITEM,
+  SERVICE_UPDATE_ITEM,
+  SERVICE_DELETE_ITEM ,
+  SERVICE_CODE_GET_LIST
 } from "../../../../constants/actionTypes";
 
 import {
-  toggleCarrierModal,
-  getCarrierListSuccess,
-  getCarrierListError,
-  addCarrierItemSuccess,
-  addCarrierItemError,
-  updateCarrierItemSuccess,
-  updateCarrierItemError,
-  deleteCarrierItemSuccess,
-  deleteCarrierItemError,
-  getCarrierList,
-  getCarrierCodeList,
-  getCarrierCodeListSuccess,
-  getCarrierCodeListError,
+  toggleServiceModal,
+  getServiceListSuccess,
+  getServiceListError,
+  addServiceItemSuccess,
+  addServiceItemError,
+  updateServiceItemSuccess,
+  updateServiceItemError,
+  deleteServiceItemSuccess,
+  deleteServiceItemError,
+  getServiceList,
+  getServiceCodeList,
+  getServiceCodeListSuccess,
+  getServiceCodeListError,
 } from "./actions";
 
 import createNotification from '../../../../util/notifications';
 import { startSubmit, stopSubmit } from 'redux-form';
 
 //validate
-function validateCarrier(errors) {
-  if (errors.name && errors.name.carrierExists) {
-    return stopSubmit('carrier_action_form', {
-      name: 'carrier.validate-name-exists'
+function validateService(errors) {
+  if (errors.name && errors.name.serviceExists) {
+    return stopSubmit('service_action_form', {
+      name: 'service.validate-name-exists'
     });
   }
-  if (errors.name_en && errors.name_en.carrierExists) {
-    return stopSubmit('carrier_action_form', {
-      name_en: 'carrier.validate-nameEn-exists'
+  if (errors.name_en && errors.name_en.serviceExists) {
+    return stopSubmit('service_action_form', {
+      name_en: 'service.validate-nameEn-exists'
     });
   }
 }
 
-//list carrier
+//list service
 function getListApi(params) {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}carrier`,
+    url: `${apiUrl}service`,
     headers: authHeader(),
     data: JSON.stringify(params)
   });
 }
 
-const getCarrierListRequest = async (params) => {
+const getServiceListRequest = async (params) => {
   return await getListApi(params).then(res => res.data).catch(err => err)
 };
 
-function* getCarrierListItems({ payload }) {
+function* getServiceListItems({ payload }) {
   const { params, messages } = payload;
   try {
-    const response = yield call(getCarrierListRequest, params);
+    const response = yield call(getServiceListRequest, params);
     switch (response.error_code) {
       case EC_SUCCESS:
-        yield put(getCarrierListSuccess(response.data, response.total));
+        yield put(getServiceListSuccess(response.data, response.total));
         break;
 
       case EC_FAILURE:
-        yield put(getCarrierListError(response.data));
+        yield put(getServiceListError(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -87,33 +87,33 @@ function* getCarrierListItems({ payload }) {
     }
 
   } catch (error) {
-    yield put(getCarrierListError(error));
+    yield put(getServiceListError(error));
   }
 }
 
-//list carrier code
+//list service code
 function getCodeListApi() {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}carrier/code`,
+    url: `${apiUrl}service/code`,
     headers: authHeader()
   });
 }
 
-const getCarrierCodeListRequest = async () => {
+const getServiceCodeListRequest = async () => {
   return await getCodeListApi().then(res => res.data).catch(err => err)
 };
 
-function* getCarrierCodeListItems() {
+function* getServiceCodeListItems() {
   try {
-    const response = yield call(getCarrierCodeListRequest);
+    const response = yield call(getServiceCodeListRequest);
     switch (response.error_code) {
       case EC_SUCCESS:
-        yield put(getCarrierCodeListSuccess(response.data));
+        yield put(getServiceCodeListSuccess(response.data));
         break;
 
       case EC_FAILURE:
-        yield put(getCarrierCodeListError(response.data));
+        yield put(getServiceCodeListError(response.data));
         break;
 
       default:
@@ -121,45 +121,45 @@ function* getCarrierCodeListItems() {
     }
 
   } catch (error) {
-    yield put(getCarrierCodeListError(error));
+    yield put(getServiceCodeListError(error));
   }
 }
 
-//add carrier
-function addCarrierApi(item) {
+//add service
+function addServiceApi(item) {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}carrier/add`,
+    url: `${apiUrl}service/add`,
     headers: authHeader(),
     data: item
   });
 }
 
-const addCarrierItemRequest = async item => {
-  return await addCarrierApi(item).then(res => res.data).catch(err => err)
+const addServiceItemRequest = async item => {
+  return await addServiceApi(item).then(res => res.data).catch(err => err)
 };
 
-function* addCarrierItem({ payload }) {
+function* addServiceItem({ payload }) {
   const { item, messages } = payload;
-  yield put(startSubmit('carrier_action_form'));
+  yield put(startSubmit('service_action_form'));
   try {
-    const response = yield call(addCarrierItemRequest, item);
+    const response = yield call(addServiceItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
-        yield put(addCarrierItemSuccess());
-        yield put(getCarrierList(null, messages));
-        yield put(getCarrierCodeList());
-        yield put(toggleCarrierModal());
+        yield put(addServiceItemSuccess());
+        yield put(getServiceList(null, messages));
+        yield put(getServiceCodeList());
+        yield put(toggleServiceModal());
         createNotification({
           type: 'success',
-          message: messages['carrier.add-success'],
+          message: messages['service.add-success'],
           title: messages['notification.success']
         });
         break;
 
       case EC_FAILURE:
-        yield put(addCarrierItemError(response.data));
-        yield put(validateCarrier(response.data));
+        yield put(addServiceItemError(response.data));
+        yield put(validateService(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -176,45 +176,45 @@ function* addCarrierItem({ payload }) {
         break;
     }
   } catch (error) {
-    yield put(addCarrierItemError(error));
+    yield put(addServiceItemError(error));
   }
 }
 
-//update carrier
-function updateCarrierApi(item) {
+//update service
+function updateServiceApi(item) {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}carrier/edit`,
+    url: `${apiUrl}service/edit`,
     headers: authHeader(),
     data: item
   });
 }
 
-const updateCarrierItemRequest = async item => {
-  return await updateCarrierApi(item).then(res => res.data).catch(err => err)
+const updateServiceItemRequest = async item => {
+  return await updateServiceApi(item).then(res => res.data).catch(err => err)
 };
 
-function* updateCarrierItem({ payload }) {
+function* updateServiceItem({ payload }) {
   const { item, messages } = payload;
-  yield put(startSubmit('carrier_action_form'));
+  yield put(startSubmit('service_action_form'));
   try {
-    const response = yield call(updateCarrierItemRequest, item);
+    const response = yield call(updateServiceItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
-        yield put(updateCarrierItemSuccess());
-        yield put(getCarrierList(null, messages));
-        yield put(getCarrierCodeList());
-        yield put(toggleCarrierModal());
+        yield put(updateServiceItemSuccess());
+        yield put(getServiceList(null, messages));
+        yield put(getServiceCodeList());
+        yield put(toggleServiceModal());
         createNotification({
           type: 'success',
-          message: messages['carrier.update-success'],
+          message: messages['service.update-success'],
           title: messages['notification.success']
         });
         break;
 
       case EC_FAILURE:
-        yield put(updateCarrierItemError(response.data));
-        yield put(validateCarrier(response.data));
+        yield put(updateServiceItemError(response.data));
+        yield put(validateService(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -231,41 +231,41 @@ function* updateCarrierItem({ payload }) {
         break;
     }
   } catch (error) {
-    yield put(updateCarrierItemError(error));
+    yield put(updateServiceItemError(error));
   }
 }
 
-//delete carrier
-function deleteCarrierApi(id) {
+//delete service
+function deleteServiceApi(id) {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}carrier/delete`,
+    url: `${apiUrl}service/delete`,
     headers: authHeader(),
     data: {  id: id }
   });
 }
 
-const deleteCarrierItemRequest = async id => {
-  return await deleteCarrierApi(id).then(res => res.data).catch(err => err)
+const deleteServiceItemRequest = async id => {
+  return await deleteServiceApi(id).then(res => res.data).catch(err => err)
 };
 
-function* deleteCarrierItem({ payload }) {
+function* deleteServiceItem({ payload }) {
   const { id, messages } = payload;
   try {
-    const response = yield call(deleteCarrierItemRequest, id);
+    const response = yield call(deleteServiceItemRequest, id);
     switch (response.error_code) {
       case EC_SUCCESS:
-        yield put(deleteCarrierItemSuccess());
-        yield put(getCarrierList(null, messages));
+        yield put(deleteServiceItemSuccess());
+        yield put(getServiceList(null, messages));
         createNotification({
           type: 'success',
-          message: messages['carrier.delete-success'],
+          message: messages['service.delete-success'],
           title: messages['notification.success']
         });
         break;
 
       case EC_FAILURE:
-        yield put(deleteCarrierItemError(response.data));
+        yield put(deleteServiceItemError(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -282,28 +282,28 @@ function* deleteCarrierItem({ payload }) {
         break;
     }
   } catch (error) {
-    yield put(deleteCarrierItemError(error));
+    yield put(deleteServiceItemError(error));
   }
 }
 
 export function* watchGetList() {
-  yield takeEvery(CARRIER_GET_LIST, getCarrierListItems);
+  yield takeEvery(SERVICE_GET_LIST, getServiceListItems);
 }
 
 export function* watchGetListCode() {
-  yield takeEvery(CARRIER_CODE_GET_LIST, getCarrierCodeListItems);
+  yield takeEvery(SERVICE_CODE_GET_LIST, getServiceCodeListItems);
 }
 
 export function* watchAddItem() {
-  yield takeEvery(CARRIER_ADD_ITEM, addCarrierItem);
+  yield takeEvery(SERVICE_ADD_ITEM, addServiceItem);
 }
 
 export function* watchUpdateItem() {
-  yield takeEvery(CARRIER_UPDATE_ITEM, updateCarrierItem);
+  yield takeEvery(SERVICE_UPDATE_ITEM, updateServiceItem);
 }
 
 export function* watchDeleteItem() {
-  yield takeEvery(CARRIER_DELETE_ITEM, deleteCarrierItem);
+  yield takeEvery(SERVICE_DELETE_ITEM, deleteServiceItem);
 }
 
 export default function* rootSaga() {

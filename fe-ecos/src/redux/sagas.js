@@ -9,6 +9,7 @@ import citySagas from './master-data/address/city/saga';
 import districtSagas from './master-data/address/district/saga';
 import wardSagas from './master-data/address/ward/saga';
 import carrierSagas from './master-data/service-shipment/carrier/saga';
+import serviceSagas from './master-data/service-shipment/service/saga';
 import userSagas from './system/users/user/saga'
 import roleSagas from './system/users/role/saga';
 import permissionSagas from './system/users/permission/saga';
@@ -29,6 +30,7 @@ export default function* rootSaga() {
     roleSagas(),
     permissionSagas(),
     carrierSagas(),
+    serviceSagas(),
     settingSagas()
   ]);
 }
