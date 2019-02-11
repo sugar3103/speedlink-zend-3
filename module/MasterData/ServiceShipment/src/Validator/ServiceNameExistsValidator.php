@@ -29,7 +29,7 @@ class ServiceNameExistsValidator extends AbstractValidator {
      */
     protected $messageTemplates = [
         self::NOT_SCALAR => 'The name must be a scalar value',
-        self::SERVICE_EXISTS => 'Another a name already exists'
+        self::SERVICE_EXISTS => 'Name already exists'
     ];
 
     /**

@@ -12,7 +12,7 @@ class ServiceCodeExistsValidator extends AbstractValidator {
      */
     protected $options = [
         'entityManager' => null,
-        'carrier' => null,
+        'service' => null,
         'language' => null,
         'column'
     ];
@@ -21,14 +21,14 @@ class ServiceCodeExistsValidator extends AbstractValidator {
      * Validation failure message IDs.
      */
     const NOT_SCALAR = 'notScalar';
-    const CARRIER_EXISTS = 'carrierExists';
+    const SERVICE_EXISTS = 'serviceExists';
 
     /**
      * Validation failure messages.
      */
     protected $messageTemplates = [
         self::NOT_SCALAR => 'The name must be a scalar value',
-        self::CARRIER_EXISTS => 'Another a name already exists'
+        self::SERVICE_EXISTS => 'Code already exists'
     ];
 
     /**
@@ -41,15 +41,15 @@ class ServiceCodeExistsValidator extends AbstractValidator {
         if (is_array($options) && isset($options['entityManager']))
             $this->options['entityManager'] = $options['entityManager'];
 
-        if (is_array($options) && isset($options['carrier']))
-            $this->options['carrier'] = $options['carrier'];
+        if (is_array($options) && isset($options['service']))
+            $this->options['service'] = $options['service'];
 
         // call the parent class constructor
         parent::__construct($options);
     }
 
     /**
-     * Check if carrier exists.
+     * Check if service exists.
      * @param mixed $value
      * @return bool
      */
@@ -74,7 +74,7 @@ class ServiceCodeExistsValidator extends AbstractValidator {
 
         // if there were an error, set error message.
         if (!$isValid) {
-            $this->error(self::CARRIER_EXISTS);
+            $this->error(self::SERVICE_EXISTS);
         }
 
         // return validation result

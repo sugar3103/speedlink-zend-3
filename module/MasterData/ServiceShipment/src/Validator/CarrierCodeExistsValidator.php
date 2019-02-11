@@ -28,7 +28,7 @@ class CarrierCodeExistsValidator extends AbstractValidator {
      */
     protected $messageTemplates = [
         self::NOT_SCALAR => 'The name must be a scalar value',
-        self::CARRIER_EXISTS => 'Another a name already exists'
+        self::CARRIER_EXISTS => 'Code already exists'
     ];
 
     /**

@@ -43,7 +43,7 @@ $router = [
                 'defaults' => [
                     'controller' => Controller\ServiceController::class,
                     'action' => 'index',
-                    'isAuthorizationRequired' => false
+                    'isAuthorizationRequired' => true
                 ]
             ]
         ],
@@ -58,7 +58,7 @@ $router = [
                 'defaults' => [
                     'controller' => Controller\ShipmentTypeController::class,
                     'action' => 'index',
-                    'isAuthorizationRequired' => false
+                    'isAuthorizationRequired' => true
                 ]
             ]
         ],

@@ -80,8 +80,7 @@ class CarrierForm extends Form {
                 [
                     'name' => StringTrim::class
                 ]
-            ],
-            'validators' => [
+            ], 'validators' => [
                 [
                     'name' => StringLength::class,
                     'options' => [
@@ -134,8 +133,7 @@ class CarrierForm extends Form {
                 [
                     'name' => StringTrim::class
                 ]
-            ],
-            'validators' => [
+            ], 'validators' => [
                 [
                     'name' => StringLength::class,
                     'options' => [
@@ -150,6 +148,5 @@ class CarrierForm extends Form {
                 ]
             ]
         ]);
-        
     }
 }

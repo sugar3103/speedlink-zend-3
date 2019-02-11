@@ -24,7 +24,11 @@ class ServiceRepository extends EntityRepository
                 s.description,
                 s.description_en,
                 s.code,
-                s.status
+                s.status,
+                s.created_at,
+                cr.username as created_by,
+                s.updated_at,
+                up.username as updated_by
             ")->andWhere('s.is_deleted = 0');
 
             if($limit) {

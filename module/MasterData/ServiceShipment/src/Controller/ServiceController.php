@@ -51,6 +51,7 @@ class ServiceController extends CoreController
         list($start, $limit, $sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);
         $dataService = $this->serviceManager->getListServiceByCondition($start, $limit, $sortField, $sortDirection, $filters);
 
+        $result['error_code'] = 1;
         $result['message'] = 'Success';
         $result["total"] = $dataService['totalService'];
         $result["data"] = !empty($dataService['listService']) ? $dataService['listService'] : [];
@@ -107,7 +108,7 @@ class ServiceController extends CoreController
             // add new service
             $this->serviceManager->addService($data, $user);
 
-            $this->error_code = 0;
+            $this->error_code = 1;
             $this->apiResponse['message'] = "Success: You have added a service!";
         } else {
             //TODO: Check error_code
@@ -135,6 +136,7 @@ class ServiceController extends CoreController
             $this->apiResponse['message'] = 'Missing data';
             return $this->createResponse();
         }
+
         //Create New Form Service
         $service = $this->entityManager->getRepository(Service::class)->find($data['id']);
         $form = new ServiceForm('update', $this->entityManager, $service);
@@ -147,14 +149,13 @@ class ServiceController extends CoreController
             // add new service
             $this->serviceManager->updateService($service, $data, $user);
 
-            $this->error_code = 0;
+            $this->error_code = 1;
             $this->apiResponse['message'] = "Success: You have edited a service!";
         } else {
             //TODO: Check error_code
             $this->error_code = -1;
             $this->apiResponse = $form->getMessages();
         }
-
         return $this->createResponse();
     }
 
@@ -181,7 +182,7 @@ class ServiceController extends CoreController
         //validate form
         if(!empty($service)) {
             $this->serviceManager->deleteService($service, $user);
-            $this->error_code = 0;
+            $this->error_code = 1;
             $this->apiResponse['message'] = "Success: You have deleted service!";
         } else {
             $this->httpStatusCode = 200;

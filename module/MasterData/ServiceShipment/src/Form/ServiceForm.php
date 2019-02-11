@@ -34,7 +34,6 @@ class ServiceForm extends Form {
     {
         // Define form name.
         parent::__construct('service-form');
-
         // Save parameters for internal use.
         $this->scenario = $scenario;
         $this->entityManager = $entityManager;
@@ -68,7 +67,7 @@ class ServiceForm extends Form {
                     'name' => ServiceNameExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'country' => $this->service
+                        'service' => $this->service
                     ]
                 ]
             ]
@@ -92,7 +91,7 @@ class ServiceForm extends Form {
                     'name' => ServiceNameExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'country' => $this->service
+                        'service' => $this->service
                     ]
                 ]
             ]
@@ -135,7 +134,8 @@ class ServiceForm extends Form {
                 [
                     'name' => StringTrim::class
                 ]
-            ], 'validators' => [
+            ],
+            'validators' => [
                 [
                     'name' => StringLength::class,
                     'options' => [
@@ -145,7 +145,7 @@ class ServiceForm extends Form {
                     'name' => ServiceCodeExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'carrier' => $this->service
+                        'service' => $this->service
                     ]
                 ]
             ]

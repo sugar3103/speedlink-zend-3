@@ -1,6 +1,7 @@
 <?php
 namespace ServiceShipment\Service;
 
+use Core\Utils\Utils;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use OAuth\Entity\User;

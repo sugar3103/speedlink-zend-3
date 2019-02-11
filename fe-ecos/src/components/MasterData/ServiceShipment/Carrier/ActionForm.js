@@ -137,9 +137,7 @@ ActionForm.propTypes = {
 
 const mapStateToProps = ({carrier}) => {  
   const { modalData } = carrier;
-  return {
-    modalData
-  };
+  return { modalData };
 };
 
 export default reduxForm({

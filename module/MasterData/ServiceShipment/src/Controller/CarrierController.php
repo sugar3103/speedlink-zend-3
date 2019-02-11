@@ -108,7 +108,7 @@ class CarrierController extends CoreController
             // add new carrier
             $this->carrierManager->addCarrier($data, $user);
 
-            $this->error_code = 0;
+            $this->error_code = 1;
             $this->apiResponse['message'] = "Success: You have added a carrier!";
         } else {
             //TODO: Check error_code
@@ -149,7 +149,7 @@ class CarrierController extends CoreController
             // add new carrier
             $this->carrierManager->updateCarrier($carrier, $data, $user);
 
-            $this->error_code = 0;
+            $this->error_code = 1;
             $this->apiResponse['message'] = "Success: You have edited a carrier!";
         } else {
             //TODO: Check error_code
@@ -171,7 +171,7 @@ class CarrierController extends CoreController
 
         $user = $this->tokenPayload;
         $data = $this->getRequestData();
-        if (empty($data['id'])) {
+        if (empty($data)) {
             // TODO: Check error_code
             $this->error_code = -1;
             $this->apiResponse['message'] = 'Missing data';
@@ -183,7 +183,7 @@ class CarrierController extends CoreController
         //validate form
         if(!empty($carrier)) {
             $this->carrierManager->deleteCarrier($carrier, $user);
-            $this->error_code = 0;
+            $this->error_code = 1;
             $this->apiResponse['message'] = "Success: You have deleted carrier!";
         } else {
             $this->httpStatusCode = 200;
