@@ -8,14 +8,14 @@ import Mail from './mail';
 import Server from './server';
 class Content extends Component {
     render() {
-        const { target,setting } = this.props;
+        const { target } = this.props;
         return(
             <Fragment>
-                { target === 'general' ? <General data={setting.items}/> : ''}
-                { target === 'local' ? <Local data={setting.items}/> : ''}
-                { target === 'option' ? <Option data={setting.items}/> : ''}
-                { target === 'mail' ? <Mail data={setting.items}/> : ''}
-                { target === 'server' ? <Server data={setting.items}/> : ''}
+                { target === 'general' ? <General /> : ''}
+                { target === 'local' ? <Local /> : ''}
+                { target === 'option' ? <Option /> : ''}
+                { target === 'mail' ? <Mail /> : ''}
+                { target === 'server' ? <Server /> : ''}
             </Fragment>        
         )
     }

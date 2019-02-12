@@ -34,7 +34,13 @@ class SettingController extends CoreController
              //get list by condition
             $dataSetting = $this->settingManager->getListSettingByCondition($sortField, $sortDirection,$filters);
 
-            $result = $this->filterByField($dataSetting['listSetting'],$fields);
+            $results = $this->filterByField($dataSetting['listSetting'],$fields);
+            $result = array();
+            foreach ($results as $_result ) {
+                $result = array_merge($result,array(
+                    $_result['key'] => $_result['value']
+                ));
+            }
             $this->error_code = 1;
             $this->apiResponse =  array(
                 'message'   => "Get List Success",
