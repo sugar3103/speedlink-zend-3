@@ -1,24 +1,26 @@
 <?php
 namespace ServiceShipment;
 
-use Core\Route\StaticRoute;
 use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use DoctrineExtensions\Query\Mysql\GroupConcat;
 use Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter;
 use Gedmo\SoftDeleteable\SoftDeleteableListener;
 use Gedmo\Timestampable\TimestampableListener;
+use Zend\Authentication\AuthenticationService;
 use Zend\Cache\Storage\Adapter\Filesystem;
 use Zend\Log\Formatter\Simple;
 use Zend\Log\Logger;
 use Zend\Log\LoggerAbstractServiceFactory;
+use Zend\Router\Http\Segment;
+
 
 use Core\DBAL\Types\UTCDateTimeType;
 
 $router = [
     'routes' => [
         'carrier' => [
-            'type' => StaticRoute::class,
+            'type' => Segment::class,
             'options' => [
                 'route' => '/carrier[/:action[/:id]]',
                 'constraints' => [
@@ -33,7 +35,7 @@ $router = [
             ]
         ],
         'service' => [
-            'type' => StaticRoute::class,
+            'type' => Segment::class,
             'options' => [
                 'route' => '/service[/:action[/:id]]',
                 'constraints' => [
@@ -43,12 +45,12 @@ $router = [
                 'defaults' => [
                     'controller' => Controller\ServiceController::class,
                     'action' => 'index',
-                    'isAuthorizationRequired' => true
+                    'isAuthorizationRequired' => false
                 ]
             ]
         ],
         'shipmnet_type' => [
-            'type' => StaticRoute::class,
+            'type' => Segment::class,
             'options' => [
                 'route' => '/shipmnet_type[/:action[/:id]]',
                 'constraints' => [
@@ -58,7 +60,7 @@ $router = [
                 'defaults' => [
                     'controller' => Controller\ShipmentTypeController::class,
                     'action' => 'index',
-                    'isAuthorizationRequired' => true
+                    'isAuthorizationRequired' => false
                 ]
             ]
         ],

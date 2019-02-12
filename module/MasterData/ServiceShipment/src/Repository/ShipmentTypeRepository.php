@@ -31,7 +31,7 @@ class ShipmentTypeRepository extends EntityRepository
                 c.code AS carrier_code,
                 smt.service_id,
                 s.code AS service_code
-            ")->where('smt.is_deleted = 0');
+            ");
             return $queryBuilder;
         } catch (QueryException $e) {
             return [];
@@ -63,7 +63,8 @@ class ShipmentTypeRepository extends EntityRepository
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(ShipmentType::class, 'smt')
             ->leftJoin('smt.join_carrier', 'c')
-            ->leftJoin('smt.join_service', 's');
+            ->leftJoin('smt.join_service', 's')
+            ->where('smt.is_deleted = 0');
 
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

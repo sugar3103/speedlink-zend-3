@@ -11,10 +11,7 @@ import {
   CARRIER_UPDATE_ITEM_ERROR,
   CARRIER_DELETE_ITEM,
   CARRIER_DELETE_ITEM_SUCCESS,
-  CARRIER_DELETE_ITEM_ERROR,
-  CARRIER_CODE_GET_LIST,
-  CARRIER_CODE_GET_LIST_SUCCESS,
-  CARRIER_CODE_GET_LIST_ERROR
+  CARRIER_DELETE_ITEM_ERROR
 } from '../../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -24,8 +21,7 @@ const INIT_STATE = {
   loading: true,
   modalOpen: false,
   modalData: null,
-  paramSearch: null,
-  codes: null
+  paramSearch: null
 };
 
 export default (state = INIT_STATE, action) => {
@@ -56,27 +52,6 @@ export default (state = INIT_STATE, action) => {
       };
 
     case CARRIER_GET_LIST_ERROR:
-      return {
-        ...state,
-        loading: false,
-        errors: action.payload
-      };
-
-    case CARRIER_CODE_GET_LIST:
-      return {
-        ...state,
-        loading: true
-      };
-
-    case CARRIER_CODE_GET_LIST_SUCCESS:
-      const { codes } = action.payload;
-      return {
-        ...state,
-        loading: false,
-        codes
-      };
-
-    case CARRIER_CODE_GET_LIST_ERROR:
       return {
         ...state,
         loading: false,
