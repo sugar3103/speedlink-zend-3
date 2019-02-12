@@ -8,10 +8,7 @@ use OAuth\Entity\User;
 use ServiceShipment\Entity\Service;
 use Zend\Mail\Message;
 use Zend\Mail\Transport\SmtpOptions;
-use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-use Zend\Paginator\Paginator;
-use Zend\Authentication\Result;
 
 /**
  * This service is responsible for adding/editing users
@@ -54,7 +51,7 @@ class ServiceManager
         $totalService = 0;
 
         //get orm carrier
-        $ormService = $this->entityManager->getRepository(Service::class)->getListServiceByCondition($start, $limit, $sortField,$sortDirection,$filters);
+        $ormService = $this->entityManager->getRepository(Service::class)->getListServiceByCondition($start, $limit, $sortField, $sortDirection, $filters);
 
         if($ormService){
             $ormPaginator = new ORMPaginator($ormService, true);
@@ -107,8 +104,8 @@ class ServiceManager
      * @return Service|bool
      * @throws \Exception
      */
-    public function addService($data, $user) {
-
+    public function addService($data, $user)
+    {
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
@@ -147,8 +144,8 @@ class ServiceManager
      * @return Service|bool
      * @throws \Exception
      */
-    public function updateService($service, $data, $user) {
-
+    public function updateService($service, $data, $user)
+    {
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
@@ -183,7 +180,8 @@ class ServiceManager
      * @return Service|bool
      * @throws \Exception
      */
-    public function deleteService($service, $user) {
+    public function deleteService($service, $user)
+    {
         // begin transaction
         $this->entityManager->beginTransaction();
         try {

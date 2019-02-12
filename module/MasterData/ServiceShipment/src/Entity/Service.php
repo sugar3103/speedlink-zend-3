@@ -96,6 +96,7 @@ class Service
      * @ORM\Column(name="created_by", type="integer", nullable=false)
      */
     private $created_by;
+
     /**
      *
      * @ORM\OneToOne(targetEntity="\OAuth\Entity\User")

@@ -48,7 +48,9 @@ class CarrierRepository extends EntityRepository
             $queryBuilder = $this->buildCarrierQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select("
                 c.id,
-                c.code
+                c.code,
+                c.name,
+                c.name_en
             ")->andwhere('c.is_deleted = 0');
             return $queryBuilder;
 

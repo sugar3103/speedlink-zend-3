@@ -1,13 +1,10 @@
 <?php
 namespace ServiceShipment\Validator;
 
-use Address\Entity\Country;
-use ServiceShipment\Entity\Carrier;
 use ServiceShipment\Entity\Service;
-use ServiceShipment\Entity\ShipmentType;
 use Zend\Validator\AbstractValidator;
 
-class ShipmentTypeExistsValidator extends AbstractValidator {
+class ServiceIdExistsValidator extends AbstractValidator {
 
     /**
      * Available validator options.
@@ -15,21 +12,22 @@ class ShipmentTypeExistsValidator extends AbstractValidator {
      */
     protected $options = [
         'entityManager' => null,
-        'shipmentType' => null,
+        'service' => null,
+        'language' => null
     ];
 
     /**
      * Validation failure message IDs.
      */
     const NOT_SCALAR = 'notScalar';
-    const SHIPMENT_TYPE_EXISTS = 'shipmentTypeExists';
+    const SERVICE_EXISTS = 'serviceExists';
 
     /**
      * Validation failure messages.
      */
     protected $messageTemplates = [
         self::NOT_SCALAR => 'The name must be a scalar value',
-        self::SHIPMENT_TYPE_EXISTS => 'Another a name already exists'
+        self::SERVICE_EXISTS => 'Code not exists'
     ];
 
     /**
@@ -50,7 +48,7 @@ class ShipmentTypeExistsValidator extends AbstractValidator {
     }
 
     /**
-     * Check if shipment type exists.
+     * Check if service exists.
      * @param mixed $value
      * @return bool
      */
@@ -63,23 +61,20 @@ class ShipmentTypeExistsValidator extends AbstractValidator {
 
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
-        if ($this->options['language'] === NULL) {
-            $shipmentType = $entityManager->getRepository(ShipmentType::class)->findOneByName($value);
-        } else if($this->options['language'] === 'en') {
-            $shipmentType = $entityManager->getRepository(ShipmentType::class)->findOneBy(array('name_en' => $value));
-        }
+        $service = $entityManager->getRepository(Service::class)->find($value);
 
         if ($this->options['shipmentType'] == null) {
-            $isValid = ($shipmentType == null);
-        } elseif ($this->options['shipmentType']->getName() != $value && $shipmentType != null) {
-            $isValid = false;
-        } else {
+            $isValid = $service;
+        } elseif ($this->options['shipmentType']->getCode() != $value && $service != null) {
             $isValid = true;
+        } else {
+            $isValid = false;
         }
 
         // if there were an error, set error message.
-        if (!$isValid)
-            $this->error(self::SHIPMENT_TYPE_EXISTS);
+        if (!$isValid) {
+            $this->error(self::SERVICE_EXISTS);
+        }
 
         // return validation result
         return $isValid;

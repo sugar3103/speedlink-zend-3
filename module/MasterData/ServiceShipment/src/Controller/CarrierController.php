@@ -178,7 +178,7 @@ class CarrierController extends CoreController
             return $this->createResponse();
         }
         //Create New Form Carrier
-        $carrier = $this->entityManager->getRepository(Carrier::class)->findOneBy(array('id' => $data['id']));
+        $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['id']);
 
         //validate form
         if(!empty($carrier)) {

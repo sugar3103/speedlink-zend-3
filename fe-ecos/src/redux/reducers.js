@@ -9,6 +9,7 @@ import branch from './master-data/branch/reducer';
 import users from './system/users/reducers';
 import carrier from './master-data/service-shipment/carrier/reducer';
 import service from './master-data/service-shipment/service/reducer';
+import shipment_type from './master-data/service-shipment/shipmnet-type/reducer';
 import setting from './system/setting/reducer';
 
 const reducers = combineReducers({
@@ -21,6 +22,7 @@ const reducers = combineReducers({
   users,
   carrier,
   service,
+  shipment_type,
   hub,
   branch
 });

@@ -10,6 +10,7 @@ import districtSagas from './master-data/address/district/saga';
 import wardSagas from './master-data/address/ward/saga';
 import carrierSagas from './master-data/service-shipment/carrier/saga';
 import serviceSagas from './master-data/service-shipment/service/saga';
+import shipmentTypeSagas from './master-data/service-shipment/shipmnet-type/saga';
 import userSagas from './system/users/user/saga'
 import roleSagas from './system/users/role/saga';
 import permissionSagas from './system/users/permission/saga';
@@ -31,6 +32,7 @@ export default function* rootSaga() {
     permissionSagas(),
     carrierSagas(),
     serviceSagas(),
+    shipmentTypeSagas(),
     settingSagas()
   ]);
 }

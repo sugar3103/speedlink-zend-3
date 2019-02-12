@@ -1,5 +1,9 @@
 const validate = (values) => {
   const errors = {};
+  if (!values.code) {
+    errors.code = 'service.validate-code-empty';
+  }
+
   if (!values.name) {
     errors.name = 'service.validate-name-empty';
   } else if (values.name.length < 5) {

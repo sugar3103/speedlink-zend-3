@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Col, Container, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
+import { List } from '../../../components/MasterData/ServiceShipment/ShipmnetType';
 
 class ShipmentType extends Component {
   render() {
     const {messages} = this.props.intl;
     return (
-      <Container>
+      <Container className={'panel__body'}>
         <Row>
           <Col md={12}>
             <h3 className="page-title">{messages['cs.shipment_type']}</h3>
@@ -14,6 +15,7 @@ class ShipmentType extends Component {
           </Col>
         </Row>
         <Row>
+          <List />
         </Row>
       </Container>
     )

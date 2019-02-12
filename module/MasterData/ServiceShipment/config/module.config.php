@@ -47,10 +47,10 @@ $router = [
                 ]
             ]
         ],
-        'shipmnet_type' => [
+        'shipment_type' => [
             'type' => StaticRoute::class,
             'options' => [
-                'route' => '/shipmnet_type[/:action[/:id]]',
+                'route' => '/shipment_type[/:action[/:id]]',
                 'constraints' => [
                     'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                     'id' => '[a-zA-Z0-9_-]*',

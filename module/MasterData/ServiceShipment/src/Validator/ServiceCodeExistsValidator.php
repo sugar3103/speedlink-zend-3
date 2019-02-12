@@ -13,8 +13,7 @@ class ServiceCodeExistsValidator extends AbstractValidator {
     protected $options = [
         'entityManager' => null,
         'service' => null,
-        'language' => null,
-        'column'
+        'language' => null
     ];
 
     /**

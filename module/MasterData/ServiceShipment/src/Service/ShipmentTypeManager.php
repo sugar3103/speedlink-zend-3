@@ -1,20 +1,21 @@
 <?php
 namespace ServiceShipment\Service;
 
+use Core\Utils\Utils;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
+use OAuth\Entity\User;
+use ServiceShipment\Entity\Carrier;
+use ServiceShipment\Entity\Service;
 use ServiceShipment\Entity\ShipmentType;
 use Zend\Mail\Message;
 use Zend\Mail\Transport\SmtpOptions;
-use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-use Zend\Paginator\Paginator;
-use Zend\Authentication\Result;
 
 /**
  * This service is responsible for adding/editing users
  * and changing user password.
- * @package NetworkPort\Service
+ * @package NetworkPort\ShipmentType
  */
 class ShipmentTypeManager
 {
@@ -32,36 +33,79 @@ class ShipmentTypeManager
         $this->entityManager = $entityManager;
     }
 
-    public function getListShipmentTypeByCondition($currentPage, $limit, $sortField = '', $sortDirection = 'asc', $filters = [])
+    private function getReferenced(&$shipment_type, $data, $user, $mode = '')
+    {
+        $user_data = $this->entityManager->getRepository(User::class)->find($user->id);
+        if ($user_data == null) {
+            throw new \Exception('Not found User by ID');
+        }
+
+        if ($mode == 'add') {
+            $shipment_type->setJoinCreated($user_data);
+        }
+        $shipment_type->setJoinUpdated($user_data);
+
+        $carrier_data = $this->entityManager->getRepository(Carrier::class)->find($data['carrier_id']);
+        if ($carrier_data == null) {
+            throw new \Exception('Not found Carrier Code');
+        }
+        $shipment_type->setJoinCarrier($carrier_data);
+
+        $service_data = $this->entityManager->getRepository(Service::class)->find($data['service_id']);
+        if ($service_data == null) {
+            throw new \Exception('Not found Service Code');
+        }
+        $shipment_type->setJoinService($service_data);
+
+    }
+
+    public function getListShipmentTypeByCondition($start, $limit, $sortField = '', $sortDirection = 'asc', $filters = [])
     {
         $shipmentTypes = [];
         $totalShipmentType = 0;
 
         //get orm carrier
-        $ormShipmentType = $this->entityManager->getRepository(ShipmentType::class)->getListShipmentTypeByCondition($sortField,$sortDirection,$filters);
+        $ormShipmentType = $this->entityManager->getRepository(ShipmentType::class)->getListShipmentTypeByCondition($start, $limit, $sortField, $sortDirection, $filters);
 
         if($ormShipmentType){
             $ormPaginator = new ORMPaginator($ormShipmentType, true);
             $ormPaginator->setUseOutputWalkers(false);
 
-            $adapter = new DoctrineAdapter($ormPaginator);
-            $paginator = new Paginator($adapter);
-            //sets the current page number
-            $paginator->setCurrentPageNumber($currentPage);
-            //Sets the number of items per page
-            $paginator->setItemCountPerPage($limit);
-
-            //get carriers list
-            $shipmentTypes = $paginator->getIterator()->getArrayCopy();
             //get total carriers list
-            $totalShipmentType = $paginator->getTotalItemCount();
+            $totalShipmentType = $ormPaginator->count();
+            $shipmentTypes = $ormPaginator->getIterator()->getArrayCopy();
 
+            foreach ($shipmentTypes as $key => $shipmentType) {
+                $date_format = 'd/m/Y H:i:s';
+                $shipmentTypes[$key]['created_at'] = Utils::checkDateFormat($shipmentType['created_at'], $date_format);
+                $shipmentTypes[$key]['updated_at'] = Utils::checkDateFormat($shipmentType['updated_at'], $date_format);
+            }
         }
 
         //set return data
         $dataShipmentType = [
             'listShipmentType' => $shipmentTypes,
             'totalShipmentType' => $totalShipmentType,
+        ];
+        return $dataShipmentType;
+    }
+
+    public function getListShipmentTypeCodeByCondition()
+    {
+        $shipmentType = [];
+
+        //get orm carrier
+        $ormShipmentType = $this->entityManager->getRepository(ShipmentType::class)->getListShipmentTypeCodeByCondition();
+
+        if($ormShipmentType){
+            $ormPaginator = new ORMPaginator($ormShipmentType, true);
+            $ormPaginator->setUseOutputWalkers(false);
+            $shipmentType = $ormPaginator->getIterator()->getArrayCopy();
+        }
+
+        //set return data
+        $dataShipmentType = [
+            'listShipmentType' => $shipmentType,
         ];
         return $dataShipmentType;
     }
@@ -74,8 +118,8 @@ class ShipmentTypeManager
      * @return ShipmentType|bool
      * @throws \Exception
      */
-    public function addShipmentType($data, $user) {
-
+    public function addShipmentType($data, $user)
+    {
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
@@ -86,10 +130,17 @@ class ShipmentTypeManager
             $shipmentType->setDescriptionEn($data['description_en']);
             $shipmentType->setStatus($data['status']);
             $shipmentType->setCode($data['code']);
+            $shipmentType->setCategoryCode($data['category_code']);
+            $shipmentType->setProductTypeCode($data['product_type_code']);
+            $shipmentType->setCarrierId($data['carrier_id']);
+            $shipmentType->setServiceId($data['service_id']);
+            $shipmentType->setVolumetricNumber($data['volumetric_number']);
             //TODO: check timezone
             $shipmentType->setCreatedAt(date('Y-m-d H:i:s'));
-            //$shipmentType->setCreatedBy($user->id);
-            $shipmentType->setCreatedBy('1');
+            $shipmentType->setCreatedBy($user->id);
+            $shipmentType->setUpdatedAt(date('Y-m-d H:i:s'));
+            $shipmentType->setUpdatedBy($user->id);
+            $this->getReferenced($shipmentType, $data, $user, 'add');
 
             $this->entityManager->persist($shipmentType);
             $this->entityManager->flush();
@@ -112,8 +163,8 @@ class ShipmentTypeManager
      * @return ShipmentType|bool
      * @throws \Exception
      */
-    public function updateShipmentType($shipmentType, $data, $user) {
-
+    public function updateShipmentType($shipmentType, $data, $user)
+    {
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
@@ -123,10 +174,15 @@ class ShipmentTypeManager
             $shipmentType->setDescriptionEn($data['description_en']);
             $shipmentType->setStatus($data['status']);
             $shipmentType->setCode($data['code']);
+            $shipmentType->setCategoryCode($data['category_code']);
+            $shipmentType->setProductTypeCode($data['product_type_code']);
+            $shipmentType->setCarrierId($data['carrier_id']);
+            $shipmentType->setServiceId($data['service_id']);
+            $shipmentType->setVolumetricNumber($data['volumetric_number']);
             //TODO: check timezone
             $shipmentType->setUpdatedAt(date('Y-m-d H:i:s'));
-            //$shipmentType->setUpdatedBy($user->id);
-            $shipmentType->setUpdatedBy('1');
+            $shipmentType->setUpdatedBy($user->id);
+            $this->getReferenced($shipmentType, $data, $user);
 
             $this->entityManager->persist($shipmentType);
             $this->entityManager->flush();
@@ -144,17 +200,18 @@ class ShipmentTypeManager
      * Remove ShipmentType
      *
      * @param $shipmentType
+     * @param $user
      * @return ShipmentType|bool
      * @throws \Exception
      */
-    public function deleteShipmentType($shipmentType) {
+    public function deleteShipmentType($shipmentType, $user)
+    {
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
             $shipmentType->setIsDeleted('1');
             $shipmentType->setUpdatedAt(date('Y-m-d H:i:s'));
-            //$shipmentType->setUpdatedBy($user->id);
-            $shipmentType->setUpdatedBy('1');
+            $shipmentType->setUpdatedBy($user->id);
 
             $this->entityManager->persist($shipmentType);
             $this->entityManager->flush();

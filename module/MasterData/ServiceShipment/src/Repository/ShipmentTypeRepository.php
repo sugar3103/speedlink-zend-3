@@ -1,6 +1,7 @@
 <?php
 namespace ServiceShipment\Repository;
 
+use Core\Utils\Utils;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
@@ -12,7 +13,7 @@ use ServiceShipment\Entity\ShipmentType;
  */
 class ShipmentTypeRepository extends EntityRepository
 {
-    public function getListShipmentTypeByCondition($sortField = 'c.id', $sortDirection = 'asc', $filters = [])
+    public function getListShipmentTypeByCondition($start, $limit, $sortField = 'c.id', $sortDirection = 'asc', $filters = [])
     {
         try {
             $queryBuilder = $this->buildShipmentTypeQueryBuilder($sortField, $sortDirection, $filters);
@@ -22,17 +23,45 @@ class ShipmentTypeRepository extends EntityRepository
                 smt.name_en,
                 smt.description,
                 smt.description_en,
-                smt.code AS shipment_type_code,
+                smt.code,
                 smt.category_code,
                 smt.product_type_code,
                 smt.volumetric_number,
                 smt.status,
                 smt.carrier_id,
-                c.code AS carrier_code,
+                c.name_en AS carrier_name_en,
+                c.name AS carrier_name,
                 smt.service_id,
-                s.code AS service_code
-            ")->where('smt.is_deleted = 0');
+                s.name_en AS service_name_en,
+                s.name AS service_name,
+                smt.created_at,
+                cr.username as created_by,
+                smt.updated_at,
+                up.username as updated_by
+            ")->andWhere('smt.is_deleted = 0');
+
+            if($limit) {
+                $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
+            }
+
             return $queryBuilder;
+        } catch (QueryException $e) {
+            return [];
+        }
+    }
+
+    public function getListShipmentTypeCodeByCondition($sortField = 'code', $sortDirection = 'asc', $filters = [])
+    {
+        try {
+            $queryBuilder = $this->buildShipmentTypeQueryBuilder($sortField, $sortDirection, $filters);
+            $queryBuilder->select("
+                smt.id,
+                smt.code,
+                smt.name,
+                smt.name_en
+            ")->andWhere('smt.is_deleted = 0');
+            return $queryBuilder;
+
         } catch (QueryException $e) {
             return [];
         }
@@ -63,7 +92,9 @@ class ShipmentTypeRepository extends EntityRepository
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(ShipmentType::class, 'smt')
             ->leftJoin('smt.join_carrier', 'c')
-            ->leftJoin('smt.join_service', 's');
+            ->leftJoin('smt.join_service', 's')
+            ->leftJoin('smt.join_created', 'cr')
+            ->leftJoin('smt.join_updated', 'up');
 
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
@@ -71,6 +102,6 @@ class ShipmentTypeRepository extends EntityRepository
             $queryBuilder->orderBy('smt.id', 'ASC');
         }
 
-        return Core\Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
+        return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
 }
