@@ -24,7 +24,27 @@ class ServiceRepository extends EntityRepository
                 s.description_en,
                 s.code,
                 s.status
-            ");
+            ")->andWhere('s.is_deleted = 0');
+
+            if($limit) {
+                $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
+            }
+
+            return $queryBuilder;
+
+        } catch (QueryException $e) {
+            return [];
+        }
+    }
+
+    public function getListServiceCodeByCondition($sortField = 'code', $sortDirection = 'asc', $filters = [])
+    {
+        try {
+            $queryBuilder = $this->buildServiceQueryBuilder($sortField, $sortDirection, $filters);
+            $queryBuilder->select("
+                s.id,
+                s.code
+            ")->andwhere('s.is_deleted = 0');
             return $queryBuilder;
 
         } catch (QueryException $e) {

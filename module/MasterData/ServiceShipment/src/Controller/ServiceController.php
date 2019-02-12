@@ -54,7 +54,22 @@ class ServiceController extends CoreController
         $filters =  $this->params()->fromPost('filters','{}');
         $filters = json_decode($filters, true);
 
-        $dataService = $this->serviceManager->getListServiceByCondition($currentPage, $limit, $sortField, $sortDirection, $filters);
+        $result['message'] = 'Success';
+        $result["total"] = $dataService['totalService'];
+        $result["data"] = !empty($dataService['listService']) ? $dataService['listService'] : [];
+        $this->apiResponse = $result;
+
+        return $this->createResponse();
+    }
+
+    public function codeAction()
+    {
+        if (!$this->getRequest()->isPost()) {
+            // TODO: Check error_code
+            $this->httpStatusCode = 405;
+            $this->apiResponse['message'] = 'Request not allow';
+            return $this->createResponse();
+        }
 
         $result['message'] = 'Success';
         $result["total"] = $dataService['totalService'];
@@ -165,7 +180,7 @@ class ServiceController extends CoreController
 
         //validate form
         if(!empty($service)) {
-            $this->serviceManager->deleteService($service);
+            $this->serviceManager->deleteService($service, $user);
             $this->error_code = 0;
             $this->apiResponse['message'] = "Success: You have deleted service!";
         } else {

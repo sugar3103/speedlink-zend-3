@@ -145,7 +145,21 @@ class CarrierForm extends Form {
                 [
                     'name' => StringTrim::class
                 ]
-            ] 
+            ],
+            'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'max' => 50
+                    ]
+                ], [
+                    'name' => CarrierCodeExistsValidator::class,
+                    'options' => [
+                        'entityManager' => $this->entityManager,
+                        'carrier' => $this->carrier
+                    ]
+                ]
+            ]
         ]);
         
     }

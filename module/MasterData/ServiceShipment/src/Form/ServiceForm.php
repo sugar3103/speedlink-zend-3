@@ -145,7 +145,20 @@ class ServiceForm extends Form {
                 [
                     'name' => StringTrim::class
                 ]
-            ] 
+            ], 'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'max' => 50
+                    ]
+                ], [
+                    'name' => ServiceCodeExistsValidator::class,
+                    'options' => [
+                        'entityManager' => $this->entityManager,
+                        'carrier' => $this->service
+                    ]
+                ]
+            ]
         ]);
         
     }
