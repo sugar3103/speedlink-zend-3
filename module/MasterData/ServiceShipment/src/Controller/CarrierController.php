@@ -154,8 +154,8 @@ class CarrierController extends CoreController
         }
 
         $user = $this->tokenPayload;
-        $data = $this->params()->fromPost();
-        if (empty($data)) {
+        $data = $this->getRequestData();
+        if (empty($data['id'])) {
             // TODO: Check error_code
             $this->error_code = -1;
             $this->apiResponse['message'] = 'Missing data';
@@ -166,7 +166,7 @@ class CarrierController extends CoreController
 
         //validate form
         if(!empty($carrier)) {
-            $this->carrierManager->deleteCarrier($carrier);
+            $this->carrierManager->deleteCarrier($carrier, $user);
             $this->error_code = 0;
             $this->apiResponse['message'] = "Success: You have deleted carrier!";
         } else {

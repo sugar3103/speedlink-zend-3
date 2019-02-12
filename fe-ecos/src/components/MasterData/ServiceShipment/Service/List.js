@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
-import { ButtonToolbar, Card, CardBody, Col, Table, Button } from 'reactstrap';
+import { Card, CardBody, Col, Table, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Item from './Item';
 import Pagination from '../../../../containers/Shared/pagination/Pagination';
@@ -10,14 +10,14 @@ import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import Action from './Action';
 import Search from './Search';
-import { getCarrierList, toggleCarrierModal } from "../../../../redux/actions";
+import { getServiceList, toggleServiceModal } from "../../../../redux/actions";
 
-const CarrierFormatter = ({ value }) => (
+const ServiceFormatter = ({ value }) => (
   value === 'Enabled' ? <span className="badge badge-success">Enabled</span> :
     <span className="badge badge-disabled">Disabled</span>
 );
 
-CarrierFormatter.propTypes = {
+ServiceFormatter.propTypes = {
   value: PropTypes.string.isRequired,
 };
 
@@ -40,10 +40,10 @@ class List extends Component {
       }
     };
 
-    if (this.props.carrier.paramSearch) {
-      Object.assign(params, { "query": this.props.carrier.paramSearch})
+    if (this.props.service.paramSearch) {
+      Object.assign(params, { "query": this.props.service.paramSearch})
     }
-    this.props.getCarrierList(params, messages);
+    this.props.getServiceList(params, messages);
 
     this.setState({
       currentPage: 1,
@@ -52,7 +52,7 @@ class List extends Component {
   };
 
 toggleModal = () => {
-  this.props.toggleCarrierModal();
+  this.props.toggleServiceModal();
 };
 
   onChangePage = (page) => {
@@ -64,10 +64,10 @@ toggleModal = () => {
       }
     };
 
-    if (this.props.carrier.paramSearch) {
-      Object.assign(params, { "query": this.props.carrier.paramSearch })
+    if (this.props.service.paramSearch) {
+      Object.assign(params, { "query": this.props.service.paramSearch })
     }
-    this.props.getCarrierList(params, messages);
+    this.props.getServiceList(params, messages);
 
     this.setState({
       currentPage: page
@@ -76,71 +76,70 @@ toggleModal = () => {
 
   componentDidMount() {
     const { messages } = this.props.intl;
-    this.props.getCarrierList(null, messages);
+    this.props.getServiceList(null, messages);
   }
 
-  showCarrierItem = (items) => {
+  showServiceItem = (items) => {
     const { messages } = this.props.intl;
     let result = null;
     if (items != null && items.length > 0) {
       result = items.map((item, index) => {
         return (
-          <Item key={index} carrier={item} />
+          <Item key={index} service={item} />
         );
       })
     } else {
       result = (
-        <tr><td colSpan={8} className="text-center">{messages['carrier.no-result']}</td></tr>
+        <tr><td colSpan={8} className="text-center">{messages['no-result']}</td></tr>
       );
     }
     return result;
   };
 
+
   render() {
-    const { items, loading, modalOpen, total } = this.props.carrier;
-    const { messages } = this.props.intl;
+    const { items, loading, modalOpen, total } = this.props.service;
+    const { messages, locale } = this.props.intl;
     return (
       <Col md={12} lg={12}>
         <Card>
           <CardBody className="master-data-list">
-            <div className="card__title">
-              <h5 className="bold-text">{messages['carrier.list-title']}</h5>
-            </div>
-            <div className={'panel__content'}>
-              <Search />
-              <ButtonToolbar className="">
-                <Button color="success" className="master-data-list__btn-add" onClick={this.toggleModal} >
-                  {messages['carrier.add-new']}
-                </Button>
-              </ButtonToolbar>
+            <Search />
+            <div className="mb-2">
+              <Button 
+                color="success" 
+                onClick={this.toggleModal}
+                className="master-data-btn"
+                size="sm"
+              >{messages['status.add-new']}</Button>
               <Action modalOpen={modalOpen} />
-
               <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
-              <Table responsive bordered hover>
-                <thead>
+            </div>
+            <Table responsive bordered hover>
+              <thead>
                 <tr>
                   <th>#</th>
-                  <th>{messages['carrier.code']}</th>
+                  <th>{messages['service.code']}</th>
                   {locale === 'en-US' ? (
-                    <th>{messages['carrier.name-en']}</th>
+                    <th>{messages['service.name-en']}</th>
                   ) : (
-                    <th>{messages['carrier.name']}</th>
+                    <th>{messages['service.name']}</th>
                   )}
-                  <th>{messages['carrier.status']}</th>
-                  <th>{messages['carrier.created-at']}</th>
-                  <th>{messages['carrier.action']}</th>
+                  <th>{messages['service.status']}</th>
+                  <th>{messages['service.created-at']}</th>
+                  <th>{messages['service.updated-at']}</th>
+                  <th>{messages['action']}</th>
                 </tr>
                 </thead>
                 <tbody>
                 {loading ? (
                   <tr><td colSpan={8} className="text-center"><div className="loading-table" /></td></tr>
                 ) : (
-                  this.showCarrierItem(items)
+                  this.showServiceItem(items)
                 )}
                 </tbody>
               </Table>
               <Pagination pagination={this.state} total={total} onChangePage={this.onChangePage} />
-            </div>
           </CardBody>
         </Card>
       </Col>
@@ -149,20 +148,20 @@ toggleModal = () => {
 }
 
 List.propTypes = {
-  carrier: PropTypes.object.isRequired,
+  service: PropTypes.object.isRequired,
   modal: PropTypes.object,
-  getCarrierList: PropTypes.func.isRequired,
-  toggleCarrierModal: PropTypes.func.isRequired
+  getServiceList: PropTypes.func.isRequired,
+  toggleServiceModal: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({ carrier, modal }) => {
+const mapStateToProps = ({ service, modal }) => {
   return {
-    carrier,
+    service,
     modal
   };
 };
 
 export default injectIntl(connect(mapStateToProps, {
-  getCarrierList,
-  toggleCarrierModal
+  getServiceList,
+  toggleServiceModal
 })(List));
