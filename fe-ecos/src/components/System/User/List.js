@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
-import { ButtonToolbar, Card, CardBody, Col, Table, Button } from 'reactstrap';
+import { ButtonToolbar, Card, CardBody, Col, Table } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Item from './Item';
 import Pagination from '../../../containers/Shared/pagination/Pagination';
@@ -117,11 +117,11 @@ class List extends Component {
                     <MagnifyIcon />
                   </div>
                 </form>
-                <Button 
+                {/* <Button 
                   color="success" 
                   className="master-data-list__btn-add btn-sm"
                   onClick={this.toggleModal}
-                >{messages['user.add-new']}</Button>
+                >{messages['user.add-new']}</Button> */}
               </ButtonToolbar>
               <Action modalOpen={modalOpen} />
             </div>

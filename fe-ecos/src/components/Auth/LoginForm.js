@@ -46,6 +46,7 @@ class LogInForm extends PureComponent {
               component={CustomField}
               type="text"
               placeholder={messages['login.username']}
+              messages={messages}
             />
           </div>
         </div>
@@ -60,6 +61,7 @@ class LogInForm extends PureComponent {
               component={CustomField}
               type={this.state.showPassword ? 'text' : 'password'}
               placeholder={messages['login.password']}
+              messages={messages}
             />
             <button
               className={`form__form-group-button${this.state.showPassword ? ' active' : ''}`}
