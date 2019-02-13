@@ -61,7 +61,7 @@ class SettingController extends CoreController
                 if(is_array($value)) {
                     foreach ($value as $c => $v) {
                         $setting = $this->entityManager->getRepository(Setting::class)->findOneBy(
-                            array('code' => $key,'key' => $c, 'value' => $v)
+                            array('code' => $key,'key' => $c)
                         );
                         if($setting) {
                             $this->settingManager->updateSetting($setting,$key,$c,$v,0);
