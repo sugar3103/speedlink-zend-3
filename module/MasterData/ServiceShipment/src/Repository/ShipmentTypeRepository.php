@@ -32,7 +32,6 @@ class ShipmentTypeRepository extends EntityRepository
                 c.name_en AS carrier_name_en,
                 c.name AS carrier_name,
                 smt.service_id,
-                s.code AS service_code
                 s.name_en AS service_name_en,
                 s.name AS service_name,
                 smt.created_at,

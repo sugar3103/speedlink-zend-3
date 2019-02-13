@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { injectIntl } from 'react-intl';
 import { Modal } from 'reactstrap';
 import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
 import { addCarrierItem, updateCarrierItem, toggleCarrierModal } from '../../../../redux/actions';
+import PropTypes from 'prop-types';
 
 class Action extends Component {
   handleSubmit = values => {
@@ -30,15 +32,20 @@ class Action extends Component {
   }
 }
 
-const mapStateToProps = ({carrier}) => {
+Action.propTypes = {
+  modalData: PropTypes.object,
+  addCarrierItem: PropTypes.func.isRequired,
+  updateCarrierItem: PropTypes.func.isRequired,
+  toggleCarrierModal: PropTypes.func.isRequired,
+}
+
+const mapStateToProps = ({ carrier }) => {
   const { modalData } = carrier;
-  return {
-    modalData
-  };
+  return { modalData };
 };
 
-export default connect(mapStateToProps, {
+export default injectIntl(connect(mapStateToProps, {
   addCarrierItem,
   updateCarrierItem,
   toggleCarrierModal
-})(Action);
+})(Action));

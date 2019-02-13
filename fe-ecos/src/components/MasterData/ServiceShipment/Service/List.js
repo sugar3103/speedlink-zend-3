@@ -120,11 +120,7 @@ toggleModal = () => {
                 <tr>
                   <th>#</th>
                   <th>{messages['service.code']}</th>
-                  {locale === 'en-US' ? (
-                    <th>{messages['service.name-en']}</th>
-                  ) : (
-                    <th>{messages['service.name']}</th>
-                  )}
+                  <th>{locale === 'en-US' ? (messages['service.name-en']) : (messages['service.name'])}</th>
                   <th>{messages['service.status']}</th>
                   <th>{messages['service.created-at']}</th>
                   <th>{messages['service.updated-at']}</th>
