@@ -34,7 +34,7 @@ class Layout extends Component {
   };
 
   render() {
-    const { sidebar, theme } = this.props;
+    const { sidebar, theme,setting } = this.props;
     const layoutClass = classNames({
       layout: true,
       'layout--collapse': this.props.sidebar.collapse,
@@ -47,6 +47,7 @@ class Layout extends Component {
           theme={theme}
           changeToDark={this.changeToDark}
           changeToLight={this.changeToLight}
+          setting = {setting.items}
         />
         <Topbar
           changeMobileSidebarVisibility={this.changeMobileSidebarVisibility}
@@ -61,11 +62,12 @@ class Layout extends Component {
   }
 }
 
-const mapStateToProps = ({settings}) => {
+const mapStateToProps = ({settings,setting}) => {
   const { sidebar, theme } = settings;
   return {
     sidebar,
-    theme
+    theme,
+    setting
   }
 }
 

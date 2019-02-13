@@ -1,11 +1,42 @@
 import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
+
 import { Field } from 'redux-form';
 import renderRadioButtonField from '../../../containers/Shared/form/RadioButton';
 import renderSelectField from '../../../containers/Shared/form/Select';
+import {
+    getRoleList
+} from "../../../redux/actions";
 class Option extends Component {
+    componentDidMount() {
+        let params = {
+            field: ['id', 'name', 'name_en'],
+            offset: {
+                limit: 0
+            }
+        }
+
+        this.props.getRoleList(params);
+    }
+
+    showItems(items) {
+        const { locale } = this.props.intl;
+
+        const roles = items.map(item => {
+            return {
+                'value': item.id,
+                'label': (locale === 'en-US' && item.name_en) ? item.name_en : item.name
+            }
+        });
+
+        return roles;
+    }
+
+
     render() {
-        const { messages } = this.props.intl;        
+        const { messages } = this.props.intl; 
+        const { role } = this.props;
         return (
             <Fragment>
                 <h5 className="bold-text">{messages['list-view']}</h5>
@@ -83,10 +114,7 @@ class Option extends Component {
                         <Field
                             name="user_group"
                             component={renderSelectField}
-                            options={[
-                                { value: 'one', label: 'One' },
-                                { value: 'two', label: 'Two' },
-                            ]}
+                            options={role.items && this.showItems(role.items)}
                         />
                     </div>
                 </div>
@@ -159,4 +187,11 @@ class Option extends Component {
     }
 }
 
-export default injectIntl(Option);
+const mapStateToProps = ({ users }) => {
+    const { role } = users;
+    return {role};
+  };
+  
+export default injectIntl(connect(mapStateToProps, {
+    getRoleList
+})(Option))

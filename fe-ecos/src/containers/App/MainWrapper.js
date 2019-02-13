@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { ThemeProps } from '../Shared/prop-types/ReducerProps';
+import { getSetting } from '../../redux/actions';
 
 class MainWrapper extends PureComponent {
   static propTypes = {
@@ -16,8 +17,20 @@ class MainWrapper extends PureComponent {
     } else {
       document.body.classList.remove('theme-light');
       document.body.classList.add(theme.className);
-    }
+    }    
+  }
+
+  componentDidMount() {
+    this.props.getSetting();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {setting,locale} = nextProps;
     
+    if(setting.items) {
+      document.title = (locale === 'en') ? setting.items.name_en : setting.items.name;
+      document.title += (setting.items.owner) ? ' - '+ setting.items.owner : '';
+    }
   }
   render() {
     const { theme } = this.props;
@@ -31,11 +44,15 @@ class MainWrapper extends PureComponent {
   }
 }
 
-const mapStateToProps = ({settings}) => {
-  const { theme } = settings;
+const mapStateToProps = ({settings,setting}) => {
+  const { theme,locale } = settings;
   return {
-    theme
+    theme,
+    locale,
+    setting
   }
 }
 
-export default connect(mapStateToProps, null)(MainWrapper);
+export default connect(mapStateToProps, {
+  getSetting
+})(MainWrapper);

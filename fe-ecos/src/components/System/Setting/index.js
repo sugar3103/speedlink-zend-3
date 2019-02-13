@@ -8,13 +8,9 @@ import PropTypes from 'prop-types';
 
 class Page extends Component {
 
-    componentDidMount() {
-        this.props.getSetting();
-    } 
-
     handleSubmit = values => {
         const { messages } = this.props.intl;        
-        this.props.updateSetting({'config':values}, messages);        
+        this.props.updateSetting({'config':values}, messages);                
     }
 
     render() {

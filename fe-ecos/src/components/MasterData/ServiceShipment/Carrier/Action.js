@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { injectIntl } from 'react-intl';
 import { Modal } from 'reactstrap';
 import { connect } from 'react-redux';
 import ActionForm from './ActionForm';

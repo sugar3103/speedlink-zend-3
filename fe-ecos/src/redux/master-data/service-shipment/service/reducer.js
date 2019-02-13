@@ -1,20 +1,20 @@
 import {
-  CARRIER_TOGGLE_MODAL,
-  CARRIER_GET_LIST,
-  CARRIER_GET_LIST_SUCCESS,
-  CARRIER_GET_LIST_ERROR,
-  CARRIER_ADD_ITEM,
-  CARRIER_ADD_ITEM_SUCCESS,
-  CARRIER_ADD_ITEM_ERROR,
-  CARRIER_UPDATE_ITEM,
-  CARRIER_UPDATE_ITEM_SUCCESS,
-  CARRIER_UPDATE_ITEM_ERROR,
-  CARRIER_DELETE_ITEM,
-  CARRIER_DELETE_ITEM_SUCCESS,
-  CARRIER_DELETE_ITEM_ERROR,
-  CARRIER_CODE_GET_LIST,
-  CARRIER_CODE_GET_LIST_SUCCESS,
-  CARRIER_CODE_GET_LIST_ERROR
+  SERVICE_TOGGLE_MODAL,
+  SERVICE_GET_LIST,
+  SERVICE_GET_LIST_SUCCESS,
+  SERVICE_GET_LIST_ERROR,
+  SERVICE_ADD_ITEM,
+  SERVICE_ADD_ITEM_SUCCESS,
+  SERVICE_ADD_ITEM_ERROR,
+  SERVICE_UPDATE_ITEM,
+  SERVICE_UPDATE_ITEM_SUCCESS,
+  SERVICE_UPDATE_ITEM_ERROR,
+  SERVICE_DELETE_ITEM,
+  SERVICE_DELETE_ITEM_SUCCESS,
+  SERVICE_DELETE_ITEM_ERROR,
+  SERVICE_CODE_GET_LIST,
+  SERVICE_CODE_GET_LIST_SUCCESS,
+  SERVICE_CODE_GET_LIST_ERROR
 } from '../../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -30,7 +30,7 @@ const INIT_STATE = {
 
 export default (state = INIT_STATE, action) => {
   switch (action.type) {
-    case CARRIER_TOGGLE_MODAL:
+    case SERVICE_TOGGLE_MODAL:
       return {
         ...state,
         modalOpen: !state.modalOpen,
@@ -38,7 +38,7 @@ export default (state = INIT_STATE, action) => {
         errors: null
       };
 
-    case CARRIER_GET_LIST:
+    case SERVICE_GET_LIST:
       const { params } = action.payload;
       return {
         ...state,
@@ -46,7 +46,7 @@ export default (state = INIT_STATE, action) => {
         paramSearch: (params && params.query) ? params.query : null
       };
 
-    case CARRIER_GET_LIST_SUCCESS:
+    case SERVICE_GET_LIST_SUCCESS:
       const { items, total } = action.payload;
       return {
         ...state,
@@ -55,20 +55,20 @@ export default (state = INIT_STATE, action) => {
         total
       };
 
-    case CARRIER_GET_LIST_ERROR:
+    case SERVICE_GET_LIST_ERROR:
       return {
         ...state,
         loading: false,
         errors: action.payload
       };
 
-    case CARRIER_CODE_GET_LIST:
+    case SERVICE_CODE_GET_LIST:
       return {
         ...state,
         loading: true
       };
 
-    case CARRIER_CODE_GET_LIST_SUCCESS:
+    case SERVICE_CODE_GET_LIST_SUCCESS:
       const { codes } = action.payload;
       return {
         ...state,
@@ -76,65 +76,65 @@ export default (state = INIT_STATE, action) => {
         codes
       };
 
-    case CARRIER_CODE_GET_LIST_ERROR:
+    case SERVICE_CODE_GET_LIST_ERROR:
       return {
         ...state,
         loading: false,
         errors: action.payload
       };
 
-    case CARRIER_ADD_ITEM:
+    case SERVICE_ADD_ITEM:
       return {
         ...state,
         loading: false
       };
 
-    case CARRIER_ADD_ITEM_SUCCESS:
+    case SERVICE_ADD_ITEM_SUCCESS:
       return {
         ...state,
         loading: false,
         errors: null
       };
 
-    case CARRIER_ADD_ITEM_ERROR:
+    case SERVICE_ADD_ITEM_ERROR:
       return {
         ...state,
         loading: false,
         errors: action.payload
       };
 
-    case CARRIER_UPDATE_ITEM:
+    case SERVICE_UPDATE_ITEM:
       return {
         ...state,
         loading: false
       };
 
-    case CARRIER_UPDATE_ITEM_SUCCESS:
+    case SERVICE_UPDATE_ITEM_SUCCESS:
       return {
         ...state,
         loading: false,
         errors: null
       };
 
-    case CARRIER_UPDATE_ITEM_ERROR:
+    case SERVICE_UPDATE_ITEM_ERROR:
       return {
         ...state,
         loading: false,
         errors: action.payload
       };
 
-    case CARRIER_DELETE_ITEM:
+    case SERVICE_DELETE_ITEM:
       return {
         ...state,
         loading: false
       };
 
-    case CARRIER_DELETE_ITEM_SUCCESS:
+    case SERVICE_DELETE_ITEM_SUCCESS:
       return {
         ...state,
       };
 
-    case CARRIER_DELETE_ITEM_ERROR:
+    case SERVICE_DELETE_ITEM_ERROR:
       return {
         ...state,
         errors: action.payload

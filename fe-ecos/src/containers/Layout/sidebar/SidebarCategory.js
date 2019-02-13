@@ -22,45 +22,49 @@ export default class SidebarCategory extends Component {
     super();
     this.state = {
       collapse: false,
-      selectedParentMenu: ""      
-    };   
-    
+      selectedParentMenu: ""
+    };
+
   }
 
-  toggle = () => {    
+  toggle = () => {
     this.setState({ collapse: !this.state.collapse });
   };
 
   activeMenu = () => {
     const {
-      children,pathname
+      children, pathname
     } = this.props;
-    children.map(menu => {
-        if(menu.props.route === pathname) {          
-          this.setState({
-            collapse: true
-          })
-        }
 
-        if(menu.props.children && menu.props.children.length > 0) {
-          menu.props.children.map(chil => {            
-            if(chil.props.route === pathname) {          
-              this.setState({
-                collapse: true
-              })
-            }   
-          })
-        }
-    })    
+    children.map(menu => {
+      if (menu.props.route === pathname) {
+        this.setState({
+          collapse: true
+        })        
+      }
+
+      if (menu.props.children && menu.props.children.length > 0) {
+        menu.props.children.map(chil => {
+          if (chil.props.route === pathname) {
+            this.setState({
+              collapse: true
+            });
+          }
+          return  true;
+        })
+      }
+
+      return  true;
+    })
   }
-  
+
   componentDidMount = () => {
     this.activeMenu();
   }
 
-  render() {    
-    const {id,title, icon, isNew, children} = this.props;
-    
+  render() {
+    const { id, title, icon, isNew, children } = this.props;
+
     const categoryClass = classNames({
       'sidebar__category-wrap': true,
       'sidebar__category-wrap--open': this.state.collapse,
@@ -77,7 +81,7 @@ export default class SidebarCategory extends Component {
         </button>
         <Collapse isOpen={this.state.collapse} className="sidebar__submenu-wrap">
           <ul className="sidebar__submenu">
-              {children}
+            {children}
           </ul>
         </Collapse>
       </div>
