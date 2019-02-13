@@ -98,7 +98,7 @@ toggleModal = () => {
 
   render() {
     const { items, loading, modalOpen, total } = this.props.carrier;
-    const { messages } = this.props.intl;
+    const { messages,locale } = this.props.intl;
     return (
       <Col md={12} lg={12}>
         <Card>

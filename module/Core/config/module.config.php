@@ -36,7 +36,10 @@ return [
             'setting' => [
                 'type'    => StaticRoute::class,
                 'options' => [
-                    'route'    => '/setting',
+                    'route' => '/setting[/:action]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*'                            
+                    ],
                     'defaults' => [
                         'controller' => Controller\SettingController::class,
                         'action'     => 'index',

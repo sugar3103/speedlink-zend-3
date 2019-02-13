@@ -1,15 +1,11 @@
 import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { Field } from 'redux-form';
 import renderRadioButtonField from '../../../containers/Shared/form/RadioButton';
 import renderSelectField from '../../../containers/Shared/form/Select';
-
-
 class Option extends Component {
     render() {
-        const { messages } = this.props.intl;
-        const { data } = this.props;
+        const { messages } = this.props.intl;        
         return (
             <Fragment>
                 <h5 className="bold-text">{messages['list-view']}</h5>

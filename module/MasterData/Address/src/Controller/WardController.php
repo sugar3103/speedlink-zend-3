@@ -149,5 +149,4 @@ class WardController extends CoreController {
         }
         return $this->createResponse();
     }
-
 }

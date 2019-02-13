@@ -3,6 +3,7 @@ namespace Core\Controller;
 
 use Core\Controller\CoreController;
 use Doctrine\ORM\EntityManager;
+use Core\Entity\Setting;
 
 class SettingController extends CoreController
 {
@@ -50,5 +51,31 @@ class SettingController extends CoreController
         }
 
         return $this->createResponse();
+    }
+    public function updateAction()
+    {
+        if ( $this->getRequest()->isPost()) {
+            $this->error_code = 1;        
+            $data = $this->getRequestData();
+            foreach ($data as $key => $value) {
+                if(is_array($value)) {
+                    foreach ($value as $c => $v) {
+                        $setting = $this->entityManager->getRepository(Setting::class)->findOneBy(
+                            array('code' => $key,'key' => $c, 'value' => $v)
+                        );
+                        if($setting) {
+                            $this->settingManager->updateSetting($setting,$key,$c,$v,0);
+                        } else {
+                            $this->settingManager->addSetting($key,$c,$v,0);
+                        }
+                    }
+                    
+                }
+            }
+            $this->apiResponse =  array(
+                'message'   => "Update Success"              
+            );
+        }
+        return $this->createResponse();        
     }
 }

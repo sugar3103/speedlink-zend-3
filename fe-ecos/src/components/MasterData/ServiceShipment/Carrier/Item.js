@@ -32,7 +32,7 @@ class Item extends Component {
 
   render() {
     const { carrier } = this.props;
-    const { messages } = this.props.intl;
+    const { messages,locale } = this.props.intl;
     return (
       <tr>
         <th scope="row">{carrier.id}</th>

@@ -14,12 +14,14 @@ class SelectField extends PureComponent {
         PropTypes.number
       ]),
       label: PropTypes.string,
-    }))
+    })),
+    disabled: PropTypes.bool
   };
 
   static defaultProps = {
     placeholder: '',
     options: [],
+    disabled: false,
   };
 
   handleChange = (selectedOption) => {
@@ -32,11 +34,11 @@ class SelectField extends PureComponent {
 
   render() {
     const {
-      value, name, placeholder, options, onInputChange
-    } = this.props;
-
+      value, name, placeholder, options, onInputChange,disabled
+    } = this.props;    
     return (
       <Select
+        disabled = {disabled}
         name={name}
         value={value}
         onChange={this.handleChange}
@@ -57,6 +59,7 @@ const renderSelectField = props => (
       onInputChange={props.onInputChange}
       options={props.options}
       placeholder={props.placeholder}
+      disabled={props.disabled}
     />
     {props.meta.touched && props.meta.error && <span className="form__form-group-error">{props.messages[props.meta.error]}</span>}
   </div>
@@ -79,13 +82,15 @@ renderSelectField.propTypes = {
     label: PropTypes.string,
   })),
   placeholder: PropTypes.string,
-  onInputChange: PropTypes.func
+  onInputChange: PropTypes.func,
+  disabled: PropTypes.bool
 };
 
 renderSelectField.defaultProps = {
   meta: null,
   options: [],
   placeholder: '',
+  disabled: false
 };
 
 export default renderSelectField;
