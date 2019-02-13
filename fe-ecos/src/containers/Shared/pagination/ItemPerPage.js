@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { PAGE_SIZE } from '../../../constants/defaultValues';
-
+import { injectIntl } from 'react-intl';
+import { connect } from "react-redux";
 class ItemPerPage extends Component {
 
   changePageSize = (e) => {
@@ -18,12 +19,14 @@ class ItemPerPage extends Component {
   }
 
   render() {
+    const { messages } = this.props.intl;
+
     return (
-      <p className="master-data-perpage">Show
+      <p className="master-data-perpage">{messages['show']}
         <select className="select-options" value={this.props.selectedPageSize} onChange={this.changePageSize}>
           {this.showPageOption()}
         </select>
-        entries
+        {messages['entries']}
       </p>
     );
   }
@@ -34,4 +37,4 @@ ItemPerPage.propTypes = {
   changePageSize: PropTypes.func.isRequired
 }
 
-export default ItemPerPage;
+export default injectIntl(connect(null)(ItemPerPage));

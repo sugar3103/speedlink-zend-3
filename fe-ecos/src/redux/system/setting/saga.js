@@ -92,7 +92,7 @@ function* updateSetting({ payload}) {
     const response = yield call(updateSettingRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
-        // yield put(getSetting(null, messages));
+        yield put(getSetting(null, messages));
         createNotification({
           type: 'success', 
           message: messages['setting.update-success'], 

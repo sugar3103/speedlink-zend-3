@@ -10,7 +10,8 @@ class Page extends Component {
 
     handleSubmit = values => {
         const { messages } = this.props.intl;        
-        this.props.updateSetting({'config':values}, messages);                
+        this.props.updateSetting({'config':values}, messages);          
+        
     }
 
     render() {

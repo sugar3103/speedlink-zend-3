@@ -11,13 +11,21 @@ class MainWrapper extends PureComponent {
   };
   
   addClassBody(theme) {
-    if(theme.className === "theme-light") {
-      document.body.classList.remove('theme-dark');
-      document.body.classList.add(theme.className);
+    const { setting } = this.props;
+    
+    let color = (setting.items) ? setting.items.default_color : 'light';
+    if(theme) {
+      if(theme === "theme-light") {
+        document.body.classList.remove('theme-dark');
+        document.body.classList.add(theme);
+      } else {
+        document.body.classList.remove('theme-light');
+        document.body.classList.add(theme);        
+      }
     } else {
-      document.body.classList.remove('theme-light');
-      document.body.classList.add(theme.className);
-    }    
+      document.body.classList.add('theme-'+ color);
+      localStorage.setItem('currentTheme', 'theme-'+ color);
+    }
   }
 
   componentDidMount() {
@@ -33,8 +41,9 @@ class MainWrapper extends PureComponent {
     }
   }
   render() {
-    const { theme } = this.props;
-    this.addClassBody(theme)
+    const { theme } = this.props;        
+    this.addClassBody(theme.className)
+
     return (      
         <div className="wrapper">
           {this.props.children}
