@@ -5,15 +5,15 @@ import renderSelectField from '../../../../containers/Shared/form/Select';
 import { Button, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { getCarrierCodeList } from "../../../../redux/actions";
+import { getServiceCodeList } from "../../../../redux/actions";
 
 class SearchForm extends Component {
 
   componentDidMount() {
-    this.props.getCarrierCodeList();
+    this.props.getServiceCodeList();
   }
 
-  showOptionCarrier = (items) => {
+  showOptionService = (items) => {
     let result = [];
     if (items.length > 0) {
       result = items.map(item => {
@@ -27,31 +27,31 @@ class SearchForm extends Component {
   }
 
   render() {
-    const { handleSubmit, reset, carrierCode } = this.props;
+    const { handleSubmit, reset, serviceCode } = this.props;
     const { messages, locale } = this.props.intl;
     return (
       <form className="form" onSubmit={handleSubmit}>
         <Col md={4}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['carrier.code']}</span>
+            <span className="form__form-group-label">{messages['service.code']}</span>
             <div className="form__form-group-field">
               <Field name="code" component={renderSelectField} type="text"
-                     options={carrierCode && this.showOptionCarrier(carrierCode)}/>
+                     options={serviceCode && this.showOptionService(serviceCode)}/>
             </div>
           </div>
         </Col>
         <Col md={4}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['carrier.name']}</span>
+            <span className="form__form-group-label">{messages['service.name']}</span>
             <div className="form__form-group-field">
-              <Field component="input" type="text" placeholder={messages['carrier.name']}
+              <Field component="input" type="text" placeholder={messages['service.name']}
                      name={locale === 'en-US' ? 'name_en' : 'name'} />
             </div>
           </div>
         </Col>
         <Col md={4}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['carrier.status']}</span>
+            <span className="form__form-group-label">{messages['service.status']}</span>
             <div className="form__form-group-field">
               <Field name="status" component={renderSelectField} type="text" options={[
                 { value: -1, label: messages['all'] },
@@ -80,23 +80,23 @@ class SearchForm extends Component {
 }
 
 SearchForm.propTypes = {
-  carrierCode: PropTypes.array,
-  getCarrierCodeList: PropTypes.func.isRequired,
+  serviceCode: PropTypes.array,
+  getServiceCodeList: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ carrier }) => {
-  const carrierCode = carrier.codes;
-  return { carrierCode }
+const mapStateToProps = ({ service }) => {
+  const serviceCode = service.codes;
+  return { serviceCode }
 }
 
 export default reduxForm({
-  form: 'carrier_search_form',
+  form: 'service_search_form',
   initialValues: {
     name: '',
-    carrier: -1
+    service: -1
   }
 })(injectIntl(connect(mapStateToProps, {
-  getCarrierCodeList
+  getServiceCodeList
 })(SearchForm)));

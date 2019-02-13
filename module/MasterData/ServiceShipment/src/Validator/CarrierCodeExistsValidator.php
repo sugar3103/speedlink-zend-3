@@ -1,12 +1,10 @@
 <?php
 namespace ServiceShipment\Validator;
 
-use Address\Entity\Country;
 use ServiceShipment\Entity\Carrier;
-use ServiceShipment\Entity\Service;
 use Zend\Validator\AbstractValidator;
 
-class ServiceExistsValidator extends AbstractValidator {
+class CarrierCodeExistsValidator extends AbstractValidator {
 
     /**
      * Available validator options.
@@ -14,21 +12,22 @@ class ServiceExistsValidator extends AbstractValidator {
      */
     protected $options = [
         'entityManager' => null,
-        'service' => null,
+        'carrier' => null,
+        'language' => null
     ];
 
     /**
      * Validation failure message IDs.
      */
     const NOT_SCALAR = 'notScalar';
-    const SERVICE_EXISTS = 'serviceExists';
+    const CARRIER_EXISTS = 'carrierExists';
 
     /**
      * Validation failure messages.
      */
     protected $messageTemplates = [
         self::NOT_SCALAR => 'The name must be a scalar value',
-        self::SERVICE_EXISTS => 'Another a name already exists'
+        self::CARRIER_EXISTS => 'Code already exists'
     ];
 
     /**
@@ -41,15 +40,15 @@ class ServiceExistsValidator extends AbstractValidator {
         if (is_array($options) && isset($options['entityManager']))
             $this->options['entityManager'] = $options['entityManager'];
 
-        if (is_array($options) && isset($options['service']))
-            $this->options['service'] = $options['service'];
+        if (is_array($options) && isset($options['carrier']))
+            $this->options['carrier'] = $options['carrier'];
 
         // call the parent class constructor
         parent::__construct($options);
     }
 
     /**
-     * Check if service exists.
+     * Check if carrier exists.
      * @param mixed $value
      * @return bool
      */
@@ -62,15 +61,11 @@ class ServiceExistsValidator extends AbstractValidator {
 
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
-        if ($this->options['language'] === NULL) {
-            $service = $entityManager->getRepository(Service::class)->findOneByName($value);
-        } else if($this->options['language'] === 'en') {
-            $service = $entityManager->getRepository(Service::class)->findOneBy(array('name_en' => $value));
-        }
+        $carrier = $entityManager->getRepository(Carrier::class)->findOneBy(array('code' => $value));
 
-        if ($this->options['service'] == null) {
-            $isValid = ($service == null);
-        } elseif ($this->options['service']->getName() != $value && $service != null) {
+        if ($this->options['carrier'] == null) {
+            $isValid = ($carrier == null);
+        } elseif ($this->options['carrier']->getCode() != $value && $carrier != null) {
             $isValid = false;
         } else {
             $isValid = true;
@@ -78,7 +73,7 @@ class ServiceExistsValidator extends AbstractValidator {
 
         // if there were an error, set error message.
         if (!$isValid) {
-            $this->error(self::SERVICE_EXISTS);
+            $this->error(self::CARRIER_EXISTS);
         }
 
         // return validation result

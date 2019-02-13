@@ -12,10 +12,7 @@ import {
 import {
   getSettingSuccess,
   getSettingError,  
-  getSetting
 } from "./action";
-import { startSubmit, stopSubmit } from 'redux-form';
-
 
 import createNotification from '../../../util/notifications';
 
@@ -87,7 +84,6 @@ const updateSettingRequest = async (params) => {
 
 function* updateSetting({ payload}) {
   const { item, messages } = payload;
-  yield put(startSubmit('setting_action_form'));
   try {
     const response = yield call(updateSettingRequest, item);
     switch (response.error_code) {
@@ -102,7 +98,6 @@ function* updateSetting({ payload}) {
 
       case EC_FAILURE:
         yield put(getSettingError(response.data));
-        // yield put(validateCity(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:

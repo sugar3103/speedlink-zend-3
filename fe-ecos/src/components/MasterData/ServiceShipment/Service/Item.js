@@ -37,11 +37,7 @@ class Item extends Component {
       <tr>
         <th scope="row">{service.id}</th>
         <td>{service.code}</td>
-        {locale === 'en-US' ? (
-          <td>{service.name_en}</td>
-        ) : (
-          <td>{service.name}</td>
-        )}
+        <td>{locale === 'en-US' ? (service.name_en) : (service.name)}</td>
         <td>{service.status === 1 ?
           <Badge color="success">
             {messages['active']}

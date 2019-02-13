@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { getCarrierList } from '../../../../redux/actions';
+import { getServiceList } from '../../../../redux/actions';
 import SearchForm from './SearchForm';
 import  { SELECTED_PAGE_SIZE } from '../../../../constants/defaultValues';
 
@@ -16,7 +16,7 @@ class Search extends Component {
       },
       query: values
     };
-    this.props.getCarrierList(params, messages);
+    this.props.getServiceList(params, messages);
   };
 
   render() {
@@ -33,9 +33,9 @@ class Search extends Component {
 }
 
 Search.propTypes = {
-  getCarrierList: PropTypes.func.isRequired
+  getServiceList: PropTypes.func.isRequired
 };
 
 export default injectIntl(connect(null, {
-  getCarrierList
+  getServiceList
 })(Search));
