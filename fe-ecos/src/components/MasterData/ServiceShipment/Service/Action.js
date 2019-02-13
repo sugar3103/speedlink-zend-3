@@ -41,9 +41,7 @@ Action.propTypes = {
 
 const mapStateToProps = ({ service }) => {
   const { modalData } = service;
-  return {
-    modalData
-  };
+  return { modalData };
 };
 
 export default injectIntl(connect(mapStateToProps, {
