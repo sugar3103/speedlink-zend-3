@@ -31,7 +31,6 @@ class ServiceRepository extends EntityRepository
             }
 
             return $queryBuilder;
-
         } catch (QueryException $e) {
             return [];
         }
@@ -43,8 +42,10 @@ class ServiceRepository extends EntityRepository
             $queryBuilder = $this->buildServiceQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select("
                 s.id,
-                s.code
-            ")->andwhere('s.is_deleted = 0');
+                s.code,
+                s.name,
+                s.name_en
+            ")->andWhere('s.is_deleted = 0');
             return $queryBuilder;
 
         } catch (QueryException $e) {

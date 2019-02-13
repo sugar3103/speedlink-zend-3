@@ -176,7 +176,7 @@ class ServiceController extends CoreController
             return $this->createResponse();
         }
         //Create New Form Service
-        $service = $this->entityManager->getRepository(Service::class)->findOneBy(array('id' => $data['id']));
+        $service = $this->entityManager->getRepository(Service::class)->find($data['id']);
 
         //validate form
         if(!empty($service)) {
@@ -188,7 +188,6 @@ class ServiceController extends CoreController
             $this->error_code = -1;
             $this->apiResponse['message'] = "Not Found Service";
         }
-
         return $this->createResponse();
     }
 }

@@ -9,6 +9,8 @@ export * from './master-data/address/city/actions';
 export * from './master-data/address/district/actions';
 export * from './master-data/address/ward/actions';
 export * from './master-data/service-shipment/carrier/actions';
+export * from './master-data/service-shipment/service/actions';
+export * from './master-data/service-shipment/shipmnet-type/actions';
 export * from './system/users/permission/actions';
 export * from './system/users/role/actions';
 export * from './system/users/user/actions';
