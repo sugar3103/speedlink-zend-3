@@ -137,6 +137,13 @@ class Branch
     private $description_en;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="address", type="text", length=65535, precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $address;
+
+    /**
      * @var \Address\Entity\District
      *
      * @ORM\OneToOne(targetEntity="Address\Entity\District")
@@ -522,6 +529,30 @@ class Branch
         return $this->description_en;
     }
     
+    /**
+     * Set address.
+     *
+     * @param string|null $address
+     *
+     * @return Branch
+     */
+    public function setAddress($address = null)
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get address.
+     *
+     * @return string|null
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
     /**
      * Set district.
      *

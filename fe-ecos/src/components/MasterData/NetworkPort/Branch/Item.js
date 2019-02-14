@@ -46,7 +46,7 @@ class Item extends Component {
         <td>{ (locale === 'en-US' && branch.name_en) ? branch.name_en : branch.name }</td>
         <td>{ (locale === 'en-US' && branch.description_en) ? branch.description_en : branch.description }</td>
         <td>{branch.city}</td>
-        <td>{branch.status === 1 ? <Badge color="success">{messages['branch.active']}</Badge> : <Badge color="dark">{messages['branch.inactive']}</Badge>}</td>
+        <td>{branch.status === 1 ? <Badge color="success">{messages['active']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>}</td>
         <td>{branch.created_at}</td>
         <td className="text-center">
           <Button color="info" size="sm" onClick={() => this.toggleModal(branch)}><span className="lnr lnr-pencil" /></Button> &nbsp;

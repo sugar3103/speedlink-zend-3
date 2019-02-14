@@ -118,7 +118,7 @@ class List extends Component {
                 onClick={this.toggleModal}
                 className="master-data-btn"
                 size="sm"
-              >{messages['hub.add-new']}</Button>
+              >{messages['branch.add-new']}</Button>
               <Action modalOpen={modalOpen} />
               <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
             </div>

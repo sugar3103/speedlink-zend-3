@@ -35,6 +35,21 @@ $router = [
                 ]
             ]
         ],
+        'branch_area' => [
+            'type' => StaticRoute::class,
+            'options' => [
+                'verb' => 'POST',
+                'route' => '/brancharea[/:action]',
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                ],
+                'defaults' => [
+                    'controller' => Controller\BranchAreaController::class,
+                    'action' => 'index',
+                    'isAuthorizationRequired' => true
+                ]
+            ]
+        ],
       'hub' => [
             'type' => StaticRoute::class,
             'options' => [
@@ -55,13 +70,15 @@ $router = [
 $controllers = [
     'factories' => [
         Controller\BranchController::class => Factory\BranchControllerFactory::class,
+        Controller\BranchAreaController::class => Factory\BranchAreaControllerFactory::class,
         Controller\HubController::class => Factory\HubControllerFactory::class
     ]
 ];
 
 $service_manager = [
     'factories' => [  
-        Service\BranchManager::class => Factory\BranchManagerFactory::class,        
+        Service\BranchManager::class => Factory\BranchManagerFactory::class,
+        Service\BranchAreaManager::class => Factory\BranchAreaManagerFactory::class,         
         Service\HubManager::class => Factory\HubManagerFactory::class,        
     ],
 ];
