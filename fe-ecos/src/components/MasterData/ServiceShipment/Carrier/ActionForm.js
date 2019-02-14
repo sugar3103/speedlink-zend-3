@@ -138,14 +138,9 @@ class Action extends PureComponent {
 }
 
 const mapStateToProps = ({carrier}) => {  
-<<<<<<< HEAD
   const { errors, modalData } = carrier;
   return {
     errors,
-=======
-  const { modalData } = carrier;
-  return {
->>>>>>> parent of 1b76824... fix notification service and carrier
     modalData
   };
 };

@@ -1,6 +1,7 @@
 <?php
 namespace NetworkPort\Service;
 
+use NetworkPort\Entity\BranchArea;
 use NetworkPort\Entity\Branch;
 use NetworkPort\Entity\Hub;
 use Doctrine\ORM\EntityManager;
@@ -27,7 +28,7 @@ use Address\Entity\Ward;
  * and changing user password.
  * @package NetworkPort\Service
  */
-class BranchManager {
+class BranchAreaManager {
 
     /**
      * @var EntityManager
@@ -47,52 +48,29 @@ class BranchManager {
         $this->entityManager = $entityManager;
     }   
 
-     /**
-     * Performs a login attempt. If $rememberMe argument is true, it forces the session
-     * to last for one month (otherwise the session expires on one hour).
-     * @param $code
-     * @param $name
-     * @param $hubId
-     * @param $status
-     * @param $createdBy
-     * @param $createdAt
-     * @param $countryId
-     * @param $cityId
-     * @param $districtId
-     * @param $wardId
-     * @param $includingWardIds
-     * @param $description
-     * @return Result
-     * @throws \Exception
-     */
-    // public function add($code, $name, $hubId, $status, $createdBy, $createdAt, $countryId, $cityId, $districtId, $wardId, $includingWardIds, $description )
-    public function addBranch($data)
+    public function addBranchArea($data)
     {
         $this->entityManager->beginTransaction();
         try {
-        $branch = new Branch;
+        $branch_area = new BranchArea;
         // var_dump($data); die;
-        $branch->setCode($data['code']);
-        $branch->setName($data['name']);
-        $branch->setNameEn($data['name_en']);
-        $branch->setHubId($data['hub_id']);
-        $branch->setStatus($data['status']);
-        $branch->setCreatedBy($data['created_by']);
-        $branch->setCreatedAt(date('Y-m-d H:i:s'));
-        $branch->setCountryId($data['country_id']);
-        $branch->setCityId($data['city_id']);
-        $branch->setDistrictId($data['district_id']);
-        $branch->setWardId($data['ward_id']);
-        $branch->setDescription($data['description']);
-        $branch->setDescriptionEn($data['description_en']);
-        $this->getReferenced($branch, $data);
+        $branch_area->setBranchId($data['branch_id']);
+        $branch_area->setHubId($data['hub_id']);
+        $branch_area->setCountryId($data['country_id']);
+        $branch_area->setCityId($data['city_id']);
+        $branch_area->setDistrictId($data['district_id']);
+        $branch_area->setWardId($data['ward_id']);
+        $branch_area->setStatus($data['status']);
+        $branch_area->setCreatedBy($data['created_by']);
+        $branch_area->setCreatedAt(date('Y-m-d H:i:s'));
+        $this->getReferenced($branch_area, $data);
         
-        $this->entityManager->persist($branch);
+        $this->entityManager->persist($branch_area);
         $this->entityManager->flush();        
         
         // $last_id = $branch->getBranchId();
         $this->entityManager->commit();
-        return $branch;
+        return $branch_area;
         }
         catch (ORMException $e) {
             $this->entityManager->rollback();
@@ -100,30 +78,26 @@ class BranchManager {
         }
     }
 
-     public function updateBranch($branch, $data) {
+     public function updateBranchArea($branch_area, $data) {
 
         $this->entityManager->beginTransaction();
         try {
-            $branch->setCode($data['code']);
-            $branch->setName($data['name']);
-            $branch->setNameEn($data['name_en']);
-            $branch->setHubId($data['hub_id']);
-            $branch->setStatus($data['status']);
-            $branch->setUpdatedBy($data['updated_by']);
-            $branch->setUpdatedAt(date('Y-m-d H:i:s'));
-            $branch->setCountryId($data['country_id']);
-            $branch->setCityId($data['city_id']);
-            $branch->setDistrictId($data['district_id']);
-            $branch->setWardId($data['ward_id']);
-            $branch->setDescription($data['description']);
-            $branch->setDescriptionEn($data['description_en']);
-            $this->getReferenced($branch, $data);
+            $branch_area->setBranchId($data['branch_id']);
+            $branch_area->setHubId($data['hub_id']);
+            $branch_area->setStatus($data['status']);
+            $branch_area->setUpdatedBy($data['updated_by']);
+            $branch_area->setUpdatedAt(date('Y-m-d H:i:s'));
+            $branch_area->setCountryId($data['country_id']);
+            $branch_area->setCityId($data['city_id']);
+            $branch_area->setDistrictId($data['district_id']);
+            $branch_area->setWardId($data['ward_id']);
+            $this->getReferenced($branch_area, $data);
             
             // apply changes to database.
             $this->entityManager->flush();
             // $last_id = $branch->getBranchId();
             $this->entityManager->commit();
-           return $branch;
+           return $branch_area;
         }
         catch (ORMException $e) {
 
@@ -132,37 +106,43 @@ class BranchManager {
         }
     }
 
-    private function getReferenced($branch,$data) {
+    private function getReferenced($branch_area,$data) {
 
         $country = $this->entityManager->getRepository(Country::class)->find($data['country_id']);
         if ($country == null)
             throw new \Exception('Not found Country by ID');
 
-        $branch->setCountry($country);
+        $branch_area->setCountry($country);
 
         $city = $this->entityManager->getRepository(City::class)->find($data['city_id']);
         if ($city == null)
             throw new \Exception('Not found City by ID');
 
-        $branch->setCity($city);
+        $branch_area->setCity($city);
         
         $district = $this->entityManager->getRepository(District::class)->find($data['district_id']);
         if ($district == null)
             throw new \Exception('Not found District by ID');
 
-        $branch->setDistrict($district);
+        $branch_area->setDistrict($district);
 
         $ward = $this->entityManager->getRepository(Ward::class)->find($data['ward_id']);
         if ($ward == null)
             throw new \Exception('Not found Ward by ID');
 
-        $branch->setWard($ward);
+        $branch_area->setWard($ward);
 
         $hub = $this->entityManager->getRepository(Hub::class)->find($data['hub_id']);
         if ($hub == null)
             throw new \Exception('Not found Hub by ID');
 
-        $branch->setHub($hub);
+        $branch_area->setHub($hub);
+
+        $branch = $this->entityManager->getRepository(Branch::class)->find($data['branch_id']);
+        if ($branch == null)
+            throw new \Exception('Not found Branch by ID');
+
+        $branch_area->setBranch($branch);
     }
 
     /**
@@ -176,7 +156,7 @@ class BranchManager {
      * @return array
      * @throws ORMException
      */
-    public function getListBranchByCondition(
+    public function getListBranchAreaByCondition(
         $start,
         $limit,
         $sortField = '',
@@ -184,24 +164,24 @@ class BranchManager {
         $filters = []
     ){
 
-        $branches     = [];
-        $totalBranch = 0;
+        $branche_areas     = [];
+        $totalBranchArea = 0;
 
         //get orm branch
-        $ormBranch = $this->entityManager->getRepository(Branch::class)
-            ->getListBranchByCondition($start, $limit, $sortField, $sortDirection, $filters);
+        $ormBranch = $this->entityManager->getRepository(BranchArea::class)
+            ->getListBranchAreaByCondition($start, $limit, $sortField, $sortDirection, $filters);
 
         if($ormBranch){
             //set offset,limit
             $ormPaginator = new ORMPaginator($ormBranch, true);
             $ormPaginator->setUseOutputWalkers(false);
-            $totalBranch = $ormPaginator->count();
+            $totalBranchArea = $ormPaginator->count();
 
             //get user list
-            $branches = $ormPaginator->getIterator()->getArrayCopy();
+            $branche_areas = $ormPaginator->getIterator()->getArrayCopy();
             $countRow = 1;
 
-             foreach ($branches as &$branche) {
+             foreach ($branche_areas as &$branche) {
                 //set status
              //   $branche['status'] = Branch::getIsActiveList($branche['status']);
                 //set created_at
@@ -214,22 +194,22 @@ class BranchManager {
 
         //set data user
         $dataBranch = [
-            'listBranch' => $branches,
-            'totalBranch' => $totalBranch,
+            'listBranchArea' => $branche_areas,
+            'totalBranchArea' => $totalBranchArea,
         ];
         return $dataBranch;
     }
     
-    public function deleteBranch($branch) {
+    public function deleteBranchArea($branch_area) {
 
         $this->entityManager->beginTransaction();
         try {
             
-            $this->entityManager->remove($branch);
+            $this->entityManager->remove($branch_area);
             $this->entityManager->flush();
 
             $this->entityManager->commit();
-            return $branch;
+            return $branch_area;
           
         } catch (ORMException $e) {
 

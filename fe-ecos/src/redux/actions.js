@@ -3,6 +3,7 @@ export * from './auth/actions';
 export * from './master-data/status/actions';
 export * from './master-data/hub/actions';
 export * from './master-data/branch/actions';
+export * from './master-data/brancharea/actions';
 export * from './master-data/address/code/actions';
 export * from './master-data/address/country/actions';
 export * from './master-data/address/city/actions';

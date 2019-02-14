@@ -98,7 +98,7 @@ toggleModal = () => {
 
   render() {
     const { items, loading, modalOpen, total } = this.props.carrier;
-    const { messages } = this.props.intl;
+    const { messages,locale } = this.props.intl;
     return (
       <Col md={12} lg={12}>
         <Card>
@@ -155,10 +155,12 @@ List.propTypes = {
   toggleCarrierModal: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({ carrier, modal }) => {
+const mapStateToProps = ({ carrier, modal,settings }) => {
+  const { locale } = settings;
   return {
     carrier,
-    modal
+    modal,
+    locale
   };
 };
 

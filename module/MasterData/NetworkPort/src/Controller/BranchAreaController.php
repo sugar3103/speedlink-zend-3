@@ -9,10 +9,10 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Zend\Uri\Uri;
-use NetworkPort\Entity\Branch;
-use NetworkPort\Form\BranchForm;
+use NetworkPort\Entity\BranchArea;
+use NetworkPort\Form\BranchAreaForm;
 
-class BranchController extends CoreController {
+class BranchAreaController extends CoreController {
     /**
      * EntityManager.
      * @var EntityManager
@@ -20,9 +20,9 @@ class BranchController extends CoreController {
     protected $entityManager;
     
     /**
-     * @var BranchManager
+     * @var BranchAreaManager
      */
-    private $branchManager;
+    private $branchareaManager;
    
     /**
      * AuthController constructor.
@@ -32,11 +32,11 @@ class BranchController extends CoreController {
 
     public function __construct(
         $entityManager,
-        $branchManager
+        $branchareaManager
      ) {
         parent::__construct($entityManager);
         $this->entityManager = $entityManager;
-        $this->branchManager = $branchManager;
+        $this->branchareaManager = $branchareaManager;
         // $this->cache = $cache;
     }
 
@@ -46,30 +46,28 @@ class BranchController extends CoreController {
       
       // get the filters
       $fieldsMap = [
-          0 => 'code',
-          1 => 'name',
-          2 => 'name_en',
-          3 => 'hub',
-          4 => 'district',
-          5 => 'ward',
-          6 => 'city',
-          7 => 'country',
-          8 => 'status',
-          9 => 'id'
+          0 => 'branch',        
+          1 => 'hub',
+          2 => 'district',
+          3 => 'ward',
+          4 => 'city',
+          5 => 'country',
+          6 => 'status',
+          7 => 'code'
       ];
 
       list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);
 
-      $dataBranch = $this->branchManager->getListBranchByCondition(
+      $dataBranch = $this->branchareaManager->getListBranchAreaByCondition(
                 $start, $limit, $sortField, $sortDirection, $filters);
 
-      $results = $this->filterByField($dataBranch['listBranch'], $fields);
+      $results = $this->filterByField($dataBranch['listBranchArea'], $fields);
 
       $this->error_code = 1;
       $this->apiResponse =  array(
           'message' => 'Get list success',
           'data' => $results,
-          'total' => $dataBranch['totalBranch']
+          'total' => $dataBranch['totalBranchArea']
       );
       }
       return $this->createResponse();
@@ -80,21 +78,31 @@ class BranchController extends CoreController {
         if ($this->getRequest()->isPost()) {
            
             $user = $this->tokenPayload;
+            $data = $this->getRequestData();
+            //check Country,city,district,ward
+            $check_exits = $this->entityManager->getRepository(BranchArea::class)->findOneBy(array('country_id' => $data['country_id'], 'city_id' => $data['city_id'], 'district_id' => $data['district_id'], 'ward_id' => $data['ward_id']));    
+            
+            if($check_exits)
+            {
+              $this->error_code = 0;
+              $this->apiResponse['message'] = "Already have this Address!";
+              return $this->createResponse();
+            }
 
-            $form = new BranchForm('create', $this->entityManager);   
-
-            $form->setData($this->getRequestData());
+            $form = new BranchAreaForm('create', $this->entityManager);   
+            $form->setData($data);
            // var_dump($this->getRequestData());die();
-
+          
             //validate form
             if ($form->isValid()) {
               $data = $form->getData();
               $data['created_by'] = $user->id;
-              $result = $this->branchManager->addBranch($data);                
+              $data['branch_type'] = 1;
+              $result = $this->branchareaManager->addBranchArea($data);                
               // Check result
 
               $this->error_code = 1;
-              $this->apiResponse['message'] = "Success: You have added a branch!";
+              $this->apiResponse['message'] = "Success: You have added a branch area!";
             }else {
               $this->error_code = 0;
               $this->apiResponse['message'] = $form->getMessages();      
@@ -114,21 +122,34 @@ class BranchController extends CoreController {
         $data = $this->getRequestData();
         $user = $this->tokenPayload;
         $data['updated_by'] = $user->id;
-        $this->apiResponse['message'] = 'Action Update Branch';       
-        
+        $this->apiResponse['message'] = 'Action Update Branch Area';       
+
         if ( $data['id'] < 1 ) {
           //bao loi k tim thay branch
           $this->error_code = 0;
-          $this->apiResponse['message'] = 'Branch Not Found';     
+          $this->apiResponse['message'] = 'Branch Area Not Found';     
           return $this->createResponse();
         }
+        $check_exits = $this->entityManager->getRepository(BranchArea::class)->findOneBy(array('country_id' => $data['country_id'], 'city_id' => $data['city_id'], 'district_id' => $data['district_id'], 'ward_id' => $data['ward_id']));    
+            
+        if($check_exits)
+        {
+          $brancharea_id = $check_exits->getId();
+          // var_dump( $old_id); die();
+          if($brancharea_id != $data['id']) {
+            $this->error_code = 0;
+            $this->apiResponse['message'] = "Already have this Address!";
+            return $this->createResponse();
+          }
+        }
+
         if ($this->getRequest()->isPost()) {
-          $branch = $this->entityManager->getRepository(Branch::class)->find($data['id']);
-          if($branch) {
-            $form = new BranchForm('update', $this->entityManager, $branch);
+          $branch_area = $this->entityManager->getRepository(BranchArea::class)->find($data['id']);
+          if($branch_area) {
+            $form = new BranchAreaForm('update', $this->entityManager, $branch_area);
             $form->setData($data);
             if ($form->isValid()) {
-              $result = $this->branchManager->updateBranch($branch, $data);                
+              $result = $this->branchareaManager->updateBranchArea($branch_area, $data);                
                 // Check result
               $this->error_code = 1;
               $this->apiResponse['message'] = "You have modified branch!";
@@ -138,7 +159,7 @@ class BranchController extends CoreController {
             }   
           } else {
             $this->error_code = 0;
-            $this->apiResponse['message'] = 'Branch Not Found';   
+            $this->apiResponse['message'] = 'Branch Area Not Found';   
           }            
         } else {
           $this->httpStatusCode = 404;
@@ -151,22 +172,21 @@ class BranchController extends CoreController {
         $data = $this->getRequestData();
         if(isset($data['id'])) {
             // Find existing status in the database.
-            $branch = $this->entityManager->getRepository(Branch::class)->findOneBy(array('id' => $data['id']));    
+            $branch = $this->entityManager->getRepository(BranchArea::class)->findOneBy(array('id' => $data['id']));    
             if ($branch == null) {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = "Branch Not Found";
+                $this->apiResponse['message'] = "Branch Area Not Found";
             } else {
                 //remove status
-                $this->branchManager->deleteBranch($branch);
+                $this->branchManager->deleteBranchArea($branch);
     
                 $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have deleted branch!";
+                $this->apiResponse['message'] = "Success: You have deleted branch area!";
             }          
         } else {
             $this->error_code = 0;
-            $this->apiResponse['message'] = "Branch request id !";
+            $this->apiResponse['message'] = "Branch area request id !";
         }
         return $this->createResponse();       
     }
-   
 }

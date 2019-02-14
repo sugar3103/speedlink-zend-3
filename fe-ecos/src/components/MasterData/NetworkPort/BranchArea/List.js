@@ -12,17 +12,17 @@ import Action from './Action';
 import Search from './Search';
 
 import {
-  getBranchList,
-  toggleBranchModal
+  getBranchAreaList,
+  toggleBranchAreaModal
 } from "../../../../redux/actions";
 
 
-const BranchFormatter = ({ value }) => (
+const BranchAreaFormatter = ({ value }) => (
   value === 'Enabled' ? <span className="badge badge-success">Enabled</span> :
     <span className="badge badge-disabled">Disabled</span>
 );
 
-BranchFormatter.propTypes = {
+BranchAreaFormatter.propTypes = {
   value: PropTypes.string.isRequired,
 };
 
@@ -45,10 +45,10 @@ class List extends Component {
       }
     }
 
-    if (this.props.branch.paramSearch) {
-      Object.assign(params, { "query": this.props.branch.paramSearch})
+    if (this.props.brancharea.paramSearch) {
+      Object.assign(params, { "query": this.props.brancharea.paramSearch})
     };
-    this.props.getBranchList(params, messages);
+    this.props.getBranchAreaList(params, messages);
 
     this.setState({
       currentPage: 1,
@@ -57,7 +57,7 @@ class List extends Component {
   }
 
   toggleModal = () => {    
-    this.props.toggleBranchModal();
+    this.props.toggleBranchAreaModal();
   }
 
   onChangePage = (page) => {
@@ -69,10 +69,10 @@ class List extends Component {
       }
     }
 
-    if (this.props.branch.paramSearch) {
-      Object.assign(params, { "query": this.props.branch.paramSearch })
+    if (this.props.brancharea.paramSearch) {
+      Object.assign(params, { "query": this.props.brancharea.paramSearch })
     };
-    this.props.getBranchList(params, messages);
+    this.props.getBranchAreaList(params, messages);
 
     this.setState({
       currentPage: page
@@ -81,10 +81,10 @@ class List extends Component {
 
   componentDidMount() {
     const { messages } = this.props.intl;
-    this.props.getBranchList(null, messages);
+    this.props.getBranchAreaList(null, messages);
   }
 
-  showBranchItem = (items) => {
+  showBranchAreaItem = (items) => {
     const { messages } = this.props.intl;
     let result = null;
     if (items.length > 0) {
@@ -92,7 +92,7 @@ class List extends Component {
         return (
           <Item 
             key={index}
-            branch={item}
+            brancharea={item}
           />
         )
       })
@@ -105,7 +105,7 @@ class List extends Component {
   }
 
   render() {
-    const { items, loading, modalOpen, total } = this.props.branch;
+    const { items, loading, modalOpen, total } = this.props.brancharea;
     const { messages } = this.props.intl;
     return (
       <Col md={12} lg={12}>
@@ -118,7 +118,7 @@ class List extends Component {
                 onClick={this.toggleModal}
                 className="master-data-btn"
                 size="sm"
-              >{messages['branch.add-new']}</Button>
+              >{messages['brancharea.add-new']}</Button>
               <Action modalOpen={modalOpen} />
               <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
             </div>
@@ -128,19 +128,20 @@ class List extends Component {
                 <tr>
                   <th>#</th>
                   <th>{messages['branch.code']}</th>
-                  <th>{messages['name']}</th>
-                  <th>{messages['description']}</th>
-                  <th>{messages['branch.city']}</th>
-                  <th>{messages['status']}</th>
-                  <th>{messages['created-at']}</th>
-                  <th>{messages['action']}</th>
+                  <th>{messages['brancharea.branchname']}</th>
+                  <th>{messages['brancharea.hubcode']}</th>
+                  <th>{messages['brancharea.country']}</th>
+                  <th>{messages['brancharea.city']}</th>
+                  <th>{messages['brancharea.district']}</th>
+                  <th>{messages['brancharea.ward']}</th>
+                  <th>{messages['brancharea.action']}</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
                   <tr><td colSpan={9} className="text-center"><div className="loading-table" /></td></tr>
                 ) : (
-                    this.showBranchItem(items)
+                    this.showBranchAreaItem(items)
                   )}
               </tbody>
             </Table>
@@ -153,21 +154,21 @@ class List extends Component {
 }
 
 List.propTypes = {
-  branch: PropTypes.object.isRequired,
-  getBranchList: PropTypes.func.isRequired,
-  toggleBranchModal: PropTypes.func.isRequired
+  brancharea: PropTypes.object.isRequired,
+  getBranchAreaList: PropTypes.func.isRequired,
+  toggleBranchAreaModal: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ branch }) => {
+const mapStateToProps = ({ brancharea }) => {
   return {
-    branch,
+    brancharea,
   };
 };
 
 export default injectIntl(connect(
   mapStateToProps,
   {
-    getBranchList,
-    toggleBranchModal
+    getBranchAreaList,
+    toggleBranchAreaModal
   }
 )(List));

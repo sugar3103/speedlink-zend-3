@@ -32,7 +32,7 @@ class Item extends Component {
 
   render() {
     const { carrier } = this.props;
-    const { messages } = this.props.intl;
+    const { messages, locale } = this.props.intl;
     return (
       <tr>
         <th scope="row">{carrier.id}</th>
@@ -65,8 +65,14 @@ Item.propTypes = {
   toggleCarrierModal: PropTypes.func.isRequired,
   deleteCarrierItem: PropTypes.func.isRequired
 };
+const mapStateToProps = ({ settings }) => {
+  const { locale } = settings;
+  return {
+    locale
+  }
+}
 
-export default injectIntl(connect(null, {
+export default injectIntl(connect(mapStateToProps, {
   toggleCarrierModal,
   deleteCarrierItem
 })(Item));

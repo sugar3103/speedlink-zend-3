@@ -2,7 +2,7 @@
 namespace NetworkPort\Repository;
 
 use Core\Utils\Utils;
-use NetworkPort\Entity\Branch;
+use NetworkPort\Entity\BranchArea;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
@@ -11,7 +11,7 @@ use Doctrine\ORM\QueryBuilder;
  * This is the custom repository class for User entity.
  * @package NetworkPort\Repository
  */
-class BranchRepository extends EntityRepository
+class BranchAreaRepository extends EntityRepository
 {
     /**
      * Get list user by condition
@@ -21,7 +21,7 @@ class BranchRepository extends EntityRepository
      * @param array $filters
      * @return array|QueryBuilder
      */
-    public function getListBranchByCondition(
+    public function getListBranchAreaByCondition(
         $start = 1,
         $limit = 10,
         $sortField = 'b.id',
@@ -30,31 +30,31 @@ class BranchRepository extends EntityRepository
     )
     {
         try {
-            $queryBuilder = $this->buildBranchQueryBuilder($sortField, $sortDirection, $filters);
+            $queryBuilder = $this->buildBranchAreaQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select("
-                b.id,
-                b.code,
-                b.name,
-                b.name_en,
-                b.status,
-                b.created_at,
-                b.created_by,
-                b.updated_at,
-                b.updated_by,
-                b.hub_id,
-                b.district_id,
-                b.city_id,
-                b.ward_id,
-                b.country_id,
+                ba.id,
+                ba.status,
+                ba.created_at,
+                ba.created_by,
+                ba.updated_at,
+                ba.updated_by,
+                ba.branch_id,
+                ba.hub_id,
+                ba.country_id,
+                ba.city_id,
+                ba.district_id,
+                ba.ward_id,
+                b.name AS branch_name,
+                b.name_en AS branch_name_en,
+                b.code AS branch_code,
                 h.name AS hub_name,
+                h.code AS hub_code,
                 d.name AS district,
                 c.name AS city,
                 w.name AS ward,
-                co.name AS country,
-                b.description,
-                b.description_en
-            ")->andWhere("h.is_deleted = 0")
-            ->groupBy('b.id');
+                co.name AS country
+            ")->andWhere("ba.is_deleted = 0")
+            ->groupBy('ba.id');
             
             if($limit) {
                 $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
@@ -75,62 +75,55 @@ class BranchRepository extends EntityRepository
      * @return QueryBuilder
      * @throws QueryException
      */
-    public function buildBranchQueryBuilder($sortField = 'b.id', $sortDirection = 'asc', $filters)
+    public function buildBranchAreaQueryBuilder($sortField = 'ba.id', $sortDirection = 'asc', $filters)
     {
         $operatorsMap = [
-            'id' => [
-                'alias' => 'b.id',
+            'branch' => [
+                'alias' => 'ba.branch_id',
+                'operator' => 'eq'
+            ],
+            'hub' => [
+                'alias' => 'ba.hub_id',
+                'operator' => 'eq'
+            ],
+            'country' => [
+                'alias' => 'ba.country_id',
+                'operator' => 'eq'
+            ],
+            'city' => [
+                'alias' => 'ba.city_id',
+                'operator' => 'eq'
+            ],
+            'district' => [
+                'alias' => 'ba.district_id',
+                'operator' => 'eq'
+            ],
+            'ward' => [
+                'alias' => 'ba.ward_id',
+                'operator' => 'eq'
+            ],
+            'created_at' => [
+                'alias' => 'ba.created_at',
+                'operator' => 'contains'
+            ],
+            'status' => [
+                'alias' => 'ba.status',
                 'operator' => 'eq'
             ],
             'code' => [
                 'alias' => 'b.code',
                 'operator' => 'contains'
             ],
-            'name' => [
-                'alias' => 'b.name',
-                'operator' => 'contains'
-            ],
-            'name_en' => [
-                'alias' => 'b.name_en',
-                'operator' => 'contains'
-            ],
-            'hub' => [
-                'alias' => 'b.hub_id',
-                'operator' => 'eq'
-            ],
-            'district' => [
-                'alias' => 'b.district_id',
-                'operator' => 'eq'
-            ],
-            'ward' => [
-                'alias' => 'b.ward_id',
-                'operator' => 'eq'
-            ],
-            'city' => [
-                'alias' => 'b.city_id',
-                'operator' => 'eq'
-            ],
-            'country' => [
-                'alias' => 'b.country_id',
-                'operator' => 'eq'
-            ],
-            'created_at' => [
-                'alias' => 'b.created_at',
-                'operator' => 'contains'
-            ],
-            'status' => [
-                'alias' => 'b.status',
-                'operator' => 'eq'
-            ]
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(Branch::class, 'b')
-        ->leftJoin('b.district', 'd')
-        ->leftJoin('b.city', 'c')
-        ->leftJoin('b.ward', 'w')
-        ->leftJoin('b.country', 'co')
-        ->leftJoin('b.hub', 'h');
+        $queryBuilder->from(BranchArea::class, 'ba')
+        ->leftJoin('ba.hub', 'h')
+        ->leftJoin('ba.branch', 'b')
+        ->leftJoin('ba.district', 'd')
+        ->leftJoin('ba.city', 'c')
+        ->leftJoin('ba.ward', 'w')
+        ->leftJoin('ba.country', 'co');
         // ->groupBy('b.id')
         // ->where('b.deletedAt is null')
         // ->andWhere('b.id <> 1')
@@ -138,7 +131,7 @@ class BranchRepository extends EntityRepository
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
         } else {
-            $queryBuilder->orderBy('b.id', 'DESC');
+            $queryBuilder->orderBy('ba.id', 'DESC');
         }
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }

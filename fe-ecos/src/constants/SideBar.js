@@ -85,6 +85,11 @@ export default {
               icon: 'license'
             },
             {
+              title: 'menu.brancharea',
+              route: '/app/master-data/networkport/brancharea',
+              icon: 'license'
+            },
+            {
               title: 'menu.hub',
               route: '/app/master-data/networkport/hub',
               icon: 'map'
