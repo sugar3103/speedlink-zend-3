@@ -178,7 +178,7 @@ class BranchAreaController extends CoreController {
                 $this->apiResponse['message'] = "Branch Area Not Found";
             } else {
                 //remove status
-                $this->branchManager->deleteBranchArea($branch);
+                $this->branchareaManager->deleteBranchArea($branch);
     
                 $this->error_code = 1;
                 $this->apiResponse['message'] = "Success: You have deleted branch area!";

@@ -196,6 +196,7 @@ function* deleteBranchAreaItem({ payload }) {
   const { id, messages } = payload;
   try {
     const response = yield call(deleteBranchAreaItemRequest, id);
+    console.log(response);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(deleteBranchAreaItemSuccess());

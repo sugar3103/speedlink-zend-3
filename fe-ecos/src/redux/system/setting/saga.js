@@ -12,6 +12,7 @@ import {
 import {
   getSettingSuccess,
   getSettingError,  
+  getSetting
 } from "./action";
 
 import createNotification from '../../../util/notifications';

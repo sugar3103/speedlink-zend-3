@@ -47,6 +47,7 @@ class BranchRepository extends EntityRepository
                 b.ward_id,
                 b.country_id,
                 h.name AS hub_name,
+                h.code AS hub_code,
                 d.name AS district,
                 c.name AS city,
                 w.name AS ward,

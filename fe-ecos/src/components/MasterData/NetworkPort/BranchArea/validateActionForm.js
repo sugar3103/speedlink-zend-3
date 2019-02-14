@@ -23,20 +23,23 @@ const validate = (values) => {
     // } else if (values.code.length > 21) {
     //   errors.code = 'brancharea.validate-code-maxlength';
     // }
+    if (!values.branch_id) {
+      errors.branch_id = 'brancharea.validate-branch-empty';
+    }
 
-    // if (!values.country_id) {
-    //   errors.country_id = 'brancharea.validate-code-empty';
-    // }
+    if (!values.country_id) {
+      errors.country_id = 'brancharea.validate-country-empty';
+    }
 
-    // if (!values.city_id) {
-    //   errors.city_id = 'brancharea.validate-code-empty';
-    // }
-    // if (!values.district_id) {
-    //   errors.district_id = 'brancharea.validate-code-empty';
-    // }
-    // if (!values.ward_id) {
-    //   errors.ward_id = 'brancharea.validate-code-empty';
-    // }
+    if (!values.city_id) {
+      errors.city_id = 'brancharea.validate-city-empty';
+    }
+    if (!values.district_id) {
+      errors.district_id = 'brancharea.validate-district-empty';
+    }
+    if (!values.ward_id) {
+      errors.ward_id = 'brancharea.validate-ward-empty';
+    }
 
     return errors;
   };

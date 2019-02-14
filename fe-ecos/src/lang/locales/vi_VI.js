@@ -395,6 +395,12 @@ module.exports = {
   'brancharea.validate-nameEn-minlength': 'Tên tiếng anh phải có trên 5 ký tự',
   'brancharea.validate-nameEn-maxlength': 'Tên tiếng anh phải có dưới 20 ký tự',
   'brancharea.validate-nameEn-exists': 'Tên tiếng anh đã tồn tại',
+  'brancharea.validate-branch-empty': 'Branch không được bỏ trống',
+  'brancharea.validate-country-empty': 'Country không được bỏ trống',
+  'brancharea.validate-city-empty': 'City không được bỏ trống',
+  'brancharea.validate-district-empty': 'District không được bỏ trống',
+  'brancharea.validate-ward-empty': 'Ward không được bỏ trống',
+
   'brancharea.validate-code-empty': 'Code BranchArea không được bỏ trống',
   'brancharea.validate-code-minlength': 'Code BranchArea phải có trên 5 ký tự',
   'brancharea.validate-code-maxlength': 'Code BranchArea phải có dưới 20 ký tự',

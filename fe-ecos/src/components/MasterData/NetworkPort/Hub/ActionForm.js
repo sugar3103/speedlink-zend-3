@@ -74,7 +74,7 @@ class ActionForm extends Component {
     return (
       <form className="form" onSubmit={handleSubmit}>
         <div className="modal__header">
-          <button className="lnr lnr-cross modal__close-btn" onClick={this.toggleModal} />
+          {/* <button className="lnr lnr-cross modal__close-btn" onClick={this.toggleModal} /> */}
           <h4 className="bold-text  modal__title">{title}</h4>
         </div>
         <div className="modal__body">
