@@ -11,7 +11,7 @@ class Carrier extends Component {
         <Row>
           <Col md={12}>
             <h3 className="page-title">{messages['cs.carrier']}</h3>
-            <h3 className="page-subhead subhead"/>
+            {/* <h3 className="page-subhead subhead"/> */}
           </Col>
         </Row>
         <Row>

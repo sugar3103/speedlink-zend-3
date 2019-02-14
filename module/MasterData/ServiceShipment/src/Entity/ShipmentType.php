@@ -63,9 +63,9 @@ class ShipmentType
     private $carrier_id;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="category_code", type="integer", nullable=false, options={"comment"="Inbound, Outbound, Domestic"})
+     * @ORM\Column(name="category_code", type="string", nullable=false, options={"comment"="Inbound, Outbound, Domestic"})
      */
     private $category_code;
 
@@ -77,9 +77,9 @@ class ShipmentType
     private $service_id;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="product_type_code", type="integer", nullable=false, options={"comment"="Dox, Parcel"})
+     * @ORM\Column(name="product_type_code", type="string", nullable=false, options={"comment"="Dox, Parcel"})
      */
     private $product_type_code;
 
@@ -134,17 +134,31 @@ class ShipmentType
 
     /**
      *
-     * @ORM\OneToOne(targetEntity="\ServiceShipment\Entity\Carrier", inversedBy="shipment_type")
+     * @ORM\OneToOne(targetEntity="\ServiceShipment\Entity\Carrier")
      * @ORM\JoinColumn(name="carrier_id", referencedColumnName="id", nullable=true)
      */
     private $join_carrier;
 
     /**
      *
-     * @ORM\OneToOne(targetEntity="\ServiceShipment\Entity\Service", inversedBy="shipment_type")
+     * @ORM\OneToOne(targetEntity="\ServiceShipment\Entity\Service")
      * @ORM\JoinColumn(name="service_id", referencedColumnName="id", nullable=true)
      */
     private $join_service;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\OAuth\Entity\User")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
+     */
+    private $join_created;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\OAuth\Entity\User")
+     * @ORM\JoinColumn(name="updated_by", referencedColumnName="id", nullable=true)
+     */
+    private $join_updated;
 
     /**
      * @return int
@@ -416,6 +430,70 @@ class ShipmentType
     public function setCreatedBy($created_by)
     {
         $this->created_by = $created_by;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinCarrier()
+    {
+        return $this->join_carrier;
+    }
+
+    /**
+     * @param mixed $join_carrier
+     */
+    public function setJoinCarrier($join_carrier)
+    {
+        $this->join_carrier = $join_carrier;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinService()
+    {
+        return $this->join_service;
+    }
+
+    /**
+     * @param mixed $join_service
+     */
+    public function setJoinService($join_service)
+    {
+        $this->join_service = $join_service;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinCreated()
+    {
+        return $this->join_created;
+    }
+
+    /**
+     * @param mixed $join_created
+     */
+    public function setJoinCreated($join_created)
+    {
+        $this->join_created = $join_created;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinUpdated()
+    {
+        return $this->join_updated;
+    }
+
+    /**
+     * @param mixed $join_updated
+     */
+    public function setJoinUpdated($join_updated)
+    {
+        $this->join_updated = $join_updated;
     }
 
 }

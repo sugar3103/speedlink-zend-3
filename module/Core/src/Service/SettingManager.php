@@ -36,26 +36,23 @@ class SettingManager {
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function addSetting($data) {
+    public function addSetting($code,$key,$value,$serialized = 0) {
 
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
 
             $setting = new Setting();
-            $setting->setCode($data['code']);
-            $setting->setKey($data['key']);
-            $setting->setVaule($data['value']);
-            $setting->setSerialized($data['serialized']);            
+            $setting->setCode($code);
+            $setting->setKey($key);
+            $setting->setValue($value);
+            $setting->setSerialized($serialized);            
             
             $this->entityManager->persist($setting);
 
             // apply changes to database
             $this->entityManager->flush();
-
-            // reload rbac container
-            $this->rbacManager->init(true);
-
+            
             $this->entityManager->commit();
             return TRUE;
         }
@@ -73,21 +70,17 @@ class SettingManager {
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function updateSetting($setting, $data) {
+    public function updateSetting($setting, $code,$key,$value,$serialized = 0) {
 
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
-
-            $setting->setCode($data['code']);
-            $setting->setKey($data['key']);
-            $setting->setVaule($data['value']);
-            $setting->setSerialized($data['serialized']);
+            $setting->setCode($code);
+            $setting->setKey($key);
+            $setting->setValue($value);
+            $setting->setSerialized($serialized);
 
             $this->entityManager->flush();
-
-            // reload rbac container.
-            $this->rbacManager->init(true);
 
             $this->entityManager->commit();
             return TRUE;
@@ -115,10 +108,7 @@ class SettingManager {
 
             $this->entityManager->remove($setting);
             $this->entityManager->flush();
-
-            // reload rbac container.
-            $this->rbacManager->init(true);
-
+            
             $this->entityManager->commit();
             return TRUE;
         } catch (ORMException $e) {

@@ -9,7 +9,10 @@ import branch from './master-data/branch/reducer';
 import brancharea from './master-data/brancharea/reducer';
 import users from './system/users/reducers';
 import carrier from './master-data/service-shipment/carrier/reducer';
+import service from './master-data/service-shipment/service/reducer';
+import shipment_type from './master-data/service-shipment/shipmnet-type/reducer';
 import setting from './system/setting/reducer';
+
 const reducers = combineReducers({
   form: reduxFormReducer,
   settings,
@@ -19,6 +22,8 @@ const reducers = combineReducers({
   address,
   users,
   carrier,
+  service,
+  shipment_type,
   hub,
   branch,
   brancharea

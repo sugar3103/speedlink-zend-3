@@ -40,9 +40,11 @@ class RoleRepository extends EntityRepository {
                  r.description,
                  r.description_en,
                  r.created_at"
-            )->andWhere('r.id <> 0')->groupBy('r.id')
-            ->setMaxResults($limit)
-            ->setFirstResult(($start - 1) * $limit);
+            )->andWhere('r.id <> 0')->groupBy('r.id');
+            if($limit){
+                $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
+            }
+            
 
             return $queryBuilder;
 

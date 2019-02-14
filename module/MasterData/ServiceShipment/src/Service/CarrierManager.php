@@ -1,6 +1,8 @@
 <?php
 namespace ServiceShipment\Service;
 
+use Core\Utils\Utils;
+use OAuth\Entity\User;
 use ServiceShipment\Entity\Carrier;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
@@ -9,7 +11,6 @@ use Zend\Mail\Transport\SmtpOptions;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator;
-use Zend\Authentication\Result;
 /**
  * This service is responsible for adding/editing users
  * and changing user password.s
@@ -30,36 +31,68 @@ class CarrierManager
         $this->entityManager = $entityManager;
     }
 
-    public function getListCarrierByCondition($currentPage, $limit, $sortField = '', $sortDirection = 'asc', $filters = [])
+    private function getReferenced(&$carrier, $data, $user, $mode = '')
+    {
+        $user_data = $this->entityManager->getRepository(User::class)->find($user->id);
+        if ($user_data == null) {
+            throw new \Exception('Not found User by ID');
+        }
+
+        if ($mode == 'add') {
+            $carrier->setJoinCreated($user_data);
+        }
+        $carrier->setJoinUpdated($user_data);
+
+    }
+
+    public function getListCarrierByCondition($start, $limit, $sortField = '', $sortDirection = 'asc', $filters = [])
     {
         $carriers = [];
         $totalCarrier = 0;
 
         //get orm carrier
-        $ormCarrier = $this->entityManager->getRepository(Carrier::class)->getListCarrierByCondition($sortField,$sortDirection,$filters);
+        $ormCarrier = $this->entityManager->getRepository(Carrier::class)
+            ->getListCarrierByCondition($start, $limit, $sortField, $sortDirection, $filters);
 
         if($ormCarrier){
             $ormPaginator = new ORMPaginator($ormCarrier, true);
             $ormPaginator->setUseOutputWalkers(false);
 
-            $adapter = new DoctrineAdapter($ormPaginator);
-            $paginator = new Paginator($adapter);
-            //sets the current page number
-            $paginator->setCurrentPageNumber($currentPage);
-            //Sets the number of items per page
-            $paginator->setItemCountPerPage($limit);
-
-            //get carriers list
-            $carriers = $paginator->getIterator()->getArrayCopy();
             //get total carriers list
-            $totalCarrier = $paginator->getTotalItemCount();
+            $totalCarrier = $ormPaginator->count();
+            $carriers = $ormPaginator->getIterator()->getArrayCopy();
 
+            foreach ($carriers as $key => $carrier) {
+                $date_format = 'd/m/Y H:i:s';
+                $carriers[$key]['created_at'] = Utils::checkDateFormat($carrier['created_at'], $date_format);
+                $carriers[$key]['updated_at'] = Utils::checkDateFormat($carrier['updated_at'], $date_format);
+            }
         }
 
         //set return data
         $dataCarrier = [
             'listCarrier' => $carriers,
             'totalCarrier' => $totalCarrier,
+        ];
+        return $dataCarrier;
+    }
+
+    public function getListCarrierCodeByCondition()
+    {
+        $carriers = [];
+
+        //get orm carrier
+        $ormCarrier = $this->entityManager->getRepository(Carrier::class)->getListCarrierCodeByCondition();
+
+        if($ormCarrier){
+            $ormPaginator = new ORMPaginator($ormCarrier, true);
+            $ormPaginator->setUseOutputWalkers(false);
+            $carriers = $ormPaginator->getIterator()->getArrayCopy();
+        }
+
+        //set return data
+        $dataCarrier = [
+            'listCarrier' => $carriers,
         ];
         return $dataCarrier;
     }
@@ -72,8 +105,8 @@ class CarrierManager
      * @return Carrier|bool
      * @throws \Exception
      */
-    public function addCarrier($data, $user) {
-
+    public function addCarrier($data, $user)
+    {
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
@@ -86,8 +119,10 @@ class CarrierManager
             $carrier->setCode($data['code']);
             //TODO: check timezone
             $carrier->setCreatedAt(date('Y-m-d H:i:s'));
-            //$carrier->setCreatedBy($user->id);
-            $carrier->setCreatedBy('1');
+            $carrier->setCreatedBy($user->id);
+            $carrier->setUpdatedAt(date('Y-m-d H:i:s'));
+            $carrier->setUpdatedBy($user->id);
+            $this->getReferenced($carrier, $data, $user, 'add');
 
             $this->entityManager->persist($carrier);
             $this->entityManager->flush();
@@ -121,10 +156,9 @@ class CarrierManager
             $carrier->setDescriptionEn($data['description_en']);
             $carrier->setStatus($data['status']);
             $carrier->setCode($data['code']);
-            //TODO: check timezone
             $carrier->setUpdatedAt(date('Y-m-d H:i:s'));
-            //$carrier->setUpdatedBy($user->id);
-            $carrier->setUpdatedBy('1');
+            $carrier->setUpdatedBy($user->id);
+            $this->getReferenced($carrier, $data, $user);
 
             $this->entityManager->persist($carrier);
             $this->entityManager->flush();
@@ -145,14 +179,13 @@ class CarrierManager
      * @return Carrier|bool
      * @throws \Exception
      */
-    public function deleteCarrier($carrier) {
+    public function deleteCarrier($carrier, $user) {
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
-            $carrier->setIsDeleted('1');
+            $carrier->setIsDeleted(1);
             $carrier->setUpdatedAt(date('Y-m-d H:i:s'));
-            //$carrier->setUpdatedBy($user->id);
-            $carrier->setUpdatedBy('1');
+            $carrier->setUpdatedBy($user->id);
 
             $this->entityManager->persist($carrier);
             $this->entityManager->flush();

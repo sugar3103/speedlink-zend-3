@@ -1,9 +1,7 @@
 import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { Field } from 'redux-form';
 import renderRadioButtonField from '../../../containers/Shared/form/RadioButton';
-
 
 class Server extends Component {
     render() {

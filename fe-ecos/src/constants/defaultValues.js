@@ -6,8 +6,8 @@ export const localeOptions=[
 ];
 
 //api
-// export const apiUrl = 'http://localhost:8888/api/v1/';
-export const apiUrl = 'http://speedlink.local/api/v1/';
+export const apiUrl = 'http://localhost:8888/api/v1/';
+// export const apiUrl = 'http://speedlink.local/api/v1/';
 
 //error code
 export const EC_SUCCESS = 1;

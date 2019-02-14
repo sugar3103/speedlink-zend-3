@@ -15,6 +15,7 @@ class Customizer extends PureComponent {
     theme: ThemeProps.isRequired,
     changeToDark: PropTypes.func.isRequired,
     changeToLight: PropTypes.func.isRequired,
+    setting: PropTypes.any
   };
 
   state = {
@@ -35,27 +36,40 @@ class Customizer extends PureComponent {
       theme,
       changeToDark,
       changeToLight,
+      setting
     } = this.props;
-
+    
     const { messages } = this.props.intl;
-
-    return (
-      <div className="customizer">
-        <button className="customizer__btn" onClick={this.handleOpen}>
-          <img className="customizer__btn-icon" src={settings} alt="icon" />
-        </button>
-        <div className={customizerClass}>
-          <div className="customizer__title-wrap">
-            <h5>{messages['theme.title-setting']}</h5>
-            <button className="customizer__close-btn" onClick={this.handleOpen}>
-              <CloseIcon />
+    if(setting) {
+      if(setting.allow_customizer === '1') {
+        return (
+          <div className="customizer">
+            <button className="customizer__btn" onClick={this.handleOpen}>
+              <img className="customizer__btn-icon" src={settings} alt="icon" />
             </button>
+            {this.state.open && <button className="topbar__back" onClick={this.handleOpen} />}
+            <div className={customizerClass}>
+              <div className="customizer__title-wrap">
+                <h5>{messages['theme.title-setting']}</h5>
+                <button className="customizer__close-btn" onClick={this.handleOpen}>
+                  <CloseIcon />
+                </button>
+              </div>
+              <p className="customizer__caption">{messages['theme.desc-setting']}</p>
+              <ToggleTheme changeToDark={changeToDark} changeToLight={changeToLight} theme={theme} />
+            </div>
           </div>
-          <p className="customizer__caption">{messages['theme.desc-setting']}</p>
-          <ToggleTheme changeToDark={changeToDark} changeToLight={changeToLight} theme={theme} />
-        </div>
-      </div>
-    );
+        );
+      }
+        else {
+        return '';
+      } 
+      
+    } else {
+      return '';
+    }
+    
+    
   }
 }
 

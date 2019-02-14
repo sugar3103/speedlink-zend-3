@@ -14,7 +14,7 @@ module.exports = {
   'menu.hub': 'Hub',
   'menu.customer_service': 'Service/Shipment Type',
   'menu.cs_carrier': 'Carrier',
-  'menu.cs_service': 'ServiceShipment',
+  'menu.cs_service': 'Service',
   'menu.cs_shipment_type': 'Shipment Type',
   'menu.brancharea' : 'Branch Area',
   //Menu Setting

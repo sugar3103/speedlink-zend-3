@@ -11,7 +11,10 @@ import {
   CARRIER_UPDATE_ITEM_ERROR,
   CARRIER_DELETE_ITEM,
   CARRIER_DELETE_ITEM_SUCCESS,
-  CARRIER_DELETE_ITEM_ERROR
+  CARRIER_DELETE_ITEM_ERROR,
+  CARRIER_CODE_GET_LIST,
+  CARRIER_CODE_GET_LIST_SUCCESS,
+  CARRIER_CODE_GET_LIST_ERROR
 } from '../../../../constants/actionTypes';
 
 export const toggleCarrierModal = (carrier = null) => ({
@@ -31,6 +34,21 @@ export const getCarrierListSuccess = (items, total) => ({
 
 export const getCarrierListError = (error) => ({
   type: CARRIER_GET_LIST_ERROR,
+  payload: error
+});
+
+export const getCarrierCodeList = () => ({
+  type: CARRIER_CODE_GET_LIST,
+  payload: { }
+});
+
+export const getCarrierCodeListSuccess = (codes) => ({
+  type: CARRIER_CODE_GET_LIST_SUCCESS,
+  payload: { codes }
+});
+
+export const getCarrierCodeListError = (error) => ({
+  type: CARRIER_CODE_GET_LIST_ERROR,
   payload: error
 });
 

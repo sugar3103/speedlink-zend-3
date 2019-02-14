@@ -51,17 +51,17 @@ class RoleController extends CoreController {
              $fieldsMap = [
                 0 => 'name'
             ];
-            list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);
+            list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);
 
             //get list by condition
             $dataRole = $this->roleManager->getListRoleByCondition($start, $limit, $sortField, $sortDirection,$filters);
-
-            $result = ($dataRole['listRole']) ? $dataRole['listRole'] : [] ;
+            
+            $results = $this->filterByField($dataRole['listRole'], $fields);
             
             $this->error_code = 1;
             $this->apiResponse =  array(
                 'message'   => "Get List Role Success",
-                'data'      => $result,
+                'data'      => $results,
                 'total'     => $dataRole['totalRole']
             );        
         }

@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
-import { ButtonToolbar, Card, CardBody, Col, Table, Button } from 'reactstrap';
+import { Card, CardBody, Col, Table, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Item from './Item';
 import Pagination from '../../../../containers/Shared/pagination/Pagination';
@@ -90,45 +90,41 @@ toggleModal = () => {
       })
     } else {
       result = (
-        <tr><td colSpan={8} className="text-center">{messages['carrier.no-result']}</td></tr>
+        <tr><td colSpan={8} className="text-center">{messages['no-result']}</td></tr>
       );
     }
     return result;
   };
 
+
   render() {
     const { items, loading, modalOpen, total } = this.props.carrier;
-    const { messages,locale } = this.props.intl;
+    const { messages, locale } = this.props.intl;
     return (
       <Col md={12} lg={12}>
         <Card>
           <CardBody className="master-data-list">
-            <div className="card__title">
-              <h5 className="bold-text">{messages['carrier.list-title']}</h5>
-            </div>
-            <div className={'panel__content'}>
-              <Search />
-              <ButtonToolbar className="">
-                <Button color="success" className="master-data-list__btn-add" onClick={this.toggleModal} >
-                  {messages['carrier.add-new']}
-                </Button>
-              </ButtonToolbar>
+            <Search />
+            <div className="mb-2">
+              <Button 
+                color="success" 
+                onClick={this.toggleModal}
+                className="master-data-btn"
+                size="sm"
+              >{messages['status.add-new']}</Button>
               <Action modalOpen={modalOpen} />
-
               <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
-              <Table responsive bordered hover>
-                <thead>
+            </div>
+            <Table responsive bordered hover>
+              <thead>
                 <tr>
                   <th>#</th>
                   <th>{messages['carrier.code']}</th>
-                  {locale === 'en-US' ? (
-                    <th>{messages['carrier.name-en']}</th>
-                  ) : (
-                    <th>{messages['carrier.name']}</th>
-                  )}
+                  <th>{locale === 'en-US' ? (messages['carrier.name-en']) : (messages['carrier.name'])}</th>
                   <th>{messages['carrier.status']}</th>
                   <th>{messages['carrier.created-at']}</th>
-                  <th>{messages['carrier.action']}</th>
+                  <th>{messages['carrier.updated-at']}</th>
+                  <th>{messages['action']}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -140,7 +136,6 @@ toggleModal = () => {
                 </tbody>
               </Table>
               <Pagination pagination={this.state} total={total} onChangePage={this.onChangePage} />
-            </div>
           </CardBody>
         </Card>
       </Col>

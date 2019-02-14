@@ -79,7 +79,7 @@ class SettingForm extends Component {
                 {Tabs.map((tab, index) => {
                     return (
                         <TabPane tabId={tab.id} key={index}>
-                            <Content target={tab.title} />
+                            <Content target={tab.title} setting={this.props.settings}/>
                         </TabPane>
                     )
                 })}
@@ -89,7 +89,8 @@ class SettingForm extends Component {
 
     render() {
         const { messages } = this.props.intl;
-        const { handleSubmit } = this.props; 
+        const { handleSubmit } = this.props;         
+        
         return (
             <form className="form form--horizontal" onSubmit={handleSubmit}>
                 <div className="tabs tabs--bordered-bottom">

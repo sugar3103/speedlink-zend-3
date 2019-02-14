@@ -23,21 +23,21 @@ class Setting
     /**
      * @var string
      *
-     * @ORM\Column(name="code", type="string", length=128, nullable=false)
+     * @ORM\Column(name="`code`", type="string", length=128, nullable=false)
      */
     private $code;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="key", type="string", length=128, nullable=false)
+     * @ORM\Column(name="`key`", type="string", length=128, nullable=false)
      */
     private $key;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="value", type="text", length=65535, nullable=false)
+     * @ORM\Column(name="`value`", type="text", length=65535, nullable=false)
      */
     private $value;
 

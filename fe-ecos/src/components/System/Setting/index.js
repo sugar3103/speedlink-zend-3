@@ -3,17 +3,15 @@ import { Col, Card, CardBody } from 'reactstrap';
 import SettingForm from './SettingForm';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import { getSetting } from '../../../redux/actions';
+import { getSetting, updateSetting } from '../../../redux/actions';
 import PropTypes from 'prop-types';
 
 class Page extends Component {
 
-    componentDidMount() {
-        this.props.getSetting();
-    } 
-
     handleSubmit = values => {
-        console.log(values);
+        const { messages } = this.props.intl;        
+        this.props.updateSetting({'config':values}, messages);          
+        
     }
 
     render() {
@@ -43,5 +41,6 @@ const mapStateToProps = ({ setting }) => {
 };
 
 export default injectIntl(connect(mapStateToProps, {
-    getSetting
+    getSetting,
+    updateSetting
 })(Page));

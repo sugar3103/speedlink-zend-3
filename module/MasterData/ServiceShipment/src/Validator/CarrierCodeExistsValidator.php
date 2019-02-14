@@ -1,13 +1,10 @@
 <?php
 namespace ServiceShipment\Validator;
 
-use Address\Entity\Country;
 use ServiceShipment\Entity\Carrier;
-use ServiceShipment\Entity\Service;
-use ServiceShipment\Entity\ShipmentType;
 use Zend\Validator\AbstractValidator;
 
-class ShipmentTypeExistsValidator extends AbstractValidator {
+class CarrierCodeExistsValidator extends AbstractValidator {
 
     /**
      * Available validator options.
@@ -15,21 +12,22 @@ class ShipmentTypeExistsValidator extends AbstractValidator {
      */
     protected $options = [
         'entityManager' => null,
-        'shipmentType' => null,
+        'carrier' => null,
+        'language' => null
     ];
 
     /**
      * Validation failure message IDs.
      */
     const NOT_SCALAR = 'notScalar';
-    const SHIPMENT_TYPE_EXISTS = 'shipmentTypeExists';
+    const CARRIER_EXISTS = 'carrierExists';
 
     /**
      * Validation failure messages.
      */
     protected $messageTemplates = [
         self::NOT_SCALAR => 'The name must be a scalar value',
-        self::SHIPMENT_TYPE_EXISTS => 'Another a name already exists'
+        self::CARRIER_EXISTS => 'Code already exists'
     ];
 
     /**
@@ -42,15 +40,15 @@ class ShipmentTypeExistsValidator extends AbstractValidator {
         if (is_array($options) && isset($options['entityManager']))
             $this->options['entityManager'] = $options['entityManager'];
 
-        if (is_array($options) && isset($options['shipmentType']))
-            $this->options['shipmentType'] = $options['shipmentType'];
+        if (is_array($options) && isset($options['carrier']))
+            $this->options['carrier'] = $options['carrier'];
 
         // call the parent class constructor
         parent::__construct($options);
     }
 
     /**
-     * Check if shipment type exists.
+     * Check if carrier exists.
      * @param mixed $value
      * @return bool
      */
@@ -63,23 +61,20 @@ class ShipmentTypeExistsValidator extends AbstractValidator {
 
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
-        if ($this->options['language'] === NULL) {
-            $shipmentType = $entityManager->getRepository(ShipmentType::class)->findOneByName($value);
-        } else if($this->options['language'] === 'en') {
-            $shipmentType = $entityManager->getRepository(ShipmentType::class)->findOneBy(array('name_en' => $value));
-        }
+        $carrier = $entityManager->getRepository(Carrier::class)->findOneBy(array('code' => $value));
 
-        if ($this->options['shipmentType'] == null) {
-            $isValid = ($shipmentType == null);
-        } elseif ($this->options['shipmentType']->getName() != $value && $shipmentType != null) {
+        if ($this->options['carrier'] == null) {
+            $isValid = ($carrier == null);
+        } elseif ($this->options['carrier']->getCode() != $value && $carrier != null) {
             $isValid = false;
         } else {
             $isValid = true;
         }
 
         // if there were an error, set error message.
-        if (!$isValid)
-            $this->error(self::SHIPMENT_TYPE_EXISTS);
+        if (!$isValid) {
+            $this->error(self::CARRIER_EXISTS);
+        }
 
         // return validation result
         return $isValid;
