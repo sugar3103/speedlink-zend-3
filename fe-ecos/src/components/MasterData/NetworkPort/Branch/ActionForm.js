@@ -170,7 +170,7 @@ class ActionForm extends PureComponent {
     return (
       <form className="form" onSubmit={handleSubmit}>
         <div className="modal__header">
-          <button className="lnr lnr-cross modal__close-btn" onClick={this.toggleModal} />
+          {/* <button className="lnr lnr-cross modal__close-btn" onClick={this.toggleModal} /> */}
           <h4 className="bold-text  modal__title">{title}</h4>
         </div>
         <div className="modal__body">
@@ -205,7 +205,7 @@ class ActionForm extends PureComponent {
                         name="name_en"
                         component={CustomField}
                         type="text"
-                        placeholder={messages['branch.name-en']}
+                        placeholder={messages['branch.name']}
                         messages={messages}
                       />
                     </div>

@@ -11,12 +11,11 @@ class Action extends Component {
   handleSubmit = values => {
     const { messages } = this.props.intl;
     console.log(values);
-    
-    // if (values.id) {
-    //   this.props.updateBranchAreaItem(values, messages);
-    // } else {
-    //   this.props.addBranchAreaItem(values, messages);
-    // }
+    if (values.id) {
+      this.props.updateBranchAreaItem(values, messages);
+    } else {
+      this.props.addBranchAreaItem(values, messages);
+    }
   }
 
   toggleModal = () => {

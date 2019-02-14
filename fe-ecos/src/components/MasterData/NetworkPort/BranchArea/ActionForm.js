@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { toggleBranchAreaModal, getCityList, getDistrictList, getWardList, getCountryList, getHubList, getBranchList } from '../../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../../containers/Shared/form/CustomField';
-import renderRadioButtonField from '../../../../containers/Shared/form/RadioButton';
 import renderSelectField from '../../../../containers/Shared/form/Select';
 import validate from './validateActionForm';
 import PropTypes from 'prop-types';
@@ -67,6 +66,7 @@ class ActionForm extends PureComponent {
       this.props.getWardList(paramsWard);
     }
   }
+
   onChangeBranch = values => {
     let params = {
       offset: {
@@ -82,12 +82,13 @@ class ActionForm extends PureComponent {
   componentWillReceiveProps(nextProps) {
     if (nextProps && nextProps.branchs && nextProps.branchs.length === 1) {
       const branch = nextProps.branchs[0];
-      const data = {
+      const data2 = {
         branch_id: branch.id,
-        name: branch.name,
-        hub_id: branch.hub_id
+        branch_name: branch.name,
+        hub_id: branch.hub_id,
+        hub_code: branch.hub_code
       };
-      this.props.initialize(data);
+      this.props.initialize(data2);
     }
   }
 
@@ -203,7 +204,7 @@ class ActionForm extends PureComponent {
     return (
       <form className="form" onSubmit={handleSubmit}>
         <div className="modal__header">
-          <button className="lnr lnr-cross modal__close-btn" onClick={this.toggleModal} />
+          {/* <button className="lnr lnr-cross modal__close-btn" onClick={this.toggleModal} /> */}
           <h4 className="bold-text  modal__title">{title}</h4>
         </div>
         <div className="modal__body">
@@ -286,13 +287,13 @@ class ActionForm extends PureComponent {
                     </div>
                 </div>
                 <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['brancharea.code']}</span>
+                    <span className="form__form-group-label">{messages['branch.name']}</span>
                     <div className="form__form-group-field">
                       <Field
-                        name="name"
+                        name="branch_name"
                         component={CustomField}
                         type="text"
-                        placeholder={messages['brancharea.name']}
+                        placeholder={messages['branch.name']}
                         messages={messages}
                         disabled={true}
                       />
@@ -300,6 +301,28 @@ class ActionForm extends PureComponent {
                 </div>
 
                 <div className="form__form-group">
+                    <span className="form__form-group-label">{messages['brancharea.hubcode']}</span>
+                    <div className="form__form-group-field">
+                    
+                      <Field
+                        name="hub_code"
+                        component={CustomField}
+                        type="text"
+                        placeholder={messages['brancharea.hubcode']}
+                        messages={messages}
+                        disabled={true}
+                      />
+                    </div>
+                </div>
+                <Field
+                        name="hub_id"
+                        component={CustomField}
+                        type="hidden"
+                        placeholder={messages['brancharea.hubcode']}
+                        messages={messages}
+                        disabled={true}
+                      />
+                {/* <div className="form__form-group">
                     <span className="form__form-group-label">{messages['brancharea.hubcode']}</span>
                     <div className="form__form-group-field">
                       <Field
@@ -310,9 +333,10 @@ class ActionForm extends PureComponent {
                         placeholder={messages['brancharea.hubcode']}
                         onInputChange={this.onInputChange}
                         messages={messages}
+                        disabled={true}
                       />
                     </div>
-                </div>
+                </div> */}
 
                 </CardBody>
               </Card>
@@ -324,7 +348,6 @@ class ActionForm extends PureComponent {
                     <h5 className="bold-text">Data</h5>
                     <h5 className="subhead">Use default modal with property <span className="red-text">colored</span></h5>
                   </div>
-                  
 
                   <div className="form__form-group">
                     <span className="form__form-group-label">{messages['brancharea.country']}</span>
