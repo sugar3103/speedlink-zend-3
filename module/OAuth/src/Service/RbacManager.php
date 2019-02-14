@@ -151,6 +151,7 @@ class RbacManager {
                 if ($this->rbac->isGranted($parentRole->getName(), $permission))
                     return true;
         }
+        
         return false;
     }
 }
