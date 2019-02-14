@@ -99,9 +99,6 @@ class BranchController extends CoreController {
               $this->error_code = 0;
               $this->apiResponse['message'] = $form->getMessages();      
             }     
-        } else {
-            $this->httpStatusCode = 404;
-            $this->apiResponse['message'] = "Page Not Found";                 
         }
         return $this->createResponse();
       }
@@ -140,9 +137,6 @@ class BranchController extends CoreController {
             $this->error_code = 0;
             $this->apiResponse['message'] = 'Branch Not Found';   
           }            
-        } else {
-          $this->httpStatusCode = 404;
-          $this->apiResponse['message'] = "Page Not Found";
         }
         return $this->createResponse();
       }

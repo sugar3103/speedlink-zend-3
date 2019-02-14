@@ -82,13 +82,8 @@ class ActionForm extends PureComponent {
   componentWillReceiveProps(nextProps) {
     if (nextProps && nextProps.branchs && nextProps.branchs.length === 1) {
       const branch = nextProps.branchs[0];
-      const data2 = {
-        branch_id: branch.id,
-        branch_name: branch.name,
-        hub_id: branch.hub_id,
-        hub_code: branch.hub_code
-      };
-      this.props.initialize(data2);
+      this.props.change('branch_name', branch.name);
+      this.props.change('hub_code', branch.hub_code);
     }
   }
 

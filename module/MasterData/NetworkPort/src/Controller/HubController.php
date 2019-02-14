@@ -98,10 +98,6 @@ class HubController extends CoreController {
                 $this->apiResponse['message'] = $form->getMessages();    
             }            
         }
-        else {
-            $this->httpStatusCode = 404;
-            $this->apiResponse['message'] = "Page Not Found";                 
-        }
         return $this->createResponse();
       }
 
@@ -110,6 +106,7 @@ class HubController extends CoreController {
     * @throws \Exception
     */
     public function editAction() {
+    
         $data = $this->getRequestData();
         $user = $this->tokenPayload;
         $data['updated_by'] = $user->id;
