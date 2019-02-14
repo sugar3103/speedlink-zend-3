@@ -14,16 +14,6 @@ class MultiSelectField extends PureComponent {
       ]),
       label: PropTypes.string,
     })),
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.arrayOf(PropTypes.shape({
-        value: PropTypes.oneOfType([
-          PropTypes.number,
-          PropTypes.string
-        ]),
-        label: PropTypes.string,
-      })),
-    ]).isRequired,
   };
 
   static defaultProps = {
@@ -63,7 +53,7 @@ const renderMultiSelectField = props => (
       options={props.options}
       placeholder={props.placeholder}
     />    
-    {props.meta.touched && props.meta.error && <span className="form__form-group-error">{props.meta.error}</span>}
+    {props.meta.touched && props.meta.error && <span className="form__form-group-error">{props.messages[props.meta.error]}</span>}
   </div>
 );
 

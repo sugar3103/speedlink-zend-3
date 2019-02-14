@@ -12,13 +12,6 @@ import PropTypes from 'prop-types';
 
 class ActionForm extends Component {
 
-  constructor() {
-    super();
-    this.state = {
-      activeTab: '1',
-    };
-  }
-
   componentDidMount() {
     const data = this.props.modalData;
     if (data) {
@@ -63,14 +56,6 @@ class ActionForm extends Component {
     }
     return result;
   }
-
-  toggleTab = (tab) => {
-    if (this.state.activeTab !== tab) {
-      this.setState({
-        activeTab: tab,
-      });
-    }
-  };
 
   toggleModal = () => {
     this.props.toggleDistrictModal();

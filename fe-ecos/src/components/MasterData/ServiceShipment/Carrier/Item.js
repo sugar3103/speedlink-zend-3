@@ -20,9 +20,9 @@ class Item extends Component {
           <div className='custom-ui-confirm'>
             <h2>{messages["carrier.title-confirm"]}</h2>
             <p>{messages["carrier.desc-confirm"]}</p>
-            <Button color="light" size="sm" onClick={onClose}>{messages["carrier.confirm-no"]}</Button> &nbsp;
+            <Button color="light" size="sm" onClick={onClose}>{messages["confirm-no"]}</Button>&nbsp;
             <Button color="danger" size="sm" onClick={() => { this.props.deleteCarrierItem(id); onClose();}}>
-              {messages["carrier.confirm-yes"]}
+              {messages["confirm-yes"]}
             </Button>
           </div>
         )
@@ -32,19 +32,28 @@ class Item extends Component {
 
   render() {
     const { carrier } = this.props;
-    const { messages } = this.props.intl;
+    const { messages, locale } = this.props.intl;
     return (
       <tr>
         <th scope="row">{carrier.id}</th>
-        <td>{carrier.name}</td>
-        <td>{carrier.name_en}</td>
-        <td>{carrier.description}</td>
-        <td>{carrier.description_en}</td>
-        <td>{carrier.status === 1 ? <Badge color="success">{messages['carrier.active']}</Badge> : <Badge color="dark">{messages['carrier.inactive']}</Badge>}</td>
-        <td>{carrier.created_at}</td>
+        <td>{carrier.code}</td>
+        <td>{locale === 'en-US' ? (carrier.name_en) : (carrier.name)}</td>
+        <td>{carrier.status === 1 ?
+          <Badge color="success">
+            {messages['active']}
+          </Badge> : <Badge color="dark">
+            {messages['inactive']}
+          </Badge>
+        }</td>
+        <td>{carrier.created_at} by {carrier.created_by}</td>
+        <td>{carrier.updated_at} by {carrier.updated_by}</td>
         <td className="text-center">
-          <Button color="info" size="sm" onClick={() => this.toggleModal(carrier)}><span className="lnr lnr-pencil" /></Button> &nbsp;
-          <Button color="danger" size="sm" onClick={() => this.onDelete(carrier.id)}><span className="lnr lnr-trash" /></Button>
+          <Button color="info" size="sm" onClick={() => this.toggleModal(carrier)}>
+            <span className="lnr lnr-pencil" />
+          </Button> &nbsp;
+          <Button color="danger" size="sm" onClick={() => this.onDelete(carrier.id)}>
+            <span className="lnr lnr-trash" />
+          </Button>
         </td>
       </tr>
     );
@@ -56,8 +65,14 @@ Item.propTypes = {
   toggleCarrierModal: PropTypes.func.isRequired,
   deleteCarrierItem: PropTypes.func.isRequired
 };
+const mapStateToProps = ({ settings }) => {
+  const { locale } = settings;
+  return {
+    locale
+  }
+}
 
-export default injectIntl(connect(null, {
+export default injectIntl(connect(mapStateToProps, {
   toggleCarrierModal,
   deleteCarrierItem
 })(Item));

@@ -25,6 +25,7 @@ export default class TopbarSearch extends PureComponent {
         <button className="topbar__btn topbar__search-btn" onClick={this.onInputOpen}>
           <SearchIcon />
         </button>
+        {this.state.inputOpen && <button className="topbar__back" onClick={this.onInputOpen} />}
       </form>
     );
   }

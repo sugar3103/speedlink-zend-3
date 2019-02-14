@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import SidebarLink from './SidebarLink';
@@ -6,42 +7,20 @@ import SidebarCategory from './SidebarCategory';
 import navigation from '../../../constants/SideBar';
 
 class SidebarContent extends Component {
-  constructor(props) {
-    super(props)
-    
-    this.state = {
-      selectedParentMenu: "",
-      viewingParentMenu:"", 
-    };
-
-    this.setSelectedLiActive = this.setSelectedLiActive.bind(this);
-  }
+ 
   static propTypes = {
     onClick: PropTypes.func.isRequired,
   };
 
-  hideSidebar = () => {
+  hideSidebar = (e) => {    
     this.props.onClick();
   };
-
-  setSelectedLiActive() {
-    const sidebarCategory = document.querySelector(".sidebar__block .sidebar__link-active");
-    if(sidebarCategory.parentElement.classList !== 'sidebar__block'){
-      // console.log(sidebarCategory.parentElement);
-    } 
-  }
-
-  componentDidMount() {
-    this.setSelectedLiActive();
-  }
-
-
   renderNavigation = (items) => {
     const { messages } = this.props.intl;
     return items.map((item, index) => {
       if (item.childrens) {
         return (
-          <SidebarCategory title={messages[item.title]} icon={item.icon} key={index} id={item.id}>
+          <SidebarCategory title={messages[item.title]} icon={item.icon} key={index} id={item.id} pathname={this.props.location.pathname}>
             {this.renderNavigation(item.childrens)}
           </SidebarCategory>
         )
@@ -64,4 +43,4 @@ class SidebarContent extends Component {
   }
 }
 
-export default injectIntl(SidebarContent);
+export default withRouter(injectIntl(SidebarContent));

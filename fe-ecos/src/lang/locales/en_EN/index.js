@@ -6,7 +6,7 @@ import * as menu from './menu';
 import * as networkport from './networkport';
 import * as shipment from './shipment';
 import * as status from './status';
-
+import * as setting from './setting';
 let enMessages = {
     address,
     auth,
@@ -15,7 +15,8 @@ let enMessages = {
     menu,
     networkport,
     shipment,
-    status
+    status,
+    setting
 };
 
 

@@ -54,7 +54,8 @@ class BranchController extends CoreController {
           5 => 'ward',
           6 => 'city',
           7 => 'country',
-          8 => 'status'
+          8 => 'status',
+          9 => 'id'
       ];
 
       list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);

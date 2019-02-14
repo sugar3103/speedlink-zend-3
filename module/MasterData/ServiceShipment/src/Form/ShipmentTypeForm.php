@@ -1,23 +1,14 @@
 <?php
 namespace ServiceShipment\Form;
 
-use Address\Entity\Country;
-use Address\Validator\CountryExistsValidator;
-use ServiceShipment\Validator\ShipmentTypeExistsValidator;
+use ServiceShipment\Validator\CarrierIdExistsValidator;
+use ServiceShipment\Validator\ServiceIdExistsValidator;
+use ServiceShipment\Validator\ShipmentTypeCodeExistsValidator;
+use ServiceShipment\Validator\ShipmentTypeNameExistsValidator;
 use Doctrine\ORM\EntityManager;
 use Zend\Filter\StringTrim;
 use Zend\Filter\ToInt;
-use Zend\Form\Element\Button;
-use Zend\Form\Element\Csrf;
-use Zend\Form\Element\Password;
-use Zend\Form\Element\Select;
-use Zend\Form\Element\Submit;
-use Zend\Form\Element\Text;
 use Zend\Form\Form;
-use Zend\InputFilter\ArrayInput;
-use Zend\Validator\GreaterThan;
-use Zend\Validator\Identical;
-use Zend\Validator\InArray;
 use Zend\Validator\StringLength;
 
 class ShipmentTypeForm extends Form {
@@ -75,10 +66,10 @@ class ShipmentTypeForm extends Form {
                         'max' => 50
                     ]
                 ], [
-                    'name' => ShipmentTypeExistsValidator::class,
+                    'name' => ShipmentTypeNameExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'country' => $this->shipmentType
+                        'shipmentType' => $this->shipmentType
                     ]
                 ]
             ]
@@ -99,10 +90,10 @@ class ShipmentTypeForm extends Form {
                         'max' => 50
                     ]
                 ], [
-                    'name' => ShipmentTypeExistsValidator::class,
+                    'name' => ShipmentTypeNameExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'country' => $this->shipmentType
+                        'shipmentType' => $this->shipmentType
                     ]
                 ]
             ]
@@ -139,13 +130,27 @@ class ShipmentTypeForm extends Form {
         ]);
 
         $inputFilter->add([
-            'name'  => 'shipment_type_code',
+            'name'  => 'code',
             'required'  => true,
             'filters' => [
                 [
                     'name' => StringTrim::class
                 ]
-            ] 
+            ],
+            'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'max' => 50
+                    ]
+                ], [
+                    'name' => ShipmentTypeCodeExistsValidator::class,
+                    'options' => [
+                        'entityManager' => $this->entityManager,
+                        'shipmentType' => $this->shipmentType
+                    ]
+                ]
+            ]
         ]);
 
         $inputFilter->add([
@@ -154,6 +159,19 @@ class ShipmentTypeForm extends Form {
             'filters' => [
                 [
                     'name' => StringTrim::class
+                ]
+            ],
+            'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'validator' => [
+                            'name' => 'InArray',
+                            'options' => [
+                                'haystack' => ['Inbound', 'Outbound', 'Domestic']
+                            ]
+                        ]
+                    ]
                 ]
             ]
         ]);
@@ -164,6 +182,19 @@ class ShipmentTypeForm extends Form {
             'filters' => [
                 [
                     'name' => StringTrim::class
+                ]
+            ],
+            'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'validator' => [
+                            'name' => 'InArray',
+                            'options' => [
+                                'haystack' => ['Dox', 'Parcel']
+                            ]
+                        ]
+                    ]
                 ]
             ]
         ]);
@@ -185,6 +216,15 @@ class ShipmentTypeForm extends Form {
                 [
                     'name' => ToInt::class
                 ]
+            ],
+            'validators' => [
+                [
+                    'name' => CarrierIdExistsValidator::class,
+                    'options' => [
+                        'entityManager' => $this->entityManager,
+                        'shipmentType' => $this->shipmentType
+                    ]
+                ]
             ]
         ]);
 
@@ -194,6 +234,15 @@ class ShipmentTypeForm extends Form {
             'filters' => [
                 [
                     'name' => ToInt::class
+                ]
+            ],
+            'validators' => [
+                [
+                    'name' => ServiceIdExistsValidator::class,
+                    'options' => [
+                        'entityManager' => $this->entityManager,
+                        'shipmentType' => $this->shipmentType
+                    ]
                 ]
             ]
         ]);

@@ -52,6 +52,20 @@ class Permission
     /**
      * @var int
      *
+     * @ORM\Column(name="status", type="integer", nullable=false)
+     */
+    private $status = 0;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_deleted", type="boolean", nullable=false)
+     */
+    private $is_deleted = '0';
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="created_by", type="integer", nullable=false)
      */
     private $created_by;
@@ -172,6 +186,38 @@ class Permission
     public function setDescriptionEn($description_en)
     {
         $this->description_en = $description_en;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param int $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDeleted()
+    {
+        return $this->is_deleted;
+    }
+
+    /**
+     * @param bool $is_deleted
+     */
+    public function setIsDeleted($is_deleted)
+    {
+        $this->is_deleted = $is_deleted;
     }
 
     /**

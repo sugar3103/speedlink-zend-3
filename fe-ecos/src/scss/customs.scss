@@ -116,5 +116,26 @@ legend.scheduler-border {
         border: 1px solid #f2f4f7;
     }
 
+#setting {
+    .form {
+        display: block;
+        &.form--horizontal {
+            .form__form-group-label {
+                width: 155px;
+            }
+            .form__form-group-field {
+                width: calc(100% - 155px);                
+                padding-left: 20px;
+            }
+        }
+    }
+    .tabs {
+        overflow: inherit;
+    }
+}
 
-      
+table {
+    .checkbox-btn {
+        height: 10px;
+    }
+}

@@ -219,6 +219,7 @@ class BranchManager {
         ];
         return $dataBranch;
     }
+    
     public function deleteBranch($branch) {
 
         $this->entityManager->beginTransaction();

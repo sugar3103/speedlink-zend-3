@@ -14,11 +14,12 @@ module.exports = {
   'menu.hub': 'Hub',
   'menu.customer_service': 'Service/Shipment Type',
   'menu.cs_carrier': 'Carrier',
-  'menu.cs_service': 'ServiceShipment',
+  'menu.cs_service': 'Service',
   'menu.cs_shipment_type': 'Shipment Type',
-
+  'menu.brancharea' : 'Branch Area',
   //Menu Setting
-  'menu.setting': 'Settings',
+  'menu.setting': 'Setting',
+  'menu.system': 'System',
   'menu.user': 'Users',
   'menu.user.list': 'User',
   'menu.user.role': 'Roles',

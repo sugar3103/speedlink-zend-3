@@ -19,7 +19,7 @@ class RolePermission
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    private $role_id;
+    private $roleId;
 
     /**
      * @var int
@@ -28,7 +28,7 @@ class RolePermission
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    private $permission_id;
+    private $permissionId;
 
 
 }

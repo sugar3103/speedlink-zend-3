@@ -47,18 +47,33 @@ class CarrierController extends CoreController
             "data" => []
         ];
 
-        $currentPage = $this->params()->fromPost('current_page','10');
-        $limit = $this->params()->fromPost('limit','10');
-        $sortField = $this->params()->fromPost('field',null);
-        $sortDirection = $this->params()->fromPost('sort',null);
-        $filters =  $this->params()->fromPost('filters','{}');
-        $filters = json_decode($filters, true);
-
-        $dataCarrier = $this->carrierManager->getListCarrierByCondition($currentPage, $limit, $sortField, $sortDirection, $filters);
+        $fieldsMap = ['code', 'name', 'name_en', 'status'];
+        list($start, $limit, $sortField, $sortDirection, $filters) = $this->getRequestData($fieldsMap);
+        $dataCarrier = $this->carrierManager->getListCarrierByCondition($start, $limit, $sortField, $sortDirection, $filters);
 
         $result['error_code'] = 1;
         $result['message'] = 'Success';
         $result["total"] = $dataCarrier['totalCarrier'];
+        $result["data"] = !empty($dataCarrier['listCarrier']) ? $dataCarrier['listCarrier'] : [];
+        $this->apiResponse = $result;
+
+        return $this->createResponse();
+    }
+
+    public function codeAction()
+    {
+         if (!$this->getRequest()->isPost()) {
+             // TODO: Check error_code
+             $this->httpStatusCode = 405;
+             $this->apiResponse['message'] = 'Request not allow';
+             return $this->createResponse();
+         }
+
+        $result = array("data" => []);
+        $dataCarrier = $this->carrierManager->getListCarrierCodeByCondition();
+
+        $result['error_code'] = 1;
+        $result['message'] = 'Success';
         $result["data"] = !empty($dataCarrier['listCarrier']) ? $dataCarrier['listCarrier'] : [];
         $this->apiResponse = $result;
 
@@ -75,7 +90,7 @@ class CarrierController extends CoreController
         }
 
         $user = $this->tokenPayload;
-        $data = $this->params()->fromPost();
+        $data = $this->getRequestData();
         if (empty($data)) {
             // TODO: Check error_code
             $this->error_code = -1;
@@ -93,7 +108,7 @@ class CarrierController extends CoreController
             // add new carrier
             $this->carrierManager->addCarrier($data, $user);
 
-            $this->error_code = 0;
+            $this->error_code = 1;
             $this->apiResponse['message'] = "Success: You have added a carrier!";
         } else {
             //TODO: Check error_code
@@ -114,15 +129,16 @@ class CarrierController extends CoreController
         }
 
         $user = $this->tokenPayload;
-        $data = $this->params()->fromPost();
+        $data = $this->getRequestData();
         if (empty($data)) {
             // TODO: Check error_code
             $this->error_code = -1;
             $this->apiResponse['message'] = 'Missing data';
             return $this->createResponse();
         }
+
         //Create New Form Carrier
-        $carrier = $this->entityManager->getRepository(Carrier::class)->findOneBy(array('id' => $data['id']));
+        $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['id']);
         $form = new CarrierForm('update', $this->entityManager, $carrier);
         $form->setData($data);
 
@@ -133,7 +149,7 @@ class CarrierController extends CoreController
             // add new carrier
             $this->carrierManager->updateCarrier($carrier, $data, $user);
 
-            $this->error_code = 0;
+            $this->error_code = 1;
             $this->apiResponse['message'] = "Success: You have edited a carrier!";
         } else {
             //TODO: Check error_code
@@ -154,7 +170,7 @@ class CarrierController extends CoreController
         }
 
         $user = $this->tokenPayload;
-        $data = $this->params()->fromPost();
+        $data = $this->getRequestData();
         if (empty($data)) {
             // TODO: Check error_code
             $this->error_code = -1;
@@ -162,12 +178,12 @@ class CarrierController extends CoreController
             return $this->createResponse();
         }
         //Create New Form Carrier
-        $carrier = $this->entityManager->getRepository(Carrier::class)->findOneBy(array('id' => $data['id']));
+        $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['id']);
 
         //validate form
         if(!empty($carrier)) {
-            $this->carrierManager->deleteCarrier($carrier);
-            $this->error_code = 0;
+            $this->carrierManager->deleteCarrier($carrier, $user);
+            $this->error_code = 1;
             $this->apiResponse['message'] = "Success: You have deleted carrier!";
         } else {
             $this->httpStatusCode = 200;

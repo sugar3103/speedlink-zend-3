@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
-
+import CheckIcon from 'mdi-react/CheckIcon';
 import { connect } from 'react-redux';
 import { toggleStatusModal, deleteStatusItem } from '../../../redux/actions';
 
@@ -34,15 +34,24 @@ class Item extends Component {
       }
     })
   }
-
+  checkItem = () => {
+    alert("Check Item")
+  }
   render() {
     const { status } = this.props;
-    const { messages,locale } = this.props.intl;
+    const { messages, locale } = this.props.intl;
+
     return (
       <tr>
-        <th scope="row">{status.id}</th>        
-        <td>{locale === 'en-Us' ? status.name_en : status.name}</td>
-        <td>{locale === 'en-Us' ? status.description_en : status.description}</td>        
+        <td scope="row">
+          <label className="checkbox-btn">
+            <input className="checkbox-btn__checkbox" type="checkbox" onChange={e => this.checkItem()} />
+            <span className="checkbox-btn__checkbox-custom">
+              <CheckIcon />
+            </span>
+          </label></td>
+        <td>{locale === 'en-US' ? status.name_en : status.name}</td>
+        <td>{locale === 'en-US' ? status.description_en : status.description}</td>
         <td>{status.status === 1 ? <Badge color="success">{messages['active']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>}</td>
         <td>{status.created_at}</td>
         <td className="text-center">

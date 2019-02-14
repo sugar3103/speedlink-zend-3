@@ -9,6 +9,12 @@ module.exports = {
     'description': 'Description',
     'name': 'Name',  
     'status': 'Status',
+    'select-none': '--- None ---',
+    'please-select': '--- Please Select ---',
+    'select-all': 'Select All',
+    'unselect-all': 'Unselect All',
+    'show': 'Show',
+    'entries': 'Entries',
 
     'action': 'Action',
     'active': 'Enable',
@@ -32,5 +38,5 @@ module.exports = {
     //notification
     'notification.success': 'Success',
     'notification.warning': 'Warning',
-    'notification.error': 'Error'
+    'notification.error': 'Error',
 }

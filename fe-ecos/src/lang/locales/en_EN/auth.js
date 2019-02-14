@@ -28,12 +28,32 @@ module.exports = {
   'user.add-new': 'Add New User',
   'user.password': 'Password',
   'user.confirm_password': 'Confirm password',
+  'user.update-success': 'You have modified user!',
+  //validate
+  'user.validate-username-empty': 'Username shouldn’t be empty',
+  'user.validate-username-minlength': 'Username must be 5 characters or more',
+  'user.validate-username-maxlength': 'Username must be 60 characters or less',
+  'user.validate-username-exists': 'Username already exists',
+  'user.validate-password-empty': 'Password shouldn’t be empty',
+  'user.validate-password-minlength': 'Password must be 5 characters or more',
+  'user.validate-password-maxlength': 'Password must be 60 characters or less',
+  'user.validate-confirm-password-empty': 'Confirm password shouldn’t be empty',
+  'user.validate-confirm-password-mismatched': 'Password mismatched',
+  'user.validate-roles-empty': 'Role shouldn’t be empty',
 
   //Role
   'role.list': 'Roles',
   'role.name': 'Role',
   'role.add-new': 'Add New Role',  
+  'role.update': 'Update Role',  
   'role.title-confirm': 'Delete Role',  
+  //validate
+  'role.validate-name-empty': 'Name shouldn’t be empty',
+  'role.validate-name-minlength': 'Name must be 2 characters or more',
+  'role.validate-name-maxlength': 'Name must be 128 characters or less',
+  'role.validate-nameEn-empty': 'English name shouldn’t be empty',
+  'role.validate-nameEn-minlength': 'English name must be 2 characters or more',
+  'role.validate-nameEn-maxlength': 'English name must be 128 characters or less',
 
   //Role
   'permission.list': 'Permissions',

@@ -69,6 +69,7 @@ class TopbarLanguage extends PureComponent {
           {this.state.mainButtonContent}
           <DownIcon className="topbar__icon" />
         </button>
+        {this.state.collapse && <button className="topbar__back" onClick={this.toggle} />}
         <Collapse
           isOpen={this.state.collapse}
           className="topbar__collapse-content topbar__collapse-content--language"

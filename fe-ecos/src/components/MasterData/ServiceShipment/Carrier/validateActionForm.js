@@ -1,5 +1,9 @@
 const validate = (values) => {
   const errors = {};
+  if (!values.code) {
+    errors.code = 'carrier.validate-code-empty';
+  }
+
   if (!values.name) {
     errors.name = 'carrier.validate-name-empty';
   } else if (values.name.length < 5) {

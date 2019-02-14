@@ -38,13 +38,16 @@ class RadioButtonField extends PureComponent {
   render() {
     const {
       disabled, className, name, label, radioValue, value,
-    } = this.props;
-    
+    } = this.props;    
+
     const RadioButtonClass = classNames({
       'radio-btn': true,
       disabled,
     });
-
+    let _value = value;
+    if(typeof(value) === 'string') {
+      _value = Number(value);
+    }
     return (
       <label
         className={`${RadioButtonClass}${className ? ` radio-btn--${className}` : ''}`}
@@ -54,7 +57,7 @@ class RadioButtonField extends PureComponent {
           name={name}
           type="radio"
           onChange={this.onChange}
-          checked={value === radioValue}
+          checked={_value === radioValue}
           disabled={disabled}
         />
         <span className="radio-btn__radio-custom" />

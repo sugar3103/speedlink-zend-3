@@ -85,6 +85,11 @@ export default {
               icon: 'license'
             },
             {
+              title: 'menu.brancharea',
+              route: '/app/master-data/networkport/brancharea',
+              icon: 'license'
+            },
+            {
               title: 'menu.hub',
               route: '/app/master-data/networkport/hub',
               icon: 'map'
@@ -93,37 +98,43 @@ export default {
         },
       ]
     },{
-      id: 'setting',
-      title: 'menu.setting',
-      route: '/app/setting',
+      id: 'system',
+      title: 'menu.system',
+      route: '/app/system',
       icon: 'cog',
       childrens: [
         {
+          id: 'setting',
+          title: 'menu.setting',
+          route: '/app/system/setting',
+          icon: 'layers'
+        },
+        {
           id: 'users',
           title: 'menu.user',
-          route: '/app/setting/user',
+          route: '/app/system/user',
           icon: 'users',
-          childrens: [
+          childrens: [            
             {
               id: 'user',
               title: 'menu.user.list',
-              route: '/app/setting/user/list',
+              route: '/app/system/user/list',
               icon: 'users'
             },
             {
               id: 'role',
               title: 'menu.user.role',
-              route: '/app/setting/user/role',
+              route: '/app/system/user/role',
               icon: 'link'
             },
             {
               id: 'permission',
               title: 'menu.user.permission',
-              route: '/app/setting/user/permission',
+              route: '/app/system/user/permission',
               icon: 'lock'
             }
           ]
-        }
+        }        
       ]
     }
   ]

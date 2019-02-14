@@ -26,14 +26,14 @@ class UserRole
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $user_id;
+    private $userId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="role_id", type="integer", nullable=false)
      */
-    private $role_id;
+    private $roleId;
 
 
 }

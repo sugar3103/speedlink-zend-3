@@ -24,7 +24,7 @@ class Search extends Component {
     return (
       <div className="mb-2">
         <fieldset className="scheduler-border">
-          <legend className="scheduler-border">{messages['carrier.search']}</legend>
+          <legend className="scheduler-border">{messages['search']}</legend>
           <SearchForm onSubmit={this.handleSubmit} />
         </fieldset>
       </div>
