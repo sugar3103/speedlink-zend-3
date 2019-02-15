@@ -60,7 +60,7 @@ class BranchAreaManager {
         $branch_area->setCityId($data['city_id']);
         $branch_area->setDistrictId($data['district_id']);
         $branch_area->setWardId($data['ward_id']);
-        $branch_area->setStatus($data['status']);
+        $branch_area->setStatus(1);
         $branch_area->setCreatedBy($data['created_by']);
         $branch_area->setCreatedAt(date('Y-m-d H:i:s'));
         $this->getReferenced($branch_area, $data);

@@ -84,6 +84,7 @@ class ActionForm extends PureComponent {
       const branch = nextProps.branchs[0];
       this.props.change('branch_name', branch.name);
       this.props.change('hub_code', branch.hub_code);
+      this.props.change('hub_id', branch.hub_id);
     }
   }
 
@@ -315,7 +316,7 @@ class ActionForm extends PureComponent {
                         type="hidden"
                         placeholder={messages['brancharea.hubcode']}
                         messages={messages}
-                        disabled={true}
+                       
                       />
                 {/* <div className="form__form-group">
                     <span className="form__form-group-label">{messages['brancharea.hubcode']}</span>

@@ -106,20 +106,12 @@ class HubController extends CoreController {
     * @throws \Exception
     */
     public function editAction() {
-    
-        $data = $this->getRequestData();
-        $user = $this->tokenPayload;
-        $data['updated_by'] = $user->id;
-        $this->apiResponse['message'] = 'Action Update Hub'; 
- 
-        if ( $data['id'] < 1) {
-          //bao loi k tim thay hub
-          $this->error_code = 0;
-          $this->apiResponse['message'] = 'Hub Not Found';
-          return $this->createResponse();
-        }
         // check if user has submitted the form.
-        if ($this->getRequest()->isPost()) {
+      if ($this->getRequest()->isPost()) {
+          $data = $this->getRequestData();
+          $user = $this->tokenPayload;
+          $data['updated_by'] = $user->id;
+
           $hub = $this->entityManager->getRepository(Hub::class)->find($data['id']);
           if($hub){
             $form = new HubForm('update', $this->entityManager, $hub);
@@ -138,10 +130,8 @@ class HubController extends CoreController {
             $this->error_code = 0;
             $this->apiResponse['message'] = 'Hub Not Found';   
           }
-        } else {
-          $this->httpStatusCode = 404;
-          $this->apiResponse['message'] = "Page Not Found";   
         }
+        
         return $this->createResponse();
       }
 
