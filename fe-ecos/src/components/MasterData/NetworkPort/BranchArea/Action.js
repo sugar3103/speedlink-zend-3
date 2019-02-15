@@ -10,7 +10,6 @@ class Action extends Component {
 
   handleSubmit = values => {
     const { messages } = this.props.intl;
-    console.log(values);
     if (values.id) {
       this.props.updateBranchAreaItem(values, messages);
     } else {
