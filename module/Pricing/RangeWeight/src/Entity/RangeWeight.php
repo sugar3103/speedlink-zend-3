@@ -1,14 +1,13 @@
 <?php
-
-
+namespace RangeWeight\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
+ /**
  * RangeWeight
  *
- * @ORM\Table(name="range_weight")
- * @ORM\Entity
+ * @ORM\Table(name="range_weight", uniqueConstraints={@ORM\UniqueConstraint(name="unique_code", columns={"code"})})
+ * @ORM\Entity(repositoryClass="\RangeWeight\Repository\RangeWeightRepository")
  */
 class RangeWeight
 {
@@ -160,6 +159,36 @@ class RangeWeight
      * @ORM\Column(name="is_deleted", type="boolean", nullable=false)
      */
     private $is_deleted = '0';
+
+    /**
+     * @var \ServiceShipment\Entity\Carrier
+     *
+     * @ORM\OneToOne(targetEntity="ServiceShipment\Entity\Carrier")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="carrier_id", referencedColumnName="id", unique=true, nullable=false)
+     * })
+     */
+    private $carrier;
+
+    /**
+     * @var \ServiceShipment\Entity\Service
+     *
+     * @ORM\OneToOne(targetEntity="ServiceShipment\Entity\Service")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="service_id", referencedColumnName="id", unique=true, nullable=false)
+     * })
+     */
+    private $service;
+
+    /**
+     * @var \ServiceShipment\Entity\ShipmentType
+     *
+     * @ORM\OneToOne(targetEntity="ServiceShipment\Entity\ShipmentType")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="shipment_type_id", referencedColumnName="id", unique=true, nullable=false)
+     * })
+     */
+    private $shipmenttype;
 
     /**
      * @return int
@@ -497,5 +526,73 @@ class RangeWeight
         $this->is_deleted = $is_deleted;
     }
 
+    /**
+     * Set carrier.
+     *
+     * @param \ServiceShipment\Entity\Carrier|null $carrier
+     *
+     * @return RangeWeight
+     */
+    public function setCarrier(\ServiceShipment\Entity\Carrier $carrier = null)
+    {
+        $this->carrier = $carrier;
+        return $this;
+    }
+
+    /**
+     * Get carrier.
+     *
+     * @return \ServiceShipment\Entity\Carrier(|null
+     */
+    public function getCarrier()
+    {
+        return $this->carrier;
+    }
+
+     /**
+     * Set service.
+     *
+     * @param \ServiceShipment\Entity\Service|null $service
+     *
+     * @return RangeWeight
+     */
+    public function setService(\ServiceShipment\Entity\Service $service = null)
+    {
+        $this->service = $service;
+        return $this;
+    }
+
+    /**
+     * Get service.
+     *
+     * @return \ServiceShipment\Entity\Service(|null
+     */
+    public function getService()
+    {
+        return $this->service;
+    }
+
+    /**
+     * Set shipmenttype.
+     *
+     * @param \ServiceShipment\Entity\ShipmentType|null $shipmenttype
+     *
+     * @return RangeWeight
+     */
+    public function setShipmentType(\ServiceShipment\Entity\ShipmentType $shipmenttype = null)
+    {
+        $this->shipmenttype = $shipmenttype;
+        return $this;
+    }
+
+    /**
+     * Get shipmenttype.
+     *
+     * @return \ServiceShipment\Entity\ShipmentType(|null
+     */
+    public function getShipmentType()
+    {
+        return $this->shipmenttype;
+    }
 
 }
