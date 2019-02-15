@@ -161,5 +161,341 @@ class RangeWeight
      */
     private $is_deleted = '0';
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param string $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCarrierId()
+    {
+        return $this->carrier_id;
+    }
+
+    /**
+     * @param int $carrier_id
+     */
+    public function setCarrierId($carrier_id)
+    {
+        $this->carrier_id = $carrier_id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param string $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+    }
+
+    /**
+     * @return int
+     */
+    public function getServiceId()
+    {
+        return $this->service_id;
+    }
+
+    /**
+     * @param int $service_id
+     */
+    public function setServiceId($service_id)
+    {
+        $this->service_id = $service_id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getShipmentTypeId()
+    {
+        return $this->shipment_type_id;
+    }
+
+    /**
+     * @param int $shipment_type_id
+     */
+    public function setShipmentTypeId($shipment_type_id)
+    {
+        $this->shipment_type_id = $shipment_type_id;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCalculateUnit()
+    {
+        return $this->calculateUnit;
+    }
+
+    /**
+     * @param bool $calculateUnit
+     */
+    public function setCalculateUnit($calculateUnit)
+    {
+        $this->calculateUnit = $calculateUnit;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUnit()
+    {
+        return $this->unit;
+    }
+
+    /**
+     * @param string|null $unit
+     */
+    public function setUnit($unit)
+    {
+        $this->unit = $unit;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRoundUp()
+    {
+        return $this->round_up;
+    }
+
+    /**
+     * @param string $round_up
+     */
+    public function setRoundUp($round_up)
+    {
+        $this->round_up = $round_up;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrivate()
+    {
+        return $this->is_private;
+    }
+
+    /**
+     * @param bool $is_private
+     */
+    public function setIsPrivate($is_private)
+    {
+        $this->is_private = $is_private;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCustomerId()
+    {
+        return $this->customer_id;
+    }
+
+    /**
+     * @param int|null $customer_id
+     */
+    public function setCustomerId($customer_id)
+    {
+        $this->customer_id = $customer_id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFrom()
+    {
+        return $this->from;
+    }
+
+    /**
+     * @param string $from
+     */
+    public function setFrom($from)
+    {
+        $this->from = $from;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTo()
+    {
+        return $this->to;
+    }
+
+    /**
+     * @param string $to
+     */
+    public function setTo($to)
+    {
+        $this->to = $to;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param bool $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string|null $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescriptionEn()
+    {
+        return $this->description_en;
+    }
+
+    /**
+     * @param string|null $description_en
+     */
+    public function setDescriptionEn($description_en)
+    {
+        $this->description_en = $description_en;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCreatedBy()
+    {
+        return $this->created_by;
+    }
+
+    /**
+     * @param int $created_by
+     */
+    public function setCreatedBy($created_by)
+    {
+        $this->created_by = $created_by;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * @param DateTime $created_at
+     */
+    public function setCreatedAt($created_at)
+    {
+        $this->created_at = $created_at;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getUpdatedBy()
+    {
+        return $this->updated_by;
+    }
+
+    /**
+     * @param int|null $updated_by
+     */
+    public function setUpdatedBy($updated_by)
+    {
+        $this->updated_by = $updated_by;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * @param DateTime|null $updated_at
+     */
+    public function setUpdatedAt($updated_at)
+    {
+        $this->updated_at = $updated_at;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDeleted()
+    {
+        return $this->is_deleted;
+    }
+
+    /**
+     * @param bool $is_deleted
+     */
+    public function setIsDeleted($is_deleted)
+    {
+        $this->is_deleted = $is_deleted;
+    }
+
 
 }
