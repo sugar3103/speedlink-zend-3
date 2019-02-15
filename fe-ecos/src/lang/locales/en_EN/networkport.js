@@ -30,6 +30,7 @@ module.exports = {
   'branch.add-new': 'Add New Branch',
   'branch.update': 'Update Branch',
   'branch.code': 'Branch Code',
+  'branch.name': 'Branch Name',
   'branch.city': 'City',
   'branch.title-confirm': 'Delete branch',
   'branch.desc-confirm': 'Are you sure delete this Branch?',
@@ -53,4 +54,5 @@ module.exports = {
   'branch.validate-code-minlength': 'Code must be 5 characters or more',
   'branch.validate-code-maxlength': 'Code must be 20 characters or less',
   'branch.validate-code-exists': 'Code already exists',
+
 }

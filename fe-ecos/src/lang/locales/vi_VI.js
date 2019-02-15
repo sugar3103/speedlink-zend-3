@@ -31,7 +31,7 @@ module.exports = {
   'menu.networkport': 'Network Port',
   'menu.branch': 'Branch',
   'menu.hub': 'Hub',
-
+  'menu.brancharea': 'Branch Area',
   //Menu Setting
   'menu.setting': 'Cài đặt',
   'menu.user': 'Người dùng',

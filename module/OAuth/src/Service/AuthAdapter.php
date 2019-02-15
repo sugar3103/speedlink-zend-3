@@ -3,10 +3,12 @@
 namespace OAuth\Service;
 
 use OAuth\Entity\User;
+use OAuth\Entity\Role;
 use Doctrine\ORM\EntityManager;
 use Zend\Authentication\Adapter\Ldap;
 use Zend\Authentication\Result;
 use Zend\Crypt\Password\Bcrypt;
+use Core\Entity\Setting;
 
 /**
  * Class AuthAdapter
@@ -95,6 +97,18 @@ class AuthAdapter extends Ldap
                 $ldapUser->setIsLdap(User::LDAP_USER);
                 $ldapUser->setLanguage('en_US');
                 $ldapUser->setIsAdmin(0);
+
+                //set role default for new user
+                $roleDefault = $this->entityManager->getRepository(Setting::class)->findOneBy([
+                    'code' => 'config',
+                    'key' => 'user_group'
+                ]);
+
+                if ($roleDefault) {
+                    $roleId = $roleDefault->getValue();
+                    $role = $this->entityManager->getRepository(Role::class)->find($roleId);
+                    $ldapUser->addRole($role);
+                }
 
                 $this->entityManager->persist($ldapUser);
                 $this->entityManager->flush();

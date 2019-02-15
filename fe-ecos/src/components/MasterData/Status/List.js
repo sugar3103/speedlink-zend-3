@@ -1,10 +1,9 @@
 /* eslint-disable react/no-unused-state */
-import React, { Component } from 'react';
-import { Card, CardBody, Col, Table, Button } from 'reactstrap';
+import React, { Component, Fragment } from 'react';
+import { Card, CardBody, Col,Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Item from './Item';
-import Pagination from '../../../containers/Shared/pagination/Pagination';
-import ItemPerPage from '../../../containers/Shared/pagination/ItemPerPage';
+import Table from '../../../containers/Shared/form/Table';
 import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
@@ -25,6 +24,7 @@ const StatusFormatter = ({ value }) => (
 StatusFormatter.propTypes = {
   value: PropTypes.string.isRequired,
 };
+
 
 class List extends Component {
   constructor() {
@@ -87,7 +87,8 @@ class List extends Component {
   showStatusItem = (items) => {
     const { messages } = this.props.intl;
     let result = null;
-    if (items.length > 0) {
+
+    if (items && items.length > 0) {
       result = items.map((item, index) => {
         return (
           <Item
@@ -104,44 +105,67 @@ class List extends Component {
     return result;
   }
 
-  render() {
-    const { items, loading, modalOpen, total } = this.props.status;
+  actionHeader = () => {
     const { messages } = this.props.intl;
+    const { modalOpen } = this.props.status;
+    return (
+      <Fragment>
+        <Button
+          color="success"
+          onClick={this.toggleModal}
+          className="master-data-btn"
+          size="sm"
+        >{messages['status.add-new']}</Button>
+        <Action modalOpen={modalOpen} />
+
+      </Fragment>
+    )
+  }
+  render() {
+    const { items, loading, total } = this.props.status;
+    const { messages } = this.props.intl;
+    const columns = [
+      {
+        Header: messages['name'],
+        accessor: "name"
+      },
+      {
+        Header: messages['description'],
+        accessor: "description"
+      },
+      {
+        Header: messages['status'],
+        accessor: "status"
+      },
+      {
+        Header: messages['created-at'],
+        accessor: "created-at"
+      },
+      {
+        Header: messages['action']
+      }
+    ]
     return (
       <Col md={12} lg={12}>
         <Card>
           <CardBody className="master-data-list">
             <Search />
-            <div className="mb-2">
-              <Button 
-                color="success" 
-                onClick={this.toggleModal}
-                className="master-data-btn"
-                size="sm"
-              >{messages['status.add-new']}</Button>
-              <Action modalOpen={modalOpen} />
-              <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
-            </div>
-            <Table responsive bordered hover>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>{messages['name']}</th>                  
-                  <th>{messages['description']}</th>
-                  <th>{messages['status']}</th>
-                  <th>{messages['created-at']}</th>
-                  <th>{messages['action']}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {loading ? (
-                  <tr><td colSpan={6} className="text-center"><div className="loading-table" /></td></tr>
-                ) : (
-                    this.showStatusItem(items)
-                  )}
-              </tbody>
+            <Table
+              header={this.actionHeader()}
+              loading={loading}
+              columns={columns}
+              pages={{
+                pagination: this.state,
+                total: total,
+                onChangePage: this.onChangePage
+              }}
+              size={{
+                selectedPageSize: this.state.selectedPageSize,
+                changePageSize: this.onChangePageSize
+              }}
+            >
+              {this.showStatusItem(items)}
             </Table>
-            <Pagination pagination={this.state} total={total} onChangePage={this.onChangePage} />
           </CardBody>
         </Card>
       </Col>

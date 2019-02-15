@@ -13,6 +13,8 @@ import {
   loginUserSuccess
 } from './actions';
 
+import { getSetting } from '../system/setting/action';
+
 import createNotification from '../../util/notifications';
 
 function loginApi(user) {
@@ -41,6 +43,7 @@ function* login({ payload }) {
       };
       localStorage.setItem('authUser', JSON.stringify(authUser));
       yield put(loginUserSuccess(authUser));
+      yield put(getSetting(null, null));
       yield call(history.push, '/app/dashboards');
     } else {
       const error = data.message;

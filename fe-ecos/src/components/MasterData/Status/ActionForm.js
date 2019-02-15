@@ -11,6 +11,13 @@ import PropTypes from 'prop-types';
 
 class ActionForm extends Component {
 
+  constructor() {
+    super()
+
+    this.state = {
+      view: true
+    }
+  }
   componentDidMount() {
     const data = this.props.modalData;
     if (data) {
@@ -45,7 +52,7 @@ class ActionForm extends Component {
                 component={CustomField}
                 type="text"
                 placeholder={messages['name']}
-                messages={messages}
+                messages={messages}                
               />
             </div>
             <div className="form__form-group-field">
@@ -104,6 +111,7 @@ class ActionForm extends Component {
               />
             </div>
           </div>
+          <span><u>Update at: 2/2/2019 - Update by: Admin</u></span>
         </div>
         <ButtonToolbar className="modal__footer">
           <Button outline onClick={this.toggleModal}>{messages['cancel']}</Button>{' '}

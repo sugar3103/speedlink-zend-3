@@ -47,6 +47,7 @@ class BranchRepository extends EntityRepository
                 b.ward_id,
                 b.country_id,
                 h.name AS hub_name,
+                h.code AS hub_code,
                 d.name AS district,
                 c.name AS city,
                 w.name AS ward,
@@ -78,6 +79,10 @@ class BranchRepository extends EntityRepository
     public function buildBranchQueryBuilder($sortField = 'b.id', $sortDirection = 'asc', $filters)
     {
         $operatorsMap = [
+            'id' => [
+                'alias' => 'b.id',
+                'operator' => 'eq'
+            ],
             'code' => [
                 'alias' => 'b.code',
                 'operator' => 'contains'

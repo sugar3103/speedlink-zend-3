@@ -150,10 +150,12 @@ List.propTypes = {
   toggleCarrierModal: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({ carrier, modal }) => {
+const mapStateToProps = ({ carrier, modal,settings }) => {
+  const { locale } = settings;
   return {
     carrier,
-    modal
+    modal,
+    locale
   };
 };
 

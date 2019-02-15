@@ -65,8 +65,14 @@ Item.propTypes = {
   toggleCarrierModal: PropTypes.func.isRequired,
   deleteCarrierItem: PropTypes.func.isRequired
 };
+const mapStateToProps = ({ settings }) => {
+  const { locale } = settings;
+  return {
+    locale
+  }
+}
 
-export default injectIntl(connect(null, {
+export default injectIntl(connect(mapStateToProps, {
   toggleCarrierModal,
   deleteCarrierItem
 })(Item));

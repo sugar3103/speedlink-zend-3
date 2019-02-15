@@ -150,7 +150,7 @@ class BranchForm extends Form {
 
         $inputFilter->add([
             'name'  => 'status',
-            'required'  => true,
+            'required'  => false,
             'filters' => [
                 [
                     'name' => ToInt::class

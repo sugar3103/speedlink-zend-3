@@ -13,6 +13,8 @@ module.exports = {
     'please-select': '--- Please Select ---',
     'select-all': 'Select All',
     'unselect-all': 'Unselect All',
+    'show': 'Show',
+    'entries': 'Entries',
 
     'action': 'Action',
     'active': 'Enable',

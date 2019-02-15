@@ -8,7 +8,7 @@ const NetworkPort = ({ match }) => (
   <Fragment>
       <Switch>
           <Redirect exact from={`${match.url}/`} to={`${match.url}/branch`} />
-          <Route path={`${match.url}/branch`} component={Branch} />          
+          <Route path={`${match.url}/branch`} component={Branch} />     
           <Route path={`${match.url}/hub`} component={Hub} />          
           <Redirect to="/error" />
       </Switch>

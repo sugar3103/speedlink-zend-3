@@ -43,6 +43,7 @@ class SearchForm extends Component {
       }
     }
     this.props.getDistrictList(params);
+    this.props.getWardList(null);
   }
 
   onChangeDistrict = value => {
