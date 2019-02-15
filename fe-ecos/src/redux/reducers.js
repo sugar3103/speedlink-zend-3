@@ -6,7 +6,6 @@ import status from './master-data/status/reducer';
 import address from './master-data/address/reducers';
 import hub from './master-data/hub/reducer';
 import branch from './master-data/branch/reducer';
-import brancharea from './master-data/brancharea/reducer';
 import users from './system/users/reducers';
 import carrier from './master-data/service-shipment/carrier/reducer';
 import service from './master-data/service-shipment/service/reducer';
@@ -25,8 +24,7 @@ const reducers = combineReducers({
   service,
   shipment_type,
   hub,
-  branch,
-  brancharea
+  branch
 });
 
 export default reducers;

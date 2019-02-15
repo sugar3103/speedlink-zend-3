@@ -3,7 +3,6 @@ import authSagas from './auth/saga';
 import statusSagas from './master-data/status/saga';
 import hubSagas from './master-data/hub/saga';
 import branchSagas from './master-data/branch/saga';
-import branchareaSagas from './master-data/brancharea/saga';
 import codeSagas from './master-data/address/code/saga';
 import countrySagas from './master-data/address/country/saga';
 import citySagas from './master-data/address/city/saga';
@@ -23,7 +22,6 @@ export default function* rootSaga() {
     statusSagas(),
     hubSagas(),
     branchSagas(),
-    branchareaSagas(),
     codeSagas(),
     countrySagas(),
     citySagas(),
