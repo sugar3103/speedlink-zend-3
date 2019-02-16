@@ -4,9 +4,9 @@ namespace Customer\Controller;
 use Core\Controller\CoreController;
 use Doctrine\ORM\EntityManager;
 use Zend\Cache\Storage\StorageInterface;
-use Pricing\Entity\RangeWeight;
+use Customer\Entity\Customer;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-use Pricing\Form\RangeWeightForm;
+use Customer\Form\CustomerForm;
 
 class CustomerController extends CoreController {
     /**
@@ -16,22 +16,22 @@ class CustomerController extends CoreController {
     protected $entityManager;
 
     /**
-     * RangeWeight Manager.
-     * @var RangeWeightManager
+     * Customer Manager.
+     * @var CustomerManager
      */
-    protected $rangeweightManager;
+    protected $customertManager;
 
     /**
-     * RangeWeightController constructor.
+     * CustomerController constructor.
      * @param $entityManager
-     * @param $rangeweightManager
+     * @param $customertManager
      */
 
-    public function __construct($entityManager, $rangeweightManager) 
+    public function __construct($entityManager, $customertManager) 
     {
         parent::__construct($entityManager);
         $this->entityManager = $entityManager;
-        $this->rangeweightManager = $rangeweightManager;
+        $this->customertManager = $customertManager;
     }
 
     public function indexAction()
@@ -46,15 +46,15 @@ class CustomerController extends CoreController {
 
             list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);          
             //get list User by condition
-            $dataRangeWeight = $this->rangeweightManager->getListRangeWeightByCondition($start, $limit, $sortField, $sortDirection,$filters);            
+            $dataCustome = $this->customertManager->getListCustomerByCondition($start, $limit, $sortField, $sortDirection,$filters);            
             
-            $result = ($dataRangeWeight['listRangeWeight']) ? $dataRangeWeight['listRangeWeight'] : [] ;
+            $result = ($dataCustome['listCustomer']) ? $dataCustome['listCustomer'] : [] ;
             
             $this->error_code = 1;
             $this->apiResponse =  array(
                 'message'   => "Success",
                 'data'      => $result,
-                'total'     => $dataRangeWeight['totalRangeWeight']
+                'total'     => $dataCustome['totalCustomer']
             );                         
         } 
 

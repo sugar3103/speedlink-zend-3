@@ -1,8 +1,8 @@
 <?php
 namespace Customer\Factory;
 
-use Pricing\Controller\RangeWeightController;
-use Pricing\Service\RangeWeightManager;
+use Customer\Controller\CustomerController;
+use Customer\Service\CustomerManager;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\ServiceManager\ServiceManager;
@@ -18,9 +18,9 @@ class CustomerControllerFactory implements FactoryInterface {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
-        $rangeweightManager = $container->get(RangeWeightManager::class);
+        $customerManager = $container->get(CustomerManager::class);
 
         // instantiate the controller and inject dependencies.
-        return new CustomerController($entityManager,$rangeweightManager);
+        return new CustomerController($entityManager,$customerManager);
     }
 }

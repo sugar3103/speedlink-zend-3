@@ -19,19 +19,19 @@ class ZoneCodeController extends CoreController {
      * ZoneCode Manager.
      * @var ZoneCodeManager
      */
-    protected $zondecodeManager;
+    protected $zonecodeManager;
 
     /**
      * ZondeCodeController constructor.
      * @param $entityManager
-     * @param $zondecodeManager
+     * @param $zonecodeManager
      */
 
-    public function __construct($entityManager, $zondecodeManager) 
+    public function __construct($entityManager, $zonecodeManager) 
     {
         parent::__construct($entityManager);
         $this->entityManager = $entityManager;
-        $this->zondecodeManager = $zondecodeManager;
+        $this->zonecodeManager = $zonecodeManager;
     }
 
     public function indexAction()
@@ -59,7 +59,7 @@ class ZoneCodeController extends CoreController {
         ];
         list($start, $limit, $sortField, $sortDirection, $filters, $fields) = $this->getRequestData($fieldsMap);
 
-        $dataZoneCode = $this->zondecodeManager->getListZoneCodeByCondition(
+        $dataZoneCode = $this->zonecodeManager->getListZoneCodeByCondition(
             $start,
             $limit,
             $sortField,
@@ -79,28 +79,26 @@ class ZoneCodeController extends CoreController {
     }
 
     public function addAction()
-    {   
-        // check if zonecode  has submitted the form
-        if ($this->getRequest()->isPost()) {
-            $user = $this->tokenPayload;
-            //Create New Form zonecode
-            $form = new ZoneCodeForm('create', $this->entityManager);
-            $form->setData($this->getRequestData());            
-            //validate form
-            if ($form->isValid()) {
-                // get filtered and validated data
-                $data = $form->getData();
-                // add zonecode.
-                $this->zondecodeManager->addZoneCode($data,$user);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have added a ZoneCode!";
-            } else {
-                $this->error_code = 0;
-                $this->apiResponse['message'] = "Error";
-                $this->apiResponse['data'] = $form->getMessages(); 
-            }            
+    {  
+      if ($this->getRequest()->isPost()) {
+        $user = $this->tokenPayload;
+        $form = new ZoneCodeForm('create', $this->entityManager);
+        $form->setData($this->getRequestData());
+          //validate form
+        if ($form->isValid()) {
+          $data = $form->getData();
+          $data['created_by'] = $user->id;
+          // var_dump($data);die();
+          $result = $this->zonecodeManager->addZoneCode($data);                
+          // Check result
+          $this->error_code = 1;
+          $this->apiResponse['message'] = "Success: You have added a ZoneCode!";
+        } else {
+          $this->error_code = 0;
+          $this->apiResponse['message'] = $form->getMessages();
         }
-        return $this->createResponse();
+      }
+      return $this->createResponse();
     }
 
     public function editAction()

@@ -18,9 +18,9 @@ class ZoneCodeControllerFactory implements FactoryInterface {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
-        $ZoneCodeManager = $container->get(ZoneCodeManager::class);
+        $zoneCodeManager = $container->get(ZoneCodeManager::class);
 
         // instantiate the controller and inject dependencies.
-        return new ZoneCodeController($entityManager,$rangeweightManager);
+        return new ZoneCodeController($entityManager,$zoneCodeManager);
     }
 }

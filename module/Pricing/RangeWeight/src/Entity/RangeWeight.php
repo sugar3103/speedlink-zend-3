@@ -23,7 +23,7 @@ class RangeWeight
     /**
      * @var string
      *
-     * @ORM\Column(name="code", type="string", length=20, nullable=false)
+     * @ORM\Column(name="`code`", type="string", length=20, nullable=false)
      */
     private $code;
 
@@ -93,14 +93,14 @@ class RangeWeight
     /**
      * @var string
      *
-     * @ORM\Column(name="from", type="decimal", precision=10, scale=2, nullable=false)
+     * @ORM\Column(name="`from`", type="decimal", precision=10, scale=2, nullable=false)
      */
     private $from;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="to", type="decimal", precision=10, scale=2, nullable=false, options={"comment"="0 = Over"})
+     * @ORM\Column(name="`to`", type="decimal", precision=10, scale=2, nullable=false, options={"comment"="0 = Over"})
      */
     private $to;
 
@@ -189,6 +189,16 @@ class RangeWeight
      * })
      */
     private $shipmenttype;
+
+    /**
+     * @var \Customer\Entity\Customer
+     *
+     * @ORM\OneToOne(targetEntity="Customer\Entity\Customer")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id", unique=true, nullable=false)
+     * })
+     */
+    private $customer;
 
     /**
      * @return int
@@ -593,6 +603,29 @@ class RangeWeight
     public function getShipmentType()
     {
         return $this->shipmenttype;
+    }
+
+    /**
+     * Set customer.
+     *
+     * @param \Customer\Entity\Customer|null $customer
+     *
+     * @return RangeWeight
+     */
+    public function setCustomer(\Customer\Entity\Customer $customer = null)
+    {
+        $this->customer = $customer;
+        return $this;
+    }
+
+    /**
+     * Get customer.
+     *
+     * @return \Customer\Entity\Customer(|null
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
     }
 
 }

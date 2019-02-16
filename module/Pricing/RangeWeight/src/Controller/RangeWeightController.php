@@ -4,7 +4,7 @@ namespace RangeWeight\Controller;
 use Core\Controller\CoreController;
 use Doctrine\ORM\EntityManager;
 use Zend\Cache\Storage\StorageInterface;
-use Pricing\Entity\RangeWeight;
+use RangeWeight\Entity\RangeWeight;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use RangeWeight\Form\RangeWeightForm;
 
@@ -51,7 +51,8 @@ class RangeWeightController extends CoreController {
               9 => 'to',
               10 => 'calculate_unit',
               11 => 'round_up',
-              12 => 'created_at'
+              12 => 'created_at',
+              13 => 'customer'
             ];
 
             list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);          
@@ -71,6 +72,10 @@ class RangeWeightController extends CoreController {
         return $this->createResponse();
     }
 
+    /**
+    * Add RangeWeight Action
+    * @throws \Exception
+    */
     public function addAction()
   {  
     if ($this->getRequest()->isPost()) {
@@ -81,6 +86,7 @@ class RangeWeightController extends CoreController {
       if ($form->isValid()) {
         $data = $form->getData();
         $data['created_by'] = $user->id;
+        // var_dump($data);die();
         $result = $this->rangeweightManager->addRangeWeight($data);                
         // Check result
         $this->error_code = 1;

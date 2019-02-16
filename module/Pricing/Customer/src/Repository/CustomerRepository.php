@@ -2,14 +2,14 @@
 namespace Customer\Repository;
 
 use Core\Utils\Utils;
-use Pricing\Entity\RangeWeight;
+use Customer\Entity\Customer;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
 
 /**
  * This is the custom repository class for User entity.
- * @package Pricing\Repository
+ * @package Customer\Repository
  */
 class CustomerRepository extends EntityRepository
 {
@@ -21,41 +21,26 @@ class CustomerRepository extends EntityRepository
      * @param array $filters
      * @return array|QueryBuilder
      */
-    public function getListRangeWeightByCondition(
+    public function getListCustomerByCondition(
         $start = 1,
         $limit = 10,
-        $sortField = 'b.id',
+        $sortField = 'c.id',
         $sortDirection = 'asc',
         $filters = []
     )
     {
         try {
-            $queryBuilder = $this->buildRangeWeightQueryBuilder($sortField, $sortDirection, $filters);
+            $queryBuilder = $this->buildCustomerQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select("
-                r.id,
-                r.code,
-                r.category,
-                r.unit,
-                r.round_up,
-                r.is_private,
-                r.from,
-                r.to,
-                r.status,
-                r.description,
-                r.description_en,
-                r.created_at,
-                r.created_by,
-                r.updated_at,
-                r.updated_by,
-                r.carrier_id,
-                r.service_id,
-                r.shipment_type_id,
-                r.customer_id,
-                c.code AS carrier_code,
-                s.code AS service_code,
-                st.code AS shipmenttype_code
-            ")->andWhere("r.is_deleted = 0")
-            ->groupBy('r.id');
+                c.id,
+                c.name,
+                c.status,
+                c.created_at,
+                c.created_by,
+                c.updated_at,
+                c.updated_by
+            ")->andWhere("c.is_deleted = 0")
+            ->groupBy('c.id');
             
             if($limit) {
                 $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
@@ -76,55 +61,19 @@ class CustomerRepository extends EntityRepository
      * @return QueryBuilder
      * @throws QueryException
      */
-    public function buildRangeWeightQueryBuilder($sortField = 'r.id', $sortDirection = 'asc', $filters)
+    public function buildCustomerQueryBuilder($sortField = 'c.id', $sortDirection = 'asc', $filters)
     {
         $operatorsMap = [
             'id' => [
-                'alias' => 'r.id',
+                'alias' => 'c.id',
                 'operator' => 'eq'
             ],
-            'is_private' => [
-                'alias' => 'r.is_private',
-                'operator' => 'eq'
-            ],
-            'code' => [
-                'alias' => 'r.code',
+            'name' => [
+                'alias' => 'c.name',
                 'operator' => 'contains'
-            ],
-            'carrier_id' => [
-                'alias' => 'r.carrier_id',
-                'operator' => 'eq'
-            ],
-            'category' => [
-                'alias' => 'r.category',
-                'operator' => 'contains'
-            ],
-            'service_id' => [
-                'alias' => 'r.service_id',
-                'operator' => 'eq'
-            ],
-            'shipmenttype' => [
-                'alias' => 'r.shipment_type_id',
-                'operator' => 'eq'
             ],
             'status' => [
-                'alias' => 'r.status',
-                'operator' => 'eq'
-            ],
-            'from' => [
-                'alias' => 'r.from',
-                'operator' => 'eq'
-            ],
-            'to' => [
-                'alias' => 'r.to',
-                'operator' => 'eq'
-            ],
-            'calculate_unit' => [
-                'alias' => 'r.calculate_unit',
-                'operator' => 'eq'
-            ],
-            'round_up' => [
-                'alias' => 'r.round_up',
+                'alias' => 'c.status',
                 'operator' => 'eq'
             ],
             'created_at' => [
@@ -134,10 +83,8 @@ class CustomerRepository extends EntityRepository
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(RangeWeight::class, 'r')
-        ->leftJoin('r.carrier', 'c')
-        ->leftJoin('r.service', 's')
-        ->leftJoin('r.shipmenttype', 'st');
+        $queryBuilder->from(Customer::class, 'c')
+        ;
         // ->groupBy('b.id')
         // ->where('b.deletedAt is null')
         // ->andWhere('b.id <> 1')
@@ -145,7 +92,7 @@ class CustomerRepository extends EntityRepository
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
         } else {
-            $queryBuilder->orderBy('r.id', 'DESC');
+            $queryBuilder->orderBy('c.id', 'DESC');
         }
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }

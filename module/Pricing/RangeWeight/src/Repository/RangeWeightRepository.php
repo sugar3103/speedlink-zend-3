@@ -53,7 +53,8 @@ class RangeWeightRepository extends EntityRepository
                 r.customer_id,
                 c.code AS carrier_code,
                 s.code AS service_code,
-                st.code AS shipmenttype_code
+                st.code AS shipmenttype_code,
+                cu.name AS customer_name
             ")->andWhere("r.is_deleted = 0")
             ->groupBy('r.id');
             
@@ -107,6 +108,10 @@ class RangeWeightRepository extends EntityRepository
                 'alias' => 'r.shipment_type_id',
                 'operator' => 'eq'
             ],
+            'customer' => [
+                'alias' => 'r.customer_id',
+                'operator' => 'eq'
+            ],
             'status' => [
                 'alias' => 'r.status',
                 'operator' => 'eq'
@@ -137,7 +142,8 @@ class RangeWeightRepository extends EntityRepository
         $queryBuilder->from(RangeWeight::class, 'r')
         ->leftJoin('r.carrier', 'c')
         ->leftJoin('r.service', 's')
-        ->leftJoin('r.shipmenttype', 'st');
+        ->leftJoin('r.shipmenttype', 'st')
+        ->leftJoin('r.customer', 'cu');
         // ->groupBy('b.id')
         // ->where('b.deletedAt is null')
         // ->andWhere('b.id <> 1')

@@ -1,5 +1,5 @@
 <?php
-namespace RangeWeight;
+namespace ZoneCode;
 
 use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;

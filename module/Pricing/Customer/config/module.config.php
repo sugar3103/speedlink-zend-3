@@ -1,5 +1,5 @@
 <?php
-namespace Pricing;
+namespace Customer;
 
 use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
@@ -19,7 +19,7 @@ use Core\DBAL\Types\UTCDateTimeType;
 
 $router = [
     'routes' => [
-        'customer' => [
+        'customers' => [
             'type' => StaticRoute::class,
             'options' => [
                 'verb' => 'POST',

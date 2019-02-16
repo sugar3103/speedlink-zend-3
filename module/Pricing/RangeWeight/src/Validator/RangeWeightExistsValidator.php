@@ -12,7 +12,7 @@ class RangeWeightExistsValidator extends AbstractValidator {
      */
     protected $options = [
         'entityManager' => null,
-        'branch' => null,
+        'rangeweight' => null,
         'language' => null
     ];
 
@@ -20,14 +20,14 @@ class RangeWeightExistsValidator extends AbstractValidator {
      * Validation failure message IDs.
      */
     const NOT_SCALAR = 'notScalar';
-    const BRANCH_EXISTS = 'branchExists';
+    const RANGEWEIGHT_EXISTS = 'rangeweightExists';
 
     /**
      * Validation failure messages.
      */
     protected $messageTemplates = [
         self::NOT_SCALAR => 'The name must be a scalar value',
-        self::BRANCH_EXISTS => 'Another a name already exists'
+        self::RANGEWEIGHT_EXISTS => 'Another a name already exists'
     ];
 
     /**
@@ -40,15 +40,15 @@ class RangeWeightExistsValidator extends AbstractValidator {
         if (is_array($options) && isset($options['entityManager']))
             $this->options['entityManager'] = $options['entityManager'];
 
-        if (is_array($options) && isset($options['branch']))
-            $this->options['branch'] = $options['branch'];
+        if (is_array($options) && isset($options['rangeweight']))
+            $this->options['rangeweight'] = $options['rangeweight'];
 
         // call the parent class constructor
         parent::__construct($options);
     }
 
     /**
-     * Check if branch exists.
+     * Check if rangeweight exists.
      * @param mixed $value
      * @return bool
      */
@@ -60,32 +60,39 @@ class RangeWeightExistsValidator extends AbstractValidator {
         }
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
-        if($this->options['language'] === NULL) {
-            $branch = $entityManager->getRepository(Branch::class)->findOneByName($value);
-        } else if($this->options['language'] === 'en') {
-            $branch = $entityManager->getRepository(Branch::class)->findOneBy(array('name_en' => $value));       
-        }
+        // if($this->options['language'] === NULL) {
+        //     $rangeweight = $entityManager->getRepository(RangeWeight::class)->findOneByName($value);
+        // } else if($this->options['language'] === 'en') {
+        //     $rangeweight = $entityManager->getRepository(RangeWeight::class)->findOneBy(array('name_en' => $value));       
+        // }
+
+        $rangeweight = $entityManager->getRepository(RangeWeight::class)->findOneBy(array('code' => $value));  
 
         //English
-        if ($this->options['branch'] == null)
-            $isValid = ($branch == null);
+        if ($this->options['rangeweight'] == null)
+            $isValid = ($rangeweight == null);
         else {
-            if($this->options['language'] === 'en') {
-                if ($this->options['branch']->getNameEn() != $value && $branch != null)
+            if ($this->options['rangeweight']->getCode() != $value && $rangeweight != null)
                     $isValid = false;
                 else
                     $isValid = true;
-            } else {
-                if ($this->options['branch']->getName() != $value && $branch != null)
-                    $isValid = false;
-                else
-                    $isValid = true;
-            }
+
+            // if($this->options['language'] === 'en') {
+            //     if ($this->options['rangeweight']->getNameEn() != $value && $rangeweight != null)
+            //         $isValid = false;
+            //     else
+            //         $isValid = true;
+            // } else {
+            //     if ($this->options['rangeweight']->getName() != $value && $rangeweight != null)
+            //         $isValid = false;
+            //     else
+            //         $isValid = true;
+            // }
         }
 
         // if there were an error, set error message.
         if (!$isValid) {
-            $this->error(self::BRANCH_EXISTS);
+            $this->error(self::RANGEWEIGHT_EXISTS);
         }
           
         // return validation result

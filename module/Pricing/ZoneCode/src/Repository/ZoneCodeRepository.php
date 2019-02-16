@@ -48,6 +48,7 @@ class ZoneCodeRepository extends EntityRepository
                 z.carrier_id,
                 z.service_id,
                 z.shipment_type_id,
+                z.customer_id,
                 z.origin_country_id,
                 z.origin_city_id,
                 z.origin_district_id,
@@ -60,6 +61,7 @@ class ZoneCodeRepository extends EntityRepository
                 c.code AS carrier_code,
                 s.code AS service_code,
                 st.code AS shipmenttype_code,
+                cu.name AS customer_name,
                 oc.name AS origin_country_name,
                 dc.name AS destination_country_name,
                 oci.name AS origin_city_name,
@@ -120,6 +122,10 @@ class ZoneCodeRepository extends EntityRepository
                 'alias' => 'z.shipment_type_id',
                 'operator' => 'eq'
             ],
+            'customer' => [
+                'alias' => 'z.customer_id',
+                'operator' => 'eq'
+            ],
             'status' => [
                 'alias' => 'z.status',
                 'operator' => 'eq'
@@ -167,6 +173,7 @@ class ZoneCodeRepository extends EntityRepository
         ->leftJoin('z.carrier', 'c')
         ->leftJoin('z.service', 's')
         ->leftJoin('z.shipmenttype', 'st')
+        ->leftJoin('z.customer', 'cu')
         ->leftJoin('z.origin_country', 'oc')
         ->leftJoin('z.destination_country', 'dc')
         ->leftJoin('z.origin_city', 'oci')

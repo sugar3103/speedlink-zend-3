@@ -18,10 +18,10 @@ use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator;
 use Zend\Authentication\Result;
 use Core\Utils\Utils;
-use Address\Entity\Country;
-use Address\Entity\City;
-use Address\Entity\District;
-use Address\Entity\Ward;
+use ServiceShipment\Entity\Carrier;
+use ServiceShipment\Entity\Service;
+use ServiceShipment\Entity\ShipmentType;
+use Customer\Entity\Customer;
 /**
  * This service is responsible for adding/editing users
  * and changing user password.
@@ -52,7 +52,7 @@ class RangeWeightManager {
         $this->entityManager->beginTransaction();
         try {
         $rangeweight = new RangeWeight;
-        // var_dump($data); die;
+       
         $rangeweight->setCode($data['code']);
         $rangeweight->setCarrierId($data['carrier_id']);
         $rangeweight->setCategory($data['category']);
@@ -72,10 +72,9 @@ class RangeWeightManager {
         $rangeweight->setCreatedBy($data['created_by']);
         $rangeweight->setCreatedAt(date('Y-m-d H:i:s'));
         $this->getReferenced($rangeweight, $data);
-        
+        //  var_dump($data); die;
         $this->entityManager->persist($rangeweight);
-        $this->entityManager->flush();        
-        
+        $this->entityManager->flush();       
         // $last_id = $rangeweight->getBranchId();
         $this->entityManager->commit();
         return $rangeweight;
@@ -122,37 +121,32 @@ class RangeWeightManager {
         }
     }
 
-    private function getReferenced($branch,$data) {
+    private function getReferenced($rangeweight,$data) {
 
-        $country = $this->entityManager->getRepository(Country::class)->find($data['country_id']);
-        if ($country == null)
-            throw new \Exception('Not found Country by ID');
+        $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['carrier_id']);
+        if ($carrier == null)
+            throw new \Exception('Not found Carrier by ID');
 
-        $branch->setCountry($country);
+        $rangeweight->setCarrier($carrier);
 
-        $city = $this->entityManager->getRepository(City::class)->find($data['city_id']);
-        if ($city == null)
-            throw new \Exception('Not found City by ID');
+        $service = $this->entityManager->getRepository(Service::class)->find($data['service_id']);
+        if ($service == null)
+            throw new \Exception('Not found service by ID');
 
-        $branch->setCity($city);
+        $rangeweight->setService($service);
         
-        $district = $this->entityManager->getRepository(District::class)->find($data['district_id']);
-        if ($district == null)
-            throw new \Exception('Not found District by ID');
+        $shipmenttype = $this->entityManager->getRepository(ShipmentType::class)->find($data['shipmenttype_id']);
+        if ($shipmenttype == null)
+            throw new \Exception('Not found Shipmenttype by ID');
 
-        $branch->setDistrict($district);
+        $rangeweight->setShipmenttype($shipmenttype);
 
-        $ward = $this->entityManager->getRepository(Ward::class)->find($data['ward_id']);
-        if ($ward == null)
-            throw new \Exception('Not found Ward by ID');
+        $customer = $this->entityManager->getRepository(Customer::class)->find($data['customer_id']);
+        if ($customer == null)
+            throw new \Exception('Not found Customer by ID');
 
-        $branch->setWard($ward);
+        $rangeweight->setCustomer($customer);
 
-        $hub = $this->entityManager->getRepository(Hub::class)->find($data['hub_id']);
-        if ($hub == null)
-            throw new \Exception('Not found Hub by ID');
-
-        $branch->setHub($hub);
     }
 
     /**
@@ -203,7 +197,7 @@ class RangeWeightManager {
         return $dataRangeWeight;
     }
     
-    public function deleteRangeWeight($rangeweight) {
+    public function removeRangeWeight($rangeweight) {
         $this->entityManager->beginTransaction();
         try {      
             $this->entityManager->remove($rangeweight);
