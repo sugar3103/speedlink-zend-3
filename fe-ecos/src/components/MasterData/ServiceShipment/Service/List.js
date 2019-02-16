@@ -111,7 +111,7 @@ toggleModal = () => {
                 onClick={this.toggleModal}
                 className="master-data-btn"
                 size="sm"
-              >{messages['status.add-new']}</Button>
+              >{messages['service.add-new']}</Button>
               <Action modalOpen={modalOpen} />
               <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
             </div>
