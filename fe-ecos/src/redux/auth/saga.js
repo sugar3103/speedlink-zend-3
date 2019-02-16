@@ -4,14 +4,15 @@ import axios from 'axios';
 import history from '../../util/history';
 import {
   LOGIN_USER,
-  LOGOUT_USER
+  LOGOUT_USER,
+  VERITY_AUTH
 } from '../../constants/actionTypes';
+
+import { authHeader } from '../../util/auth-header';
 
 import { apiUrl, EC_SUCCESS } from '../../constants/defaultValues';
 
-import {
-  loginUserSuccess
-} from './actions';
+import { loginUserSuccess,getVerifyAuthSuccess,getVerifyAuth } from './actions';
 
 import { getSetting } from '../system/setting/action';
 
@@ -32,19 +33,16 @@ const loginAsync = async (user) => {
 }
 
 function* login({ payload }) {
-  const { user } = payload;
-  
+  const { user } = payload;  
   try {
     const data = yield call(loginAsync, user);
-    if (data.error_code === EC_SUCCESS) {
-      const authUser = {
-        user: data.user,
-        token: data.token
-      };
-      localStorage.setItem('authUser', JSON.stringify(authUser));
-      yield put(loginUserSuccess(authUser));
-      yield put(getSetting(null, null));
+    if (data.error_code === EC_SUCCESS) {      
+      localStorage.setItem('authUser', JSON.stringify(data.token));
+      yield call(loginUserSuccess,data.token);      
+      yield put(getSetting(null,null));
+      // yield put(getVerifyAuth());      
       yield call(history.push, '/app/dashboards');
+      
     } else {
       const error = data.message;
       createNotification({type: 'warning', message: error.toString()})
@@ -74,9 +72,44 @@ export function* watchLogoutUser() {
   yield takeEvery(LOGOUT_USER, logout);
 }
 
+
+//get Verify 
+function getVerify() {
+  return axios.request({
+    method: 'post',
+    headers: authHeader(),
+    url: `${apiUrl}user`    
+  });
+}
+
+const verifyAsync = async () => {
+  return await getVerify()
+    .then(res => res.data)
+    .catch(error => error);
+}
+
+function* verify () {
+  try {
+    const data = yield call(verifyAsync);
+    if (data.error_code === EC_SUCCESS) {
+      yield put(getVerifyAuthSuccess(data.data));                        
+    } else {
+      const error = data.message;
+      createNotification({type: 'warning', message: error.toString()})
+    }
+  } catch (error) {
+    console.log('login error : ', error)
+  }
+}
+
+export function* watchVerify() {
+  yield takeEvery(VERITY_AUTH, verify);
+}
+
 export default function* rootSaga() {
   yield all([
     fork(watchLoginUser),
     fork(watchLogoutUser),
+    fork(watchVerify)
   ]);
 }

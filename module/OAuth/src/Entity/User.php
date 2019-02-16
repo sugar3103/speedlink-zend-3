@@ -511,6 +511,21 @@ class User
         }
         return $roleList;
     }
+    /**
+     * Return roles list as ids.
+     *
+     * @return array
+     */
+    public function getRoleIds() {
+        $roleList = array();        
+        $count = count($this->roles);
+        
+        foreach ($this->roles as $role) {
+            $roleList[] = $role->getId();            
+        }
+
+        return $roleList;
+    }
 
     /**
      * Returns user status as string.

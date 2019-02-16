@@ -50,6 +50,8 @@ class AuthController extends CoreController {
         $userManager,      
         $cache
      ) {
+        parent::__construct($entityManager);
+        
         $this->entityManager = $entityManager;
         $this->authManager = $authManager;
         $this->userManager = $userManager;
@@ -59,7 +61,6 @@ class AuthController extends CoreController {
     public function indexAction()
     {
         $this->apiResponse['message'] = 'Action Auth';
-
         return $this->createResponse();
     }
 
@@ -110,26 +111,13 @@ class AuthController extends CoreController {
                     $_user = $this->entityManager->getRepository(User::class)->findOneByUsername($data['username']);
                     
                     $payload  = [
-                        'id'            => $_user->getId(),
-                        'username'      => $_user->getUsername(),
-                        'email'         => $_user->getEmail(),
-                        'isActive'      => $_user->getIsActive(),
-                        'isAdmin'       => $_user->getIsAdmin(),
+                        'id'            => $_user->getId(),                        
                         'createAt'      => date('Y-m-d H:i:s')
                     ];
                     
                     $token = $this->generateJwtToken($payload);
-                    $user_info = [
-                        'id'            => $_user->getId(),
-                        'username'      => $_user->getUsername(),
-                        'first_name'    => $_user->getFirstName(),
-                        'last_name'    => $_user->getLastName(),
-                        'email'         => $_user->getEmail()
-                    ];
 
                     $this->apiResponse['token'] = $token;
-                    $this->apiResponse['user'] = $user_info;
-
                     // begin transaction
                     $this->entityManager->beginTransaction();
                     try {

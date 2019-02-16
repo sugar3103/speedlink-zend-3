@@ -31,7 +31,7 @@ const InitialPath = ({ component: Component, authUser, ...rest }) =>
 
 class Router extends Component {
   render() {
-    const { location, match, user, locale } = this.props;
+    const { location, match, authUser, locale } = this.props;
     
     const currentAppLocale = AppLocale[locale];
     if (location.pathname === '/' || location.pathname === '/app' || location.pathname === '/app/') {
@@ -49,7 +49,7 @@ class Router extends Component {
               <Switch>
                 <InitialPath
                   path={`${match.url}app`}
-                  authUser={user}
+                  authUser={authUser}
                   component={MainRoute}
                 />
                 <Route path={`/login`} component={Login} />
@@ -64,10 +64,9 @@ class Router extends Component {
   }
 }
 
-const mapStateToProps = ({ settings, authUser }) => {
-  const { user } = authUser;
+const mapStateToProps = ({ settings, authUser }) => {  
   const { locale } = settings;
-  return { user, locale };
+  return { authUser, locale };
 };
 
 export default withRouter(connect(mapStateToProps, {})(Router));

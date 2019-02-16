@@ -86,26 +86,25 @@ class UserController extends CoreController {
 
     public function editAction() {
         if ($this->getRequest()->isPost()) {
-             $data = $this->getRequestData();
-             
-             $user = $this->tokenPayload;
-             $_user = $this->entityManager->getRepository(User::class)
-                ->findOneById($data['id']);
-            
-            if(isset($data['id']) && $_user) {
-                //Create New Form User
-                $form = new UserForm('update', $this->entityManager, $_user);
-                $form->setData($data);
-                if ($form->isValid()) {
-                   $data = $form->getData(); 
-                                     
-                   $this->userManager->updateUser($_user, $data,$user);
-                   $this->error_code = 1;
-                   $this->apiResponse['message'] = "Success: You have modified user!";
-                }  else {
-                   $this->error_code = 0;
-                   $this->apiResponse = $form->getMessages(); 
-                }   
+            $data = $this->getRequestData();             
+            $user = $this->tokenPayload;
+            $_user = $this->entityManager->getRepository(User::class)->findOneById($data['id']);
+            if(isset($data['id']) && $_user) {                
+                if($this->checkAllow($user,$data['id'])) {
+                    //Create New Form User
+                    $form = new UserForm('update', $this->entityManager, $_user);
+                    $form->setData($data);
+                    if ($form->isValid()) {
+                    $data = $form->getData(); 
+                                        
+                    $this->userManager->updateUser($_user, $data,$user);
+                    $this->error_code = 1;
+                    $this->apiResponse['message'] = "Success: You have modified user!";
+                    }  else {
+                    $this->error_code = 0;
+                    $this->apiResponse = $form->getMessages(); 
+                    }   
+                }
             }   else {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = 'User Not Found'; 
@@ -119,8 +118,7 @@ class UserController extends CoreController {
     public function deleteAction()
     {
         if ($this->getRequest()->isPost()) {
-              $data = $this->getRequestData();
- 
+              $data = $this->getRequestData(); 
               $user = $this->tokenPayload;
               $_user = $this->entityManager->getRepository(User::class)
                  ->findOneById($data['id']);
@@ -136,5 +134,35 @@ class UserController extends CoreController {
         }
 
         return $this->createResponse();
+    }
+
+    public function infoAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            $user = $this->tokenPayload;
+            $user = $this->entityManager->getRepository(User::class)
+                 ->findOneById($user->id);
+            $user_info = [
+                'id'            => $user->getId(),
+                'username'      => $user->getUsername(),
+                'first_name'    => $user->getFirstName(),
+                'last_name'     => $user->getLastName(),
+                'email'         => $user->getEmail(),
+                'roles'         => $user->getRoleIds(),
+                'is_active'     => $user->getIsActive()
+            ];
+            
+            $this->apiResponse['data'] = $user_info;            
+        }
+
+        return $this->createResponse();
+    }
+    private function checkAllow($user,$id)
+    {
+        if($user->id === $id) {
+            return true;
+        } else {
+            var_dump($user);die;
+        }
     }
 }

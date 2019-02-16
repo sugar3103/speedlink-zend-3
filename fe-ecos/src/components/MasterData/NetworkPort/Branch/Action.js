@@ -9,9 +9,7 @@ import PropTypes from 'prop-types';
 class Action extends Component {
 
   handleSubmit = values => {
-    const { messages } = this.props.intl;
-    console.log(values);
-    
+    const { messages } = this.props.intl;    
     if (values.id) {
       this.props.updateBranchItem(values, messages);
     } else {

@@ -36,7 +36,7 @@ function validateUser(errors) {
 function getListApi(params) {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}user`,
+    url: `${apiUrl}users`,
     headers: authHeader(),
     data: JSON.stringify(params)
   });

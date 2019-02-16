@@ -22,10 +22,12 @@ module.exports = {
   'user.fullname': 'Full Name',
   'user.firstname': 'First Name',
   'user.lastname': 'Last Name',
+  'user.email': 'Email',
   'user.status': 'Status',
   'user.created-at': 'Created At',
   'user.action': 'Action',
   'user.add-new': 'Add New User',
+  'user.update': 'Update User',
   'user.password': 'Password',
   'user.confirm_password': 'Confirm password',
   'user.update-success': 'You have modified user!',
@@ -34,12 +36,26 @@ module.exports = {
   'user.validate-username-minlength': 'Username must be 5 characters or more',
   'user.validate-username-maxlength': 'Username must be 60 characters or less',
   'user.validate-username-exists': 'Username already exists',
+ 
+  'user.validate-firstname-empty': 'Firstname shouldn’t be empty',
+  'user.validate-firstname-minlength': 'Firstname must be 5 characters or more',
+  'user.validate-firstname-maxlength': 'Firstname must be 60 characters or less',
+  
+  'user.validate-lastname-empty': 'Lastname shouldn’t be empty',
+  'user.validate-lastname-minlength': 'Lastname must be 5 characters or more',
+  'user.validate-lastname-maxlength': 'Lastname must be 60 characters or less',
+  
+ 
   'user.validate-password-empty': 'Password shouldn’t be empty',
   'user.validate-password-minlength': 'Password must be 5 characters or more',
   'user.validate-password-maxlength': 'Password must be 60 characters or less',
   'user.validate-confirm-password-empty': 'Confirm password shouldn’t be empty',
   'user.validate-confirm-password-mismatched': 'Password mismatched',
   'user.validate-roles-empty': 'Role shouldn’t be empty',
+  'user.validate-email-empty': 'Email shouldn’t be empty',
+  'user.validate-email-exists': 'Email already exists',
+  'user.validate-email-minlength': 'Email must be 5 characters or more',
+  'user.validate-email-maxlength': 'Email must be 60 characters or less',
 
   //Role
   'role.list': 'Roles',

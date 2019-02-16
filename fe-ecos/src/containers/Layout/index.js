@@ -7,7 +7,7 @@ import Topbar from './topbar/Topbar';
 import Sidebar from './sidebar/Sidebar';
 import Customizer from './customizer/Customizer';
 
-import { changeMobileSidebarVisibility, changeSidebarVisibility, changeThemeToDark, changeThemeToLight } from '../../redux/actions';
+import { changeMobileSidebarVisibility, changeSidebarVisibility, changeThemeToDark, changeThemeToLight,getVerifyAuth,getSetting } from '../../redux/actions';
 
 class Layout extends Component {
   static propTypes = {
@@ -16,6 +16,14 @@ class Layout extends Component {
       collapse: PropTypes.bool
     }).isRequired,
   };
+
+  componentDidMount() {
+    this.props.getSetting();
+    this.props.getVerifyAuth();
+  }
+  componentWillReceiveProps(nextProps) {
+
+  }
 
   changeSidebarVisibility = () => {
     this.props.changeSidebarVisibility();
@@ -62,12 +70,13 @@ class Layout extends Component {
   }
 }
 
-const mapStateToProps = ({settings,setting}) => {
+const mapStateToProps = ({settings,setting,authUser}) => {
   const { sidebar, theme } = settings;
   return {
     sidebar,
     theme,
-    setting
+    setting,
+    authUser
   }
 }
 
@@ -75,5 +84,7 @@ export default withRouter(connect(mapStateToProps, {
   changeSidebarVisibility,
   changeMobileSidebarVisibility,
   changeThemeToDark,
-  changeThemeToLight
+  changeThemeToLight,
+  getVerifyAuth,
+  getSetting
 })(Layout));

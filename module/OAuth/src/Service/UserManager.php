@@ -140,11 +140,12 @@ class UserManager {
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
-
+            
             $user->setUsername($data['username']);
             $user->setFirstName($data['first_name']);
             $user->setLastName($data['last_name']);
             $user->setIsActive($data['is_active']);
+            $user->setEmail($data['email']);
 
             // Assign roles to user.
             $this->assignRoles($user, $data['roles']);

@@ -34,6 +34,18 @@ $router = [
             ]
          
         ],
+        'users' => [
+            'type' => StaticRoute::class,
+            'options' => [
+                'route' => '/users',                
+                'defaults' => [
+                    'controller' => Controller\UserController::class,
+                    'action' => 'index',
+                    'isAuthorizationRequired' => true
+                ]
+            ]
+         
+        ],
         'user' => [
             'type' => StaticRoute::class,
             'options' => [
@@ -43,7 +55,7 @@ $router = [
                 ],                       
                 'defaults' => [
                     'controller' => Controller\UserController::class,
-                    'action' => 'index',
+                    'action' => 'info',
                     'isAuthorizationRequired' => true
                 ]
             ]
