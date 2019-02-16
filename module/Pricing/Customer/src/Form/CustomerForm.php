@@ -1,8 +1,8 @@
 <?php
 namespace Customer\Form;
 
-use Pricing\Entity\RangeWeight;
-use Pricing\Validator\RangeWeightExistsValidator;
+use Customer\Entity\RangeWeight;
+use Customer\Validator\RangeWeightExistsValidator;
 use Doctrine\ORM\EntityManager;
 use Zend\Filter\StringTrim;
 use Zend\Filter\ToInt;

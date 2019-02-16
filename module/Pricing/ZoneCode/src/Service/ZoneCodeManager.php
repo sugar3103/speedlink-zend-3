@@ -22,6 +22,11 @@ use Address\Entity\Country;
 use Address\Entity\City;
 use Address\Entity\District;
 use Address\Entity\Ward;
+use ServiceShipment\Entity\Carrier;
+use ServiceShipment\Entity\Service;
+use ServiceShipment\Entity\ShipmentType;
+use Customer\Entity\Customer;
+
 /**
  * This service is responsible for adding/editing users
  * and changing user password.
@@ -54,25 +59,30 @@ class ZoneCodeManager {
         $zonecode = new ZoneCode;
         // var_dump($data); die;
         $zonecode->setCode($data['code']);
-        $zonecode->setName($data['name']);
-        $zonecode->setNameEn($data['name_en']);
-        $zonecode->setHubId($data['hub_id']);
+        $zonecode->setCarrierId($data['carrier_id']);
+        $zonecode->setCategory($data['category']);
+        $zonecode->setServiceId($data['service_id']);
+        $zonecode->setShipmentTypeId($data['shipmenttype_id']);
+        $zonecode->setOriginCountryId($data['origin_country_id']);
+        $zonecode->setOriginCityId($data['origin_city_id']);
+        $zonecode->setOriginDistrictId($data['origin_district_id']);
+        $zonecode->setOriginWardId($data['origin_ward_id']);
+        $zonecode->setDestinationCountryId($data['destination_country_id']);
+        $zonecode->setDestinationCityId($data['destination_city_id']);
+        $zonecode->setDestinationDistrictId($data['destination_district_id']);
+        $zonecode->setDestinationWardId($data['destination_ward_id']);
+        $zonecode->setIsPrivate($data['is_private']);
+        $zonecode->setCustomerId($data['customer_id']); 
         $zonecode->setStatus($data['status']);
-       
-        $zonecode->setCountryId($data['country_id']);
-        $zonecode->setCityId($data['city_id']);
-        $zonecode->setDistrictId($data['district_id']);
-        $zonecode->setWardId($data['ward_id']);
         $zonecode->setDescription($data['description']);
         $zonecode->setDescriptionEn($data['description_en']);
-
+       
         $zonecode->setCreatedBy($data['created_by']);
         $zonecode->setCreatedAt(date('Y-m-d H:i:s'));
         $this->getReferenced($zonecode, $data);
         
         $this->entityManager->persist($zonecode);
         $this->entityManager->flush();        
-        
         // $last_id = $zonecode->getZoneCodeId();
         $this->entityManager->commit();
         return $zonecode;
@@ -88,15 +98,21 @@ class ZoneCodeManager {
         $this->entityManager->beginTransaction();
         try {
             $zonecode->setCode($data['code']);
-            $zonecode->setName($data['name']);
-            $zonecode->setNameEn($data['name_en']);
-            $zonecode->setHubId($data['hub_id']);
+            $zonecode->setCarrierId($data['carrier_id']);
+            $zonecode->setCategory($data['category']);
+            $zonecode->setServiceId($data['service_id']);
+            $zonecode->setShipmentTypeId($data['shipmenttype_id']);
+            $zonecode->setOriginCountryId($data['origin_country_id']);
+            $zonecode->setOriginCityId($data['origin_city_id']);
+            $zonecode->setOriginDistrictId($data['origin_city_id']);
+            $zonecode->setOriginWardId($data['origin_city_id']);
+            $zonecode->setDestinationCountryId($data['destination_country_id']);
+            $zonecode->setDestinationCityId($data['destination_country_id']);
+            $zonecode->setDestinationDistrictId($data['destination_country_id']);
+            $zonecode->setDestinationWardId($data['destination_country_id']);
+            $zonecode->setIsPrivate($data['is_private']);
+            $zonecode->setCustomerId($data['customer_id']); 
             $zonecode->setStatus($data['status']);
-           
-            $zonecode->setCountryId($data['country_id']);
-            $zonecode->setCityId($data['city_id']);
-            $zonecode->setDistrictId($data['district_id']);
-            $zonecode->setWardId($data['ward_id']);
             $zonecode->setDescription($data['description']);
             $zonecode->setDescriptionEn($data['description_en']);
 
@@ -116,37 +132,79 @@ class ZoneCodeManager {
         }
     }
 
-    private function getReferenced($branch,$data) {
+    private function getReferenced($zonecode,$data) {
 
-        $country = $this->entityManager->getRepository(Country::class)->find($data['country_id']);
-        if ($country == null)
-            throw new \Exception('Not found Country by ID');
+        $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['carrier_id']);
+        if ($carrier == null)
+            throw new \Exception('Not found Carrier by ID');
 
-        $branch->setCountry($country);
+        $zonecode->setCarrier($carrier);
 
-        $city = $this->entityManager->getRepository(City::class)->find($data['city_id']);
-        if ($city == null)
-            throw new \Exception('Not found City by ID');
+        $service = $this->entityManager->getRepository(Service::class)->find($data['service_id']);
+        if ($service == null)
+            throw new \Exception('Not found service by ID');
 
-        $branch->setCity($city);
+        $zonecode->setService($service);
         
-        $district = $this->entityManager->getRepository(District::class)->find($data['district_id']);
-        if ($district == null)
-            throw new \Exception('Not found District by ID');
+        $shipmenttype = $this->entityManager->getRepository(Shipmenttype::class)->find($data['shipmenttype_id']);
+        if ($shipmenttype == null)
+            throw new \Exception('Not found Shipmenttype by ID');
 
-        $branch->setDistrict($district);
+        $zonecode->setShipmenttype($shipmenttype);
 
-        $ward = $this->entityManager->getRepository(Ward::class)->find($data['ward_id']);
-        if ($ward == null)
-            throw new \Exception('Not found Ward by ID');
+        $customer = $this->entityManager->getRepository(Customer::class)->find($data['customer_id']);
+        if ($customer == null)
+            throw new \Exception('Not found Customer by ID');
 
-        $branch->setWard($ward);
+        $zonecode->setCustomer($customer);
+        
+        $origin_country = $this->entityManager->getRepository(Country::class)->find($data['origin_country_id']);
+        if ($origin_country == null)
+            throw new \Exception('Not found Origin Country by ID');
 
-        $hub = $this->entityManager->getRepository(Hub::class)->find($data['hub_id']);
-        if ($hub == null)
-            throw new \Exception('Not found Hub by ID');
+        $zonecode->setOriginCountry($origin_country);
 
-        $branch->setHub($hub);
+        $origin_city = $this->entityManager->getRepository(City::class)->find($data['origin_city_id']);
+        if ($origin_city == null)
+            throw new \Exception('Not found Origin City by ID');
+
+        $zonecode->setOriginCity($origin_city);
+        
+        $origin_district = $this->entityManager->getRepository(District::class)->find($data['origin_district_id']);
+        if ($origin_district == null)
+            throw new \Exception('Not found Origin District by ID');
+
+        $zonecode->setOriginDistrict($origin_district);
+
+        $origin_ward = $this->entityManager->getRepository(Ward::class)->find($data['origin_ward_id']);
+        if ($origin_ward == null)
+            throw new \Exception('Not found Origin Ward by ID');
+
+        $zonecode->setOriginWard($origin_ward);
+
+        $destination_country = $this->entityManager->getRepository(Country::class)->find($data['destination_country_id']);
+        if ($destination_country == null)
+            throw new \Exception('Not found Destination Country by ID');
+
+        $zonecode->setDestinationCountry($destination_country);
+
+        $destination_city = $this->entityManager->getRepository(City::class)->find($data['destination_city_id']);
+        if ($destination_city == null)
+            throw new \Exception('Not found Destination City by ID');
+
+        $zonecode->setDestinationCity($destination_city);
+        
+        $destination_district = $this->entityManager->getRepository(District::class)->find($data['destination_district_id']);
+        if ($destination_district == null)
+            throw new \Exception('Not found Destination District by ID');
+
+        $zonecode->setDestinationDistrict($destination_district);
+
+        $destination_ward = $this->entityManager->getRepository(Ward::class)->find($data['destination_ward_id']);
+        if ($destination_ward == null)
+            throw new \Exception('Not found Destination Ward by ID');
+
+        $zonecode->setDestinationWard($destination_ward);
     }
 
     /**
@@ -196,7 +254,7 @@ class ZoneCodeManager {
         return $dataZoneCode;
     }
     
-    public function deleteZoneCode($zonecode) {
+    public function removeZoneCode($zonecode) {
         $this->entityManager->beginTransaction();
         try {      
             $this->entityManager->remove($zonecode);

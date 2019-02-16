@@ -1,8 +1,8 @@
 <?php
 namespace ZoneCode\Form;
 
-use ZoneCode\Entity\RangeWeight;
-use ZoneCode\Validator\RangeWeightExistsValidator;
+use ZoneCode\Entity\ZoneCode;
+use ZoneCode\Validator\ZoneCodeExistsValidator;
 use Doctrine\ORM\EntityManager;
 use Zend\Filter\StringTrim;
 use Zend\Filter\ToInt;
@@ -19,7 +19,7 @@ use Zend\Validator\Identical;
 use Zend\Validator\InArray;
 use Zend\Validator\StringLength;
 
-class RangeWeightForm extends Form {
+class ZoneCodeForm extends Form {
     
     /**
      * Scenario ('create' or 'update')
@@ -34,20 +34,20 @@ class RangeWeightForm extends Form {
     private $entityManager = null;
 
     /**
-     * Current RangeWeight.
-     * @var RangeWeight
+     * Current ZoneCode.
+     * @var ZoneCode
      */
-    private $rangeweight = null;
+    private $zonecode = null;
 
-    public function __construct($scenario = 'create', $entityManager = null, $rangeweight = null)
+    public function __construct($scenario = 'create', $entityManager = null, $zonecode = null)
     {
         // Define form name.
-        parent::__construct('rangeweight-form');
+        parent::__construct('zonecode-form');
         
         // Save parameters for internal use.
         $this->scenario = $scenario;
         $this->entityManager = $entityManager;
-        $this->rangeweight = $rangeweight;
+        $this->zonecode = $zonecode;
 
         $this->addInputFilter();
     }
@@ -59,59 +59,6 @@ class RangeWeightForm extends Form {
         // Create main input filter.
         $inputFilter = $this->getInputFilter();
         // Add input for "username" field.
-        $inputFilter->add([
-            'name' => 'name',
-            'required' => true,
-            'filters' => [
-                [
-                    'name' => StringTrim::class
-                ]
-            ],
-            'validators' => [
-                [
-                    'name' => StringLength::class,
-                    'options' => [
-                        'min' => 4,
-                        'max' => 50
-                    ]
-                ],
-                [
-                    'name' => BranchExistsValidator::class,
-                    'options' => [
-                        'entityManager' => $this->entityManager,
-                        'branch' => $this->branch
-                    ]
-                ]
-            ]
-        ]);
-
-        $inputFilter->add([
-            'name' => 'name_en',
-            'required' => true,
-            'filters' => [
-                [
-                    'name' => StringTrim::class
-                ]
-            ],
-            'validators' => [
-                [
-                    'name' => StringLength::class,
-                    'options' => [
-                        'min' => 4,
-                        'max' => 50
-                    ]
-                ],
-                [
-                    'name' => BranchExistsValidator::class,
-                    'options' => [
-                        'entityManager' => $this->entityManager,
-                        'branch' => $this->branch,
-                        'language' => 'en'
-                    ]
-                ]
-            ]
-        ]);
-
         $inputFilter->add([
             'name' => 'code',
             'required' => true,
@@ -129,17 +76,65 @@ class RangeWeightForm extends Form {
                     ]
                 ],
                 [
-                    'name' => BranchExistsValidator::class,
+                    'name' => ZoneCodeExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'branch' => $this->branch
+                        'zonecode' => $this->zonecode
                     ]
                 ]
             ]
         ]);
-        
+
         $inputFilter->add([
-            'name' => 'hub_id',
+            'name' => 'category',
+            'required'  => true,
+            'filters' => [
+                [
+                  'name' => StringTrim::class
+                ]
+            ]           
+        ]);
+        $inputFilter->add([
+            'name' => 'carrier_id',
+            'required'  => true,
+            'filters' => [
+                [
+                  'name' => ToInt::class
+                ]
+            ]           
+        ]);
+        $inputFilter->add([
+            'name' => 'service_id',
+            'required'  => true,
+            'filters' => [
+                [
+                  'name' => ToInt::class
+                ]
+            ]           
+        ]);
+
+        $inputFilter->add([
+            'name' => 'shipmenttype_id',
+            'required'  => true,
+            'filters' => [
+                [
+                  'name' => ToInt::class
+                ]
+            ]           
+        ]);
+
+        $inputFilter->add([
+            'name' => 'is_private',
+            'required'  => true,
+            'filters' => [
+                [
+                  'name' => ToInt::class
+                ]
+            ]           
+        ]);
+
+        $inputFilter->add([
+            'name' => 'customer_id',
             'required'  => true,
             'filters' => [
                 [
@@ -175,43 +170,6 @@ class RangeWeightForm extends Form {
                 ]
             ] 
         ]);
-        $inputFilter->add([
-            'name' => 'city_id',
-            'required'  => true,
-            'filters' => [
-                [
-                    'name' => ToInt::class
-                ]
-            ]           
-        ]); 
-         $inputFilter->add([
-            'name' => 'country_id',
-            'required'  => true,
-            'filters' => [
-                [
-                    'name' => ToInt::class
-                ]
-            ]           
-        ]);
-        $inputFilter->add([
-            'name' => 'district_id',
-            'required'  => true,
-            'filters' => [
-                [
-                    'name' => ToInt::class
-                ]
-            ]           
-        ]);
-
-        $inputFilter->add([
-            'name' => 'ward_id',
-            'required'  => true,
-            'filters' => [
-                [
-                    'name' => ToInt::class
-                ]
-            ]           
-        ]);
 
         $inputFilter->add([
             'name'  => 'description',
@@ -232,6 +190,80 @@ class RangeWeightForm extends Form {
                 ]
             ]
         ]);
+        
+        $inputFilter->add([
+            'name' => 'origin_country_id',
+            'required'  => true,
+            'filters' => [
+                [
+                    'name' => ToInt::class
+                ]
+            ]           
+        ]); 
+        $inputFilter->add([
+            'name' => 'origin_city_id',
+            'required'  => true,
+            'filters' => [
+                [
+                    'name' => ToInt::class
+                ]
+            ]           
+        ]); 
+        $inputFilter->add([
+            'name' => 'origin_district_id',
+            'required'  => true,
+            'filters' => [
+                [
+                    'name' => ToInt::class
+                ]
+            ]           
+        ]); 
+        $inputFilter->add([
+            'name' => 'origin_ward_id',
+            'required'  => true,
+            'filters' => [
+                [
+                    'name' => ToInt::class
+                ]
+            ]           
+        ]);
+        
+        $inputFilter->add([
+            'name' => 'destination_country_id',
+            'required'  => true,
+            'filters' => [
+                [
+                    'name' => ToInt::class
+                ]
+            ]           
+        ]); 
+        $inputFilter->add([
+            'name' => 'destination_city_id',
+            'required'  => true,
+            'filters' => [
+                [
+                    'name' => ToInt::class
+                ]
+            ]           
+        ]); 
+        $inputFilter->add([
+            'name' => 'destination_district_id',
+            'required'  => true,
+            'filters' => [
+                [
+                    'name' => ToInt::class
+                ]
+            ]           
+        ]); 
+        $inputFilter->add([
+            'name' => 'destination_ward_id',
+            'required'  => true,
+            'filters' => [
+                [
+                    'name' => ToInt::class
+                ]
+            ]           
+        ]); 
         
     }
 }

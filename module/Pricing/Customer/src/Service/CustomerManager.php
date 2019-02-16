@@ -1,8 +1,7 @@
 <?php
 namespace Customer\Service;
 
-use Pricing\Entity\RangeWeight;
-use Pricing\Entity\ZoneCode;
+use Customer\Entity\Customer;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use Zend\Crypt\Password\Bcrypt;
@@ -25,7 +24,7 @@ use Address\Entity\Ward;
 /**
  * This service is responsible for adding/editing users
  * and changing user password.
- * @package Pricing\Service
+ * @package Customer\Service
  */
 class CustomerManager {
 
@@ -166,41 +165,41 @@ class CustomerManager {
      * @return array
      * @throws ORMException
      */
-    public function getListRangeWeightByCondition(
+    public function getListCustomerByCondition(
         $start,
         $limit,
         $sortField = '',
         $sortDirection = 'asc',
         $filters = []
     ){
-        $rangeweights     = [];
-        $totalRangeWeight = 0;
-        //get orm rangeweight
-        
-        $ormRangeWeight = $this->entityManager->getRepository(RangeWeight::class)
-            ->getListRangeWeightByCondition($start, $limit, $sortField, $sortDirection, $filters);
-        if($ormRangeWeight){
+        $customers     = [];
+        $totalCustomer = 0;
+        //get orm Customer
+        // var_dump('abcd'); die();
+        $ormCustomer = $this->entityManager->getRepository(Customer::class)
+            ->getListCustomerByCondition($start, $limit, $sortField, $sortDirection, $filters);
+        if($ormCustomer){
             //set offset,limit
-            $ormPaginator = new ORMPaginator($ormRangeWeight, true);
+            $ormPaginator = new ORMPaginator($ormCustomer, true);
             $ormPaginator->setUseOutputWalkers(false);
-            $totalRangeWeight = $ormPaginator->count();
+            $totalCustomer = $ormPaginator->count();
             //get user list
-            $rangeweights = $ormPaginator->getIterator()->getArrayCopy();
+            $customers = $ormPaginator->getIterator()->getArrayCopy();
             // $countRow = 1;
-             foreach ($rangeweights as &$rangeweight) {
+             foreach ($customers as &$customer) {
             //set status
-            //   $rangeweight['status'] = Branch::getIsActiveList($rangeweight['status']);
+            //   $customer['status'] = Branch::getIsActiveList($customer['status']);
             //set created_at
-                $rangeweight['created_at'] =  ($rangeweight['created_at']) ?Utils::checkDateFormat($rangeweight['created_at'],'d/m/Y') : '';
+                $customer['created_at'] =  ($customer['created_at']) ?Utils::checkDateFormat($customer['created_at'],'d/m/Y') : '';
             // $countRow++;
             }
         }
         //set data user
-        $dataRangeWeight = [
-            'listRangeWeight' => $rangeweights,
-            'totalRangeWeight' => $totalRangeWeight,
+        $dataCustomer = [
+            'listCustomer' => $customers,
+            'totalCustomer' => $totalCustomer,
         ];
-        return $dataRangeWeight;
+        return $dataCustomer;
     }
     
     public function deleteRangeWeight($rangeweight) {

@@ -1,7 +1,7 @@
 <?php
 namespace Customer\Validator;
 
-use Pricing\Entity\RangeWeight;
+
 use Zend\Validator\AbstractValidator;
 
 class CustomerExistsValidator extends AbstractValidator {

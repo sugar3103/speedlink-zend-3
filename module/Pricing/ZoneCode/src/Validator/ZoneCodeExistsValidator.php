@@ -1,10 +1,10 @@
 <?php
 namespace ZoneCode\Validator;
 
-use ZoneCode\Entity\Branch;
+use ZoneCode\Entity\ZoneCode;
 use Zend\Validator\AbstractValidator;
 
-class BranchExistsValidator extends AbstractValidator {
+class ZoneCodeExistsValidator extends AbstractValidator {
 
     /**
      * Available validator options.
@@ -12,7 +12,7 @@ class BranchExistsValidator extends AbstractValidator {
      */
     protected $options = [
         'entityManager' => null,
-        'branch' => null,
+        'zonecode' => null,
         'language' => null
     ];
 
@@ -20,14 +20,14 @@ class BranchExistsValidator extends AbstractValidator {
      * Validation failure message IDs.
      */
     const NOT_SCALAR = 'notScalar';
-    const BRANCH_EXISTS = 'branchExists';
+    const ZONECODE_EXISTS = 'zonecodeExists';
 
     /**
      * Validation failure messages.
      */
     protected $messageTemplates = [
         self::NOT_SCALAR => 'The name must be a scalar value',
-        self::BRANCH_EXISTS => 'Another a name already exists'
+        self::ZONECODE_EXISTS => 'Another a name already exists'
     ];
 
     /**
@@ -40,15 +40,15 @@ class BranchExistsValidator extends AbstractValidator {
         if (is_array($options) && isset($options['entityManager']))
             $this->options['entityManager'] = $options['entityManager'];
 
-        if (is_array($options) && isset($options['branch']))
-            $this->options['branch'] = $options['branch'];
+        if (is_array($options) && isset($options['zonecode']))
+            $this->options['zonecode'] = $options['zonecode'];
 
         // call the parent class constructor
         parent::__construct($options);
     }
 
     /**
-     * Check if branch exists.
+     * Check if zonecode exists.
      * @param mixed $value
      * @return bool
      */
@@ -60,32 +60,20 @@ class BranchExistsValidator extends AbstractValidator {
         }
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
-        if($this->options['language'] === NULL) {
-            $branch = $entityManager->getRepository(Branch::class)->findOneByName($value);
-        } else if($this->options['language'] === 'en') {
-            $branch = $entityManager->getRepository(Branch::class)->findOneBy(array('name_en' => $value));       
-        }
 
+        $zonecode = $entityManager->getRepository(ZoneCode::class)->findOneBy(array('code' => $value));  
         //English
-        if ($this->options['branch'] == null)
-            $isValid = ($branch == null);
+        if ($this->options['zonecode'] == null)
+            $isValid = ($zonecode == null);
         else {
-            if($this->options['language'] === 'en') {
-                if ($this->options['branch']->getNameEn() != $value && $branch != null)
+            if ($this->options['zonecode']->getCode() != $value && $zonecode != null)
                     $isValid = false;
                 else
                     $isValid = true;
-            } else {
-                if ($this->options['branch']->getName() != $value && $branch != null)
-                    $isValid = false;
-                else
-                    $isValid = true;
-            }
         }
-
         // if there were an error, set error message.
         if (!$isValid) {
-            $this->error(self::BRANCH_EXISTS);
+            $this->error(self::ZONECODE_EXISTS);
         }
           
         // return validation result

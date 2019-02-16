@@ -67,6 +67,19 @@ final class Version20190215021458 extends AbstractMigration
                 is_deleted              TINYINT(1) NOT NULL DEFAULT 0
             ) COLLATE = utf8_unicode_ci"
         );
+
+        $this->addSql("CREATE TABLE customer
+            (
+                id                      INT(11) AUTO_INCREMENT PRIMARY KEY,
+                name                  VARCHAR(20) NOT NULL,
+                status                TINYINT(1) NOT NULL DEFAULT 0,
+                created_by              INT(11) NOT NULL,
+                created_at              TIMESTAMP NOT NULL,
+                updated_by              INT(11) NULL,
+                updated_at              TIMESTAMP NULL,
+                is_deleted              TINYINT(1) NOT NULL DEFAULT 0
+            ) COLLATE = utf8_unicode_ci"
+        );
     }
 
     public function down(Schema $schema) : void
@@ -74,5 +87,6 @@ final class Version20190215021458 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('DROP TABLE zone_code');
         $this->addSql('DROP TABLE range_weight');
+        $this->addSql('DROP TABLE customer');
     }
 }

@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
  /**
  * ZoneCode
  *
- * @ORM\Table(name="range_weight", uniqueConstraints={@ORM\UniqueConstraint(name="unique_code", columns={"code"})})
+ * @ORM\Table(name="zone_code", uniqueConstraints={@ORM\UniqueConstraint(name="unique_code", columns={"code"})})
  * @ORM\Entity(repositoryClass="\ZoneCode\Repository\ZoneCodeRepository")
  */
 class ZoneCode
@@ -23,7 +23,7 @@ class ZoneCode
     /**
      * @var string
      *
-     * @ORM\Column(name="code", type="string", length=20, nullable=false)
+     * @ORM\Column(name="`code`", type="string", length=20, nullable=false)
      */
     private $code;
 
@@ -214,9 +214,9 @@ class ZoneCode
     /**
      * @var \Address\Entity\Country
      *
-     * @ORM\OneToOne(targetEntity="Address\Entity\Country")
+     * @ORM\OneToOne(targetEntity="\Address\Entity\Country")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="origin_country_id", referencedColumnName="id", unique=true, nullable=false)
+     *   @ORM\JoinColumn(name="origin_country_id", referencedColumnName="id", unique=true)
      * })
      */
     private $origin_country;
@@ -226,7 +226,7 @@ class ZoneCode
      *
      * @ORM\OneToOne(targetEntity="Address\Entity\Country")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="destination_country_id", referencedColumnName="id", unique=true, nullable=false)
+     *   @ORM\JoinColumn(name="destination_country_id", referencedColumnName="id", unique=true)
      * })
      */
     private $destination_country;
@@ -290,6 +290,16 @@ class ZoneCode
      * })
      */
     private $destination_ward;
+
+    /**
+     * @var \Customer\Entity\Customer
+     *
+     * @ORM\OneToOne(targetEntity="Customer\Entity\Customer")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id", unique=true, nullable=false)
+     * })
+     */
+    private $customer;
 
     /**
      * @return int
@@ -747,11 +757,11 @@ class ZoneCode
     /**
      * Set origin_country.
      *
-     * @param \NetworkPort\Entity\Country|null $origin_country
+     * @param \Address\Entity\Country|null $origin_country
      *
      * @return ZoneCode
      */
-    public function setOriginCountry(\NetworkPort\Entity\Country $origin_country = null)
+    public function setOriginCountry(\Address\Entity\Country $origin_country = null)
     {
         $this->origin_country = $origin_country;
         return $this;
@@ -760,7 +770,7 @@ class ZoneCode
     /**
      * Get origin_country.
      *
-     * @return \NetworkPort\Entity\Country(|null
+     * @return \Address\Entity\Country(|null
      */
     public function getOriginCountry()
     {
@@ -770,11 +780,11 @@ class ZoneCode
     /**
      * Set destination_country.
      *
-     * @param \NetworkPort\Entity\Country|null $destination_country
+     * @param \Address\Entity\Country|null $destination_country
      *
      * @return ZoneCode
      */
-    public function setDestinationCountry(\NetworkPort\Entity\Country $destination_country = null)
+    public function setDestinationCountry(\Address\Entity\Country $destination_country = null)
     {
         $this->destination_country = $destination_country;
         return $this;
@@ -783,7 +793,7 @@ class ZoneCode
     /**
      * Get destination_country.
      *
-     * @return \NetworkPort\Entity\Country(|null
+     * @return \Address\Entity\Country(|null
      */
     public function getDestinationCountry()
     {
@@ -793,11 +803,11 @@ class ZoneCode
      /**
      * Set origin_city.
      *
-     * @param \NetworkPort\Entity\City|null $origin_city
+     * @param \Address\Entity\City|null $origin_city
      *
      * @return ZoneCode
      */
-    public function setOriginCity(\NetworkPort\Entity\City $origin_city = null)
+    public function setOriginCity(\Address\Entity\City $origin_city = null)
     {
         $this->origin_city = $origin_city;
         return $this;
@@ -816,11 +826,11 @@ class ZoneCode
     /**
      * Set destination_city.
      *
-     * @param \NetworkPort\Entity\City|null $destination_country
+     * @param \Address\Entity\City|null $destination_country
      *
      * @return ZoneCode
      */
-    public function setDestinationCity(\NetworkPort\Entity\City $destination_city = null)
+    public function setDestinationCity(\Address\Entity\City $destination_city = null)
     {
         $this->destination_city = $destination_city;
         return $this;
@@ -829,7 +839,7 @@ class ZoneCode
     /**
      * Get destination_city.
      *
-     * @return \NetworkPort\Entity\City(|null
+     * @return \Address\Entity\City(|null
      */
     public function getDestinationCity()
     {
@@ -839,11 +849,11 @@ class ZoneCode
     /**
      * Set origin_district.
      *
-     * @param \NetworkPort\Entity\District|null $origin_district
+     * @param \Address\Entity\District|null $origin_district
      *
      * @return ZoneCode
      */
-    public function setOriginDistrict(\NetworkPort\Entity\District $origin_district = null)
+    public function setOriginDistrict(\Address\Entity\District $origin_district = null)
     {
         $this->origin_district = $origin_district;
         return $this;
@@ -852,7 +862,7 @@ class ZoneCode
     /**
      * Get origin_district.
      *
-     * @return \NetworkPort\Entity\District(|null
+     * @return \Address\Entity\District(|null
      */
     public function getOriginDistrict()
     {
@@ -862,11 +872,11 @@ class ZoneCode
     /**
      * Set destination_district.
      *
-     * @param \NetworkPort\Entity\District|null $destination_district
+     * @param \Address\Entity\District|null $destination_district
      *
      * @return ZoneCode
      */
-    public function setDestinationDistrict(\NetworkPort\Entity\District $destination_district = null)
+    public function setDestinationDistrict(\Address\Entity\District $destination_district = null)
     {
         $this->destination_district = $destination_district;
         return $this;
@@ -875,7 +885,7 @@ class ZoneCode
     /**
      * Get destination_district.
      *
-     * @return \NetworkPort\Entity\District(|null
+     * @return \Address\Entity\District(|null
      */
     public function getDestinationDistrict()
     {
@@ -885,11 +895,11 @@ class ZoneCode
      /**
      * Set origin_ward.
      *
-     * @param \NetworkPort\Entity\Ward|null $origin_ward
+     * @param \Address\Entity\Ward|null $origin_ward
      *
      * @return ZoneCode
      */
-    public function setOriginWard(\NetworkPort\Entity\Ward $origin_ward = null)
+    public function setOriginWard(\Address\Entity\Ward $origin_ward = null)
     {
         $this->origin_ward = $origin_ward;
         return $this;
@@ -898,7 +908,7 @@ class ZoneCode
     /**
      * Get origin_ward.
      *
-     * @return \NetworkPort\Entity\Ward(|null
+     * @return \Address\Entity\Ward(|null
      */
     public function getOriginWard()
     {
@@ -908,11 +918,11 @@ class ZoneCode
     /**
      * Set destination_ward.
      *
-     * @param \NetworkPort\Entity\Ward|null $destination_ward
+     * @param \Address\Entity\Ward|null $destination_ward
      *
      * @return ZoneCode
      */
-    public function setDestinationWard(\NetworkPort\Entity\Ward $destination_ward = null)
+    public function setDestinationWard(\Address\Entity\Ward $destination_ward = null)
     {
         $this->destination_ward = $destination_ward;
         return $this;
@@ -921,11 +931,34 @@ class ZoneCode
     /**
      * Get destination_ward.
      *
-     * @return \NetworkPort\Entity\Ward(|null
+     * @return \Address\Entity\Ward(|null
      */
     public function getDestinationWard()
     {
         return $this->destination_ward;
+    }
+
+    /**
+     * Set customer.
+     *
+     * @param \Customer\Entity\Customer|null $customer
+     *
+     * @return ZoneCode
+     */
+    public function setCustomer(\Customer\Entity\Customer $customer = null)
+    {
+        $this->customer = $customer;
+        return $this;
+    }
+
+    /**
+     * Get customer.
+     *
+     * @return \Customer\Entity\Customer(|null
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
     }
 
 }
