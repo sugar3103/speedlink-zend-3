@@ -114,7 +114,7 @@ class ZoneCodeForm extends Form {
         ]);
 
         $inputFilter->add([
-            'name' => 'shipmenttype_id',
+            'name' => 'shipment_type_id',
             'required'  => true,
             'filters' => [
                 [

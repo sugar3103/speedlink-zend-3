@@ -39,4 +39,8 @@ module.exports = {
     'notification.success': 'Success',
     'notification.warning': 'Warning',
     'notification.error': 'Error',
+
+    'inbound': 'Inbound',
+    'outbound': 'Outbound',
+    'domestic': 'Domestic'
 }

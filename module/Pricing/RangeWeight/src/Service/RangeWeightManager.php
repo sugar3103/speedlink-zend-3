@@ -57,7 +57,7 @@ class RangeWeightManager {
         $rangeweight->setCarrierId($data['carrier_id']);
         $rangeweight->setCategory($data['category']);
         $rangeweight->setServiceId($data['service_id']);
-        $rangeweight->setShipmentTypeId($data['shipmenttype_id']);
+        $rangeweight->setShipmentTypeId($data['shipment_type_id']);
         $rangeweight->setCalculateUnit($data['calculate_unit']);
         $rangeweight->setUnit($data['unit']);
         $rangeweight->setRoundUp($data['round_up']);
@@ -93,7 +93,7 @@ class RangeWeightManager {
             $rangeweight->setCarrierId($data['carrier_id']);
             $rangeweight->setCategory($data['category']);
             $rangeweight->setServiceId($data['service_id']);
-            $rangeweight->setShipmentTypeId($data['shipmenttype_id']);
+            $rangeweight->setShipmentTypeId($data['shipment_type_id']);
             $rangeweight->setCalculateUnit($data['calculate_unit']);
             $rangeweight->setUnit($data['unit']);
             $rangeweight->setRoundUp($data['round_up']);
@@ -135,7 +135,7 @@ class RangeWeightManager {
 
         $rangeweight->setService($service);
         
-        $shipmenttype = $this->entityManager->getRepository(ShipmentType::class)->find($data['shipmenttype_id']);
+        $shipmenttype = $this->entityManager->getRepository(ShipmentType::class)->find($data['shipment_type_id']);
         if ($shipmenttype == null)
             throw new \Exception('Not found Shipmenttype by ID');
 

@@ -35,6 +35,7 @@ class RangeWeightRepository extends EntityRepository
                 r.id,
                 r.code,
                 r.category,
+                r.calculate_unit,
                 r.unit,
                 r.round_up,
                 r.is_private,

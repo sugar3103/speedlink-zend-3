@@ -114,7 +114,7 @@ class ZoneCode
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_private", type="boolean", nullable=false)
+     * @ORM\Column(name="is_private", type="integer", nullable=false)
      */
     private $is_private;
 
@@ -128,7 +128,7 @@ class ZoneCode
     /**
      * @var bool
      *
-     * @ORM\Column(name="status", type="boolean", nullable=false)
+     * @ORM\Column(name="status", type="integer", nullable=false)
      */
     private $status = '0';
 

@@ -92,7 +92,6 @@ function* addHubItem({ payload }) {
   const { item, messages } = payload;
   try {
     const response = yield call(addHubItemRequest, item);
-    console.log(response);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(addHubItemSuccess());
