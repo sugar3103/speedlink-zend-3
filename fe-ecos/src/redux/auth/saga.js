@@ -12,7 +12,7 @@ import { authHeader } from '../../util/auth-header';
 
 import { apiUrl, EC_SUCCESS } from '../../constants/defaultValues';
 
-import { loginUserSuccess,getVerifyAuthSuccess,getVerifyAuth } from './actions';
+import { loginUserSuccess,getVerifyAuthSuccess } from './actions';
 
 import { getSetting } from '../system/setting/action';
 

@@ -17,12 +17,9 @@ class Layout extends Component {
     }).isRequired,
   };
 
-  componentDidMount() {
+  componentWillMount() {
     this.props.getSetting();
     this.props.getVerifyAuth();
-  }
-  componentWillReceiveProps(nextProps) {
-
   }
 
   changeSidebarVisibility = () => {

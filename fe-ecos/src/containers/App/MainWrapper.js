@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { ThemeProps } from '../Shared/prop-types/ReducerProps';
-import { getSetting,getVerifyAuth } from '../../redux/actions';
 
 class MainWrapper extends PureComponent {
   static propTypes = {
@@ -36,10 +35,6 @@ class MainWrapper extends PureComponent {
     }
   }
 
-  handleSubmit = values => {
-  }
-  
-  
   render() {
     const { theme } = this.props;
     this.addClassBody(theme.className)    

@@ -59,11 +59,11 @@ class Action extends PureComponent {
   }
 
   hiddenFiled = (field) => {
-    const { fields } = this.props;   
-    
-    if(fields !== undefined) {
-      return fields.indexOf(field) > -1 ? false : true;      
-    } else {      
+    const { fields } = this.props;
+
+    if (fields !== undefined) {
+      return fields.indexOf(field) > -1 ? false : true;
+    } else {
       return false;
     }
 
@@ -71,7 +71,7 @@ class Action extends PureComponent {
 
   render() {
     const { messages } = this.props.intl;
-    const { handleSubmit,modalData,dataUser,cancel } = this.props;
+    const { handleSubmit, modalData, dataUser } = this.props;
     const { items } = this.props.role;
     const title = (modalData || dataUser) ? messages['user.update'] : messages['user.add-new'];
     return (

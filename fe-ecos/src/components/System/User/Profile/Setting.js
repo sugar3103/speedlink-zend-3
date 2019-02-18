@@ -49,6 +49,12 @@ class Setting extends PureComponent {
     }
   }
 
+  componentDidMount() {
+    this.props.getRoleList();
+    const { user } = this.props;
+    this.props.initialize(user);
+  }
+  
   render() {
     const { messages } = this.props.intl;
     const { handleSubmit } = this.props;

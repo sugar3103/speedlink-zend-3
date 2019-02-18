@@ -34,6 +34,7 @@ class Tabs extends PureComponent {
     this.props.updateUserItem(values, messages);
   }
   render() {
+    const { user } = this.props.authUser;
     return (
       <Col md={12} lg={12} xl={12}>
         <Card>
@@ -68,7 +69,9 @@ class Tabs extends PureComponent {
                 </TabPane>
 
                 <TabPane tabId="2">
-                  <Setting onSubmit={this.handleSubmit} user={this.props.authUser.user} />
+                  {user &&
+                    <Setting onSubmit={this.handleSubmit} user={user} />
+                  }
                 </TabPane>
               </TabContent>
             </div>
