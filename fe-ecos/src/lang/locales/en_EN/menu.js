@@ -24,4 +24,7 @@ module.exports = {
   'menu.user.list': 'User',
   'menu.user.role': 'Roles',
   'menu.user.permission': 'Permissions',
+  'menu.pricing': 'Pricing',
+  'menu.rangeweight' : 'RangeWeight',
+  'menu.zonecode' : 'ZoneCode'
 }

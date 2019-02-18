@@ -62,7 +62,7 @@ class ZoneCodeManager {
         $zonecode->setCarrierId($data['carrier_id']);
         $zonecode->setCategory($data['category']);
         $zonecode->setServiceId($data['service_id']);
-        $zonecode->setShipmentTypeId($data['shipmenttype_id']);
+        $zonecode->setShipmentTypeId($data['shipment_type_id']);
         $zonecode->setOriginCountryId($data['origin_country_id']);
         $zonecode->setOriginCityId($data['origin_city_id']);
         $zonecode->setOriginDistrictId($data['origin_district_id']);
@@ -101,7 +101,7 @@ class ZoneCodeManager {
             $zonecode->setCarrierId($data['carrier_id']);
             $zonecode->setCategory($data['category']);
             $zonecode->setServiceId($data['service_id']);
-            $zonecode->setShipmentTypeId($data['shipmenttype_id']);
+            $zonecode->setShipmentTypeId($data['shipment_type_id']);
             $zonecode->setOriginCountryId($data['origin_country_id']);
             $zonecode->setOriginCityId($data['origin_city_id']);
             $zonecode->setOriginDistrictId($data['origin_city_id']);
@@ -146,7 +146,7 @@ class ZoneCodeManager {
 
         $zonecode->setService($service);
         
-        $shipmenttype = $this->entityManager->getRepository(Shipmenttype::class)->find($data['shipmenttype_id']);
+        $shipmenttype = $this->entityManager->getRepository(Shipmenttype::class)->find($data['shipment_type_id']);
         if ($shipmenttype == null)
             throw new \Exception('Not found Shipmenttype by ID');
 

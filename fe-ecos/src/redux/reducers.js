@@ -7,6 +7,9 @@ import address from './master-data/address/reducers';
 import hub from './master-data/hub/reducer';
 import branch from './master-data/branch/reducer';
 import users from './system/users/reducers';
+import rangeweight from './master-data/pricing/rangeweight/reducer';
+import zonecode from './master-data/pricing/zonecode/reducer';
+import customer from './master-data/pricing/customer/reducer';
 import carrier from './master-data/service-shipment/carrier/reducer';
 import service from './master-data/service-shipment/service/reducer';
 import shipment_type from './master-data/service-shipment/shipmnet-type/reducer';
@@ -24,7 +27,10 @@ const reducers = combineReducers({
   service,
   shipment_type,
   hub,
-  branch
+  branch,
+  rangeweight,
+  zonecode,
+  customer
 });
 
 export default reducers;

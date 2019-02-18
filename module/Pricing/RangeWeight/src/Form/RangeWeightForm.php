@@ -85,8 +85,7 @@ class RangeWeightForm extends Form {
                 ]
             ]
         ]);
-
-      
+ 
         $inputFilter->add([
             'name' => 'category',
             'required'  => true,
@@ -116,7 +115,7 @@ class RangeWeightForm extends Form {
         ]);
 
         $inputFilter->add([
-            'name' => 'shipmenttype_id',
+            'name' => 'shipment_type_id',
             'required'  => true,
             'filters' => [
                 [
@@ -124,7 +123,6 @@ class RangeWeightForm extends Form {
                 ]
             ]           
         ]);
-
         
         $inputFilter->add([
             'name' => 'calculate_unit',
