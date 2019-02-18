@@ -13,7 +13,6 @@ use Zend\Log\Formatter\Simple;
 use Zend\Log\Logger;
 use Zend\Log\LoggerAbstractServiceFactory;
 use Core\Route\StaticRoute;
-
 use Core\DBAL\Types\UTCDateTimeType;
 
 $router = [
