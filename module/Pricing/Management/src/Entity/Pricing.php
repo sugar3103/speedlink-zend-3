@@ -5,12 +5,12 @@
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ZoneCode
+ * Pricing
  *
- * @ORM\Table(name="zone_code")
+ * @ORM\Table(name="pricing")
  * @ORM\Entity
  */
-class ZoneCode
+class Pricing
 {
     /**
      * @var int
@@ -24,9 +24,9 @@ class ZoneCode
     /**
      * @var string
      *
-     * @ORM\Column(name="code", type="string", length=20, nullable=false)
+     * @ORM\Column(name="name", type="string", length=50, nullable=false)
      */
-    private $code;
+    private $name;
 
     /**
      * @var int
@@ -113,6 +113,27 @@ class ZoneCode
     private $destinationWardId;
 
     /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="effected_date", type="datetime", nullable=true)
+     */
+    private $effectedDate;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="expired_date", type="datetime", nullable=true)
+     */
+    private $expiredDate;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="saleman_id", type="integer", nullable=true, options={"comment"="user_id"})
+     */
+    private $salemanId;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="is_private", type="boolean", nullable=false)
@@ -132,6 +153,20 @@ class ZoneCode
      * @ORM\Column(name="status", type="boolean", nullable=false)
      */
     private $status = '0';
+
+    /**
+     * @var bool|null
+     *
+     * @ORM\Column(name="approval_status", type="boolean", nullable=true, options={"comment"="0 == new, 1 == approved"})
+     */
+    private $approvalStatus;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="approval_by", type="integer", nullable=true, options={"comment"="user_id"})
+     */
+    private $approvalBy;
 
     /**
      * @var string|null
