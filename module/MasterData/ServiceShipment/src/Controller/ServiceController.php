@@ -35,13 +35,6 @@ class ServiceController extends CoreController
 
     public function indexAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            // TODO: Check error_code
-            $this->httpStatusCode = 405;
-            $this->apiResponse['message'] = 'Request not allow';
-            return $this->createResponse();
-        }
-
         $result = [
             "total" => 0,
             "data" => []
@@ -62,13 +55,6 @@ class ServiceController extends CoreController
 
     public function codeAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            // TODO: Check error_code
-            $this->httpStatusCode = 405;
-            $this->apiResponse['message'] = 'Request not allow';
-            return $this->createResponse();
-        }
-
         $result = array("data" => []);
         $dataService = $this->serviceManager->getListServiceCodeByCondition();
 
@@ -82,13 +68,6 @@ class ServiceController extends CoreController
 
     public function addAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            // TODO: Check error_code
-            $this->httpStatusCode = 405;
-            $this->apiResponse['message'] = 'Request not allow';
-            return $this->createResponse();
-        }
-
         $user = $this->tokenPayload;
         $data = $this->getRequestData();
         if (empty($data)) {
@@ -121,13 +100,6 @@ class ServiceController extends CoreController
 
     public function editAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            // TODO: Check error_code
-            $this->httpStatusCode = 405;
-            $this->apiResponse['message'] = 'Request not allow';
-            return $this->createResponse();
-        }
-
         $user = $this->tokenPayload;
         $data = $this->getRequestData();
         if (empty($data)) {
@@ -161,13 +133,6 @@ class ServiceController extends CoreController
 
     public function deleteAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            // TODO: Check error_code
-            $this->httpStatusCode = 405;
-            $this->apiResponse['message'] = 'Request not allow';
-            return $this->createResponse();
-        }
-
         $user = $this->tokenPayload;
         $data = $this->getRequestData();
         if (empty($data)) {
