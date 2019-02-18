@@ -9,6 +9,8 @@ import renderCheckBoxField from '../../containers/Shared/form/CheckBox';
 import { injectIntl } from 'react-intl';
 import validate from './validateLoginForm';
 import CustomField from '../../containers/Shared/form/CustomField';
+import { connect } from 'react-redux';
+import LoadingIcon from 'mdi-react/LoadingIcon';
 
 class LogInForm extends PureComponent {
   static propTypes = {
@@ -32,7 +34,7 @@ class LogInForm extends PureComponent {
   }
 
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, loading } = this.props;
     const { messages } = this.props.intl;
     return (
       <form className="form" onSubmit={handleSubmit}>
@@ -84,7 +86,7 @@ class LogInForm extends PureComponent {
           </div>
         </div>
         <div className="account__btns">
-          <Button color="success" outline className="account__btn" type="submit">{messages['login.login']}</Button>
+          <Button color="success" outline className={`account__btn expand ${loading && 'expand--load'}`} type="submit">{loading && <LoadingIcon />}{messages['login.login']}</Button>
           {/* <Link className="btn btn-outline-primary account__btn" to="/register">{messages['login.register']}</Link> */}
         </div>
       </form>
@@ -92,7 +94,14 @@ class LogInForm extends PureComponent {
   }
 }
 
+const mapStateToProps = ({authUser}) => {
+  const { loading } = authUser;
+  return {
+    loading
+  }
+}
+
 export default reduxForm({
   form: 'log_in_form',
   validate
-})(injectIntl(LogInForm));
+})(injectIntl(connect(mapStateToProps, null)(LogInForm)));
