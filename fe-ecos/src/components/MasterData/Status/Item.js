@@ -35,7 +35,8 @@ class Item extends Component {
     })
   }
   checkItem = () => {
-    alert("Check Item")
+    document.getElementById("tableList").querySelector('thead input.checkbox-btn__checkbox').checked = false;             
+    
   }
   render() {
     const { status } = this.props;
@@ -45,7 +46,7 @@ class Item extends Component {
       <tr>
         <td>
           <label className="checkbox-btn">
-            <input className="checkbox-btn__checkbox" type="checkbox" />
+            <input className="checkbox-btn__checkbox" type="checkbox" onChange={this.checkItem}/>
             <span className="checkbox-btn__checkbox-custom">
               <CheckIcon />
             </span>

@@ -68,7 +68,7 @@ class Tabs extends PureComponent {
                 </TabPane>
 
                 <TabPane tabId="2">
-                  <Setting onSubmit={this.handleSubmit} />
+                  <Setting onSubmit={this.handleSubmit} user={this.props.authUser.user} />
                 </TabPane>
               </TabContent>
             </div>
@@ -78,7 +78,10 @@ class Tabs extends PureComponent {
     )
   }
 }
+const mapStateToProps = ({ authUser}) => {
+  return { authUser}
+}
 
-export default injectIntl(connect(null, {
+export default injectIntl(connect(mapStateToProps, {
   updateUserItem
 })(Tabs));

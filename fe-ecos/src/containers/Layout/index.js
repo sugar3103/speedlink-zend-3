@@ -59,7 +59,7 @@ class Layout extends Component {
         />
         <Topbar
           changeMobileSidebarVisibility={this.changeMobileSidebarVisibility}
-          changeSidebarVisibility={this.changeSidebarVisibility}
+          changeSidebarVisibility={this.changeSidebarVisibility}         
         />
         <Sidebar
           sidebar={this.props.sidebar}

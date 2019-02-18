@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import CheckIcon from 'mdi-react/CheckIcon';
 
 class TableHead extends Component {
+    
     render() {
-        const { columns } = this.props;
+        const { columns,toggleSelect } = this.props;
         return (
             <thead>
                 <tr>
@@ -12,6 +13,7 @@ class TableHead extends Component {
                             <input
                                 className="checkbox-btn__checkbox"
                                 type="checkbox"
+                                onChange={toggleSelect}                                       
                             />
                             <span className="checkbox-btn__checkbox-custom">
                                 <CheckIcon />

@@ -10,7 +10,7 @@ import EyeIcon from 'mdi-react/EyeIcon';
 import EmailIcon from 'mdi-react/EmailIcon';
 import CustomField from '../../../../containers/Shared/form/CustomField';
 import renderMultiSelectField from '../../../../containers/Shared/form/MultiSelect';
-import { getRoleList,getVerifyAuth } from '../../../../redux/actions';
+import { getRoleList } from '../../../../redux/actions';
 
 class Setting extends PureComponent {
 
@@ -38,16 +38,6 @@ class Setting extends PureComponent {
       showPassword: !this.state.showPassword,
     });
   };
-
-  componentDidMount() {
-    const { authUser } = this.props;
-    console.log(this.props);
-    
-    this.props.getRoleList();
-
-    this.props.initialize(authUser.user);
-    
-  }
 
   hiddenFiled = (field) => {
     const { fields } = this.props;
@@ -197,13 +187,13 @@ class Setting extends PureComponent {
   }
 }
 
-const mapStateToProps = ({ authUser, users }) => {
+const mapStateToProps = ({ users, authUser }) => {
   const { role } = users
-  return { authUser, role }
+  return { role, authUser }
 }
 
 
 export default reduxForm({
   form: 'user_setting_action_form',
   validate
-})(injectIntl(connect(mapStateToProps, { getRoleList,getVerifyAuth })(Setting)));
+})(injectIntl(connect(mapStateToProps, { getRoleList })(Setting)));

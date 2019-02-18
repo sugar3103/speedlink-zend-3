@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import DownIcon from 'mdi-react/ChevronDownIcon';
 import { Collapse } from 'reactstrap';
 import TopbarMenuLink from './TopbarMenuLink';
-import { logoutUser, getVerifyAuth } from '../../../redux/actions';
+import { logoutUser} from '../../../redux/actions';
 import PropTypes from 'prop-types';
 
 const Ava = `${process.env.PUBLIC_URL}/img/ava.png`;
@@ -26,12 +26,14 @@ class TopbarProfile extends PureComponent {
   }
 
   render() {
-    const {user } = this.props.authUser;
+    const { user } = this.props.authUser;
+    let currentUser = user ? user : {};
+
     return (
       <div className="topbar__profile">
         <button className="topbar__avatar" onClick={this.toggle}>
           {/* <img className="topbar__avatar-img" src={Ava} alt="avatar" /> */}
-          <p className="topbar__avatar-name">{(user.first_name || user.last_name) ? user.first_name +' '+ user.last_name : user.username }</p>
+          <p className="topbar__avatar-name">{(currentUser.first_name || currentUser.last_name) ? currentUser.first_name +' '+ currentUser.last_name : currentUser.username }</p>
           <DownIcon className="topbar__icon" />
         </button>
         {this.state.collapse && <button className="topbar__back" onClick={this.toggle} />}
@@ -62,7 +64,7 @@ TopbarProfile.propTypes = {
 const mapStateToProps = ({ authUser }) => {
   return {
     authUser
-  }
+  } 
 }
 export default connect(mapStateToProps, {
   logoutUser

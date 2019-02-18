@@ -25,6 +25,8 @@ class LogInForm extends PureComponent {
 
   showPassword = e => {
     e.preventDefault();
+    console.log(e);
+    
     this.setState({
       showPassword: !this.state.showPassword,
     });
@@ -69,7 +71,7 @@ class LogInForm extends PureComponent {
             ><EyeIcon />
             </button>
           </div>
-          <div className="account__forgot-password">
+          <div className="account__forgot-password" hidden>
             <a href="/">{messages['login.forgot-password']}</a>
           </div>
         </div>
@@ -84,7 +86,7 @@ class LogInForm extends PureComponent {
         </div>
         <div className="account__btns">
           <Button color="success" outline className="account__btn" type="submit">{messages['login.login']}</Button>
-          <Link className="btn btn-outline-primary account__btn" to="/register">{messages['login.register']}</Link>
+          {/* <Link className="btn btn-outline-primary account__btn" to="/register">{messages['login.register']}</Link> */}
         </div>
       </form>
     );

@@ -27,6 +27,20 @@ class RenderTable extends PureComponent {
         data: [],
     };
 
+    constructor() {
+        super()
+        this.toggleSelectAll = this.toggleSelectAll.bind(this);
+    }
+
+    toggleSelectAll(e) {
+        let nodeListInput = document.getElementById("tableList").querySelectorAll('tbody input.checkbox-btn__checkbox');        
+
+        for (var i = 0; i < nodeListInput.length; i++) {
+            nodeListInput[i].checked = e.target.checked;            
+        }   
+     
+    }
+
     render() {
         const { header, columns, pages, size, children, loading } = this.props;
 
@@ -36,9 +50,10 @@ class RenderTable extends PureComponent {
                     {header}
                     <ItemPerPage selectedPageSize={size.selectedPageSize} changePageSize={size.changePageSize} />
                 </div>
-                <TableReact responsive bordered hover id="tableList">
-                    <TableHead 
-                        columns={columns} 
+                <TableReact responsive bordered hover size="sm" id="tableList">
+                    <TableHead
+                        columns={columns}
+                        toggleSelect={this.toggleSelectAll}                        
                     />
                     <tbody>
                         {loading ? (

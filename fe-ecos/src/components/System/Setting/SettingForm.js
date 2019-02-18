@@ -41,7 +41,10 @@ class SettingForm extends Component {
     }
 
     componentDidMount() {
-        this.props.initialize(this.props.settings)
+        
+        if(Object.keys(this.props.settings).length > 0) {
+            this.props.initialize(this.props.settings)
+        }
     }
    
     toggle = (tab) => {
