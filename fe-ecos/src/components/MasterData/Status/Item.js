@@ -43,9 +43,9 @@ class Item extends Component {
 
     return (
       <tr>
-        <td scope="row">
+        <td>
           <label className="checkbox-btn">
-            <input className="checkbox-btn__checkbox" type="checkbox" onChange={e => this.checkItem()} />
+            <input className="checkbox-btn__checkbox" type="checkbox" />
             <span className="checkbox-btn__checkbox-custom">
               <CheckIcon />
             </span>

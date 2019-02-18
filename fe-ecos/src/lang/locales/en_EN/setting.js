@@ -44,5 +44,6 @@ module.exports = {
     'uploads': 'Uploads',
     'file_max_size': 'Max File Size',
     'file_mime_allowed': 'Allowed File Mime Types',
-    'file_ext_allowed': 'Allowed File Extensions'
+    'file_ext_allowed': 'Allowed File Extensions',
+    'setting.update-success': 'Update setting success'
 }

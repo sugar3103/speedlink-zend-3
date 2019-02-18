@@ -10,7 +10,7 @@ const MasterData = ({ match }) => (
   <Fragment>
       <Switch>
           <Redirect exact from={`${match.url}/`} to={`${match.url}/status`} />
-          <Route path={`${match.url}/status`} component={Status} />
+          <Route exact path={`${match.url}/status`} component={Status} />
           <Route path={`${match.url}/address`} component={Address} />
           <Route path={`${match.url}/service-shipment`} component={ServiceShipment} />
           <Route path={`${match.url}/networkport`} component={Networkport} />
