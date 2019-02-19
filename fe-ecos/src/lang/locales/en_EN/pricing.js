@@ -1,7 +1,8 @@
 module.exports = {
 
     //master-data --- RangeWeight
-    'rangeweight.list-title': 'RangeWeight',
+    'rangeweight.list-title': 'Range Weight',
+    'rangeweight.filtertype': 'Filter Type',
     'rangeweight.add-new': 'Add New RangeWeight',
     'rangeweight.add': 'Add New RangeWeight',
     'rangeweight.update': 'Update RangeWeight',
@@ -28,16 +29,29 @@ module.exports = {
    
     'rangeweight.validate-code-empty': 'Name shouldn’t be empty',
     'rangeweight.validate-code-minlength': 'Name must be 5 characters or more',
-    'rangeweight.validate-nacodeme-maxlength': 'Name must be 20 characters or less',
+    'rangeweight.validate-code-maxlength': 'Name must be 20 characters or less',
     'rangeweight.validate-code-exists': 'Name already exists',
+    'rangeweight.validate-private-empty': 'Type shouldn’t be empty',
+    'rangeweight.validate-carrier-empty': 'Carrier shouldn’t be empty',
+    'rangeweight.validate-customer-empty': 'Customer shouldn’t be empty',
+    'rangeweight.validate-category-empty': 'Category shouldn’t be empty',
+    'rangeweight.validate-status-empty': 'Status shouldn’t be empty',
+    'rangeweight.validate-service-empty': 'Service shouldn’t be empty',
+    'rangeweight.validate-shipment_type-empty': 'Shipment Type shouldn’t be empty',
+    'rangeweight.validate-from-empty' : 'From Type shouldn’t be empty',
+    'rangeweight.validate-to-empty' : 'To Type shouldn’t be empty',
+    'rangeweight.validate-calculate_unit-empty' : 'Calculate Unit Type shouldn’t be empty',
+    'rangeweight.validate-unit-empty' : 'Unit Type shouldn’t be empty',
+    'rangeweight.validate-round_up-empty' : 'Round Up Type shouldn’t be empty',
 
     //master-data --- ZoneCode
-    'zonecode.list-title': 'ZoneCode',
+    'zonecode.filtertype': 'Filter Type',
+    'zonecode.list-title': 'Zone Code',
     'zonecode.add-new': 'Add New ZoneCode',
     'zonecode.add': 'Add New ZoneCode',
     'zonecode.update': 'Update ZoneCode',
-    'zonecode.type': 'ZoneCode Type',
-    'zonecode.code': 'ZoneCode Name',
+    'zonecode.type': 'Zone Type',
+    'zonecode.code': 'Zone Code',
     'zonecode.carrier': 'Carrier',
     'zonecode.category': 'Category',
     'zonecode.service': 'Service',
@@ -67,7 +81,14 @@ module.exports = {
    
     'zonecode.validate-code-empty': 'Name shouldn’t be empty',
     'zonecode.validate-code-minlength': 'Name must be 5 characters or more',
-    'zonecode.validate-nacodeme-maxlength': 'Name must be 20 characters or less',
+    'zonecode.validate-code-maxlength': 'Name must be 20 characters or less',
     'zonecode.validate-code-exists': 'Name already exists',
+    'zonecode.validate-private-empty': 'Type shouldn’t be empty',
+    'zonecode.validate-carrier-empty': 'Carrier shouldn’t be empty',
+    'zonecode.validate-customer-empty': 'Customer shouldn’t be empty',
+    'zonecode.validate-category-empty': 'Category shouldn’t be empty',
+    'zonecode.validate-status-empty': 'Status shouldn’t be empty',
+    'zonecode.validate-service-empty': 'Service shouldn’t be empty',
+    'zonecode.validate-shipment_type-empty': 'Shipment Type shouldn’t be empty',
 
   }

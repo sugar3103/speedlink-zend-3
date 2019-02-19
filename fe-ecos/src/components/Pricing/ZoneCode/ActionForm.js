@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, ButtonToolbar, Card, CardBody, Col, Row } from 'reactstrap';
+import { Button, ButtonToolbar, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { toggleZoneCodeModal, getCarrierCodeList, getServiceCodeList, getShipmentTypeCodeList, getCustomerList, getCityList, getDistrictList, getWardList, getCountryList  } from '../../../redux/actions';
@@ -10,6 +10,25 @@ import validate from './validateActionForm';
 import PropTypes from 'prop-types';
 
 class ActionForm extends Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      disabled: false
+    }
+  }
+  hanldeChangeType = value => {
+    if (value === 1) {
+      this.setState({
+        disabled: true
+      });
+    } else {
+      this.setState({
+        disabled: false
+      })
+    }
+  }
+
   componentDidMount() {
     const data = this.props.modalData;
     if (data) {
@@ -18,6 +37,55 @@ class ActionForm extends Component {
       this.props.getServiceCodeList();
       this.props.getShipmentTypeCodeList();
       this.props.getCustomerList();
+    }
+    if (data && data.origin_country_id) {
+      let paramsCountry = {
+        offset: {
+          limit: 0
+        },
+        query: {
+          id: data.origin_country_id
+        }
+      }
+      this.props.getCountryList(paramsCountry);
+    }
+    if (data && data.origin_city_id) {
+      let paramsCity = {
+        field: ['id', 'name'],
+        offset: {
+          limit: 0
+        },
+        query: {
+          country: data.origin_country_id
+        }
+      }
+      this.props.getCityList(paramsCity);
+    }
+
+    if (data && data.origin_district_id) {
+      let paramsDistrict = {
+        field: ['id', 'name'],
+        offset: {
+          limit: 0
+        },
+        query: {
+          city: data.origin_city_id
+        }
+      }
+      this.props.getDistrictList(paramsDistrict);
+    }
+
+    if (data && data.origin_ward_id) {
+      let paramsWard = {
+        field: ['id', 'name'],
+        offset: {
+          limit: 0
+        },
+        query: {
+          district: data.origin_district_id
+        }
+      }
+      this.props.getWardList(paramsWard);
     }
   }
 
@@ -162,285 +230,270 @@ class ActionForm extends Component {
         <div className="modal__body">
         <Row>
           <Col md={6} lg={3} xl={3} xs={6}>
-            <Card>
-              <CardBody>
-                <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['zonecode.type'] }</span>
-                    <span className="text-danger">{'*'}</span>
-                    <div className="form__form-group-field">
-                      <Field name="is_private" component={renderSelectField} type="text" options={[
-                        { value: 0, label: messages['zonecode.public'] },
-                        { value: 1, label: messages['zonecode.customer'] }
-                        ]}
-                      />
-                    </div>
+            <div className="form__form-group">
+                <span className="form__form-group-label">{messages['zonecode.type'] }</span>
+                <span className="text-danger">{'*'}</span>
+                <div className="form__form-group-field">
+                  <Field name="is_private" component={renderSelectField} type="text" options={[
+                    { value: 1, label: messages['zonecode.public'] },
+                    { value: 2, label: messages['zonecode.customer'] }
+                    ]} 
+                    messages={messages}
+                    onChange={this.hanldeChangeType}
+                  />
                 </div>
-                
-                <div className="form__form-group">
-                  <span className="form__form-group-label">{messages['zonecode.carrier']}</span>
-                  <span className="text-danger">{'*'}</span>
-                  <div className="form__form-group-field">
-                    <Field
-                      name="carrier_id"
-                      component={renderSelectField}
-                      type="text"
-                      options={carrierCode && this.showOptionsCarrier(carrierCode)}
-                      placeholder={messages['zonecode.carrier']}
-                      messages={messages}
-                    />
-                  </div>
-                </div>
-
-                <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['zonecode.country_origin']}</span>
-                    <div className="form__form-group-field">
-                      <Field
-                        name="origin_country_id"
-                        component={renderSelectField}
-                        type="text"
-                        options={countries && this.showOptionsCountry(countries)}
-                        placeholder={messages['zonecode.country_origin']}
-                        onChange={this.onChangeCountry}
-                        messages={messages}
-
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['zonecode.country_destination']}</span>
-                    <div className="form__form-group-field">
-                      <Field
-                        name="destination_country_id"
-                        component={renderSelectField}
-                        type="text"
-                        options={countries && this.showOptionsCountry(countries)}
-                        placeholder={messages['zonecode.country_destination']}
-                        onChange={this.onChangeCountry}
-                        messages={messages}
-
-                      />
-                    </div>
-                  </div>
-
-                <div className="form__form-group">
-                  <span className="form__form-group-label">{messages['zonecode.customer']}</span>
-                  <span className="text-danger">{'*'}</span>
-                  <div className="form__form-group-field">
-                    <Field
-                      name="customer_id"
-                      component={renderSelectField}
-                      type="text"
-                      options={customerCode && this.showOptionsCustomer(customerCode)}
-                      placeholder={messages['zonecode.customer']}
-                      messages={messages}
-                    />
-                  </div>
-                </div>
-                </CardBody>
-              </Card>
-            </Col>
-            <Col md={6} lg={3} xl={3} xs={6}>
-              <Card>
-                <CardBody>
-                <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['zonecode.code']}</span>
-                    <span className="text-danger">{'*'}</span>
-                    <div className="form__form-group-field">
-                      <Field
-                        name="code"
-                        component={CustomField}
-                        type="text"
-                        placeholder={messages['zonecode.code']}
-                        messages={messages}
-                      />
-                    </div>
-                </div>
-
-                <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['zonecode.category']}</span>
-                    <span className="text-danger">{'*'}</span>
-                    <div className="form__form-group-field">
-                       <Field name="category" component={renderSelectField} type="text" options={[
-                          { value: 'Inbound', label: messages['inbound'] },
-                          { value: 'Outbound', label: messages['outbound'] },
-                          { value: 'Domestic', label: messages['domestic'] }
-                          ]}
-                        />
-                    </div>
-                </div>
-                
-                <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['zonecode.city_origin']}</span>
-                    <div className="form__form-group-field">
-                      <Field
-                        name="origin_city_id"
-                        component={renderSelectField}
-                        type="text"
-                        options={cities && this.showOptionsCity(cities)}
-                        placeholder={messages['zonecode.city_origin']}
-                        onChange={this.onChangeCity}
-                        onInputChange={this.onInputChangeCity}
-                        messages={messages}
-                      />
-                    </div>
-                  </div>
-                
-                <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['zonecode.city_destination']}</span>
-                    <div className="form__form-group-field">
-                      <Field
-                        name="destination_city_id"
-                        component={renderSelectField}
-                        type="text"
-                        options={cities && this.showOptionsCity(cities)}
-                        placeholder={messages['zonecode.city_destination']}
-                        onChange={this.onChangeCity}
-                        onInputChange={this.onInputChangeCity}
-                        messages={messages}
-                      />
-                    </div>
-                </div>
-
-                  <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['status']}</span>
-                    <div className="form__form-group-field">
-                    <Field name="status" component={renderSelectField} type="text" options={[
-                        { value: 1, label: messages['active'] },
-                        { value: 0, label: messages['inactive'] }
-                        ]}
-                      />
-                    </div>
-                  </div>
-                </CardBody>
-              </Card>
-            </Col>
-
+            </div>
+          </Col>
           <Col md={6} lg={3} xl={3} xs={6}>
-              <Card>
-                <CardBody>
-                  <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['zonecode.service']}</span>
-                    <span className="text-danger">{'*'}</span>
-                    <div className="form__form-group-field">
-                      <Field
-                        name="service_id"
-                        component={renderSelectField}
-                        type="text"
-                        options={serviceCode && this.showOptionsService(serviceCode)}
-                        placeholder={messages['zonecode.service']}
-                        messages={messages}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['zonecode.district_origin']}</span>
-                    <div className="form__form-group-field">
-                      <Field
-                        name="origin_district_id"
-                        component={renderSelectField}
-                        type="text"
-                        options={districts && this.showOptionsDistrict(districts)}
-                        placeholder={messages['zonecode.district_origin']}
-                        onChange={this.onChangeDistrict}
-                        onInputChange={this.onInputChangeDistrict}
-                        messages={messages}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['zonecode.district_destination']}</span>
-                    <div className="form__form-group-field">
-                      <Field
-                        name="destination_district_id"
-                        component={renderSelectField}
-                        type="text"
-                        options={districts && this.showOptionsDistrict(districts)}
-                        placeholder={messages['zonecode.district_destination']}
-                        onChange={this.onChangeDistrict}
-                        onInputChange={this.onInputChangeDistrict}
-                        messages={messages}
-                      />
-                    </div>
-                  </div>
-
-                    
-                  <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['zonecode.desc']}</span>
-                    <div className="form__form-group-field">
-                      <div className="form__form-group-icon">
-                        <div className="flag vn"></div>
-                      </div>
-                      <Field name="description" component="textarea" type="text" placeholder={messages['zonecode.desc']} />
-                    </div>
-                  </div>
-                </CardBody>
-              </Card>
-            </Col>
-          
-            <Col md={6} lg={3} xl={3} xs={6}>
-              <Card>
-                <CardBody>
-                  <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['zonecode.shipmenttype']}</span>
-                    <span className="text-danger">{'*'}</span>
-                    <div className="form__form-group-field">
-                      <Field
-                        name="shipment_type_id"
-                        component={renderSelectField}
-                        type="text"
-                        options={shipment_typeCode && this.showOptionsShipmenttype(shipment_typeCode)}
-                        placeholder={messages['zonecode.shipmenttype']}
-                        messages={messages}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['zonecode.ward_origin']}</span>
-                    <div className="form__form-group-field">
-                      <Field
-                        name="origin_ward_id"
-                        component={renderSelectField}
-                        type="text"
-                        options={wards && this.showOptionsWard(wards)}
-                        placeholder={messages['zonecode.ward_origin']}
-                        onChange={this.onChangeWard}
-                        messages={messages}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['zonecode.ward_destination']}</span>
-                    <div className="form__form-group-field">
-                      <Field
-                        name="destination_ward_id"
-                        component={renderSelectField}
-                        type="text"
-                        options={wards && this.showOptionsWard(wards)}
-                        placeholder={messages['zonecode.ward_destination']}
-                        onChange={this.onChangeWard}
-                        messages={messages}
-                      />
-                    </div>
-                  </div>
-                
-                  <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['zonecode.desc']}</span>
-                  
-                    <div className="form__form-group-field">
-                      <div className="form__form-group-icon">
-                        <div className="flag us"></div>
-                      </div>
-                      <Field name="description_en" component="textarea" type="text" placeholder={messages['zonecode.desc-en']} />
-                    </div>
-                  </div>
-                </CardBody>
-              </Card>
-            </Col>
+            <div className="form__form-group">
+              <span className="form__form-group-label">{messages['zonecode.customer']}</span>
+              <span className="text-danger">{'*'}</span>
+              <div className="form__form-group-field">
+                <Field
+                  name="customer_id"
+                  component={renderSelectField}
+                  type="text"
+                  options={customerCode && this.showOptionsCustomer(customerCode)}
+                  placeholder={messages['zonecode.customer']}
+                  disabled={this.state.disabled}
+                  messages={messages}
+                />
+              </div>
+            </div>
+          </Col>
+          <Col md={6} lg={3} xl={3} xs={6}>
+            <div className="form__form-group">
+                <span className="form__form-group-label">{messages['zonecode.code']}</span>
+                <span className="text-danger">{'*'}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="code"
+                    component={CustomField}
+                    type="text"
+                    messages={messages}
+                  />
+                </div>
+            </div>
+          </Col>
+          <Col md={6} lg={3} xl={3} xs={6}>
+            <div className="form__form-group">
+              <span className="form__form-group-label">{messages['status']}</span>
+              <div className="form__form-group-field">
+              <Field name="status" component={renderSelectField} type="text" options={[
+                  { value: 1, label: messages['active'] },
+                  { value: 0, label: messages['inactive'] }
+                  ]}
+                  messages={messages}
+                />
+              </div>
+            </div>
+          </Col>
+          <Col md={6} lg={3} xl={3} xs={6}>
+            <div className="form__form-group">
+                <span className="form__form-group-label">{messages['zonecode.category']}</span>
+                <span className="text-danger">{'*'}</span>
+                <div className="form__form-group-field">
+                    <Field name="category" component={renderSelectField} type="text" options={[
+                      { value: 'Inbound', label: messages['inbound'] },
+                      { value: 'Outbound', label: messages['outbound'] },
+                      { value: 'Domestic', label: messages['domestic'] }
+                      ]}
+                      messages={messages}
+                    />
+                </div>
+            </div>
+          </Col>
+          <Col md={6} lg={3} xl={3} xs={6}>
+            <div className="form__form-group">
+              <span className="form__form-group-label">{messages['zonecode.carrier']}</span>
+              <span className="text-danger">{'*'}</span>
+              <div className="form__form-group-field">
+                <Field
+                  name="carrier_id"
+                  component={renderSelectField}
+                  type="text"
+                  options={carrierCode && this.showOptionsCarrier(carrierCode)}
+                  messages={messages}
+                />
+              </div>
+            </div>
+          </Col>
+          <Col md={6} lg={3} xl={3} xs={6}>
+            <div className="form__form-group">
+              <span className="form__form-group-label">{messages['zonecode.service']}</span>
+              <span className="text-danger">{'*'}</span>
+              <div className="form__form-group-field">
+                <Field
+                  name="service_id"
+                  component={renderSelectField}
+                  type="text"
+                  options={serviceCode && this.showOptionsService(serviceCode)}
+                  messages={messages}
+                />
+              </div>
+            </div>
+          </Col>
+          <Col md={6} lg={3} xl={3} xs={6}>
+            <div className="form__form-group">
+              <span className="form__form-group-label">{messages['zonecode.shipmenttype']}</span>
+              <span className="text-danger">{'*'}</span>
+              <div className="form__form-group-field">
+                <Field
+                  name="shipment_type_id"
+                  component={renderSelectField}
+                  type="text"
+                  options={shipment_typeCode && this.showOptionsShipmenttype(shipment_typeCode)}
+                  messages={messages}
+                />
+              </div>
+            </div>
+          </Col>
+          <Col md={6} lg={3} xl={3} xs={6}>
+            <div className="form__form-group">
+              <span className="form__form-group-label">{messages['zonecode.country_origin']}</span>
+              <div className="form__form-group-field">
+                <Field
+                  name="origin_country_id"
+                  component={renderSelectField}
+                  type="text"
+                  options={countries && this.showOptionsCountry(countries)}
+                  onChange={this.onChangeCountry}
+                  messages={messages}
+                />
+              </div>
+            </div>
+          </Col>
+          <Col md={6} lg={3} xl={3} xs={6}>
+            <div className="form__form-group">
+              <span className="form__form-group-label">{messages['zonecode.city_origin']}</span>
+              <div className="form__form-group-field">
+                <Field
+                  name="origin_city_id"
+                  component={renderSelectField}
+                  type="text"
+                  options={cities && this.showOptionsCity(cities)}
+                  onChange={this.onChangeCity}
+                  onInputChange={this.onInputChangeCity}
+                  messages={messages}
+                />
+              </div>
+            </div>
+          </Col>
+          <Col md={6} lg={3} xl={3} xs={6}>
+            <div className="form__form-group">
+              <span className="form__form-group-label">{messages['zonecode.district_origin']}</span>
+              <div className="form__form-group-field">
+                <Field
+                  name="origin_district_id"
+                  component={renderSelectField}
+                  type="text"
+                  options={districts && this.showOptionsDistrict(districts)}
+                  onChange={this.onChangeDistrict}
+                  onInputChange={this.onInputChangeDistrict}
+                  messages={messages}
+                />
+              </div>
+            </div>
+          </Col>
+          <Col md={6} lg={3} xl={3} xs={6}>
+            <div className="form__form-group">
+              <span className="form__form-group-label">{messages['zonecode.ward_origin']}</span>
+              <div className="form__form-group-field">
+                <Field
+                  name="origin_ward_id"
+                  component={renderSelectField}
+                  type="text"
+                  options={wards && this.showOptionsWard(wards)}
+                  onChange={this.onChangeWard}
+                  messages={messages}
+                />
+              </div>
+            </div>
+          </Col>
+          <Col md={6} lg={3} xl={3} xs={6}>
+            <div className="form__form-group">
+              <span className="form__form-group-label">{messages['zonecode.country_destination']}</span>
+              <div className="form__form-group-field">
+                <Field
+                  name="destination_country_id"
+                  component={renderSelectField}
+                  type="text"
+                  options={countries && this.showOptionsCountry(countries)}
+                  onChange={this.onChangeCountry}
+                  messages={messages}
+                />
+              </div>
+            </div>
+          </Col>
+          <Col md={6} lg={3} xl={3} xs={6}>
+            <div className="form__form-group">
+                <span className="form__form-group-label">{messages['zonecode.city_destination']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="destination_city_id"
+                    component={renderSelectField}
+                    type="text"
+                    options={cities && this.showOptionsCity(cities)}
+                    onChange={this.onChangeCity}
+                    onInputChange={this.onInputChangeCity}
+                    messages={messages}
+                  />
+                </div>
+            </div>
+          </Col>
+          <Col md={6} lg={3} xl={3} xs={6}>
+            <div className="form__form-group">
+              <span className="form__form-group-label">{messages['zonecode.district_destination']}</span>
+              <div className="form__form-group-field">
+                <Field
+                  name="destination_district_id"
+                  component={renderSelectField}
+                  type="text"
+                  options={districts && this.showOptionsDistrict(districts)}
+                  onChange={this.onChangeDistrict}
+                  onInputChange={this.onInputChangeDistrict}
+                  messages={messages}
+                />
+              </div>
+            </div>
+          </Col>
+          <Col md={6} lg={3} xl={3} xs={6}>
+            <div className="form__form-group">
+              <span className="form__form-group-label">{messages['zonecode.ward_destination']}</span>
+              <div className="form__form-group-field">
+                <Field
+                  name="destination_ward_id"
+                  component={renderSelectField}
+                  type="text"
+                  options={wards && this.showOptionsWard(wards)}
+                  onChange={this.onChangeWard}
+                  messages={messages}
+                />
+              </div>
+            </div>
+          </Col>
+          <Col md={12} lg={6} xl={6} xs={12}>
+            <div className="form__form-group">
+              <span className="form__form-group-label">{messages['zonecode.desc']}</span>
+              <div className="form__form-group-field">
+                <div className="form__form-group-icon">
+                  <div className="flag vn"></div>
+                </div>
+                <Field name="description" component="textarea" type="text" />
+              </div>
+            </div>
+          </Col>
+          <Col md={12} lg={6} xl={6} xs={12}>
+            <div className="form__form-group">
+              <span className="form__form-group-label"> &nbsp; </span>
+              <div className="form__form-group-field">
+                <div className="form__form-group-icon">
+                  <div className="flag us"></div>
+                </div>
+                <Field name="description_en" component="textarea" type="text" />
+              </div>
+            </div>
+          </Col>
           </Row>
         </div>
         <ButtonToolbar className="modal__footer">
@@ -489,7 +542,7 @@ const mapStateToProps = ({zonecode, carrier, service, shipment_type, customer, a
 };
 
 export default reduxForm({
-  form: 'zonezode_action_form',
+  form: 'zonecode_action_form',
   validate
 })(injectIntl(connect(mapStateToProps, {
   toggleZoneCodeModal,

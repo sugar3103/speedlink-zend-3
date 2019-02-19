@@ -25,7 +25,7 @@ class Action extends Component {
     const className = modalData ? 'primary' : 'success';
     return (
       <Modal isOpen={this.props.modalOpen} toggle={this.toggleModal}
-             className={`modal-dialog--${className} modal-dialog--header  modal-lg`}>
+             className={`modal-dialog--${className} modal-dialog--header  modal-custom-size`}>
         <ActionForm onSubmit={this.handleSubmit} />
       </Modal>
     );

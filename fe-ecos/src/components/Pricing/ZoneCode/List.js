@@ -162,6 +162,10 @@ toggleModal = () => {
           accessor: "zonecode.country_destination"
         },
         {
+          Header: messages['zonecode.city_destination'],
+          accessor: "zonecode.city_destination"
+        },
+        {
             Header: messages['action']
         }
       ]

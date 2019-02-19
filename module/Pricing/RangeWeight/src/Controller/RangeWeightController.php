@@ -80,8 +80,18 @@ class RangeWeightController extends CoreController {
   {  
     if ($this->getRequest()->isPost()) {
       $user = $this->tokenPayload;
+      $data = $this->getRequestData();
+
+      $check_exits = $this->entityManager->getRepository(RangeWeight::class)->findOneBy(array('carrier_id' => $data['carrier_id'], 'category' => $data['category'], 'service_id' => $data['service_id'], 'shipment_type_id' => $data['shipment_type_id'], 'code' => $data['code'], 'from' => $data['from'], 'to' => $data['to']));    
+        if($check_exits)
+        {
+          $this->error_code = 0;
+          $this->apiResponse['message'] = "Already have this Range Weight!";
+          return $this->createResponse();
+        }
+
       $form = new RangeWeightForm('create', $this->entityManager);
-      $form->setData($this->getRequestData());
+      $form->setData($data);
         //validate form
       if ($form->isValid()) {
         $data = $form->getData();
@@ -93,7 +103,8 @@ class RangeWeightController extends CoreController {
         $this->apiResponse['message'] = "Success: You have added a RangeWeight!";
       } else {
         $this->error_code = 0;
-        $this->apiResponse['message'] = $form->getMessages();
+        $this->apiResponse['message'] = "Errors";
+        $this->apiResponse['data'] = $form->getMessages();
       }
     }
     return $this->createResponse();
@@ -104,6 +115,18 @@ class RangeWeightController extends CoreController {
     if ($this->getRequest()->isPost()) {
       $data = $this->getRequestData();
       $user = $this->tokenPayload;
+
+      $check_exits = $this->entityManager->getRepository(RangeWeight::class)->findOneBy(array('carrier_id' => $data['carrier_id'], 'category' => $data['category'], 'service_id' => $data['service_id'], 'shipment_type_id' => $data['shipment_type_id'], 'code' => $data['code'], 'from' => $data['from'], 'to' => $data['to']));    
+      if($check_exits)
+      {
+        $rangeweight_id = $check_exits->getId();
+        if($rangeweight_id != $data['id']) {
+        $this->error_code = 0;
+        $this->apiResponse['data'] = "Already have this Range Weight!";
+        return $this->createResponse();
+        }
+      }
+
       $data['updated_by'] = $user->id;
       $rangeweight = $this->entityManager->getRepository(RangeWeight::class)->find($data['id']);
       if ($rangeweight) {
@@ -116,7 +139,8 @@ class RangeWeightController extends CoreController {
           $this->apiResponse['message'] = "You have modified RangeWeight!";
         } else {
           $this->error_code = 0;
-          $this->apiResponse['message'] = $form->getMessages();
+          $this->apiResponse['message'] = "Errors";
+          $this->apiResponse['data'] = $form->getMessages();
         }
       } else {
         $this->error_code = 0;

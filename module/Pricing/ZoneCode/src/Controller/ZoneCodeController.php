@@ -82,8 +82,18 @@ class ZoneCodeController extends CoreController {
     {  
       if ($this->getRequest()->isPost()) {
         $user = $this->tokenPayload;
+        $data = $this->getRequestData();
+
+        $check_exits = $this->entityManager->getRepository(ZoneCode::class)->findOneBy(array('carrier_id' => $data['carrier_id'], 'category' => $data['category'], 'service_id' => $data['service_id'], 'shipment_type_id' => $data['shipment_type_id'], 'code' => $data['code']));    
+        if($check_exits)
+        {
+          $this->error_code = 0;
+          $this->apiResponse['data'] = "Already have this Zone Code!";
+          return $this->createResponse();
+        }
+
         $form = new ZoneCodeForm('create', $this->entityManager);
-        $form->setData($this->getRequestData());
+        $form->setData($data);
           //validate form
         if ($form->isValid()) {
           $data = $form->getData();
@@ -95,7 +105,8 @@ class ZoneCodeController extends CoreController {
           $this->apiResponse['message'] = "Success: You have added a ZoneCode!";
         } else {
           $this->error_code = 0;
-          $this->apiResponse['message'] = $form->getMessages();
+          $this->apiResponse['message'] ="Error";
+          $this->apiResponse['data'] = $form->getMessages();
         }
       }
       return $this->createResponse();
@@ -106,6 +117,18 @@ class ZoneCodeController extends CoreController {
     if ($this->getRequest()->isPost()) {
       $data = $this->getRequestData();
       $user = $this->tokenPayload;
+
+      $check_exits = $this->entityManager->getRepository(ZoneCode::class)->findOneBy(array('carrier_id' => $data['carrier_id'], 'category' => $data['category'], 'service_id' => $data['service_id'], 'shipment_type_id' => $data['shipment_type_id'], 'code' => $data['code']));    
+        if($check_exits)
+        {
+          $zonecode_id = $check_exits->getId();
+          if($zonecode_id != $data['id']) {
+          $this->error_code = 0;
+          $this->apiResponse['data'] = "Already have this Zone Code!";
+          return $this->createResponse();
+          }
+        }
+
       $data['updated_by'] = $user->id;
       $zonecode = $this->entityManager->getRepository(ZoneCode::class)->find($data['id']);
       if ($zonecode) {
@@ -118,7 +141,8 @@ class ZoneCodeController extends CoreController {
           $this->apiResponse['message'] = "You have modified ZoneCode!";
         } else {
           $this->error_code = 0;
-          $this->apiResponse['message'] = $form->getMessages();
+          $this->apiResponse['message'] ="Error";
+          $this->apiResponse['data'] = $form->getMessages();
         }
       } else {
         $this->error_code = 0;

@@ -30,9 +30,9 @@ import { startSubmit, stopSubmit } from 'redux-form';
 //validate
 
 function validateRangeWeight(errors) {
-  if (errors.name && errors.name.rangeweightExists) {
+  if (errors.code && errors.code.rangeweightExists) {
     return stopSubmit('rangeweight_action_form', {
-      name: 'rangeweight.validate-name-exists'
+      code: 'rangeweight.validate-code-exists'
     });
   }
 }
