@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
-import renderSelectField from '../../../../containers/Shared/form/Select';
+import renderSelectField from '../../../containers/Shared/form/Select';
 import { Button, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { getCarrierCodeList, getServiceCodeList, getShipmentTypeCodeList, getCustomerList, getCityList, getCountryList, getWardList, getDistrictList  } from "../../../../redux/actions";
+import { getCarrierCodeList, getServiceCodeList, getShipmentTypeCodeList, getCustomerList, getCityList, getCountryList, getWardList, getDistrictList  } from "../../../redux/actions";
 
 class SearchForm extends Component {
 

@@ -3,7 +3,7 @@ import { Button, Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
 import CheckIcon from 'mdi-react/CheckIcon';
 import { connect } from 'react-redux';
-import { toggleRangeWeightModal, deleteRangeWeightItem } from '../../../../redux/actions';
+import { toggleRangeWeightModal, deleteRangeWeightItem } from '../../../redux/actions';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { injectIntl } from 'react-intl';
