@@ -30,9 +30,11 @@ import { startSubmit, stopSubmit } from 'redux-form';
 //validate
 
 function validateZoneCode(errors) {
-  if (errors.name && errors.name.zonecodeExists) {
+  console.log(errors);
+  
+  if (errors.code && errors.code.zonecodeExists) {
     return stopSubmit('zonecode_action_form', {
-      name: 'zonecode.validate-name-exists'
+      code: 'rangeweight.validate-code-exists'
     });
   }
 }

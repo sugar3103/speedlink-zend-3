@@ -9,6 +9,13 @@ import { getCarrierCodeList, getServiceCodeList, getShipmentTypeCodeList, getCus
 
 class SearchForm extends Component {
 
+  constructor(props){
+    super(props);
+    this.state = {
+      disabled: false
+    }
+  }
+
   componentDidMount() {
     this.props.getCarrierCodeList();
     this.props.getServiceCodeList();
@@ -65,6 +72,18 @@ class SearchForm extends Component {
     return result;
   }
 
+  hanldeChangeType = value => {
+    if (value === 1) {
+      this.setState({
+        disabled: true
+      });
+    } else {
+      this.setState({
+        disabled: false
+      })
+    }
+  }
+
 
   render() {
     const { handleSubmit, reset, carrierCode, serviceCode, shipment_typeCode, customerCode } = this.props;
@@ -73,40 +92,57 @@ class SearchForm extends Component {
       <form className="form" onSubmit={handleSubmit}>
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.type']}</span>
+            <span className="form__form-group-label">{messages['rangeweight.filtertype']}</span>
             <div className="form__form-group-field">
               <Field name="is_private" component={renderSelectField} type="text" options={[
                 { value: -1, label: messages['all'] },
-                { value: 0, label: messages['rangeweight.public'] },
-                { value: 1, label: messages['rangeweight.customer'] }
+                { value: 1, label: messages['rangeweight.public'] },
+                { value: 2, label: messages['rangeweight.customer'] }
+                ]}
+                clearable={false}
+                onChange={this.hanldeChangeType}
+              />
+            </div>
+          </div>
+        </Col>
+
+        <Col md={3}>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['rangeweight.customer']}</span>
+            <div className="form__form-group-field">
+              <Field name="customer" component={renderSelectField} type="text"
+                     options={customerCode && this.showOptionCustomer(customerCode)}
+                     disabled={this.state.disabled}
+              />
+            </div>
+          </div>
+        </Col>    
+
+        <Col md={3}>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['rangeweight.name']}</span>
+            <div className="form__form-group-field">
+              <Field component="input" type="text"
+                     name='code' />
+            </div>
+          </div>
+        </Col>
+
+
+        <Col md={3}>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['status']}</span>
+            <div className="form__form-group-field">
+              <Field name="status" component={renderSelectField} type="text" options={[
+                { value: -1, label: messages['all'] },
+                { value: 1, label: messages['active'] },
+                { value: 0, label: messages['inactive'] }
                 ]}
                 clearable={false}
               />
             </div>
           </div>
         </Col>
-        <Col md={9}></Col>   
-
-        <Col md={3}>
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.name']}</span>
-            <div className="form__form-group-field">
-              <Field component="input" type="text" placeholder={messages['rangeweight.name']}
-                     name='code' />
-            </div>
-          </div>
-        </Col>
-
-        <Col md={3}>
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.carrier']}</span>
-            <div className="form__form-group-field">
-              <Field name="carrier_id" component={renderSelectField} type="text"
-                     options={carrierCode && this.showOptionCarrier(carrierCode)}/>
-            </div>
-          </div>
-        </Col>
-        
         <Col md={3}>
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['rangeweight.category']}</span>
@@ -119,6 +155,15 @@ class SearchForm extends Component {
                 ]}
                 clearable={false}
               />
+            </div>
+          </div>
+        </Col>
+        <Col md={3}>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['rangeweight.carrier']}</span>
+            <div className="form__form-group-field">
+              <Field name="carrier_id" component={renderSelectField} type="text"
+                     options={carrierCode && this.showOptionCarrier(carrierCode)}/>
             </div>
           </div>
         </Col>
@@ -143,37 +188,12 @@ class SearchForm extends Component {
           </div>
         </Col>       
 
-        <Col md={3}>
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['status']}</span>
-            <div className="form__form-group-field">
-              <Field name="status" component={renderSelectField} type="text" options={[
-                { value: -1, label: messages['all'] },
-                { value: 1, label: messages['active'] },
-                { value: 0, label: messages['inactive'] }
-                ]}
-                clearable={false}
-              />
-            </div>
-          </div>
-        </Col>
-       
-        <Col md={3}>
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.customer']}</span>
-            <div className="form__form-group-field">
-              <Field name="customer" component={renderSelectField} type="text"
-                     options={customerCode && this.showOptionCustomer(customerCode)}/>
-            </div>
-          </div>
-        </Col>    
-        <Col md={3}></Col>
         
         <Col md={3}>
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['rangeweight.from']}</span>
             <div className="form__form-group-field">
-              <Field component="input" type="number" step="0.1" min="0" placeholder={messages['rangeweight.from']}
+              <Field component="input" type="number" step="0.1" min="0" 
                      name='from' />
             </div>
           </div>
@@ -182,7 +202,7 @@ class SearchForm extends Component {
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['rangeweight.to']}</span>
             <div className="form__form-group-field">
-              <Field component="input" type="number" step="0.1" min="0" placeholder={messages['rangeweight.from']}
+              <Field component="input" type="number" step="0.1" min="0"
                      name='to' />
             </div>
           </div>
@@ -206,7 +226,7 @@ class SearchForm extends Component {
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['rangeweight.roundup']}</span>
             <div className="form__form-group-field">
-              <Field component="input" type="number" min="0" placeholder={messages['rangeweight.roundup']}
+              <Field component="input" type="number" min="0" 
                      name='round_up' />
             </div>
           </div>

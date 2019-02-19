@@ -135,7 +135,7 @@ class ZoneCodeForm extends Form {
 
         $inputFilter->add([
             'name' => 'customer_id',
-            'required'  => true,
+            'required'  => false,
             'filters' => [
                 [
                   'name' => ToInt::class

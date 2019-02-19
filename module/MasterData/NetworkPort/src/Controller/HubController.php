@@ -95,7 +95,8 @@ class HubController extends CoreController {
             }
             else {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = $form->getMessages();    
+                $this->apiResponse['message'] = "Errors";
+                $this->apiResponse['data'] = $form->getMessages();
             }            
         }
         return $this->createResponse();
@@ -124,7 +125,8 @@ class HubController extends CoreController {
               $this->apiResponse['message'] = "You have modified hub!";
             } else {
               $this->error_code = 0;
-              $this->apiResponse['message'] = $form->getMessages(); 
+              $this->apiResponse['message'] = "Errors";
+              $this->apiResponse['data'] = $form->getMessages();
             }   
           } else {
             $this->error_code = 0;

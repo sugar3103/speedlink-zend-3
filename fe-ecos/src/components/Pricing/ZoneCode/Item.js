@@ -66,6 +66,7 @@ class Item extends Component {
         <td>{zonecode.origin_country_name}</td>
         <td>{zonecode.origin_city_name}</td>
         <td>{zonecode.destination_country_name}</td>
+        <td>{zonecode.destination_city_name}</td>
         {/* <td>{carrier.created_at} by {carrier.created_by}</td>
         <td>{carrier.updated_at} by {carrier.updated_by}</td> */}
         <td className="text-center">
