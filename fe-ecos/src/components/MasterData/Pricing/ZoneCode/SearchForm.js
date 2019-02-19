@@ -5,7 +5,7 @@ import renderSelectField from '../../../../containers/Shared/form/Select';
 import { Button, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { getCarrierCodeList, getServiceCodeList, getShipmentTypeCodeList, getCustomerList   } from "../../../../redux/actions";
+import { getCarrierCodeList, getServiceCodeList, getShipmentTypeCodeList, getCustomerList, getCityList, getCountryList, getWardList, getDistrictList  } from "../../../../redux/actions";
 
 class SearchForm extends Component {
 
@@ -14,6 +14,47 @@ class SearchForm extends Component {
     this.props.getServiceCodeList();
     this.props.getShipmentTypeCodeList();
     this.props.getCustomerList();
+    this.props.getCountryList();
+  }
+
+  onChangeCountry = value => {
+    let params = {
+      field: ['id', 'name'],
+      offset: {
+        limit: 0
+      },
+      query: {
+        country_id: value
+      }
+    }
+    this.props.getCityList(params);
+  }
+
+  onChangeCity = value => {
+    let params = {
+      field: ['id', 'name'],
+      offset: {
+        limit: 0
+      },
+      query: {
+        city: value
+      }
+    }
+    this.props.getDistrictList(params);
+    this.props.getWardList(null);
+  }
+
+  onChangeDistrict = value => {
+    let params = {
+      field: ['id', 'name'],
+      offset: {
+        limit: 0
+      },
+      query: {
+        district: value
+      }
+    }
+    this.props.getWardList(params);
   }
 
   showOptionCarrier = (items) => {
@@ -65,9 +106,48 @@ class SearchForm extends Component {
     return result;
   }
 
+  showOptionsCountry = (country_items) => {
+    const countries = country_items.map(country_item => {
+      return {
+        'value': country_item.id,
+        'label': country_item.name
+      }
+    });
+    return countries;
+  }
+
+  showOptionsCity = (city_items) => {
+    const cities = city_items.map(city_item => {
+      return {
+        'value': city_item.id,
+        'label': city_item.name
+      }
+    });
+    return cities;
+  }
+
+  showOptionsDistrict = (district_items) => {
+    const districts = district_items.map(district_item => {
+      return {
+        'value': district_item.id,
+        'label': district_item.name
+      }
+    });
+    return districts;
+  }
+
+  showOptionsWard = (ward_items) => {
+    const wards = ward_items.map(ward_item => {
+      return {
+        'value': ward_item.id,
+        'label': ward_item.name
+      }
+    });
+    return wards;
+  }
 
   render() {
-    const { handleSubmit, reset, carrierCode, serviceCode, shipment_typeCode, customerCode } = this.props;
+    const { handleSubmit, reset, carrierCode, serviceCode, shipment_typeCode, customerCode, cities, countries, districts, wards } = this.props;
     const { messages } = this.props.intl;
     return (
       <form className="form" onSubmit={handleSubmit}>
@@ -168,46 +248,121 @@ class SearchForm extends Component {
           </div>
         </Col>    
         <Col md={3}></Col>
-        
+
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.from']}</span>
+            <span className="form__form-group-label">{messages['zonecode.country_origin']}</span>
             <div className="form__form-group-field">
-              <Field component="input" type="number" step="0.1" min="0" placeholder={messages['rangeweight.from']}
-                     name='from' />
-            </div>
-          </div>
-        </Col>
-        <Col md={3}>
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.to']}</span>
-            <div className="form__form-group-field">
-              <Field component="input" type="number" step="0.1" min="0" placeholder={messages['rangeweight.from']}
-                     name='to' />
+              <Field
+                name="origin_country"
+                component={renderSelectField}
+                options={countries && this.showOptionsCountry(countries)}
+                placeholder={messages['zonecode.country_origin']}
+                onChange={this.onChangeCountry}
+              />
             </div>
           </div>
         </Col>
 
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.calculate']}</span>
+            <span className="form__form-group-label">{messages['zonecode.city_origin']}</span>
             <div className="form__form-group-field">
-              <Field name="calculate_unit" component={renderSelectField} type="text" options={[
-                { value: -1, label: messages['all'] },
-                { value: 1, label: messages['yes'] },
-                { value: 0, label: messages['no'] }
-                ]}
-                clearable={false}
+              <Field
+                name="origin_city"
+                component={renderSelectField}
+                options={cities && this.showOptionsCity(cities)}
+                placeholder={messages['zonecode.city_origin']}
+                onChange={this.onChangeCity}
               />
             </div>
           </div>
         </Col>
+
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.roundup']}</span>
+            <span className="form__form-group-label">{messages['zonecode.district_origin']}</span>
             <div className="form__form-group-field">
-              <Field component="input" type="number" min="0" placeholder={messages['rangeweight.roundup']}
-                     name='round_up' />
+              <Field
+                name="origin_district"
+                component={renderSelectField}
+                options={districts && this.showOptionsDistrict(districts)}
+                placeholder={messages['zonecode.district_origin']}
+                onChange={this.onChangeDistrict}
+              />
+            </div>
+          </div>
+        </Col>
+
+        <Col md={3}>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['zonecode.ward_origin']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="origin_ward"
+                component={renderSelectField}
+                options={wards && this.showOptionsWard(wards)}
+                placeholder={messages['zonecode.ward_origin']}
+              />
+            </div>
+          </div>
+        </Col>
+
+        <Col md={3}>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['zonecode.country_destination']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="destination_country"
+                component={renderSelectField}
+                options={countries && this.showOptionsCountry(countries)}
+                placeholder={messages['zonecode.country_destination']}
+                onChange={this.onChangeCountry}
+              />
+            </div>
+          </div>
+        </Col>
+
+        <Col md={3}>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['zonecode.city_destination']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="destination_city"
+                component={renderSelectField}
+                options={cities && this.showOptionsCity(cities)}
+                placeholder={messages['zonecode.city_destination']}
+                onChange={this.onChangeCity}
+              />
+            </div>
+          </div>
+        </Col>
+
+        <Col md={3}>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['zonecode.district_destination']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="destination_district"
+                component={renderSelectField}
+                options={districts && this.showOptionsDistrict(districts)}
+                placeholder={messages['zonecode.district_destination']}
+                onChange={this.onChangeDistrict}
+              />
+            </div>
+          </div>
+        </Col>
+
+        <Col md={3}>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['zonecode.ward_destination']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="destination_ward"
+                component={renderSelectField}
+                options={wards && this.showOptionsWard(wards)}
+                placeholder={messages['zonecode.ward_destination']}
+              />
             </div>
           </div>
         </Col>
@@ -231,24 +386,36 @@ class SearchForm extends Component {
 
 SearchForm.propTypes = {
   carrierCode: PropTypes.array,
+  cities: PropTypes.array,
+  districts: PropTypes.array,
+  countries: PropTypes.array,
+  wards: PropTypes.array,
   getCarrierCodeList: PropTypes.func.isRequired,
   getServiceCodeList: PropTypes.func.isRequired,
   getShipmentTypeCodeList: PropTypes.func.isRequired,
   getCustomerList: PropTypes.func.isRequired,
+  getCityList: PropTypes.func.isRequired,
+  getDistrictList: PropTypes.func.isRequired,
+  getCountryList: PropTypes.func.isRequired,
+  getWardList: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ carrier, service, shipment_type, customer }) => {
+const mapStateToProps = ({ carrier, service, shipment_type, customer, address }) => {
   const carrierCode = carrier.codes;
   const serviceCode = service.codes;
   const shipment_typeCode = shipment_type.codes;
   const customerCode = customer.items;
-  return { carrierCode, serviceCode, shipment_typeCode, customerCode }
+  const cities = address.city.items;
+  const districts = address.district.items;
+  const countries = address.country.items;
+  const wards = address.ward.items;
+  return { carrierCode, serviceCode, shipment_typeCode, customerCode, cities, districts, countries, wards }
 }
 
 export default reduxForm({
-  form: 'rangeweight_search_form',
+  form: 'zonecode_search_form',
   initialValues: {
     name: '',
     carrier: -1,
@@ -261,5 +428,9 @@ export default reduxForm({
   getCarrierCodeList,
   getServiceCodeList,
   getShipmentTypeCodeList,
-  getCustomerList
+  getCustomerList,
+  getCityList,
+  getCountryList,
+  getWardList,
+  getDistrictList
 })(SearchForm)));

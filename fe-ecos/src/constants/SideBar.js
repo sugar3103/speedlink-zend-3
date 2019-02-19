@@ -102,28 +102,29 @@ export default {
             }
           ]
         },
-        {
-          id: 'pricing',
-          title: 'menu.pricing',
-          route: '/app/master-data/pricing',
-          icon: 'dice',
-          childrens: [
-            {
-              id: 'rangeweight',
-              title: 'menu.rangeweight',
-              route: '/app/master-data/pricing/rangeweight',
-              icon: 'license'
-            },
-            {
-              id: 'zonecode',
-              title: 'menu.zonecode',
-              route: '/app/master-data/pricing/zonecode',
-              icon: 'map'
-            }
-          ]
-        },
       ]
-    },{
+    },
+    {
+      id: 'pricing',
+      title: 'menu.pricing',
+      route: '/app/pricing',
+      icon: 'dice',
+      childrens: [
+        {
+          id: 'rangeweight',
+          title: 'menu.rangeweight',
+          route: '/app/pricing/rangeweight',
+          icon: 'license'
+        },
+        {
+          id: 'zonecode',
+          title: 'menu.zonecode',
+          route: '/app/pricing/zonecode',
+          icon: 'map'
+        }
+      ]
+    },
+    {
       id: 'system',
       title: 'menu.system',
       route: '/app/system',
