@@ -1,15 +1,15 @@
 import axios from "axios";
 import { all, call, fork, put, takeEvery } from "redux-saga/effects";
-import { apiUrl, EC_SUCCESS, EC_FAILURE, EC_FAILURE_AUTHENCATION } from '../../../../constants/defaultValues';
-import { authHeader } from '../../../../util/auth-header';
-import history from '../../../../util/history';
+import { apiUrl, EC_SUCCESS, EC_FAILURE, EC_FAILURE_AUTHENCATION } from '../../../constants/defaultValues';
+import { authHeader } from '../../../util/auth-header';
+import history from '../../../util/history';
 
 import {
   RANGEWEIGHT_GET_LIST,
   RANGEWEIGHT_ADD_ITEM,
   RANGEWEIGHT_UPDATE_ITEM,
   RANGEWEIGHT_DELETE_ITEM 
-} from "../../../../constants/actionTypes";
+} from "../../../constants/actionTypes";
 
 import {
   toggleRangeWeightModal,
@@ -24,7 +24,7 @@ import {
   getRangeWeightList,
 } from "./actions";
 
-import createNotification from '../../../../util/notifications';
+import createNotification from '../../../util/notifications';
 import { startSubmit, stopSubmit } from 'redux-form';
 
 //validate

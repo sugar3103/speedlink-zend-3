@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Button, ButtonToolbar, Card, CardBody, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleZoneCodeModal, getCarrierCodeList, getServiceCodeList, getShipmentTypeCodeList, getCustomerList, getCityList, getDistrictList, getWardList, getCountryList  } from '../../../../redux/actions';
+import { toggleZoneCodeModal, getCarrierCodeList, getServiceCodeList, getShipmentTypeCodeList, getCustomerList, getCityList, getDistrictList, getWardList, getCountryList  } from '../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
-import CustomField from '../../../../containers/Shared/form/CustomField';
-import renderSelectField from '../../../../containers/Shared/form/Select';
+import CustomField from '../../../containers/Shared/form/CustomField';
+import renderSelectField from '../../../containers/Shared/form/Select';
 import validate from './validateActionForm';
 import PropTypes from 'prop-types';
 

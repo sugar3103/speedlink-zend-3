@@ -12,7 +12,7 @@ import {
   ZONECODE_DELETE_ITEM,
   ZONECODE_DELETE_ITEM_SUCCESS,
   ZONECODE_DELETE_ITEM_ERROR
-} from '../../../../constants/actionTypes';
+} from '../../../constants/actionTypes';
 
 export const toggleZoneCodeModal = (zonecode = null) => ({
   type: ZONECODE_TOGGLE_MODAL,

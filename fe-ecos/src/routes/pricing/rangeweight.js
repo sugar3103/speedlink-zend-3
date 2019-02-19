@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Col, Container, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
-import {List} from '../../components/MasterData/Pricing/RangeWeight';
+import {List} from '../../components/Pricing/RangeWeight';
 
 class RangeWeight extends Component {
   render() {

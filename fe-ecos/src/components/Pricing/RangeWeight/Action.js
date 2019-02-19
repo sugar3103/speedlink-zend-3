@@ -3,21 +3,21 @@ import { injectIntl } from 'react-intl';
 import { Modal } from 'reactstrap';
 import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
-import { addZoneCodeItem, updateZoneCodeItem, toggleZoneCodeModal } from '../../../../redux/actions';
+import { addRangeWeightItem, updateRangeWeightItem, toggleRangeWeightModal } from '../../../redux/actions';
 import PropTypes from 'prop-types';
 
 class Action extends Component {
   handleSubmit = values => {
     const { messages } = this.props.intl;
     if (values.id) {
-      this.props.updateZoneCodeItem(values, messages);
+      this.props.updateRangeWeightItem(values, messages);
     } else {
-      this.props.addZoneCodeItem(values, messages);
+      this.props.addRangeWeightItem(values, messages);
     }
   };
 
   toggleModal = () => {
-    this.props.toggleZoneCodeModal();
+    this.props.toggleRangeWeightModal();
   };
 
   render() {
@@ -34,18 +34,18 @@ class Action extends Component {
 
 Action.propTypes = {
   modalData: PropTypes.object,
-  addZoneCodeItem: PropTypes.func.isRequired,
-  updateZoneCodeItem: PropTypes.func.isRequired,
-  toggleZoneCodeModal: PropTypes.func.isRequired,
+  addRangeWeightItem: PropTypes.func.isRequired,
+  updateRangeWeightItem: PropTypes.func.isRequired,
+  toggleRangeWeightModal: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ zonecode }) => {
-  const { modalData } = zonecode;
+const mapStateToProps = ({ rangeweight }) => {
+  const { modalData } = rangeweight;
   return { modalData };
 };
 
 export default injectIntl(connect(mapStateToProps, {
-  addZoneCodeItem,
-  updateZoneCodeItem,
-  toggleZoneCodeModal
+  addRangeWeightItem,
+  updateRangeWeightItem,
+  toggleRangeWeightModal
 })(Action));

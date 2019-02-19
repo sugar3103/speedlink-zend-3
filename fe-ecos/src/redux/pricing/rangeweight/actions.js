@@ -12,7 +12,7 @@ import {
     RANGEWEIGHT_DELETE_ITEM,
     RANGEWEIGHT_DELETE_ITEM_SUCCESS,
     RANGEWEIGHT_DELETE_ITEM_ERROR
-  } from '../../../../constants/actionTypes';
+  } from '../../../constants/actionTypes';
   
   export const toggleRangeWeightModal = (rangeweight = null) => ({
     type: RANGEWEIGHT_TOGGLE_MODAL,
