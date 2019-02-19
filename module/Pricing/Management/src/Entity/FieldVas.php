@@ -1,14 +1,12 @@
 <?php
 
-
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * FieldVas
  *
  * @ORM\Table(name="field_vas")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Management\Repository\FieldVasRepository")
  */
 class FieldVas
 {
@@ -56,5 +54,100 @@ class FieldVas
      */
     private $isDeleted = '0';
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFunctionName()
+    {
+        return $this->functionName;
+    }
+
+    /**
+     * @param string|null $functionName
+     */
+    public function setFunctionName($functionName)
+    {
+        $this->functionName = $functionName;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string|null $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescriptionEn()
+    {
+        return $this->descriptionEn;
+    }
+
+    /**
+     * @param string|null $descriptionEn
+     */
+    public function setDescriptionEn($descriptionEn)
+    {
+        $this->descriptionEn = $descriptionEn;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDeleted()
+    {
+        return $this->isDeleted;
+    }
+
+    /**
+     * @param bool $isDeleted
+     */
+    public function setIsDeleted($isDeleted)
+    {
+        $this->isDeleted = $isDeleted;
+    }
 
 }
