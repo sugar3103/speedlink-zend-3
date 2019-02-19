@@ -49,4 +49,19 @@ class Utils
         }
         return $queryBuilder;
     }
+
+    public static function formatDateTime($list)
+    {
+        if (count($list) > 0) {
+            foreach ($list as $key => $obj) {
+                $date_format = 'd/m/Y H:i:s';
+                if (!empty($obj['created_at'])) {
+                    $list[$key]['created_at'] = Utils::checkDateFormat($obj['created_at'], $date_format);
+                }
+                if (!empty($obj['updated_at'])) {
+                    $list[$key]['updated_at'] = Utils::checkDateFormat($obj['updated_at'], $date_format);
+                }
+            }
+        }
+    }
 }
