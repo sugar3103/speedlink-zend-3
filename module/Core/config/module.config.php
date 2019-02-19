@@ -73,9 +73,22 @@ return [
                     __DIR__ . '/../src/Entity'
                 ]
             ],
+            __NAMESPACE__ . '_driver_document' => [
+                'class' => 'Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver',
+                'cache' => 'array',
+                'paths' => [
+                    __DIR__ . '/../src/Entity'
+                ]
+            ],
             'orm_default' => [
                 'drivers' => [
                     __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
+                ]
+            ],
+            
+            'odm_default' => [
+                'drivers' => [
+                    __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver_document'
                 ]
             ],
             'orm_report' => [

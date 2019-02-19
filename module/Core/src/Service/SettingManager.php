@@ -8,7 +8,7 @@ use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator;
 use Core\Utils\Utils;
-
+use Core\Entity\Notification;
 /**
  * this service is responsible for adding/editing settings.
  * @package Core\Service
@@ -20,14 +20,16 @@ class SettingManager {
      */
     private $entityManager;
 
+    private $documentManager;
     /**
      * SettingManager constructor.
      * @param $entityManager
      * @param $rbacManager
      */
-    public function __construct($entityManager)
+    public function __construct($entityManager,$documentManager)
     {
         $this->entityManager = $entityManager;
+        $this->documentManager = $documentManager;
     }
 
     /**

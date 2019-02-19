@@ -28,7 +28,11 @@
         "zendframework\/zend-permissions-rbac": "^3.0",
         "zendframework\/zend-serializer": "^2.9",
         "ocramius\/proxy-manager": "2.1.0",
-        "zendframework\/zend-cache": "^2.8"
+        "zendframework\/zend-cache": "^2.8",
+        "doctrine/mongodb": "^1.6",
+        "doctrine/mongodb-odm": "^1.2",
+        "doctrine/doctrine-mongo-odm-module": "^1.1",
+        "alcaeus/mongo-php-adapter": "^1.1"
     },
     "autoload": {
         "psr-4": {
@@ -61,5 +65,10 @@
         ],
         "serve": "php -S 0.0.0.0:8080 -t public public\/index.php",
         "test": "phpunit"
+    },
+    "config": {
+        "platform": {
+            "ext-mongo": "1.6.16"
+        }
     }
 }
