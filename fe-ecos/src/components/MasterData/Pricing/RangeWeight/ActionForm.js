@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { toggleRangeWeightModal, getCarrierCodeList, getServiceCodeList, getShipmentTypeCodeList, getCustomerList  } from '../../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../../containers/Shared/form/CustomField';
-import renderRadioButtonField from '../../../../containers/Shared/form/RadioButton';
 import renderSelectField from '../../../../containers/Shared/form/Select';
 import validate from './validateActionForm';
 import PropTypes from 'prop-types';
@@ -68,7 +67,7 @@ class ActionForm extends Component {
   };
   componentWillReceiveProps(nextProps) {
       if (nextProps && nextProps.modalData) {
-      const data = nextProps.modalData;
+      // const data = nextProps.modalData;
     }
   }
   render() {
