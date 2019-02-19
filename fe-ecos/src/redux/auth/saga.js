@@ -38,8 +38,7 @@ function* login({ payload }) {
     const data = yield call(loginAsync, user);
     if (data.error_code === EC_SUCCESS) {      
       localStorage.setItem('authUser', JSON.stringify(data.token));
-      yield call(loginUserSuccess,data.token);      
-      yield put(getSetting(null,null));      
+      yield put(loginUserSuccess(data.token));      
       yield call(history.push, '/app/dashboards');
       
     } else {
