@@ -12,9 +12,7 @@ import { authHeader } from '../../util/auth-header';
 
 import { apiUrl, EC_SUCCESS } from '../../constants/defaultValues';
 
-import { loginUserSuccess,getVerifyAuthSuccess } from './actions';
-
-import { getSetting } from '../system/setting/action';
+import { loginUserSuccess, loginUserError, getVerifyAuthSuccess } from './actions';
 
 import createNotification from '../../util/notifications';
 
@@ -38,12 +36,12 @@ function* login({ payload }) {
     const data = yield call(loginAsync, user);
     if (data.error_code === EC_SUCCESS) {      
       localStorage.setItem('authUser', JSON.stringify(data.token));
-      yield call(loginUserSuccess,data.token);      
-      yield put(getSetting(null,null));      
+      yield put(loginUserSuccess(data.token));      
       yield call(history.push, '/app/dashboards');
       
     } else {
       const error = data.message;
+      yield put(loginUserError(error))
       createNotification({type: 'warning', message: error.toString()})
     }
   } catch (error) {

@@ -3,13 +3,13 @@ import React, { Component, Fragment} from 'react';
 import { Card, CardBody, Col, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Item from './Item';
-import Table from '../../../../containers/Shared/table/Table';
-import { SELECTED_PAGE_SIZE } from '../../../../constants/defaultValues';
+import Table from '../../../containers/Shared/table/Table';
+import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import Action from './Action';
 import Search from './Search';
-import { getRangeWeightList, toggleRangeWeightModal } from "../../../../redux/actions";
+import { getRangeWeightList, toggleRangeWeightModal } from "../../../redux/actions";
 
 const RangeWeightFormatter = ({ value }) => (
   value === 'Enabled' ? <span className="badge badge-success">Enabled</span> :

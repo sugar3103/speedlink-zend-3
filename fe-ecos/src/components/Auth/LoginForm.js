@@ -86,8 +86,13 @@ class LogInForm extends PureComponent {
           </div>
         </div>
         <div className="account__btns">
-          <Button color="success" outline className={`account__btn expand ${loading && 'expand--load'}`} type="submit">{loading && <LoadingIcon />}{messages['login.login']}</Button>
-          {/* <Link className="btn btn-outline-primary account__btn" to="/register">{messages['login.register']}</Link> */}
+          <Button 
+            color="success" 
+            outline 
+            className={`account__btn expand ${loading && 'expand--load'}`} 
+            type="submit"
+            disabled={loading}
+          >{loading && <LoadingIcon />}{messages['login.login']}</Button>
         </div>
       </form>
     );

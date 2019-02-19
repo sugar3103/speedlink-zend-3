@@ -3,9 +3,9 @@ const validate = (values) => {
     if (!values.code) {
       errors.code = 'rangeweight.validate-code-empty';
     } else if (values.code.length < 5) {
-      errors.name = 'carrier.validate-name-minlength';
+      errors.name = 'carrier.validate-code-minlength';
     } else if (values.code.length > 20) {
-      errors.name = 'carrier.validate-name-maxlength';
+      errors.name = 'carrier.validate-code-maxlength';
     }
     return errors;
   };

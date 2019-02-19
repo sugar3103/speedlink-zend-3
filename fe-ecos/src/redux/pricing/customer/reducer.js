@@ -3,7 +3,7 @@ import {
     CUSTOMER_GET_LIST,
     CUSTOMER_GET_LIST_SUCCESS,
     CUSTOMER_GET_LIST_ERROR
-  } from '../../../../constants/actionTypes';
+  } from '../../../constants/actionTypes';
   
   const INIT_STATE = {
     items: null,

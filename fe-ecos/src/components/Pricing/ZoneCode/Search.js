@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { getRangeWeightList } from '../../../../redux/actions';
+import { getZoneCodeList } from '../../../redux/actions';
 import SearchForm from './SearchForm';
-import  { SELECTED_PAGE_SIZE } from '../../../../constants/defaultValues';
+import  { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 
 class Search extends Component {
   handleSubmit = values => {
@@ -16,7 +16,7 @@ class Search extends Component {
       },
       query: values
     };
-    this.props.getRangeWeightList(params, messages);
+    this.props.getZoneCodeList(params, messages);
   };
 
   render() {
@@ -33,9 +33,9 @@ class Search extends Component {
 }
 
 Search.propTypes = {
-  getRangeWeightList: PropTypes.func.isRequired
+  getZoneCodeList: PropTypes.func.isRequired
 };
 
 export default injectIntl(connect(null, {
-  getRangeWeightList
+  getZoneCodeList
 })(Search));

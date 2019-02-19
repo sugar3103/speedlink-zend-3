@@ -15,7 +15,8 @@ class SelectField extends PureComponent {
       ]),
       label: PropTypes.string,
     })),
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
+    clearable: PropTypes.bool
   };
 
   static defaultProps = {
@@ -34,8 +35,9 @@ class SelectField extends PureComponent {
 
   render() {
     const {
-      value, name, placeholder, options, onInputChange,disabled
+      value, name, placeholder, options, onInputChange,disabled,clearable
     } = this.props;    
+    
     return (
       <Select
         disabled = {disabled}
@@ -43,7 +45,7 @@ class SelectField extends PureComponent {
         value={value}
         onChange={this.handleChange}
         options={options}
-        clearable={true}
+        clearable={clearable}
         className="form__form-group-select"
         placeholder={placeholder}
         onInputChange={onInputChange}
@@ -60,6 +62,7 @@ const renderSelectField = props => (
       options={props.options}
       placeholder={props.placeholder}
       disabled={props.disabled}
+      clearable={props.clearable}
     />
     {props.meta.touched && props.meta.error && <span className="form__form-group-error">{props.messages[props.meta.error]}</span>}
   </div>
@@ -83,14 +86,16 @@ renderSelectField.propTypes = {
   })),
   placeholder: PropTypes.string,
   onInputChange: PropTypes.func,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  clearable: PropTypes.bool
 };
 
 renderSelectField.defaultProps = {
   meta: null,
   options: [],
   placeholder: '',
-  disabled: false
+  disabled: false,
+  clearable: true
 };
 
 export default renderSelectField;

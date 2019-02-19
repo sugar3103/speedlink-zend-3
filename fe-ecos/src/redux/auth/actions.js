@@ -1,6 +1,7 @@
 import {
   LOGIN_USER,
   LOGIN_USER_SUCCESS,
+  LOGIN_USER_ERROR,
   LOGOUT_USER,
   VERITY_AUTH,
   VERITY_AUTH_SUCCESS,
@@ -13,6 +14,11 @@ export const loginUser = (user) => ({
 export const loginUserSuccess = (token) => ({
   type: LOGIN_USER_SUCCESS,
   payload: token
+});
+
+export const loginUserError = (error) => ({
+  type: LOGIN_USER_ERROR,
+  payload: error
 });
 
 export const logoutUser = () => ({
