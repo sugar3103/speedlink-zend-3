@@ -88,7 +88,7 @@
     }
 
     .form__form-group-input-wrap--error-above {
-      margin-bottom: 15px;
+      margin-bottom: 0px;
 
       .form__form-group-error {
         top: -28px;
@@ -278,6 +278,9 @@
   @media screen and (max-width: 1200px) {
     width: 100%;
     margin-right: 0;
+    &:first-child {
+      margin-right: 0px;
+    }
   }
 }
 

@@ -13,7 +13,6 @@ use Zend\Log\Formatter\Simple;
 use Zend\Log\Logger;
 use Zend\Log\LoggerAbstractServiceFactory;
 use Core\Route\StaticRoute;
-
 use Core\DBAL\Types\UTCDateTimeType;
 
 $router = [
@@ -34,6 +33,18 @@ $router = [
             ]
          
         ],
+        'users' => [
+            'type' => StaticRoute::class,
+            'options' => [
+                'route' => '/users',                
+                'defaults' => [
+                    'controller' => Controller\UserController::class,
+                    'action' => 'index',
+                    'isAuthorizationRequired' => true
+                ]
+            ]
+         
+        ],
         'user' => [
             'type' => StaticRoute::class,
             'options' => [
@@ -43,7 +54,7 @@ $router = [
                 ],                       
                 'defaults' => [
                     'controller' => Controller\UserController::class,
-                    'action' => 'index',
+                    'action' => 'info',
                     'isAuthorizationRequired' => true
                 ]
             ]

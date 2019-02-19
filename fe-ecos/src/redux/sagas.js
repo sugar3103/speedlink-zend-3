@@ -3,12 +3,14 @@ import authSagas from './auth/saga';
 import statusSagas from './master-data/status/saga';
 import hubSagas from './master-data/hub/saga';
 import branchSagas from './master-data/branch/saga';
-import branchareaSagas from './master-data/brancharea/saga';
 import codeSagas from './master-data/address/code/saga';
 import countrySagas from './master-data/address/country/saga';
 import citySagas from './master-data/address/city/saga';
 import districtSagas from './master-data/address/district/saga';
 import wardSagas from './master-data/address/ward/saga';
+import rangeweightSagas from './master-data/pricing/rangeweight/saga';
+import zonecodeSagas from './master-data/pricing/zonecode/saga';
+import customerSagas from './master-data/pricing/customer/saga';
 import carrierSagas from './master-data/service-shipment/carrier/saga';
 import serviceSagas from './master-data/service-shipment/service/saga';
 import shipmentTypeSagas from './master-data/service-shipment/shipmnet-type/saga';
@@ -23,7 +25,6 @@ export default function* rootSaga() {
     statusSagas(),
     hubSagas(),
     branchSagas(),
-    branchareaSagas(),
     codeSagas(),
     countrySagas(),
     citySagas(),
@@ -32,6 +33,9 @@ export default function* rootSaga() {
     userSagas(),
     roleSagas(),
     permissionSagas(),
+    rangeweightSagas(),
+    zonecodeSagas(),
+    customerSagas(),
     carrierSagas(),
     serviceSagas(),
     shipmentTypeSagas(),

@@ -2,7 +2,7 @@
   .form {
     display: block;
     input, textarea {
-      border: 1px solid #f2f4f7;
+      border: 1px solid #d7d7d7;
       color: #646777;
     }
   }
@@ -10,7 +10,7 @@
     color: #646777;
   }
   .radio-btn__radio-custom {
-    border: 1px solid #ddd;
+    border: 1px solid #d7d7d7;
   }
 
 }
@@ -170,6 +170,7 @@
   .modal__title {
     margin: 0;
     font-weight: 300;
+    color: white;
   }
 
   .modal__close-btn {

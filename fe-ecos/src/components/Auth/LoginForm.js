@@ -3,13 +3,14 @@ import { Field, reduxForm } from 'redux-form';
 import EyeIcon from 'mdi-react/EyeIcon';
 import KeyVariantIcon from 'mdi-react/KeyVariantIcon';
 import AccountOutlineIcon from 'mdi-react/AccountOutlineIcon';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import renderCheckBoxField from '../../containers/Shared/form/CheckBox';
 import { injectIntl } from 'react-intl';
 import validate from './validateLoginForm';
 import CustomField from '../../containers/Shared/form/CustomField';
+import { connect } from 'react-redux';
+import LoadingIcon from 'mdi-react/LoadingIcon';
 
 class LogInForm extends PureComponent {
   static propTypes = {
@@ -25,13 +26,15 @@ class LogInForm extends PureComponent {
 
   showPassword = e => {
     e.preventDefault();
+    console.log(e);
+    
     this.setState({
       showPassword: !this.state.showPassword,
     });
   }
 
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, loading } = this.props;
     const { messages } = this.props.intl;
     return (
       <form className="form" onSubmit={handleSubmit}>
@@ -69,7 +72,7 @@ class LogInForm extends PureComponent {
             ><EyeIcon />
             </button>
           </div>
-          <div className="account__forgot-password">
+          <div className="account__forgot-password" hidden>
             <a href="/">{messages['login.forgot-password']}</a>
           </div>
         </div>
@@ -83,15 +86,27 @@ class LogInForm extends PureComponent {
           </div>
         </div>
         <div className="account__btns">
-          <Button color="success" outline className="account__btn" type="submit">{messages['login.login']}</Button>
-          <Link className="btn btn-outline-primary account__btn" to="/register">{messages['login.register']}</Link>
+          <Button 
+            color="success" 
+            outline 
+            className={`account__btn expand ${loading && 'expand--load'}`} 
+            type="submit"
+            disabled={loading}
+          >{loading && <LoadingIcon />}{messages['login.login']}</Button>
         </div>
       </form>
     );
   }
 }
 
+const mapStateToProps = ({authUser}) => {
+  const { loading } = authUser;
+  return {
+    loading
+  }
+}
+
 export default reduxForm({
   form: 'log_in_form',
   validate
-})(injectIntl(LogInForm));
+})(injectIntl(connect(mapStateToProps, null)(LogInForm)));

@@ -1,23 +1,18 @@
 import React, { Component } from 'react';
 import { Col, Container, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
+import { Main,Tabs } from '../../../components/System/User/Profile';
 
 class Edit extends Component {
   render() {
-    const { messages } = this.props.intl;
     return (
       <Container>
-        <Row>
-          <Col md={12}>
-            <h3 className="page-title">{messages['user.list']}</h3>
-            <h3 className="page-subhead subhead">Use this elements, if you want to show some hints or additional
-                  information
-            </h3>
-          </Col>
-        </Row>
-        <Row>
-
-        </Row>
+        <Col md={12} lg={12} xl={12}>
+          <Row>
+            <Main />
+          </Row>
+        </Col>
+        <Tabs />
       </Container>
     )
   }

@@ -24,7 +24,7 @@ class Action extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
+    
     if (nextProps.errors) {
       const { errors } = nextProps;
       this.setState({

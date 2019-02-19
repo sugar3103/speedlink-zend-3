@@ -18,6 +18,8 @@ import {
   toggleUserModal
 } from "./actions";
 
+import { getVerifyAuth } from '../../../actions';
+
 import createNotification from '../../../../util/notifications';
 import { startSubmit, stopSubmit } from 'redux-form';
 
@@ -36,7 +38,7 @@ function validateUser(errors) {
 function getListApi(params) {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}user`,
+    url: `${apiUrl}users`,
     headers: authHeader(),
     data: JSON.stringify(params)
   });
@@ -101,6 +103,7 @@ function* updateUserItem({ payload }) {
       case EC_SUCCESS:
         yield put(updateUserItemSuccess());
         yield put(getUserList(null, messages));
+        yield put(getVerifyAuth());
         yield put(toggleUserModal());
         createNotification({
           type: 'success', 

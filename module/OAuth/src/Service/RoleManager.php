@@ -185,22 +185,20 @@ class RoleManager {
             return false; // some roles already exist; do nothing.
 
         $defaultRoles = [
+            'Super Administrator' => [
+                'description' => 'User group all rights',
+                'parent' => null,
+                'permission' => [],
+            ],
             'Administrator' => [
                 'description' => 'A person who managers users, roles, etc.',
                 'parent' => null,
-                'permission' => [
-                    'user.manage',
-                    'role.manage',
-                    'permission.manage',
-                    'profile.any.view',
-                ],
+                'permission' => [],
             ],
-            'Guest' => [
+            'Default' => [
                 'description' => 'A person who can log in and view own profile',
                 'parent' => null,
-                'permission' => [
-                    'profile.own.view'
-                ]
+                'permission' => []
             ]
         ];
 

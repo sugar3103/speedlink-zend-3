@@ -246,6 +246,19 @@
     .sidebar__category-icon {
       transform: rotate(90deg);
     }
+    .sidebar__category-wrap {
+
+      .sidebar__category-icon {
+        transform: none;
+      }
+
+      &.sidebar__category-wrap--open {
+        
+        .sidebar__category-icon {
+          transform: rotate(90deg);
+        }
+      }
+    }
   }
 }
 

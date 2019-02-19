@@ -19,7 +19,7 @@ class Page extends Component {
         return (
             <Col md={12} lg={12} xl={12}>
                 <Card id="setting">
-                    <CardBody> 
+                    <CardBody style={{padding: '0 30px'}}> 
                         {setting && setting.items &&
                             <SettingForm onSubmit={this.handleSubmit} settings={setting.items}/>
                         }

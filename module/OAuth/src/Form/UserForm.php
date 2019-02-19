@@ -124,6 +124,24 @@ class UserForm extends Form {
                 ]
             ]
         ]);
+        $inputFilter->add([
+            'name' => 'email',
+            'required' => true,
+            'filters' => [
+                [
+                    'name' => StringTrim::class
+                ]
+            ],
+            'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'min' => 1,
+                        'max' => 50,
+                    ]
+                ]
+            ]
+        ]);
 
         
             // Add input for "password" field.
@@ -171,7 +189,7 @@ class UserForm extends Form {
             $inputFilter->add([
                 'class' => ArrayInput::class,
                 'name' => 'roles',
-                'required' => true,
+                'required' => false,
                 'filters' => [
                     [
                         'name' => ToInt::class

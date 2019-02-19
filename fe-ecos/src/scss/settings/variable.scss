@@ -9,7 +9,7 @@ $themes: (
     colorBorder: #eff1f5,
     colorIcon: #dddddd,
     imgInvert: invert(0%),
-    colorFieldsBorder: #f2f4f7,
+    colorFieldsBorder: #d7d7d7,
     colorBubble: rgba(242, 244, 247, 0.65),
     colorBubbleActive: rgba(234, 238, 255, 0.6),
     colorScrollbar: #B4BFD0,
@@ -51,7 +51,7 @@ $themes: (
   @return map-get($theme-map, $key);
 }
 
-$color-accent: #4ce1b6;
+$color-accent: #218838;
 $color-accent-hover: darken($color-accent, 10%);
 $color-additional: #999999;
 $color-additional-hover: darken($color-additional, 10%);
@@ -64,7 +64,7 @@ $color-violet: #c88ffa;
 $color-red: #ff4861;
 $color-red-hover: darken($color-red, 10%);
 
-$color-blue: #70bbfd;
+$color-blue: #0069d9;
 $color-blue-hover: darken($color-blue, 10%);
 
 $color-gray: #787985;

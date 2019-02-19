@@ -3,7 +3,7 @@ import React, { Component, Fragment } from 'react';
 import { Card, CardBody, Col,Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Item from './Item';
-import Table from '../../../containers/Shared/form/Table';
+import Table from '../../../containers/Shared/table/Table';
 import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
@@ -163,6 +163,7 @@ class List extends Component {
                 selectedPageSize: this.state.selectedPageSize,
                 changePageSize: this.onChangePageSize
               }}
+              data={items && items.length}
             >
               {this.showStatusItem(items)}
             </Table>

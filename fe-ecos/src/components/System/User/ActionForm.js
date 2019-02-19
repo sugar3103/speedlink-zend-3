@@ -58,18 +58,30 @@ class Action extends PureComponent {
     this.props.toggleUserModal();
   }
 
+  hiddenFiled = (field) => {
+    const { fields } = this.props;
+
+    if (fields !== undefined) {
+      return fields.indexOf(field) > -1 ? false : true;
+    } else {
+      return false;
+    }
+
+  }
+
   render() {
     const { messages } = this.props.intl;
-    const { handleSubmit } = this.props;
+    const { handleSubmit, modalData, dataUser } = this.props;
     const { items } = this.props.role;
+    const title = (modalData || dataUser) ? messages['user.update'] : messages['user.add-new'];
     return (
       <form className="form" onSubmit={handleSubmit}>
         <div className="modal__header">
           <button className="lnr lnr-cross modal__close-btn" onClick={this.toggleModal} />
-          <h4 className="bold-text  modal__title">{messages['user.add-new']}</h4>
+          <h4 className="bold-text  modal__title">{title}</h4>
         </div>
         <div className="modal__body">
-          <Row>
+          <Row hidden={this.hiddenFiled('username')}>
             <Col md={12}>
               <div className="form__form-group">
                 <span className="form__form-group-label">{messages['user.username']}</span>
@@ -86,7 +98,7 @@ class Action extends PureComponent {
             </Col>
           </Row>
           <Row>
-            <Col md={6}>
+            <Col md={6} hidden={this.hiddenFiled('firstname')}>
               <div className="form__form-group">
                 <span className="form__form-group-label">{messages['user.firstname']}</span>
                 <div className="form__form-group-field">
@@ -99,7 +111,7 @@ class Action extends PureComponent {
                 </div>
               </div>
             </Col>
-            <Col md={6}>
+            <Col md={6} hidden={this.hiddenFiled('lastname')}>
               <div className="form__form-group">
                 <span className="form__form-group-label">{messages['user.lastname']}</span>
                 <div className="form__form-group-field">
@@ -114,7 +126,7 @@ class Action extends PureComponent {
             </Col>
           </Row>
           <Row>
-            <Col md={12}>
+            <Col md={12} hidden={this.hiddenFiled('password')}>
               <div className="form__form-group">
                 <span className="form__form-group-label">{messages['user.password']}</span>
                 <div className="form__form-group-field">
@@ -150,7 +162,7 @@ class Action extends PureComponent {
                 </div>
               </div>
 
-              <div className="form__form-group">
+              <div className="form__form-group" hidden={this.hiddenFiled('status')}>
                 <span className="form__form-group-label">{messages['user.status']}</span>
                 <div className="form__form-group-field">
                   <Field
@@ -169,7 +181,7 @@ class Action extends PureComponent {
                 </div>
               </div>
 
-              <div className="form__form-group">
+              <div className="form__form-group" hidden={this.hiddenFiled('list')}>
                 <span className="form__form-group-label">{messages['role.list']}</span>
                 <div className="form__form-group-field">
                   <Field

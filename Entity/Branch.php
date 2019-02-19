@@ -133,5 +133,12 @@ class Branch
      */
     private $descriptionEn;
 
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="address", type="text", length=65535, nullable=true)
+     */
+    private $address;
+
 
 }

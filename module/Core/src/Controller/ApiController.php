@@ -44,7 +44,7 @@ class ApiController extends AbstractRestfulController
      *
      * @var type string 
      */
-    public $error_code = 0;
+    public $error_code = 1;
 
     /**
      *

@@ -13,6 +13,7 @@ export default {
       icon: 'database',
       childrens: [
         {
+          id: 'status',
           title: 'menu.status',
           route: '/app/master-data/status',
           icon: 'dice',
@@ -24,26 +25,31 @@ export default {
           icon: 'store',
           childrens: [
             {
+              id: 'address_code',
               title: 'menu.address_code',
               route: '/app/master-data/address/code',
               icon: 'license'
             },
             {
+              id: 'country',
               title: 'menu.address_country',
               route: '/app/master-data/address/country',
               icon: 'map'
             },
             {
+              id: 'country',
               title: 'menu.address_city',
               route: '/app/master-data/address/city',
               icon: 'apartment'
             },
             {
+              id: 'district',
               title: 'menu.address_district',
               route: '/app/master-data/address/district',
               icon: 'location'
             },
             {
+              id: 'ward',
               title: 'menu.address_ward',
               route: '/app/master-data/address/ward',
               icon: 'construction'
@@ -57,16 +63,19 @@ export default {
           icon: 'store',
           childrens: [
             {
+              id: 'carrier',
               title: 'menu.cs_carrier',
               route: '/app/master-data/service-shipment/carrier',
               icon: 'license'
             },
             {
+              id: 'service',
               title: 'menu.cs_service',
               route: '/app/master-data/service-shipment/service',
               icon: 'map'
             },
             {
+              id: 'shipment_type',
               title: 'menu.cs_shipment_type',
               route: '/app/master-data/service-shipment/shipment-type',
               icon: 'apartment'
@@ -80,18 +89,35 @@ export default {
           icon: 'store',
           childrens: [
             {
+              id: 'branch',
               title: 'menu.branch',
               route: '/app/master-data/networkport/branch',
               icon: 'license'
             },
             {
-              title: 'menu.brancharea',
-              route: '/app/master-data/networkport/brancharea',
+              id: 'hub',
+              title: 'menu.hub',
+              route: '/app/master-data/networkport/hub',
+              icon: 'map'
+            }
+          ]
+        },
+        {
+          id: 'pricing',
+          title: 'menu.pricing',
+          route: '/app/master-data/pricing',
+          icon: 'dice',
+          childrens: [
+            {
+              id: 'rangeweight',
+              title: 'menu.rangeweight',
+              route: '/app/master-data/pricing/rangeweight',
               icon: 'license'
             },
             {
-              title: 'menu.hub',
-              route: '/app/master-data/networkport/hub',
+              id: 'zonecode',
+              title: 'menu.zonecode',
+              route: '/app/master-data/pricing/zonecode',
               icon: 'map'
             }
           ]
