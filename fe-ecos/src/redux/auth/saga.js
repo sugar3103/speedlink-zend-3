@@ -12,7 +12,7 @@ import { authHeader } from '../../util/auth-header';
 
 import { apiUrl, EC_SUCCESS } from '../../constants/defaultValues';
 
-import { loginUserSuccess,getVerifyAuthSuccess } from './actions';
+import { loginUserSuccess, loginUserError, getVerifyAuthSuccess } from './actions';
 
 import { getSetting } from '../system/setting/action';
 
@@ -44,6 +44,7 @@ function* login({ payload }) {
       
     } else {
       const error = data.message;
+      yield put(loginUserError(error))
       createNotification({type: 'warning', message: error.toString()})
     }
   } catch (error) {

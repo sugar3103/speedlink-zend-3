@@ -1,6 +1,7 @@
 import {
   LOGIN_USER,
   LOGIN_USER_SUCCESS,
+  LOGIN_USER_ERROR,
   LOGOUT_USER,
   VERITY_AUTH,
   VERITY_AUTH_SUCCESS
@@ -8,6 +9,7 @@ import {
 
 const INIT_STATE = {
   loading: false,
+  error: '',
   token: '',
   user: ''
 };
@@ -18,6 +20,8 @@ export default (state = INIT_STATE, action) => {
       return { ...state, loading: true };
     case LOGIN_USER_SUCCESS:    
       return { ...state, loading: false, token: action.payload };
+    case LOGIN_USER_ERROR:    
+      return { ...state, loading: false, error: action.payload };
     case LOGOUT_USER:
       return { ...state, user: null };
     case VERITY_AUTH:
