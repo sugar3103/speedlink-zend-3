@@ -36,9 +36,19 @@ class FieldVasController extends CoreController {
 
     public function indexAction()
     {
-      $this->apiResponse = [
-          'message' => 'Field Vas Index Action'
-      ];
-      return $this->createResponse();
+        $result = [
+            "data" => []
+        ];
+
+        $fieldsMap = ['name'];
+        list($start, $limit, $sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);
+        $dataShipmentType = $this->fieldVasManager->getListFieldVasByCondition($start, $limit, $sortField, $sortDirection, $filters);
+
+        $result['error_code'] = 1;
+        $result['message'] = 'Success';
+        $result["data"] = !empty($dataShipmentType['listFieldVas']) ? $dataShipmentType['listFieldVas'] : [];
+        $this->apiResponse = $result;
+
+        return $this->createResponse();
     }
 }

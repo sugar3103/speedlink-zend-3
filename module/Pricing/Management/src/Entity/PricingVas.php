@@ -25,7 +25,7 @@ class PricingVas
      *
      * @ORM\Column(name="pricing_data_id", type="integer", nullable=false)
      */
-    private $pricingDataId;
+    private $pricing_data_id;
 
     /**
      * @var string
@@ -60,35 +60,35 @@ class PricingVas
      *
      * @ORM\Column(name="created_by", type="integer", nullable=false)
      */
-    private $createdBy;
+    private $created_by;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    private $createdAt;
+    private $created_at;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="updated_by", type="integer", nullable=true)
      */
-    private $updatedBy;
+    private $updated_by;
 
     /**
      * @var \DateTime|null
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    private $updatedAt;
+    private $updated_at;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="is_deleted", type="boolean", nullable=false)
      */
-    private $isDeleted = '0';
+    private $is_deleted = '0';
 
     /**
      * @return int
@@ -111,15 +111,15 @@ class PricingVas
      */
     public function getPricingDataId()
     {
-        return $this->pricingDataId;
+        return $this->pricing_data_id;
     }
 
     /**
-     * @param int $pricingDataId
+     * @param int $pricing_data_id
      */
-    public function setPricingDataId($pricingDataId)
+    public function setPricingDataId($pricing_data_id)
     {
-        $this->pricingDataId = $pricingDataId;
+        $this->pricing_data_id = $pricing_data_id;
     }
 
     /**
@@ -191,31 +191,31 @@ class PricingVas
      */
     public function getCreatedBy()
     {
-        return $this->createdBy;
+        return $this->created_by;
     }
 
     /**
-     * @param int $createdBy
+     * @param int $created_by
      */
-    public function setCreatedBy($createdBy)
+    public function setCreatedBy($created_by)
     {
-        $this->createdBy = $createdBy;
+        $this->created_by = $created_by;
     }
 
     /**
-     * @return DateTime
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
 
     /**
-     * @param DateTime $createdAt
+     * @param \DateTime $created_at
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt($created_at)
     {
-        $this->createdAt = $createdAt;
+        $this->created_at = $created_at;
     }
 
     /**
@@ -223,31 +223,31 @@ class PricingVas
      */
     public function getUpdatedBy()
     {
-        return $this->updatedBy;
+        return $this->updated_by;
     }
 
     /**
-     * @param int|null $updatedBy
+     * @param int|null $updated_by
      */
-    public function setUpdatedBy($updatedBy)
+    public function setUpdatedBy($updated_by)
     {
-        $this->updatedBy = $updatedBy;
+        $this->updated_by = $updated_by;
     }
 
     /**
-     * @return DateTime|null
+     * @return \DateTime|null
      */
     public function getUpdatedAt()
     {
-        return $this->updatedAt;
+        return $this->updated_at;
     }
 
     /**
-     * @param DateTime|null $updatedAt
+     * @param \DateTime|null $updated_at
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updated_at)
     {
-        $this->updatedAt = $updatedAt;
+        $this->updated_at = $updated_at;
     }
 
     /**
@@ -255,15 +255,15 @@ class PricingVas
      */
     public function isDeleted()
     {
-        return $this->isDeleted;
+        return $this->is_deleted;
     }
 
     /**
-     * @param bool $isDeleted
+     * @param bool $is_deleted
      */
-    public function setIsDeleted($isDeleted)
+    public function setIsDeleted($is_deleted)
     {
-        $this->isDeleted = $isDeleted;
+        $this->is_deleted = $is_deleted;
     }
 
 }

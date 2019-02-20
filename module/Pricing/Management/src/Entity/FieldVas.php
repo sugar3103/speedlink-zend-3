@@ -32,7 +32,7 @@ class FieldVas
      *
      * @ORM\Column(name="function_name", type="string", length=50, nullable=true)
      */
-    private $functionName;
+    private $function_name;
 
     /**
      * @var string|null
@@ -46,14 +46,14 @@ class FieldVas
      *
      * @ORM\Column(name="description_en", type="text", length=65535, nullable=true)
      */
-    private $descriptionEn;
+    private $description_en;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="is_deleted", type="boolean", nullable=false)
      */
-    private $isDeleted = '0';
+    private $is_deleted = '0';
 
     /**
      * @return int
@@ -92,15 +92,15 @@ class FieldVas
      */
     public function getFunctionName()
     {
-        return $this->functionName;
+        return $this->function_name;
     }
 
     /**
-     * @param string|null $functionName
+     * @param string|null $function_name
      */
-    public function setFunctionName($functionName)
+    public function setFunctionName($function_name)
     {
-        $this->functionName = $functionName;
+        $this->function_name = $function_name;
     }
 
     /**
@@ -124,15 +124,15 @@ class FieldVas
      */
     public function getDescriptionEn()
     {
-        return $this->descriptionEn;
+        return $this->description_en;
     }
 
     /**
-     * @param string|null $descriptionEn
+     * @param string|null $description_en
      */
-    public function setDescriptionEn($descriptionEn)
+    public function setDescriptionEn($description_en)
     {
-        $this->descriptionEn = $descriptionEn;
+        $this->description_en = $description_en;
     }
 
     /**
@@ -140,15 +140,15 @@ class FieldVas
      */
     public function isDeleted()
     {
-        return $this->isDeleted;
+        return $this->is_deleted;
     }
 
     /**
-     * @param bool $isDeleted
+     * @param bool $is_deleted
      */
-    public function setIsDeleted($isDeleted)
+    public function setIsDeleted($is_deleted)
     {
-        $this->isDeleted = $isDeleted;
+        $this->is_deleted = $is_deleted;
     }
 
 }

@@ -42,14 +42,14 @@ class PricingController extends CoreController {
             "data" => []
         ];
 
-        $fieldsMap = ['code', 'name', 'name_en', 'status'];
+        $fieldsMap = ['name'];
         list($start, $limit, $sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);
         $dataShipmentType = $this->pricingManager->getListPricingByCondition($start, $limit, $sortField, $sortDirection, $filters);
 
         $result['error_code'] = 1;
         $result['message'] = 'Success';
-        $result["total"] = $dataShipmentType['totalShipmentType'];
-        $result["data"] = !empty($dataShipmentType['listShipmentType']) ? $dataShipmentType['listShipmentType'] : [];
+        $result["total"] = $dataShipmentType['totalPricing'];
+        $result["data"] = !empty($dataShipmentType['listPricing']) ? $dataShipmentType['listPricing'] : [];
         $this->apiResponse = $result;
 
         return $this->createResponse();

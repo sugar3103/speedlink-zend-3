@@ -25,7 +25,7 @@ class PricingCod
      *
      * @ORM\Column(name="pricing_data_id", type="integer", nullable=false)
      */
-    private $pricingDataId;
+    private $pricing_data_id;
 
     /**
      * @var string
@@ -46,63 +46,63 @@ class PricingCod
      *
      * @ORM\Column(name="internal_city", type="decimal", precision=10, scale=2, nullable=false)
      */
-    private $internalCity;
+    private $internal_city;
 
     /**
      * @var string
      *
      * @ORM\Column(name="internal_city_ras", type="decimal", precision=10, scale=2, nullable=false)
      */
-    private $internalCityRas;
+    private $internal_city_ras;
 
     /**
      * @var string
      *
      * @ORM\Column(name="external_city", type="decimal", precision=10, scale=2, nullable=false)
      */
-    private $externalCity;
+    private $external_city;
 
     /**
      * @var string
      *
      * @ORM\Column(name="external_city_ras", type="decimal", precision=10, scale=2, nullable=false)
      */
-    private $externalCityRas;
+    private $external_city_ras;
 
     /**
      * @var int
      *
      * @ORM\Column(name="created_by", type="integer", nullable=false)
      */
-    private $createdBy;
+    private $created_by;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    private $createdAt;
+    private $created_at;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="updated_by", type="integer", nullable=true)
      */
-    private $updatedBy;
+    private $updated_by;
 
     /**
      * @var \DateTime|null
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    private $updatedAt;
+    private $updated_at;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="is_deleted", type="boolean", nullable=false)
      */
-    private $isDeleted = '0';
+    private $is_deleted = '0';
 
     /**
      * @return int
@@ -125,15 +125,15 @@ class PricingCod
      */
     public function getPricingDataId()
     {
-        return $this->pricingDataId;
+        return $this->pricing_data_id;
     }
 
     /**
-     * @param int $pricingDataId
+     * @param int $pricing_data_id
      */
-    public function setPricingDataId($pricingDataId)
+    public function setPricingDataId($pricing_data_id)
     {
-        $this->pricingDataId = $pricingDataId;
+        $this->pricing_data_id = $pricing_data_id;
     }
 
     /**
@@ -173,15 +173,15 @@ class PricingCod
      */
     public function getInternalCity()
     {
-        return $this->internalCity;
+        return $this->internal_city;
     }
 
     /**
-     * @param string $internalCity
+     * @param string $internal_city
      */
-    public function setInternalCity($internalCity)
+    public function setInternalCity($internal_city)
     {
-        $this->internalCity = $internalCity;
+        $this->internal_city = $internal_city;
     }
 
     /**
@@ -189,15 +189,15 @@ class PricingCod
      */
     public function getInternalCityRas()
     {
-        return $this->internalCityRas;
+        return $this->internal_city_ras;
     }
 
     /**
-     * @param string $internalCityRas
+     * @param string $internal_city_ras
      */
-    public function setInternalCityRas($internalCityRas)
+    public function setInternalCityRas($internal_city_ras)
     {
-        $this->internalCityRas = $internalCityRas;
+        $this->internal_city_ras = $internal_city_ras;
     }
 
     /**
@@ -205,15 +205,15 @@ class PricingCod
      */
     public function getExternalCity()
     {
-        return $this->externalCity;
+        return $this->external_city;
     }
 
     /**
-     * @param string $externalCity
+     * @param string $external_city
      */
-    public function setExternalCity($externalCity)
+    public function setExternalCity($external_city)
     {
-        $this->externalCity = $externalCity;
+        $this->external_city = $external_city;
     }
 
     /**
@@ -221,15 +221,15 @@ class PricingCod
      */
     public function getExternalCityRas()
     {
-        return $this->externalCityRas;
+        return $this->external_city_ras;
     }
 
     /**
-     * @param string $externalCityRas
+     * @param string $external_city_ras
      */
-    public function setExternalCityRas($externalCityRas)
+    public function setExternalCityRas($external_city_ras)
     {
-        $this->externalCityRas = $externalCityRas;
+        $this->external_city_ras = $external_city_ras;
     }
 
     /**
@@ -237,31 +237,31 @@ class PricingCod
      */
     public function getCreatedBy()
     {
-        return $this->createdBy;
+        return $this->created_by;
     }
 
     /**
-     * @param int $createdBy
+     * @param int $created_by
      */
-    public function setCreatedBy($createdBy)
+    public function setCreatedBy($created_by)
     {
-        $this->createdBy = $createdBy;
+        $this->created_by = $created_by;
     }
 
     /**
-     * @return DateTime
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
 
     /**
-     * @param DateTime $createdAt
+     * @param \DateTime $created_at
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt($created_at)
     {
-        $this->createdAt = $createdAt;
+        $this->created_at = $created_at;
     }
 
     /**
@@ -269,31 +269,31 @@ class PricingCod
      */
     public function getUpdatedBy()
     {
-        return $this->updatedBy;
+        return $this->updated_by;
     }
 
     /**
-     * @param int|null $updatedBy
+     * @param int|null $updated_by
      */
-    public function setUpdatedBy($updatedBy)
+    public function setUpdatedBy($updated_by)
     {
-        $this->updatedBy = $updatedBy;
+        $this->updated_by = $updated_by;
     }
 
     /**
-     * @return DateTime|null
+     * @return \DateTime|null
      */
     public function getUpdatedAt()
     {
-        return $this->updatedAt;
+        return $this->updated_at;
     }
 
     /**
-     * @param DateTime|null $updatedAt
+     * @param \DateTime|null $updated_at
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updated_at)
     {
-        $this->updatedAt = $updatedAt;
+        $this->updated_at = $updated_at;
     }
 
     /**
@@ -301,15 +301,15 @@ class PricingCod
      */
     public function isDeleted()
     {
-        return $this->isDeleted;
+        return $this->is_deleted;
     }
 
     /**
-     * @param bool $isDeleted
+     * @param bool $is_deleted
      */
-    public function setIsDeleted($isDeleted)
+    public function setIsDeleted($is_deleted)
     {
-        $this->isDeleted = $isDeleted;
+        $this->is_deleted = $is_deleted;
     }
 
 }

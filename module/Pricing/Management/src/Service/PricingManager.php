@@ -1,6 +1,8 @@
 <?php
 namespace Management\Service;
 
+use Core\Utils\Utils;
+use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Management\Entity\Pricing;
 use Doctrine\ORM\EntityManager;
 
@@ -27,33 +29,35 @@ class PricingManager {
 
     public function getListPricingByCondition($start, $limit, $sortField = '', $sortDirection = 'asc', $filters = [])
     {
-        $shipmentTypes = [];
-        $totalShipmentType = 0;
+        $pricingList = [];
+        $totalPricing = 0;
 
         //get orm carrier
-        $ormShipmentType = $this->entityManager->getRepository(Pricing::class)->getListPricingByCondition($start, $limit, $sortField, $sortDirection, $filters);
+        $ormPricing = $this->entityManager->getRepository(Pricing::class)->getListPricingByCondition($start, $limit, $sortField, $sortDirection, $filters);
 
-        if($ormShipmentType){
-            $ormPaginator = new ORMPaginator($ormShipmentType, true);
+        if($ormPricing){
+            $ormPaginator = new ORMPaginator($ormPricing, true);
             $ormPaginator->setUseOutputWalkers(false);
 
             //get total carriers list
-            $totalShipmentType = $ormPaginator->count();
-            $shipmentTypes = $ormPaginator->getIterator()->getArrayCopy();
+            $totalPricing = $ormPaginator->count();
+            $pricingList = $ormPaginator->getIterator()->getArrayCopy();
 
-            foreach ($shipmentTypes as $key => $shipmentType) {
+            foreach ($pricingList as $key => $pricing) {
                 $date_format = 'd/m/Y H:i:s';
-                $shipmentTypes[$key]['created_at'] = Utils::checkDateFormat($shipmentType['created_at'], $date_format);
-                $shipmentTypes[$key]['updated_at'] = Utils::checkDateFormat($shipmentType['updated_at'], $date_format);
+                $pricingList[$key]['created_at'] = Utils::checkDateFormat($pricing['created_at'], $date_format);
+                $pricingList[$key]['updated_at'] = Utils::checkDateFormat($pricing['updated_at'], $date_format);
+                $pricingList[$key]['effected_date'] = Utils::checkDateFormat($pricing['effected_date'], $date_format);
+                $pricingList[$key]['expired_date'] = Utils::checkDateFormat($pricing['expired_date'], $date_format);
             }
         }
 
         //set return data
-        $dataShipmentType = [
-            'listShipmentType' => $shipmentTypes,
-            'totalShipmentType' => $totalShipmentType,
+        $dataPricing = [
+            'listPricing' => $pricingList,
+            'totalPricing' => $totalPricing,
         ];
-        return $dataShipmentType;
+        return $dataPricing;
     }
 
 }

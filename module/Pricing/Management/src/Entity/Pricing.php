@@ -32,140 +32,140 @@ class Pricing
      *
      * @ORM\Column(name="carrier_id", type="integer", nullable=false)
      */
-    private $carrierId;
+    private $carrier_id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="category", type="string", length=10, nullable=false, options={"fixed"=true,"comment"="Inbound, Outbound, Domestic"})
+     * @ORM\Column(name="category_code", type="string", length=10, nullable=false, options={"fixed"=true,"comment"="Inbound, Outbound, Domestic"})
      */
-    private $category;
+    private $category_code;
 
     /**
      * @var int
      *
      * @ORM\Column(name="service_id", type="integer", nullable=false)
      */
-    private $serviceId;
+    private $service_id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="shipment_type_id", type="integer", nullable=false)
      */
-    private $shipmentTypeId;
+    private $shipment_type_id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="origin_country_id", type="integer", nullable=false)
      */
-    private $originCountryId;
+    private $origin_country_id;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="origin_city_id", type="integer", nullable=true, options={"comment"="required if category == Domestic"})
      */
-    private $originCityId;
+    private $origin_city_id;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="origin_district_id", type="integer", nullable=true)
      */
-    private $originDistrictId;
+    private $origin_district_id;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="origin_ward_id", type="integer", nullable=true)
      */
-    private $originWardId;
+    private $origin_ward_id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="destination_country_id", type="integer", nullable=false)
      */
-    private $destinationCountryId;
+    private $destination_country_id;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="destination_city_id", type="integer", nullable=true, options={"comment"="required if category == Domestic"})
      */
-    private $destinationCityId;
+    private $destination_city_id;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="destination_district_id", type="integer", nullable=true)
      */
-    private $destinationDistrictId;
+    private $destination_district_id;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="destination_ward_id", type="integer", nullable=true)
      */
-    private $destinationWardId;
+    private $destination_ward_id;
 
     /**
      * @var \DateTime|null
      *
      * @ORM\Column(name="effected_date", type="datetime", nullable=true)
      */
-    private $effectedDate;
+    private $effected_date;
 
     /**
      * @var \DateTime|null
      *
      * @ORM\Column(name="expired_date", type="datetime", nullable=true)
      */
-    private $expiredDate;
+    private $expired_date;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="saleman_id", type="integer", nullable=true, options={"comment"="user_id"})
      */
-    private $salemanId;
+    private $saleman_id;
 
     /**
-     * @var bool
+     * @var int
      *
      * @ORM\Column(name="is_private", type="boolean", nullable=false)
      */
-    private $isPrivate;
+    private $is_private;
 
     /**
      * @var int
      *
      * @ORM\Column(name="customer_id", type="integer", nullable=false, options={"comment"="required if is_private == 1"})
      */
-    private $customerId;
+    private $customer_id;
 
     /**
-     * @var bool
+     * @var int
      *
      * @ORM\Column(name="status", type="boolean", nullable=false)
      */
     private $status = '0';
 
     /**
-     * @var bool|null
+     * @var int
      *
      * @ORM\Column(name="approval_status", type="boolean", nullable=true, options={"comment"="0 == new, 1 == approved"})
      */
-    private $approvalStatus;
+    private $approval_status;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="approval_by", type="integer", nullable=true, options={"comment"="user_id"})
      */
-    private $approvalBy;
+    private $approval_by;
 
     /**
      * @var string|null
@@ -179,42 +179,140 @@ class Pricing
      *
      * @ORM\Column(name="description_en", type="text", length=65535, nullable=true)
      */
-    private $descriptionEn;
+    private $description_en;
 
     /**
      * @var int
      *
      * @ORM\Column(name="created_by", type="integer", nullable=false)
      */
-    private $createdBy;
+    private $created_by;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    private $createdAt;
+    private $created_at;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="updated_by", type="integer", nullable=true)
      */
-    private $updatedBy;
+    private $updated_by;
 
     /**
      * @var \DateTime|null
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    private $updatedAt;
+    private $updated_at;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="is_deleted", type="boolean", nullable=false)
      */
-    private $isDeleted = '0';
+    private $is_deleted = '0';
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\ServiceShipment\Entity\Carrier")
+     * @ORM\JoinColumn(name="carrier_id", referencedColumnName="id", nullable=true)
+     */
+    private $join_carrier;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\ServiceShipment\Entity\Service")
+     * @ORM\JoinColumn(name="shipment_type_id", referencedColumnName="id", nullable=true)
+     */
+    private $join_service;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\Address\Entity\Country")
+     * @ORM\JoinColumn(name="origin_country_id", referencedColumnName="id", nullable=true)
+     */
+    private $join_origin_country;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\Address\Entity\City")
+     * @ORM\JoinColumn(name="origin_city_id", referencedColumnName="id", nullable=true)
+     */
+    private $join_origin_city;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\Address\Entity\District")
+     * @ORM\JoinColumn(name="origin_district_id", referencedColumnName="id", nullable=true)
+     */
+    private $join_origin_district;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\Address\Entity\Ward")
+     * @ORM\JoinColumn(name="origin_ward_id", referencedColumnName="id", nullable=true)
+     */
+    private $join_origin_ward;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\Address\Entity\Country")
+     * @ORM\JoinColumn(name="destination_country_id", referencedColumnName="id", nullable=true)
+     */
+    private $join_destination_country;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\Address\Entity\City")
+     * @ORM\JoinColumn(name="destination_city_id", referencedColumnName="id", nullable=true)
+     */
+    private $join_destination_city;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\Address\Entity\District")
+     * @ORM\JoinColumn(name="destination_district_id", referencedColumnName="id", nullable=true)
+     */
+    private $join_destination_district;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\Address\Entity\Ward")
+     * @ORM\JoinColumn(name="destination_ward_id", referencedColumnName="id", nullable=true)
+     */
+    private $join_destination_ward;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\ServiceShipment\Entity\ShipmentType")
+     * @ORM\JoinColumn(name="shipment_type_id", referencedColumnName="id", nullable=true)
+     */
+    private $join_shipment_type;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\OAuth\Entity\User")
+     * @ORM\JoinColumn(name="saleman_id", referencedColumnName="id", nullable=true)
+     */
+    private $join_saleman;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\Customer\Entity\Customer")
+     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=true)
+     */
+    private $join_customer;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\OAuth\Entity\User")
+     * @ORM\JoinColumn(name="approval_by", referencedColumnName="id", nullable=true)
+     */
+    private $join_approval;
 
     /**
      *
@@ -267,31 +365,31 @@ class Pricing
      */
     public function getCarrierId()
     {
-        return $this->carrierId;
+        return $this->carrier_id;
     }
 
     /**
      * @param int $carrierId
      */
-    public function setCarrierId($carrierId)
+    public function setCarrierId($carrier_id)
     {
-        $this->carrierId = $carrierId;
+        $this->carrier_id = $carrier_id;
     }
 
     /**
      * @return string
      */
-    public function getCategory()
+    public function getCategoryCode()
     {
-        return $this->category;
+        return $this->category_code;
     }
 
     /**
-     * @param string $category
+     * @param string $category_code
      */
-    public function setCategory($category)
+    public function setCategoryCode($category_code)
     {
-        $this->category = $category;
+        $this->category_code = $category_code;
     }
 
     /**
@@ -299,15 +397,15 @@ class Pricing
      */
     public function getServiceId()
     {
-        return $this->serviceId;
+        return $this->service_id;
     }
 
     /**
-     * @param int $serviceId
+     * @param int $service_id
      */
-    public function setServiceId($serviceId)
+    public function setServiceId($service_id)
     {
-        $this->serviceId = $serviceId;
+        $this->service_id = $service_id;
     }
 
     /**
@@ -315,15 +413,15 @@ class Pricing
      */
     public function getShipmentTypeId()
     {
-        return $this->shipmentTypeId;
+        return $this->shipment_type_id;
     }
 
     /**
-     * @param int $shipmentTypeId
+     * @param int $shipment_type_id
      */
-    public function setShipmentTypeId($shipmentTypeId)
+    public function setShipmentTypeId($shipment_type_id)
     {
-        $this->shipmentTypeId = $shipmentTypeId;
+        $this->shipment_type_id = $shipment_type_id;
     }
 
     /**
@@ -331,15 +429,15 @@ class Pricing
      */
     public function getOriginCountryId()
     {
-        return $this->originCountryId;
+        return $this->origin_country_id;
     }
 
     /**
-     * @param int $originCountryId
+     * @param int $origin_country_id
      */
-    public function setOriginCountryId($originCountryId)
+    public function setOriginCountryId($origin_country_id)
     {
-        $this->originCountryId = $originCountryId;
+        $this->origin_country_id = $origin_country_id;
     }
 
     /**
@@ -347,15 +445,15 @@ class Pricing
      */
     public function getOriginCityId()
     {
-        return $this->originCityId;
+        return $this->origin_city_id;
     }
 
     /**
-     * @param int|null $originCityId
+     * @param int|null $origin_city_id
      */
-    public function setOriginCityId($originCityId)
+    public function setOriginCityId($origin_city_id)
     {
-        $this->originCityId = $originCityId;
+        $this->origin_city_id = $origin_city_id;
     }
 
     /**
@@ -363,15 +461,15 @@ class Pricing
      */
     public function getOriginDistrictId()
     {
-        return $this->originDistrictId;
+        return $this->origin_district_id;
     }
 
     /**
-     * @param int|null $originDistrictId
+     * @param int|null $origin_district_id
      */
-    public function setOriginDistrictId($originDistrictId)
+    public function setOriginDistrictId($origin_district_id)
     {
-        $this->originDistrictId = $originDistrictId;
+        $this->origin_district_id = $origin_district_id;
     }
 
     /**
@@ -379,15 +477,15 @@ class Pricing
      */
     public function getOriginWardId()
     {
-        return $this->originWardId;
+        return $this->origin_ward_id;
     }
 
     /**
-     * @param int|null $originWardId
+     * @param int|null $origin_ward_id
      */
-    public function setOriginWardId($originWardId)
+    public function setOriginWardId($origin_ward_id)
     {
-        $this->originWardId = $originWardId;
+        $this->origin_ward_id = $origin_ward_id;
     }
 
     /**
@@ -395,15 +493,15 @@ class Pricing
      */
     public function getDestinationCountryId()
     {
-        return $this->destinationCountryId;
+        return $this->destination_country_id;
     }
 
     /**
-     * @param int $destinationCountryId
+     * @param int $destination_country_id
      */
-    public function setDestinationCountryId($destinationCountryId)
+    public function setDestinationCountryId($destination_country_id)
     {
-        $this->destinationCountryId = $destinationCountryId;
+        $this->destination_country_id = $destination_country_id;
     }
 
     /**
@@ -411,15 +509,15 @@ class Pricing
      */
     public function getDestinationCityId()
     {
-        return $this->destinationCityId;
+        return $this->destination_city_id;
     }
 
     /**
-     * @param int|null $destinationCityId
+     * @param int|null $destination_city_id
      */
-    public function setDestinationCityId($destinationCityId)
+    public function setDestinationCityId($destination_city_id)
     {
-        $this->destinationCityId = $destinationCityId;
+        $this->destination_city_id = $destination_city_id;
     }
 
     /**
@@ -427,15 +525,15 @@ class Pricing
      */
     public function getDestinationDistrictId()
     {
-        return $this->destinationDistrictId;
+        return $this->destination_district_id;
     }
 
     /**
-     * @param int|null $destinationDistrictId
+     * @param int|null $destination_district_id
      */
-    public function setDestinationDistrictId($destinationDistrictId)
+    public function setDestinationDistrictId($destination_district_id)
     {
-        $this->destinationDistrictId = $destinationDistrictId;
+        $this->destination_district_id = $destination_district_id;
     }
 
     /**
@@ -443,47 +541,47 @@ class Pricing
      */
     public function getDestinationWardId()
     {
-        return $this->destinationWardId;
+        return $this->destination_ward_id;
     }
 
     /**
-     * @param int|null $destinationWardId
+     * @param int|null $destination_ward_id
      */
-    public function setDestinationWardId($destinationWardId)
+    public function setDestinationWardId($destination_ward_id)
     {
-        $this->destinationWardId = $destinationWardId;
+        $this->destination_ward_id = $destination_ward_id;
     }
 
     /**
-     * @return DateTime|null
+     * @return \DateTime|null
      */
     public function getEffectedDate()
     {
-        return $this->effectedDate;
+        return $this->effected_date;
     }
 
     /**
-     * @param DateTime|null $effectedDate
+     * @param \DateTime|null $effected_date
      */
-    public function setEffectedDate($effectedDate)
+    public function setEffectedDate($effected_date)
     {
-        $this->effectedDate = $effectedDate;
+        $this->effected_date = $effected_date;
     }
 
     /**
-     * @return DateTime|null
+     * @return \DateTime|null
      */
     public function getExpiredDate()
     {
-        return $this->expiredDate;
+        return $this->expired_date;
     }
 
     /**
-     * @param DateTime|null $expiredDate
+     * @param \DateTime|null $expired_date
      */
-    public function setExpiredDate($expiredDate)
+    public function setExpiredDate($expired_date)
     {
-        $this->expiredDate = $expiredDate;
+        $this->expired_date = $expired_date;
     }
 
     /**
@@ -491,31 +589,31 @@ class Pricing
      */
     public function getSalemanId()
     {
-        return $this->salemanId;
+        return $this->saleman_id;
     }
 
     /**
-     * @param int|null $salemanId
+     * @param int|null $saleman_id
      */
-    public function setSalemanId($salemanId)
+    public function setSalemanId($saleman_id)
     {
-        $this->salemanId = $salemanId;
+        $this->saleman_id = $saleman_id;
     }
 
     /**
-     * @return bool
+     * @return int
      */
-    public function isPrivate()
+    public function getisPrivate()
     {
-        return $this->isPrivate;
+        return $this->is_private;
     }
 
     /**
-     * @param bool $isPrivate
+     * @param int $is_private
      */
-    public function setIsPrivate($isPrivate)
+    public function setIsPrivate($is_private)
     {
-        $this->isPrivate = $isPrivate;
+        $this->is_private = $is_private;
     }
 
     /**
@@ -523,27 +621,27 @@ class Pricing
      */
     public function getCustomerId()
     {
-        return $this->customerId;
+        return $this->customer_id;
     }
 
     /**
-     * @param int $customerId
+     * @param int $customer_id
      */
-    public function setCustomerId($customerId)
+    public function setCustomerId($customer_id)
     {
-        $this->customerId = $customerId;
+        $this->customer_id = $customer_id;
     }
 
     /**
-     * @return bool
+     * @return int
      */
-    public function isStatus()
+    public function getStatus()
     {
         return $this->status;
     }
 
     /**
-     * @param bool $status
+     * @param int $status
      */
     public function setStatus($status)
     {
@@ -551,19 +649,19 @@ class Pricing
     }
 
     /**
-     * @return bool|null
+     * @return int
      */
     public function getApprovalStatus()
     {
-        return $this->approvalStatus;
+        return $this->approval_status;
     }
 
     /**
-     * @param bool|null $approvalStatus
+     * @param int $approval_status
      */
-    public function setApprovalStatus($approvalStatus)
+    public function setApprovalStatus($approval_status)
     {
-        $this->approvalStatus = $approvalStatus;
+        $this->approval_status = $approval_status;
     }
 
     /**
@@ -571,15 +669,15 @@ class Pricing
      */
     public function getApprovalBy()
     {
-        return $this->approvalBy;
+        return $this->approval_by;
     }
 
     /**
-     * @param int|null $approvalBy
+     * @param int|null $approval_by
      */
-    public function setApprovalBy($approvalBy)
+    public function setApprovalBy($approval_by)
     {
-        $this->approvalBy = $approvalBy;
+        $this->approval_by = $approval_by;
     }
 
     /**
@@ -603,15 +701,15 @@ class Pricing
      */
     public function getDescriptionEn()
     {
-        return $this->descriptionEn;
+        return $this->description_en;
     }
 
     /**
-     * @param string|null $descriptionEn
+     * @param string|null $description_en
      */
-    public function setDescriptionEn($descriptionEn)
+    public function setDescriptionEn($description_en)
     {
-        $this->descriptionEn = $descriptionEn;
+        $this->description_en = $description_en;
     }
 
     /**
@@ -619,31 +717,31 @@ class Pricing
      */
     public function getCreatedBy()
     {
-        return $this->createdBy;
+        return $this->created_by;
     }
 
     /**
-     * @param int $createdBy
+     * @param int $created_by
      */
-    public function setCreatedBy($createdBy)
+    public function setCreatedBy($created_by)
     {
-        $this->createdBy = $createdBy;
+        $this->created_by = $created_by;
     }
 
     /**
-     * @return DateTime
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
 
     /**
-     * @param DateTime $createdAt
+     * @param \DateTime $created_at
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt($created_at)
     {
-        $this->createdAt = $createdAt;
+        $this->created_at = $created_at;
     }
 
     /**
@@ -651,31 +749,31 @@ class Pricing
      */
     public function getUpdatedBy()
     {
-        return $this->updatedBy;
+        return $this->updated_by;
     }
 
     /**
-     * @param int|null $updatedBy
+     * @param int|null $updated_by
      */
-    public function setUpdatedBy($updatedBy)
+    public function setUpdatedBy($updated_by)
     {
-        $this->updatedBy = $updatedBy;
+        $this->updated_by = $updated_by;
     }
 
     /**
-     * @return DateTime|null
+     * @return \DateTime|null
      */
     public function getUpdatedAt()
     {
-        return $this->updatedAt;
+        return $this->updated_at;
     }
 
     /**
-     * @param DateTime|null $updatedAt
+     * @param \DateTime|null $updated_at
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updated_at)
     {
-        $this->updatedAt = $updatedAt;
+        $this->updated_at = $updated_at;
     }
 
     /**
@@ -683,15 +781,239 @@ class Pricing
      */
     public function isDeleted()
     {
-        return $this->isDeleted;
+        return $this->is_deleted;
     }
 
     /**
-     * @param bool $isDeleted
+     * @param bool $is_deleted
      */
-    public function setIsDeleted($isDeleted)
+    public function setIsDeleted($is_deleted)
     {
-        $this->isDeleted = $isDeleted;
+        $this->is_deleted = $is_deleted;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinCarrier()
+    {
+        return $this->join_carrier;
+    }
+
+    /**
+     * @param mixed $join_carrier
+     */
+    public function setJoinCarrier($join_carrier)
+    {
+        $this->join_carrier = $join_carrier;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinService()
+    {
+        return $this->join_service;
+    }
+
+    /**
+     * @param mixed $join_service
+     */
+    public function setJoinService($join_service)
+    {
+        $this->join_service = $join_service;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinOriginCountry()
+    {
+        return $this->join_origin_country;
+    }
+
+    /**
+     * @param mixed $join_origin_country
+     */
+    public function setJoinOriginCountry($join_origin_country)
+    {
+        $this->join_origin_country = $join_origin_country;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinOriginCity()
+    {
+        return $this->join_origin_city;
+    }
+
+    /**
+     * @param mixed $join_origin_city
+     */
+    public function setJoinOriginCity($join_origin_city)
+    {
+        $this->join_origin_city = $join_origin_city;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinOriginDistrict()
+    {
+        return $this->join_origin_district;
+    }
+
+    /**
+     * @param mixed $join_origin_district
+     */
+    public function setJoinOriginDistrict($join_origin_district)
+    {
+        $this->join_origin_district = $join_origin_district;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinOriginWard()
+    {
+        return $this->join_origin_ward;
+    }
+
+    /**
+     * @param mixed $join_origin_ward
+     */
+    public function setJoinOriginWard($join_origin_ward)
+    {
+        $this->join_origin_ward = $join_origin_ward;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinDestinationCountry()
+    {
+        return $this->join_destination_country;
+    }
+
+    /**
+     * @param mixed $join_destination_country
+     */
+    public function setJoinDestinationCountry($join_destination_country)
+    {
+        $this->join_destination_country = $join_destination_country;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinDestinationCity()
+    {
+        return $this->join_destination_city;
+    }
+
+    /**
+     * @param mixed $join_destination_city
+     */
+    public function setJoinDestinationCity($join_destination_city)
+    {
+        $this->join_destination_city = $join_destination_city;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinDestinationDistrict()
+    {
+        return $this->join_destination_district;
+    }
+
+    /**
+     * @param mixed $join_destination_district
+     */
+    public function setJoinDestinationDistrict($join_destination_district)
+    {
+        $this->join_destination_district = $join_destination_district;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinDestinationWard()
+    {
+        return $this->join_destination_ward;
+    }
+
+    /**
+     * @param mixed $join_destination_ward
+     */
+    public function setJoinDestinationWard($join_destination_ward)
+    {
+        $this->join_destination_ward = $join_destination_ward;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinShipmentType()
+    {
+        return $this->join_shipment_type;
+    }
+
+    /**
+     * @param mixed $join_shipment_type
+     */
+    public function setJoinShipmentType($join_shipment_type)
+    {
+        $this->join_shipment_type = $join_shipment_type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinSaleman()
+    {
+        return $this->join_saleman;
+    }
+
+    /**
+     * @param mixed $join_saleman
+     */
+    public function setJoinSaleman($join_saleman)
+    {
+        $this->join_saleman = $join_saleman;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinCustomer()
+    {
+        return $this->join_customer;
+    }
+
+    /**
+     * @param mixed $join_customer
+     */
+    public function setJoinCustomer($join_customer)
+    {
+        $this->join_customer = $join_customer;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinApproval()
+    {
+        return $this->join_approval;
+    }
+
+    /**
+     * @param mixed $join_approval
+     */
+    public function setJoinApproval($join_approval)
+    {
+        $this->join_approval = $join_approval;
     }
 
     /**
