@@ -1,13 +1,12 @@
 const validate = (values) => {
-    const errors = {};
-    // console.log(values);
-    if (!values.code) {
-      errors.code = 'rangeweight.validate-code-empty';
-    } else if (values.code.length < 5) {
-      errors.name = 'rangeweight.validate-code-minlength';
-    } else if (values.code.length > 20) {
-      errors.name = 'rangeweight.validate-code-maxlength';
-    }
+  const errors = {};
+  if (!values.code) {
+    errors.code = 'rangeweight.validate-code-empty';
+  } else if (values.code.length < 5) {
+    errors.code = 'rangeweight.validate-code-minlength';
+  } else if (values.code.length > 20) {
+    errors.code = 'rangeweight.validate-code-maxlength';
+  }
 
     if (!values.is_private ) {
       errors.is_private = 'rangeweight.validate-private-empty';
@@ -25,8 +24,8 @@ const validate = (values) => {
       errors.category = 'rangeweight.validate-category-empty';
     }
 
-    if (!values.status) {
-      errors.status = 'rangeweight.validate-status-empty';
+    if (values.status  === undefined || values.status === null ) {
+      errors.status = 'zonecode.validate-status-empty';
     }
 
     if (!values.service_id) {

@@ -1,5 +1,5 @@
+
 const validate = (values) => {
-  console.log(values.status);
   
     const errors = {};
     if (!values.code) {
@@ -26,7 +26,7 @@ const validate = (values) => {
       errors.category = 'zonecode.validate-category-empty';
     }
 
-    if (values.status == 'undefined' || values.status =='null') {
+    if (values.status  === undefined || values.status === null ) {
       errors.status = 'zonecode.validate-status-empty';
     }
 
