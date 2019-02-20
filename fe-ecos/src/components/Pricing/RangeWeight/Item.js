@@ -65,7 +65,7 @@ class Item extends Component {
         }</td>
         <td>{rangeweight.customer_name}</td>
         <td>{rangeweight.from}</td>
-        <td>{rangeweight.to}</td>
+        <td>{rangeweight.to === '0.00' ? 'Over' : rangeweight.to }</td>
         <td>{rangeweight.calculate_unit ?
           <Badge color="success">
             {messages['yes']}

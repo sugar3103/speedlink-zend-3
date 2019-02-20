@@ -296,7 +296,7 @@ class ZoneCode
      *
      * @ORM\OneToOne(targetEntity="Customer\Entity\Customer")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id", unique=true, nullable=false)
+     *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id", unique=true, nullable=true)
      * })
      */
     private $customer;

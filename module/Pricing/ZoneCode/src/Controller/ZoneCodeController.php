@@ -83,7 +83,7 @@ class ZoneCodeController extends CoreController {
       if ($this->getRequest()->isPost()) {
         $user = $this->tokenPayload;
         $data = $this->getRequestData();
-
+ //  var_dump($result);die();
         $check_exits = $this->entityManager->getRepository(ZoneCode::class)->findOneBy(array('carrier_id' => $data['carrier_id'], 'category' => $data['category'], 'service_id' => $data['service_id'], 'shipment_type_id' => $data['shipment_type_id'], 'code' => $data['code']));    
         if($check_exits)
         {
@@ -98,7 +98,6 @@ class ZoneCodeController extends CoreController {
         if ($form->isValid()) {
           $data = $form->getData();
           $data['created_by'] = $user->id;
-          // var_dump($data);die();
           $result = $this->zonecodeManager->addZoneCode($data);                
           // Check result
           $this->error_code = 1;

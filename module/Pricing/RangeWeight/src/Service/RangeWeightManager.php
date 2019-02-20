@@ -141,12 +141,12 @@ class RangeWeightManager {
 
         $rangeweight->setShipmenttype($shipmenttype);
 
-        $customer = $this->entityManager->getRepository(Customer::class)->find($data['customer_id']);
-        if ($customer == null)
-            throw new \Exception('Not found Customer by ID');
-
-        $rangeweight->setCustomer($customer);
-
+        if($data['customer_id']) {
+            $customer = $this->entityManager->getRepository(Customer::class)->find($data['customer_id']);
+            if ($customer == null)
+                throw new \Exception('Not found Customer by ID');
+            $rangeweight->setCustomer($customer);
+        }
     }
 
     /**
