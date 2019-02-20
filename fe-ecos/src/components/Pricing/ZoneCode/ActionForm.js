@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Button, ButtonToolbar, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleZoneCodeModal, getCarrierCodeList, getServiceCodeList, getShipmentTypeCodeList, getCustomerList, getCityList, getDistrictList, getWardList, getCountryList  } from '../../../redux/actions';
+import { toggleZoneCodeModal, getCarrierCodeList, getServiceCodeList, getShipmentTypeCodeList, getCustomerList, 
+  getOriginCountryList, getOriginCityList, getOriginDistrictList, getOriginWardList,
+  getDestinationCountryList, getDestinationCityList, getDestinationDistrictList, getDestinationWardList  } from '../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../containers/Shared/form/CustomField';
 import renderSelectField from '../../../containers/Shared/form/Select';
@@ -47,7 +49,7 @@ class ActionForm extends Component {
           id: data.origin_country_id
         }
       }
-      this.props.getCountryList(paramsCountry);
+      this.props.getOriginCountryList(paramsCountry);
     }
     if (data && data.origin_city_id) {
       let paramsCity = {
@@ -59,7 +61,7 @@ class ActionForm extends Component {
           country: data.origin_country_id
         }
       }
-      this.props.getCityList(paramsCity);
+      this.props.getOriginCityList(paramsCity);
     }
 
     if (data && data.origin_district_id) {
@@ -72,7 +74,7 @@ class ActionForm extends Component {
           city: data.origin_city_id
         }
       }
-      this.props.getDistrictList(paramsDistrict);
+      this.props.getOriginDistrictList(paramsDistrict);
     }
 
     if (data && data.origin_ward_id) {
@@ -85,7 +87,57 @@ class ActionForm extends Component {
           district: data.origin_district_id
         }
       }
-      this.props.getWardList(paramsWard);
+      this.props.getOriginWardList(paramsWard);
+    }
+
+    if (data && data.destination_country_id) {
+      let paramsCountry = {
+        offset: {
+          limit: 0
+        },
+        query: {
+          id: data.destination_country_id
+        }
+      }
+      this.props.getDestinationCountryList(paramsCountry);
+    }
+    if (data && data.destination_city_id) {
+      let paramsCity = {
+        field: ['id', 'name'],
+        offset: {
+          limit: 0
+        },
+        query: {
+          country: data.destination_country_id
+        }
+      }
+      this.props.getDestinationCityList(paramsCity);
+    }
+
+    if (data && data.destination_district_id) {
+      let paramsDistrict = {
+        field: ['id', 'name'],
+        offset: {
+          limit: 0
+        },
+        query: {
+          city: data.destination_city_id
+        }
+      }
+      this.props.getDestinationDistrictList(paramsDistrict);
+    }
+
+    if (data && data.destination_ward_id) {
+      let paramsWard = {
+        field: ['id', 'name'],
+        offset: {
+          limit: 0
+        },
+        query: {
+          district: data.destination_district_id
+        }
+      }
+      this.props.getDestinationWardList(paramsWard);
     }
   }
 
@@ -129,83 +181,163 @@ class ActionForm extends Component {
     return shipmenttypes;
   }
 
-  onChangeCountry = values => {
+  onChangeOriginCountry = value => {
     let params = {
       field: ['id', 'name'],
       offset: {
         limit: 0
       },
       query: {
-        country: values
+        country_id: value
       }
     }
-    this.props.getCityList(params);
+    this.props.getOriginCityList(params);
   }
 
-  onChangeCity = values => {
+  onChangeOriginCity = value => {
     let params = {
       field: ['id', 'name'],
       offset: {
         limit: 0
       },
       query: {
-        city: values
+        city: value
       }
     }
-    this.props.getDistrictList(params);
+    this.props.getOriginDistrictList(params);
+    this.props.getOriginWardList(null);
   }
 
-  onChangeDistrict = values => {
+  onChangeOriginDistrict = value => {
     let params = {
       field: ['id', 'name'],
       offset: {
         limit: 0
       },
       query: {
-        district: values
+        district: value
       }
     }
-    this.props.getWardList(params);
+    this.props.getOriginWardList(params);
   }
 
-  showOptionsCity = (items) => {
-    const cities = items.map(item => {
+  onChangeDestinationCountry = value => {
+    let params = {
+      field: ['id', 'name'],
+      offset: {
+        limit: 0
+      },
+      query: {
+        country_id: value
+      }
+    }
+    this.props.getDestinationCityList(params);
+  }
+
+  onChangeDestinationCity = value => {
+    let params = {
+      field: ['id', 'name'],
+      offset: {
+        limit: 0
+      },
+      query: {
+        city: value
+      }
+    }
+    this.props.getDestinationDistrictList(params);
+    this.props.getDestinationWardList(null);
+  }
+
+  onChangeDestinationDistrict = value => {
+    let params = {
+      field: ['id', 'name'],
+      offset: {
+        limit: 0
+      },
+      query: {
+        district: value
+      }
+    }
+    this.props.getDestinationWardList(params);
+  }
+
+  showOptionsOriginCountry = (country_items) => {
+    const countries = country_items.map(country_item => {
       return {
-        'value': item.id,
-        'label': item.name
+        'value': country_item.id,
+        'label': country_item.name
+      }
+    });
+    return countries;
+  }
+
+  showOptionsOriginCity = (city_items) => {
+    const cities = city_items.map(city_item => {
+      return {
+        'value': city_item.id,
+        'label': city_item.name
       }
     });
     return cities;
   }
 
-  showOptionsDistrict = (items) => {
-    const districts = items.map(item => {
+  showOptionsOriginDistrict = (district_items) => {
+    const districts = district_items.map(district_item => {
       return {
-        'value': item.id,
-        'label': item.name
+        'value': district_item.id,
+        'label': district_item.name
       }
     });
     return districts;
   }
 
-  showOptionsWard = (items) => {
-    const wards = items.map(item => {
+  showOptionsOriginWard = (ward_items) => {
+    const wards = ward_items.map(ward_item => {
       return {
-        'value': item.id,
-        'label': item.name
+        'value': ward_item.id,
+        'label': ward_item.name
       }
     });
     return wards;
   }
-
-  showOptionsCountry = (items) => {
-    const Countries = items.map(item => {
+  showOptionsDestinationCountry = (country_items) => {
+    const countries = country_items.map(country_item => {
       return {
-        'value': item.id,
-        'label': item.name
+        'value': country_item.id,
+        'label': country_item.name
       }
     });
-    return Countries;
+    return countries;
+  }
+
+  showOptionsDestinationCity = (city_items) => {
+    const cities = city_items.map(city_item => {
+      return {
+        'value': city_item.id,
+        'label': city_item.name
+      }
+    });
+    return cities;
+  }
+
+  showOptionsDestinationDistrict = (district_items) => {
+    const districts = district_items.map(district_item => {
+      return {
+        'value': district_item.id,
+        'label': district_item.name
+      }
+    });
+    return districts;
+  }
+
+  showOptionsDestinationWard = (ward_items) => {
+    const wards = ward_items.map(ward_item => {
+      return {
+        'value': ward_item.id,
+        'label': ward_item.name
+      }
+    });
+    return wards;
   }
 
 
@@ -219,7 +351,7 @@ class ActionForm extends Component {
   }
   render() {
     const { messages } = this.props.intl;
-    const { handleSubmit, modalData, carrierCode, serviceCode, shipment_typeCode, customerCode, cities, countries, districts, wards } = this.props;
+    const { handleSubmit, modalData, carrierCode, serviceCode, shipment_typeCode, customerCode,origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards } = this.props;
     const className = modalData ? 'primary' : 'success';
     const title = modalData ? messages['carrier.update'] : messages['carrier.add-new'];
     return (
@@ -356,8 +488,8 @@ class ActionForm extends Component {
                   name="origin_country_id"
                   component={renderSelectField}
                   type="text"
-                  options={countries && this.showOptionsCountry(countries)}
-                  onChange={this.onChangeCountry}
+                  options={origin_countrys && this.showOptionsOriginCountry(origin_countrys)}
+                  onChange={this.onChangeOriginCountry}
                   messages={messages}
                 />
               </div>
@@ -371,9 +503,8 @@ class ActionForm extends Component {
                   name="origin_city_id"
                   component={renderSelectField}
                   type="text"
-                  options={cities && this.showOptionsCity(cities)}
-                  onChange={this.onChangeCity}
-                  onInputChange={this.onInputChangeCity}
+                  options={origin_citys && this.showOptionsOriginCity(origin_citys)}
+                  onChange={this.onChangeOriginCity}
                   messages={messages}
                 />
               </div>
@@ -387,9 +518,8 @@ class ActionForm extends Component {
                   name="origin_district_id"
                   component={renderSelectField}
                   type="text"
-                  options={districts && this.showOptionsDistrict(districts)}
-                  onChange={this.onChangeDistrict}
-                  onInputChange={this.onInputChangeDistrict}
+                  options={origin_districts && this.showOptionsOriginDistrict(origin_districts)}
+                  onChange={this.onChangeOriginDistrict}
                   messages={messages}
                 />
               </div>
@@ -403,8 +533,8 @@ class ActionForm extends Component {
                   name="origin_ward_id"
                   component={renderSelectField}
                   type="text"
-                  options={wards && this.showOptionsWard(wards)}
-                  onChange={this.onChangeWard}
+                  options={origin_wards && this.showOptionsOriginWard(origin_wards)}
+                  onChange={this.onChangeOriginWard}
                   messages={messages}
                 />
               </div>
@@ -418,8 +548,8 @@ class ActionForm extends Component {
                   name="destination_country_id"
                   component={renderSelectField}
                   type="text"
-                  options={countries && this.showOptionsCountry(countries)}
-                  onChange={this.onChangeCountry}
+                  options={destination_countrys && this.showOptionsDestinationCountry(destination_countrys)}
+                  onChange={this.onChangeDestinationCountry}
                   messages={messages}
                 />
               </div>
@@ -433,9 +563,8 @@ class ActionForm extends Component {
                     name="destination_city_id"
                     component={renderSelectField}
                     type="text"
-                    options={cities && this.showOptionsCity(cities)}
-                    onChange={this.onChangeCity}
-                    onInputChange={this.onInputChangeCity}
+                    options={destination_citys && this.showOptionsDestinationCity(destination_citys)}
+                    onChange={this.onChangeDestinationCity}
                     messages={messages}
                   />
                 </div>
@@ -449,9 +578,8 @@ class ActionForm extends Component {
                   name="destination_district_id"
                   component={renderSelectField}
                   type="text"
-                  options={districts && this.showOptionsDistrict(districts)}
-                  onChange={this.onChangeDistrict}
-                  onInputChange={this.onInputChangeDistrict}
+                  options={destination_districts && this.showOptionsDestinationDistrict(destination_districts)}
+                  onChange={this.onChangeDestinationDistrict}
                   messages={messages}
                 />
               </div>
@@ -465,8 +593,8 @@ class ActionForm extends Component {
                   name="destination_ward_id"
                   component={renderSelectField}
                   type="text"
-                  options={wards && this.showOptionsWard(wards)}
-                  onChange={this.onChangeWard}
+                  options={destination_wards && this.showOptionsDestinationWard(destination_wards)}
+                  onChange={this.onChangeDestinationWard}
                   messages={messages}
                 />
               </div>
@@ -517,27 +645,35 @@ ActionForm.propTypes = {
   getServiceCodeList: PropTypes.func.isRequired,
   getShipmentTypeCodeList: PropTypes.func.isRequired,
   getCustomerList: PropTypes.func.isRequired,
-  getCityList: PropTypes.func.isRequired,
-  getDistrictList: PropTypes.func.isRequired,
-  getCountryList: PropTypes.func.isRequired,
-  getWardList: PropTypes.func.isRequired
+  getOriginCountryList: PropTypes.func.isRequired,
+  getOriginCityList: PropTypes.func.isRequired,
+  getOriginDistrictList: PropTypes.func.isRequired,
+  getOriginWardList: PropTypes.func.isRequired,
+  getDestinationCountryList: PropTypes.func.isRequired,
+  getDestinationCityList: PropTypes.func.isRequired,
+  getDestinationDistrictList: PropTypes.func.isRequired,
+  getDestinationWardList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({zonecode, carrier, service, shipment_type, customer, address}) => {  
+const mapStateToProps = ({zonecode, carrier, service, shipment_type, customer}) => {  
   const { errors, modalData } = zonecode;
   const carrierCode = carrier.codes;
   const serviceCode = service.codes;
   const shipment_typeCode = shipment_type.codes;
   const customerCode = customer.items;
-  const cities = address.city.items;
-  const districts = address.district.items;
-  const countries = address.country.items;
-  const wards = address.ward.items;
+  const origin_countrys = zonecode.origin_country;
+  const origin_citys = zonecode.origin_city;
+  const origin_districts = zonecode.origin_district;
+  const origin_wards = zonecode.origin_ward;
+  const destination_countrys = zonecode.destination_country;
+  const destination_citys = zonecode.destination_city;
+  const destination_districts = zonecode.destination_district;
+  const destination_wards = zonecode.destination_ward;
   return {
     errors,
     modalData,
     carrierCode, serviceCode, shipment_typeCode, customerCode,
-    cities, districts, countries, wards
+    origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards
   };
 };
 
@@ -550,8 +686,6 @@ export default reduxForm({
   getServiceCodeList,
   getShipmentTypeCodeList,
   getCustomerList,
-  getCityList,
-  getDistrictList,
-  getCountryList,
-  getWardList,
+  getOriginCountryList, getOriginCityList, getOriginDistrictList, getOriginWardList,
+  getDestinationCountryList, getDestinationCityList, getDestinationDistrictList, getDestinationWardList
 })(ActionForm)));

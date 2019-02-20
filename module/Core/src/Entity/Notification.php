@@ -3,6 +3,7 @@ namespace Core\Entity;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\Id;
+
 /** @ODM\Document */
 
 class Notification
