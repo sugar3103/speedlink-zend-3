@@ -18,9 +18,12 @@ class SettingManagerFactory implements FactoryInterface {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
+        // $mongoManager = $container->get('doctrine.documentManager.odm_default');
+        $documentManager = $container->get('doctrine.documentmanager.odm_default');
 
         return new settingManager(
-            $entityManager            
+            $entityManager,
+            $documentManager
         );
     }
 }

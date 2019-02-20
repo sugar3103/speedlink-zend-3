@@ -1,6 +1,5 @@
 <?php
-
-
+namespace Management\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
  * PricingVasSpec
  *
  * @ORM\Table(name="pricing_vas_spec")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Management\Repository\PricingVasSpecRepository")
  */
 class PricingVasSpec
 {
@@ -91,5 +90,180 @@ class PricingVasSpec
      */
     private $isDeleted = '0';
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPricingDataId()
+    {
+        return $this->pricingDataId;
+    }
+
+    /**
+     * @param int $pricingDataId
+     */
+    public function setPricingDataId($pricingDataId)
+    {
+        $this->pricingDataId = $pricingDataId;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPricingVasId()
+    {
+        return $this->pricingVasId;
+    }
+
+    /**
+     * @param int|null $pricingVasId
+     */
+    public function setPricingVasId($pricingVasId)
+    {
+        $this->pricingVasId = $pricingVasId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFrom()
+    {
+        return $this->from;
+    }
+
+    /**
+     * @param string $from
+     */
+    public function setFrom($from)
+    {
+        $this->from = $from;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTo()
+    {
+        return $this->to;
+    }
+
+    /**
+     * @param string $to
+     */
+    public function setTo($to)
+    {
+        $this->to = $to;
+    }
+
+    /**
+     * @return string
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * @param string $value
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * @param int $createdBy
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param DateTime $createdAt
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getUpdatedBy()
+    {
+        return $this->updatedBy;
+    }
+
+    /**
+     * @param int|null $updatedBy
+     */
+    public function setUpdatedBy($updatedBy)
+    {
+        $this->updatedBy = $updatedBy;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param DateTime|null $updatedAt
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDeleted()
+    {
+        return $this->isDeleted;
+    }
+
+    /**
+     * @param bool $isDeleted
+     */
+    public function setIsDeleted($isDeleted)
+    {
+        $this->isDeleted = $isDeleted;
+    }
 
 }

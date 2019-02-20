@@ -98,7 +98,8 @@ class BranchController extends CoreController
         $this->apiResponse['message'] = "Success: You have added a branch!";
       } else {
         $this->error_code = 0;
-        $this->apiResponse['message'] = $form->getMessages();
+        $this->apiResponse['message'] = "Errors";
+        $this->apiResponse['data'] = $form->getMessages();
       }
     }
     return $this->createResponse();
@@ -125,7 +126,8 @@ class BranchController extends CoreController
           $this->apiResponse['message'] = "You have modified branch!";
         } else {
           $this->error_code = 0;
-          $this->apiResponse['message'] = $form->getMessages();
+          $this->apiResponse['message'] = "Errors";
+          $this->apiResponse['data'] = $form->getMessages();
         }
       } else {
         $this->error_code = 0;

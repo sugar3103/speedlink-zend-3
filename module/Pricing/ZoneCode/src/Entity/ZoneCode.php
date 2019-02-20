@@ -121,7 +121,7 @@ class ZoneCode
     /**
      * @var int
      *
-     * @ORM\Column(name="customer_id", type="integer", nullable=false, options={"comment"="required if is_private == 1"})
+     * @ORM\Column(name="customer_id", type="integer", nullable=true, options={"comment"="required if is_private == 1"})
      */
     private $customer_id;
 

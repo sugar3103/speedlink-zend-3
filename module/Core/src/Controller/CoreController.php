@@ -3,6 +3,7 @@ namespace Core\Controller;
 
 use Core\Controller\ApiController;
 use Doctrine\ORM\EntityManager;
+use Core\Entity\Notification;
 
 class CoreController extends ApiController
 {
@@ -11,14 +12,20 @@ class CoreController extends ApiController
      */
     private $entityManager;
 
+    private $documentManager;
+
     public function __construct($entityManager) {
-        parent::__construct($entityManager);
-        
+        parent::__construct($entityManager);        
         $this->entityManager = $entityManager;
+        // $this->documentManager = $documentManager;
     }
 
     public function indexAction()
     {
+        // echo "Test MongoDB";
+        // $qb = $this->documentManager->createQueryBuilder('Notification');
+        // $query = $qb->getQuery();
+        // die;
         $this->apiResponse = [
             'message' => 'ECos System Api'
         ];

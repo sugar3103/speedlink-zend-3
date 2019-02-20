@@ -13,7 +13,7 @@ use ServiceShipment\Entity\ShipmentType;
  */
 class ShipmentTypeRepository extends EntityRepository
 {
-    public function getListShipmentTypeByCondition($start, $limit, $sortField = 'c.id', $sortDirection = 'asc', $filters = [])
+    public function getListShipmentTypeByCondition($start, $limit, $sortField = 'smt.id', $sortDirection = 'asc', $filters = [])
     {
         try {
             $queryBuilder = $this->buildShipmentTypeQueryBuilder($sortField, $sortDirection, $filters);

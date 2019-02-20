@@ -1,6 +1,5 @@
 <?php
-
-
+namespace Management\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
  * PricingData
  *
  * @ORM\Table(name="pricing_data")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Management\Repository\PricingDataRepository")
  */
 class PricingData
 {
@@ -98,5 +97,196 @@ class PricingData
      */
     private $isDeleted = '0';
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPricingId()
+    {
+        return $this->pricingId;
+    }
+
+    /**
+     * @param int $pricingId
+     */
+    public function setPricingId($pricingId)
+    {
+        $this->pricingId = $pricingId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCarrierId()
+    {
+        return $this->carrierId;
+    }
+
+    /**
+     * @param int $carrierId
+     */
+    public function setCarrierId($carrierId)
+    {
+        $this->carrierId = $carrierId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getServiceId()
+    {
+        return $this->serviceId;
+    }
+
+    /**
+     * @param int $serviceId
+     */
+    public function setServiceId($serviceId)
+    {
+        $this->serviceId = $serviceId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getShipmentTypeId()
+    {
+        return $this->shipmentTypeId;
+    }
+
+    /**
+     * @param int $shipmentTypeId
+     */
+    public function setShipmentTypeId($shipmentTypeId)
+    {
+        $this->shipmentTypeId = $shipmentTypeId;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param bool $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPricingData()
+    {
+        return $this->pricingData;
+    }
+
+    /**
+     * @param string|null $pricingData
+     */
+    public function setPricingData($pricingData)
+    {
+        $this->pricingData = $pricingData;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * @param int $createdBy
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param DateTime $createdAt
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getUpdatedBy()
+    {
+        return $this->updatedBy;
+    }
+
+    /**
+     * @param int|null $updatedBy
+     */
+    public function setUpdatedBy($updatedBy)
+    {
+        $this->updatedBy = $updatedBy;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param DateTime|null $updatedAt
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDeleted()
+    {
+        return $this->isDeleted;
+    }
+
+    /**
+     * @param bool $isDeleted
+     */
+    public function setIsDeleted($isDeleted)
+    {
+        $this->isDeleted = $isDeleted;
+    }
 
 }

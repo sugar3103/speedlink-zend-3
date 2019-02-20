@@ -5,7 +5,6 @@ import Status from './status';
 import Address from './address';
 import ServiceShipment from './service-shipment';
 import Networkport from './networkport';
-import Pricing from './pricing';
 
 const MasterData = ({ match }) => (
   <Fragment>
@@ -15,7 +14,6 @@ const MasterData = ({ match }) => (
           <Route path={`${match.url}/address`} component={Address} />
           <Route path={`${match.url}/service-shipment`} component={ServiceShipment} />
           <Route path={`${match.url}/networkport`} component={Networkport} />
-          <Route path={`${match.url}/pricing`} component={Pricing} />
           <Redirect to="/error" />
       </Switch>
   </Fragment>
