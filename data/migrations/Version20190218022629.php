@@ -17,7 +17,7 @@ final class Version20190218022629 extends AbstractMigration
                 id                         INT(11) AUTO_INCREMENT PRIMARY KEY,
                 name                       VARCHAR(50) NOT NULL,
                 carrier_id                 INT(11) NOT NULL,
-                category                   CHAR(10) NOT NULL  COMMENT 'Inbound, Outbound, Domestic',
+                category_code              CHAR(10) NOT NULL  COMMENT 'Inbound, Outbound, Domestic',
                 service_id                 INT(11) NOT NULL,
                 shipment_type_id           INT(11) NOT NULL,
                 origin_country_id          INT(11) NOT NULL,
@@ -128,8 +128,6 @@ final class Version20190218022629 extends AbstractMigration
             (
                 id                         INT(11) AUTO_INCREMENT PRIMARY KEY,
                 pricing_data_id            INT(11) NOT NULL,
-                `from`                     DECIMAL(10, 2) NOT NULL,
-                `to`                       DECIMAL(10, 2) NOT NULL COMMENT '0 == over',
                 internal_city_min          DECIMAL(10, 2) NOT NULL,
                 internal_city_ras_min      DECIMAL(10, 2) NOT NULL,
                 external_city_min          DECIMAL(10, 2) NOT NULL,

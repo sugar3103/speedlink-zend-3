@@ -25,28 +25,28 @@ class PricingData
      *
      * @ORM\Column(name="pricing_id", type="integer", nullable=false)
      */
-    private $pricingId;
+    private $pricing_id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="carrier_id", type="integer", nullable=false)
      */
-    private $carrierId;
+    private $carrier_id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="service_id", type="integer", nullable=false)
      */
-    private $serviceId;
+    private $service_id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="shipment_type_id", type="integer", nullable=false)
      */
-    private $shipmentTypeId;
+    private $shipment_type_id;
 
     /**
      * @var bool
@@ -60,42 +60,77 @@ class PricingData
      *
      * @ORM\Column(name="pricing_data", type="text", length=65535, nullable=true)
      */
-    private $pricingData;
+    private $pricing_data;
 
     /**
      * @var int
      *
      * @ORM\Column(name="created_by", type="integer", nullable=false)
      */
-    private $createdBy;
+    private $created_by;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    private $createdAt;
+    private $created_at;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="updated_by", type="integer", nullable=true)
      */
-    private $updatedBy;
+    private $updated_by;
 
     /**
      * @var \DateTime|null
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    private $updatedAt;
+    private $updated_at;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="is_deleted", type="boolean", nullable=false)
      */
-    private $isDeleted = '0';
+    private $is_deleted = '0';
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\ServiceShipment\Entity\Carrier")
+     * @ORM\JoinColumn(name="carrier_id", referencedColumnName="id", nullable=true)
+     */
+    private $join_carrier;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\ServiceShipment\Entity\Service")
+     * @ORM\JoinColumn(name="shipment_type_id", referencedColumnName="id", nullable=true)
+     */
+    private $join_service;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\ServiceShipment\Entity\ShipmentType")
+     * @ORM\JoinColumn(name="shipment_type_id", referencedColumnName="id", nullable=true)
+     */
+    private $join_shipment_type;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\OAuth\Entity\User")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
+     */
+    private $join_created;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\OAuth\Entity\User")
+     * @ORM\JoinColumn(name="updated_by", referencedColumnName="id", nullable=true)
+     */
+    private $join_updated;
 
     /**
      * @return int
@@ -118,15 +153,15 @@ class PricingData
      */
     public function getPricingId()
     {
-        return $this->pricingId;
+        return $this->pricing_id;
     }
 
     /**
-     * @param int $pricingId
+     * @param int $pricing_id
      */
-    public function setPricingId($pricingId)
+    public function setPricingId($pricing_id)
     {
-        $this->pricingId = $pricingId;
+        $this->pricing_id = $pricing_id;
     }
 
     /**
@@ -134,15 +169,15 @@ class PricingData
      */
     public function getCarrierId()
     {
-        return $this->carrierId;
+        return $this->carrier_id;
     }
 
     /**
-     * @param int $carrierId
+     * @param int $carrier_id
      */
-    public function setCarrierId($carrierId)
+    public function setCarrierId($carrier_id)
     {
-        $this->carrierId = $carrierId;
+        $this->carrier_id = $carrier_id;
     }
 
     /**
@@ -150,15 +185,15 @@ class PricingData
      */
     public function getServiceId()
     {
-        return $this->serviceId;
+        return $this->service_id;
     }
 
     /**
-     * @param int $serviceId
+     * @param int $service_id
      */
-    public function setServiceId($serviceId)
+    public function setServiceId($service_id)
     {
-        $this->serviceId = $serviceId;
+        $this->service_id = $service_id;
     }
 
     /**
@@ -166,15 +201,15 @@ class PricingData
      */
     public function getShipmentTypeId()
     {
-        return $this->shipmentTypeId;
+        return $this->shipment_type_id;
     }
 
     /**
-     * @param int $shipmentTypeId
+     * @param int $shipment_type_id
      */
-    public function setShipmentTypeId($shipmentTypeId)
+    public function setShipmentTypeId($shipment_type_id)
     {
-        $this->shipmentTypeId = $shipmentTypeId;
+        $this->shipment_type_id = $shipment_type_id;
     }
 
     /**
@@ -198,15 +233,15 @@ class PricingData
      */
     public function getPricingData()
     {
-        return $this->pricingData;
+        return $this->pricing_data;
     }
 
     /**
-     * @param string|null $pricingData
+     * @param string|null $pricing_data
      */
-    public function setPricingData($pricingData)
+    public function setPricingData($pricing_data)
     {
-        $this->pricingData = $pricingData;
+        $this->pricing_data = $pricing_data;
     }
 
     /**
@@ -214,31 +249,31 @@ class PricingData
      */
     public function getCreatedBy()
     {
-        return $this->createdBy;
+        return $this->created_by;
     }
 
     /**
-     * @param int $createdBy
+     * @param int $created_by
      */
-    public function setCreatedBy($createdBy)
+    public function setCreatedBy($created_by)
     {
-        $this->createdBy = $createdBy;
+        $this->created_by = $created_by;
     }
 
     /**
-     * @return DateTime
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
 
     /**
-     * @param DateTime $createdAt
+     * @param \DateTime $created_at
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt($created_at)
     {
-        $this->createdAt = $createdAt;
+        $this->created_at = $created_at;
     }
 
     /**
@@ -246,31 +281,31 @@ class PricingData
      */
     public function getUpdatedBy()
     {
-        return $this->updatedBy;
+        return $this->updated_by;
     }
 
     /**
-     * @param int|null $updatedBy
+     * @param int|null $updated_by
      */
-    public function setUpdatedBy($updatedBy)
+    public function setUpdatedBy($updated_by)
     {
-        $this->updatedBy = $updatedBy;
+        $this->updated_by = $updated_by;
     }
 
     /**
-     * @return DateTime|null
+     * @return \DateTime|null
      */
     public function getUpdatedAt()
     {
-        return $this->updatedAt;
+        return $this->updated_at;
     }
 
     /**
-     * @param DateTime|null $updatedAt
+     * @param \DateTime|null $updated_at
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updated_at)
     {
-        $this->updatedAt = $updatedAt;
+        $this->updated_at = $updated_at;
     }
 
     /**
@@ -278,15 +313,95 @@ class PricingData
      */
     public function isDeleted()
     {
-        return $this->isDeleted;
+        return $this->is_deleted;
     }
 
     /**
-     * @param bool $isDeleted
+     * @param bool $is_deleted
      */
-    public function setIsDeleted($isDeleted)
+    public function setIsDeleted($is_deleted)
     {
-        $this->isDeleted = $isDeleted;
+        $this->is_deleted = $is_deleted;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinCarrier()
+    {
+        return $this->join_carrier;
+    }
+
+    /**
+     * @param mixed $join_carrier
+     */
+    public function setJoinCarrier($join_carrier)
+    {
+        $this->join_carrier = $join_carrier;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinService()
+    {
+        return $this->join_service;
+    }
+
+    /**
+     * @param mixed $join_service
+     */
+    public function setJoinService($join_service)
+    {
+        $this->join_service = $join_service;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinShipmentType()
+    {
+        return $this->join_shipment_type;
+    }
+
+    /**
+     * @param mixed $join_shipment_type
+     */
+    public function setJoinShipmentType($join_shipment_type)
+    {
+        $this->join_shipment_type = $join_shipment_type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinCreated()
+    {
+        return $this->join_created;
+    }
+
+    /**
+     * @param mixed $join_created
+     */
+    public function setJoinCreated($join_created)
+    {
+        $this->join_created = $join_created;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinUpdated()
+    {
+        return $this->join_updated;
+    }
+
+    /**
+     * @param mixed $join_updated
+     */
+    public function setJoinUpdated($join_updated)
+    {
+        $this->join_updated = $join_updated;
     }
 
 }
