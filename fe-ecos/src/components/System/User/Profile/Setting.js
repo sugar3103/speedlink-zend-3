@@ -153,6 +153,7 @@ class Setting extends PureComponent {
                     type={this.state.showPassword ? 'text' : 'password'}
                     placeholder={messages['user.password']}
                     messages={messages}
+                    autocomplete='off' 
                   />
                 </div>
                 <button
@@ -174,6 +175,7 @@ class Setting extends PureComponent {
                     type={this.state.showPassword ? 'text' : 'password'}
                     placeholder={messages['user.confirm_password']}
                     messages={messages}
+                    autocomplete='off' 
                   />
                 </div>
                 <button

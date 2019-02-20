@@ -30,7 +30,7 @@ class Topbar extends PureComponent {
           <div className="topbar__right">
             <TopbarSearch />
             <TopbarNotification />
-            <TopbarMail new />
+            {/* <TopbarMail new /> */}
             <TopbarProfile />
             <TopbarLanguage />
           </div>
