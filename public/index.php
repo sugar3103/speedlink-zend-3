@@ -1,5 +1,5 @@
 <?php
-
+echo "Var"; die;
 use Zend\Mvc\Application;
 use Zend\Stdlib\ArrayUtils;
 
