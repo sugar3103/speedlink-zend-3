@@ -1,5 +1,6 @@
 <?php
-echo "Var"; die;
+ini_set("display_errors", 1);
+
 use Zend\Mvc\Application;
 use Zend\Stdlib\ArrayUtils;
 
