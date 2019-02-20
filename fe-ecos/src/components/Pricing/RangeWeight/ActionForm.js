@@ -19,13 +19,21 @@ class ActionForm extends Component {
   }
 
   componentDidMount() {
-    const data = this.props.modalData;
+    let data = this.props.modalData;
     if (data) {
       this.props.initialize(data);
       this.props.getCarrierCodeList();
       this.props.getServiceCodeList();
       this.props.getShipmentTypeCodeList();
       this.props.getCustomerList();
+    } else {
+      data = {
+        from: 0,
+        to: 0,
+        unit: 0,
+        round_up: 0
+      };
+      this.props.initialize(data);
     }
   }
 
@@ -219,7 +227,7 @@ class ActionForm extends Component {
             <span className="text-danger">{'*'}</span>
             <div className="form__form-group-field">
               <Field name="from" component="input" type="number" step="0.1" min="0" 
-                     messages={messages} />
+                     messages={messages} /> 
             </div>
           </div>
         </Col>
