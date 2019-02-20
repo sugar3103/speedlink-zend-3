@@ -90,5 +90,7 @@ module.exports = {
     'zonecode.validate-status-empty': 'Status shouldn’t be empty',
     'zonecode.validate-service-empty': 'Service shouldn’t be empty',
     'zonecode.validate-shipment_type-empty': 'Shipment Type shouldn’t be empty',
+    'zonecode.validate-origin_city-empty': 'Origin City shouldn’t be empty',
+    'zonecode.validate-destination_city-empty': 'Destination City shouldn’t be empty'
 
   }
