@@ -538,5 +538,5 @@ export default reduxForm({
   getShipmentTypeCodeList,
   getCustomerList,
   getOriginCountryList, getOriginCityList, getOriginDistrictList, getOriginWardList,
-  getDestinationCountryList, getDestinationCityList, getDestinationDistrictList, getDestinationWardList,
+  getDestinationCountryList, getDestinationCityList, getDestinationDistrictList, getDestinationWardList
 })(SearchForm)));
