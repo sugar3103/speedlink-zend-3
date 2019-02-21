@@ -3,6 +3,7 @@ module.exports = {
   'status.list-title': 'Status',
   'status.add-new': 'Add New Status',
   'status.update': 'Update Status',
+  'status.delete': 'Delete Status',
   'status.add-success': 'You have added a status!',
   'status.update-success': 'You have modified status!',
   'status.delete-success': 'You have deleted status!',
