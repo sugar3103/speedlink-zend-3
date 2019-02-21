@@ -53,7 +53,9 @@ class BranchRepository extends EntityRepository
                 w.name AS ward,
                 co.name AS country,
                 b.description,
-                b.description_en
+                b.description_en,
+                uc.username AS user_create_name,
+                ud.username AS user_update_name
             ")->andWhere("h.is_deleted = 0")
             ->groupBy('b.id');
             
@@ -131,7 +133,9 @@ class BranchRepository extends EntityRepository
         ->leftJoin('b.city', 'c')
         ->leftJoin('b.ward', 'w')
         ->leftJoin('b.country', 'co')
-        ->leftJoin('b.hub', 'h');
+        ->leftJoin('b.hub', 'h')
+        ->leftJoin('h.user_create', 'uc')
+        ->leftJoin('h.user_update', 'ud');
         // ->groupBy('b.id')
         // ->where('b.deletedAt is null')
         // ->andWhere('b.id <> 1')

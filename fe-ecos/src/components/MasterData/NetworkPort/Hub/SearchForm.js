@@ -3,7 +3,7 @@ import { injectIntl } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
 import renderSelectField from '../../../../containers/Shared/form/Select';
 import { Button, Col } from 'reactstrap';
-import { getCityList } from '../../../../redux/actions';
+import { getCountryList, getCityList } from '../../../../redux/actions';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -15,7 +15,30 @@ class SearchForm extends Component {
         limit: 10
       }
     }
+    this.props.getCountryList(params);
+  }
+
+  onChangeCountry = value => {
+    let params = {
+      field: ['id', 'name'],
+      offset: {
+        limit: 0
+      },
+      query: {
+        country_id: value
+      }
+    }
     this.props.getCityList(params);
+  }
+
+  showOptionsCountry = (country_items) => {
+    const countries = country_items.map(country_item => {
+      return {
+        'value': country_item.id,
+        'label': country_item.name
+      }
+    });
+    return countries;
   }
 
   showOptionCity = (items) => {
@@ -46,7 +69,7 @@ class SearchForm extends Component {
 
 
   render() {
-    const { handleSubmit, reset, cities } = this.props;
+    const { handleSubmit, reset, cities, countries } = this.props;
     const { messages,locale } = this.props.intl;
     return (
       <form className="form" onSubmit={handleSubmit}>
@@ -58,7 +81,6 @@ class SearchForm extends Component {
                 name="code"
                 component="input"
                 type="text"
-                placeholder={messages['hub.code']}
               />
             </div>
           </div>
@@ -71,7 +93,34 @@ class SearchForm extends Component {
                 name={locale === 'en-US' ? 'name_en' : 'name'}
                 component="input"
                 type="text"
-                placeholder={messages['name']}
+              />
+            </div>
+          </div>
+        </Col>
+        <Col md={3}>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['hub.country']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="country"
+                component={renderSelectField}
+                options={countries && this.showOptionsCountry(countries)}
+                onChange={this.onChangeCountry}
+              />
+            </div>
+          </div>
+        </Col>
+
+        <Col md={3}>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['hub.city']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="city"
+                component={renderSelectField}
+                type="text"
+                options={cities && this.showOptionCity(cities)}
+                onInputChange={this.onInputChange}
               />
             </div>
           </div>
@@ -89,25 +138,12 @@ class SearchForm extends Component {
                   { value: 1, label: messages['active'] },
                   { value: 0, label: messages['inactive'] }
                 ]}
+                clearable={false}
               />
             </div>
           </div>
         </Col>
-        <Col md={3}>
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['hub.city']}</span>
-            <div className="form__form-group-field">
-              <Field
-                name="city"
-                component={renderSelectField}
-                type="text"
-                options={cities && this.showOptionCity(cities)}
-                onInputChange={this.onInputChange}
-                placeholder={messages['hub.country']}
-              />
-            </div>
-          </div>
-        </Col>
+        <Col md={9}></Col>
         <div className="search-group-button">
           <Button 
             size="sm" 
@@ -133,14 +169,17 @@ class SearchForm extends Component {
 SearchForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
+  countries: PropTypes.array,
   cities: PropTypes.array,
+  getCountryList: PropTypes.func.isRequired,
   getCityList: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ address }) => {
   const cities = address.city.items;
+  const countries = address.country.items;
   return {
-    cities
+    cities, countries
   }
 }
 
@@ -151,5 +190,6 @@ export default reduxForm({
     status: -1
   }
 })(injectIntl(connect(mapStateToProps, {
-  getCityList
+  getCityList,
+  getCountryList,
 })(SearchForm)));

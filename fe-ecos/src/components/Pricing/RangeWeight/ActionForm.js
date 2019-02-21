@@ -20,12 +20,19 @@ class ActionForm extends Component {
 
   componentDidMount() {
     let data = this.props.modalData;
+    
     if (data) {
       this.props.initialize(data);
       this.props.getCarrierCodeList();
       this.props.getServiceCodeList();
       this.props.getShipmentTypeCodeList();
       this.props.getCustomerList();
+      if(data.is_private === 1)
+      {
+        this.setState({
+          disabled: true
+        });
+      }
     } else {
       data = {
         from: 0,
@@ -297,7 +304,7 @@ class ActionForm extends Component {
             <span className="text-danger">{'*'}</span>
             <div className="form__form-group-field">
               <Field component="input" type="number" min="0" 
-                    name='round_up' />
+                    name='round_up'  messages={messages} /> 
             </div>
           </div>
         </Col>
@@ -314,6 +321,12 @@ class ActionForm extends Component {
           </div>
         </div>
         </Col>
+        <Col md={12} lg={12} xl={12} xs={12}>
+            { modalData ?
+              <span><u>{ modalData.updated_by ? "Update at: "+modalData.updated_at : "Created at: "+modalData.created_at } 
+              &nbsp;- { modalData.updated_by ? "Update by: "+modalData.user_update_name : "Created by: "+modalData.user_create_name }</u></span>
+             : '' }
+            </Col>
       </Row>
     </div>
         <ButtonToolbar className="modal__footer">

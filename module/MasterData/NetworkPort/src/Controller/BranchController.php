@@ -115,6 +115,7 @@ class BranchController extends CoreController
       $data = $this->getRequestData();
       $user = $this->tokenPayload;
       $data['updated_by'] = $user->id;
+
       $branch = $this->entityManager->getRepository(Branch::class)->find($data['id']);
       if ($branch) {
         $form = new BranchForm('update', $this->entityManager, $branch);

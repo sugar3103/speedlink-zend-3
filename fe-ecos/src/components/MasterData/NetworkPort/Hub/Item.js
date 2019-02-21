@@ -3,7 +3,7 @@ import { Button, Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
-import { toggleHubModal, deleteHubItem } from '../../../../redux/actions';
+import { toggleHubDetailModal,toggleHubModal, deleteHubItem } from '../../../../redux/actions';
 
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -14,6 +14,10 @@ class Item extends Component {
 
   toggleModal = (hub) => {
     this.props.toggleHubModal(hub);
+  }
+
+  toggleDetailModal = (hub) => {
+    this.props.toggleHubDetailModal(hub);
   }
 
   onDelete = (id) => {
@@ -39,7 +43,7 @@ class Item extends Component {
     const { hub } = this.props;
     const { messages,locale } = this.props.intl;
     return (
-      <tr>
+      <tr onClick={() => this.toggleDetailModal(hub)} >
         <th scope="row">{hub.id}</th>
         <td>{hub.code}</td>
         <td>{ (locale ==='en-US' && hub.name_en) ? hub.name_en : hub.name }</td>
@@ -59,6 +63,7 @@ class Item extends Component {
 Item.propTypes = {
   hub: PropTypes.object.isRequired,
   toggleHubModal: PropTypes.func.isRequired,
+  toggleHubDetailModal: PropTypes.func.isRequired,
   deleteHubItem: PropTypes.func.isRequired
 }
 const mapStateToProps = ({ settings }) => {
@@ -68,6 +73,7 @@ const mapStateToProps = ({ settings }) => {
   }
 }
 export default injectIntl(connect(mapStateToProps, {
+  toggleHubDetailModal,
   toggleHubModal,
   deleteHubItem
 })(Item));

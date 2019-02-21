@@ -179,10 +179,7 @@ class ActionForm extends PureComponent {
             <Col md={12} lg={6} xl={6} xs={12}>
               <Card>
                 <CardBody>
-                  <div className="card__title">
-                    <h5 className="bold-text">Generate</h5>
-                    <h5 className="subhead">Use default modal with property <span className="red-text">colored</span></h5>
-                  </div>
+                  
                   <div className="form__form-group">
                     <span className="form__form-group-label">{messages['name']}</span>
                     <div className="form__form-group-field">
@@ -210,6 +207,30 @@ class ActionForm extends PureComponent {
                       />
                     </div>
                   </div>
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">{messages['branch.code']}</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="code"
+                        component={CustomField}
+                        type="text"
+                        messages={messages}
+                      />
+                    </div>
+                  </div>
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">{messages['branch.hubcode']}</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="hub_id"
+                        component={renderSelectField}
+                        type="text"
+                        options={hubs && this.showOptionsHub(hubs)}
+                        onInputChange={this.onInputChange}
+                        messages={messages}
+                      />
+                    </div>
+                  </div>
 
                   <div className="form__form-group">
                     <span className="form__form-group-label">{messages['description']}</span>
@@ -221,7 +242,6 @@ class ActionForm extends PureComponent {
                         name="description"
                         component="textarea"
                         type="text"
-                        placeholder={messages['description']}
                       />
                     </div>
                     <div className="form__form-group-field">
@@ -232,7 +252,6 @@ class ActionForm extends PureComponent {
                         name="description_en"
                         component="textarea"
                         type="text"
-                        placeholder={messages['description']}
                       />
                     </div>
                   </div>
@@ -243,22 +262,7 @@ class ActionForm extends PureComponent {
             <Col md={12} lg={6} xl={6} xs={12}>
               <Card>
                 <CardBody>
-                  <div className="card__title">
-                    <h5 className="bold-text">Data</h5>
-                    <h5 className="subhead">Use default modal with property <span className="red-text">colored</span></h5>
-                  </div>
-                  <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['branch.code']}</span>
-                    <div className="form__form-group-field">
-                      <Field
-                        name="code"
-                        component={CustomField}
-                        type="text"
-                        placeholder={messages['branch.code']}
-                        messages={messages}
-                      />
-                    </div>
-                  </div>
+                 
 
                   <div className="form__form-group">
                     <span className="form__form-group-label">{messages['branch.country']}</span>
@@ -268,7 +272,6 @@ class ActionForm extends PureComponent {
                         component={renderSelectField}
                         type="text"
                         options={countries && this.showOptionsCountry(countries)}
-                        placeholder={messages['branch.country']}
                         onChange={this.onChangeCountry}
                         messages={messages}
 
@@ -284,7 +287,6 @@ class ActionForm extends PureComponent {
                         component={renderSelectField}
                         type="text"
                         options={cities && this.showOptionsCity(cities)}
-                        placeholder={messages['branch.city']}
                         onChange={this.onChangeCity}
                         onInputChange={this.onInputChangeCity}
                         messages={messages}
@@ -300,7 +302,6 @@ class ActionForm extends PureComponent {
                         component={renderSelectField}
                         type="text"
                         options={districts && this.showOptionsDistrict(districts)}
-                        placeholder={messages['branch.district']}
                         onChange={this.onChangeDistrict}
                         onInputChange={this.onInputChangeDistrict}
                         messages={messages}
@@ -316,28 +317,12 @@ class ActionForm extends PureComponent {
                         component={renderSelectField}
                         type="text"
                         options={wards && this.showOptionsWard(wards)}
-                        placeholder={messages['branch.ward']}
                         onChange={this.onChangeWard}
                         // onInputChange={this.onInputChangeWard}
                         messages={messages}
                       />
                     </div>
-                  </div>
-
-                  <div className="form__form-group">
-                    <span className="form__form-group-label">{messages['branch.hubcode']}</span>
-                    <div className="form__form-group-field">
-                      <Field
-                        name="hub_id"
-                        component={renderSelectField}
-                        type="text"
-                        options={hubs && this.showOptionsHub(hubs)}
-                        placeholder={messages['branch.hubcode']}
-                        onInputChange={this.onInputChange}
-                        messages={messages}
-                      />
-                    </div>
-                  </div>
+                  </div> 
 
                   <div className="form__form-group">
                     <span className="form__form-group-label">{messages['status']}</span>
@@ -361,6 +346,12 @@ class ActionForm extends PureComponent {
               </Card>
             </Col>
           </Row>
+          <Col md={12} lg={12} xl={12} xs={12}>
+            { modalData ?
+              <span><u>{ modalData.updated_by ? "Update at: "+modalData.updated_at : "Created at: "+modalData.created_at } 
+              &nbsp;- { modalData.updated_by ? "Update by: "+modalData.user_update_name : "Created by: "+modalData.user_create_name }</u></span>
+             : '' }
+            </Col>
         </div>
         <ButtonToolbar className="modal__footer">
           <Button outline onClick={this.toggleModal}>{messages['cancel']}</Button>{' '}

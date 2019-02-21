@@ -24,6 +24,7 @@ final class Version20190129025542 extends AbstractMigration
         ADD `description_en` text NULL');
 
       $this->addSql('ALTER TABLE `hub` 
+        ADD `country_id` INT NOT NULL,
         ADD `name` VARCHAR(20) NOT NULL,
         ADD `description` text NULL,
         ADD `name_en` VARCHAR(20) NOT NULL,

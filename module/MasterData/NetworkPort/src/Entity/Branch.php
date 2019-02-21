@@ -55,7 +55,7 @@ class Branch
     /**
      * @var int
      *
-     * @ORM\Column(name="created_by", type="integer", nullable=false)
+     * @ORM\Column(name="created_by", type="integer", nullable=true)
      */
     private $created_by;
 
@@ -192,6 +192,20 @@ class Branch
      * })
      */
     private $hub;
+
+    /**
+     * 
+     * @ORM\OneToOne(targetEntity="OAuth\Entity\User")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
+     */
+    protected $user_create;
+
+    /**
+     * 
+     * @ORM\OneToOne(targetEntity="OAuth\Entity\User")
+     * @ORM\JoinColumn(name="updated_by", referencedColumnName="id", nullable=true)
+     */
+    protected $user_update;
 
     /**
      * @return int
@@ -673,5 +687,52 @@ class Branch
         return $this->hub;
     }
 
+    /**
+     * Set city.
+     *
+     * @param \OAuth\Entity\User|null $city
+     *
+     * @return Hub
+     */
+    public function setUserCreate(\OAuth\Entity\User $user_create = null)
+    {
+        $this->user_create = $user_create;
+
+        return $this;
+    }
+
+    /**
+     * Get city.
+     *
+     * @return \OAuth\Entity\User|null
+     */
+    public function getUserCreate()
+    {
+        return $this->user_create;
+    }
+
+    /**
+     * Set city.
+     *
+     * @param \OAuth\Entity\User|null $city
+     *
+     * @return Hub
+     */
+    public function setUserUpdate(\OAuth\Entity\User $user_update = null)
+    {
+        $this->user_update = $user_update;
+
+        return $this;
+    }
+
+    /**
+     * Get city.
+     *
+     * @return \OAuth\Entity\User|null
+     */
+    public function getUserUpdate()
+    {
+        return $this->user_update;
+    }
 
 }

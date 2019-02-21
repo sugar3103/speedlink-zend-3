@@ -49,7 +49,8 @@ class HubController extends CoreController {
           1 => 'name_en',
           2 => 'status',
           3 => 'code',
-          4 => 'city'
+          4 => 'city',
+          5 => 'country'
       ];
       
       list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);
@@ -77,16 +78,16 @@ class HubController extends CoreController {
         // check if user has submitted the form.
         if ($this->getRequest()->isPost()) {
             // fill in the form with POST data.
-          
             $user = $this->tokenPayload;
-            
+            $data = $this->getRequestData();
+
             $form = new HubForm('create', $this->entityManager);
 
-            $form->setData($this->getRequestData());
+            $form->setData($data);
             //validate form
             if ($form->isValid()) {
               $data = $form->getData();
-
+              $data['created_by'] = $user->id;
               $result = $this->hubManager->addHub($data,$user); 
                 // Check result
               

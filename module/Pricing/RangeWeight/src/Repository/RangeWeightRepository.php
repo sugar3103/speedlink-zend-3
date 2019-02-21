@@ -55,7 +55,9 @@ class RangeWeightRepository extends EntityRepository
                 c.code AS carrier_code,
                 s.code AS service_code,
                 st.code AS shipmenttype_code,
-                cu.name AS customer_name
+                cu.name AS customer_name,
+                uc.username AS user_create_name,
+                ud.username AS user_update_name
             ")->andWhere("r.is_deleted = 0")
             ->groupBy('r.id');
             
@@ -144,7 +146,9 @@ class RangeWeightRepository extends EntityRepository
         ->leftJoin('r.carrier', 'c')
         ->leftJoin('r.service', 's')
         ->leftJoin('r.shipmenttype', 'st')
-        ->leftJoin('r.customer', 'cu');
+        ->leftJoin('r.customer', 'cu')
+        ->leftJoin('r.user_create', 'uc')
+        ->leftJoin('r.user_update', 'ud');
         // ->groupBy('b.id')
         // ->where('b.deletedAt is null')
         // ->andWhere('b.id <> 1')

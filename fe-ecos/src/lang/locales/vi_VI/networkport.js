@@ -5,6 +5,7 @@ module.exports = {
   'hub.update': 'Cập nhật Hub',
   'hub.code': 'Hub Code',
   'hub.name': 'Tên Hub',
+  'hub.country': 'Quốc gia',
   'hub.city': 'Thành phố',
   'hub.name-en': 'Tên tiếng anh',
   'hub.desc': 'Mô tả',

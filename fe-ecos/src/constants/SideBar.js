@@ -89,16 +89,16 @@ export default {
           icon: 'store',
           childrens: [
             {
-              id: 'branch',
-              title: 'menu.branch',
-              route: '/app/master-data/networkport/branch',
-              icon: 'license'
-            },
-            {
               id: 'hub',
               title: 'menu.hub',
               route: '/app/master-data/networkport/hub',
               icon: 'map'
+            },
+            {
+              id: 'branch',
+              title: 'menu.branch',
+              route: '/app/master-data/networkport/branch',
+              icon: 'license'
             }
           ]
         },

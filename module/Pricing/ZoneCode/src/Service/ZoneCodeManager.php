@@ -26,6 +26,7 @@ use ServiceShipment\Entity\Carrier;
 use ServiceShipment\Entity\Service;
 use ServiceShipment\Entity\ShipmentType;
 use Customer\Entity\Customer;
+use OAuth\Entity\User;
 
 /**
  * This service is responsible for adding/editing users
@@ -111,6 +112,7 @@ class ZoneCodeManager {
             $zonecode->setDestinationWardId($data['destination_country_id']);
             $zonecode->setIsPrivate($data['is_private']);
             $zonecode->setCustomerId($data['customer_id']); 
+           
             $zonecode->setStatus($data['status']);
             $zonecode->setDescription($data['description']);
             $zonecode->setDescriptionEn($data['description_en']);
@@ -217,6 +219,19 @@ class ZoneCodeManager {
 
             $zonecode->setDestinationWard($destination_ward);
         }
+        if($data['created_by']) {
+            $user_create = $this->entityManager->getRepository(User::class)->find($data['created_by']);
+            if ($user_create == null)
+                throw new \Exception('Not found User by ID');
+            $zonecode->setUserCreate($user_create);
+        }
+      
+        if($data['updated_by']){
+            $user_update = $this->entityManager->getRepository(User::class)->find($data['updated_by']);
+            if ($user_update == null)
+                throw new \Exception('Not found User by ID');
+            $zonecode->setUserUpdate($user_update);
+        }
     }
 
     /**
@@ -255,6 +270,7 @@ class ZoneCodeManager {
             //   $zonecode['status'] = Branch::getIsActiveList($zonecode['status']);
             //set created_at
                 $zonecode['created_at'] =  ($zonecode['created_at']) ?Utils::checkDateFormat($zonecode['created_at'],'d/m/Y') : '';
+                $zonecode['updated_at'] =  ($zonecode['updated_at']) ? Utils::checkDateFormat($zonecode['updated_at'],'d/m/Y H:i:s') : '';
             // $countRow++;
             }
         }

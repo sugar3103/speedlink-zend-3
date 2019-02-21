@@ -69,7 +69,9 @@ class ZoneCodeRepository extends EntityRepository
                 od.name AS origin_district_name,
                 dd.name AS destination_district_name,
                 ow.name AS origin_ward_name,
-                dw.name AS destination_ward_name
+                dw.name AS destination_ward_name,
+                uc.username AS user_create_name,
+                ud.username AS user_update_name
             ")->andWhere("z.is_deleted = 0")
             ->groupBy('z.id');
             
@@ -181,7 +183,9 @@ class ZoneCodeRepository extends EntityRepository
         ->leftJoin('z.origin_district', 'od')
         ->leftJoin('z.destination_district', 'dd')
         ->leftJoin('z.origin_ward', 'ow')
-        ->leftJoin('z.destination_ward', 'dw');
+        ->leftJoin('z.destination_ward', 'dw')
+        ->leftJoin('z.user_create', 'uc')
+        ->leftJoin('z.user_update', 'ud');
         // ->groupBy('b.id')
         // ->where('b.deletedAt is null')
         // ->andWhere('b.id <> 1')
