@@ -10,8 +10,6 @@ use Gedmo\Timestampable\TimestampableListener;
 use Zend\Authentication\AuthenticationService;
 use Zend\Cache\Storage\Adapter\Filesystem;
 use Zend\Log\Formatter\Simple;
-use Zend\Log\Logger;
-use Zend\Log\LoggerAbstractServiceFactory;
 use Core\Route\StaticRoute;
 use Core\DBAL\Types\UTCDateTimeType;
 
@@ -90,6 +88,7 @@ $router = [
         ],
     ]
 ];
+
 $controllers = [
     'factories' => [
         Controller\AuthController::class        => Factory\AuthControllerFactory::class,
@@ -222,9 +221,20 @@ $doctrine = [
     ]
 ];
 
+$controller_plugins = [
+    'factories' => [
+        Plugin\AccessPlugin::class => Plugin\Factory\AccessPluginFactory::class,
+        Plugin\CurrentUserPlugin::class => Plugin\Factory\CurrentUserPluginFactory::class
+    ],
+    'aliases' => [
+        'access' => Plugin\AccessPlugin::class,
+        'currentUser' => Plugin\CurrentUserPluginFactory::class
+    ]
+];
 return [
     'router'            => $router,
     'controllers'       => $controllers,
+    'controller_plugins'=> $controller_plugins,
     'caches'            => $caches,
     'service_manager'   => $service_manager,
     'doctrine'          => $doctrine,

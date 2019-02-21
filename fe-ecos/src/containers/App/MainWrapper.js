@@ -26,10 +26,9 @@ class MainWrapper extends PureComponent {
       localStorage.setItem('currentTheme', 'theme-' + color);
     }
   }
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {    
     const { setting, locale } = nextProps;
-
-    if (setting.items && setting.items.length > 0) {
+    if (setting.items && Object.keys(setting.items).length > 0) {
       document.title = (locale === 'en') ? setting.items.name_en : setting.items.name;
       document.title += (setting.items.owner) ? ' - ' + setting.items.owner : '';
     }
@@ -40,7 +39,6 @@ class MainWrapper extends PureComponent {
     this.addClassBody(theme.className)    
     return (
       <div className="wrapper">
-        
         {this.props.children}
       </div>
     );

@@ -53,6 +53,7 @@ class Layout extends Component {
           changeToDark={this.changeToDark}
           changeToLight={this.changeToLight}
           setting = {setting.items}
+          changeSidebarVisibility={this.changeSidebarVisibility}
         />
         <Topbar
           changeMobileSidebarVisibility={this.changeMobileSidebarVisibility}
