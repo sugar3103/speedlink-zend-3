@@ -1,19 +1,22 @@
 /* eslint-disable react/no-unused-state */
 import React, { Component, Fragment } from 'react';
-import { Card, CardBody, Col,Button } from 'reactstrap';
+import { Card, CardBody, Col,Button, Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
-import Item from './Item';
 import Table from '../../../containers/Shared/table/Table';
 import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import Action from './Action';
 import Search from './Search';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 import {
   getStatusList,
-  toggleStatusModal
+  toggleStatusModal,
+  deleteStatusItem
 } from "../../../redux/actions";
+import ConfirmPicker from '../../../containers/Shared/picker/ConfirmPicker';
 
 
 const StatusFormatter = ({ value }) => (
@@ -25,7 +28,6 @@ StatusFormatter.propTypes = {
   value: PropTypes.string.isRequired,
 };
 
-
 class List extends Component {
   constructor() {
     super();
@@ -33,6 +35,25 @@ class List extends Component {
       selectedPageSize: SELECTED_PAGE_SIZE,
       currentPage: 1,
     };
+  }
+  
+  toggleModal = (status) => {
+    this.props.toggleStatusModal(status);
+  }
+
+  onDelete = (ids) => {
+    const { messages } = this.props.intl;
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <ConfirmPicker 
+            onClose={onClose}
+            onDelete={() => this.props.deleteStatusItem(ids, messages)}
+            messages={messages}
+          />
+        )
+      }
+    })
   }
 
   onChangePageSize = (size) => {
@@ -54,10 +75,6 @@ class List extends Component {
       currentPage: 1,
       selectedPageSize: size
     });
-  }
-
-  toggleModal = () => {
-    this.props.toggleStatusModal();
   }
 
   onChangePage = (page) => {
@@ -84,76 +101,98 @@ class List extends Component {
     this.props.getStatusList(null, messages);
   }
 
-  showStatusItem = (items) => {
-    const { messages } = this.props.intl;
-    let result = null;
-
-    if (items && items.length > 0) {
-      result = items.map((item, index) => {
-        return (
-          <Item
-            key={index}
-            status={item}
-          />
-        )
-      })
-    } else {
-      result = (
-        <tr><td colSpan={6} className="text-center">{messages['no-result']}</td></tr>
-      )
-    }
-    return result;
-  }
-
-  actionHeader = () => {
+  renderHeader = (selected) => {
     const { messages } = this.props.intl;
     const { modalOpen } = this.props.status;
     return (
       <Fragment>
         <Button
           color="success"
-          onClick={this.toggleModal}
+          onClick={() => this.toggleModal(null)}
           className="master-data-btn"
           size="sm"
         >{messages['status.add-new']}</Button>
         <Action modalOpen={modalOpen} />
-
+        {selected.length > 0 &&
+            <Button
+            color="danger"
+            onClick={() => this.onDelete(selected)}
+            className="master-data-btn"
+            size="sm"
+          >{messages['status.delete']}</Button>
+        }
       </Fragment>
     )
   }
+
   render() {
     const { items, loading, total } = this.props.status;
-    const { messages } = this.props.intl;
-    const columns = [
-      {
-        Header: messages['name'],
-        accessor: "name"
-      },
-      {
-        Header: messages['description'],
-        accessor: "description"
-      },
-      {
-        Header: messages['status'],
-        accessor: "status"
-      },
-      {
-        Header: messages['created-at'],
-        accessor: "created-at"
-      },
-      {
-        Header: messages['action']
-      }
-    ]
+    const { messages, locale } = this.props.intl;
+    const columnTable = {
+      checkbox: true,
+      columns: [
+        {
+          Header: messages['name'],
+          accessor: "name",
+          Cell: ({ original }) => {
+            return (
+              locale === 'en-US' ? original.name_en : original.name
+            )
+          },
+          sortable: false,
+        },
+        {
+          Header: messages['description'],
+          accessor: "description",
+          Cell: ({ original }) => {
+            return (
+              locale === 'en-US' ? original.description_en : original.description
+            )
+          },
+          sortable: false,
+        },
+        {
+          Header: messages['status'],
+          accessor: "status",
+          Cell: ({ original }) => {
+            return (
+              original.status === 1 ? <Badge color="success">{messages['active']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>
+            )
+          },
+          className: "text-center",
+          sortable: false,
+        },
+        {
+          Header: messages['created-at'],
+          accessor: "created_at",
+          sortable: false,
+        },
+        {
+          Header: messages['action'],
+          accessor: "",
+          className: "text-center", 
+          Cell: ({ original }) => {
+            return (
+              <Fragment>
+                <Button color="info" size="sm" onClick={() => this.toggleModal(original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
+                <Button color="danger" size="sm" onClick={() => this.onDelete([original.id])}><span className="lnr lnr-trash" /></Button>
+              </Fragment>
+            );
+          },
+          sortable: false,
+        }
+      ]
+    };
+  
     return (
       <Col md={12} lg={12}>
         <Card>
           <CardBody className="master-data-list">
             <Search />
             <Table
-              header={this.actionHeader()}
+              renderHeader={this.renderHeader}
               loading={loading}
-              columns={columns}
+              columnTable={columnTable}
               pages={{
                 pagination: this.state,
                 total: total,
@@ -163,10 +202,8 @@ class List extends Component {
                 selectedPageSize: this.state.selectedPageSize,
                 changePageSize: this.onChangePageSize
               }}
-              data={items && items.length}
-            >
-              {this.showStatusItem(items)}
-            </Table>
+              data={items}
+            />
           </CardBody>
         </Card>
       </Col>
@@ -193,5 +230,6 @@ export default injectIntl(connect(
   {
     getStatusList,
     toggleStatusModal,
+    deleteStatusItem
   }
 )(List));

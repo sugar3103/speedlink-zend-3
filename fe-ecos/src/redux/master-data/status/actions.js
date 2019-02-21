@@ -62,9 +62,9 @@ export const updateStatusItemError = (error) => ({
   payload: error
 });
 
-export const deleteStatusItem = (id, messages) => ({
+export const deleteStatusItem = (ids, messages) => ({
   type: STATUS_DELETE_ITEM,
-  payload: { id, messages }
+  payload: { ids, messages }
 });
 
 export const deleteStatusItemSuccess = () => ({
