@@ -49,9 +49,9 @@ class PricingVas
     private $min;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="type", type="boolean", nullable=false, options={"comment"="0 == formula, 1 == range"})
+     * @ORM\Column(name="type", type="integer", nullable=false, options={"comment=0 == formula, 1 == range"})
      */
     private $type;
 

@@ -28,9 +28,9 @@ class PricingVasSpec
     private $pricing_data_id;
 
     /**
-     * @var int|null
+     * @var int
      *
-     * @ORM\Column(name="pricing_vas_id", type="integer", nullable=true)
+     * @ORM\Column(name="pricing_vas_id", type="integer", nullable=false)
      */
     private $pricing_vas_id;
 
@@ -123,7 +123,7 @@ class PricingVasSpec
     }
 
     /**
-     * @return int|null
+     * @return int
      */
     public function getPricingVasId()
     {
@@ -131,7 +131,7 @@ class PricingVasSpec
     }
 
     /**
-     * @param int|null $pricing_vas_id
+     * @param int $pricing_vas_id
      */
     public function setPricingVasId($pricing_vas_id)
     {

@@ -4,6 +4,7 @@ namespace Management\Factory;
 use Management\Controller\PricingVasController;
 use Management\Service\PricingVasManager;
 use Interop\Container\ContainerInterface;
+use Management\Service\PricingVasSpecManager;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\ServiceManager\ServiceManager;
 use Doctrine\Common\Cache\FilesystemCache;
@@ -19,8 +20,9 @@ class PricingVasControllerFactory implements FactoryInterface {
     {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
         $pricingVasManager = $container->get(PricingVasManager::class);
+        $pricingVasSpecManager = $container->get(PricingVasSpecManager::class);
 
         // instantiate the controller and inject dependencies.
-        return new PricingVasController($entityManager,$pricingVasManager);
+        return new PricingVasController($entityManager,$pricingVasManager,$pricingVasSpecManager);
     }
 }

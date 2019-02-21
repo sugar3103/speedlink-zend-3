@@ -19,9 +19,7 @@ class FieldVasManager {
      * BranchManager constructor.
      * @param $entityManager
      */
-    public function __construct(
-        $entityManager
-    )
+    public function __construct($entityManager)
     {
         $this->entityManager = $entityManager;
     }
