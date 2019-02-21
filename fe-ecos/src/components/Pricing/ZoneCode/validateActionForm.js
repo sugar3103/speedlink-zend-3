@@ -37,6 +37,15 @@ const validate = (values) => {
     if (!values.shipment_type_id) {
       errors.shipment_type_id = 'zonecode.validate-shipment_type-empty';
     }
+
+    if (values.category==='Domestic' && !values.origin_city_id) {
+      errors.origin_city_id = 'zonecode.validate-origin_city-empty';
+    }
+
+    if (values.category==='Domestic' && !values.destination_city_id) {
+      errors.destination_city_id = 'zonecode.validate-destination_city-empty';
+    }
+
     return errors;
   };
   

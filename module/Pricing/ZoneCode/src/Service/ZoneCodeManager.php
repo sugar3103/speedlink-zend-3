@@ -57,7 +57,6 @@ class ZoneCodeManager {
         $this->entityManager->beginTransaction();
         try {
         $zonecode = new ZoneCode;
-        // var_dump($data); die;
         $zonecode->setCode($data['code']);
         $zonecode->setCarrierId($data['carrier_id']);
         $zonecode->setCategory($data['category']);
@@ -79,8 +78,8 @@ class ZoneCodeManager {
        
         $zonecode->setCreatedBy($data['created_by']);
         $zonecode->setCreatedAt(date('Y-m-d H:i:s'));
+       
         $this->getReferenced($zonecode, $data);
-        
         $this->entityManager->persist($zonecode);
         $this->entityManager->flush();        
         // $last_id = $zonecode->getZoneCodeId();
@@ -135,11 +134,11 @@ class ZoneCodeManager {
     private function getReferenced($zonecode,$data) {
 
         $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['carrier_id']);
-        if ($carrier == null)
+        if ($carrier == null) {
             throw new \Exception('Not found Carrier by ID');
-
-        $zonecode->setCarrier($carrier);
-
+        } else {
+            $zonecode->setCarrier($carrier);
+        }
         $service = $this->entityManager->getRepository(Service::class)->find($data['service_id']);
         if ($service == null)
             throw new \Exception('Not found service by ID');
@@ -151,36 +150,43 @@ class ZoneCodeManager {
             throw new \Exception('Not found Shipmenttype by ID');
 
         $zonecode->setShipmenttype($shipmenttype);
-
-        $customer = $this->entityManager->getRepository(Customer::class)->find($data['customer_id']);
-        if ($customer == null)
-            throw new \Exception('Not found Customer by ID');
-
-        $zonecode->setCustomer($customer);
-        
+       
+        if($data['customer_id']) {
+            $customer = $this->entityManager->getRepository(Customer::class)->find($data['customer_id']);
+            if ($customer == null)
+                throw new \Exception('Not found Customer by ID');
+            $zonecode->setCustomer($customer);
+        }
+       
         $origin_country = $this->entityManager->getRepository(Country::class)->find($data['origin_country_id']);
         if ($origin_country == null)
             throw new \Exception('Not found Origin Country by ID');
 
         $zonecode->setOriginCountry($origin_country);
-
-        $origin_city = $this->entityManager->getRepository(City::class)->find($data['origin_city_id']);
-        if ($origin_city == null)
-            throw new \Exception('Not found Origin City by ID');
-
-        $zonecode->setOriginCity($origin_city);
         
-        $origin_district = $this->entityManager->getRepository(District::class)->find($data['origin_district_id']);
-        if ($origin_district == null)
-            throw new \Exception('Not found Origin District by ID');
+        if($data['origin_city_id']) {
+            $origin_city = $this->entityManager->getRepository(City::class)->find($data['origin_city_id']);
+            if ($origin_city == null)
+                throw new \Exception('Not found Origin City by ID');
 
-        $zonecode->setOriginDistrict($origin_district);
+            $zonecode->setOriginCity($origin_city);
+        }
 
+        if($data['origin_district_id']) {
+            $origin_district = $this->entityManager->getRepository(District::class)->find($data['origin_district_id']);
+            if ($origin_district == null)
+                throw new \Exception('Not found Origin District by ID');
+
+            $zonecode->setOriginDistrict($origin_district);
+        }
+
+        if($data['origin_ward_id']) {
         $origin_ward = $this->entityManager->getRepository(Ward::class)->find($data['origin_ward_id']);
         if ($origin_ward == null)
             throw new \Exception('Not found Origin Ward by ID');
 
         $zonecode->setOriginWard($origin_ward);
+        }
 
         $destination_country = $this->entityManager->getRepository(Country::class)->find($data['destination_country_id']);
         if ($destination_country == null)
@@ -188,23 +194,29 @@ class ZoneCodeManager {
 
         $zonecode->setDestinationCountry($destination_country);
 
-        $destination_city = $this->entityManager->getRepository(City::class)->find($data['destination_city_id']);
-        if ($destination_city == null)
-            throw new \Exception('Not found Destination City by ID');
+        if($data['destination_city_id']) {
+            $destination_city = $this->entityManager->getRepository(City::class)->find($data['destination_city_id']);
+            if ($destination_city == null)
+                throw new \Exception('Not found Destination City by ID');
 
-        $zonecode->setDestinationCity($destination_city);
-        
-        $destination_district = $this->entityManager->getRepository(District::class)->find($data['destination_district_id']);
-        if ($destination_district == null)
-            throw new \Exception('Not found Destination District by ID');
+            $zonecode->setDestinationCity($destination_city);
+        }
 
-        $zonecode->setDestinationDistrict($destination_district);
+        if($data['destination_district_id']) {
+            $destination_district = $this->entityManager->getRepository(District::class)->find($data['destination_district_id']);
+            if ($destination_district == null)
+                throw new \Exception('Not found Destination District by ID');
 
-        $destination_ward = $this->entityManager->getRepository(Ward::class)->find($data['destination_ward_id']);
-        if ($destination_ward == null)
-            throw new \Exception('Not found Destination Ward by ID');
+            $zonecode->setDestinationDistrict($destination_district);
+        }
 
-        $zonecode->setDestinationWard($destination_ward);
+        if($data['destination_ward_id']) {
+            $destination_ward = $this->entityManager->getRepository(Ward::class)->find($data['destination_ward_id']);
+            if ($destination_ward == null)
+                throw new \Exception('Not found Destination Ward by ID');
+
+            $zonecode->setDestinationWard($destination_ward);
+        }
     }
 
     /**

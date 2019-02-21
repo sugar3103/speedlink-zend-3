@@ -7,6 +7,7 @@ import * as networkport from './networkport';
 import * as shipment from './shipment';
 import * as status from './status';
 import * as setting from './setting';
+import * as pricing from './pricing';
 let viMessages = {
   address,
   auth,
@@ -16,7 +17,8 @@ let viMessages = {
   networkport,
   shipment,
   status,
-  setting
+  setting,
+  pricing
 };
 
 
