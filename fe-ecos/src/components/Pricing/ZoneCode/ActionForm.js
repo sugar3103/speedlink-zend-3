@@ -622,6 +622,12 @@ class ActionForm extends Component {
               </div>
             </div>
           </Col>
+          <Col md={12} lg={12} xl={12} xs={12}>
+            { modalData ?
+              <span><u>{ modalData.updated_by ? "Update at: "+modalData.updated_at : "Created at: "+modalData.created_at } 
+              &nbsp;- { modalData.updated_by ? "Update by: "+modalData.user_update_name : "Created by: "+modalData.user_create_name }</u></span>
+             : '' }
+            </Col>
           </Row>
         </div>
         <ButtonToolbar className="modal__footer">

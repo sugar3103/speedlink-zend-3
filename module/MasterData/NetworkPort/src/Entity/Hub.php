@@ -26,6 +26,14 @@ class Hub
     /**
      * @var int
      *
+     * @ORM\Column(name="country_id", type="integer", nullable=false)
+     */
+    private $country_id;
+
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="city_id", type="integer", nullable=false)
      */
     private $city_id;
@@ -109,10 +117,31 @@ class Hub
 
     /**
      * 
+     * @ORM\OneToOne(targetEntity="\Address\Entity\Country")
+     * @ORM\JoinColumn(name="country_id", referencedColumnName="id", nullable=true)
+     */
+    protected $country;
+
+    /**
+     * 
      * @ORM\OneToOne(targetEntity="\Address\Entity\City")
      * @ORM\JoinColumn(name="city_id", referencedColumnName="id", nullable=true)
      */
     protected $city;
+
+    /**
+     * 
+     * @ORM\OneToOne(targetEntity="OAuth\Entity\User")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
+     */
+    protected $user_create;
+
+    /**
+     * 
+     * @ORM\OneToOne(targetEntity="OAuth\Entity\User")
+     * @ORM\JoinColumn(name="updated_by", referencedColumnName="id", nullable=true)
+     */
+    protected $user_update;
 
     /**
      * @return int
@@ -128,6 +157,22 @@ class Hub
     public function setId($id)
     {
         $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCountryId()
+    {
+        return $this->country_id;
+    }
+
+    /**
+     * @param int $country_id
+     */
+    public function setCountryId($country_id)
+    {
+        $this->country_id = $country_id;
     }
 
     /**
@@ -355,6 +400,30 @@ class Hub
     }
 
     /**
+     * Set country.
+     *
+     * @param \Address\Entity\Country|null $country
+     *
+     * @return Hub
+     */
+    public function setCountry(\Address\Entity\Country $country = null)
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * Get country.
+     *
+     * @return \Address\Entity\Country|null
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
      * Set city.
      *
      * @param \Address\Entity\City|null $city
@@ -377,4 +446,53 @@ class Hub
     {
         return $this->city;
     }
+
+    /**
+     * Set city.
+     *
+     * @param \OAuth\Entity\User|null $city
+     *
+     * @return Hub
+     */
+    public function setUserCreate(\OAuth\Entity\User $user_create = null)
+    {
+        $this->user_create = $user_create;
+
+        return $this;
+    }
+
+    /**
+     * Get city.
+     *
+     * @return \OAuth\Entity\User|null
+     */
+    public function getUserCreate()
+    {
+        return $this->user_create;
+    }
+
+    /**
+     * Set city.
+     *
+     * @param \OAuth\Entity\User|null $city
+     *
+     * @return Hub
+     */
+    public function setUserUpdate(\OAuth\Entity\User $user_update = null)
+    {
+        $this->user_update = $user_update;
+
+        return $this;
+    }
+
+    /**
+     * Get city.
+     *
+     * @return \OAuth\Entity\User|null
+     */
+    public function getUserUpdate()
+    {
+        return $this->user_update;
+    }
+
 }

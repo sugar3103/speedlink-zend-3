@@ -142,6 +142,16 @@ class HubForm extends Form {
         ]);
         
         $inputFilter->add([
+            'name' => 'country_id',
+            'required'  => true,
+            'filters' => [
+                [
+                    'name' => ToInt::class
+                ]
+            ]           
+        ]);
+
+        $inputFilter->add([
             'name' => 'city_id',
             'required'  => true,
             'filters' => [

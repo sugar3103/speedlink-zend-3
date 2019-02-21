@@ -22,6 +22,8 @@ use Address\Entity\Country;
 use Address\Entity\City;
 use Address\Entity\District;
 use Address\Entity\Ward;
+use OAuth\Entity\User;
+
 /**
  * This service is responsible for adding/editing users
  * and changing user password.
@@ -110,7 +112,8 @@ class BranchManager {
             $branch->setHubId($data['hub_id']);
             $branch->setStatus($data['status']);
             $branch->setUpdatedBy($data['updated_by']);
-            $branch->setUpdatedAt(date('Y-m-d H:i:s'));
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $branch->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
             $branch->setCountryId($data['country_id']);
             $branch->setCityId($data['city_id']);
             $branch->setDistrictId($data['district_id']);
@@ -126,14 +129,13 @@ class BranchManager {
            return $branch;
         }
         catch (ORMException $e) {
-
             $this->entityManager->rollback();
             return FALSE;
         }
     }
 
     private function getReferenced($branch,$data) {
-
+       
         $country = $this->entityManager->getRepository(Country::class)->find($data['country_id']);
         if ($country == null)
             throw new \Exception('Not found Country by ID');
@@ -161,8 +163,21 @@ class BranchManager {
         $hub = $this->entityManager->getRepository(Hub::class)->find($data['hub_id']);
         if ($hub == null)
             throw new \Exception('Not found Hub by ID');
-
         $branch->setHub($hub);
+
+        if($data['created_by']) {
+        $user_create = $this->entityManager->getRepository(User::class)->find($data['created_by']);
+        if ($user_create == null)
+            throw new \Exception('Not found User by ID');
+        $branch->setUserCreate($user_create);
+        }
+
+        if($data['updated_by']){
+        $user_update = $this->entityManager->getRepository(User::class)->find($data['updated_by']);
+        if ($user_update == null)
+            throw new \Exception('Not found User by ID');
+        $branch->setUserUpdate($user_update);
+        }
     }
 
     /**
@@ -206,6 +221,7 @@ class BranchManager {
              //   $branche['status'] = Branch::getIsActiveList($branche['status']);
                 //set created_at
                 $branche['created_at'] =  ($branche['created_at']) ?Utils::checkDateFormat($branche['created_at'],'d/m/Y') : '';
+                $branche['updated_at'] =  ($branche['updated_at']) ? Utils::checkDateFormat($branche['updated_at'],'d/m/Y H:i:s') : '';
                 $countRow++;
             }
 

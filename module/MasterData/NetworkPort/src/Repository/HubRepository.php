@@ -44,7 +44,11 @@ class HubRepository extends EntityRepository
                 h.description,
                 h.description_en,
                 h.city_id,
-                c.name as city
+                h.country_id,
+                uc.username AS user_create_name,
+                ud.username AS user_update_name,
+                c.name as city,
+                co.name as country
             ")->andWhere("h.is_deleted = 0")
             ->groupBy('h.id');
             if($limit) {
@@ -92,11 +96,18 @@ class HubRepository extends EntityRepository
                 'alias' => 'h.city_id',
                 'operator' => 'eq'
             ],
+            'country' => [
+                'alias' => 'h.country_id',
+                'operator' => 'eq'
+            ],
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(Hub::class, 'h')
-         ->leftJoin('h.city', 'c');
+         ->leftJoin('h.city', 'c')
+         ->leftJoin('h.country', 'co')
+         ->leftJoin('h.user_create', 'uc')
+         ->leftJoin('h.user_update', 'ud');
         // ->groupBy('u.id')
         // ->where('u.deletedAt is null')
         // ->andWhere('u.id <> 1')

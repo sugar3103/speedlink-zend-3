@@ -1,5 +1,6 @@
 import {
   HUB_TOGGLE_MODAL,
+  HUB_TOGGLE_DETAIL_MODAL,
   HUB_GET_LIST,
   HUB_GET_LIST_SUCCESS,
   HUB_GET_LIST_ERROR,
@@ -21,6 +22,8 @@ const INIT_STATE = {
   loading: true,
   modalOpen: false,
   modalData: null,
+  modalViewDetailOpen: false,
+  modalViewDetailData: null,
   paramSearch: null
 };
 
@@ -32,6 +35,14 @@ export default (state = INIT_STATE, action) => {
         ...state,
         modalOpen: !state.modalOpen,
         modalData: action.payload,
+        errors: null
+      }
+
+    case HUB_TOGGLE_DETAIL_MODAL:
+      return {
+        ...state,
+        modalViewDetailOpen: !state.modalViewDetailOpen,
+        modalViewDetailData: action.payload,
         errors: null
       }
 

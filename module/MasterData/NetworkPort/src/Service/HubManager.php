@@ -17,7 +17,9 @@ use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator;
 use Zend\Authentication\Result;
 use Core\Utils\Utils;
+use Address\Entity\Country;
 use Address\Entity\City;
+use OAuth\Entity\User;
 
 /**
  * This service is responsible for adding/editing users
@@ -68,12 +70,13 @@ class HubManager {
         $this->entityManager->beginTransaction();
         try {
         $hub = new Hub;
+        $hub->setCountryId($data['country_id']);
         $hub->setCityId($data['city_id']);
         $hub->setCode($data['code']);
         $hub->setName($data['name']);
         $hub->setNameEn($data['name_en']);
         $hub->setStatus($data['status']);
-        $hub->setCreatedBy($user->id);
+        $hub->setCreatedBy($data['created_by']);
         $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
         $hub->setCreatedAt($addTime->format('Y-m-d H:i:s'));
         // $hub->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
@@ -99,13 +102,15 @@ class HubManager {
 
         $this->entityManager->beginTransaction();
         try {
+            $hub->setCountryId($data['country_id']);
             $hub->setCityId($data['city_id']);
             $hub->setCode($data['code']);
             $hub->setName($data['name']);
             $hub->setNameEn($data['name_en']);
             $hub->setStatus($data['status']);
             $hub->setUpdatedBy($data['updated_by']);
-            $hub->setUpdatedAt(date('Y-m-d H:i:s'));
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $hub->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
             $hub->setDescription($data['description']);
             $hub->setDescriptionEn($data['description_en']);
             $this->getReferenced($hub, $data);
@@ -123,10 +128,29 @@ class HubManager {
 
     private function getReferenced($hub,$data) {
 
+      $country = $this->entityManager->getRepository(Country::class)->find($data['country_id']);
+      if ($country == null)
+          throw new \Exception('Not found Country by ID');
+      $hub->setCountry($country);
+
       $city = $this->entityManager->getRepository(City::class)->find($data['city_id']);
       if ($city == null)
           throw new \Exception('Not found City by ID');
       $hub->setCity($city);
+
+      if($data['created_by']) {
+      $user_create = $this->entityManager->getRepository(User::class)->find($data['created_by']);
+      if ($user_create == null)
+          throw new \Exception('Not found User by ID');
+      $hub->setUserCreate($user_create);
+      }
+
+      if($data['updated_by']){
+      $user_update = $this->entityManager->getRepository(User::class)->find($data['updated_by']);
+      if ($user_update == null)
+          throw new \Exception('Not found User by ID');
+      $hub->setUserUpdate($user_update);
+      }
     }
 
     /**
@@ -169,6 +193,7 @@ class HubManager {
                 // $hub['status'] = Hub::getIsActiveList($hub['status']);
                 //set created_at
                 $hub['created_at'] =  ($hub['created_at']) ? Utils::checkDateFormat($hub['created_at'],'d/m/Y') : '';
+                $hub['updated_at'] =  ($hub['updated_at']) ? Utils::checkDateFormat($hub['updated_at'],'d/m/Y H:i:s') : '';
                 $countRow++;
             }
         }
