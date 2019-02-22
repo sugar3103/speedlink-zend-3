@@ -2,7 +2,7 @@ module.exports = {
     //Global
     'cancel': 'Hủy bỏ',
     'save': 'Lưu',
-    'update': 'Cập nhật',
+    'edit': 'Chỉnh sửa',
     'ok': 'OK',
     'warning': 'Cảnh báo',
     'delete-confirm': 'Bạn có chắc chắn muốn xóa?',

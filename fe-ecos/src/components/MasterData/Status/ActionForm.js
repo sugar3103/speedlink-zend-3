@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Button, ButtonToolbar, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -50,7 +50,7 @@ class ActionForm extends Component {
     const { handleSubmit, modalType, modalData } = this.props;
     let className = 'success';
     let title = messages['status.add-new'];
-    const readOnly = modalType === MODAL_VIEW ? true : false;
+    const disabled = modalType === MODAL_VIEW ? true : false;
     switch (modalType) {
       case MODAL_ADD:
         className = 'success';
@@ -71,6 +71,7 @@ class ActionForm extends Component {
     return (
       <form className="form" onSubmit={handleSubmit}>
         <div className="modal__header">
+          <button className="lnr lnr-cross modal__close-btn" onClick={this.toggleModal} />
           <h4 className="bold-text  modal__title">{title}</h4>
         </div>
         <div className="modal__body">
@@ -86,7 +87,7 @@ class ActionForm extends Component {
                 type="text"
                 placeholder={messages['name']}
                 messages={messages} 
-                readOnly={readOnly} 
+                disabled={disabled} 
               />
             </div>
             <div className="form__form-group-field">
@@ -99,7 +100,7 @@ class ActionForm extends Component {
                 type="text"
                 placeholder={messages['name']}
                 messages={messages}
-                readOnly={readOnly} 
+                disabled={disabled} 
               />
             </div>
           </div>
@@ -114,7 +115,7 @@ class ActionForm extends Component {
                 component="textarea"
                 type="text"
                 placeholder={messages['description']}
-                readOnly={readOnly} 
+                disabled={disabled} 
               />
             </div>
             <div className="form__form-group-field">
@@ -126,51 +127,53 @@ class ActionForm extends Component {
                 component="textarea"
                 type="text"
                 placeholder={messages['description']}
-                readOnly={readOnly} 
+                disabled={disabled} 
               />
             </div>
           </div>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['status']}</span>
-            <div className="form__form-group-field">
+            <span className="form__form-group-label radio-button-group">{messages['status']}</span>
               <Field
                 name="status"
                 component={renderRadioButtonField}
                 label={messages['active']}
                 radioValue={1}
                 defaultChecked
-                disabled={readOnly} 
+                disabled={disabled} 
               />
               <Field
                 name="status"
                 component={renderRadioButtonField}
                 label={messages['inactive']}
                 radioValue={0}
-                disabled={readOnly} 
+                disabled={disabled} 
               />
-            </div>
           </div>
-          <hr />
           {modalData &&
-            <Row>
-              <Col md={6}>
-                <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.created_by}</span>
-                <br />
-                <span><i className="label-info-data">{messages['created-at']}:</i>{modalData.created_at}</span>
-              </Col>
-              {modalData.updated_at && 
+            <Fragment>
+              <hr />
+              <Row>
                 <Col md={6}>
-                  <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.updated_by}</span>
+                  <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.created_by}</span>
                   <br />
-                  <span><i className="label-info-data">{messages['updated-at']}:</i>{modalData.updated_at}</span>
+                  <span><i className="label-info-data">{messages['created-at']}:</i>{modalData.created_at}</span>
                 </Col>
-              }
-            </Row>
+                {modalData.updated_at && 
+                  <Col md={6}>
+                    <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.updated_by}</span>
+                    <br />
+                    <span><i className="label-info-data">{messages['updated-at']}:</i>{modalData.updated_at}</span>
+                  </Col>
+                }
+              </Row>
+            </Fragment>
           }
         </div>
         <ButtonToolbar className="modal__footer">
-          <Button outline onClick={this.state.modalType === MODAL_VIEW ? this.changeTypeModal : this.toggleModal}>{messages['cancel']}</Button>{' '}
-          <Button color={className} type="submit">{ modalType === MODAL_VIEW ? messages['update'] : messages['save']}</Button>
+          {this.state.modalType === MODAL_VIEW &&
+            <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
+          }
+          <Button color={className} type="submit">{ modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
         </ButtonToolbar>
       </form>
     );
