@@ -3,17 +3,27 @@ import { injectIntl } from 'react-intl';
 import { Modal } from 'reactstrap';
 import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
-import { addHubItem, updateHubItem, toggleHubModal } from '../../../../redux/actions';
+import { addHubItem, updateHubItem, toggleHubModal, changeTypeHubModal } from '../../../../redux/actions';
 import PropTypes from 'prop-types';
+import { MODAL_EDIT, MODAL_ADD, MODAL_VIEW } from '../../../../constants/defaultValues';
 
 class Action extends Component {
 
   handleSubmit = values => {
     const { messages } = this.props.intl;
-    if (values.id) {
-      this.props.updateHubItem(values, messages);
-    } else {
-      this.props.addHubItem(values, messages);
+    const { modalType } = this.props;
+    switch (modalType) {
+      case MODAL_ADD:
+        this.props.addHubItem(values, messages);
+        break;
+      case MODAL_EDIT:
+        this.props.updateHubItem(values, messages);
+        break;
+      case MODAL_VIEW:
+        this.props.changeTypeHubModal(MODAL_EDIT);
+        break;
+      default:
+        break;
     }
   }
 
@@ -22,8 +32,22 @@ class Action extends Component {
   }
 
   render() {
-    const { modalData } = this.props;
-    const className = modalData ? 'primary' : 'success';
+    const { modalType } = this.props;
+    let className = 'success';
+    switch (modalType) {
+      case MODAL_ADD:
+        className = 'success';
+        break;
+      case MODAL_EDIT:
+        className = 'primary';
+        break;
+      case MODAL_VIEW:
+        className = 'info';
+        break;
+      default:
+        break;
+    }
+
     return (
       <Modal
         isOpen={this.props.modalOpen}
@@ -37,22 +61,24 @@ class Action extends Component {
 }
 
 Action.propTypes = {
-  modalData: PropTypes.object,
+  modalType: PropTypes.string,
   addHubItem: PropTypes.func.isRequired,
   updateHubItem: PropTypes.func.isRequired,
   toggleHubModal: PropTypes.func.isRequired,
+  changeTypeHubModal: PropTypes.func.isRequired
 }
 
 
 const mapStateToProps = ({hub}) => {
-  const { modalData } = hub;
+  const { modalType } = hub;
   return {
-    modalData
+    modalType
   }
 }
 
 export default injectIntl(connect(mapStateToProps, {
   addHubItem,
   updateHubItem,
-  toggleHubModal
+  toggleHubModal,
+  changeTypeHubModal
 })(Action));

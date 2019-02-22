@@ -11,6 +11,7 @@ import Action from './Action';
 import Search from './Search';
 import { confirmAlert } from 'react-confirm-alert';
 import ConfirmPicker from '../../../../containers/Shared/picker/ConfirmPicker';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 import {
   getBranchList,
@@ -37,11 +38,13 @@ class List extends Component {
     };
   }
 
-  toggleModal = (branch) => {
-    this.props.toggleBranchModal(branch);
+  toggleModal = (e, type, branch) => {
+    e.stopPropagation();
+    this.props.toggleBranchModal(type, branch);
   }
 
-  onDelete = (ids) => {
+  onDelete = (e, ids) => {
+    e.stopPropagation();
     const { messages } = this.props.intl;
     confirmAlert({
       customUI: ({ onClose }) => {
@@ -128,7 +131,7 @@ class List extends Component {
       <Fragment>
         <Button
           color="success"
-          onClick={() => this.toggleModal(null)}
+          onClick={(e) => this.toggleModal(e, 'add', null)}
           className="master-data-btn"
           size="sm"
         >{messages['branch.add-new']}</Button>
@@ -136,7 +139,7 @@ class List extends Component {
         {selected.length > 0 &&
             <Button
             color="danger"
-            onClick={() => this.onDelete(selected)}
+            onClick={(e) => this.onDelete(e, selected)}
             className="master-data-btn"
             size="sm"
           >{messages['branch.delete']}</Button>
@@ -154,6 +157,7 @@ class List extends Component {
         {
             Header: '#',
             accessor: "#",
+            width: 30,
             Cell: ({ original }) => {
               return (
                original.id
@@ -218,12 +222,13 @@ class List extends Component {
           sortable: false,
         },
         {
-            Header: messages['action'], 
+            Header: messages['action'],
+            className: "text-center",  
             Cell: ({ original }) => {
               return (
                 <Fragment>
-                  <Button color="info" size="sm" onClick={() => this.toggleModal(original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
-                  <Button color="danger" size="sm" onClick={() => this.onDelete([original.id])}><span className="lnr lnr-trash" /></Button>
+                  <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
+                  <Button color="danger" size="sm" onClick={(e) => this.onDelete(e, [original.id])}><span className="lnr lnr-trash" /></Button>
                 </Fragment>
               );
             },
@@ -251,6 +256,7 @@ class List extends Component {
                 changePageSize: this.onChangePageSize
               }}
               data={items}
+              onRowClick={this.toggleModal}
             />
           </CardBody>
         </Card>
@@ -302,13 +308,15 @@ class List extends Component {
 
 List.propTypes = {
   branch: PropTypes.object.isRequired,
+  modal: PropTypes.object,
   getBranchList: PropTypes.func.isRequired,
   toggleBranchModal: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ branch }) => {
+const mapStateToProps = ({ branch, modal }) => {
   return {
     branch,
+    modal
   };
 };
 

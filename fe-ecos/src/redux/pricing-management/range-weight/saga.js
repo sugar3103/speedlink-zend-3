@@ -5,10 +5,10 @@ import { authHeader } from '../../../util/auth-header';
 import history from '../../../util/history';
 
 import {
-  RANGEWEIGHT_GET_LIST,
-  RANGEWEIGHT_ADD_ITEM,
-  RANGEWEIGHT_UPDATE_ITEM,
-  RANGEWEIGHT_DELETE_ITEM 
+  RANGE_WEIGHT_GET_LIST,
+  RANGE_WEIGHT_ADD_ITEM,
+  RANGE_WEIGHT_UPDATE_ITEM,
+  RANGE_WEIGHT_DELETE_ITEM 
 } from "../../../constants/actionTypes";
 
 import {
@@ -31,8 +31,8 @@ import { startSubmit, stopSubmit } from 'redux-form';
 
 function validateRangeWeight(errors) {
   if (errors.code && errors.code.rangeweightExists) {
-    return stopSubmit('rangeweight_action_form', {
-      code: 'rangeweight.validate-code-exists'
+    return stopSubmit('range_weight_action_form', {
+      code: 'range_weight.validate-code-exists'
     });
   }
 }
@@ -42,7 +42,7 @@ function validateRangeWeight(errors) {
 function getListApi(params) {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}rangeweight`,
+    url: `${apiUrl}range-weight`,
     headers: authHeader(),
     data: JSON.stringify(params)
   });
@@ -88,7 +88,7 @@ function* getRangeWeightListItems({ payload }) {
 function addRangeWeightApi(item) {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}rangeweight/add`,
+    url: `${apiUrl}range-weight/add`,
     headers: authHeader(),
     data: item
   });
@@ -100,7 +100,7 @@ const addRangeWeightItemRequest = async item => {
 
 function* addRangeWeightItem({ payload }) {
   const { item, messages } = payload;
-  yield put(startSubmit('rangeweight_action_form'));
+  yield put(startSubmit('range_weight_action_form'));
   try {
     const response = yield call(addRangeWeightItemRequest, item);
     switch (response.error_code) {
@@ -110,7 +110,7 @@ function* addRangeWeightItem({ payload }) {
         yield put(toggleRangeWeightModal());
         createNotification({
           type: 'success', 
-          message: messages['rangeweight.add-success'], 
+          message: messages['range_weight.add-success'], 
           title: messages['notification.success']
         });
         break;
@@ -141,7 +141,7 @@ function* addRangeWeightItem({ payload }) {
 function updateRangeWeightApi(item) {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}rangeweight/edit`,
+    url: `${apiUrl}range-weight/edit`,
     headers: authHeader(),
     data: item
   });
@@ -153,7 +153,7 @@ const updateRangeWeightItemRequest = async item => {
 
 function* updateRangeWeightItem({ payload }) {
   const { item, messages } = payload;
-  yield put(startSubmit('rangeweight_action_form'));
+  yield put(startSubmit('range_weight_action_form'));
   try {
     const response = yield call(updateRangeWeightItemRequest, item);
     switch (response.error_code) {
@@ -163,7 +163,7 @@ function* updateRangeWeightItem({ payload }) {
         yield put(toggleRangeWeightModal());
         createNotification({
           type: 'success', 
-          message: messages['rangeweight.update-success'], 
+          message: messages['range_weight.update-success'], 
           title: messages['notification.success']
         });
         break;
@@ -195,7 +195,7 @@ function* updateRangeWeightItem({ payload }) {
 function deleteRangeWeightApi(id) {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}rangeweight/delete`,
+    url: `${apiUrl}range-weight/delete`,
     headers: authHeader(),
     data: {  id: id }
   });
@@ -215,7 +215,7 @@ function* deleteRangeWeightItem({ payload }) {
         yield put(getRangeWeightList(null, messages));
         createNotification({
           type: 'success', 
-          message: messages['rangeweight.delete-success'], 
+          message: messages['range_weight.delete-success'], 
           title: messages['notification.success']
         });
         break;
@@ -242,19 +242,19 @@ function* deleteRangeWeightItem({ payload }) {
 }
 
 export function* watchGetList() {
-  yield takeEvery(RANGEWEIGHT_GET_LIST, getRangeWeightListItems);
+  yield takeEvery(RANGE_WEIGHT_GET_LIST, getRangeWeightListItems);
 }
 
 export function* watchAddItem() {
-  yield takeEvery(RANGEWEIGHT_ADD_ITEM, addRangeWeightItem);
+  yield takeEvery(RANGE_WEIGHT_ADD_ITEM, addRangeWeightItem);
 }
 
 export function* watchUpdateItem() {
-  yield takeEvery(RANGEWEIGHT_UPDATE_ITEM, updateRangeWeightItem);
+  yield takeEvery(RANGE_WEIGHT_UPDATE_ITEM, updateRangeWeightItem);
 }
 
 export function* watchDeleteItem() {
-  yield takeEvery(RANGEWEIGHT_DELETE_ITEM, deleteRangeWeightItem);
+  yield takeEvery(RANGE_WEIGHT_DELETE_ITEM, deleteRangeWeightItem);
 }
 
 

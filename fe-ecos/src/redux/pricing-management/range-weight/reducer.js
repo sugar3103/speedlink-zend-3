@@ -1,17 +1,18 @@
 import {
-    RANGEWEIGHT_TOGGLE_MODAL,
-    RANGEWEIGHT_GET_LIST,
-    RANGEWEIGHT_GET_LIST_SUCCESS,
-    RANGEWEIGHT_GET_LIST_ERROR,
-    RANGEWEIGHT_ADD_ITEM,
-    RANGEWEIGHT_ADD_ITEM_SUCCESS,
-    RANGEWEIGHT_ADD_ITEM_ERROR,
-    RANGEWEIGHT_UPDATE_ITEM,
-    RANGEWEIGHT_UPDATE_ITEM_SUCCESS,
-    RANGEWEIGHT_UPDATE_ITEM_ERROR,
-    RANGEWEIGHT_DELETE_ITEM,
-    RANGEWEIGHT_DELETE_ITEM_SUCCESS,
-    RANGEWEIGHT_DELETE_ITEM_ERROR
+    RANGE_WEIGHT_TOGGLE_MODAL,
+    RANGE_WEIGHT_GET_LIST,
+    RANGE_WEIGHT_GET_LIST_SUCCESS,
+    RANGE_WEIGHT_GET_LIST_ERROR,
+    RANGE_WEIGHT_ADD_ITEM,
+    RANGE_WEIGHT_ADD_ITEM_SUCCESS,
+    RANGE_WEIGHT_ADD_ITEM_ERROR,
+    RANGE_WEIGHT_UPDATE_ITEM,
+    RANGE_WEIGHT_UPDATE_ITEM_SUCCESS,
+    RANGE_WEIGHT_UPDATE_ITEM_ERROR,
+    RANGE_WEIGHT_DELETE_ITEM,
+    RANGE_WEIGHT_DELETE_ITEM_SUCCESS,
+    RANGE_WEIGHT_DELETE_ITEM_ERROR,
+    RANGE_WEIGHT_CHANGE_TYPE_MODAL
   } from '../../../constants/actionTypes';
   
   const INIT_STATE = {
@@ -20,6 +21,7 @@ import {
     errors: null,
     loading: true,
     modalOpen: false,
+    modalType: null,
     modalData: null,
     paramSearch: null,
     codes: null
@@ -27,15 +29,22 @@ import {
   
   export default (state = INIT_STATE, action) => {
     switch (action.type) {
-      case RANGEWEIGHT_TOGGLE_MODAL:
+      case RANGE_WEIGHT_TOGGLE_MODAL:
         return {
           ...state,
           modalOpen: !state.modalOpen,
-          modalData: action.payload,
+          modalData: action.payload.data,
+          modalType: action.payload.type,
           errors: null
         };
   
-      case RANGEWEIGHT_GET_LIST:
+      case RANGE_WEIGHT_CHANGE_TYPE_MODAL:
+			return { 
+        ...state, 
+        modalType: action.payload
+      };
+      
+      case RANGE_WEIGHT_GET_LIST:
         const { params } = action.payload;
         return {
           ...state,
@@ -43,7 +52,7 @@ import {
           paramSearch: (params && params.query) ? params.query : null
         };
   
-      case RANGEWEIGHT_GET_LIST_SUCCESS:
+      case RANGE_WEIGHT_GET_LIST_SUCCESS:
         const { items, total } = action.payload;
         return {
           ...state,
@@ -52,65 +61,65 @@ import {
           total
         };
   
-      case RANGEWEIGHT_GET_LIST_ERROR:
+      case RANGE_WEIGHT_GET_LIST_ERROR:
         return {
           ...state,
           loading: false,
           errors: action.payload
         };
   
-      case RANGEWEIGHT_ADD_ITEM:
+      case RANGE_WEIGHT_ADD_ITEM:
         return {
           ...state,
           loading: false
         };
   
-      case RANGEWEIGHT_ADD_ITEM_SUCCESS:
+      case RANGE_WEIGHT_ADD_ITEM_SUCCESS:
         return {
           ...state,
           loading: false,
           errors: null
         };
   
-      case RANGEWEIGHT_ADD_ITEM_ERROR:
+      case RANGE_WEIGHT_ADD_ITEM_ERROR:
         return {
           ...state,
           loading: false,
           errors: action.payload
         };
   
-      case RANGEWEIGHT_UPDATE_ITEM:
+      case RANGE_WEIGHT_UPDATE_ITEM:
         return {
           ...state,
           loading: false
         };
   
-      case RANGEWEIGHT_UPDATE_ITEM_SUCCESS:
+      case RANGE_WEIGHT_UPDATE_ITEM_SUCCESS:
         return {
           ...state,
           loading: false,
           errors: null
         };
   
-      case RANGEWEIGHT_UPDATE_ITEM_ERROR:
+      case RANGE_WEIGHT_UPDATE_ITEM_ERROR:
         return {
           ...state,
           loading: false,
           errors: action.payload
         };
   
-      case RANGEWEIGHT_DELETE_ITEM:
+      case RANGE_WEIGHT_DELETE_ITEM:
         return {
           ...state,
           loading: false
         };
   
-      case RANGEWEIGHT_DELETE_ITEM_SUCCESS:
+      case RANGE_WEIGHT_DELETE_ITEM_SUCCESS:
         return {
           ...state,
         };
   
-      case RANGEWEIGHT_DELETE_ITEM_ERROR:
+      case RANGE_WEIGHT_DELETE_ITEM_ERROR:
         return {
           ...state,
           errors: action.payload

@@ -12,6 +12,7 @@ import Search from './Search';
 import { getRangeWeightList, toggleRangeWeightModal, deleteRangeWeightItem } from "../../../redux/actions";
 import { confirmAlert } from 'react-confirm-alert';
 import ConfirmPicker from '../../../containers/Shared/picker/ConfirmPicker';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 
 const RangeWeightFormatter = ({ value }) => (
@@ -42,8 +43,8 @@ class List extends Component {
       }
     };
 
-    if (this.props.rangeweight.paramSearch) {
-      Object.assign(params, { "query": this.props.rangeweight.paramSearch})
+    if (this.props.rangeWeight.paramSearch) {
+      Object.assign(params, { "query": this.props.rangeWeight.paramSearch})
     }
     this.props.getRangeWeightList(params, messages);
 
@@ -53,11 +54,13 @@ class List extends Component {
     });
   };
 
-  toggleModal = (rangeweight) => {
-    this.props.toggleRangeWeightModal(rangeweight);
+  toggleModal = (e, type, rangeWeight) => {
+    e.stopPropagation();
+    this.props.toggleRangeWeightModal(type, rangeWeight);
   };
 
-  onDelete = (ids) => {
+  onDelete = (e, ids) => {
+    e.stopPropagation();
     const { messages } = this.props.intl;
     confirmAlert({
       customUI: ({ onClose }) => {
@@ -81,8 +84,8 @@ class List extends Component {
       }
     };
 
-    if (this.props.rangeweight.paramSearch) {
-      Object.assign(params, { "query": this.props.rangeweight.paramSearch })
+    if (this.props.rangeWeight.paramSearch) {
+      Object.assign(params, { "query": this.props.rangeWeight.paramSearch })
     }
     this.props.getRangeWeightList(params, messages);
 
@@ -102,7 +105,7 @@ class List extends Component {
     if (items != null && items.length > 0) {
       result = items.map((item, index) => {
         return (
-          <Item key={index} rangeweight={item} />
+          <Item key={index} rangeWeight={item} />
         );
       })
     } else {
@@ -133,30 +136,30 @@ class List extends Component {
 
   renderHeader = (selected) => {
     const { messages } = this.props.intl;
-    const { modalOpen } = this.props.rangeweight;
+    const { modalOpen } = this.props.rangeWeight;
     return (
       <Fragment>
         <Button
           color="success"
-          onClick={() => this.toggleModal(null)}
+          onClick={(e) => this.toggleModal(e, 'add', null)}
           className="master-data-btn"
           size="sm"
-        >{messages['rangeweight.add-new']}</Button>
+        >{messages['range_weight.add-new']}</Button>
         <Action modalOpen={modalOpen} />
         {selected.length > 0 &&
             <Button
             color="danger"
-            onClick={() => this.onDelete(selected)}
+            onClick={(e) => this.onDelete(e, selected)}
             className="master-data-btn"
             size="sm"
-          >{messages['rangeweight.delete']}</Button>
+          >{messages['range_weight.delete']}</Button>
         }
       </Fragment>
     )
   }
 
   render() {
-    const { items, loading, total } = this.props.rangeweight;
+    const { items, loading, total } = this.props.rangeWeight;
     const { messages } = this.props.intl;
     const columnTable = {
       checkbox: true,
@@ -164,6 +167,7 @@ class List extends Component {
         {
             Header: '#',
             accessor: "#",
+            width: 30,
             Cell: ({ original }) => {
               return (
                original.id
@@ -172,8 +176,8 @@ class List extends Component {
             sortable: false,
         },
         {
-          Header: messages['rangeweight.name'],
-          accessor: "rangeweight.name",
+          Header: messages['range_weight.name'],
+          accessor: "range_weight.name",
           Cell: ({ original }) => {
             return (
              original.code
@@ -182,8 +186,8 @@ class List extends Component {
           sortable: false,
         },
         {
-          Header: messages['rangeweight.carrier'],
-          accessor: "rangeweight.carrier",
+          Header: messages['range_weight.carrier'],
+          accessor: "range_weight.carrier",
           Cell: ({ original }) => {
             return (
              original.carrier_code
@@ -192,8 +196,8 @@ class List extends Component {
           sortable: false
         },
         {
-            Header: messages['rangeweight.category'],
-            accessor: "rangeweight.category",
+            Header: messages['range_weight.category'],
+            accessor: "range_weight.category",
             Cell: ({ original }) => {
               return (
                original.category
@@ -202,8 +206,8 @@ class List extends Component {
             sortable: false
         },
         {
-            Header: messages['rangeweight.service'],
-            accessor: "rangeweight.service",
+            Header: messages['range_weight.service'],
+            accessor: "range_weight.service",
             Cell: ({ original }) => {
               return (
                original.service_code
@@ -212,8 +216,8 @@ class List extends Component {
             sortable: false
         },
         {
-            Header: messages['rangeweight.shipmenttype'],
-            accessor: "rangeweight.shipmenttype",
+            Header: messages['range_weight.shipmenttype'],
+            accessor: "range_weight.shipmenttype",
             Cell: ({ original }) => {
               return (
                original.shipmenttype_code
@@ -233,8 +237,8 @@ class List extends Component {
             sortable: false
         },
         {
-            Header: messages['rangeweight.customer'],
-            accessor: "rangeweight.customer",
+            Header: messages['range_weight.customer'],
+            accessor: "range_weight.customer",
             Cell: ({ original }) => {
               return (
                original.customer_name
@@ -243,8 +247,8 @@ class List extends Component {
             sortable: false
         },
         {
-            Header: messages['rangeweight.from'],
-            accessor: "rangeweight.from",
+            Header: messages['range_weight.from'],
+            accessor: "range_weight.from",
             Cell: ({ original }) => {
               return (
                original.from
@@ -253,8 +257,8 @@ class List extends Component {
             sortable: false
         },
         {
-            Header: messages['rangeweight.to'],
-            accessor: "rangeweight.to",
+            Header: messages['range_weight.to'],
+            accessor: "range_weight.to",
             Cell: ({ original }) => {
               return (
                 original.to === '0.00' ? 'Over' : original.to 
@@ -263,8 +267,8 @@ class List extends Component {
             sortable: false
         },
         {
-            Header: messages['rangeweight.calculate'],
-            accessor: "rangeweight.calculate",
+            Header: messages['range_weight.calculate'],
+            accessor: "range_weight.calculate",
             Cell: ({ original }) => {
               return (
                original.calculate_unit
@@ -273,8 +277,8 @@ class List extends Component {
             sortable: false
         },
         {
-            Header: messages['rangeweight.unit'],
-            accessor: "rangeweight.unit",
+            Header: messages['range_weight.unit'],
+            accessor: "range_weight.unit",
             Cell: ({ original }) => {
               return (
                original.unit
@@ -283,8 +287,8 @@ class List extends Component {
             sortable: false
         },
         {
-            Header: messages['rangeweight.roundup'],
-            accessor: "rangeweight.roundup",
+            Header: messages['range_weight.roundup'],
+            accessor: "range_weight.roundup",
             Cell: ({ original }) => {
               return (
                original.round_up
@@ -297,8 +301,8 @@ class List extends Component {
             Cell: ({ original }) => {
               return (
                 <Fragment>
-                  <Button color="info" size="sm" onClick={() => this.toggleModal(original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
-                  <Button color="danger" size="sm" onClick={() => this.onDelete([original.id])}><span className="lnr lnr-trash" /></Button>
+                  <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
+                  <Button color="danger" size="sm" onClick={(e) => this.onDelete(e, [original.id])}><span className="lnr lnr-trash" /></Button>
                 </Fragment>
               );
             },
@@ -329,6 +333,7 @@ class List extends Component {
               }}
               // data={items && items.length}
               data={items}
+              onRowClick={this.toggleModal}
             />
               {/* {this.showRangeWeightItem(items)}
               </Table> */}
@@ -340,15 +345,15 @@ class List extends Component {
 }
 
 List.propTypes = {
-  rangeweight: PropTypes.object.isRequired,
+  rangeWeight: PropTypes.object.isRequired,
   modal: PropTypes.object,
   getRangeWeightList: PropTypes.func.isRequired,
   toggleRangeWeightModal: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({ rangeweight, modal }) => {
+const mapStateToProps = ({ rangeWeight, modal }) => {
   return {
-    rangeweight,
+    rangeWeight,
     modal
   };
 };

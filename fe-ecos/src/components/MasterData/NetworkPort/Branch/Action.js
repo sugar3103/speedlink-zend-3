@@ -3,18 +3,28 @@ import { injectIntl } from 'react-intl';
 import { Modal } from 'reactstrap';
 import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
-import { addBranchItem, updateBranchItem, toggleBranchModal } from '../../../../redux/actions';
+import { addBranchItem, updateBranchItem, toggleBranchModal, changeTypeBranchModal } from '../../../../redux/actions';
 import PropTypes from 'prop-types';
+import { MODAL_EDIT, MODAL_ADD, MODAL_VIEW } from '../../../../constants/defaultValues';
 
 class Action extends Component {
 
   handleSubmit = values => {
-    const { messages } = this.props.intl;    
-    if (values.id) {
-      this.props.updateBranchItem(values, messages);
-    } else {
-      this.props.addBranchItem(values, messages);
-    }
+    const { messages } = this.props.intl;  
+    const { modalType } = this.props;
+    switch (modalType) {
+      case MODAL_ADD:
+        this.props.addBranchItem(values, messages);
+        break;
+      case MODAL_EDIT:
+        this.props.updateBranchItem(values, messages);
+        break;
+      case MODAL_VIEW:
+        this.props.changeTypeBranchModal(MODAL_EDIT);
+        break;
+      default:
+        break;
+    }  
   }
 
   toggleModal = () => {
@@ -22,8 +32,21 @@ class Action extends Component {
   }
 
   render() {
-    const { modalData } = this.props;
-    const className = modalData ? 'primary' : 'success';
+    const { modalType } = this.props;
+    let className = 'success';
+    switch (modalType) {
+      case MODAL_ADD:
+        className = 'success';
+        break;
+      case MODAL_EDIT:
+        className = 'primary';
+        break;
+      case MODAL_VIEW:
+        className = 'info';
+        break;
+      default:
+        break;
+    }
     return (
       <Modal
         isOpen={this.props.modalOpen}
@@ -38,21 +61,23 @@ class Action extends Component {
 
 
 Action.propTypes = {
-  modalData: PropTypes.object,
+  modalType: PropTypes.string,
   addBranchItem: PropTypes.func.isRequired,
   updateBranchItem: PropTypes.func.isRequired,
   toggleBranchModal: PropTypes.func.isRequired,
+  changeTypeBranchModal: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({branch}) => {
-  const { modalData } = branch;
+  const { modalType } = branch;
   return {
-    modalData
+    modalType
   }
 }
 
 export default injectIntl(connect(mapStateToProps, {
   addBranchItem,
   updateBranchItem,
-  toggleBranchModal
+  toggleBranchModal,
+  changeTypeBranchModal
 })(Action));

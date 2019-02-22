@@ -9,8 +9,8 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { injectIntl } from 'react-intl';
 
 class Item extends Component {
-  toggleModal = (zonecode) => {
-    this.props.toggleZoneCodeModal(zonecode);
+  toggleModal = (zoneCode) => {
+    this.props.toggleZoneCodeModal(zoneCode);
   };
 
   onDelete = (id) => {
@@ -19,8 +19,8 @@ class Item extends Component {
       customUI: ({ onClose }) => {
         return (
           <div className='custom-ui-confirm'>
-            <h2>{messages["zonecode.title-confirm"]}</h2>
-            <p>{messages["zonecode.desc-confirm"]}</p>
+            <h2>{messages["zone_code.title-confirm"]}</h2>
+            <p>{messages["zone_code.desc-confirm"]}</p>
             <Button color="light" size="sm" onClick={onClose}>{messages["confirm-no"]}</Button>&nbsp;
             <Button color="danger" size="sm" onClick={() => { this.props.deleteZoneCodeItem(id); onClose();}}>
               {messages["confirm-yes"]}
@@ -37,7 +37,7 @@ class Item extends Component {
 
 
   render() {
-    const { zonecode } = this.props;
+    const { zone_code } = this.props;
     const { messages } = this.props.intl;
     return (
       <tr>
@@ -48,32 +48,32 @@ class Item extends Component {
               <CheckIcon />
             </span>
           </label></td>
-        <th scope="row">{zonecode.id}</th>
-        <td>{zonecode.code}</td>
-        <td>{zonecode.carrier_code}</td>
-        <td>{zonecode.category}</td>
-        <td>{zonecode.service_code}</td>
-        <td>{zonecode.shipmenttype_code}</td>
+        <th scope="row">{zone_code.id}</th>
+        <td>{zone_code.code}</td>
+        <td>{zone_code.carrier_code}</td>
+        <td>{zone_code.category}</td>
+        <td>{zone_code.service_code}</td>
+        <td>{zone_code.shipmenttype_code}</td>
         {/* <td>{locale === 'en-US' ? (carrier.name_en) : (carrier.name)}</td> */}
-        <td>{zonecode.status === 1 ?
+        <td>{zone_code.status === 1 ?
           <Badge color="success">
             {messages['active']}
           </Badge> : <Badge color="dark">
             {messages['inactive']}
           </Badge>
         }</td>
-        <td>{zonecode.customer_name}</td>
-        <td>{zonecode.origin_country_name}</td>
-        <td>{zonecode.origin_city_name}</td>
-        <td>{zonecode.destination_country_name}</td>
-        <td>{zonecode.destination_city_name}</td>
+        <td>{zone_code.customer_name}</td>
+        <td>{zone_code.origin_country_name}</td>
+        <td>{zone_code.origin_city_name}</td>
+        <td>{zone_code.destination_country_name}</td>
+        <td>{zone_code.destination_city_name}</td>
         {/* <td>{carrier.created_at} by {carrier.created_by}</td>
         <td>{carrier.updated_at} by {carrier.updated_by}</td> */}
         <td className="text-center">
-          <Button color="info" size="sm" onClick={() => this.toggleModal(zonecode)}>
+          <Button color="info" size="sm" onClick={() => this.toggleModal(zone_code)}>
             <span className="lnr lnr-pencil" />
           </Button> &nbsp;
-          <Button color="danger" size="sm" onClick={() => this.onDelete(zonecode.id)}>
+          <Button color="danger" size="sm" onClick={() => this.onDelete(zone_code.id)}>
             <span className="lnr lnr-trash" />
           </Button>
         </td>

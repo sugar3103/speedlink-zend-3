@@ -5,10 +5,10 @@ import { authHeader } from '../../../util/auth-header';
 import history from '../../../util/history';
 
 import {
-  ZONECODE_GET_LIST,
-  ZONECODE_ADD_ITEM,
-  ZONECODE_UPDATE_ITEM,
-  ZONECODE_DELETE_ITEM,
+  ZONE_CODE_GET_LIST,
+  ZONE_CODE_ADD_ITEM,
+  ZONE_CODE_UPDATE_ITEM,
+  ZONE_CODE_DELETE_ITEM,
   ORIGIN_COUNTRY_GET_LIST,
   ORIGIN_CITY_GET_LIST,
   ORIGIN_DISTRICT_GET_LIST,
@@ -59,8 +59,8 @@ function validateZoneCode(errors) {
   console.log(errors);
   
   if (errors.code && errors.code.zonecodeExists) {
-    return stopSubmit('zonecode_action_form', {
-      code: 'rangeweight.validate-code-exists'
+    return stopSubmit('zone_code_action_form', {
+      code: 'range-weight.validate-code-exists'
     });
   }
 }
@@ -70,7 +70,7 @@ function validateZoneCode(errors) {
 function getListApi(params) {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}zonecode`,
+    url: `${apiUrl}zone-code`,
     headers: authHeader(),
     data: JSON.stringify(params)
   });
@@ -116,7 +116,7 @@ function* getZoneCodeListItems({ payload }) {
 function addZoneCodeApi(item) {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}zonecode/add`,
+    url: `${apiUrl}zone-code/add`,
     headers: authHeader(),
     data: item
   });
@@ -128,7 +128,7 @@ const addZoneCodeItemRequest = async item => {
 
 function* addZoneCodeItem({ payload }) {
   const { item, messages } = payload;
-  yield put(startSubmit('zonecode_action_form'));
+  yield put(startSubmit('zone_code_action_form'));
   try {
     const response = yield call(addZoneCodeItemRequest, item);
     switch (response.error_code) {
@@ -138,7 +138,7 @@ function* addZoneCodeItem({ payload }) {
         yield put(toggleZoneCodeModal());
         createNotification({
           type: 'success', 
-          message: messages['zonecode.add-success'], 
+          message: messages['zone_code.add-success'], 
           title: messages['notification.success']
         });
         break;
@@ -169,7 +169,7 @@ function* addZoneCodeItem({ payload }) {
 function updateZoneCodeApi(item) {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}zonecode/edit`,
+    url: `${apiUrl}zone-code/edit`,
     headers: authHeader(),
     data: item
   });
@@ -181,7 +181,7 @@ const updateZoneCodeItemRequest = async item => {
 
 function* updateZoneCodeItem({ payload }) {
   const { item, messages } = payload;
-  yield put(startSubmit('zonecode_action_form'));
+  yield put(startSubmit('zone_code_action_form'));
   try {
     const response = yield call(updateZoneCodeItemRequest, item);
     switch (response.error_code) {
@@ -191,7 +191,7 @@ function* updateZoneCodeItem({ payload }) {
         yield put(toggleZoneCodeModal());
         createNotification({
           type: 'success', 
-          message: messages['zonecode.update-success'], 
+          message: messages['zone_code.update-success'], 
           title: messages['notification.success']
         });
         break;
@@ -223,7 +223,7 @@ function* updateZoneCodeItem({ payload }) {
 function deleteZoneCodeApi(id) {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}zonecode/delete`,
+    url: `${apiUrl}zone-code/delete`,
     headers: authHeader(),
     data: {  id: id }
   });
@@ -243,7 +243,7 @@ function* deleteZoneCodeItem({ payload }) {
         yield put(getZoneCodeList(null, messages));
         createNotification({
           type: 'success', 
-          message: messages['zonecode.delete-success'], 
+          message: messages['zone_code.delete-success'], 
           title: messages['notification.success']
         });
         break;
@@ -639,19 +639,19 @@ function* getDestinationWardListItems({ payload }) {
 
 
 export function* watchGetList() {
-  yield takeEvery(ZONECODE_GET_LIST, getZoneCodeListItems);
+  yield takeEvery(ZONE_CODE_GET_LIST, getZoneCodeListItems);
 }
 
 export function* watchAddItem() {
-  yield takeEvery(ZONECODE_ADD_ITEM, addZoneCodeItem);
+  yield takeEvery(ZONE_CODE_ADD_ITEM, addZoneCodeItem);
 }
 
 export function* watchUpdateItem() {
-  yield takeEvery(ZONECODE_UPDATE_ITEM, updateZoneCodeItem);
+  yield takeEvery(ZONE_CODE_UPDATE_ITEM, updateZoneCodeItem);
 }
 
 export function* watchDeleteItem() {
-  yield takeEvery(ZONECODE_DELETE_ITEM, deleteZoneCodeItem);
+  yield takeEvery(ZONE_CODE_DELETE_ITEM, deleteZoneCodeItem);
 }
 
 export function* watchOriginCountryGetList() {
