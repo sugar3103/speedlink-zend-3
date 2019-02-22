@@ -1,8 +1,9 @@
 module.exports = {
   //master-data --- Hub
   'hub.list-title': 'Danh sách Hub',
-  'hub.add-new': 'Tạo mới hub',
+  'hub.add-new': 'Tạo mới Hub',
   'hub.update': 'Cập nhật Hub',
+  'hub.delete': 'Xóa Hub',
   'hub.code': 'Hub Code',
   'hub.name': 'Tên Hub',
   'hub.country': 'Quốc gia',
@@ -48,6 +49,7 @@ module.exports = {
   'branch.list-title': 'Danh sách Branch',
   'branch.add-new': 'Tạo mới Branch',
   'branch.update': 'Cập nhật Branch',
+  'branch.delete': 'Xóa Branch',
   'branch.code': 'Branch Code',
   'branch.name': 'Tên Branch',
   'branch.city': 'Thành phố',

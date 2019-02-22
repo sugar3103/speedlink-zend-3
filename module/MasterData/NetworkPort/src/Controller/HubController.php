@@ -140,18 +140,27 @@ class HubController extends CoreController {
 
       public function deleteAction() {
         $data = $this->getRequestData();
-        if(isset($data['id'])) {
+        if(isset($data['id']) && count($data['id']) > 0 ) {
+          try {
+            foreach ($data['id'] as $id) {
             // Find existing status in the database.
-            $hub = $this->entityManager->getRepository(Hub::class)->findOneBy(array('id' => $data['id']));    
+            $hub = $this->entityManager->getRepository(Hub::class)->findOneBy(array('id' => $id));    
             if ($hub == null) {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = "Hub Not Found";
+                exit();
             } else {
                 //remove status
                 $this->hubManager->deleteHub($hub);
+            }
+          }
                 $this->error_code = 1;
                 $this->apiResponse['message'] = "Success: You have deleted hub!";
-            }          
+          }
+          catch (\Throwable $th) {
+            $this->error_code = 0;
+            $this->apiResponse['message'] = "Status request Id!";
+          }        
         } else {
             $this->error_code = 0;
             $this->apiResponse['message'] = "Hub request id !";

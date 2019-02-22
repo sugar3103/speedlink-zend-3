@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unused-state */
 import React, { Component, Fragment} from 'react';
-import { Card, CardBody, Col, Button } from 'reactstrap';
+import { Card, CardBody, Col, Button, Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Item from './Item';
 import Table from '../../../containers/Shared/table/Table';
@@ -9,7 +9,10 @@ import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import Action from './Action';
 import Search from './Search';
-import { getRangeWeightList, toggleRangeWeightModal } from "../../../redux/actions";
+import { getRangeWeightList, toggleRangeWeightModal, deleteRangeWeightItem } from "../../../redux/actions";
+import { confirmAlert } from 'react-confirm-alert';
+import ConfirmPicker from '../../../containers/Shared/picker/ConfirmPicker';
+
 
 const RangeWeightFormatter = ({ value }) => (
   value === 'Enabled' ? <span className="badge badge-success">Enabled</span> :
@@ -50,9 +53,24 @@ class List extends Component {
     });
   };
 
-toggleModal = () => {
-  this.props.toggleRangeWeightModal();
-};
+  toggleModal = (rangeweight) => {
+    this.props.toggleRangeWeightModal(rangeweight);
+  };
+
+  onDelete = (ids) => {
+    const { messages } = this.props.intl;
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <ConfirmPicker 
+            onClose={onClose}
+            onDelete={() => this.props.deleteRangeWeightItem(ids, messages)}
+            messages={messages}
+          />
+        )
+      }
+    })
+  }
 
   onChangePage = (page) => {
     const { messages } = this.props.intl;
@@ -95,20 +113,44 @@ toggleModal = () => {
     return result;
   };
 
-  actionHeader = () => {
+  // actionHeader = () => {
+  //   const { messages } = this.props.intl;
+  //   const { modalOpen } = this.props.rangeweight;
+    
+  //   return (
+  //     <Fragment>
+  //       <Button
+  //         color="success"
+  //         onClick={this.toggleModal}
+  //         className="master-data-btn"
+  //         size="sm"
+  //       >{messages['rangeweight.add-new']}</Button>
+  //       <Action modalOpen={modalOpen} />
+
+  //     </Fragment>
+  //   )
+  // }
+
+  renderHeader = (selected) => {
     const { messages } = this.props.intl;
     const { modalOpen } = this.props.rangeweight;
-    
     return (
       <Fragment>
         <Button
           color="success"
-          onClick={this.toggleModal}
+          onClick={() => this.toggleModal(null)}
           className="master-data-btn"
           size="sm"
         >{messages['rangeweight.add-new']}</Button>
         <Action modalOpen={modalOpen} />
-
+        {selected.length > 0 &&
+            <Button
+            color="danger"
+            onClick={() => this.onDelete(selected)}
+            className="master-data-btn"
+            size="sm"
+          >{messages['rangeweight.delete']}</Button>
+        }
       </Fragment>
     )
   }
@@ -116,63 +158,154 @@ toggleModal = () => {
   render() {
     const { items, loading, total } = this.props.rangeweight;
     const { messages } = this.props.intl;
-    const columns = [
+    const columnTable = {
+      checkbox: true,
+      columns: [
         {
             Header: '#',
-            accessor: "#"
+            accessor: "#",
+            Cell: ({ original }) => {
+              return (
+               original.id
+              )
+            },
+            sortable: false,
         },
         {
           Header: messages['rangeweight.name'],
-          accessor: "rangeweight.name"
+          accessor: "rangeweight.name",
+          Cell: ({ original }) => {
+            return (
+             original.code
+            )
+          },
+          sortable: false,
         },
         {
           Header: messages['rangeweight.carrier'],
-          accessor: "rangeweight.carrier"
+          accessor: "rangeweight.carrier",
+          Cell: ({ original }) => {
+            return (
+             original.carrier_code
+            )
+          },
+          sortable: false
         },
         {
             Header: messages['rangeweight.category'],
-            accessor: "rangeweight.category"
+            accessor: "rangeweight.category",
+            Cell: ({ original }) => {
+              return (
+               original.category
+              )
+            },
+            sortable: false
         },
         {
             Header: messages['rangeweight.service'],
-            accessor: "rangeweight.service"
+            accessor: "rangeweight.service",
+            Cell: ({ original }) => {
+              return (
+               original.service_code
+              )
+            },
+            sortable: false
         },
         {
             Header: messages['rangeweight.shipmenttype'],
-            accessor: "rangeweight.shipmenttype"
+            accessor: "rangeweight.shipmenttype",
+            Cell: ({ original }) => {
+              return (
+               original.shipmenttype_code
+              )
+            },
+            sortable: false
         },
         {
             Header: messages['status'],
-            accessor: "status"
+            accessor: "status",
+            Cell: ({ original }) => {
+              return (
+                original.status === 1 ? <Badge color="success">{messages['active']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>
+              )
+            },
+            className: "text-center",
+            sortable: false
         },
         {
             Header: messages['rangeweight.customer'],
-            accessor: "rangeweight.customer"
+            accessor: "rangeweight.customer",
+            Cell: ({ original }) => {
+              return (
+               original.customer_name
+              )
+            },
+            sortable: false
         },
         {
             Header: messages['rangeweight.from'],
-            accessor: "rangeweight.from"
+            accessor: "rangeweight.from",
+            Cell: ({ original }) => {
+              return (
+               original.from
+              )
+            },
+            sortable: false
         },
         {
             Header: messages['rangeweight.to'],
-            accessor: "rangeweight.to"
+            accessor: "rangeweight.to",
+            Cell: ({ original }) => {
+              return (
+                original.to === '0.00' ? 'Over' : original.to 
+              )
+            },
+            sortable: false
         },
         {
             Header: messages['rangeweight.calculate'],
-            accessor: "rangeweight.calculate"
+            accessor: "rangeweight.calculate",
+            Cell: ({ original }) => {
+              return (
+               original.calculate_unit
+              )
+            },
+            sortable: false
         },
         {
             Header: messages['rangeweight.unit'],
-            accessor: "rangeweight.unit"
+            accessor: "rangeweight.unit",
+            Cell: ({ original }) => {
+              return (
+               original.unit
+              )
+            },
+            sortable: false
         },
         {
             Header: messages['rangeweight.roundup'],
-            accessor: "rangeweight.roundup"
+            accessor: "rangeweight.roundup",
+            Cell: ({ original }) => {
+              return (
+               original.round_up
+              )
+            },
+            sortable: false
         },
         {
-            Header: messages['action']
+            Header: messages['action'], 
+            Cell: ({ original }) => {
+              return (
+                <Fragment>
+                  <Button color="info" size="sm" onClick={() => this.toggleModal(original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
+                  <Button color="danger" size="sm" onClick={() => this.onDelete([original.id])}><span className="lnr lnr-trash" /></Button>
+                </Fragment>
+              );
+            },
+            sortable: false
         }
       ]
+    };
 
     return (
       <Col md={12} lg={12}>
@@ -180,9 +313,11 @@ toggleModal = () => {
           <CardBody className="master-data-list">
             <Search />
             <Table 
-              header={this.actionHeader()}
+              // header={this.actionHeader()}
+              renderHeader={this.renderHeader}
               loading={loading}
-              columns={columns}
+              columnTable={columnTable}
+              // columns={columns}
               pages={{
                 pagination: this.state,
                 total: total,
@@ -192,10 +327,11 @@ toggleModal = () => {
                 selectedPageSize: this.state.selectedPageSize,
                 changePageSize: this.onChangePageSize
               }}
-              data={items && items.length}
-            >
-              {this.showRangeWeightItem(items)}
-              </Table>
+              // data={items && items.length}
+              data={items}
+            />
+              {/* {this.showRangeWeightItem(items)}
+              </Table> */}
           </CardBody>
         </Card>
       </Col>
@@ -219,5 +355,6 @@ const mapStateToProps = ({ rangeweight, modal }) => {
 
 export default injectIntl(connect(mapStateToProps, {
   getRangeWeightList,
-  toggleRangeWeightModal
+  toggleRangeWeightModal,
+  deleteRangeWeightItem
 })(List));
