@@ -107,19 +107,19 @@ export default {
     {
       id: 'pricing',
       title: 'menu.pricing',
-      route: '/app/pricing',
+      route: '/app/pricing-management',
       icon: 'dice',
       childrens: [
         {
           id: 'rangeweight',
           title: 'menu.rangeweight',
-          route: '/app/pricing/rangeweight',
+          route: '/app/pricing-management/range-weight',
           icon: 'license'
         },
         {
           id: 'zonecode',
           title: 'menu.zonecode',
-          route: '/app/pricing/zonecode',
+          route: '/app/pricing-management/zone-code',
           icon: 'map'
         }
       ]

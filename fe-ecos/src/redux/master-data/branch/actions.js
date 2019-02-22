@@ -11,12 +11,18 @@ import {
   BRANCH_UPDATE_ITEM_ERROR,
   BRANCH_DELETE_ITEM,
   BRANCH_DELETE_ITEM_SUCCESS,
-  BRANCH_DELETE_ITEM_ERROR
+  BRANCH_DELETE_ITEM_ERROR,
+  BRANCH_CHANGE_TYPE_MODAL
 } from '../../../constants/actionTypes';
 
-export const toggleBranchModal = (branch = null) => ({
+export const toggleBranchModal = (type, data) => ({
   type: BRANCH_TOGGLE_MODAL,
-  payload: branch
+  payload: { type, data }
+})
+
+export const changeTypeBranchModal = (type) => ({
+  type: BRANCH_CHANGE_TYPE_MODAL,
+  payload: type
 })
 
 export const getBranchList = (params, messages) => ({

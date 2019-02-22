@@ -2,18 +2,20 @@ import React, { Component } from 'react';
 import { Button, ButtonToolbar, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleRangeWeightModal, getCarrierCodeList, getServiceCodeList, getShipmentTypeCodeList, getCustomerList  } from '../../../redux/actions';
+import { toggleRangeWeightModal, changeTypeRangeWeightModal, getCarrierCodeList, getServiceCodeList, getShipmentTypeCodeList, getCustomerList  } from '../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../containers/Shared/form/CustomField';
 import renderSelectField from '../../../containers/Shared/form/Select';
 import validate from './validateActionForm';
 import PropTypes from 'prop-types';
+import { MODAL_ADD, MODAL_VIEW, MODAL_EDIT } from '../../../constants/defaultValues';
 
 class ActionForm extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
+      modalType: '',
       disabled: false
     }
   }
@@ -41,6 +43,14 @@ class ActionForm extends Component {
         round_up: 0
       };
       this.props.initialize(data);
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.modalType !== this.props.modalType) {
+      this.setState({
+        modalType: prevProps.modalType
+      });
     }
   }
 
@@ -104,29 +114,53 @@ class ActionForm extends Component {
       // const data = nextProps.modalData;
     }
   }
+  changeTypeModal = () => {
+    this.props.changeTypeRangeWeightModal(MODAL_VIEW);
+  }
+
   render() {
     const { messages } = this.props.intl;
-    const { handleSubmit, modalData, carrierCode, serviceCode, shipment_typeCode, customerCode } = this.props;
-    const className = modalData ? 'primary' : 'success';
-    const title = modalData ? messages['carrier.update'] : messages['carrier.add-new'];
+    const { handleSubmit, modalData, modalType, carrierCode, serviceCode, shipment_typeCode, customerCode } = this.props;
+    let className = 'success';
+    let title = messages['range_weight.add-new'];
+    const disabled = modalType === MODAL_VIEW ? true : false;
+    switch (modalType) {
+      case MODAL_ADD:
+        className = 'success';
+        title = messages['range_weight.add-new'];
+        break;
+      case MODAL_EDIT:
+        className = 'primary';
+        title = messages['range_weight.update'];
+        break;
+      case MODAL_VIEW:
+        className = 'info';
+        title = messages['range_weight.view'];
+        break;
+      default:
+        break;
+    }
+
     return (
       <form className="form" onSubmit={handleSubmit}>
         <div className="modal__header">
+          <button className="lnr lnr-cross modal__close-btn" onClick={this.toggleModal} />
           <h4 className="bold-text  modal__title">{title}</h4>
         </div>
         <div className="modal__body">
         <Row>
         <Col md={6} lg={3} xl={3} xs={6}>
         <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.filtertype'] }</span>
+            <span className="form__form-group-label">{messages['range_weight.filtertype'] }</span>
             <span className="text-danger">{'*'}</span>
             <div className="form__form-group-field">
               <Field name="is_private" component={renderSelectField} type="text" options={[
-                { value: 1, label: messages['rangeweight.public'] },
-                { value: 2, label: messages['rangeweight.customer'] }
+                { value: 1, label: messages['range_weight.public'] },
+                { value: 2, label: messages['range_weight.customer'] }
                 ]}
                 messages={messages}
                 onChange={this.hanldeChangeType}
+                disabled={disabled} 
               />
             </div>
         </div>
@@ -134,7 +168,7 @@ class ActionForm extends Component {
 
         <Col md={6} lg={3} xl={3} xs={6}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.customer']}</span>
+            <span className="form__form-group-label">{messages['range_weight.customer']}</span>
             <span className="text-danger">{'*'}</span>
             <div className="form__form-group-field">
               <Field
@@ -144,6 +178,7 @@ class ActionForm extends Component {
                 options={customerCode && this.showOptionsCustomer(customerCode)}
                 messages={messages}
                 disabled={this.state.disabled}
+                
               />
             </div>
           </div>
@@ -151,7 +186,7 @@ class ActionForm extends Component {
 
         <Col md={6} lg={3} xl={3} xs={6}>
         <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.name']}</span>
+            <span className="form__form-group-label">{messages['range_weight.name']}</span>
             <span className="text-danger">{'*'}</span>
             <div className="form__form-group-field">
               <Field
@@ -159,6 +194,7 @@ class ActionForm extends Component {
                 component={CustomField}
                 type="text"
                 messages={messages}
+                disabled={disabled} 
               />
             </div>
         </div>
@@ -169,7 +205,7 @@ class ActionForm extends Component {
         </Col>
         <Col md={6} lg={3} xl={3} xs={6}>
         <div className="form__form-group">
-          <span className="form__form-group-label">{messages['rangeweight.category']}</span>
+          <span className="form__form-group-label">{messages['range_weight.category']}</span>
           <span className="text-danger">{'*'}</span>
           <div className="form__form-group-field">
             <Field name="category" component={renderSelectField} type="text" options={[
@@ -178,13 +214,14 @@ class ActionForm extends Component {
                 { value: 'Domestic', label: messages['domestic'] }
                 ]}
                 messages={messages}
+                disabled={disabled} 
               />
           </div>
         </div>
         </Col>  
         <Col md={6} lg={3} xl={3} xs={6}>
         <div className="form__form-group">
-          <span className="form__form-group-label">{messages['rangeweight.carrier']}</span>
+          <span className="form__form-group-label">{messages['range_weight.carrier']}</span>
           <span className="text-danger">{'*'}</span>
           <div className="form__form-group-field">
             <Field
@@ -193,13 +230,14 @@ class ActionForm extends Component {
               type="text"
               options={carrierCode && this.showOptionsCarrier(carrierCode)}
               messages={messages}
+              disabled={disabled} 
             />
           </div>
         </div>
         </Col>
         <Col md={6} lg={3} xl={3} xs={6}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.service']}</span>
+            <span className="form__form-group-label">{messages['range_weight.service']}</span>
             <span className="text-danger">{'*'}</span>
             <div className="form__form-group-field">
               <Field
@@ -208,6 +246,7 @@ class ActionForm extends Component {
                 type="text"
                 options={serviceCode && this.showOptionsService(serviceCode)}
                 messages={messages}
+                disabled={disabled} 
               />
             </div>
           </div>
@@ -215,7 +254,7 @@ class ActionForm extends Component {
 
         <Col md={6} lg={3} xl={3} xs={6}>
         <div className="form__form-group">
-          <span className="form__form-group-label">{messages['rangeweight.shipmenttype']}</span>
+          <span className="form__form-group-label">{messages['range_weight.shipmenttype']}</span>
           <span className="text-danger">{'*'}</span>
           <div className="form__form-group-field">
             <Field
@@ -224,34 +263,39 @@ class ActionForm extends Component {
               type="text"
               options={shipment_typeCode && this.showOptionsShipmenttype(shipment_typeCode)}
               messages={messages}
+              disabled={disabled} 
             />
           </div>
         </div>
         </Col>
         <Col md={6} lg={3} xl={3} xs={6}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.from']}</span>
+            <span className="form__form-group-label">{messages['range_weight.from']}</span>
             <span className="text-danger">{'*'}</span>
             <div className="form__form-group-field">
               <Field name="from" component="input" type="number" step="0.1" min="0" 
-                     messages={messages} /> 
+                     messages={messages}
+                     disabled={disabled} 
+                      /> 
             </div>
           </div>
         </Col>
         <Col md={6} lg={3} xl={3} xs={6}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.to']}</span>
+            <span className="form__form-group-label">{messages['range_weight.to']}</span>
             <span className="text-danger">{'*'}</span>
             <div className="form__form-group-field">
               <Field name="to" component="input" type="number" step="0.1" min="0" 
-                     messages={messages} />
+                     messages={messages}
+                     disabled={disabled} 
+                      />
             </div>
           </div>
         </Col>
 
         <Col md={6} lg={3} xl={3} xs={6}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.calculate']}</span>
+            <span className="form__form-group-label">{messages['range_weight.calculate']}</span>
             <span className="text-danger">{'*'}</span>
             <div className="form__form-group-field">
             <Field name="calculate_unit" component={renderSelectField} type="text" options={[
@@ -259,6 +303,7 @@ class ActionForm extends Component {
                 { value: 0, label: messages['no'] }
                 ]}
                 messages={messages}
+                disabled={disabled} 
               />
             </div>
           </div>
@@ -266,22 +311,24 @@ class ActionForm extends Component {
 
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-              <span className="form__form-group-label">{messages['rangeweight.unit']}</span>
+              <span className="form__form-group-label">{messages['range_weight.unit']}</span>
               <span className="text-danger">{'*'}</span>
               <div className="form__form-group-field">
                 <Field name="unit" component="input" type="number" step="0.1" min="0" 
-                       messages={messages} />
+                       messages={messages}
+                       disabled={disabled} 
+                        />
               </div>
             </div>
           </Col>
         <Col md={12} lg={6} xl={6} xs={12}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.desc']}</span>
+            <span className="form__form-group-label">{messages['range_weight.desc']}</span>
             <div className="form__form-group-field">
               <div className="form__form-group-icon">
                 <div className="flag vn"></div>
               </div>
-              <Field name="description" component="textarea" type="text" />
+              <Field name="description" component="textarea" type="text" disabled={disabled}  />
             </div>
           </div>
         </Col>
@@ -293,18 +340,18 @@ class ActionForm extends Component {
               <div className="form__form-group-icon">
                 <div className="flag us"></div>
               </div>
-              <Field name="description_en" component="textarea" type="text"  />
+              <Field name="description_en" component="textarea" type="text" disabled={disabled}  />
             </div>
           </div>
         </Col>
 
         <Col md={6} lg={3} xl={3} xs={6}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.roundup']}</span>
+            <span className="form__form-group-label">{messages['range_weight.roundup']}</span>
             <span className="text-danger">{'*'}</span>
             <div className="form__form-group-field">
               <Field component="input" type="number" min="0" 
-                    name='round_up'  messages={messages} /> 
+                    name='round_up'  messages={messages} disabled={disabled}  /> 
             </div>
           </div>
         </Col>
@@ -317,6 +364,7 @@ class ActionForm extends Component {
               { value: 0, label: messages['inactive'] }
               ]}
               messages={messages}
+              disabled={disabled} 
             />
           </div>
         </div>
@@ -330,8 +378,10 @@ class ActionForm extends Component {
       </Row>
     </div>
         <ButtonToolbar className="modal__footer">
-          <Button outline onClick={this.toggleModal}>{messages['cancel']}</Button>{' '}
-          <Button color={className} type="submit">{messages['save']}</Button>
+          {this.state.modalType === MODAL_VIEW &&
+            <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
+          }
+          <Button color={className} type="submit">{ modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
         </ButtonToolbar>
       </form>
     );
@@ -340,6 +390,7 @@ class ActionForm extends Component {
 
 ActionForm.propTypes = {
   modalData: PropTypes.object,
+  modalType: PropTypes.string,
   carrierCode: PropTypes.array,
   serviceCode: PropTypes.array,
   shipment_typeCode: PropTypes.array,
@@ -352,8 +403,8 @@ ActionForm.propTypes = {
   getCustomerList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({rangeweight, carrier, service, shipment_type, customer}) => {  
-  const { errors, modalData } = rangeweight;
+const mapStateToProps = ({rangeWeight, carrier, service, shipment_type, customer}) => {  
+  const { errors, modalData, modalType } = rangeWeight;
   const carrierCode = carrier.codes;
   const serviceCode = service.codes;
   const shipment_typeCode = shipment_type.codes;
@@ -361,17 +412,19 @@ const mapStateToProps = ({rangeweight, carrier, service, shipment_type, customer
   return {
     errors,
     modalData,
+    modalType,
     carrierCode, serviceCode, shipment_typeCode, customerCode
   };
 };
 
 export default reduxForm({
-  form: 'rangeweight_action_form',
+  form: 'range_weight_action_form',
   validate
 })(injectIntl(connect(mapStateToProps, {
   toggleRangeWeightModal,
   getCarrierCodeList,
   getServiceCodeList,
   getShipmentTypeCodeList,
-  getCustomerList
+  getCustomerList,
+  changeTypeRangeWeightModal
 })(ActionForm)));

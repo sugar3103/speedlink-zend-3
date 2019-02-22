@@ -363,12 +363,12 @@ class ActionForm extends Component {
         <Row>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-                <span className="form__form-group-label">{messages['zonecode.type'] }</span>
+                <span className="form__form-group-label">{messages['zone_code.type'] }</span>
                 <span className="text-danger">{'*'}</span>
                 <div className="form__form-group-field">
                   <Field name="is_private" component={renderSelectField} type="text" options={[
-                    { value: 1, label: messages['zonecode.public'] },
-                    { value: 2, label: messages['zonecode.customer'] }
+                    { value: 1, label: messages['zone_code.public'] },
+                    { value: 2, label: messages['zone_code.customer'] }
                     ]} 
                     messages={messages}
                     onChange={this.hanldeChangeType}
@@ -378,7 +378,7 @@ class ActionForm extends Component {
           </Col>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-              <span className="form__form-group-label">{messages['zonecode.customer']}</span>
+              <span className="form__form-group-label">{messages['zone_code.customer']}</span>
               <span className="text-danger">{'*'}</span>
               <div className="form__form-group-field">
                 <Field
@@ -386,7 +386,7 @@ class ActionForm extends Component {
                   component={renderSelectField}
                   type="text"
                   options={customerCode && this.showOptionsCustomer(customerCode)}
-                  placeholder={messages['zonecode.customer']}
+                  placeholder={messages['zone_code.customer']}
                   disabled={this.state.disabled}
                   messages={messages}
                 />
@@ -395,7 +395,7 @@ class ActionForm extends Component {
           </Col>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-                <span className="form__form-group-label">{messages['zonecode.code']}</span>
+                <span className="form__form-group-label">{messages['zone_code.code']}</span>
                 <span className="text-danger">{'*'}</span>
                 <div className="form__form-group-field">
                   <Field
@@ -422,7 +422,7 @@ class ActionForm extends Component {
           </Col>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-                <span className="form__form-group-label">{messages['zonecode.category']}</span>
+                <span className="form__form-group-label">{messages['zone_code.category']}</span>
                 <span className="text-danger">{'*'}</span>
                 <div className="form__form-group-field">
                     <Field name="category" component={renderSelectField} type="text" options={[
@@ -437,7 +437,7 @@ class ActionForm extends Component {
           </Col>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-              <span className="form__form-group-label">{messages['zonecode.carrier']}</span>
+              <span className="form__form-group-label">{messages['zone_code.carrier']}</span>
               <span className="text-danger">{'*'}</span>
               <div className="form__form-group-field">
                 <Field
@@ -452,7 +452,7 @@ class ActionForm extends Component {
           </Col>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-              <span className="form__form-group-label">{messages['zonecode.service']}</span>
+              <span className="form__form-group-label">{messages['zone_code.service']}</span>
               <span className="text-danger">{'*'}</span>
               <div className="form__form-group-field">
                 <Field
@@ -467,7 +467,7 @@ class ActionForm extends Component {
           </Col>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-              <span className="form__form-group-label">{messages['zonecode.shipmenttype']}</span>
+              <span className="form__form-group-label">{messages['zone_code.shipmenttype']}</span>
               <span className="text-danger">{'*'}</span>
               <div className="form__form-group-field">
                 <Field
@@ -482,7 +482,7 @@ class ActionForm extends Component {
           </Col>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-              <span className="form__form-group-label">{messages['zonecode.country_origin']}</span>
+              <span className="form__form-group-label">{messages['zone_code.country_origin']}</span>
               <div className="form__form-group-field">
                 <Field
                   name="origin_country_id"
@@ -497,7 +497,7 @@ class ActionForm extends Component {
           </Col>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-              <span className="form__form-group-label">{messages['zonecode.city_origin']}</span>
+              <span className="form__form-group-label">{messages['zone_code.city_origin']}</span>
               <div className="form__form-group-field">
                 <Field
                   name="origin_city_id"
@@ -512,7 +512,7 @@ class ActionForm extends Component {
           </Col>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-              <span className="form__form-group-label">{messages['zonecode.district_origin']}</span>
+              <span className="form__form-group-label">{messages['zone_code.district_origin']}</span>
               <div className="form__form-group-field">
                 <Field
                   name="origin_district_id"
@@ -527,7 +527,7 @@ class ActionForm extends Component {
           </Col>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-              <span className="form__form-group-label">{messages['zonecode.ward_origin']}</span>
+              <span className="form__form-group-label">{messages['zone_code.ward_origin']}</span>
               <div className="form__form-group-field">
                 <Field
                   name="origin_ward_id"
@@ -542,7 +542,7 @@ class ActionForm extends Component {
           </Col>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-              <span className="form__form-group-label">{messages['zonecode.country_destination']}</span>
+              <span className="form__form-group-label">{messages['zone_code.country_destination']}</span>
               <div className="form__form-group-field">
                 <Field
                   name="destination_country_id"
@@ -557,7 +557,7 @@ class ActionForm extends Component {
           </Col>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-                <span className="form__form-group-label">{messages['zonecode.city_destination']}</span>
+                <span className="form__form-group-label">{messages['zone_code.city_destination']}</span>
                 <div className="form__form-group-field">
                   <Field
                     name="destination_city_id"
@@ -572,7 +572,7 @@ class ActionForm extends Component {
           </Col>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-              <span className="form__form-group-label">{messages['zonecode.district_destination']}</span>
+              <span className="form__form-group-label">{messages['zone_code.district_destination']}</span>
               <div className="form__form-group-field">
                 <Field
                   name="destination_district_id"
@@ -587,7 +587,7 @@ class ActionForm extends Component {
           </Col>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-              <span className="form__form-group-label">{messages['zonecode.ward_destination']}</span>
+              <span className="form__form-group-label">{messages['zone_code.ward_destination']}</span>
               <div className="form__form-group-field">
                 <Field
                   name="destination_ward_id"
@@ -602,7 +602,7 @@ class ActionForm extends Component {
           </Col>
           <Col md={12} lg={6} xl={6} xs={12}>
             <div className="form__form-group">
-              <span className="form__form-group-label">{messages['zonecode.desc']}</span>
+              <span className="form__form-group-label">{messages['zone_code.desc']}</span>
               <div className="form__form-group-field">
                 <div className="form__form-group-icon">
                   <div className="flag vn"></div>
@@ -661,20 +661,20 @@ ActionForm.propTypes = {
   getDestinationWardList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({zonecode, carrier, service, shipment_type, customer}) => {  
-  const { errors, modalData } = zonecode;
+const mapStateToProps = ({zoneCode, carrier, service, shipment_type, customer}) => {  
+  const { errors, modalData } = zoneCode;
   const carrierCode = carrier.codes;
   const serviceCode = service.codes;
   const shipment_typeCode = shipment_type.codes;
   const customerCode = customer.items;
-  const origin_countrys = zonecode.origin_country;
-  const origin_citys = zonecode.origin_city;
-  const origin_districts = zonecode.origin_district;
-  const origin_wards = zonecode.origin_ward;
-  const destination_countrys = zonecode.destination_country;
-  const destination_citys = zonecode.destination_city;
-  const destination_districts = zonecode.destination_district;
-  const destination_wards = zonecode.destination_ward;
+  const origin_countrys = zoneCode.origin_country;
+  const origin_citys = zoneCode.origin_city;
+  const origin_districts = zoneCode.origin_district;
+  const origin_wards = zoneCode.origin_ward;
+  const destination_countrys = zoneCode.destination_country;
+  const destination_citys = zoneCode.destination_city;
+  const destination_districts = zoneCode.destination_district;
+  const destination_wards = zoneCode.destination_ward;
   return {
     errors,
     modalData,
@@ -684,7 +684,7 @@ const mapStateToProps = ({zonecode, carrier, service, shipment_type, customer}) 
 };
 
 export default reduxForm({
-  form: 'zonecode_action_form',
+  form: 'zone_code_action_form',
   validate
 })(injectIntl(connect(mapStateToProps, {
   toggleZoneCodeModal,

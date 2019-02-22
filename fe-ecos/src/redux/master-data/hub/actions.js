@@ -1,6 +1,5 @@
 import {
   HUB_TOGGLE_MODAL,
-  HUB_TOGGLE_DETAIL_MODAL,
   HUB_GET_LIST,
   HUB_GET_LIST_SUCCESS,
   HUB_GET_LIST_ERROR,
@@ -12,17 +11,13 @@ import {
   HUB_UPDATE_ITEM_ERROR,
   HUB_DELETE_ITEM,
   HUB_DELETE_ITEM_SUCCESS,
-  HUB_DELETE_ITEM_ERROR
+  HUB_DELETE_ITEM_ERROR,
+  HUB_CHANGE_TYPE_MODAL
 } from '../../../constants/actionTypes';
 
-export const toggleHubModal = (hub = null) => ({
+export const toggleHubModal = (type, data) => ({
   type: HUB_TOGGLE_MODAL,
-  payload: hub
-})
-
-export const toggleHubDetailModal = (hub = null) => ({
-  type: HUB_TOGGLE_DETAIL_MODAL,
-  payload: hub
+  payload: { type, data }
 })
 
 export const getHubList = (params, messages) => ({
@@ -81,3 +76,8 @@ export const deleteHubItemError = (error) => ({
   type: HUB_DELETE_ITEM_ERROR,
   payload: error
 });
+
+export const changeTypeHubModal = (type) => ({
+  type: HUB_CHANGE_TYPE_MODAL,
+  payload: type
+})

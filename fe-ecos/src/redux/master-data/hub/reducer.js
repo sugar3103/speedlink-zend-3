@@ -1,6 +1,5 @@
 import {
   HUB_TOGGLE_MODAL,
-  HUB_TOGGLE_DETAIL_MODAL,
   HUB_GET_LIST,
   HUB_GET_LIST_SUCCESS,
   HUB_GET_LIST_ERROR,
@@ -12,7 +11,8 @@ import {
   HUB_UPDATE_ITEM_ERROR,
   HUB_DELETE_ITEM,
   HUB_DELETE_ITEM_SUCCESS,
-  HUB_DELETE_ITEM_ERROR
+  HUB_DELETE_ITEM_ERROR,
+  HUB_CHANGE_TYPE_MODAL
 } from '../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -22,8 +22,7 @@ const INIT_STATE = {
   loading: true,
   modalOpen: false,
   modalData: null,
-  modalViewDetailOpen: false,
-  modalViewDetailData: null,
+  modalType: null,
   paramSearch: null
 };
 
@@ -34,17 +33,16 @@ export default (state = INIT_STATE, action) => {
       return {
         ...state,
         modalOpen: !state.modalOpen,
-        modalData: action.payload,
+        modalData: action.payload.data,
+        modalType: action.payload.type,
         errors: null
       }
-
-    case HUB_TOGGLE_DETAIL_MODAL:
-      return {
-        ...state,
-        modalViewDetailOpen: !state.modalViewDetailOpen,
-        modalViewDetailData: action.payload,
-        errors: null
-      }
+    
+    case HUB_CHANGE_TYPE_MODAL:
+			return { 
+        ...state, 
+        modalType: action.payload
+      };
 
     case HUB_GET_LIST:
       const { params } = action.payload;

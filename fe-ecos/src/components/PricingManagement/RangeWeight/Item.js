@@ -9,8 +9,8 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { injectIntl } from 'react-intl';
 
 class Item extends Component {
-  toggleModal = (rangeweight) => {
-    this.props.toggleRangeWeightModal(rangeweight);
+  toggleModal = (rangeWeight) => {
+    this.props.toggleRangeWeightModal(rangeWeight);
   };
 
   onDelete = (id) => {
@@ -19,8 +19,8 @@ class Item extends Component {
       customUI: ({ onClose }) => {
         return (
           <div className='custom-ui-confirm'>
-            <h2>{messages["rangeweight.title-confirm"]}</h2>
-            <p>{messages["rangeweight.desc-confirm"]}</p>
+            <h2>{messages["range_weight.title-confirm"]}</h2>
+            <p>{messages["range_weight.desc-confirm"]}</p>
             <Button color="light" size="sm" onClick={onClose}>{messages["confirm-no"]}</Button>&nbsp;
             <Button color="danger" size="sm" onClick={() => { this.props.deleteRangeWeightItem(id); onClose();}}>
               {messages["confirm-yes"]}
@@ -37,7 +37,7 @@ class Item extends Component {
 
 
   render() {
-    const { rangeweight } = this.props;
+    const { range_weight } = this.props;
     const { messages } = this.props.intl;
     return (
       <tr>
@@ -48,40 +48,40 @@ class Item extends Component {
               <CheckIcon />
             </span>
           </label></td>
-        <th scope="row">{rangeweight.id}</th>
-        <td>{rangeweight.code}</td>
-        <td>{rangeweight.carrier_code}</td>
-        <td>{rangeweight.category}</td>
-        <td>{rangeweight.service_code}</td>
-        <td>{rangeweight.shipmenttype_code}</td>
+        <th scope="row">{range_weight.id}</th>
+        <td>{range_weight.code}</td>
+        <td>{range_weight.carrier_code}</td>
+        <td>{range_weight.category}</td>
+        <td>{range_weight.service_code}</td>
+        <td>{range_weight.shipmenttype_code}</td>
         
         {/* <td>{locale === 'en-US' ? (carrier.name_en) : (carrier.name)}</td> */}
-        <td>{rangeweight.status === 1 ?
+        <td>{range_weight.status === 1 ?
           <Badge color="success">
             {messages['active']}
           </Badge> : <Badge color="dark">
             {messages['inactive']}
           </Badge>
         }</td>
-        <td>{rangeweight.customer_name}</td>
-        <td>{rangeweight.from}</td>
-        <td>{rangeweight.to === '0.00' ? 'Over' : rangeweight.to }</td>
-        <td>{rangeweight.calculate_unit ?
+        <td>{range_weight.customer_name}</td>
+        <td>{range_weight.from}</td>
+        <td>{range_weight.to === '0.00' ? 'Over' : range_weight.to }</td>
+        <td>{range_weight.calculate_unit ?
           <Badge color="success">
             {messages['yes']}
           </Badge> : <Badge color="dark">
             {messages['no']}
           </Badge>
         }</td>
-        <td>{rangeweight.unit}</td>
-        <td>{rangeweight.round_up}</td>
+        <td>{range_weight.unit}</td>
+        <td>{range_weight.round_up}</td>
         {/* <td>{carrier.created_at} by {carrier.created_by}</td>
         <td>{carrier.updated_at} by {carrier.updated_by}</td> */}
         <td className="text-center">
-          <Button color="info" size="sm" onClick={() => this.toggleModal(rangeweight)}>
+          <Button color="info" size="sm" onClick={() => this.toggleModal(range_weight)}>
             <span className="lnr lnr-pencil" />
           </Button> &nbsp;
-          <Button color="danger" size="sm" onClick={() => this.onDelete(rangeweight.id)}>
+          <Button color="danger" size="sm" onClick={() => this.onDelete(range_weight.id)}>
             <span className="lnr lnr-trash" />
           </Button>
         </td>
@@ -91,7 +91,7 @@ class Item extends Component {
 }
 
 Item.propTypes = {
-  rangeweight: PropTypes.object.isRequired,
+  range_weight: PropTypes.object.isRequired,
   toggleRangeWeightModal: PropTypes.func.isRequired,
   deleteRangeWeightItem: PropTypes.func.isRequired
 };

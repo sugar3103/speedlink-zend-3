@@ -355,7 +355,7 @@ class SearchForm extends Component {
 
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['zonecode.country_origin']}</span>
+            <span className="form__form-group-label">{messages['zone_code.country_origin']}</span>
             <div className="form__form-group-field">
               <Field
                 name="origin_country"
@@ -369,7 +369,7 @@ class SearchForm extends Component {
 
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['zonecode.city_origin']}</span>
+            <span className="form__form-group-label">{messages['zone_code.city_origin']}</span>
             <div className="form__form-group-field">
               <Field
                 name="origin_city"
@@ -383,7 +383,7 @@ class SearchForm extends Component {
 
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['zonecode.district_origin']}</span>
+            <span className="form__form-group-label">{messages['zone_code.district_origin']}</span>
             <div className="form__form-group-field">
               <Field
                 name="origin_district"
@@ -397,7 +397,7 @@ class SearchForm extends Component {
 
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['zonecode.ward_origin']}</span>
+            <span className="form__form-group-label">{messages['zone_code.ward_origin']}</span>
             <div className="form__form-group-field">
               <Field
                 name="origin_ward"
@@ -410,7 +410,7 @@ class SearchForm extends Component {
 
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['zonecode.country_destination']}</span>
+            <span className="form__form-group-label">{messages['zone_code.country_destination']}</span>
             <div className="form__form-group-field">
               <Field
                 name="destination_country"
@@ -424,7 +424,7 @@ class SearchForm extends Component {
 
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['zonecode.city_destination']}</span>
+            <span className="form__form-group-label">{messages['zone_code.city_destination']}</span>
             <div className="form__form-group-field">
               <Field
                 name="destination_city"
@@ -438,7 +438,7 @@ class SearchForm extends Component {
 
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['zonecode.district_destination']}</span>
+            <span className="form__form-group-label">{messages['zone_code.district_destination']}</span>
             <div className="form__form-group-field">
               <Field
                 name="destination_district"
@@ -452,7 +452,7 @@ class SearchForm extends Component {
 
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['zonecode.ward_destination']}</span>
+            <span className="form__form-group-label">{messages['zone_code.ward_destination']}</span>
             <div className="form__form-group-field">
               <Field
                 name="destination_ward"
@@ -506,24 +506,24 @@ SearchForm.propTypes = {
   reset: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ carrier, service, shipment_type, customer, zonecode }) => {
+const mapStateToProps = ({ carrier, service, shipment_type, customer, zoneCode }) => {
   const carrierCode = carrier.codes;
   const serviceCode = service.codes;
   const shipment_typeCode = shipment_type.codes;
   const customerCode = customer.items;
-  const origin_countrys = zonecode.origin_country;
-  const origin_citys = zonecode.origin_city;
-  const origin_districts = zonecode.origin_district;
-  const origin_wards = zonecode.origin_ward;
-  const destination_countrys = zonecode.destination_country;
-  const destination_citys = zonecode.destination_city;
-  const destination_districts = zonecode.destination_district;
-  const destination_wards = zonecode.destination_ward;
+  const origin_countrys = zoneCode.origin_country;
+  const origin_citys = zoneCode.origin_city;
+  const origin_districts = zoneCode.origin_district;
+  const origin_wards = zoneCode.origin_ward;
+  const destination_countrys = zoneCode.destination_country;
+  const destination_citys = zoneCode.destination_city;
+  const destination_districts = zoneCode.destination_district;
+  const destination_wards = zoneCode.destination_ward;
   return { carrierCode, serviceCode, shipment_typeCode, customerCode, origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards }
 }
 
 export default reduxForm({
-  form: 'zonecode_search_form',
+  form: 'zone_code_search_form',
   initialValues: {
     name: '',
     carrier: -1,

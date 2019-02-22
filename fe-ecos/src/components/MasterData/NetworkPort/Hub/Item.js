@@ -3,7 +3,7 @@ import { Button, Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
-import { toggleHubDetailModal,toggleHubModal, deleteHubItem } from '../../../../redux/actions';
+import { toggleHubModal, deleteHubItem } from '../../../../redux/actions';
 
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -63,7 +63,6 @@ class Item extends Component {
 Item.propTypes = {
   hub: PropTypes.object.isRequired,
   toggleHubModal: PropTypes.func.isRequired,
-  toggleHubDetailModal: PropTypes.func.isRequired,
   deleteHubItem: PropTypes.func.isRequired
 }
 const mapStateToProps = ({ settings }) => {
@@ -73,7 +72,6 @@ const mapStateToProps = ({ settings }) => {
   }
 }
 export default injectIntl(connect(mapStateToProps, {
-  toggleHubDetailModal,
   toggleHubModal,
   deleteHubItem
 })(Item));

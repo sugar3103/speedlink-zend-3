@@ -23,7 +23,7 @@ $router = [
             'type' => StaticRoute::class,
             'options' => [
                 'verb' => 'POST',
-                'route' => '/rangeweight[/:action]',
+                'route' => '/range-weight[/:action]',
                 'constraints' => [
                     'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
                 ],

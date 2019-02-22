@@ -1,17 +1,17 @@
 import {
-  ZONECODE_TOGGLE_MODAL,
-  ZONECODE_GET_LIST,
-  ZONECODE_GET_LIST_SUCCESS,
-  ZONECODE_GET_LIST_ERROR,
-  ZONECODE_ADD_ITEM,
-  ZONECODE_ADD_ITEM_SUCCESS,
-  ZONECODE_ADD_ITEM_ERROR,
-  ZONECODE_UPDATE_ITEM,
-  ZONECODE_UPDATE_ITEM_SUCCESS,
-  ZONECODE_UPDATE_ITEM_ERROR,
-  ZONECODE_DELETE_ITEM,
-  ZONECODE_DELETE_ITEM_SUCCESS,
-  ZONECODE_DELETE_ITEM_ERROR,
+  ZONE_CODE_TOGGLE_MODAL,
+  ZONE_CODE_GET_LIST,
+  ZONE_CODE_GET_LIST_SUCCESS,
+  ZONE_CODE_GET_LIST_ERROR,
+  ZONE_CODE_ADD_ITEM,
+  ZONE_CODE_ADD_ITEM_SUCCESS,
+  ZONE_CODE_ADD_ITEM_ERROR,
+  ZONE_CODE_UPDATE_ITEM,
+  ZONE_CODE_UPDATE_ITEM_SUCCESS,
+  ZONE_CODE_UPDATE_ITEM_ERROR,
+  ZONE_CODE_DELETE_ITEM,
+  ZONE_CODE_DELETE_ITEM_SUCCESS,
+  ZONE_CODE_DELETE_ITEM_ERROR,
   ORIGIN_COUNTRY_GET_LIST,
   ORIGIN_COUNTRY_GET_LIST_SUCCESS,
   ORIGIN_COUNTRY_GET_LIST_ERROR,
@@ -36,67 +36,73 @@ import {
   DESTINATION_WARD_GET_LIST,
   DESTINATION_WARD_GET_LIST_SUCCESS,
   DESTINATION_WARD_GET_LIST_ERROR,
+  ZONE_CODE_CHANGE_TYPE_MODAL
 } from '../../../constants/actionTypes';
 
-export const toggleZoneCodeModal = (zonecode = null) => ({
-  type: ZONECODE_TOGGLE_MODAL,
-  payload: zonecode
+export const toggleZoneCodeModal = (type, data) => ({
+  type: ZONE_CODE_TOGGLE_MODAL,
+  payload: { type, data }
+})
+
+export const changeTypeZoneCodeModal = (type) => ({
+  type: ZONE_CODE_CHANGE_TYPE_MODAL,
+  payload: type
 })
 
 export const getZoneCodeList = (params, messages) => ({
-  type: ZONECODE_GET_LIST,
+  type: ZONE_CODE_GET_LIST,
   payload: { params, messages }
 });
 
 export const getZoneCodeListSuccess = (items, total) => ({
-  type: ZONECODE_GET_LIST_SUCCESS,
+  type: ZONE_CODE_GET_LIST_SUCCESS,
   payload: { items, total }
 });
 
 export const getZoneCodeListError = (error) => ({
-  type: ZONECODE_GET_LIST_ERROR,
+  type: ZONE_CODE_GET_LIST_ERROR,
   payload: error
 });
 
 export const addZoneCodeItem = (item, messages) => ({
-  type: ZONECODE_ADD_ITEM,
+  type: ZONE_CODE_ADD_ITEM,
   payload: { item, messages }
 });
 
 export const addZoneCodeItemSuccess = () => ({
-  type: ZONECODE_ADD_ITEM_SUCCESS,
+  type: ZONE_CODE_ADD_ITEM_SUCCESS,
 });
 
 export const addZoneCodeItemError = (error) => ({
-  type: ZONECODE_ADD_ITEM_ERROR,
+  type: ZONE_CODE_ADD_ITEM_ERROR,
   payload: error
 });
 
 export const updateZoneCodeItem = (item, messages) => ({
-  type: ZONECODE_UPDATE_ITEM,
+  type: ZONE_CODE_UPDATE_ITEM,
   payload: { item, messages }
 });
 
 export const updateZoneCodeItemSuccess = () => ({
-  type: ZONECODE_UPDATE_ITEM_SUCCESS,
+  type: ZONE_CODE_UPDATE_ITEM_SUCCESS,
 });
 
 export const updateZoneCodeItemError = (error) => ({
-  type: ZONECODE_UPDATE_ITEM_ERROR,
+  type: ZONE_CODE_UPDATE_ITEM_ERROR,
   payload: error
 });
 
 export const deleteZoneCodeItem = (id, messages) => ({
-  type: ZONECODE_DELETE_ITEM,
+  type: ZONE_CODE_DELETE_ITEM,
   payload: { id, messages }
 });
 
 export const deleteZoneCodeItemSuccess = () => ({
-  type: ZONECODE_DELETE_ITEM_SUCCESS,
+  type: ZONE_CODE_DELETE_ITEM_SUCCESS,
 });
 
 export const deleteZoneCodeItemError = (error) => ({
-  type: ZONECODE_DELETE_ITEM_ERROR,
+  type: ZONE_CODE_DELETE_ITEM_ERROR,
   payload: error
 });
 

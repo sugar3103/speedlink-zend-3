@@ -11,7 +11,8 @@ import {
   BRANCH_UPDATE_ITEM_ERROR,
   BRANCH_DELETE_ITEM,
   BRANCH_DELETE_ITEM_SUCCESS,
-  BRANCH_DELETE_ITEM_ERROR
+  BRANCH_DELETE_ITEM_ERROR,
+  BRANCH_CHANGE_TYPE_MODAL
 } from '../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -20,6 +21,7 @@ const INIT_STATE = {
   errors: null,
   loading: true,
   modalOpen: false,
+  modalType: null,
   modalData: null,
   paramSearch: null
 };
@@ -31,9 +33,16 @@ export default (state = INIT_STATE, action) => {
       return {
         ...state,
         modalOpen: !state.modalOpen,
-        modalData: action.payload,
+        modalData: action.payload.data,
+        modalType: action.payload.type,
         errors: null
       }
+    
+    case BRANCH_CHANGE_TYPE_MODAL:
+			return { 
+        ...state, 
+        modalType: action.payload
+      };
 
     case BRANCH_GET_LIST:
       const { params } = action.payload;

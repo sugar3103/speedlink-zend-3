@@ -41,8 +41,8 @@ class List extends Component {
       }
     };
 
-    if (this.props.zonecode.paramSearch) {
-      Object.assign(params, { "query": this.props.zonecode.paramSearch})
+    if (this.props.zoneCode.paramSearch) {
+      Object.assign(params, { "query": this.props.zoneCode.paramSearch})
     }
     this.props.getZoneCodeList(params, messages);
 
@@ -52,8 +52,8 @@ class List extends Component {
     });
   };
 
-  toggleModal = (zonecode) => {
-    this.props.toggleZoneCodeModal(zonecode);
+  toggleModal = (zoneCode) => {
+    this.props.toggleZoneCodeModal(zoneCode);
   };
 
   onDelete = (ids) => {
@@ -80,8 +80,8 @@ class List extends Component {
       }
     };
 
-    if (this.props.zonecode.paramSearch) {
-      Object.assign(params, { "query": this.props.zonecode.paramSearch })
+    if (this.props.zoneCode.paramSearch) {
+      Object.assign(params, { "query": this.props.zoneCode.paramSearch })
     }
     this.props.getZoneCodeList(params, messages);
 
@@ -101,7 +101,7 @@ class List extends Component {
     if (items != null && items.length > 0) {
       result = items.map((item, index) => {
         return (
-          <Item key={index} zonecode={item} />
+          <Item key={index} zoneCode={item} />
         );
       })
     } else {
@@ -114,7 +114,7 @@ class List extends Component {
 
   renderHeader = (selected) => {
     const { messages } = this.props.intl;
-    const { modalOpen } = this.props.zonecode;
+    const { modalOpen } = this.props.zoneCode;
     return (
       <Fragment>
         <Button
@@ -122,7 +122,7 @@ class List extends Component {
           onClick={() => this.toggleModal(null)}
           className="master-data-btn"
           size="sm"
-        >{messages['zonecode.add-new']}</Button>
+        >{messages['zone_code.add-new']}</Button>
         <Action modalOpen={modalOpen} />
         {selected.length > 0 &&
             <Button
@@ -130,7 +130,7 @@ class List extends Component {
             onClick={() => this.onDelete(selected)}
             className="master-data-btn"
             size="sm"
-          >{messages['zonecode.delete']}</Button>
+          >{messages['zone_code.delete']}</Button>
         }
       </Fragment>
     )
@@ -138,7 +138,7 @@ class List extends Component {
 
 
   render() {
-    const { items, loading, total } = this.props.zonecode;
+    const { items, loading, total } = this.props.zoneCode;
     const { messages } = this.props.intl;
     const columnTable = {
       checkbox: true,
@@ -154,8 +154,8 @@ class List extends Component {
             sortable: false,
         },
         {
-          Header: messages['zonecode.code'],
-          accessor: "zonecode.code",
+          Header: messages['zone_code.code'],
+          accessor: "zone_code.code",
           Cell: ({ original }) => {
             return (
              original.code
@@ -164,8 +164,8 @@ class List extends Component {
           sortable: false,
         },
         {
-          Header: messages['zonecode.carrier'],
-          accessor: "zonecode.carrier",
+          Header: messages['zone_code.carrier'],
+          accessor: "zone_code.carrier",
           Cell: ({ original }) => {
             return (
              original.carrier_code
@@ -174,8 +174,8 @@ class List extends Component {
           sortable: false
         },
         {
-            Header: messages['zonecode.category'],
-            accessor: "zonecode.category",
+            Header: messages['zone_code.category'],
+            accessor: "zone_code.category",
             Cell: ({ original }) => {
               return (
                original.category
@@ -184,8 +184,8 @@ class List extends Component {
             sortable: false,
         },
         {
-            Header: messages['zonecode.service'],
-            accessor: "zonecode.service",
+            Header: messages['zone_code.service'],
+            accessor: "zone_code.service",
             Cell: ({ original }) => {
               return (
                original.service_code
@@ -194,8 +194,8 @@ class List extends Component {
             sortable: false,
         },
         {
-            Header: messages['zonecode.shipmenttype'],
-            accessor: "zonecode.shipmenttype",
+            Header: messages['zone_code.shipmenttype'],
+            accessor: "zone_code.shipmenttype",
             Cell: ({ original }) => {
               return (
                original.shipmenttype_code
@@ -215,8 +215,8 @@ class List extends Component {
             sortable: false,
         },
         {
-            Header: messages['zonecode.customer'],
-            accessor: "zonecode.customer",
+            Header: messages['zone_code.customer'],
+            accessor: "zone_code.customer",
             Cell: ({ original }) => {
               return (
                original.customer_name
@@ -225,8 +225,8 @@ class List extends Component {
             sortable: false,
         },
         {
-            Header: messages['zonecode.country_origin'],
-            accessor: "zonecode.country_origin",
+            Header: messages['zone_code.country_origin'],
+            accessor: "zone_code.country_origin",
             Cell: ({ original }) => {
               return (
                original.origin_country_name
@@ -235,8 +235,8 @@ class List extends Component {
             sortable: false,
         },
         {
-          Header: messages['zonecode.city_origin'],
-          accessor: "zonecode.city_origin",
+          Header: messages['zone_code.city_origin'],
+          accessor: "zone_code.city_origin",
           Cell: ({ original }) => {
             return (
              original.origin_city_name
@@ -245,8 +245,8 @@ class List extends Component {
           sortable: false,
         },
         {
-          Header: messages['zonecode.country_destination'],
-          accessor: "zonecode.country_destination",
+          Header: messages['zone_code.country_destination'],
+          accessor: "zone_code.country_destination",
           Cell: ({ original }) => {
             return (
              original.destination_country_name
@@ -255,8 +255,8 @@ class List extends Component {
           sortable: false,
         },
         {
-          Header: messages['zonecode.city_destination'],
-          accessor: "zonecode.city_destination",
+          Header: messages['zone_code.city_destination'],
+          accessor: "zone_code.city_destination",
           Cell: ({ original }) => {
             return (
              original.destination_city_name
@@ -309,15 +309,15 @@ class List extends Component {
 }
 
 List.propTypes = {
-  zonecode: PropTypes.object.isRequired,
+  zoneCode: PropTypes.object.isRequired,
   modal: PropTypes.object,
   getZoneCodeList: PropTypes.func.isRequired,
   toggleZoneCodeModal: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({ zonecode, modal }) => {
+const mapStateToProps = ({ zoneCode, modal }) => {
   return {
-    zonecode,
+    zoneCode,
     modal
   };
 };
