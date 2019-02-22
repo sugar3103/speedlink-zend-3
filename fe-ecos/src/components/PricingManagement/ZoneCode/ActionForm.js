@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, ButtonToolbar, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleZoneCodeModal, getCarrierCodeList, getServiceCodeList, getShipmentTypeCodeList, getCustomerList, 
+import { toggleZoneCodeModal, changeTypeZoneCodeModal, getCarrierCodeList, getServiceCodeList, getShipmentTypeCodeList, getCustomerList, 
   getOriginCountryList, getOriginCityList, getOriginDistrictList, getOriginWardList,
   getDestinationCountryList, getDestinationCityList, getDestinationDistrictList, getDestinationWardList  } from '../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
@@ -10,24 +10,15 @@ import CustomField from '../../../containers/Shared/form/CustomField';
 import renderSelectField from '../../../containers/Shared/form/Select';
 import validate from './validateActionForm';
 import PropTypes from 'prop-types';
+import { MODAL_ADD, MODAL_VIEW, MODAL_EDIT } from '../../../constants/defaultValues';
 
 class ActionForm extends Component {
 
   constructor(props){
     super(props);
     this.state = {
+      modalType: '',
       disabled: false
-    }
-  }
-  hanldeChangeType = value => {
-    if (value === 1) {
-      this.setState({
-        disabled: true
-      });
-    } else {
-      this.setState({
-        disabled: false
-      })
     }
   }
 
@@ -138,6 +129,14 @@ class ActionForm extends Component {
         }
       }
       this.props.getDestinationWardList(paramsWard);
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.modalType !== this.props.modalType) {
+      this.setState({
+        modalType: prevProps.modalType
+      });
     }
   }
 
@@ -341,6 +340,18 @@ class ActionForm extends Component {
   }
 
 
+ hanldeChangeType = value => {
+    if (value === 1) {
+      this.setState({
+        disabled: true
+      });
+    } else {
+      this.setState({
+        disabled: false
+      })
+    }
+  }
+
   toggleModal = () => {
     this.props.toggleZoneCodeModal();
   };
@@ -349,14 +360,37 @@ class ActionForm extends Component {
       // const data = nextProps.modalData;
     }
   }
+  changeTypeModal = () => {
+    this.props.changeTypeZoneCodeModal(MODAL_VIEW);
+  }
+
   render() {
     const { messages } = this.props.intl;
-    const { handleSubmit, modalData, carrierCode, serviceCode, shipment_typeCode, customerCode,origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards } = this.props;
-    const className = modalData ? 'primary' : 'success';
-    const title = modalData ? messages['carrier.update'] : messages['carrier.add-new'];
+    const { handleSubmit, modalData, modalType, carrierCode, serviceCode, shipment_typeCode, customerCode,origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards } = this.props;
+    let className = 'success';
+    let title = messages['hub.add-new'];
+    const disabled = modalType === MODAL_VIEW ? true : false;
+    switch (modalType) {
+      case MODAL_ADD:
+        className = 'success';
+        title = messages['hub.add-new'];
+        break;
+      case MODAL_EDIT:
+        className = 'primary';
+        title = messages['hub.update'];
+        break;
+      case MODAL_VIEW:
+        className = 'info';
+        title = messages['hub.view'];
+        break;
+      default:
+        break;
+    }
+
     return (
       <form className="form" onSubmit={handleSubmit}>
         <div className="modal__header">
+         <button className="lnr lnr-cross modal__close-btn" onClick={this.toggleModal} />
           <h4 className="bold-text  modal__title">{title}</h4>
         </div>
         <div className="modal__body">
@@ -372,6 +406,7 @@ class ActionForm extends Component {
                     ]} 
                     messages={messages}
                     onChange={this.hanldeChangeType}
+                    disabled={disabled} 
                   />
                 </div>
             </div>
@@ -387,7 +422,7 @@ class ActionForm extends Component {
                   type="text"
                   options={customerCode && this.showOptionsCustomer(customerCode)}
                   placeholder={messages['zone_code.customer']}
-                  disabled={this.state.disabled}
+                  disabled={this.state.disabled || disabled }
                   messages={messages}
                 />
               </div>
@@ -403,6 +438,7 @@ class ActionForm extends Component {
                     component={CustomField}
                     type="text"
                     messages={messages}
+                    disabled={disabled} 
                   />
                 </div>
             </div>
@@ -416,6 +452,7 @@ class ActionForm extends Component {
                   { value: 0, label: messages['inactive'] }
                   ]}
                   messages={messages}
+                  disabled={disabled} 
                 />
               </div>
             </div>
@@ -431,6 +468,7 @@ class ActionForm extends Component {
                       { value: 'Domestic', label: messages['domestic'] }
                       ]}
                       messages={messages}
+                      disabled={disabled} 
                     />
                 </div>
             </div>
@@ -446,6 +484,7 @@ class ActionForm extends Component {
                   type="text"
                   options={carrierCode && this.showOptionsCarrier(carrierCode)}
                   messages={messages}
+                  disabled={disabled} 
                 />
               </div>
             </div>
@@ -461,6 +500,7 @@ class ActionForm extends Component {
                   type="text"
                   options={serviceCode && this.showOptionsService(serviceCode)}
                   messages={messages}
+                  disabled={disabled} 
                 />
               </div>
             </div>
@@ -476,6 +516,7 @@ class ActionForm extends Component {
                   type="text"
                   options={shipment_typeCode && this.showOptionsShipmenttype(shipment_typeCode)}
                   messages={messages}
+                  disabled={disabled} 
                 />
               </div>
             </div>
@@ -491,6 +532,7 @@ class ActionForm extends Component {
                   options={origin_countrys && this.showOptionsOriginCountry(origin_countrys)}
                   onChange={this.onChangeOriginCountry}
                   messages={messages}
+                  disabled={disabled} 
                 />
               </div>
             </div>
@@ -506,6 +548,7 @@ class ActionForm extends Component {
                   options={origin_citys && this.showOptionsOriginCity(origin_citys)}
                   onChange={this.onChangeOriginCity}
                   messages={messages}
+                  disabled={disabled} 
                 />
               </div>
             </div>
@@ -521,6 +564,7 @@ class ActionForm extends Component {
                   options={origin_districts && this.showOptionsOriginDistrict(origin_districts)}
                   onChange={this.onChangeOriginDistrict}
                   messages={messages}
+                  disabled={disabled} 
                 />
               </div>
             </div>
@@ -536,6 +580,7 @@ class ActionForm extends Component {
                   options={origin_wards && this.showOptionsOriginWard(origin_wards)}
                   onChange={this.onChangeOriginWard}
                   messages={messages}
+                  disabled={disabled} 
                 />
               </div>
             </div>
@@ -551,6 +596,7 @@ class ActionForm extends Component {
                   options={destination_countrys && this.showOptionsDestinationCountry(destination_countrys)}
                   onChange={this.onChangeDestinationCountry}
                   messages={messages}
+                  disabled={disabled} 
                 />
               </div>
             </div>
@@ -566,6 +612,7 @@ class ActionForm extends Component {
                     options={destination_citys && this.showOptionsDestinationCity(destination_citys)}
                     onChange={this.onChangeDestinationCity}
                     messages={messages}
+                    disabled={disabled} 
                   />
                 </div>
             </div>
@@ -581,6 +628,7 @@ class ActionForm extends Component {
                   options={destination_districts && this.showOptionsDestinationDistrict(destination_districts)}
                   onChange={this.onChangeDestinationDistrict}
                   messages={messages}
+                  disabled={disabled} 
                 />
               </div>
             </div>
@@ -596,6 +644,7 @@ class ActionForm extends Component {
                   options={destination_wards && this.showOptionsDestinationWard(destination_wards)}
                   onChange={this.onChangeDestinationWard}
                   messages={messages}
+                  disabled={disabled} 
                 />
               </div>
             </div>
@@ -607,7 +656,7 @@ class ActionForm extends Component {
                 <div className="form__form-group-icon">
                   <div className="flag vn"></div>
                 </div>
-                <Field name="description" component="textarea" type="text" />
+                <Field name="description" component="textarea" type="text" disabled={disabled}  />
               </div>
             </div>
           </Col>
@@ -618,7 +667,7 @@ class ActionForm extends Component {
                 <div className="form__form-group-icon">
                   <div className="flag us"></div>
                 </div>
-                <Field name="description_en" component="textarea" type="text" />
+                <Field name="description_en" component="textarea" type="text" disabled={disabled}  />
               </div>
             </div>
           </Col>
@@ -631,8 +680,10 @@ class ActionForm extends Component {
           </Row>
         </div>
         <ButtonToolbar className="modal__footer">
-          <Button outline onClick={this.toggleModal}>{messages['cancel']}</Button>{' '}
-          <Button color={className} type="submit">{messages['save']}</Button>
+          {this.state.modalType === MODAL_VIEW &&
+            <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
+          }
+          <Button color={className} type="submit">{ modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
         </ButtonToolbar>
       </form>
     );
@@ -641,6 +692,7 @@ class ActionForm extends Component {
 
 ActionForm.propTypes = {
   modalData: PropTypes.object,
+  modalType: PropTypes.string,
   carrierCode: PropTypes.array,
   serviceCode: PropTypes.array,
   shipment_typeCode: PropTypes.array,
@@ -662,7 +714,7 @@ ActionForm.propTypes = {
 }
 
 const mapStateToProps = ({zoneCode, carrier, service, shipment_type, customer}) => {  
-  const { errors, modalData } = zoneCode;
+  const { errors, modalData, modalType } = zoneCode;
   const carrierCode = carrier.codes;
   const serviceCode = service.codes;
   const shipment_typeCode = shipment_type.codes;
@@ -678,6 +730,7 @@ const mapStateToProps = ({zoneCode, carrier, service, shipment_type, customer}) 
   return {
     errors,
     modalData,
+    modalType,
     carrierCode, serviceCode, shipment_typeCode, customerCode,
     origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards
   };
@@ -693,5 +746,6 @@ export default reduxForm({
   getShipmentTypeCodeList,
   getCustomerList,
   getOriginCountryList, getOriginCityList, getOriginDistrictList, getOriginWardList,
-  getDestinationCountryList, getDestinationCityList, getDestinationDistrictList, getDestinationWardList
+  getDestinationCountryList, getDestinationCityList, getDestinationDistrictList, getDestinationWardList,
+  changeTypeZoneCodeModal
 })(ActionForm)));
