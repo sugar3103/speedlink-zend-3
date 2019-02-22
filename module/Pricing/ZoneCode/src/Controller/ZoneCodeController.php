@@ -154,18 +154,27 @@ class ZoneCodeController extends CoreController {
     public function deleteAction()
     {
         $data = $this->getRequestData();
-        if(isset($data['id'])) {
+        if(isset($data['id']) && count($data['id']) > 0) {
+          try {
+            foreach ($data['id'] as $id) {
             // Find existing zonecode in the database.
             $zonecode = $this->entityManager->getRepository(ZoneCode::class)->findOneBy(array('id' => $data['id']));    
             if ($zonecode == null) {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = "ZoneCode Not Found";
+                exit();
             } else {
                 //remove zonecode
                 $this->zonecodeManager->removeZoneCode($zonecode);
+            }
+          }
                 $this->error_code = 1;
                 $this->apiResponse['message'] = "Success: You have deleted ZoneCode!";
-            }          
+            }   
+        catch (\Throwable $th) {
+          $this->error_code = 0;
+          $this->apiResponse['message'] = "Status request Id!";
+        }          
         } else {
             $this->error_code = 0;
             $this->apiResponse['message'] = "ZoneCode request Id!";

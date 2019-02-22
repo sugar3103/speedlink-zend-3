@@ -55,7 +55,7 @@ class Branch
     /**
      * @var int
      *
-     * @ORM\Column(name="created_by", type="integer", nullable=true)
+     * @ORM\Column(name="created_by", type="integer", nullable=false)
      */
     private $created_by;
 

@@ -153,18 +153,27 @@ class RangeWeightController extends CoreController {
     public function deleteAction()
     {
         $data = $this->getRequestData();
-        if(isset($data['id'])) {
+        if(isset($data['id'])  && count($data['id']) > 0) {
+          try {
+            foreach ($data['id'] as $id) {
             // Find existing rangeweight in the database.
             $rangeweight = $this->entityManager->getRepository(RangeWeight::class)->findOneBy(array('id' => $data['id']));    
             if ($rangeweight == null) {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = "RangeWeight Not Found";
+                exit();
             } else {
                 //remove rangeweight
                 $this->rangeweightManager->removeRangeWeight($rangeweight);
+            }
+          }
                 $this->error_code = 1;
                 $this->apiResponse['message'] = "Success: You have deleted RangeWeight!";
-            }          
+            }     
+          catch (\Throwable $th) {
+            $this->error_code = 0;
+            $this->apiResponse['message'] = "Status request Id!";
+          }          
         } else {
             $this->error_code = 0;
             $this->apiResponse['message'] = "RangeWeight request Id!";
