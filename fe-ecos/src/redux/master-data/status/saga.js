@@ -197,23 +197,23 @@ function* updateStatusItem({ payload }) {
 
 //delete status
 
-function deleteStatusApi(id) {
+function deleteStatusApi(ids) {
   return axios.request({
     method: 'post',
     url: `${apiUrl}status/delete`,
     headers: authHeader(),
-    data: {  id: id }
+    data: {  ids: ids }
   });
 }
 
-const deleteStatusItemRequest = async id => {
-  return await deleteStatusApi(id).then(res => res.data).catch(err => err)
+const deleteStatusItemRequest = async ids => {
+  return await deleteStatusApi(ids).then(res => res.data).catch(err => err)
 };
 
 function* deleteStatusItem({ payload }) {
-  const { id, messages } = payload;
+  const { ids, messages } = payload;
   try {
-    const response = yield call(deleteStatusItemRequest, id);
+    const response = yield call(deleteStatusItemRequest, ids);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(deleteStatusItemSuccess());

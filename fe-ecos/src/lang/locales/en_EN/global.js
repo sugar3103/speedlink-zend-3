@@ -2,10 +2,9 @@ module.exports = {
     //Global
     'cancel': 'Cancel',
     'save': 'Save',    
-    'title-confirm': 'Delete Status',
-    'desc-confirm': 'Are you sure delete this?',
-    'confirm-no': 'No',
-    'confirm-yes': 'Yes, delete it!',
+    'ok': 'OK',    
+    'warning': 'Warning',
+    'delete-confirm': 'Are you sure you want to delete?',
     'description': 'Description',
     'name': 'Name',  
     'status': 'Status',

@@ -155,6 +155,7 @@ class SearchForm extends Component {
                   { value: 1, label: messages['active'] },
                   { value: 0, label: messages['inactive'] }
                 ]}
+                clearable={false}
               />
             </div>
           </div>

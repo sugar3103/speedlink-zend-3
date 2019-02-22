@@ -52,7 +52,7 @@
 }
 
 .profile__information {
-  padding: 30px 40px;
+  padding: 0 0 15px 0;
   display: flex;
 
   @include themify($themes) {
@@ -65,7 +65,7 @@
   width: 140px;
   overflow: hidden;
   border-radius: 50%;
-
+  border: 1px solid #ccc;
   img {
     height: 100%;
   }

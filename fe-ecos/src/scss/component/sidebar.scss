@@ -42,6 +42,7 @@
 
     &:before {
       opacity: 1;
+      background: $color-accent;
     }
   }
 }
@@ -87,7 +88,7 @@
 }
 
 .sidebar__block {
-  padding: 15px 0;
+  padding: 0;
 
   @include themify($themes) {
     border-bottom: 1px solid themed('colorBorder');
@@ -121,7 +122,6 @@
     top: 0;
     height: 100%;
     width: 2px;
-    background: $color-accent;
     opacity: 0;
     transition: all 0.3s;
   }

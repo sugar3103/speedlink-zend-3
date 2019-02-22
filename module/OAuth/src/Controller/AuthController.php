@@ -10,6 +10,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Uri\Uri;
 use OAuth\Entity\User;
+use Core\Utils\Utils;
 
 class AuthController extends CoreController {
     /**
@@ -135,7 +136,11 @@ class AuthController extends CoreController {
                         $this->entityManager->rollback();
                         return FALSE;
                     }                  
-                    $this->apiResponse['message'] = $result->getMessages();                        
+                    $this->apiResponse['message'] = $result->getMessages();  
+                    
+                    Utils::createNotification($_user->getId(),'login','');  
+                    
+                    
                 } else {
                     $this->apiResponse['message'] = $result->getMessages();                        
                 }

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import TopbarSidebarButton from './TopbarSidebarButton';
 import TopbarProfile from './TopbarProfile';
 import TopbarLanguage from './TopbarLanguage';
-import TopbarMail from './TopbarMail';
+// import TopbarMail from './TopbarMail';
 import TopbarNotification from './TopbarNotification';
 import TopbarSearch from './TopbarSearch';
 

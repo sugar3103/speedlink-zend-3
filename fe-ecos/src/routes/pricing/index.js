@@ -3,11 +3,12 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 
 import RangeWeight from './rangeweight';
 import ZoneCode from './zonecode';
+import Management from './management';
 
 const Pricing = ({ match }) => (
   <Fragment>
       <Switch>
-          <Redirect exact from={`${match.url}/`} to={`${match.url}/rangeweight`} />
+          <Route exact from={`${match.url}/`} component={Management} />
           <Route path={`${match.url}/rangeweight`} component={RangeWeight} />     
           <Route path={`${match.url}/zonecode`} component={ZoneCode} />          
           <Redirect to="/error" />

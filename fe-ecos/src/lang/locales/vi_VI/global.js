@@ -17,11 +17,11 @@ module.exports = {
     'entries': 'Entries',
 
     'action': 'Hành động',
-    'active': 'Hữu hiệu',
+    'active': 'Kích hoạt',
     'inactive': 'Vô hiệu',
     'all': 'Tất cả',
 
-    'created-at': 'Tạo lúc',
+    'created-at': 'Ngày tạo',
     'search': 'Tìm kiếm',
     'clear': 'Làm mới',
     'no-result': 'Không tìm thấy kết quả',

@@ -3,16 +3,18 @@ namespace Core\Utils;
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
+use Log\Factory\NotificationControllerFactory;
 
-class Utils
-{
-     /**
+class Utils {
+
+    /**
      * Check date format
      *
      * @param $dateAction
      * @param $dateFormat
      * @return string
      */
+
     public static function checkDateFormat($dateAction,$dateFormat)
     {
         $dateLast = '';
@@ -64,5 +66,10 @@ class Utils
             }
         }
         return $list;
+    }
+
+    public static function createNotification($user_id,$type,$text)
+    {
+        
     }
 }

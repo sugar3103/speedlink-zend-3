@@ -1,5 +1,6 @@
 import {
   HUB_TOGGLE_MODAL,
+  HUB_TOGGLE_DETAIL_MODAL,
   HUB_GET_LIST,
   HUB_GET_LIST_SUCCESS,
   HUB_GET_LIST_ERROR,
@@ -16,6 +17,11 @@ import {
 
 export const toggleHubModal = (hub = null) => ({
   type: HUB_TOGGLE_MODAL,
+  payload: hub
+})
+
+export const toggleHubDetailModal = (hub = null) => ({
+  type: HUB_TOGGLE_DETAIL_MODAL,
   payload: hub
 })
 

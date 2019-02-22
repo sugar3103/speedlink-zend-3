@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, ButtonToolbar, Card, CardBody, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleHubModal, getCityList } from '../../../../redux/actions';
+import { toggleHubModal, getCountryList, getCityList } from '../../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../../containers/Shared/form/CustomField';
 import renderSelectField from '../../../../containers/Shared/form/Select';
@@ -12,22 +12,48 @@ import PropTypes from 'prop-types';
 
 class ActionForm extends Component {
 
-  
-
-
   componentDidMount() {
     const data = this.props.modalData;
+    console.log(data);
+
     if (data) {
       this.props.initialize(data);
     }
+    if (data && data.country_id) {
+      let paramsCountry = {
+        offset: {
+          limit: 0
+        },
+        query: {
+          id: data.country_id
+        }
+      }
+      this.props.getCountryList(paramsCountry);
+    }
+    if (data && data.city_id) {
+      let paramsCity = {
+        field: ['id', 'name'],
+        offset: {
+          limit: 0
+        },
+        query: {
+          country: data.country_id
+        }
+      }
+      this.props.getCityList(paramsCity);
+    }
+
+  }
+
+  onChangeCountry = values => {
     let params = {
       field: ['id', 'name'],
       offset: {
-        limit: 5
+        limit: 0
+      },
+      query: {
+        country: values
       }
-    }
-    if (data && data.city_id) {
-      params = { ...params, query: { id: data.city_id } }
     }
     this.props.getCityList(params);
   }
@@ -45,6 +71,15 @@ class ActionForm extends Component {
     this.props.getCityList(params);
   }
 
+  showOptionsCountry = (items) => {
+    const Countries = items.map(item => {
+      return {
+        'value': item.id,
+        'label': item.name
+      }
+    });
+    return Countries;
+  }
 
   showOptions = (items) => {
     let result = [];
@@ -67,7 +102,7 @@ class ActionForm extends Component {
 
   render() {
     const { messages } = this.props.intl;
-    const { handleSubmit, modalData, cities } = this.props;
+    const { handleSubmit, modalData, countries, cities } = this.props;
     const className = modalData ? 'primary' : 'success';
     const title = modalData ? messages['hub.update'] : messages['hub.add-new'];
 
@@ -82,11 +117,6 @@ class ActionForm extends Component {
             <Col md={12} lg={6} xl={6} xs={12}>
               <Card>
                 <CardBody>
-                  <div className="card__title">
-                    <h5 className="bold-text">Generate</h5>
-                    <h5 className="subhead">Use default modal with property <span className="red-text">colored</span></h5>
-                  </div>
-
                   <div className="form__form-group">
                     <span className="form__form-group-label">{messages['name']}</span>
                     <div className="form__form-group-field">
@@ -97,7 +127,6 @@ class ActionForm extends Component {
                         name="name"
                         component={CustomField}
                         type="text"
-                        placeholder={messages['name']}
                         messages={messages}
                       />
                     </div>
@@ -109,7 +138,6 @@ class ActionForm extends Component {
                         name="name_en"
                         component={CustomField}
                         type="text"
-                        placeholder={messages['name']}
                         messages={messages}
                       />
                     </div>
@@ -125,7 +153,7 @@ class ActionForm extends Component {
                         name="description"
                         component="textarea"
                         type="text"
-                        placeholder={messages['description']}
+                       
                       />
                     </div>
                     <div className="form__form-group-field">
@@ -136,7 +164,7 @@ class ActionForm extends Component {
                         name="description_en"
                         component="textarea"
                         type="text"
-                        placeholder={messages['description']}
+                        
                       />
                     </div>
                   </div>
@@ -148,11 +176,6 @@ class ActionForm extends Component {
             <Col md={12} lg={6} xl={6} xs={12}>
               <Card>
                 <CardBody>
-                  <div className="card__title">
-                    <h5 className="bold-text">Data</h5>
-                    <h5 className="subhead">Use default modal with property <span className="red-text">colored</span></h5>
-                  </div>
-
                   <div className="form__form-group">
                     <span className="form__form-group-label">{messages['hub.code']}</span>
                     <div className="form__form-group-field">
@@ -160,8 +183,22 @@ class ActionForm extends Component {
                         name="code"
                         component={CustomField}
                         type="text"
-                        placeholder={messages['hub.code']}
                         messages={messages}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">{messages['hub.country']}</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="country_id"
+                        component={renderSelectField}
+                        type="text"
+                        options={countries && this.showOptionsCountry(countries)}
+                        onChange={this.onChangeCountry}
+                        messages={messages}
+
                       />
                     </div>
                   </div>
@@ -203,6 +240,12 @@ class ActionForm extends Component {
                 </CardBody>
               </Card>
             </Col>
+            <Col md={12} lg={12} xl={12} xs={12}>
+            { modalData ?
+              <span><u>{ modalData.updated_by ? "Update at: "+modalData.updated_at : "Created at: "+modalData.created_at } 
+              &nbsp;- { modalData.updated_by ? "Update by: "+modalData.user_update_name : "Created by: "+modalData.user_create_name }</u></span>
+             : '' }
+            </Col>
           </Row>
         </div>
         <ButtonToolbar className="modal__footer">
@@ -216,6 +259,7 @@ class ActionForm extends Component {
 
 ActionForm.propTypes = {
   modalData: PropTypes.object,
+  countries: PropTypes.array,
   cities: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,
   toggleHubModal: PropTypes.func.isRequired,
@@ -225,8 +269,10 @@ ActionForm.propTypes = {
 const mapStateToProps = ({ hub, address }) => {
   const { modalData } = hub;
   const cities = address.city.items;
+  const countries = address.country.items;
   return {
     modalData,
+    countries,
     cities
   }
 }
@@ -236,5 +282,6 @@ export default reduxForm({
   validate
 })(injectIntl(connect(mapStateToProps, {
   toggleHubModal,
+  getCountryList,
   getCityList
 })(ActionForm)));

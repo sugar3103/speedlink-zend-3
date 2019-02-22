@@ -6,6 +6,7 @@ use Zend\Mvc\Controller\AbstractRestfulController;
 use OAuth\Entity\User;
 use Zend\View\Model\JsonModel;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Firebase\JWT\JWT;
 use Zend\EventManager\EventManagerInterface;
 
@@ -17,6 +18,12 @@ class ApiController extends AbstractRestfulController
      */
     private $entityManager;
 
+    /**
+     * @var DocumentManager
+     */
+
+     private $documentManager;
+    
     /**
      * @var Integer $httpStatusCode Define Api Response code.
      */
@@ -54,7 +61,7 @@ class ApiController extends AbstractRestfulController
 
     public function __construct($entityManager) {
         
-        $this->entityManager = $entityManager;
+        $this->entityManager = $entityManager;        
     }
     /**
      * set Event Manager to check Authorization
@@ -268,4 +275,6 @@ class ApiController extends AbstractRestfulController
                 break;
         }
     }
+
+
 }
