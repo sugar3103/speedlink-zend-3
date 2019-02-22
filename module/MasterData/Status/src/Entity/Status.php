@@ -94,6 +94,20 @@ class Status
     private $updated_at;
 
     /**
+     *
+     * @ORM\OneToOne(targetEntity="\OAuth\Entity\User")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
+     */
+    private $join_created;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\OAuth\Entity\User")
+     * @ORM\JoinColumn(name="updated_by", referencedColumnName="id", nullable=true)
+     */
+    private $join_updated;
+
+    /**
      * @return int
      */
     public function getId()
@@ -267,6 +281,38 @@ class Status
     public function setUpdatedAt($updated_at)
     {
         $this->updated_at = $updated_at;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinCreated()
+    {
+        return $this->join_created;
+    }
+
+    /**
+     * @param mixed $join_created
+     */
+    public function setJoinCreated($join_created)
+    {
+        $this->join_created = $join_created;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinUpdated()
+    {
+        return $this->join_updated;
+    }
+
+    /**
+     * @param mixed $join_updated
+     */
+    public function setJoinUpdated($join_updated)
+    {
+        $this->join_updated = $join_updated;
     }
 
     /**

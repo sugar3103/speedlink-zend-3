@@ -11,7 +11,8 @@ import {
   STATUS_UPDATE_ITEM_ERROR,
   STATUS_DELETE_ITEM,
   STATUS_DELETE_ITEM_SUCCESS,
-  STATUS_DELETE_ITEM_ERROR
+  STATUS_DELETE_ITEM_ERROR,
+  STATUS_CHANGE_TYPE_MODAL
 } from '../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -21,6 +22,7 @@ const INIT_STATE = {
   loading: true,
   modalOpen: false,
   modalData: null,
+  modalType: null,
   paramSearch: null
 };
 
@@ -31,7 +33,8 @@ export default (state = INIT_STATE, action) => {
       return {
         ...state,
         modalOpen: !state.modalOpen,
-        modalData: action.payload,
+        modalData: action.payload.data,
+        modalType: action.payload.type,
         errors: null
       }
 
@@ -114,6 +117,12 @@ export default (state = INIT_STATE, action) => {
 			return { 
         ...state, 
         errors: action.payload 
+      };
+
+    case STATUS_CHANGE_TYPE_MODAL:
+			return { 
+        ...state, 
+        modalType: action.payload
       };
 
     default: 

@@ -3,6 +3,12 @@
   display: flex;
   flex-wrap: wrap;
 
+  hr {
+    @include themify($themes) {
+      background-color: themed('colorText');
+    }
+  }
+
   input, textarea {
     width: 100%;
     padding: 5px 10px;

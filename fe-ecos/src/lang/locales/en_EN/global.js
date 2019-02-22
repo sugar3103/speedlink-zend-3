@@ -2,6 +2,7 @@ module.exports = {
     //Global
     'cancel': 'Cancel',
     'save': 'Save',    
+    'update': 'Update',    
     'ok': 'OK',    
     'warning': 'Warning',
     'delete-confirm': 'Are you sure you want to delete?',
@@ -21,6 +22,9 @@ module.exports = {
     'all': 'All',
 
     'created-at': 'Created At',
+    'created-by': 'Created By',
+    'updated-at': 'Updated At',
+    'updated-by': 'Updated By',
     'search': 'Search',
     'clear': 'Clear',
     'no-result': 'No result found',

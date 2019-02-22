@@ -89,7 +89,7 @@ class RenderTable extends PureComponent {
     }
 
     render() {
-        const { columnTable, pages, size, data, loading } = this.props;
+        const { columnTable, pages, size, data, loading, onRowClick } = this.props;
         let columns = columnTable.columns;
         if (columnTable.checkbox && data && data.length > 0) {
             columns.unshift({
@@ -97,9 +97,9 @@ class RenderTable extends PureComponent {
                 accessor: "",
                 Cell: ({ original }) => {
                     return (
-                        <label className="checkbox-btn">
+                        <label className="checkbox-btn" onClick={(e) => e.stopPropagation()}>
                             <input 
-                                className="checkbox-btn__checkbox" 
+                                className="checkbox-btn__checkbox"
                                 type="checkbox" 
                                 checked={this.state.selected.indexOf(original.id) !== -1}
                                 onChange={() => this.toggleRow(original.id)}
@@ -152,6 +152,9 @@ class RenderTable extends PureComponent {
                     LoadingComponent={Loading}
                     NoDataComponent={NoData}
                     getNoDataProps={this.getNoDataProps}
+                    getTrProps={(state, rowInfo) => ({
+                        onClick: (e) => onRowClick(e, 'view', rowInfo.original)
+                    })}
                 />
                 <Pagination pagination={pages.pagination} total={pages.total} onChangePage={pages.onChangePage} />
             </Fragment>

@@ -109,6 +109,13 @@
   }
 }
 
+.modal-dialog--info {
+
+  .modal__title-icon {
+    color: $color-info;
+  }
+}
+
 .modal-dialog--colored {
   color: white;
 
@@ -152,6 +159,10 @@
 
   &.modal-dialog--danger .modal-content {
     background-color: $color-red;
+  }
+
+  &.modal-dialog--info .modal-content {
+    background-color: $color-info;
   }
 }
 
@@ -214,5 +225,8 @@
 
   &.modal-dialog--danger .modal__header {
     background-color: $color-red;
+  }
+  &.modal-dialog--info .modal__header {
+    background-color: $color-info;
   }
 }

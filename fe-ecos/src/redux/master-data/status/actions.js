@@ -11,12 +11,13 @@ import {
   STATUS_UPDATE_ITEM_ERROR,
   STATUS_DELETE_ITEM,
   STATUS_DELETE_ITEM_SUCCESS,
-  STATUS_DELETE_ITEM_ERROR
+  STATUS_DELETE_ITEM_ERROR,
+  STATUS_CHANGE_TYPE_MODAL
 } from '../../../constants/actionTypes';
 
-export const toggleStatusModal = (status = null) => ({
+export const toggleStatusModal = (type, data) => ({
   type: STATUS_TOGGLE_MODAL,
-  payload: status
+  payload: { type, data }
 })
 
 export const getStatusList = (params, messages) => ({
@@ -75,3 +76,8 @@ export const deleteStatusItemError = (error) => ({
   type: STATUS_DELETE_ITEM_ERROR,
   payload: error
 });
+
+export const changeTypeStatusModal = (type) => ({
+  type: STATUS_CHANGE_TYPE_MODAL,
+  payload: type
+})

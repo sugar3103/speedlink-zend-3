@@ -1,39 +1,72 @@
 import React, { Component } from 'react';
-import { Button, ButtonToolbar } from 'reactstrap';
+import { Button, ButtonToolbar, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleStatusModal } from '../../../redux/actions';
+import { toggleStatusModal, changeTypeStatusModal } from '../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../containers/Shared/form/CustomField';
 import renderRadioButtonField from '../../../containers/Shared/form/RadioButton';
 import validate from './validateActionForm';
 import PropTypes from 'prop-types';
+import { MODAL_ADD, MODAL_VIEW, MODAL_EDIT } from '../../../constants/defaultValues';
 
 class ActionForm extends Component {
 
-  constructor() {
-    super()
-
+  constructor(props) {
+    super(props);
     this.state = {
-      view: true
+      modalType: ''
     }
   }
+  
+
   componentDidMount() {
     const data = this.props.modalData;
+    
     if (data) {
       this.props.initialize(data);
     }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.modalType !== this.props.modalType) {
+      this.setState({
+        modalType: prevProps.modalType
+      });
+    }
+    
   }
 
   toggleModal = () => {
     this.props.toggleStatusModal();
   }
 
+  changeTypeModal = () => {
+    this.props.changeTypeStatusModal(MODAL_VIEW);
+  }
+
   render() {
     const { messages } = this.props.intl;
-    const { handleSubmit, modalData } = this.props;
-    const className = modalData ? 'primary' : 'success';
-    const title = modalData ? messages['status.update'] : messages['status.add-new'];
+    const { handleSubmit, modalType, modalData } = this.props;
+    let className = 'success';
+    let title = messages['status.add-new'];
+    const readOnly = modalType === MODAL_VIEW ? true : false;
+    switch (modalType) {
+      case MODAL_ADD:
+        className = 'success';
+        title = messages['status.add-new'];
+        break;
+      case MODAL_EDIT:
+        className = 'primary';
+        title = messages['status.update'];
+        break;
+      case MODAL_VIEW:
+        className = 'info';
+        title = messages['status.view'];
+        break;
+      default:
+        break;
+    }
 
     return (
       <form className="form" onSubmit={handleSubmit}>
@@ -52,7 +85,8 @@ class ActionForm extends Component {
                 component={CustomField}
                 type="text"
                 placeholder={messages['name']}
-                messages={messages}                
+                messages={messages} 
+                readOnly={readOnly} 
               />
             </div>
             <div className="form__form-group-field">
@@ -65,6 +99,7 @@ class ActionForm extends Component {
                 type="text"
                 placeholder={messages['name']}
                 messages={messages}
+                readOnly={readOnly} 
               />
             </div>
           </div>
@@ -79,6 +114,7 @@ class ActionForm extends Component {
                 component="textarea"
                 type="text"
                 placeholder={messages['description']}
+                readOnly={readOnly} 
               />
             </div>
             <div className="form__form-group-field">
@@ -90,6 +126,7 @@ class ActionForm extends Component {
                 component="textarea"
                 type="text"
                 placeholder={messages['description']}
+                readOnly={readOnly} 
               />
             </div>
           </div>
@@ -102,20 +139,38 @@ class ActionForm extends Component {
                 label={messages['active']}
                 radioValue={1}
                 defaultChecked
+                disabled={readOnly} 
               />
               <Field
                 name="status"
                 component={renderRadioButtonField}
                 label={messages['inactive']}
                 radioValue={0}
+                disabled={readOnly} 
               />
             </div>
           </div>
-          <span><u>Update at: 2/2/2019 - Update by: Admin</u></span>
+          <hr />
+          {modalData &&
+            <Row>
+              <Col md={6}>
+                <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.created_by}</span>
+                <br />
+                <span><i className="label-info-data">{messages['created-at']}:</i>{modalData.created_at}</span>
+              </Col>
+              {modalData.updated_at && 
+                <Col md={6}>
+                  <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.updated_by}</span>
+                  <br />
+                  <span><i className="label-info-data">{messages['updated-at']}:</i>{modalData.updated_at}</span>
+                </Col>
+              }
+            </Row>
+          }
         </div>
         <ButtonToolbar className="modal__footer">
-          <Button outline onClick={this.toggleModal}>{messages['cancel']}</Button>{' '}
-          <Button color={className} type="submit">{messages['save']}</Button>
+          <Button outline onClick={this.state.modalType === MODAL_VIEW ? this.changeTypeModal : this.toggleModal}>{messages['cancel']}</Button>{' '}
+          <Button color={className} type="submit">{ modalType === MODAL_VIEW ? messages['update'] : messages['save']}</Button>
         </ButtonToolbar>
       </form>
     );
@@ -124,14 +179,17 @@ class ActionForm extends Component {
 
 ActionForm.propTypes = {
   modalData: PropTypes.object,
+  modalType: PropTypes.string,
   handleSubmit: PropTypes.func.isRequired,
   toggleStatusModal: PropTypes.func.isRequired,
+  changeTypeStatusModal: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = ({ status }) => {
-  const { modalData } = status;
+  const { modalData, modalType } = status;
   return {
-    modalData
+    modalData,
+    modalType
   }
 }
 
@@ -139,5 +197,6 @@ export default reduxForm({
   form: 'status_action_form',
   validate
 })(injectIntl(connect(mapStateToProps, {
-  toggleStatusModal
+  toggleStatusModal,
+  changeTypeStatusModal
 })(ActionForm)));

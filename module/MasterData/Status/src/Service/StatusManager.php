@@ -160,7 +160,8 @@ class StatusManager {
             
             foreach ($statuss as &$status) {
                 //set created_at
-                $status['created_at'] =  ($status['created_at']) ? $this->checkDateFormat($status['created_at'],'d/m/Y H:i:s') : '';
+                $status['created_at'] =  ($status['created_at']) ? $this->checkDateFormat($status['created_at'],'d/m/Y') : '';
+                $status['updated_at'] =  ($status['updated_at']) ? $this->checkDateFormat($status['updated_at'],'d/m/Y') : '';
 
                 $countRow++;
             }

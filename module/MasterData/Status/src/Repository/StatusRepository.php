@@ -30,7 +30,7 @@ class StatusRepository extends EntityRepository {
     )
     {
         try {
-            $queryBuilder = $this->buildUserQueryBuilder($sortField, $sortDirection, $filters);
+            $queryBuilder = $this->buildStatusQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select(
                 "s.id,
                  s.name,
@@ -38,11 +38,12 @@ class StatusRepository extends EntityRepository {
                  s.description,
                  s.description_en,
                  s.status,
-                 s.created_by,
+                 cr.username as created_by,
                  s.created_at,
-                 s.updated_by,
+                 up.username as updated_by,
                  s.updated_at"                 
-            )->groupBy('s.id')
+            )->andWhere('s.is_deleted = 0')
+            ->groupBy('s.id')
             ->setMaxResults($limit)
             ->setFirstResult(($start - 1) * $limit);
 
@@ -62,7 +63,7 @@ class StatusRepository extends EntityRepository {
      * @return QueryBuilder
      * @throws QueryException
      */
-    public function buildUserQueryBuilder($sortField = 's.id', $sortDirection = 'asc', $filters)
+    public function buildStatusQueryBuilder($sortField = 's.id', $sortDirection = 'asc', $filters)
     {
 
         $operatorsMap = [
@@ -82,7 +83,9 @@ class StatusRepository extends EntityRepository {
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(Status::class, 's');
+        $queryBuilder->from(Status::class, 's')
+            ->leftJoin('s.join_created', 'cr')
+            ->leftJoin('s.join_updated', 'up');
 
         if ($sortField != NULL && $sortDirection != NULL)
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
