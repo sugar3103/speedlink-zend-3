@@ -12,6 +12,8 @@ import Search from './Search';
 import { getZoneCodeList, toggleZoneCodeModal, deleteZoneCodeItem } from "../../../redux/actions";
 import { confirmAlert } from 'react-confirm-alert';
 import ConfirmPicker from '../../../containers/Shared/picker/ConfirmPicker';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
 
 const ZoneCodeFormatter = ({ value }) => (
   value === 'Enabled' ? <span className="badge badge-success">Enabled</span> :
@@ -52,11 +54,13 @@ class List extends Component {
     });
   };
 
-  toggleModal = (zoneCode) => {
-    this.props.toggleZoneCodeModal(zoneCode);
+  toggleModal = (e, type, zoneCode) => {
+    e.stopPropagation();
+    this.props.toggleZoneCodeModal(type, zoneCode);
   };
 
-  onDelete = (ids) => {
+  onDelete = (e, ids) => {
+    e.stopPropagation();
     const { messages } = this.props.intl;
     confirmAlert({
       customUI: ({ onClose }) => {
@@ -119,7 +123,7 @@ class List extends Component {
       <Fragment>
         <Button
           color="success"
-          onClick={() => this.toggleModal(null)}
+          onClick={(e) => this.toggleModal(e, 'add', null)}
           className="master-data-btn"
           size="sm"
         >{messages['zone_code.add-new']}</Button>
@@ -127,7 +131,7 @@ class List extends Component {
         {selected.length > 0 &&
             <Button
             color="danger"
-            onClick={() => this.onDelete(selected)}
+            onClick={(e) => this.onDelete(e, selected)}
             className="master-data-btn"
             size="sm"
           >{messages['zone_code.delete']}</Button>
@@ -271,8 +275,8 @@ class List extends Component {
             Cell: ({ original }) => {
               return (
                 <Fragment>
-                  <Button color="info" size="sm" onClick={() => this.toggleModal(original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
-                  <Button color="danger" size="sm" onClick={() => this.onDelete([original.id])}><span className="lnr lnr-trash" /></Button>
+                  <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
+                  <Button color="danger" size="sm" onClick={(e) => this.onDelete(e, [original.id])}><span className="lnr lnr-trash" /></Button>
                 </Fragment>
               );
             },
@@ -300,6 +304,7 @@ class List extends Component {
                 changePageSize: this.onChangePageSize
               }}
               data={items}
+              onRowClick={this.toggleModal}
             />
           </CardBody>
         </Card>

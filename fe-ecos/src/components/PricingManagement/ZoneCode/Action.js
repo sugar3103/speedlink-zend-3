@@ -3,16 +3,26 @@ import { injectIntl } from 'react-intl';
 import { Modal } from 'reactstrap';
 import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
-import { addZoneCodeItem, updateZoneCodeItem, toggleZoneCodeModal } from '../../../redux/actions';
+import { addZoneCodeItem, updateZoneCodeItem, toggleZoneCodeModal, changeTypeZoneCodeModal } from '../../../redux/actions';
 import PropTypes from 'prop-types';
+import { MODAL_EDIT, MODAL_ADD, MODAL_VIEW } from '../../../constants/defaultValues';
 
 class Action extends Component {
   handleSubmit = values => {
     const { messages } = this.props.intl;
-    if (values.id) {
-      this.props.updateZoneCodeItem(values, messages);
-    } else {
-      this.props.addZoneCodeItem(values, messages);
+    const { modalType } = this.props;
+    switch (modalType) {
+      case MODAL_ADD:
+        this.props.addZoneCodeItem(values, messages);
+        break;
+      case MODAL_EDIT:
+        this.props.updateZoneCodeItem(values, messages);
+        break;
+      case MODAL_VIEW:
+        this.props.changeTypeZoneCodeModal(MODAL_EDIT);
+        break;
+      default:
+        break;
     }
   };
 
@@ -21,8 +31,21 @@ class Action extends Component {
   };
 
   render() {
-    const { modalData } = this.props;
-    const className = modalData ? 'primary' : 'success';
+    const { modalType } = this.props;
+    let className = 'success';
+    switch (modalType) {
+      case MODAL_ADD:
+        className = 'success';
+        break;
+      case MODAL_EDIT:
+        className = 'primary';
+        break;
+      case MODAL_VIEW:
+        className = 'info';
+        break;
+      default:
+        break;
+    }
     return (
       <Modal isOpen={this.props.modalOpen} toggle={this.toggleModal}
              className={`modal-dialog--${className} modal-dialog--header  modal-custom-size`}>
@@ -33,19 +56,21 @@ class Action extends Component {
 }
 
 Action.propTypes = {
-  modalData: PropTypes.object,
+  modalType: PropTypes.string,
   addZoneCodeItem: PropTypes.func.isRequired,
   updateZoneCodeItem: PropTypes.func.isRequired,
   toggleZoneCodeModal: PropTypes.func.isRequired,
+  changeTypeZoneCodeModal: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ zoneCode }) => {
-  const { modalData } = zoneCode;
-  return { modalData };
+  const { modalType } = zoneCode;
+  return { modalType };
 };
 
 export default injectIntl(connect(mapStateToProps, {
   addZoneCodeItem,
   updateZoneCodeItem,
-  toggleZoneCodeModal
+  toggleZoneCodeModal,
+  changeTypeZoneCodeModal
 })(Action));
