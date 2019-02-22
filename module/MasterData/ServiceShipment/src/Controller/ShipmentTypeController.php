@@ -6,7 +6,7 @@ use Core\Controller\CoreController;
 use Doctrine\ORM\EntityManager;
 use ServiceShipment\Entity\ShipmentType;
 use ServiceShipment\Form\ShipmentTypeForm;
-use ServiceShipment\ShipmentType\ShipmentTypeManager;
+use ServiceShipment\Service\ShipmentTypeManager;
 
 class ShipmentTypeController extends CoreController
 {
@@ -61,7 +61,7 @@ class ShipmentTypeController extends CoreController
 
         $result['error_code'] = 1;
         $result['message'] = 'Success';
-        $result["data"] = !empty($dataShipmentType['listShipmentType']) ? $dataShipmentType['listShipmentType'] : [];
+        $result["data"] = !empty($dataShipmentType) ? $dataShipmentType : [];
         $this->apiResponse = $result;
 
         return $this->createResponse();
@@ -73,7 +73,6 @@ class ShipmentTypeController extends CoreController
         $data = $this->getRequestData();
 
         if (empty($data)) {
-            // TODO: Check error_code
             $this->error_code = -1;
             $this->apiResponse['message'] = 'Missing data';
             return $this->createResponse();
@@ -84,15 +83,18 @@ class ShipmentTypeController extends CoreController
 
         //validate form
         if ($form->isValid()) {
-            // get filtered and validated data
-            $data = $form->getData();
-            // add new Shipment Type
-            $this->shipmentTypeManager->addShipmentType($data, $user);
-
-            $this->error_code = 1;
-            $this->apiResponse['message'] = "Success: You have added a Shipment Type!";
+            try {
+                // get filtered and validated data
+                $data = $form->getData();
+                // add new Shipment Type
+                $this->shipmentTypeManager->addShipmentType($data, $user);
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have added a Shipment Type!";
+            } catch (\Exception $e) {
+                $this->error_code = -1;
+                $this->apiResponse['message'] = "Fail: Please contact System Admin";
+            }
         } else {
-            //TODO: Check error_code
             $this->error_code = -1;
             $this->apiResponse = $form->getMessages();
         }
@@ -105,7 +107,6 @@ class ShipmentTypeController extends CoreController
         $user = $this->tokenPayload;
         $data = $this->getRequestData();
         if (empty($data)) {
-            // TODO: Check error_code
             $this->error_code = -1;
             $this->apiResponse['message'] = 'Missing data';
             return $this->createResponse();
@@ -118,15 +119,19 @@ class ShipmentTypeController extends CoreController
 
         //validate form
         if ($form->isValid()) {
-            // get filtered and validated data
-            $data = $form->getData();
-            // add new Shipment Type
-            $this->shipmentTypeManager->updateShipmentType($shipmentType, $data, $user);
+            try {
+                // get filtered and validated data
+                $data = $form->getData();
+                // add new Shipment Type
+                $this->shipmentTypeManager->updateShipmentType($shipmentType, $data, $user);
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have edited a Shipment Type!";
+            } catch (\Exception $e) {
+                $this->error_code = -1;
+                $this->apiResponse['message'] = "Fail: Please contact System Admin";
+            }
 
-            $this->error_code = 1;
-            $this->apiResponse['message'] = "Success: You have edited a Shipment Type!";
         } else {
-            //TODO: Check error_code
             $this->error_code = -1;
             $this->apiResponse = $form->getMessages();
         }
@@ -138,7 +143,6 @@ class ShipmentTypeController extends CoreController
         $user = $this->tokenPayload;
         $data = $this->getRequestData();
         if (empty($data)) {
-            // TODO: Check error_code
             $this->error_code = -1;
             $this->apiResponse['message'] = 'Missing data';
             return $this->createResponse();
@@ -148,14 +152,35 @@ class ShipmentTypeController extends CoreController
 
         //validate form
         if(!empty($shipmentType)) {
-            $this->shipmentTypeManager->deleteShipmentType($shipmentType, $user);
-            $this->error_code = 1;
-            $this->apiResponse['message'] = "Success: You have deleted Shipment Type!";
+            try {
+                $this->shipmentTypeManager->deleteShipmentType($shipmentType, $user);
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have deleted Shipment Type!";
+            } catch (\Exception $e) {
+                $this->error_code = -1;
+                $this->apiResponse['message'] = "Fail: Please contact System Admin";
+            }
         } else {
             $this->httpStatusCode = 200;
             $this->error_code = -1;
             $this->apiResponse['message'] = "Not Found Shipment Type";
         }
+        return $this->createResponse();
+    }
+
+    public function codeByConditionAction()
+    {
+        $result = array("data" => []);
+        $param = $this->getRequestData([]);
+        $sortField = $param['type'];
+        unset($param['type']);
+        $dataShipmentType = $this->shipmentTypeManager->getListCodeByCondition($sortField, $param);
+
+        $result['error_code'] = 1;
+        $result['message'] = 'Success';
+        $result["data"] = !empty($dataShipmentType) ? $dataShipmentType : [];
+        $this->apiResponse = $result;
+
         return $this->createResponse();
     }
 }
