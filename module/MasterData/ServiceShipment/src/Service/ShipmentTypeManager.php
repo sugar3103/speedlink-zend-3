@@ -93,21 +93,13 @@ class ShipmentTypeManager
     public function getListShipmentTypeCodeByCondition()
     {
         $shipmentType = [];
-
-        //get orm carrier
         $ormShipmentType = $this->entityManager->getRepository(ShipmentType::class)->getListShipmentTypeCodeByCondition();
-
         if($ormShipmentType){
             $ormPaginator = new ORMPaginator($ormShipmentType, true);
             $ormPaginator->setUseOutputWalkers(false);
             $shipmentType = $ormPaginator->getIterator()->getArrayCopy();
         }
-
-        //set return data
-        $dataShipmentType = [
-            'listShipmentType' => $shipmentType,
-        ];
-        return $dataShipmentType;
+        return $shipmentType;
     }
 
     /**
@@ -223,5 +215,17 @@ class ShipmentTypeManager
             $this->entityManager->rollback();
             return FALSE;
         }
+    }
+
+    public function getListCodeByCondition($field, $params)
+    {
+        $shipmentType = [];
+        $ormShipmentType = $this->entityManager->getRepository(ShipmentType::class)->getListCodeByCondition($field, $params);
+        if($ormShipmentType){
+            $ormPaginator = new ORMPaginator($ormShipmentType, true);
+            $ormPaginator->setUseOutputWalkers(false);
+            $shipmentType = $ormPaginator->getIterator()->getArrayCopy();
+        }
+        return $shipmentType;
     }
 }
