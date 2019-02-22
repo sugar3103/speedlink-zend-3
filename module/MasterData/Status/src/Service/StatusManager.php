@@ -2,6 +2,7 @@
 namespace Status\Service;
 
 use Status\Entity\Status;
+use OAuth\Entity\User;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 
@@ -21,6 +22,20 @@ class StatusManager {
      */
     public function __construct($entityManager) {
         $this->entityManager = $entityManager;
+    }
+
+    private function getReferenced(&$status, $data, $user, $mode = '')
+    {
+        $user_data = $this->entityManager->getRepository(User::class)->find($user->id);
+        if ($user_data == null) {
+            throw new \Exception('Not found User by ID');
+        }
+
+        if ($mode == 'add') {
+            $status->setJoinCreated($user_data);
+        }
+        $status->setJoinUpdated($user_data);
+
     }
 
     /**
@@ -47,6 +62,7 @@ class StatusManager {
             $status->setCreatedAt($currentDate);
 
             $status->setCreatedBy($user->id);
+            $this->getReferenced($status, $data, $user, 'add');
            
             // add the entity to the entity manager.
             $this->entityManager->persist($status);
@@ -88,6 +104,7 @@ class StatusManager {
             $currentDate = date('Y-m-d H:i:s');
             $status->setUpdatedAt($currentDate);
             $status->setUpdatedBy($user->id);
+            $this->getReferenced($status, $data, $user);
 
             // apply changes to database.
             $this->entityManager->flush();
