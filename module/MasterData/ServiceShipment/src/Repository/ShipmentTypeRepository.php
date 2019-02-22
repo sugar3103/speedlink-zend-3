@@ -86,12 +86,14 @@ class ShipmentTypeRepository extends EntityRepository
                 s.name_en AS service_name_en
             ")->andWhere('smt.is_deleted = 0')
               ->andWhere('smt.status = 1');
-            if ($sortField == 'carrier') {
+            if ($sortField == 'carrier_id') {
                 $queryBuilder->andWhere('c.is_deleted = 0');
                 $queryBuilder->andWhere('c.status = 1');
-            } else if ($sortField == 'servier') {
+                $queryBuilder->groupBy('smt.carrier_id');
+            } else if ($sortField == 'servier_id') {
                 $queryBuilder->andWhere('s.is_deleted = 0');
                 $queryBuilder->andWhere('s.status = 1');
+                $queryBuilder->groupBy('smt.service_id');
             }
             return $queryBuilder;
 
@@ -130,11 +132,11 @@ class ShipmentTypeRepository extends EntityRepository
             ],
             'service_id' => [
                 'alias' => 'smt.service_id',
-                'operator' => 'eq'
+                'operator' => 'in'
             ],
             'shipment_type_id' => [
                 'alias' => 'smt.id',
-                'operator' => 'eq'
+                'operator' => 'in'
             ],
         ];
 

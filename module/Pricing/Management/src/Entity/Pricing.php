@@ -84,34 +84,6 @@ class Pricing
     private $origin_ward_id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="destination_country_id", type="integer", nullable=false)
-     */
-    private $destination_country_id;
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="destination_city_id", type="integer", nullable=true, options={"comment"="required if category == Domestic"})
-     */
-    private $destination_city_id;
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="destination_district_id", type="integer", nullable=true)
-     */
-    private $destination_district_id;
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="destination_ward_id", type="integer", nullable=true)
-     */
-    private $destination_ward_id;
-
-    /**
      * @var \DateTime|null
      *
      * @ORM\Column(name="effected_date", type="datetime", nullable=true)
@@ -369,7 +341,7 @@ class Pricing
     }
 
     /**
-     * @param int $carrierId
+     * @param int $carrier_id
      */
     public function setCarrierId($carrier_id)
     {
@@ -486,70 +458,6 @@ class Pricing
     public function setOriginWardId($origin_ward_id)
     {
         $this->origin_ward_id = $origin_ward_id;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDestinationCountryId()
-    {
-        return $this->destination_country_id;
-    }
-
-    /**
-     * @param int $destination_country_id
-     */
-    public function setDestinationCountryId($destination_country_id)
-    {
-        $this->destination_country_id = $destination_country_id;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getDestinationCityId()
-    {
-        return $this->destination_city_id;
-    }
-
-    /**
-     * @param int|null $destination_city_id
-     */
-    public function setDestinationCityId($destination_city_id)
-    {
-        $this->destination_city_id = $destination_city_id;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getDestinationDistrictId()
-    {
-        return $this->destination_district_id;
-    }
-
-    /**
-     * @param int|null $destination_district_id
-     */
-    public function setDestinationDistrictId($destination_district_id)
-    {
-        $this->destination_district_id = $destination_district_id;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getDestinationWardId()
-    {
-        return $this->destination_ward_id;
-    }
-
-    /**
-     * @param int|null $destination_ward_id
-     */
-    public function setDestinationWardId($destination_ward_id)
-    {
-        $this->destination_ward_id = $destination_ward_id;
     }
 
     /**

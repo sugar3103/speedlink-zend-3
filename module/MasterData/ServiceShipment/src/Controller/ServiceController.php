@@ -60,7 +60,7 @@ class ServiceController extends CoreController
 
         $result['error_code'] = 1;
         $result['message'] = 'Success';
-        $result["data"] = !empty($dataService['listService']) ? $dataService['listService'] : [];
+        $result["data"] = !empty($dataService) ? $dataService : [];
         $this->apiResponse = $result;
 
         return $this->createResponse();
@@ -71,7 +71,6 @@ class ServiceController extends CoreController
         $user = $this->tokenPayload;
         $data = $this->getRequestData();
         if (empty($data)) {
-            // TODO: Check error_code
             $this->error_code = -1;
             $this->apiResponse['message'] = 'Missing data';
             return $this->createResponse();
@@ -82,15 +81,18 @@ class ServiceController extends CoreController
 
         //validate form
         if ($form->isValid()) {
-            // get filtered and validated data
-            $data = $form->getData();
-            // add new service
-            $this->serviceManager->addService($data, $user);
-
-            $this->error_code = 1;
-            $this->apiResponse['message'] = "Success: You have added a service!";
+            try {
+                // get filtered and validated data
+                $data = $form->getData();
+                // add new service
+                $this->serviceManager->addService($data, $user);
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have added a service!";
+            } catch (\Exception $e) {
+                $this->error_code = -1;
+                $this->apiResponse['message'] = "Fail: Please contact System Admin";
+            }
         } else {
-            //TODO: Check error_code
             $this->error_code = -1;
             $this->apiResponse = $form->getMessages();
         }
@@ -103,7 +105,6 @@ class ServiceController extends CoreController
         $user = $this->tokenPayload;
         $data = $this->getRequestData();
         if (empty($data)) {
-            // TODO: Check error_code
             $this->error_code = -1;
             $this->apiResponse['message'] = 'Missing data';
             return $this->createResponse();
@@ -116,15 +117,18 @@ class ServiceController extends CoreController
 
         //validate form
         if ($form->isValid()) {
-            // get filtered and validated data
-            $data = $form->getData();
-            // add new service
-            $this->serviceManager->updateService($service, $data, $user);
-
-            $this->error_code = 1;
-            $this->apiResponse['message'] = "Success: You have edited a service!";
+            try {
+                // get filtered and validated data
+                $data = $form->getData();
+                // add new service
+                $this->serviceManager->updateService($service, $data, $user);
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have edited a service!";
+            } catch (\Exception $e) {
+                $this->error_code = -1;
+                $this->apiResponse['message'] = "Fail: Please contact System Admin";
+            }
         } else {
-            //TODO: Check error_code
             $this->error_code = -1;
             $this->apiResponse = $form->getMessages();
         }
@@ -136,7 +140,6 @@ class ServiceController extends CoreController
         $user = $this->tokenPayload;
         $data = $this->getRequestData();
         if (empty($data)) {
-            // TODO: Check error_code
             $this->error_code = -1;
             $this->apiResponse['message'] = 'Missing data';
             return $this->createResponse();
@@ -146,9 +149,14 @@ class ServiceController extends CoreController
 
         //validate form
         if(!empty($service)) {
-            $this->serviceManager->deleteService($service, $user);
-            $this->error_code = 1;
-            $this->apiResponse['message'] = "Success: You have deleted service!";
+            try {
+                $this->serviceManager->deleteService($service, $user);
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have deleted service!";
+            } catch (\Exception $e) {
+                $this->error_code = -1;
+                $this->apiResponse['message'] = "Fail: Please contact System Admin";
+            }
         } else {
             $this->httpStatusCode = 200;
             $this->error_code = -1;
