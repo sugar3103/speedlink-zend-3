@@ -18,7 +18,7 @@ class Layout extends Component {
   };
 
   componentWillMount() {
-    this.props.getSetting();
+    // this.props.getSetting();
     this.props.getVerifyAuth();
   }
 

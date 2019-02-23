@@ -10,7 +10,9 @@ class Permission extends Component {
       <Container>
         <Row>
           <Col md={12}>
-            <h3 className="page-title">{messages['permission.list']}</h3>
+            <h3 className="page-title">{messages['permission.list']}
+              <div className="lds-dual-ring" />
+            </h3>
             <h3 className="page-subhead subhead">Use this elements, if you want to show some hints or additional
                   information
             </h3>

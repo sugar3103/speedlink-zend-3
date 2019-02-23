@@ -1,62 +1,71 @@
-import React, { PureComponent } from 'react';
-import { Button, ButtonToolbar } from 'reactstrap';
+import React, { PureComponent,Fragment } from 'react';
+import { Button, ButtonToolbar, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { togglePermissionModal } from '../../../../redux/actions';
+import { togglePermissionModal, changeTypePermissionModal } from '../../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../../containers/Shared/form/CustomField';
 import validate from './validateActionForm';
+import { MODAL_ADD, MODAL_VIEW, MODAL_EDIT } from '../../../../constants/defaultValues';
+import PropTypes from 'prop-types';
 
-class Action extends PureComponent {
+class ActionForm extends PureComponent {
 
   constructor() {
     super();
     this.state = {
-      activeTab: '1',
-      errors: {}
-    };
-  }
-
-  onChange = (e) => {
-    this.setState({
-      errors: {}
-    });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    
-    if (nextProps.errors) {
-      const { errors } = nextProps;
-      this.setState({
-        errors: errors
-      });
+      modalType: ''
     }
   }
 
   componentDidMount() {
     const data = this.props.modalData;
-    if (data) {
+
+    if (data) { 
       this.props.initialize(data);
     }
   }
 
-  toggleTab = (tab) => {
-    if (this.state.activeTab !== tab) {
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.modalType !== this.props.modalType) {
       this.setState({
-        activeTab: tab,
+        modalType: prevProps.modalType
       });
     }
-  };
+  }
 
   toggleModal = () => {
     this.props.togglePermissionModal();
   }
 
+  changeTypeModal = () => {
+    this.props.changeTypePermissionModal(MODAL_VIEW);
+  }
+
   render() {
     const { messages } = this.props.intl;
-    const { handleSubmit, modalData } = this.props;
-    const { errors } = this.props;
-    const title = modalData ? messages['permission.update'] : messages['permission.add-new'];
+    const { handleSubmit, modalData, modalType } = this.props;
+    
+    let className = 'success';
+    let title = messages['permission.add-new'];
+    const disabled = modalType === MODAL_VIEW ? true : false;
+
+    switch (modalType) {
+      case MODAL_ADD:
+        className = 'success';
+        title = messages['permission.add-new'];
+        break;
+      case MODAL_EDIT:
+        className = 'primary';
+        title = messages['permission.update'];
+        break;
+      case MODAL_VIEW:
+        className = 'info';
+        title = messages['permission.view'];
+        break;
+      default:
+        break;
+    }
     return (
       <form className="form" onSubmit={handleSubmit}>
         <div className="modal__header">
@@ -67,16 +76,15 @@ class Action extends PureComponent {
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['permission.name']}</span>
             <div className="form__form-group-field">
-
               <Field
                 name="name"
                 component={CustomField}
                 type="text"
                 placeholder={messages['permissions.name']}
-                onChange={this.onChange}
+                messages={messages}
+                disabled={disabled}
               />
             </div>
-            {errors && errors.name && errors.name.permissionExists && <span className="form__form-group-error">{messages['permission.validate-name-exists']}</span>}
           </div>
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['description']}</span>
@@ -88,6 +96,9 @@ class Action extends PureComponent {
                 name="description"
                 component="textarea"
                 type="text"
+                placeholder={messages['description']}
+                messages={messages}
+                disabled={disabled}
               />
             </div>
           </div>
@@ -101,24 +112,56 @@ class Action extends PureComponent {
                 name="description_en"
                 component="textarea"
                 type="text"
+                placeholder={messages['description']}
+                messages={messages}
+                disabled={disabled}
               />
             </div>
           </div>
+          {modalData &&
+            <Fragment>
+              <hr />
+              <Row>
+                <Col md={6}>
+                  <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name}</span>
+                  <br />
+                  <span><i className="label-info-data">{messages['created-at']}:</i>{modalData.created_at}</span>
+                </Col>
+                {modalData.updated_at &&
+                  <Col md={6}>
+                    <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.full_name}</span>
+                    <br />
+                    <span><i className="label-info-data">{messages['updated-at']}:</i>{modalData.updated_at}</span>
+                  </Col>
+                }
+              </Row>
+            </Fragment>
+          }
         </div>
         <ButtonToolbar className="modal__footer">
-          <Button outline onClick={this.toggleModal}>{messages['cancel']}</Button>{' '}
-          <Button color="success" type="submit">{messages['save']}</Button>
+          {this.state.modalType === MODAL_VIEW &&
+            <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
+          }
+          <Button color={className} type="submit">{ modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
         </ButtonToolbar>
-      </form>
+      </form >
     );
   }
 }
 
+ActionForm.propTypes = {
+  modalData: PropTypes.object,
+  modalType: PropTypes.string,
+  handleSubmit: PropTypes.func.isRequired,
+  togglePermissionModal: PropTypes.func.isRequired,
+  changeTypePermissionModal: PropTypes.func.isRequired,
+}
+
 const mapStateToProps = ({ users }) => {
-  const { errors, modalData } = users.permission;
-  return {
-    errors,
-    modalData
+  const { modalData, modalType } = users.permission;
+  return {    
+    modalData,
+    modalType
   }
 }
 
@@ -126,5 +169,6 @@ export default reduxForm({
   form: 'permission_action_form',
   validate
 })(injectIntl(connect(mapStateToProps, {
-  togglePermissionModal
-})(Action)));
+  togglePermissionModal,
+  changeTypePermissionModal
+})(ActionForm)));

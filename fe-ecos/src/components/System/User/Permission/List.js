@@ -1,19 +1,23 @@
 /* eslint-disable react/no-unused-state */
-import React, { Component } from 'react';
-import { ButtonToolbar, Card, CardBody, Col, Table, Button } from 'reactstrap';
+import React, { Component, Fragment } from 'react';
+import { Card, CardBody, Col, Button, Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Item from './Item';
-import Pagination from '../../../../containers/Shared/pagination/Pagination';
-import ItemPerPage from '../../../../containers/Shared/pagination/ItemPerPage';
+import Table from '../../../../containers/Shared/table/Table';
 import { SELECTED_PAGE_SIZE } from '../../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import Action from './Action';
 import MagnifyIcon from 'mdi-react/MagnifyIcon';
 
+import { confirmAlert } from 'react-confirm-alert';
+import ConfirmPicker from '../../../../containers/Shared/picker/ConfirmPicker';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
 import {
   getPermissionList,
-  togglePermissionModal
+  togglePermissionModal,
+  deletePermissionItem
 } from "../../../../redux/actions";
 
 
@@ -32,9 +36,24 @@ class List extends Component {
     this.state = {
       selectedPageSize: SELECTED_PAGE_SIZE,
       currentPage: 1,
-      total: 20,
-      searchPermission: ''
+      access: true
     };
+  }
+
+  onDelete = (e, ids) => {
+    e.stopPropagation();
+    const { messages } = this.props.intl;
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <ConfirmPicker
+            onClose={onClose}
+            onDelete={() => this.props.deletePermissionItem(ids, messages)}
+            messages={messages}
+          />
+        )
+      }
+    })
   }
 
   onChangePageSize = (size) => {
@@ -45,7 +64,7 @@ class List extends Component {
         limit: size
       }
     }
-   
+
     this.props.getPermissionList(params, this.props.history);
 
     this.setState({
@@ -53,8 +72,9 @@ class List extends Component {
     });
   }
 
-  toggleModal = () => {
-    this.props.togglePermissionModal();
+  toggleModal = (e, type, status) => {
+    e.stopPropagation();
+    this.props.togglePermissionModal(type, status);
   }
 
   onChangePage = (page) => {
@@ -84,12 +104,12 @@ class List extends Component {
     this.props.getPermissionList();
   }
 
-  showPermissionItem = (items,messages) => {
+  showPermissionItem = (items, messages) => {
     let result = null;
     if (items.length > 0) {
       result = items.map((item, index) => {
         return (
-          <Item 
+          <Item
             key={index}
             permission={item}
           />
@@ -105,65 +125,107 @@ class List extends Component {
 
   handleSearch = (e) => {
     e.preventDefault();
-    
+
     let params = {
       offset: {
         start: 1,
         limit: this.state.selectedPageSize
       }
     }
-    Object.assign(params, { "query": {"name": this.state.searchPermission}});
+    Object.assign(params, { "query": { "name": this.state.searchPermission } });
     this.props.getPermissionList(params);
   }
 
   handleChange = (e) => {
-    this.setState({searchPermission: e.target.value});
+    this.setState({ searchPermission: e.target.value });
+  }
+
+  renderHeader = (selected) => {
+    const { modalOpen } = this.props.permission;
+    const { messages } = this.props.intl;
+    return (
+      <Fragment>
+        <Button
+          color="success"
+          onClick={(e) => this.toggleModal(e, 'add', null)}
+          className="master-data-btn"
+          size="sm"
+        >{messages['permission.add-new']}</Button>
+        <Action modalOpen={modalOpen} />
+        {selected.length > 0 &&
+          <Button
+            color="danger"
+            onClick={(e) => this.onDelete(e, selected)}
+            className="master-data-btn"
+            size="sm"
+          >{messages['permission.delete']}</Button>
+        }
+      </Fragment>
+    )
   }
   render() {
-    const { items, loading, modalOpen,total } = this.props.permission;
-    const { messages } = this.props.intl;
+    const { items, loading, total } = this.props.permission;
+    const { messages, locale } = this.props.intl;
+    const columnTable = {
+      checkbox: true,
+      columns: [
+        {
+          Header: messages['name'],
+          accessor: "name",
+          width: 150,
+          sortable: false,
+        },
+        {
+          Header: messages['description'],
+          accessor: "description",
+          Cell: ({ original }) => {
+            return (
+              locale === 'en-US' ? original.description_en : original.description
+            )
+          },
+          sortable: false,
+        },
+        {
+          Header: messages['created-at'],
+          accessor: "created_at",
+          sortable: false,
+        },
+        {
+          Header: messages['action'],
+          accessor: "",
+          className: "text-center",
+          Cell: ({ original }) => {
+            return (
+              <Fragment>
+                <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
+                <Button color="danger" size="sm" onClick={(e) => this.onDelete(e, [original.id])}><span className="lnr lnr-trash" /></Button>
+              </Fragment>
+            );
+          },
+          sortable: false,
+        }
+      ]
+    };
     return (
       <Col md={12} lg={12}>
         <Card>
-          <CardBody className="master-data-list">
-            <div className="card__title">
-              <h5 className="bold-text">{messages['permission.list-title']}</h5>
-              <ButtonToolbar className="master-data-list__btn-toolbar-top">
-               
-                <Button 
-                  color="success" 
-                  className="master-data-list__btn-add btn-sm"
-                  onClick={this.toggleModal}
-                >{messages['permission.add-new']}</Button>
-                 <form className="form" onSubmit={this.handleSearch}>
-                  <div className="form__form-group products-list__search">
-                    <input placeholder="Search..." name="search" value={this.state.searchPermission} onChange={this.handleChange}/>
-                    <MagnifyIcon />
-                  </div>
-                </form>
-              </ButtonToolbar>
-              <Action modalOpen={modalOpen} />
-            </div>
-            <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
-            <Table responsive bordered hover>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>{messages['name']}</th>
-                  <th>{messages['description']}</th>
-                  <th>{messages['created-at']}</th>
-                  <th className="text-center">{messages['action']}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {loading ? (
-                  <tr><td colSpan={5} className="text-center"><div className="loading-table" /></td></tr>
-                ) : (
-                    this.showPermissionItem(items,messages)
-                  )}
-              </tbody>
-            </Table>
-            <Pagination pagination={this.state} total={total} onChangePage={this.onChangePage} />
+          <CardBody className="permission-list">
+            <Table
+              renderHeader={this.renderHeader}
+              loading={loading}
+              columnTable={columnTable}
+              pages={{
+                pagination: this.state,
+                total: total,
+                onChangePage: this.onChangePage
+              }}
+              size={{
+                selectedPageSize: this.state.selectedPageSize,
+                changePageSize: this.onChangePageSize
+              }}
+              data={items}
+              onRowClick={this.toggleModal}
+            />
           </CardBody>
         </Card>
       </Col>
@@ -189,5 +251,6 @@ export default injectIntl(connect(
   {
     getPermissionList,
     togglePermissionModal,
+    deletePermissionItem
   }
 )(List));
