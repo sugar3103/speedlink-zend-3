@@ -36,22 +36,7 @@ const validate = (values) => {
       errors.shipment_type_id = 'range_weight.validate-shipment_type-empty';
     }
 
-    // if (!values.from) {
-    //   errors.from = 'range_weight.validate-from-empty';
-    // }
-    // if (!values.to) {
-    //   errors.to = 'rangeweight.validate-to-empty';
-    // }
-    // if (!values.calculate_unit) {
-    //   errors.calculate_unit = 'rangeweight.validate-calculate_unit-empty';
-    // }
-    // if (!values.unit) {
-    //   errors.unit = 'rangeweight.validate-unit-empty';
-    // }
-    // if (!values.round_up ) {
-    //   errors.round_up = 'rangeweight.validate-round_up-empty';
-    // }
-
+  
     return errors;
   };
   
