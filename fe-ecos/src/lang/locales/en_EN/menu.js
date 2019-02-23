@@ -17,14 +17,15 @@ module.exports = {
   'menu.cs_service': 'Service',
   'menu.cs_shipment_type': 'Shipment Type',
   'menu.brancharea' : 'Branch Area',
+  'menu.pricing_management': 'Pricing Management',
+  'menu.range_weight' : 'Range Weight',
+  'menu.zone_code' : 'Zone Code',
+  'menu.pricing' : 'Pricing',
   //Menu Setting
   'menu.setting': 'Setting',
   'menu.system': 'System',
   'menu.user': 'Users',
   'menu.user.list': 'User',
   'menu.user.role': 'Roles',
-  'menu.user.permission': 'Permissions',
-  'menu.pricing': 'Pricing',
-  'menu.rangeweight' : 'RangeWeight',
-  'menu.zonecode' : 'ZoneCode'
+  'menu.user.permission': 'Permissions'
 }

@@ -25,7 +25,7 @@ const validate = (values) => {
     }
 
     if (values.status  === undefined || values.status === null ) {
-      errors.status = 'zonecode.validate-status-empty';
+      errors.status = 'range_weight.validate-status-empty';
     }
 
     if (!values.service_id) {

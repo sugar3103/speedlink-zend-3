@@ -397,12 +397,12 @@ class ActionForm extends Component {
         <Row>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-                <span className="form__form-group-label">{messages['zone_code.type'] }</span>
+                <span className="form__form-group-label">{messages['pri_man.filter-type'] }</span>
                 <span className="text-danger">{'*'}</span>
                 <div className="form__form-group-field">
                   <Field name="is_private" component={renderSelectField} type="text" options={[
-                    { value: 1, label: messages['zone_code.public'] },
-                    { value: 2, label: messages['zone_code.customer'] }
+                    { value: 1, label: messages['pri_man.public'] },
+                    { value: 2, label: messages['pri_man.customer'] }
                     ]} 
                     messages={messages}
                     onChange={this.hanldeChangeType}
@@ -413,7 +413,7 @@ class ActionForm extends Component {
           </Col>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-              <span className="form__form-group-label">{messages['zone_code.customer']}</span>
+              <span className="form__form-group-label">{messages['pri_man.customer']}</span>
               <span className="text-danger">{'*'}</span>
               <div className="form__form-group-field">
                 <Field
@@ -421,8 +421,8 @@ class ActionForm extends Component {
                   component={renderSelectField}
                   type="text"
                   options={customerCode && this.showOptionsCustomer(customerCode)}
-                  placeholder={messages['zone_code.customer']}
-                  disabled={this.state.disabled || disabled }
+                  placeholder={messages['pri_man.customer']}
+                  disabled={this.state.disabled}
                   messages={messages}
                 />
               </div>
@@ -459,7 +459,7 @@ class ActionForm extends Component {
           </Col>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-                <span className="form__form-group-label">{messages['zone_code.category']}</span>
+                <span className="form__form-group-label">{messages['pri_man.category']}</span>
                 <span className="text-danger">{'*'}</span>
                 <div className="form__form-group-field">
                     <Field name="category" component={renderSelectField} type="text" options={[
@@ -475,7 +475,7 @@ class ActionForm extends Component {
           </Col>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-              <span className="form__form-group-label">{messages['zone_code.carrier']}</span>
+              <span className="form__form-group-label">{messages['pri_man.carrier']}</span>
               <span className="text-danger">{'*'}</span>
               <div className="form__form-group-field">
                 <Field
@@ -491,7 +491,7 @@ class ActionForm extends Component {
           </Col>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-              <span className="form__form-group-label">{messages['zone_code.service']}</span>
+              <span className="form__form-group-label">{messages['pri_man.service']}</span>
               <span className="text-danger">{'*'}</span>
               <div className="form__form-group-field">
                 <Field
@@ -507,7 +507,7 @@ class ActionForm extends Component {
           </Col>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-              <span className="form__form-group-label">{messages['zone_code.shipmenttype']}</span>
+              <span className="form__form-group-label">{messages['pri_man.shipment-type']}</span>
               <span className="text-danger">{'*'}</span>
               <div className="form__form-group-field">
                 <Field
@@ -651,7 +651,7 @@ class ActionForm extends Component {
           </Col>
           <Col md={12} lg={6} xl={6} xs={12}>
             <div className="form__form-group">
-              <span className="form__form-group-label">{messages['zone_code.desc']}</span>
+              <span className="form__form-group-label">{messages['description']}</span>
               <div className="form__form-group-field">
                 <div className="form__form-group-icon">
                   <div className="flag vn"></div>

@@ -43,6 +43,7 @@ module.exports = {
     'notification.warning': 'Warning',
     'notification.error': 'Error',
 
+    //category option
     'inbound': 'Inbound',
     'outbound': 'Outbound',
     'domestic': 'Domestic'

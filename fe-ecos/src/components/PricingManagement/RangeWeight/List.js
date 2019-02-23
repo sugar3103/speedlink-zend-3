@@ -186,7 +186,7 @@ class List extends Component {
           sortable: false,
         },
         {
-          Header: messages['range_weight.carrier'],
+          Header: messages['pri_man.carrier'],
           accessor: "range_weight.carrier",
           Cell: ({ original }) => {
             return (
@@ -196,7 +196,7 @@ class List extends Component {
           sortable: false
         },
         {
-            Header: messages['range_weight.category'],
+            Header: messages['pri_man.category'],
             accessor: "range_weight.category",
             Cell: ({ original }) => {
               return (
@@ -206,7 +206,7 @@ class List extends Component {
             sortable: false
         },
         {
-            Header: messages['range_weight.service'],
+            Header: messages['pri_man.service'],
             accessor: "range_weight.service",
             Cell: ({ original }) => {
               return (
@@ -216,7 +216,7 @@ class List extends Component {
             sortable: false
         },
         {
-            Header: messages['range_weight.shipmenttype'],
+            Header: messages['pri_man.shipment-type'],
             accessor: "range_weight.shipmenttype",
             Cell: ({ original }) => {
               return (
@@ -237,7 +237,7 @@ class List extends Component {
             sortable: false
         },
         {
-            Header: messages['range_weight.customer'],
+            Header: messages['pri_man.customer'],
             accessor: "range_weight.customer",
             Cell: ({ original }) => {
               return (
@@ -247,7 +247,7 @@ class List extends Component {
             sortable: false
         },
         {
-            Header: messages['range_weight.from'],
+            Header: messages['pri_man.from'],
             accessor: "range_weight.from",
             Cell: ({ original }) => {
               return (
@@ -257,7 +257,7 @@ class List extends Component {
             sortable: false
         },
         {
-            Header: messages['range_weight.to'],
+            Header: messages['pri_man.to'],
             accessor: "range_weight.to",
             Cell: ({ original }) => {
               return (

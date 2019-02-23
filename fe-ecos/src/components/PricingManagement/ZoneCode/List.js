@@ -168,7 +168,7 @@ class List extends Component {
           sortable: false,
         },
         {
-          Header: messages['zone_code.carrier'],
+          Header: messages['pri_man.carrier'],
           accessor: "zone_code.carrier",
           Cell: ({ original }) => {
             return (
@@ -178,7 +178,7 @@ class List extends Component {
           sortable: false
         },
         {
-            Header: messages['zone_code.category'],
+            Header: messages['pri_man.category'],
             accessor: "zone_code.category",
             Cell: ({ original }) => {
               return (
@@ -188,7 +188,7 @@ class List extends Component {
             sortable: false,
         },
         {
-            Header: messages['zone_code.service'],
+            Header: messages['pri_man.service'],
             accessor: "zone_code.service",
             Cell: ({ original }) => {
               return (
@@ -198,7 +198,7 @@ class List extends Component {
             sortable: false,
         },
         {
-            Header: messages['zone_code.shipmenttype'],
+            Header: messages['pri_man.shipment-type'],
             accessor: "zone_code.shipmenttype",
             Cell: ({ original }) => {
               return (
@@ -219,7 +219,7 @@ class List extends Component {
             sortable: false,
         },
         {
-            Header: messages['zone_code.customer'],
+            Header: messages['pri_man.customer'],
             accessor: "zone_code.customer",
             Cell: ({ original }) => {
               return (

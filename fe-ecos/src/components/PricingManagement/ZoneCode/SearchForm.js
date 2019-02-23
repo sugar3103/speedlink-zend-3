@@ -256,12 +256,12 @@ class SearchForm extends Component {
       <form className="form" onSubmit={handleSubmit}>
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.filtertype']}</span>
+            <span className="form__form-group-label">{messages['pri_man.filter-type']}</span>
             <div className="form__form-group-field">
               <Field name="is_private" component={renderSelectField} type="text" options={[
                 { value: -1, label: messages['all'] },
-                { value: 1, label: messages['rangeweight.public'] },
-                { value: 2, label: messages['rangeweight.customer'] }
+                { value: 1, label: messages['pri_man.public'] },
+                { value: 2, label: messages['pri_man.customer'] }
                 ]}
                 clearable={false}
                 onChange={this.hanldeChangeType}
@@ -272,7 +272,7 @@ class SearchForm extends Component {
 
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.customer']}</span>
+            <span className="form__form-group-label">{messages['pri_man.customer']}</span>
             <div className="form__form-group-field">
               <Field name="customer" component={renderSelectField} type="text"
                      options={customerCode && this.showOptionCustomer(customerCode)}
@@ -309,7 +309,7 @@ class SearchForm extends Component {
         
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.category']}</span>
+            <span className="form__form-group-label">{messages['pri_man.category']}</span>
             <div className="form__form-group-field">
               <Field name="category" component={renderSelectField} type="text" options={[
                 { value: '', label: messages['all'] },
@@ -325,7 +325,7 @@ class SearchForm extends Component {
 
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.carrier']}</span>
+            <span className="form__form-group-label">{messages['pri_man.carrier']}</span>
             <div className="form__form-group-field">
               <Field name="carrier_id" component={renderSelectField} type="text"
                      options={carrierCode && this.showOptionCarrier(carrierCode)}/>
@@ -335,7 +335,7 @@ class SearchForm extends Component {
 
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.service']}</span>
+            <span className="form__form-group-label">{messages['pri_man.service']}</span>
             <div className="form__form-group-field">
               <Field name="service_id" component={renderSelectField} type="text"
                      options={serviceCode && this.showOptionService(serviceCode)}/>
@@ -345,7 +345,7 @@ class SearchForm extends Component {
 
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.shipmenttype']}</span>
+            <span className="form__form-group-label">{messages['pri_man.shipment-type']}</span>
             <div className="form__form-group-field">
               <Field name="shipmenttype" component={renderSelectField} type="text"
                      options={shipment_typeCode && this.showOptionShipmenttype(shipment_typeCode)}/>

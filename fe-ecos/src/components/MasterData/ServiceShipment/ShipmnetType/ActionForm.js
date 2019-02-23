@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Button, ButtonToolbar, Col} from 'reactstrap';
+import {Button, ButtonToolbar } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { getCarrierCodeList, getServiceCodeList, toggleShipmentTypeModal } from '../../../../redux/actions';
@@ -23,12 +23,6 @@ class ActionForm extends Component {
     this.props.getCarrierCodeList();
     this.props.getServiceCodeList();
   };
-
-  componentWillReceiveProps(nextProps) {
-      if (nextProps && nextProps.modalData) {
-      const data = nextProps.modalData;
-    }
-  }
 
   showOption = (items) => {
     let result = [];

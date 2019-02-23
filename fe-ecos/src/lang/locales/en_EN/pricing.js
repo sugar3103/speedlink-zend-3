@@ -1,8 +1,19 @@
 module.exports = {
 
+    //pricing management global
+    'pri_man.filter-type': 'Filter Type',
+    'pri_man.carrier': 'Carrier',
+    'pri_man.category': 'Category',
+    'pri_man.service': 'Service',
+    'pri_man.shipment-type': 'Shipment Type',
+    'pri_man.from': 'From',
+    'pri_man.to': 'To',
+    'pri_man.public': 'Public',
+    'pri_man.customer': 'Customer',
+
+
     //master-data --- RangeWeight
     'range_weight.list-title': 'Range Weight',
-    'range_weight.filtertype': 'Filter Type',
     'range_weight.add-new': 'Add New Range Weight',
     'range_weight.add': 'Add New Range Weight',
     'range_weight.view': 'View Range Weight',
@@ -47,7 +58,6 @@ module.exports = {
     'range_weight.validate-round_up-empty' : 'Round Up Type shouldn’t be empty',
 
     //master-data --- ZoneCode
-    'zone_code.filtertype': 'Filter Type',
     'zone_code.list-title': 'Zone Code',
     'zone_code.add-new': 'Add New Zone Code',
     'zone_code.add': 'Add New Zone Code',

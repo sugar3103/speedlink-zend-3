@@ -105,20 +105,26 @@ export default {
       ]
     },
     {
-      id: 'pricing',
-      title: 'menu.pricing',
+      id: 'pricing_management',
+      title: 'menu.pricing_management',
       route: '/app/pricing-management',
       icon: 'dice',
       childrens: [
         {
-          id: 'rangeweight',
-          title: 'menu.rangeweight',
+          id: 'pricing',
+          title: 'menu.pricing',
+          route: '/app/pricing-management/pricing',
+          icon: 'map'
+        },
+        {
+          id: 'range_weight',
+          title: 'menu.range_weight',
           route: '/app/pricing-management/range-weight',
           icon: 'license'
         },
         {
-          id: 'zonecode',
-          title: 'menu.zonecode',
+          id: 'zone_code',
+          title: 'menu.zone_code',
           route: '/app/pricing-management/zone-code',
           icon: 'map'
         }
