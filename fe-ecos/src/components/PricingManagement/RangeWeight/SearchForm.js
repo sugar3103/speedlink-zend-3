@@ -28,7 +28,7 @@ class SearchForm extends Component {
       type : "carrier_id",
       category_code : value
     }
-    console.log(value);
+    console.log(params);
     // this.props.getCodeByCondition(params);
   }
 
