@@ -9,7 +9,8 @@ import {
   SHIPMENT_TYPE_ADD_ITEM,
   SHIPMENT_TYPE_UPDATE_ITEM,
   SHIPMENT_TYPE_DELETE_ITEM ,
-  SHIPMENT_TYPE_CODE_GET_LIST
+  SHIPMENT_TYPE_CODE_GET_LIST,
+  SHIPMENT_TYPE_GET_CODE_BY_CONDITION
 } from "../../../../constants/actionTypes";
 
 import {
@@ -26,6 +27,8 @@ import {
   getShipmentTypeCodeList,
   getShipmentTypeCodeListSuccess,
   getShipmentTypeCodeListError,
+  getShipmentTypeCodeByConditionSuccess,
+  getShipmentTypeCodeByConditionError
 } from "./actions";
 
 import createNotification from '../../../../util/notifications';
@@ -286,6 +289,40 @@ function* deleteShipmentTypeItem({ payload }) {
   }
 }
 
+//list shipment_type code
+function getCodeByConditionApi() {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}shipment_type/codeByCondition`,
+    headers: authHeader()
+  });
+}
+
+const getShipmentTypeCodeByConditionRequest = async () => {
+  return await getCodeByConditionApi().then(res => res.data).catch(err => err)
+};
+
+function* getShipmentTypeCodeByCondition() {
+  try {
+    const response = yield call(getShipmentTypeCodeByConditionRequest);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(getShipmentTypeCodeByConditionSuccess(response.data));
+        break;
+
+      case EC_FAILURE:
+        yield put(getShipmentTypeCodeByConditionError(response.data));
+        break;
+
+      default:
+        break;
+    }
+
+  } catch (error) {
+    yield put(getShipmentTypeCodeByConditionError(error));
+  }
+}
+
 export function* watchGetList() {
   yield takeEvery(SHIPMENT_TYPE_GET_LIST, getShipmentTypeListItems);
 }
@@ -306,6 +343,12 @@ export function* watchDeleteItem() {
   yield takeEvery(SHIPMENT_TYPE_DELETE_ITEM, deleteShipmentTypeItem);
 }
 
+export function* watchGetListCodeByCondition() {
+  yield takeEvery(SHIPMENT_TYPE_GET_CODE_BY_CONDITION, getShipmentTypeCodeByCondition);
+}
+
+
 export default function* rootSaga() {
-  yield all([fork(watchGetList), fork(watchGetListCode), fork(watchAddItem), fork(watchUpdateItem), fork(watchDeleteItem)]);
+  yield all([fork(watchGetList), fork(watchGetListCode), fork(watchAddItem), fork(watchUpdateItem), fork(watchDeleteItem),
+     fork(watchGetListCodeByCondition)]);
 }

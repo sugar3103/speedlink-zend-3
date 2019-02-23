@@ -14,7 +14,10 @@ import {
   SHIPMENT_TYPE_DELETE_ITEM_ERROR,
   SHIPMENT_TYPE_CODE_GET_LIST,
   SHIPMENT_TYPE_CODE_GET_LIST_SUCCESS,
-  SHIPMENT_TYPE_CODE_GET_LIST_ERROR
+  SHIPMENT_TYPE_CODE_GET_LIST_ERROR,
+  SHIPMENT_TYPE_GET_CODE_BY_CONDITION,
+  SHIPMENT_TYPE_GET_CODE_BY_CONDITION_SUCCESS,
+  SHIPMENT_TYPE_GET_CODE_BY_CONDITION_ERROR
 } from '../../../../constants/actionTypes';
 
 export const toggleShipmentTypeModal = (shipment_type = null) => ({
@@ -91,5 +94,20 @@ export const deleteShipmentTypeItemSuccess = () => ({
 
 export const deleteShipmentTypeItemError = (error) => ({
   type: SHIPMENT_TYPE_DELETE_ITEM_ERROR,
+  payload: error
+});
+
+export const getShipmentTypeCodeByCondition = () => ({
+  type: SHIPMENT_TYPE_GET_CODE_BY_CONDITION,
+  payload: { }
+});
+
+export const getShipmentTypeCodeByConditionSuccess = (codeByCondition) => ({
+  type: SHIPMENT_TYPE_GET_CODE_BY_CONDITION_SUCCESS,
+  payload: { codeByCondition }
+});
+
+export const getShipmentTypeCodeByConditionError = (error) => ({
+  type: SHIPMENT_TYPE_GET_CODE_BY_CONDITION_ERROR,
   payload: error
 });
