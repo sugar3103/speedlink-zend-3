@@ -76,7 +76,7 @@ class RbacManager {
 
         // try to load Rbac container from cache.
         $this->rbac = $this->cache->getItem('rbac_container', $result);
-
+        
         if (!$result) {
             // create Rbac container.
             $rbac = new Rbac();
@@ -89,8 +89,7 @@ class RbacManager {
                 ->findBy([], ['id' => 'ASC']);
 
             foreach ($roles as $role) {
-                $roleName = $role->getName();
-
+                $roleName = $role->getName();                
                 $parentRoleNames = [];
 
                 foreach ($role->getParentRoles() as $parentRole) {
@@ -109,14 +108,14 @@ class RbacManager {
         }
     }
 
-    public function isGranted($user, $permission, $params = null) {
+    public function isGranted($user,$permission, $params = null) {
         if ($this->rbac == null)
             $this->init();
 
-
         if ($user == null) {
-
+            
             $identity = $this->authService->getIdentity();
+            
             if ($identity == null)
                 return false;
 
@@ -128,16 +127,22 @@ class RbacManager {
                 // We throw an exception, because this is a possible security problem.
                 throw new \Exception("There is no user with such identity.");
         }
+        
+        if($user->getIsAdmin()) {
+            return true;
+        }
 
         $roles = $user->getRoles();
+        
         // loop through all roles of current user to check permission.
-        foreach ($roles as $role) {
-            if ($this->rbac->isGranted($role->getName(), $permission)) {
-
+        foreach ($roles as $role) {           
+            
+            if ($this->rbac->isGranted($role->getName(), $permission)) {                
                 if ($params == null)
                     return true;
                 // Check assertion
                 foreach ($this->assertionManagers as $assertionManager) {
+                   
                     if ($assertionManager->assert($this->rbac, $permission, $params))
                         return true;
                 }
@@ -150,8 +155,8 @@ class RbacManager {
             foreach ($parentRoles as $parentRole)
                 if ($this->rbac->isGranted($parentRole->getName(), $permission))
                     return true;
-        }
-        
+        }  
+                      
         return false;
     }
 }

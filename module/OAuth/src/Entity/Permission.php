@@ -101,6 +101,21 @@ class Permission
     protected $roles;
 
     /**
+     *
+     * @ORM\OneToOne(targetEntity="\OAuth\Entity\User")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
+     */
+    private $join_created;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\OAuth\Entity\User")
+     * @ORM\JoinColumn(name="updated_by", referencedColumnName="id", nullable=true)
+     */
+    private $join_updated;
+    
+
+    /**
      * Permission constructor.
      */
     public function __construct()

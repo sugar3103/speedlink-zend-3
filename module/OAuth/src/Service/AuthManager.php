@@ -93,19 +93,15 @@ class AuthManager
         $this->authService->clearIdentity();
     }
 
-    public function hasIdentity()
-    {
-        
-    }
-
     public function filterAccess($controllerName, $actionName)
     {
         $mode = isset($this->config['options']['mode']) ? $this->config['options']['mode'] : 'restrictive';
+
         if ($mode != 'restrictive' && $mode != 'permissive')
             throw new \Exception("Invalid filter access mode (expected either restrictive or permissive mode).");
-
+        
         if (isset($this->config['controllers'][$controllerName])) {
-            $items = $this->config['controllers'][$controllerName];
+            $items = $this->config['controllers'][$controllerName];            
             foreach ($items as $item) {
                 $actionList = $item['actions'];
                 $allow = $item['allow'];
@@ -128,7 +124,7 @@ class AuthManager
                             return self::ACCESS_GRANTED;
                         else
                             return self::ACCESS_DENIED;
-                    } elseif (substr($allow, 0, 1) == '+') {
+                    } elseif (substr($allow, 0, 1) == '+') { 
                         // only the user with this permission is allowed to see the page
                         $permission = substr($allow, 1);
                         if ($this->rbacManager->isGranted(null, $permission))
@@ -141,6 +137,7 @@ class AuthManager
             }
         }
 
+       
         // in restrictive mode, we forbid access for authenticated users to any
         // action not listed under 'access_filter' key (for security reasons).
         if ($mode == 'restrictive' && !$this->authService->hasIdentity())

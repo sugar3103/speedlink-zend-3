@@ -43,7 +43,6 @@ class PermissionManager {
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
-
             $permission = new Permission();
             $permission->setName($data['name']);
             $permission->setDescription($data['description']);
@@ -204,7 +203,8 @@ class PermissionManager {
             foreach ($permissions as &$permission) {//loop
 
                 //set created_at to GMT +7
-                $permission['created_at'] =  ($permission['created_at']) ? Utils::checkDateFormat($permission['created_at'],'d/m/Y') : '';
+                $permission['created_at'] =  ($permission['created_at']) ? Utils::checkDateFormat($permission['created_at'],'d/m/Y H:m:s') : '';
+                $permission['updated_at'] =  ($permission['updated_at']) ? Utils::checkDateFormat($permission['updated_at'],'d/m/Y H:m:s') : '';
             }
             
         }

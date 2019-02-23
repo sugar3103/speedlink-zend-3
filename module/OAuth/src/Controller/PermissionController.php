@@ -42,11 +42,9 @@ class PermissionController extends CoreController {
      */
     public function indexAction()
     {
-        if ($this->getRequest()->isPost()) {
+        if ($this->getRequest()->isPost()) {            
             // get the filters
-            $fieldsMap = [
-                0 => 'name'                
-            ];
+            $fieldsMap = [0 => 'name'];
 
             list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);                        
             
@@ -54,10 +52,8 @@ class PermissionController extends CoreController {
             $permissions = $this->permissionManager->getListPermissionByCondition($start, $limit, $sortField, $sortDirection,$filters);            
             
             $result = $this->filterByField($permissions['listPermissions'],$fields);
-            
-            $this->error_code = 1;
+
             $this->apiResponse =  array(
-                'message'   => "Get List Success",
                 'data'      => $result,
                 'total'     => $permissions['totalRecord']
             );                         
@@ -74,6 +70,7 @@ class PermissionController extends CoreController {
     public function addAction() {
         // check if permission  has submitted the form
         if ($this->getRequest()->isPost()) {
+           
             $user = $this->tokenPayload;
             //Create New Form Permission
             $form = new PermissionForm('create', $this->entityManager);
@@ -83,16 +80,12 @@ class PermissionController extends CoreController {
             //validate form
             if ($form->isValid()) {
                 // get filtered and validated data
-                $data = $form->getData();
-                
+                $data = $form->getData();                
                 // add user.
                 $permission = $this->permissionManager->addPermission($data,$user);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have modified Permission!";
             } else {
                 $this->error_code = 0;
-                $this->apiResponse['data'] = $form->getMessages(); 
-                
+                $this->apiResponse['data'] = $form->getMessages();                 
             }            
         } 
 
@@ -119,18 +112,14 @@ class PermissionController extends CoreController {
                $form = new PermissionForm('update', $this->entityManager, $permission);
                $form->setData($data);
                if ($form->isValid()) {
-                  $data = $form->getData(); 
-                                    
-                  $this->permissionManager->updatePermission($permission, $data, $user);
-                  $this->error_code = 1;
-                  $this->apiResponse['message'] = "Success: You have modified permission!";
+                  $data = $form->getData();                                     
+                  $this->permissionManager->updatePermission($permission, $data, $user);                                    
                }  else {
-                  $this->error_code = 0;
-                  $this->apiResponse['data'] = $form->getMessages(); 
+                  $this->error_code = 0;                  
                }   
            }   else {
                $this->error_code = 0;
-               $this->apiResponse['message'] = 'Permission Not Found'; 
+               $this->apiResponse['message'] = 'NOT_FOUND'; 
            }         
             
        } 
@@ -143,20 +132,18 @@ class PermissionController extends CoreController {
      */
     public function deleteAction() {
         if ($this->getRequest()->isPost()) {
-            $data = $this->getRequestData();
-            $user = $this->tokenPayload;
+            $data = $this->getRequestData();            
             $permission = $this->entityManager->getRepository(Permission::class)
                ->findOneById($data['id']);
           if($permission) {
-              $this->permissionManager->deletePermission($permission);
-              $this->error_code = 1;
-              $this->apiResponse['message'] = "Success: You have deleted permission!";
+              $this->permissionManager->deletePermission($permission);              
           } else {
               $this->error_code = -1;
-              $this->apiResponse['message'] = "Not Found Permission";
+              $this->apiResponse['message'] = "NOT_FOUND";
           }
       } 
 
       return $this->createResponse();
     }
+
 }

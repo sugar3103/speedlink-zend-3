@@ -73,17 +73,16 @@ class RoleController extends CoreController {
     /**
      * Add role
      *
-     * @return \Zend\Http\Response|ViewModel
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function addAction() {
-        // create form
-        $form = new RoleForm('create', $this->entityManager);
-
         // check if user has submitted the form
         if ($this->getRequest()->isPost()) {
-
+            
+            // create form
+            $form = new RoleForm('create', $this->entityManager);
+            
             // fill in the form with POST data
             $data = $this->getRequestData();
 
@@ -109,46 +108,12 @@ class RoleController extends CoreController {
     }
 
     /**
-     * The "view" action displays a page allowing to view role's details.
-     */
-    public function viewAction() {
-        $id = (int) $this->params()->fromRoute('id', -1);
-
-        if ($id < 1) {
-            $this->getResponse()->setStatusCode(404);
-            return $this->getResponse();
-        }
-
-        // find a role with such ID.
-        $role = $this->entityManager->getRepository(Role::class)
-            ->find($id);
-
-        if ($role == null) {
-            $this->getResponse()->setStatusCode(404);
-            return $this->getResponse();
-        }
-
-        $allPermissions = $this->entityManager->getRepository(Permission::class)
-            ->findBy([], ['name' => 'ASC']);
-
-        $effectivePermissions = $this->roleManager->getEffectivePermissions($role);
-
-        return new ViewModel(
-            [
-                'role' => $role,
-                'allPermissions' => $allPermissions,
-                'effectivePermissions' => $effectivePermissions
-            ]
-        );
-    }
-
-    /**
      * This action displays a page allowing to edit existing role.
      *
-     * @return \Zend\Http\Response|\Zend\Stdlib\ResponseInterface|ViewModel
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
+    
     public function editAction() {
         $id = (int) $this->params()->fromRoute('id', -1);
 
