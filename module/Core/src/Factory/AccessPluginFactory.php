@@ -1,5 +1,5 @@
 <?php
-namespace Core\Plugin\Factory;
+namespace Core\Factory;
 
 use Core\Plugin\AccessPlugin;
 use OAuth\Service\RbacManager;

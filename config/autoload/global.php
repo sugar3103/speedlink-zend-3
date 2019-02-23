@@ -35,6 +35,7 @@ return [
             Adapter::class => AdapterServiceFactory::class
         ],
     ],
+    
     'session_config' => [],
     'session_storage' => ['type' => SessionArrayStorage::class],
     'ldap' => [

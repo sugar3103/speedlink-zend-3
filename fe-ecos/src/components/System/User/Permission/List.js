@@ -35,8 +35,7 @@ class List extends Component {
     super();
     this.state = {
       selectedPageSize: SELECTED_PAGE_SIZE,
-      currentPage: 1,
-      access: true
+      currentPage: 1
     };
   }
 
@@ -101,7 +100,7 @@ class List extends Component {
   }
 
   componentDidMount() {
-    this.props.getPermissionList();
+    // this.props.getPermissionList();
   }
 
   showPermissionItem = (items, messages) => {

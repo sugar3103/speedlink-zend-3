@@ -25,11 +25,11 @@ class AuthAdapterFactory implements FactoryInterface {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
         $config = $container->get('config');
 
-        // if(!empty($config['ldap'])) {
-        //     $ldapConfig = $config['ldap'];
-        // } else {
+        if(!empty($config['ldap'])) {
+            $ldapConfig = $config['ldap'];
+        } else {
             $ldapConfig = [];
-        // }
+        }
 
         // Create the AuthAdapter and inject dependency to its constructor.
         return new AuthAdapter($entityManager, $ldapConfig);

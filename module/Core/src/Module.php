@@ -28,37 +28,24 @@ class Module
         $headers->addHeaderLine('Access-Control-Expose-Headers: Content-Length');
         $headers->addHeaderLine('Access-Control-Allow-Methods: POST');
         $headers->addHeaderLine('Access-Control-Allow-Headers: Authorization, Origin, X-Requested-With, Content-Type, Accept');        
-
-        $serviceManager = $event->getApplication()->getServiceManager();
-
-        $eventManager = $event->getApplication()->getEventManager();
-        $moduleRouteListener = new ModuleRouteListener();
-        $moduleRouteListener->attach($eventManager);
-        $shareEventManager = $eventManager->getSharedManager();
-        $shareEventManager->attach(AbstractActionController::class, MvcEvent::EVENT_DISPATCH,
-            [$this,'onDispatch'], 101);             
-    }
-
-      /**
-     * Event listener method for the 'Dispatch' event. We listen to the Dispatch
-     * event to call the access filter. The access filter allows to determine if
-     * the current visitor is allowed to see the page or not. If he/she
-     * is not authenticated and is not allowed to see the page, we redirect the user
-     * to the login page.
-     *
-     * @param MvcEvent $event
-     * @return mixed
-     */
-    public function onDispatch(MvcEvent $event)
-    {
-        // get controller and action to which the HTTP request was dispatched.
-        $controller = $event->getTarget();
-
-        $controllerName = $event->getRouteMatch()->getParam('controller', null);
-        $actionName = $event->getRouteMatch()->getParam('action', null);
-        // convert dash-style action name to camel-case.
-        $actionName = str_replace('-', '', lcfirst(ucwords($actionName, '-')));
-       
         
+        $sessionManager = $event->getApplication()->getServiceManager()->get('Zend\Session\SessionManager');        
+        // $this->forgetInvalidSession($sessionManager);            
+       
     }
+
+    protected function forgetInvalidSession($sessionManager) {
+    	try {
+    		$sessionManager->start();
+    		return;
+    	} catch (\Exception $e) {
+    	}
+    	/**
+    	 * Session validation failed: toast it and carry on.
+    	 */
+    	// @codeCoverageIgnoreStart
+    	session_unset();
+    	// @codeCoverageIgnoreEnd
+    }
+    
 }

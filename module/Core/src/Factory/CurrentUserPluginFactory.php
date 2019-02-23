@@ -1,5 +1,5 @@
 <?php
-namespace Core\Plugin\Factory;
+namespace Core\Factory;
 
 use Core\Plugin\CurrentUserPlugin;
 use Interop\Container\ContainerInterface;
