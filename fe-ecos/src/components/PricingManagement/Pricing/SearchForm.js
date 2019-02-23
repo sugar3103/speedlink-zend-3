@@ -17,28 +17,15 @@ class SearchForm extends Component {
       <form className="form" onSubmit={handleSubmit}>
         <Col md={6} sm={12}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['code.code']}</span>
+            <span className="form__form-group-label">{messages['pri_man.filter-type']}</span>
             <div className="form__form-group-field">
               <Field name="is_private" component={renderSelectField} type="text" options={[
                 { value: -1, label: messages['all'] },
-                { value: 1, label: messages['range_weight.public'] },
-                { value: 2, label: messages['range_weight.customer'] }
-                ]}
+                { value: 1, label: messages['pri_man.public'] },
+                { value: 2, label: messages['pri_man.customer'] }
+              ]}
                 clearable={false}
                 onChange={this.hanldeChangeType}
-              />
-            </div>
-          </div>
-        </Col>
-        <Col md={6} sm={12}>
-          <div className="form__form-group">
-            <span className="form__form-group-label">{messages['code.code']}</span>
-            <div className="form__form-group-field">
-              <Field
-                name="code"
-                component="input"
-                type="text"
-                placeholder={messages['code.code']}
               />
             </div>
           </div>
