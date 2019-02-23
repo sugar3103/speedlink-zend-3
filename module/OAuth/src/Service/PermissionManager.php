@@ -2,6 +2,7 @@
 namespace OAuth\Service;
 
 use OAuth\Entity\Permission;
+use OAuth\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
@@ -32,6 +33,21 @@ class PermissionManager {
         $this->rbacManager = $rbacManager;
     }
 
+    private function getReferenced(&$permission, $data, $user, $mode = '')
+    {
+        $user_data = $this->entityManager->getRepository(User::class)->find($user->id);
+        if ($user_data == null) {
+            throw new \Exception('Not found User by ID');
+        }
+
+        if ($mode == 'add') {
+            $permission->setJoinCreated($user_data);
+        }
+
+        $permission->setJoinUpdated($user_data);
+
+    }
+
     /**
      * Add new permission.
      * @param $data
@@ -51,6 +67,7 @@ class PermissionManager {
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $permission->setCreatedAt($addTime->format('Y-m-d H:i:s'));
             $permission->setCreatedBy($user->id);
+            $this->getReferenced($permission, $data, $user,'add');
 
             $this->entityManager->persist($permission);
 
@@ -91,6 +108,7 @@ class PermissionManager {
             $updatedTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $permission->setUpdatedAt($updatedTime->format('Y-m-d H:i:s'));
             $permission->setUpdatedBy($user->id);
+            $this->getReferenced($permission, $data, $user);
 
             $this->entityManager->flush();
 

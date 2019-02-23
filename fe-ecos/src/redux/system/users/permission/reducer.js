@@ -19,7 +19,7 @@ const INIT_STATE = {
   items: null,
   total: 0,
   errors: null,
-  loading: true,
+  loading: true,  
   modalOpen: false,
   modalData: null,
   modalType: null,
@@ -42,7 +42,7 @@ export default (state = INIT_STATE, action) => {
       const params = action.payload;
       return { 
         ...state, 
-        loading: true,
+        loading: true,        
         paramSearch: (params && params.query) ? params.query : null
       };
 
@@ -50,7 +50,7 @@ export default (state = INIT_STATE, action) => {
       const { items, total } = action.payload;
       return { 
         ...state, 
-        loading: false, 
+        loading: false,         
         items,
         total
       };
@@ -58,7 +58,7 @@ export default (state = INIT_STATE, action) => {
     case PERMISSION_GET_LIST_ERROR:
       return { 
         ...state, 
-        loading: false, 
+        loading: false,
         errors: action.payload 
       };
 

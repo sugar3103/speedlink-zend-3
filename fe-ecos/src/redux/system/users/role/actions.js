@@ -12,12 +12,13 @@ import {
   ROLE_UPDATE_ITEM_ERROR,
   ROLE_DELETE_ITEM,
   ROLE_DELETE_ITEM_SUCCESS,
-  ROLE_DELETE_ITEM_ERROR
+  ROLE_DELETE_ITEM_ERROR,
+  ROLE_CHANGE_TYPE_MODAL
 } from '../../../../constants/actionTypes';
 
-export const toggleRoleModal = (status = null) => ({
+export const toggleRoleModal = (type,data) => ({
   type: ROLE_TOGGLE_MODAL,
-  payload: status
+  payload: { type, data }
 })
 
 export const getRoleList = (params) => ({
@@ -83,3 +84,8 @@ export const deleteRoleItemError = (error) => ({
   type: ROLE_DELETE_ITEM_ERROR,
   payload: error
 });
+
+export const changeTypeRoleModal = (type) => ({
+  type: ROLE_CHANGE_TYPE_MODAL,
+  payload: type
+})

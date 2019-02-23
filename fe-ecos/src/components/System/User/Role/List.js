@@ -1,18 +1,22 @@
 /* eslint-disable react/no-unused-state */
-import React, { Component } from 'react';
-import { ButtonToolbar, Card, CardBody, Col, Table, Button } from 'reactstrap';
+import React, { Component, Fragment } from 'react';
+import { Card, CardBody, Col, Button, ButtonToolbar,Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Item from './Item';
-import Pagination from '../../../../containers/Shared/pagination/Pagination';
-import ItemPerPage from '../../../../containers/Shared/pagination/ItemPerPage';
+import Table from '../../../../containers/Shared/table/Table';
 import { SELECTED_PAGE_SIZE } from '../../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import MagnifyIcon from 'mdi-react/MagnifyIcon';
 
+import { confirmAlert } from 'react-confirm-alert';
+import ConfirmPicker from '../../../../containers/Shared/picker/ConfirmPicker';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
 import {
   getRoleList,
-  toggleRoleModal
+  toggleRoleModal,
+  deleteRoleItem
 } from "../../../../redux/actions";
 import Action from './Action';
 
@@ -32,8 +36,24 @@ class List extends Component {
     this.state = {
       selectedPageSize: SELECTED_PAGE_SIZE,
       currentPage: 1,
-      searchRole: ''
     };
+    this.handleKeyPress = this.handleKeyPress.bind(this)
+  }
+
+  onDelete = (e, ids) => {
+    e.stopPropagation();
+    const { messages } = this.props.intl;
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <ConfirmPicker
+            onClose={onClose}
+            onDelete={() => this.props.deleteRoleItem(ids, messages)}
+            messages={messages}
+          />
+        )
+      }
+    })
   }
 
   onChangePageSize = (size) => {
@@ -77,11 +97,15 @@ class List extends Component {
     });
   };
 
-  componentDidMount() {
-    this.props.getRoleList();
+  componentWillReceiveProps(nextProps) {
+    if (nextProps && nextProps.role && nextProps.role.total) {
+      this.setState({
+        total: nextProps.role.total
+      });
+    }
   }
 
-  showRoleItem = (items,messages) => {
+  showRoleItem = (items, messages) => {
     let result = null;
     if (items.length > 0) {
       result = items.map((item, index) => {
@@ -102,66 +126,135 @@ class List extends Component {
 
   handleSearch = (e) => {
     e.preventDefault();
-    
     let params = {
       offset: {
         start: 1,
         limit: this.state.selectedPageSize
       }
     }
-    Object.assign(params, { "query": {"name": this.state.searchRole}});
+    Object.assign(params, { "query": { "name": this.state.searchRole } });
     this.props.getRoleList(params);
   }
 
   handleChange = (e) => {
-    this.setState({searchRole: e.target.value});
+    this.setState({ searchRole: e.target.value });
+  }
+
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      this.handleSearch(e);
+    }
+  }
+
+  renderHeader = (selected) => {
+    const { modalOpen } = this.props.role;
+    const { messages } = this.props.intl;
+    return (
+      <Fragment>
+        <ButtonToolbar className="master-data-list__btn-toolbar-top">
+          <Button
+            color="success"
+            onClick={(e) => this.toggleModal(e, 'add', null)}
+            className="master-data-btn"
+            size="sm"
+          >{messages['role.add-new']}</Button>
+          <Action modalOpen={modalOpen} />
+          <form className="form">
+            <div className="form__form-group products-list__search">
+              <input placeholder="Search..." name="search" onKeyPress={this.handleKeyPress} onChange={event => { this.setState({ searchPermission: event.target.value }) }} />
+              <MagnifyIcon />
+            </div>
+          </form>
+          {selected.length > 0 &&
+            <Button
+              color="danger"
+              onClick={(e) => this.onDelete(e, selected)}
+              className="master-data-btn"
+              size="sm"
+            >{messages['role.delete']}</Button>
+          }
+
+        </ButtonToolbar>
+      </Fragment>
+    )
   }
 
   render() {
-    const { items, loading, modalOpen, total } = this.props.role;
-    const { messages } = this.props.intl;
+    const { items, loading, total } = this.props.role;
+    const { messages,locale } = this.props.intl;
+    const columnTable = {
+      checkbox: true,
+      columns: [
+        {
+          Header: messages['name'],
+          accessor: "name",
+          width: 150,
+          sortable: false,
+        }, {
+          Header: messages['description'],
+          accessor: "description",
+          Cell: ({ original }) => {
+            return (
+              locale === 'en-US' ? original.description_en : original.description
+            )
+          },
+          sortable: false,
+        }, {
+          Header: messages['status'],
+          accessor: "status",
+          width: 120,
+          Cell: ({ original }) => {
+            return (
+              original.status === 1 ? <Badge color="success">{messages['active']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>
+            )
+          },
+          className: "text-center",
+          sortable: false,
+        },{
+          Header: messages['created-at'],
+          accessor: "created_at",
+          width: 120,
+          className: "text-center", 
+          sortable: false,
+        },
+        {
+          Header: messages['action'],
+          accessor: "",
+          width: 100,
+          className: "text-center", 
+          Cell: ({ original }) => {
+            return (
+              <Fragment>
+                <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
+                <Button color="danger" size="sm" onClick={(e) => this.onDelete(e, [original.id])}><span className="lnr lnr-trash" /></Button>
+              </Fragment>
+            );
+          },
+          sortable: false,
+        }
+      ]
+    }
     return (
       <Col md={12} lg={12}>
         <Card>
           <CardBody className="master-data-list">
-            <div className="card__title">
-              <h5 className="bold-text">{messages['role.list-title']}</h5>
-              <ButtonToolbar className="master-data-list__btn-toolbar-top">
-                <Button
-                  color="success"
-                  className="master-data-list__btn-add btn-sm"
-                  onClick={this.toggleModal}
-                >{messages['role.add-new']}</Button>
-                <form className="form" onSubmit={this.handleSearch}>
-                  <div className="form__form-group products-list__search">
-                    <input placeholder="Search..." name="search" value={this.state.searchPermission} onChange={this.handleChange} />
-                    <MagnifyIcon />
-                  </div>
-                </form>
-              </ButtonToolbar>
-              <Action modalOpen={modalOpen} />
-            </div>
-            <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
-            <Table responsive bordered hover>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>{messages['role.name']}</th>
-                  <th>{messages['description']}</th>
-                  <th>{messages['status']}</th>
-                  <th>{messages['created-at']}</th>
-                  <th className="text-center">{messages['action']}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {loading ? (
-                  <tr><td colSpan={6} className="text-center"><div className="loading-table" /></td></tr>
-                ) : (
-                    this.showRoleItem(items,messages)
-                  )}
-              </tbody>
-            </Table>
-            <Pagination pagination={this.state} total={total} onChangePage={this.onChangePage} />
+            <Table
+              renderHeader={this.renderHeader}
+              loading={loading}
+              columnTable={columnTable}
+              pages={{
+                pagination: this.state,
+                total: total,
+                onChangePage: this.onChangePage
+              }}
+              size={{
+                selectedPageSize: this.state.selectedPageSize,
+                changePageSize: this.onChangePageSize
+              }}
+              data={items}
+              onRowClick={this.toggleModal}
+            />
           </CardBody>
         </Card>
       </Col>
@@ -170,7 +263,6 @@ class List extends Component {
 }
 
 List.propTypes = {
-  role: PropTypes.object.isRequired,
   getRoleList: PropTypes.func.isRequired,
   toggleRoleModal: PropTypes.func.isRequired
 }

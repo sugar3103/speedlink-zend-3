@@ -52,7 +52,7 @@ function* getPermissionListItems({ payload }) {
       case EC_FAILURE:
         yield put(getPermissionListError(response.message));
         break;
-
+      
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authPermission');
         yield call(history.push, '/login');

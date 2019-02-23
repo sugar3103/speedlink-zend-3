@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unused-state */
 import React, { Component, Fragment } from 'react';
-import { Card, CardBody, Col, Button, Badge } from 'reactstrap';
+import { Card, CardBody, Col, Button, ButtonToolbar } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Item from './Item';
 import Table from '../../../../containers/Shared/table/Table';
@@ -20,7 +20,6 @@ import {
   deletePermissionItem
 } from "../../../../redux/actions";
 
-
 const PermissionFormatter = ({ value }) => (
   value === 'Enabled' ? <span className="badge badge-success">Enabled</span> :
     <span className="badge badge-disabled">Disabled</span>
@@ -37,6 +36,8 @@ class List extends Component {
       selectedPageSize: SELECTED_PAGE_SIZE,
       currentPage: 1
     };
+
+    this.handleKeyPress = this.handleKeyPress.bind(this)
   }
 
   onDelete = (e, ids) => {
@@ -99,10 +100,6 @@ class List extends Component {
     }
   }
 
-  componentDidMount() {
-    // this.props.getPermissionList();
-  }
-
   showPermissionItem = (items, messages) => {
     let result = null;
     if (items.length > 0) {
@@ -123,8 +120,7 @@ class List extends Component {
   }
 
   handleSearch = (e) => {
-    e.preventDefault();
-
+    e.preventDefault();    
     let params = {
       offset: {
         start: 1,
@@ -139,26 +135,42 @@ class List extends Component {
     this.setState({ searchPermission: e.target.value });
   }
 
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      this.handleSearch(e);
+    }
+  }
+  
   renderHeader = (selected) => {
     const { modalOpen } = this.props.permission;
     const { messages } = this.props.intl;
     return (
       <Fragment>
-        <Button
-          color="success"
-          onClick={(e) => this.toggleModal(e, 'add', null)}
-          className="master-data-btn"
-          size="sm"
-        >{messages['permission.add-new']}</Button>
-        <Action modalOpen={modalOpen} />
-        {selected.length > 0 &&
+        <ButtonToolbar className="master-data-list__btn-toolbar-top">
           <Button
-            color="danger"
-            onClick={(e) => this.onDelete(e, selected)}
+            color="success"
+            onClick={(e) => this.toggleModal(e, 'add', null)}
             className="master-data-btn"
             size="sm"
-          >{messages['permission.delete']}</Button>
-        }
+          >{messages['permission.add-new']}</Button>
+          <Action modalOpen={modalOpen} />
+          <form className="form">
+            <div className="form__form-group products-list__search">
+              <input placeholder="Search..." name="search" onKeyPress={this.handleKeyPress} onChange={event => {this.setState({searchPermission: event.target.value})}}/>
+              <MagnifyIcon />
+            </div>
+          </form>
+          {selected.length > 0 &&
+            <Button
+              color="danger"
+              onClick={(e) => this.onDelete(e, selected)}
+              className="master-data-btn"
+              size="sm"
+            >{messages['permission.delete']}</Button>
+          }
+
+        </ButtonToolbar>
       </Fragment>
     )
   }
@@ -208,7 +220,7 @@ class List extends Component {
     return (
       <Col md={12} lg={12}>
         <Card>
-          <CardBody className="permission-list">
+          <CardBody className="master-data-list">
             <Table
               renderHeader={this.renderHeader}
               loading={loading}
@@ -234,7 +246,6 @@ class List extends Component {
 
 List.propTypes = {
   permission: PropTypes.object.isRequired,
-  getPermissionList: PropTypes.func.isRequired,
   togglePermissionModal: PropTypes.func.isRequired
 }
 

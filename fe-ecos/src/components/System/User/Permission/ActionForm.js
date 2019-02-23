@@ -123,13 +123,13 @@ class ActionForm extends PureComponent {
               <hr />
               <Row>
                 <Col md={6}>
-                  <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name}</span>
+                  <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name_created}</span>
                   <br />
                   <span><i className="label-info-data">{messages['created-at']}:</i>{modalData.created_at}</span>
                 </Col>
                 {modalData.updated_at &&
                   <Col md={6}>
-                    <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.full_name}</span>
+                    <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.full_name_updated}</span>
                     <br />
                     <span><i className="label-info-data">{messages['updated-at']}:</i>{modalData.updated_at}</span>
                   </Col>

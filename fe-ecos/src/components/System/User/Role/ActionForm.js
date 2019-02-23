@@ -1,17 +1,25 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent,Fragment } from 'react';
 import { Button, ButtonToolbar, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleRoleModal, getPermissionList, getRoleListAll } from '../../../../redux/actions';
+import { toggleRoleModal, getPermissionList, getRoleListAll,changeTypeRoleModal } from '../../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
-
+import { MODAL_ADD, MODAL_VIEW, MODAL_EDIT } from '../../../../constants/defaultValues';
 import renderRadioButtonField from '../../../../containers/Shared/form/RadioButton';
 import CustomField from '../../../../containers/Shared/form/CustomField';
 import CheckBoxGroup from '../../../../containers/Shared/form/CheckBoxGroup';
+import PropTypes from 'prop-types';
 
 import validate from './validateActionForm';
 
-class Action extends PureComponent {
+class ActionForm extends PureComponent {
+  
+  constructor() {
+    super();
+    this.state = {
+      modalType: ''
+    }
+  }
 
   componentDidMount() {
     //Param Permission
@@ -26,8 +34,18 @@ class Action extends PureComponent {
     this.props.getRoleListAll(param);
 
     const data = this.props.modalData;
+    console.log(this.props);
+    
     if (data) {
       this.props.initialize(data);
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.modalType !== this.props.modalType) {
+      this.setState({
+        modalType: prevProps.modalType
+      });
     }
   }
 
@@ -48,12 +66,33 @@ class Action extends PureComponent {
     this.props.toggleRoleModal();
   }
 
+  changeTypeModal = () => {
+    this.props.changeTypeRoleModal(MODAL_VIEW);
+  }
+
   render() {
     const { messages } = this.props.intl;
-    const { handleSubmit, modalData } = this.props;
-    const className = modalData ? 'primary' : 'success';
-    const { permissions } = this.props;
-    const title = modalData ? messages['role.update'] : messages['role.add-new'];
+    const { handleSubmit, modalData, modalType,permissions } = this.props;
+    
+    let className = 'success';
+    let title = messages['role.add-new'];
+    const disabled = modalType === MODAL_VIEW ? true : false;
+    switch (modalType) {
+      case MODAL_ADD:
+        className = 'success';
+        title = messages['role.add-new'];
+        break;
+      case MODAL_EDIT:
+        className = 'primary';
+        title = messages['role.update'];
+        break;
+      case MODAL_VIEW:
+        className = 'info';
+        title = messages['role.view'];
+        break;
+      default:
+        break;
+    }
     return (
       <form className="form" onSubmit={handleSubmit}>
         <div className="modal__header">
@@ -152,24 +191,54 @@ class Action extends PureComponent {
               </div>
             </Col>
           </Row>
+          {modalData &&
+            <Fragment>
+              <hr />
+              <Row>
+                <Col md={6}>
+                  <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name_created}</span>
+                  <br />
+                  <span><i className="label-info-data">{messages['created-at']}:</i>{modalData.created_at}</span>
+                </Col>
+                {modalData.updated_at &&
+                  <Col md={6}>
+                    <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.full_name_updated}</span>
+                    <br />
+                    <span><i className="label-info-data">{messages['updated-at']}:</i>{modalData.updated_at}</span>
+                  </Col>
+                }
+              </Row>
+            </Fragment>
+          }
         </div>
         <ButtonToolbar className="modal__footer">
-          <Button outline onClick={this.toggleModal}>{messages['cancel']}</Button>{' '}
-          <Button color={className} type="submit">{messages['save']}</Button>
+          {this.state.modalType === MODAL_VIEW &&
+            <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
+          }
+          <Button color={className} type="submit">{ modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
         </ButtonToolbar>
       </form>
     );
   }
 }
 
+ActionForm.propTypes = {
+  modalData: PropTypes.object,
+  modalType: PropTypes.string,
+  handleSubmit: PropTypes.func.isRequired,
+  toggleRoleModal: PropTypes.func.isRequired,
+  changeTypeRoleModal: PropTypes.func.isRequired,
+}
+
+
 const mapStateToProps = ({ users }) => {
   const { role, permission } = users;
-  const { modalData } = role;
+  const { modalData, modalType } = users.permission;
   const permissions = permission.items;
   return {
     modalData,
+    modalType,
     permissions,
-    role
   }
 }
 
@@ -179,5 +248,6 @@ export default reduxForm({
 })(injectIntl(connect(mapStateToProps, {
   toggleRoleModal,
   getPermissionList,
-  getRoleListAll
-})(Action)));
+  getRoleListAll,
+  changeTypeRoleModal
+})(ActionForm)));

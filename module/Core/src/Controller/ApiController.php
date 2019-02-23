@@ -127,7 +127,7 @@ class ApiController extends AbstractRestfulController
                         $response->setStatusCode(200);
                         $jsonModelArr = [
                             $responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'],                             
-                            $config['ApiRequest']['responseFormat']['errorKey'] => -1,                            
+                            $config['ApiRequest']['responseFormat']['errorKey'] => 0,                            
                             $config['ApiRequest']['responseFormat']['messageKey'] => 'ACCESS_DENIED'
                         ];
                        } else{

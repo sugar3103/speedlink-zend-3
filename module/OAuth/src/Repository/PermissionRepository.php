@@ -42,7 +42,8 @@ class PermissionRepository extends EntityRepository
                  p.created_at,
                  p.status,
                  cr.username as created_by,
-                 CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name,
+                 CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
+                 CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated,
                  p.created_at,
                  up.username as updated_by,
                  p.updated_at"

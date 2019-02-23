@@ -59,8 +59,13 @@ legend.scheduler-border {
 }
 
 .master-data-list {
+    .btn-toolbar {
+        .form__form-group {
+            margin-bottom: 0px;
+        }    
+    }
     .form__form-group {
-        margin-bottom: 15px;
+        margin-bottom: 10px;
     }
     .products-list__search {
         svg {
@@ -177,4 +182,8 @@ form {
       transform: rotate(360deg);
     }
   }
-  
+  .access_denied {
+    text-align: center;
+    margin: 50px;
+    h1 { color: red; }
+  }

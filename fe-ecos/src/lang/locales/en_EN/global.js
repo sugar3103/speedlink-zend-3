@@ -45,5 +45,6 @@ module.exports = {
 
     'inbound': 'Inbound',
     'outbound': 'Outbound',
-    'domestic': 'Domestic'
+    'domestic': 'Domestic',
+    'ACCESS_DENIED': 'Access Denied'
 }
