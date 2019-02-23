@@ -2,7 +2,7 @@
 import React, { Component, Fragment} from 'react';
 import { Card, CardBody, Col, Button, Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
-import Item from './Item';
+
 import Table from '../../../containers/Shared/table/Table';
 import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
@@ -13,6 +13,7 @@ import { getZoneCodeList, toggleZoneCodeModal, deleteZoneCodeItem } from "../../
 import { confirmAlert } from 'react-confirm-alert';
 import ConfirmPicker from '../../../containers/Shared/picker/ConfirmPicker';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import { MODAL_VIEW } from '../../../constants/defaultValues';
 
 
 const ZoneCodeFormatter = ({ value }) => (
@@ -99,23 +100,6 @@ class List extends Component {
     this.props.getZoneCodeList(null, messages);
   }
 
-  showZoneCodeItem = (items) => {
-    const { messages } = this.props.intl;
-    let result = null;
-    if (items != null && items.length > 0) {
-      result = items.map((item, index) => {
-        return (
-          <Item key={index} zoneCode={item} />
-        );
-      })
-    } else {
-      result = (
-        <tr><td colSpan={8} className="text-center">{messages['no-result']}</td></tr>
-      );
-    }
-    return result;
-  };
-
   renderHeader = (selected) => {
     const { messages } = this.props.intl;
     const { modalOpen } = this.props.zoneCode;
@@ -149,62 +133,32 @@ class List extends Component {
       columns: [
         {
             Header: '#',
-            accessor: "#",
-            Cell: ({ original }) => {
-              return (
-               original.id
-              )
-            },
+            accessor: "id",
             sortable: false,
         },
         {
           Header: messages['zone_code.code'],
-          accessor: "zone_code.code",
-          Cell: ({ original }) => {
-            return (
-             original.code
-            )
-          },
+          accessor: "code",
           sortable: false,
         },
         {
-          Header: messages['zone_code.carrier'],
-          accessor: "zone_code.carrier",
-          Cell: ({ original }) => {
-            return (
-             original.carrier_code
-            )
-          },
+          Header: messages['pri_man.carrier'],
+          accessor: "carrier_code",
           sortable: false
         },
         {
-            Header: messages['zone_code.category'],
-            accessor: "zone_code.category",
-            Cell: ({ original }) => {
-              return (
-               original.category
-              )
-            },
+            Header: messages['pri_man.category'],
+            accessor: "category",
             sortable: false,
         },
         {
-            Header: messages['zone_code.service'],
-            accessor: "zone_code.service",
-            Cell: ({ original }) => {
-              return (
-               original.service_code
-              )
-            },
+            Header: messages['pri_man.service'],
+            accessor: "service_code",
             sortable: false,
         },
         {
-            Header: messages['zone_code.shipmenttype'],
-            accessor: "zone_code.shipmenttype",
-            Cell: ({ original }) => {
-              return (
-               original.shipmenttype_code
-              )
-            },
+            Header: messages['pri_man.shipment-type'],
+            accessor: "shipmenttype_code",
             sortable: false,
         },
         {
@@ -219,53 +173,28 @@ class List extends Component {
             sortable: false,
         },
         {
-            Header: messages['zone_code.customer'],
-            accessor: "zone_code.customer",
-            Cell: ({ original }) => {
-              return (
-               original.customer_name
-              )
-            },
+            Header: messages['pri_man.customer'],
+            accessor: "customer_name",
             sortable: false,
         },
         {
             Header: messages['zone_code.country_origin'],
-            accessor: "zone_code.country_origin",
-            Cell: ({ original }) => {
-              return (
-               original.origin_country_name
-              )
-            },
+            accessor: "origin_country_name",
             sortable: false,
         },
         {
           Header: messages['zone_code.city_origin'],
-          accessor: "zone_code.city_origin",
-          Cell: ({ original }) => {
-            return (
-             original.origin_city_name
-            )
-          },
+          accessor: "origin_city_name",
           sortable: false,
         },
         {
           Header: messages['zone_code.country_destination'],
-          accessor: "zone_code.country_destination",
-          Cell: ({ original }) => {
-            return (
-             original.destination_country_name
-            )
-          },
+          accessor: "destination_country_name",
           sortable: false,
         },
         {
           Header: messages['zone_code.city_destination'],
-          accessor: "zone_code.city_destination",
-          Cell: ({ original }) => {
-            return (
-             original.destination_city_name
-            )
-          },
+          accessor: "destination_city_name",
           sortable: false,
         },
         {
@@ -275,7 +204,7 @@ class List extends Component {
             Cell: ({ original }) => {
               return (
                 <Fragment>
-                  <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
+                  <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, MODAL_VIEW , original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
                   <Button color="danger" size="sm" onClick={(e) => this.onDelete(e, [original.id])}><span className="lnr lnr-trash" /></Button>
                 </Fragment>
               );

@@ -3,16 +3,17 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 
 import RangeWeight from './range-weight';
 import ZoneCode from './zone-code';
-import Management from './management';
+import Pricing from './pricing';
 
-const Pricing = ({ match }) => (
+const PricingManagement = ({ match }) => (
   <Fragment>
       <Switch>
-          <Route exact from={`${match.url}/`} component={Management} />
+          <Redirect exact from={`${match.url}/`} to={`${match.url}/pricing`} />
+          <Route path={`${match.url}/pricing`} component={Pricing} />
           <Route path={`${match.url}/range-weight`} component={RangeWeight} />     
           <Route path={`${match.url}/zone-code`} component={ZoneCode} />          
           <Redirect to="/error" />
       </Switch>
   </Fragment>
 );
-export default Pricing;
+export default PricingManagement;

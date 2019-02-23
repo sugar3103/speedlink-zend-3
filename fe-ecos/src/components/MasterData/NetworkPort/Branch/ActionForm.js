@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { Button, ButtonToolbar, Card, CardBody, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -394,12 +394,27 @@ class ActionForm extends PureComponent {
               </Card>
             </Col>
           </Row>
-          <Col md={12} lg={12} xl={12} xs={12}>
-            { modalData ?
-              <span><u>{ modalData.updated_by ? "Update at: "+modalData.updated_at : "Created at: "+modalData.created_at } 
-              &nbsp;- { modalData.updated_by ? "Update by: "+modalData.user_update_name : "Created by: "+modalData.user_create_name }</u></span>
-             : '' }
-            </Col>
+      <Col md={12} lg={12} xl={12} xs={12}>
+        {modalData &&
+            <Fragment>
+              <hr />
+              <Row>
+                <Col md={6}>
+                  <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.user_create_name}</span>
+                  <br />
+                  <span><i className="label-info-data">{messages['created-at']}:</i>{modalData.created_at}</span>
+                </Col>
+                {modalData.updated_at && 
+                  <Col md={6}>
+                    <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.user_update_name}</span>
+                    <br />
+                    <span><i className="label-info-data">{messages['updated-at']}:</i>{modalData.updated_at}</span>
+                  </Col>
+                }
+              </Row>
+            </Fragment>
+          }
+        </Col>
         </div>
         <ButtonToolbar className="modal__footer">
           {this.state.modalType === MODAL_VIEW &&

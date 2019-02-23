@@ -21,11 +21,7 @@ class ActionForm extends Component {
   toggleModal = () => {
     this.props.toggleCarrierModal();
   };
-  componentWillReceiveProps(nextProps) {
-      if (nextProps && nextProps.modalData) {
-      const data = nextProps.modalData;
-    }
-  }
+
   render() {
     const { messages } = this.props.intl;
     const { handleSubmit, modalData } = this.props;
