@@ -57,7 +57,7 @@ class Action extends Component {
 }
 
 Action.propTypes = {
-  modalType: PropTypes.object,
+  modalType: PropTypes.string,
   addRangeWeightItem: PropTypes.func.isRequired,
   updateRangeWeightItem: PropTypes.func.isRequired,
   toggleRangeWeightModal: PropTypes.func.isRequired,

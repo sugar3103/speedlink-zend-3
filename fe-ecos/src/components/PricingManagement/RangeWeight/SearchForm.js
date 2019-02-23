@@ -22,6 +22,15 @@ class SearchForm extends Component {
     this.props.getShipmentTypeCodeList();
     this.props.getCustomerList();
   }
+  
+  onChangeCategory = value => {
+    let params = {
+      type : "carrier_id",
+      category_code : value
+    }
+    console.log(value);
+    // this.props.getCodeByCondition(params);
+  }
 
   showOptionCarrier = (items) => {
     let result = [];
@@ -154,6 +163,7 @@ class SearchForm extends Component {
                 { value: 'Domestic', label: messages['domestic'] }
                 ]}
                 clearable={false}
+                onChange={this.onChangeCategory}
               />
             </div>
           </div>

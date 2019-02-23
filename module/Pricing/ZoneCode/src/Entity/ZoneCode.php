@@ -556,7 +556,7 @@ class ZoneCode
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getCustomerId()
     {
@@ -564,7 +564,7 @@ class ZoneCode
     }
 
     /**
-     * @param int $customer_id
+     * @param int|null $customer_id
      */
     public function setCustomerId($customer_id)
     {
