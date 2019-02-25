@@ -17,7 +17,9 @@ class SearchForm extends Component {
     this.state = {
       disabled: false,
       category_code: null,
-      carrier_id: null
+      carrier_id: null,
+      origin_ward: null
+      
     }
   }
   
@@ -34,22 +36,19 @@ class SearchForm extends Component {
         limit: 0
       },
       query: {
-        country: value
+        country: value ? value : 0
       }
     }
     this.props.getOriginCityList(params);
-    params = {
-      query: {
-        city: 0
-      }
-    }
-    this.props.getOriginDistrictList(params);
-    params = {
-      query: {
-        district: 0
-      }
-    }
-    this.props.getOriginWardList(params);
+    // params = {
+    //   query: {
+    //     city: 0
+    //   }
+    // }
+    // this.props.getOriginDistrictList(params);
+    this.props.change('origin_district',null);
+    this.props.change('origin_ward',null);
+   
   }
 
   onChangeOriginCity = value => {
@@ -59,16 +58,17 @@ class SearchForm extends Component {
         limit: 0
       },
       query: {
-        city: value
+        city:  value ? value : 0
       }
     }
     this.props.getOriginDistrictList(params);
-    params = {
-      query: {
-        district: 0
-      }
-    }
-    this.props.getOriginWardList(params);
+    // params = {
+    //   query: {
+    //     district: 0
+    //   }
+    // }
+    // this.props.getOriginWardList(params);
+    this.props.change('origin_ward',null);
   }
 
   onChangeOriginDistrict = value => {
@@ -78,10 +78,12 @@ class SearchForm extends Component {
         limit: 0
       },
       query: {
-        district: value
+        district:  value ? value : 0
       }
     }
-    this.props.getOriginWardList(params);
+   
+    if(value)  this.props.getOriginWardList(params); 
+    else this.props.change('origin_ward',null);
   }
 
   onChangeDestinationCountry = value => {
