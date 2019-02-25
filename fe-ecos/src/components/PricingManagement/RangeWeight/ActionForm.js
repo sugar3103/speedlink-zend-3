@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Button, ButtonToolbar, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleRangeWeightModal, changeTypeRangeWeightModal, getCarrierCodeList, getServiceCodeList, getShipmentTypeCodeList, getCustomerList  } from '../../../redux/actions';
+import { toggleRangeWeightModal, changeTypeRangeWeightModal, getCarrierCodeByCondition, getServiceCodeByCondition, getShipmentTypeCodeByCondition , getCustomerList  } from '../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../containers/Shared/form/CustomField';
 import renderSelectField from '../../../containers/Shared/form/Select';
@@ -16,7 +16,9 @@ class ActionForm extends Component {
     super(props);
     this.state = {
       modalType: '',
-      disabled: false
+      disabled: false,
+      category_code: null,
+      carrier_id: null
     }
   }
 
@@ -25,14 +27,17 @@ class ActionForm extends Component {
     
     if (data) {
       this.props.initialize(data);
-      this.props.getCarrierCodeList();
-      this.props.getServiceCodeList();
-      this.props.getShipmentTypeCodeList();
+ 
       this.props.getCustomerList();
       if(data.is_private === 1)
       {
         this.setState({
           disabled: true
+        });
+      }
+      if(data.category){
+        this.setState({
+          category_code: data.category
         });
       }
     } else {
@@ -44,6 +49,33 @@ class ActionForm extends Component {
       };
       this.props.initialize(data);
     }
+    if (data && data.carrier_id) {
+      let paramsCarier = {
+        type : "carrier_id",
+        category_code : data.category
+      }
+      this.props.getCarrierCodeByCondition(paramsCarier);
+    }
+
+    if (data && data.service_id) {
+      let paramsCity = {
+        type : "service_id",
+        carrier_id : data.carrier_id,
+        category_code :  data.category
+      }
+      this.props.getServiceCodeByCondition(paramsCity);
+    }
+
+    if (data && data.shipment_type_id) {
+      let paramsShipmenttype = {
+        type : "shipment_type_id",
+        category_code : data.category,
+        carrier_id :  data.carrier_id,
+        service_id : [ data.service_id ]
+      }
+      this.props.getShipmentTypeCodeByCondition(paramsShipmenttype);
+    }
+
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -54,15 +86,96 @@ class ActionForm extends Component {
     }
   }
 
-  showOptionsCarrier = (items) => {
-    const carriers = items.map(item => {
-      return {
-        'value': item.id,
-        'label': item.code
-      }
+  onChangeCategory = value => {
+    this.setState({
+      category_code: value
     });
-    return carriers;
+    let params = {
+      type : "carrier_id",
+      category_code : value
+    }
+    this.props.getCarrierCodeByCondition(params);
+    params = {
+      type : "carrier_id",
+      category_code : value,
+      carrier_id: 0
+    }
+    this.props.getServiceCodeByCondition(params);
+    params = {
+      type : "carrier_id",
+      category_code : value,
+      carrier_id: 0,
+      service_id: [0]
+    }
+    this.props.getShipmentTypeCodeByCondition(params);
   }
+
+  onChangeCarrier = value => {
+    this.setState({
+      carrier_id: value
+    });
+    let params = {
+      type : "service_id",
+      carrier_id : value,
+      category_code : this.state.category_code
+    }
+    this.props.getServiceCodeByCondition(params);
+    params = {
+      type : "carrier_id",
+      category_code : value,
+      carrier_id: 0,
+      service_id: [0]
+    }
+    this.props.getShipmentTypeCodeByCondition(params);
+  }
+
+  onChangeService = value => {
+    let params = {
+      type : "shipment_type_id",
+      category_code : this.state.category_code,
+      carrier_id : this.state.carrier_id,
+      service_id : [ value ] 
+    }
+    this.props.getShipmentTypeCodeByCondition(params);
+  }
+
+  showOptionCarrier = (items) => {
+    let result = [];
+    if (items.length > 0) {
+      result = items.map(item => {
+        return {
+          value: item.carrier_id,
+          label: item.carrier_code
+        }
+      })
+    }
+    return result;
+  }
+  showOptionService = (items) => {
+    let result = [];
+    if (items.length > 0) {
+      result = items.map(item => {
+        return {
+          value: item.service_id,
+          label: item.service_code
+        }
+      })
+    }
+    return result;
+  }
+  showOptionShipmenttype = (items) => {
+    let result = [];
+    if (items.length > 0) {
+      result = items.map(item => {
+        return {
+          value: item.shipment_type_id,
+          label: item.shipment_type_code
+        }
+      })
+    }
+    return result;
+  }
+  
 
   showOptionsCustomer = (items) => {
     const customers = items.map(item => {
@@ -72,26 +185,6 @@ class ActionForm extends Component {
       }
     });
     return customers;
-  }
-
-  showOptionsService = (items) => {
-    const services = items.map(item => {
-      return {
-        'value': item.id,
-        'label': item.code
-      }
-    });
-    return services;
-  }
-
-  showOptionsShipmenttype = (items) => {
-    const shipmenttypes = items.map(item => {
-      return {
-        'value': item.id,
-        'label': item.code
-      }
-    });
-    return shipmenttypes;
   }
 
   hanldeChangeType = value => {
@@ -120,7 +213,7 @@ class ActionForm extends Component {
 
   render() {
     const { messages } = this.props.intl;
-    const { handleSubmit, modalData, modalType, carrierCode, serviceCode, shipment_typeCode, customerCode } = this.props;
+    const { handleSubmit, modalData, modalType, CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition, customerCode } = this.props;
     let className = 'success';
     let title = messages['range_weight.add-new'];
     const disabled = modalType === MODAL_VIEW ? true : false;
@@ -199,7 +292,8 @@ class ActionForm extends Component {
             </div>
         </div>
         </Col>
-        
+        </Row>
+        <Row>
         <Col md={6} lg={3} xl={3} xs={6}>
         <div className="form__form-group">
           <span className="form__form-group-label">{messages['pri_man.category']}</span>
@@ -212,10 +306,12 @@ class ActionForm extends Component {
                 ]}
                 messages={messages}
                 disabled={disabled} 
+                onChange={this.onChangeCategory}
               />
           </div>
         </div>
         </Col>  
+        
         <Col md={6} lg={3} xl={3} xs={6}>
         <div className="form__form-group">
           <span className="form__form-group-label">{messages['pri_man.carrier']}</span>
@@ -225,9 +321,10 @@ class ActionForm extends Component {
               name="carrier_id"
               component={renderSelectField}
               type="text"
-              options={carrierCode && this.showOptionsCarrier(carrierCode)}
               messages={messages}
               disabled={disabled} 
+              options={CarrierCodeByCondition && this.showOptionCarrier(CarrierCodeByCondition)}
+              onChange={this.onChangeCarrier}
             />
           </div>
         </div>
@@ -241,7 +338,8 @@ class ActionForm extends Component {
                 name="service_id"
                 component={renderSelectField}
                 type="text"
-                options={serviceCode && this.showOptionsService(serviceCode)}
+                options={ServiceCodeByCondition && this.showOptionService(ServiceCodeByCondition)}
+                onChange={this.onChangeService}
                 messages={messages}
                 disabled={disabled} 
               />
@@ -258,13 +356,15 @@ class ActionForm extends Component {
               name="shipment_type_id"
               component={renderSelectField}
               type="text"
-              options={shipment_typeCode && this.showOptionsShipmenttype(shipment_typeCode)}
+              options={codeByCondition && this.showOptionShipmenttype(codeByCondition)}
               messages={messages}
               disabled={disabled} 
             />
           </div>
         </div>
         </Col>
+        </Row>
+        <Row>
         <Col md={6} lg={3} xl={3} xs={6}>
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['pri_man.from']}</span>
@@ -306,7 +406,7 @@ class ActionForm extends Component {
           </div>
           </Col>
 
-          <Col md={6} lg={3} xl={3} xs={6}>
+        <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
               <span className="form__form-group-label">{messages['range_weight.unit']}</span>
               <span className="text-danger">{'*'}</span>
@@ -318,6 +418,8 @@ class ActionForm extends Component {
               </div>
             </div>
           </Col>
+        </Row>
+        <Row>
         <Col md={12} lg={6} xl={6} xs={12}>
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['range_weight.desc']}</span>
@@ -366,7 +468,7 @@ class ActionForm extends Component {
           </div>
         </div>
         </Col>
-        <Col md={12} lg={12} xl={12} xs={12}>
+      <Col md={12} lg={12} xl={12} xs={12}>
         {modalData &&
             <Fragment>
               <hr />
@@ -403,29 +505,25 @@ class ActionForm extends Component {
 ActionForm.propTypes = {
   modalData: PropTypes.object,
   modalType: PropTypes.string,
-  carrierCode: PropTypes.array,
-  serviceCode: PropTypes.array,
-  shipment_typeCode: PropTypes.array,
+  codeByCondition: PropTypes.array,
+  CarrierCodeByCondition: PropTypes.array,
+  ServiceCodeByCondition: PropTypes.array,
   customerCode: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,
   toggleRangeWeightModal: PropTypes.func.isRequired,
-  getCarrierCodeList: PropTypes.func.isRequired,
-  getServiceCodeList: PropTypes.func.isRequired,
-  getShipmentTypeCodeList: PropTypes.func.isRequired,
   getCustomerList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({rangeWeight, carrier, service, shipment_type, customer}) => {  
+const mapStateToProps = ({rangeWeight, shipment_type, customer}) => {  
   const { errors, modalData, modalType } = rangeWeight;
-  const carrierCode = carrier.codes;
-  const serviceCode = service.codes;
-  const shipment_typeCode = shipment_type.codes;
+  const { CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition  } = shipment_type;
   const customerCode = customer.items;
   return {
     errors,
     modalData,
     modalType,
-    carrierCode, serviceCode, shipment_typeCode, customerCode
+    customerCode,
+    CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition 
   };
 };
 
@@ -434,9 +532,9 @@ export default reduxForm({
   validate
 })(injectIntl(connect(mapStateToProps, {
   toggleRangeWeightModal,
-  getCarrierCodeList,
-  getServiceCodeList,
-  getShipmentTypeCodeList,
+  getCarrierCodeByCondition,
+  getServiceCodeByCondition,
+  getShipmentTypeCodeByCondition,
   getCustomerList,
   changeTypeRangeWeightModal
 })(ActionForm)));

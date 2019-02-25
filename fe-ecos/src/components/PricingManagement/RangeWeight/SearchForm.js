@@ -5,31 +5,74 @@ import renderSelectField from '../../../containers/Shared/form/Select';
 import { Button, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { getCarrierCodeList, getServiceCodeList, getShipmentTypeCodeList, getCustomerList   } from "../../../redux/actions";
+import { getCustomerList, getCarrierCodeByCondition, getServiceCodeByCondition, getShipmentTypeCodeByCondition   } from "../../../redux/actions";
 
 class SearchForm extends Component {
 
   constructor(props){
     super(props);
     this.state = {
-      disabled: false
+      disabled: false,
+      category_code: null,
+      carrier_id: null
     }
   }
 
   componentDidMount() {
-    this.props.getCarrierCodeList();
-    this.props.getServiceCodeList();
-    this.props.getShipmentTypeCodeList();
     this.props.getCustomerList();
   }
   
   onChangeCategory = value => {
+    this.setState({
+      category_code: value
+    });
     let params = {
       type : "carrier_id",
       category_code : value
     }
-    console.log(params);
-    // this.props.getCodeByCondition(params);
+    this.props.getCarrierCodeByCondition(params);
+    params = {
+      type : "carrier_id",
+      category_code : value,
+      carrier_id: 0
+    }
+    this.props.getServiceCodeByCondition(params);
+    params = {
+      type : "carrier_id",
+      category_code : value,
+      carrier_id: 0,
+      service_id: [0]
+    }
+    this.props.getShipmentTypeCodeByCondition(params);
+  }
+
+  onChangeCarrier = value => {
+    this.setState({
+      carrier_id: value
+    });
+    let params = {
+      type : "service_id",
+      carrier_id : value,
+      category_code : this.state.category_code
+    }
+    this.props.getServiceCodeByCondition(params);
+    params = {
+      type : "carrier_id",
+      category_code : value,
+      carrier_id: 0,
+      service_id: [0]
+    }
+    this.props.getShipmentTypeCodeByCondition(params);
+  }
+
+  onChangeService = value => {
+    let params = {
+      type : "shipment_type_id",
+      category_code : this.state.category_code,
+      carrier_id : this.state.carrier_id,
+      service_id : [ value ] 
+    }
+    this.props.getShipmentTypeCodeByCondition(params);
   }
 
   showOptionCarrier = (items) => {
@@ -37,8 +80,8 @@ class SearchForm extends Component {
     if (items.length > 0) {
       result = items.map(item => {
         return {
-          value: item.id,
-          label: item.code
+          value: item.carrier_id,
+          label: item.carrier_code
         }
       })
     }
@@ -49,8 +92,8 @@ class SearchForm extends Component {
     if (items.length > 0) {
       result = items.map(item => {
         return {
-          value: item.id,
-          label: item.code
+          value: item.service_id,
+          label: item.service_code
         }
       })
     }
@@ -61,8 +104,8 @@ class SearchForm extends Component {
     if (items.length > 0) {
       result = items.map(item => {
         return {
-          value: item.id,
-          label: item.code
+          value: item.shipment_type_id,
+          label: item.shipment_type_code
         }
       })
     }
@@ -95,7 +138,7 @@ class SearchForm extends Component {
 
 
   render() {
-    const { handleSubmit, reset, carrierCode, serviceCode, shipment_typeCode, customerCode } = this.props;
+    const { handleSubmit, reset,  customerCode, CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition } = this.props;
     const { messages } = this.props.intl;
     return (
       <form className="form" onSubmit={handleSubmit}>
@@ -173,7 +216,8 @@ class SearchForm extends Component {
             <span className="form__form-group-label">{messages['pri_man.carrier']}</span>
             <div className="form__form-group-field">
               <Field name="carrier_id" component={renderSelectField} type="text"
-                     options={carrierCode && this.showOptionCarrier(carrierCode)}/>
+                     options={CarrierCodeByCondition && this.showOptionCarrier(CarrierCodeByCondition)}
+                     onChange={this.onChangeCarrier} />
             </div>
           </div>
         </Col>
@@ -183,7 +227,9 @@ class SearchForm extends Component {
             <span className="form__form-group-label">{messages['pri_man.service']}</span>
             <div className="form__form-group-field">
               <Field name="service_id" component={renderSelectField} type="text"
-                     options={serviceCode && this.showOptionService(serviceCode)}/>
+                     options={ServiceCodeByCondition && this.showOptionService(ServiceCodeByCondition)}
+                     onChange={this.onChangeService}
+                     />
             </div>
           </div>
         </Col>    
@@ -193,11 +239,11 @@ class SearchForm extends Component {
             <span className="form__form-group-label">{messages['pri_man.shipment-type']}</span>
             <div className="form__form-group-field">
               <Field name="shipmenttype" component={renderSelectField} type="text"
-                     options={shipment_typeCode && this.showOptionShipmenttype(shipment_typeCode)}/>
+                     options={codeByCondition && this.showOptionShipmenttype(codeByCondition)}
+                     />
             </div>
           </div>
         </Col>       
-
         
         <Col md={3}>
           <div className="form__form-group">
@@ -261,20 +307,21 @@ class SearchForm extends Component {
 
 SearchForm.propTypes = {
   carrierCode: PropTypes.array,
-  getCarrierCodeList: PropTypes.func.isRequired,
-  getServiceCodeList: PropTypes.func.isRequired,
-  getShipmentTypeCodeList: PropTypes.func.isRequired,
+  codeByCondition: PropTypes.array,
+  CarrierCodeByCondition: PropTypes.array,
+  ServiceCodeByCondition: PropTypes.array,
   getCustomerList: PropTypes.func.isRequired,
+  getCarrierCodeByCondition: PropTypes.func.isRequired,
+  getServiceCodeByCondition: PropTypes.func.isRequired,
+  getShipmentTypeCodeByCondition: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ carrier, service, shipment_type, customer }) => {
-  const carrierCode = carrier.codes;
-  const serviceCode = service.codes;
-  const shipment_typeCode = shipment_type.codes;
+const mapStateToProps = ({ shipment_type, customer }) => {
+  const { CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition  } = shipment_type;
   const customerCode = customer.items;
-  return { carrierCode, serviceCode, shipment_typeCode, customerCode }
+  return { customerCode, CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition }
 }
 
 export default reduxForm({
@@ -288,8 +335,8 @@ export default reduxForm({
     calculate_unit: -1
   }
 })(injectIntl(connect(mapStateToProps, {
-  getCarrierCodeList,
-  getServiceCodeList,
-  getShipmentTypeCodeList,
-  getCustomerList
+  getCustomerList,
+  getCarrierCodeByCondition,
+  getServiceCodeByCondition,
+  getShipmentTypeCodeByCondition
 })(SearchForm)));
