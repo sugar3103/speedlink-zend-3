@@ -44,20 +44,6 @@ class Pricing
     /**
      * @var int
      *
-     * @ORM\Column(name="service_id", type="integer", nullable=false)
-     */
-    private $service_id;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="shipment_type_id", type="integer", nullable=false)
-     */
-    private $shipment_type_id;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="origin_country_id", type="integer", nullable=false)
      */
     private $origin_country_id;
@@ -197,13 +183,6 @@ class Pricing
 
     /**
      *
-     * @ORM\OneToOne(targetEntity="\ServiceShipment\Entity\Service")
-     * @ORM\JoinColumn(name="shipment_type_id", referencedColumnName="id", nullable=true)
-     */
-    private $join_service;
-
-    /**
-     *
      * @ORM\OneToOne(targetEntity="\Address\Entity\Country")
      * @ORM\JoinColumn(name="origin_country_id", referencedColumnName="id", nullable=true)
      */
@@ -229,41 +208,6 @@ class Pricing
      * @ORM\JoinColumn(name="origin_ward_id", referencedColumnName="id", nullable=true)
      */
     private $join_origin_ward;
-
-    /**
-     *
-     * @ORM\OneToOne(targetEntity="\Address\Entity\Country")
-     * @ORM\JoinColumn(name="destination_country_id", referencedColumnName="id", nullable=true)
-     */
-    private $join_destination_country;
-
-    /**
-     *
-     * @ORM\OneToOne(targetEntity="\Address\Entity\City")
-     * @ORM\JoinColumn(name="destination_city_id", referencedColumnName="id", nullable=true)
-     */
-    private $join_destination_city;
-
-    /**
-     *
-     * @ORM\OneToOne(targetEntity="\Address\Entity\District")
-     * @ORM\JoinColumn(name="destination_district_id", referencedColumnName="id", nullable=true)
-     */
-    private $join_destination_district;
-
-    /**
-     *
-     * @ORM\OneToOne(targetEntity="\Address\Entity\Ward")
-     * @ORM\JoinColumn(name="destination_ward_id", referencedColumnName="id", nullable=true)
-     */
-    private $join_destination_ward;
-
-    /**
-     *
-     * @ORM\OneToOne(targetEntity="\ServiceShipment\Entity\ShipmentType")
-     * @ORM\JoinColumn(name="shipment_type_id", referencedColumnName="id", nullable=true)
-     */
-    private $join_shipment_type;
 
     /**
      *
@@ -362,38 +306,6 @@ class Pricing
     public function setCategoryCode($category_code)
     {
         $this->category_code = $category_code;
-    }
-
-    /**
-     * @return int
-     */
-    public function getServiceId()
-    {
-        return $this->service_id;
-    }
-
-    /**
-     * @param int $service_id
-     */
-    public function setServiceId($service_id)
-    {
-        $this->service_id = $service_id;
-    }
-
-    /**
-     * @return int
-     */
-    public function getShipmentTypeId()
-    {
-        return $this->shipment_type_id;
-    }
-
-    /**
-     * @param int $shipment_type_id
-     */
-    public function setShipmentTypeId($shipment_type_id)
-    {
-        $this->shipment_type_id = $shipment_type_id;
     }
 
     /**
@@ -719,22 +631,6 @@ class Pricing
     /**
      * @return mixed
      */
-    public function getJoinService()
-    {
-        return $this->join_service;
-    }
-
-    /**
-     * @param mixed $join_service
-     */
-    public function setJoinService($join_service)
-    {
-        $this->join_service = $join_service;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getJoinOriginCountry()
     {
         return $this->join_origin_country;
@@ -794,86 +690,6 @@ class Pricing
     public function setJoinOriginWard($join_origin_ward)
     {
         $this->join_origin_ward = $join_origin_ward;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getJoinDestinationCountry()
-    {
-        return $this->join_destination_country;
-    }
-
-    /**
-     * @param mixed $join_destination_country
-     */
-    public function setJoinDestinationCountry($join_destination_country)
-    {
-        $this->join_destination_country = $join_destination_country;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getJoinDestinationCity()
-    {
-        return $this->join_destination_city;
-    }
-
-    /**
-     * @param mixed $join_destination_city
-     */
-    public function setJoinDestinationCity($join_destination_city)
-    {
-        $this->join_destination_city = $join_destination_city;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getJoinDestinationDistrict()
-    {
-        return $this->join_destination_district;
-    }
-
-    /**
-     * @param mixed $join_destination_district
-     */
-    public function setJoinDestinationDistrict($join_destination_district)
-    {
-        $this->join_destination_district = $join_destination_district;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getJoinDestinationWard()
-    {
-        return $this->join_destination_ward;
-    }
-
-    /**
-     * @param mixed $join_destination_ward
-     */
-    public function setJoinDestinationWard($join_destination_ward)
-    {
-        $this->join_destination_ward = $join_destination_ward;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getJoinShipmentType()
-    {
-        return $this->join_shipment_type;
-    }
-
-    /**
-     * @param mixed $join_shipment_type
-     */
-    public function setJoinShipmentType($join_shipment_type)
-    {
-        $this->join_shipment_type = $join_shipment_type;
     }
 
     /**

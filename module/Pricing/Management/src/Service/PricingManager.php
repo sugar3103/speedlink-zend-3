@@ -10,8 +10,6 @@ use Management\Entity\Pricing;
 use Doctrine\ORM\EntityManager;
 use OAuth\Entity\User;
 use ServiceShipment\Entity\Carrier;
-use ServiceShipment\Entity\Service;
-use ServiceShipment\Entity\ShipmentType;
 
 /**
  * @package Management\Service
@@ -32,6 +30,13 @@ class PricingManager {
         $this->entityManager = $entityManager;
     }
 
+    /** set objects to update and insert
+     * @param Pricing $pricing
+     * @param $data
+     * @param $user
+     * @param string $mode
+     * @throws \Exception
+     */
     private function getReferenced(&$pricing, $data, $user, $mode = '')
     {
         $user_data = $this->entityManager->getRepository(User::class)->find($user->id);
@@ -61,38 +66,26 @@ class PricingManager {
         }
         $pricing->setJoinCarrier($carrier);
 
-        $service = $this->entityManager->getRepository(Service::class)->find($data['service_id']);
-        if ($service == null) {
-            throw new \Exception('Not found Service Code');
-        }
-        $pricing->setJoinService($service);
-
-        $shipment_type = $this->entityManager->getRepository(ShipmentType::class)->find($data['shipment_type_id']);
-        if ($shipment_type == null) {
-            throw new \Exception('Not found Shipment Type');
-        }
-        $pricing->setJoinService($shipment_type);
-
         $origin_country = $this->entityManager->getRepository(City::class)->find($data['origin_country_id']);
-        if ($shipment_type == null) {
+        if ($origin_country == null) {
             throw new \Exception('Not found Origin Country');
         }
         $pricing->setJoinOriginCountry($origin_country);
 
         $origin_city = $this->entityManager->getRepository(City::class)->find($data['origin_city_id']);
-        if ($shipment_type == null) {
+        if ($origin_city == null) {
             throw new \Exception('Not found Origin City');
         }
         $pricing->setJoinOriginCity($origin_city);
 
         $origin_district = $this->entityManager->getRepository(City::class)->find($data['origin_district_id']);
-        if ($shipment_type == null) {
+        if ($origin_district == null) {
             throw new \Exception('Not found Origin District');
         }
         $pricing->setJoinOriginDistrict($origin_district);
 
         $origin_ward = $this->entityManager->getRepository(City::class)->find($data['origin_ward_id']);
-        if ($shipment_type == null) {
+        if ($origin_ward == null) {
             throw new \Exception('Not found Origin Ward');
         }
         $pricing->setJoinOriginWard($origin_ward);
@@ -147,9 +140,7 @@ class PricingManager {
             $pricing = new Pricing();
             $pricing->setName($data['name']);
             $pricing->setCarrierId($data['carrier_id']);
-            $pricing->setServiceId($data['service_id']);
             $pricing->setCategoryCode($data['category_code']);
-            $pricing->setShipmentTypeId($data['shipment_type_id']);
             $pricing->setOriginCountryId($data['origin_country_id']);
             $pricing->setOriginCityId($data['origin_city_id']);
             $pricing->setOriginDistrictId($data['origin_district_id']);
@@ -184,7 +175,7 @@ class PricingManager {
     /**
      * Update Pricing
      *
-     * @param $pricing
+     * @param Pricing $pricing
      * @param $data
      * @param $user
      * @return Pricing|bool
@@ -197,9 +188,7 @@ class PricingManager {
         try {
             $pricing->setName($data['name']);
             $pricing->setCarrierId($data['carrier_id']);
-            $pricing->setServiceId($data['service_id']);
             $pricing->setCategoryCode($data['category_code']);
-            $pricing->setShipmentTypeId($data['shipment_type_id']);
             $pricing->setOriginCountryId($data['origin_country_id']);
             $pricing->setOriginCityId($data['origin_city_id']);
             $pricing->setOriginDistrictId($data['origin_district_id']);
@@ -232,7 +221,7 @@ class PricingManager {
     /**
      * Remove Pricing
      *
-     * @param $pricing
+     * @param Pricing $pricing
      * @return Pricing|bool
      * @throws \Exception
      */
