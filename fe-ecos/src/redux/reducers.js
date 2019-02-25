@@ -10,6 +10,7 @@ import users from './system/users/reducers';
 import rangeWeight from './pricing-management/range-weight/reducer';
 import zoneCode from './pricing-management/zone-code/reducer';
 import customer from './pricing-management/customer/reducer';
+import pricing from './pricing-management/pricing/reducer';
 import carrier from './master-data/service-shipment/carrier/reducer';
 import service from './master-data/service-shipment/service/reducer';
 import shipment_type from './master-data/service-shipment/shipmnet-type/reducer';
@@ -30,7 +31,8 @@ const reducers = combineReducers({
   branch,
   rangeWeight,
   zoneCode,
-  customer
+  customer,
+  pricing
 });
 
 export default reducers;

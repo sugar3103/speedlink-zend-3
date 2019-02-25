@@ -26,7 +26,6 @@ export const getRoleList = (params) => ({
   payload: params
 });
 
-
 export const getRoleListAll = (params) => ({
   type: ROLE_GET_LIST_ALL,
   payload: params
@@ -57,9 +56,9 @@ export const addRoleItemError = (error) => ({
   payload: error
 });
 
-export const updateRoleItem = (item) => ({
+export const updateRoleItem = (item, messages) => ({
   type: ROLE_UPDATE_ITEM,
-  payload: item
+  payload: {item, messages }
 });
 
 export const updateRoleItemSuccess = () => ({

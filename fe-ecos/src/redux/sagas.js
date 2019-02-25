@@ -11,6 +11,7 @@ import wardSagas from './master-data/address/ward/saga';
 import rangeweightSagas from './pricing-management/range-weight/saga';
 import zonecodeSagas from './pricing-management/zone-code/saga';
 import customerSagas from './pricing-management/customer/saga';
+import pricingSagas from './pricing-management/pricing/saga';
 import carrierSagas from './master-data/service-shipment/carrier/saga';
 import serviceSagas from './master-data/service-shipment/service/saga';
 import shipmentTypeSagas from './master-data/service-shipment/shipmnet-type/saga';
@@ -36,6 +37,7 @@ export default function* rootSaga() {
     rangeweightSagas(),
     zonecodeSagas(),
     customerSagas(),
+    pricingSagas(),
     carrierSagas(),
     serviceSagas(),
     shipmentTypeSagas(),

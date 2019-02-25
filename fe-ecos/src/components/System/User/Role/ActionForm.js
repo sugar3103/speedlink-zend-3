@@ -1,19 +1,21 @@
-import React, { PureComponent,Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { Button, ButtonToolbar, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleRoleModal, getPermissionList, getRoleListAll,changeTypeRoleModal } from '../../../../redux/actions';
+import { toggleRoleModal, getPermissionList, getRoleListAll, changeTypeRoleModal } from '../../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import { MODAL_ADD, MODAL_VIEW, MODAL_EDIT } from '../../../../constants/defaultValues';
 import renderRadioButtonField from '../../../../containers/Shared/form/RadioButton';
 import CustomField from '../../../../containers/Shared/form/CustomField';
+import renderMultiSelectField from '../../../../containers/Shared/form/MultiSelect';
 import CheckBoxGroup from '../../../../containers/Shared/form/CheckBoxGroup';
 import PropTypes from 'prop-types';
+import Moment from 'react-moment';
 
 import validate from './validateActionForm';
 
 class ActionForm extends PureComponent {
-  
+
   constructor() {
     super();
     this.state = {
@@ -33,8 +35,8 @@ class ActionForm extends PureComponent {
     //Paran Role
     this.props.getRoleListAll(param);
 
-    const data = this.props.modalData;    
-    
+    const data = this.props.modalData;
+
     if (data) {
       this.props.initialize(data);
     }
@@ -56,9 +58,26 @@ class ActionForm extends PureComponent {
           value: item.id,
           label: item.name
         }
+
       })
     }
     return result;
+  }
+
+  showOptions = (items) => {
+    const data = this.props.modalData;
+    
+    if (data && items.length > 0) {
+      const roles = items.filter(item => item.id !== data.id).map(item => {
+        return {
+          'value': item.id,
+          'label': item.name
+        }
+
+      });
+      return roles;
+    }
+   
   }
 
   toggleModal = () => {
@@ -70,9 +89,9 @@ class ActionForm extends PureComponent {
   }
 
   render() {
-    const { messages } = this.props.intl;
-    const { handleSubmit, modalData, modalType,permissions } = this.props;
-    
+    const { messages, locale } = this.props.intl;
+    const { handleSubmit, modalData, modalType, permissions, role } = this.props;
+
     let className = 'success';
     let title = messages['role.add-new'];
     const disabled = modalType === MODAL_VIEW ? true : false;
@@ -113,6 +132,7 @@ class ActionForm extends PureComponent {
                     type="text"
                     placeholder={messages['role.name']}
                     messages={messages}
+                    disabled={disabled}
                   />
                 </div>
                 <div className="form__form-group-field">
@@ -125,6 +145,7 @@ class ActionForm extends PureComponent {
                     type="text"
                     placeholder={messages['role.name']}
                     messages={messages}
+                    disabled={disabled}
                   />
                 </div>
               </div>
@@ -140,6 +161,7 @@ class ActionForm extends PureComponent {
                     type="text"
                     placeholder={messages['description']}
                     messages={messages}
+                    disabled={disabled}
                   />
 
                 </div>
@@ -153,7 +175,21 @@ class ActionForm extends PureComponent {
                     type="text"
                     placeholder={messages['description']}
                     messages={messages}
+                    disabled={disabled}
                   />
+                </div>
+                <div className="form__form-group">
+                  <span className="form__form-group-label">{messages['role.inherit-roles']}</span>
+                  <div className="form__form-group-field">
+                    <Field
+                      name="inherit_roles"
+                      component={renderMultiSelectField}
+                      options={role.items && this.showOptions(role.items)}
+                      messages={messages}
+                      disabled={disabled}
+                      placeholder={messages['please-select']}
+                    />
+                  </div>
                 </div>
               </div>
             </Col>
@@ -162,10 +198,11 @@ class ActionForm extends PureComponent {
                 <span className="form__form-group-label">{messages['permission.list']}</span>
                 <div className="form__form-group-field">
                   {permissions &&
-                    <CheckBoxGroup 
-                      name="inherit_roles" 
-                      options={this.showPermissionOption(permissions)} 
+                    <CheckBoxGroup
+                      name="permissions"
+                      options={this.showPermissionOption(permissions)}
                       messages={messages}
+                      disabled={disabled}
                     />
                   }
                 </div>
@@ -179,12 +216,14 @@ class ActionForm extends PureComponent {
                     label={messages['active']}
                     radioValue={1}
                     defaultChecked
+                    disabled={disabled}
                   />
                   <Field
                     name="status"
                     component={renderRadioButtonField}
                     label={messages['inactive']}
                     radioValue={0}
+                    disabled={disabled}
                   />
                 </div>
               </div>
@@ -197,13 +236,18 @@ class ActionForm extends PureComponent {
                 <Col md={6}>
                   <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name_created}</span>
                   <br />
-                  <span><i className="label-info-data">{messages['created-at']}:</i>{modalData.created_at}</span>
+                  <span><i className="label-info-data">{messages['created-at']}:</i>
+                    <Moment fromNow locale={locale}>{new Date(modalData.created_at)}</Moment>
+                  </span>
                 </Col>
                 {modalData.updated_at &&
                   <Col md={6}>
                     <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.full_name_updated}</span>
                     <br />
-                    <span><i className="label-info-data">{messages['updated-at']}:</i>{modalData.updated_at}</span>
+                    <span><i className="label-info-data">{messages['updated-at']}:</i>
+                      <Moment fromNow locale={locale}>{new Date(modalData.updated_at)}</Moment>
+
+                    </span>
                   </Col>
                 }
               </Row>
@@ -214,7 +258,7 @@ class ActionForm extends PureComponent {
           {this.state.modalType === MODAL_VIEW &&
             <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
           }
-          <Button color={className} type="submit">{ modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
+          <Button color={className} type="submit">{modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
         </ButtonToolbar>
       </form>
     );
@@ -231,13 +275,14 @@ ActionForm.propTypes = {
 
 
 const mapStateToProps = ({ users }) => {
-  const { role, permission } = users;  
+  const { role, permission } = users;
   const { modalData, modalType } = role;
   const permissions = permission.items;
   return {
     modalData,
     modalType,
-    permissions    
+    permissions,
+    role
   }
 }
 

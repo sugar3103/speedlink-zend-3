@@ -312,7 +312,7 @@ class ApiController extends AbstractRestfulController
         $authManager = $event->getApplication()->getServiceManager()->get(AuthManager::class);        
         
         $authManager->login($this->tokenPayload->username, $this->tokenPayload->password,$this->tokenPayload->remember_me);
-
+        
         if($authManager->filterAccess($controllerName, $actionName)  == AuthManager::ACCESS_DENIED) {
             // redirect the user to the "Not Authorized" page.
             return false;

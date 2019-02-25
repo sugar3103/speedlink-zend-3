@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { Modal } from 'reactstrap';
 import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
-import { addUserItem, updateUserItem, toggleUserModal } from '../../../redux/actions';
+import { addUserItem, updateUserItem, toggleUserModal,changeTypeUserModal } from '../../../redux/actions';
 import { injectIntl } from 'react-intl';
+import { MODAL_EDIT, MODAL_ADD, MODAL_VIEW } from '../../../constants/defaultValues';
+import PropTypes from 'prop-types';
 class Action extends Component {
 
   handleSubmit = values => {
@@ -11,10 +13,20 @@ class Action extends Component {
       values.roles = values.roles.split(',');
     } 
     const { messages } = this.props.intl;
-    if (values.id) {
-      this.props.updateUserItem(values,messages);
-    } else {
-      this.props.addUserItem(values,messages);
+    const { modalType } = this.props;
+
+    switch (modalType) {
+      case MODAL_ADD:
+        this.props.addUserItem(values, messages);
+        break;
+      case MODAL_EDIT:
+        this.props.updateUserItem(values, messages);
+        break;
+      case MODAL_VIEW:
+        this.props.changeTypeUserModal(MODAL_EDIT);
+        break;
+      default:
+        break;
     }
   }
 
@@ -23,11 +35,26 @@ class Action extends Component {
   }
 
   render() {
+    const { modalType } = this.props; 
+    let className = 'success';
+    switch (modalType) {
+      case MODAL_ADD:
+        className = 'success';
+        break;
+      case MODAL_EDIT:
+        className = 'primary';
+        break;
+      case MODAL_VIEW:
+        className = 'info';
+        break;
+      default:
+        break;
+    }
     return (
       <Modal
         isOpen={this.props.modalOpen}
         toggle={this.toggleModal}
-        className={`modal-dialog--success modal-dialog--header`}
+        className={`modal-dialog--${className} modal-dialog--header`}
       >
         <ActionForm onSubmit={this.handleSubmit} />
       </Modal>
@@ -35,8 +62,23 @@ class Action extends Component {
   }
 }
 
-export default injectIntl(connect(null, {
+Action.propTypes = {
+  modalType: PropTypes.string,  
+  addUserItem: PropTypes.func.isRequired,
+  updateUserItem: PropTypes.func.isRequired,
+  toggleUserModal: PropTypes.func.isRequired,
+}
+
+const mapStateToProps = ({users}) => {
+  const { modalType } = users.user;
+  return {
+    modalType
+  }
+}
+
+export default injectIntl(connect(mapStateToProps, {
   addUserItem,
   updateUserItem,
-  toggleUserModal
+  toggleUserModal,
+  changeTypeUserModal
 })(Action));

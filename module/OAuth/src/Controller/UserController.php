@@ -36,16 +36,16 @@ class UserController extends CoreController {
                 1 => 'status'
             ];
             
-            list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
+            list($start,$limit,$sortField,$sortDirection,$filters, $fields) = $this->getRequestData($fieldsMap); 
             
             //get list User by condition
             $dataUser = $this->userManager->getListUserByCondition($start, $limit, $sortField, $sortDirection,$filters);            
             
-            $result = ($dataUser['listUser']) ? $dataUser['listUser'] : [] ;
+            $results = $this->filterByField($dataUser['listUser'], $fields);
             
             $this->error_code = 1;
             $this->apiResponse =  array(
-                'data'      => $result,
+                'data'      => $results,
                 'total'     => $dataUser['totalUser']
             );                         
         } 
@@ -160,7 +160,10 @@ class UserController extends CoreController {
         if($user->id === $id) {
             return true;
         } else {
-            var_dump($user);die;
+            $admin = $this->entityManager->getRepository(User::class)->findOneById($user->id);
+            if($admin->getIsAdmin()) {
+                return true;
+            }
         }
     }
 }

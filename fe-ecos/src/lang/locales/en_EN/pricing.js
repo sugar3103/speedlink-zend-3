@@ -83,6 +83,11 @@ module.exports = {
     'zone_code.validate-service-empty': 'Service shouldn’t be empty',
     'zone_code.validate-shipment_type-empty': 'Shipment Type shouldn’t be empty',
     'zone_code.validate-origin_city-empty': 'Origin City shouldn’t be empty',
-    'zone_code.validate-destination_city-empty': 'Destination City shouldn’t be empty'
+    'zone_code.validate-destination_city-empty': 'Destination City shouldn’t be empty',
+
+    //pricing
+    'pricing.saleman': 'Saleman',
+    'pricing.effected-date': 'Effected Date',
+    'pricing.expired-date': 'Expired Date',
 
   }

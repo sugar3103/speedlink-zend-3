@@ -65,7 +65,7 @@ class CarrierIdExistsValidator extends AbstractValidator {
 
         if ($this->options['shipmentType'] == null) {
             $isValid = $carrier;
-        } elseif ($this->options['shipmentType']->getCode() != $value && $carrier != null) {
+        } elseif ($this->options['shipmentType']->getId() != $value && $carrier != null) {
             $isValid = true;
         } else {
             $isValid = false;
