@@ -7,6 +7,7 @@ import { SELECTED_PAGE_SIZE } from '../../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import MagnifyIcon from 'mdi-react/MagnifyIcon';
+import Moment from 'react-moment';
 
 import { confirmAlert } from 'react-confirm-alert';
 import ConfirmPicker from '../../../../containers/Shared/picker/ConfirmPicker';
@@ -74,8 +75,9 @@ class List extends Component {
     });
   }
 
-  toggleModal = () => {
-    this.props.toggleRoleModal();
+  toggleModal = (e, type, status) => {
+    e.stopPropagation();
+    this.props.toggleRoleModal(type, status);
   }
 
   onChangePage = (page) => {
@@ -142,7 +144,7 @@ class List extends Component {
           <Action modalOpen={modalOpen} />
           <form className="form">
             <div className="form__form-group products-list__search">
-              <input placeholder="Search..." name="search" onKeyPress={this.handleKeyPress} onChange={event => { this.setState({ searchPermission: event.target.value }) }} />
+              <input placeholder="Search..." name="search" onKeyPress={this.handleKeyPress} onChange={event => { this.setState({ searchRole: event.target.value }) }} />
               <MagnifyIcon />
             </div>
           </form>
@@ -196,6 +198,7 @@ class List extends Component {
           accessor: "created_at",
           width: 120,
           className: "text-center", 
+          Cell: ({ original}) => { return (<Moment fromNow format="D/MM/YYYY" locale={locale}>{new Date(original.created_at)}</Moment> )},
           sortable: false,
         },
         {

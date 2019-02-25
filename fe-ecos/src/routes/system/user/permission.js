@@ -29,6 +29,7 @@ class Permission extends Component {
   render() {
     const { messages } = this.props.intl;
     const { errors } = this.props.permission;
+    
     return (
       <Container>
         <Row>

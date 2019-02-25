@@ -43,7 +43,7 @@ class RoleManager {
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function addRole($data) {
+    public function addRole($data,$user) {
 
         // begin transaction
         $this->entityManager->beginTransaction();
@@ -55,8 +55,11 @@ class RoleManager {
             $role->setStatus($data['status']);
             $role->setDescription($data['description']);
             $role->setDescriptionEn($data['description_en']);
-            $role->setCreatedAt(date('Y-m-d H:i:s'));
 
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $role->setCreatedAt($addTime->format('Y-m-d H:i:s'));
+            $role->setCreatedBy($user->id);
+            
             // add parent roles to inherit
             $inheritedRoles = $data['inherit_roles'];
             if (!empty($inheritedRoles)) {
@@ -96,7 +99,7 @@ class RoleManager {
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function updateRole($role, $data) {
+    public function updateRole($role, $data,$user) {
 
         // begin transaction
         $this->entityManager->beginTransaction();
@@ -107,6 +110,12 @@ class RoleManager {
             $role->setNameEn($data['name_en']);
             $role->setDescriptionEn($data['description_en']);
             $role->setStatus($data['status']);
+
+            // Set time UTC
+            $updatedTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            
+            $role->setUpdatedAt($updatedTime->format('Y-m-d H:i:s'));
+            $role->setUpdatedBy($user->id);
 
             // clear parent roles so we don't populate database twice
             $role->clearParentRoles();
@@ -124,6 +133,20 @@ class RoleManager {
                         $role->addParent($parentRole);
                     }
                 }
+            }
+
+            //Update Role Permission
+            // remove old permissions.
+            $role->getPermissions()->clear();
+             // assign new permissions to role
+            foreach ($data['permissions'] as $permission) {
+                $permisson = $this->entityManager->getRepository(Permission::class)
+                    ->findOneById($permission);
+
+                if ($permisson == null)
+                    throw new \Exception("Permission with such name doesn't exist");
+
+                $role->getPermissions()->add($permisson);
             }
 
             $this->entityManager->flush();
@@ -245,24 +268,35 @@ class RoleManager {
      * @param $role Role
      * @return array
      */
-    public function getEffectivePermissions($role) {
+    public function getEffectivePermissions($role_id) {
+        $role = $this->entityManager->getRepository(Role::class)->findOneById($role_id);
+
         $effectivePermissions = [];
 
         foreach ($role->getParentRoles() as $parentRole) {
-            $parentPermissions = $this->getEffectivePermissions($parentRole);
-            foreach ($parentPermissions as $name => $inherited) {
-                $effectivePermissions[$name] = 'inherited';
+            $parentPermissions = $this->getEffectivePermissions($parentRole);            
+            foreach ($parentPermissions as $parentPermission) {
+                $effectivePermissions[] = $parentPermission;                
             }
         }
-
-        foreach ($role->getPermissions() as $permission) {
-            if (!isset($effectivePermissions[$permission->getName()])) {
-                $effectivePermissions[$permission->getName()] = 'own';
+        
+        foreach ($role->getPermissions() as $permission) {            
+            if (!isset($effectivePermissions[$permission->getId()])) {
+                $effectivePermissions[] = $permission->getId();
             }
-        }
+        }        
+        
         return $effectivePermissions;
     }
-
+    public function getInheritRoles($role_id) {
+        $role = $this->entityManager->getRepository(Role::class)->findOneById($role_id);
+        $roles = array();
+        foreach ($role->getParentRoles() as $parentRole) {            
+            $roles[] = $parentRole->getId();
+        }        
+        return $roles;
+    }
+    
     /**
      * update permissions of role.
      * @param $role Role
@@ -326,14 +360,16 @@ class RoleManager {
             //set offset,limit
             $ormPaginator = new ORMPaginator($ormRole, true);
             $ormPaginator->setUseOutputWalkers(false);
-            $totalRole = $ormPaginator->count();
-            
+            $totalRole = $ormPaginator->count();            
+
             //get list
             $roles = $ormPaginator->getIterator()->getArrayCopy();
-
             foreach ($roles as &$role) {//loop
-                //set created_at
-                $role['created_at'] =  ($role['created_at']) ? Utils::checkDateFormat($role['created_at'],'d/m/Y') : '';
+                 //set created_at to GMT +7
+                 $role['permissions'] = $this->getEffectivePermissions($role['id']);                 
+                 $role['inherit_roles'] = $this->getInheritRoles($role['id']);
+                 $role['created_at'] =  ($role['created_at']) ? Utils::checkDateFormat($role['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                 $role['updated_at'] =  ($role['updated_at']) ? Utils::checkDateFormat($role['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
             }
         }
 

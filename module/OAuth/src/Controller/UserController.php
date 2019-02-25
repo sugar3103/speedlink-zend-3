@@ -160,7 +160,10 @@ class UserController extends CoreController {
         if($user->id === $id) {
             return true;
         } else {
-            var_dump($user);die;
+            $admin = $this->entityManager->getRepository(User::class)->findOneById($user->id);
+            if($admin->getIsAdmin()) {
+                return true;
+            }
         }
     }
 }

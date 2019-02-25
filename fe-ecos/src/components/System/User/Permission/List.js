@@ -126,7 +126,7 @@ class List extends Component {
   
   renderHeader = (selected) => {
     const { modalOpen } = this.props.permission;
-    const { messages,locale } = this.props.intl;
+    const { messages } = this.props.intl;
     
     return (
       <Fragment>

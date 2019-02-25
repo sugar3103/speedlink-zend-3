@@ -1,12 +1,31 @@
 import React, { Component } from 'react';
 import { Col, Container, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
-
+import { connect } from 'react-redux';
+import { getUserList } from '../../../redux/actions';
 import { List } from '../../../components/System/User';
-
+import AccessDenied from '../../../containers/Layout/accessDenied';
 class Lists extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loadPage : true
+    }
+  }
+
+  componentDidMount() {
+    this.props.getUserList();    
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    
+    if(this.state.loadPage) {
+      this.setState({ loadPage : prevProps.loading})
+    } 
+  }
   render() {
     const { messages } = this.props.intl;
+    const { errors } = this.props.user;
     return (
       <Container>
         <Row>
@@ -18,11 +37,27 @@ class Lists extends Component {
           </Col>
         </Row>
         <Row>
-          <List />
+        {!this.state.loadPage ? (
+           (errors && errors === 'ACCESS_DENIED') ? (<AccessDenied />) : (<List />)
+         ) : ''}
         </Row>
       </Container>
     )
   }
 };
 
-export default injectIntl(Lists);
+const mapStateToProps = ({ users }) => {
+  const { user } = users;
+  return {
+    user
+  };
+};
+
+
+export default injectIntl(connect(
+  mapStateToProps,
+  {
+    getUserList
+  }
+)(Lists));
+

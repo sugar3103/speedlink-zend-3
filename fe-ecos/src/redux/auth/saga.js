@@ -10,7 +10,7 @@ import {
 
 import { authHeader } from '../../util/auth-header';
 
-import { apiUrl, EC_SUCCESS } from '../../constants/defaultValues';
+import { apiUrl, EC_SUCCESS,EC_FAILURE_AUTHENCATION } from '../../constants/defaultValues';
 
 import { loginUserSuccess, loginUserError, getVerifyAuthSuccess } from './actions';
 
@@ -31,18 +31,18 @@ const loginAsync = async (user) => {
 }
 
 function* login({ payload }) {
-  const { user } = payload;  
+  const { user } = payload;
   try {
     const data = yield call(loginAsync, user);
-    if (data.error_code === EC_SUCCESS) {      
+    if (data.error_code === EC_SUCCESS) {
       localStorage.setItem('authUser', JSON.stringify(data.token));
-      yield put(loginUserSuccess(data.token));      
+      yield put(loginUserSuccess(data.token));
       yield call(history.push, '/app/dashboards');
-      
+
     } else {
       const error = data.message;
       yield put(loginUserError(error))
-      createNotification({type: 'warning', message: error.toString()})
+      createNotification({ type: 'warning', message: error.toString() })
     }
   } catch (error) {
     console.log('login error : ', error)
@@ -75,7 +75,7 @@ function getVerify() {
   return axios.request({
     method: 'post',
     headers: authHeader(),
-    url: `${apiUrl}user`    
+    url: `${apiUrl}user`
   });
 }
 
@@ -85,17 +85,23 @@ const verifyAsync = async () => {
     .catch(error => error);
 }
 
-function* verify () {
+function* verify() {
   try {
-    const data = yield call(verifyAsync);
-    if (data.error_code === EC_SUCCESS) {
-      yield put(getVerifyAuthSuccess(data.data));                        
-    } else {
-      const error = data.message;
-      createNotification({type: 'warning', message: error.toString()})
+    const response = yield call(verifyAsync);
+
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(getVerifyAuthSuccess(response.data));
+        break;
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login');
+        break;
+      default:
+        break;
     }
   } catch (error) {
-    console.log('login error : ', error)
+    createNotification({ type: 'warning', message: error.toString() })
   }
 }
 

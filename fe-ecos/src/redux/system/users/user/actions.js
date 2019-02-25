@@ -11,12 +11,13 @@ import {
   USER_UPDATE_ITEM_ERROR,
   USER_DELETE_ITEM,
   USER_DELETE_ITEM_SUCCESS,
-  USER_DELETE_ITEM_ERROR
+  USER_DELETE_ITEM_ERROR,
+  USER_CHANGE_TYPE_MODAL
 } from '../../../../constants/actionTypes';
 
-export const toggleUserModal = (status = null) => ({
+export const toggleUserModal = (type, data) => ({
   type: USER_TOGGLE_MODAL,
-  payload: status
+  payload: { type, data}
 })
 
 export const getUserList = (params) => ({
@@ -75,3 +76,8 @@ export const deleteUserItemError = (error) => ({
   type: USER_DELETE_ITEM_ERROR,
   payload: error
 });
+
+export const changeTypeUserModal = (type) => ({
+  type: USER_CHANGE_TYPE_MODAL,
+  payload: type
+})
