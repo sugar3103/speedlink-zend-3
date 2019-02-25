@@ -90,7 +90,7 @@ class ShipmentTypeRepository extends EntityRepository
                 $queryBuilder->andWhere('c.is_deleted = 0');
                 $queryBuilder->andWhere('c.status = 1');
                 $queryBuilder->groupBy('smt.carrier_id');
-            } else if ($sortField == 'servier_id') {
+            } else if ($sortField == 'service_id') {
                 $queryBuilder->andWhere('s.is_deleted = 0');
                 $queryBuilder->andWhere('s.status = 1');
                 $queryBuilder->groupBy('smt.service_id');

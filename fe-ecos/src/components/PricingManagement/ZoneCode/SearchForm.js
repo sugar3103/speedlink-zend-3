@@ -5,7 +5,7 @@ import renderSelectField from '../../../containers/Shared/form/Select';
 import { Button, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { getCarrierCodeList, getServiceCodeList, getShipmentTypeCodeList, getCustomerList,
+import { getCarrierCodeByCondition, getServiceCodeByCondition, getShipmentTypeCodeByCondition, getCustomerList,
   getOriginCountryList, getOriginCityList, getOriginDistrictList, getOriginWardList,
   getDestinationCountryList, getDestinationCityList, getDestinationDistrictList, getDestinationWardList
  } from "../../../redux/actions";
@@ -15,14 +15,13 @@ class SearchForm extends Component {
   constructor(props){
     super(props);
     this.state = {
-      disabled: false
+      disabled: false,
+      category_code: null,
+      carrier_id: null
     }
   }
   
   componentDidMount() {
-    this.props.getCarrierCodeList();
-    this.props.getServiceCodeList();
-    this.props.getShipmentTypeCodeList();
     this.props.getCustomerList();
     this.props.getOriginCountryList();
     this.props.getDestinationCountryList();
@@ -35,10 +34,22 @@ class SearchForm extends Component {
         limit: 0
       },
       query: {
-        country_id: value
+        country: value
       }
     }
     this.props.getOriginCityList(params);
+    params = {
+      query: {
+        city: 0
+      }
+    }
+    this.props.getOriginDistrictList(params);
+    params = {
+      query: {
+        district: 0
+      }
+    }
+    this.props.getOriginWardList(params);
   }
 
   onChangeOriginCity = value => {
@@ -52,7 +63,12 @@ class SearchForm extends Component {
       }
     }
     this.props.getOriginDistrictList(params);
-    this.props.getOriginWardList(null);
+    params = {
+      query: {
+        district: 0
+      }
+    }
+    this.props.getOriginWardList(params);
   }
 
   onChangeOriginDistrict = value => {
@@ -75,10 +91,22 @@ class SearchForm extends Component {
         limit: 0
       },
       query: {
-        country_id: value
+        country: value
       }
     }
     this.props.getDestinationCityList(params);
+    params = {
+      query: {
+        city: 0
+      }
+    }
+    this.props.getDestinationDistrictList(params);
+    params = {
+      query: {
+        district: 0
+      }
+    }
+    this.props.getDestinationWardList(params);
   }
 
   onChangeDestinationCity = value => {
@@ -92,7 +120,12 @@ class SearchForm extends Component {
       }
     }
     this.props.getDestinationDistrictList(params);
-    this.props.getDestinationWardList(null);
+    params = {
+      query: {
+        district: 0
+      }
+    }
+    this.props.getDestinationWardList(params);
   }
 
   onChangeDestinationDistrict = value => {
@@ -108,13 +141,66 @@ class SearchForm extends Component {
     this.props.getDestinationWardList(params);
   }
 
+  onChangeCategory = value => {
+    this.setState({
+      category_code: value
+    });
+    let params = {
+      type : "carrier_id",
+      category_code : value
+    }
+    this.props.getCarrierCodeByCondition(params);
+    params = {
+      type : "carrier_id",
+      category_code : value,
+      carrier_id: 0
+    }
+    this.props.getServiceCodeByCondition(params);
+    params = {
+      type : "carrier_id",
+      category_code : value,
+      carrier_id: 0,
+      service_id: [0]
+    }
+    this.props.getShipmentTypeCodeByCondition(params);
+  }
+
+  onChangeCarrier = value => {
+    this.setState({
+      carrier_id: value
+    });
+    let params = {
+      type : "service_id",
+      carrier_id : value,
+      category_code : this.state.category_code
+    }
+    this.props.getServiceCodeByCondition(params);
+    params = {
+      type : "carrier_id",
+      category_code : value,
+      carrier_id: 0,
+      service_id: [0]
+    }
+    this.props.getShipmentTypeCodeByCondition(params);
+  }
+
+  onChangeService = value => {
+    let params = {
+      type : "shipment_type_id",
+      category_code : this.state.category_code,
+      carrier_id : this.state.carrier_id,
+      service_id : [ value ] 
+    }
+    this.props.getShipmentTypeCodeByCondition(params);
+  }
+
   showOptionCarrier = (items) => {
     let result = [];
     if (items.length > 0) {
       result = items.map(item => {
         return {
-          value: item.id,
-          label: item.code
+          value: item.carrier_id,
+          label: item.carrier_code
         }
       })
     }
@@ -125,8 +211,8 @@ class SearchForm extends Component {
     if (items.length > 0) {
       result = items.map(item => {
         return {
-          value: item.id,
-          label: item.code
+          value: item.service_id,
+          label: item.service_code
         }
       })
     }
@@ -137,13 +223,14 @@ class SearchForm extends Component {
     if (items.length > 0) {
       result = items.map(item => {
         return {
-          value: item.id,
-          label: item.code
+          value: item.shipment_type_id,
+          label: item.shipment_type_code
         }
       })
     }
     return result;
   }
+
   showOptionCustomer = (items) => {
     let result = [];
     if (items.length > 0) {
@@ -250,7 +337,7 @@ class SearchForm extends Component {
 
 
   render() {
-    const { handleSubmit, reset, carrierCode, serviceCode, shipment_typeCode, customerCode, origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards  } = this.props;
+    const { handleSubmit, reset, CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition , customerCode, origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards  } = this.props;
     const { messages } = this.props.intl;
     return (
       <form className="form" onSubmit={handleSubmit}>
@@ -318,6 +405,7 @@ class SearchForm extends Component {
                 { value: 'Domestic', label: messages['domestic'] }
                 ]}
                 clearable={false}
+                onChange={this.onChangeCategory}
               />
             </div>
           </div>
@@ -328,7 +416,9 @@ class SearchForm extends Component {
             <span className="form__form-group-label">{messages['pri_man.carrier']}</span>
             <div className="form__form-group-field">
               <Field name="carrier_id" component={renderSelectField} type="text"
-                     options={carrierCode && this.showOptionCarrier(carrierCode)}/>
+                     options={CarrierCodeByCondition && this.showOptionCarrier(CarrierCodeByCondition)}
+                     onChange={this.onChangeCarrier} 
+                     />
             </div>
           </div>
         </Col>
@@ -338,7 +428,9 @@ class SearchForm extends Component {
             <span className="form__form-group-label">{messages['pri_man.service']}</span>
             <div className="form__form-group-field">
               <Field name="service_id" component={renderSelectField} type="text"
-                     options={serviceCode && this.showOptionService(serviceCode)}/>
+                     options={ServiceCodeByCondition && this.showOptionService(ServiceCodeByCondition)}
+                     onChange={this.onChangeService}
+                     />
             </div>
           </div>
         </Col>    
@@ -348,7 +440,8 @@ class SearchForm extends Component {
             <span className="form__form-group-label">{messages['pri_man.shipment-type']}</span>
             <div className="form__form-group-field">
               <Field name="shipmenttype" component={renderSelectField} type="text"
-                     options={shipment_typeCode && this.showOptionShipmenttype(shipment_typeCode)}/>
+                    options={codeByCondition && this.showOptionShipmenttype(codeByCondition)}
+                    />
             </div>
           </div>
         </Col>       
@@ -490,9 +583,12 @@ SearchForm.propTypes = {
   destination_districts: PropTypes.array,
   destination_countrys: PropTypes.array,
   destination_wards: PropTypes.array,
-  getCarrierCodeList: PropTypes.func.isRequired,
-  getServiceCodeList: PropTypes.func.isRequired,
-  getShipmentTypeCodeList: PropTypes.func.isRequired,
+  codeByCondition: PropTypes.array,
+  CarrierCodeByCondition: PropTypes.array,
+  ServiceCodeByCondition: PropTypes.array,
+  getCarrierCodeByCondition: PropTypes.func.isRequired,
+  getServiceCodeByCondition: PropTypes.func.isRequired,
+  getShipmentTypeCodeByCondition: PropTypes.func.isRequired,
   getCustomerList: PropTypes.func.isRequired,
   getOriginCountryList: PropTypes.func.isRequired,
   getOriginCityList: PropTypes.func.isRequired,
@@ -506,10 +602,8 @@ SearchForm.propTypes = {
   reset: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ carrier, service, shipment_type, customer, zoneCode }) => {
-  const carrierCode = carrier.codes;
-  const serviceCode = service.codes;
-  const shipment_typeCode = shipment_type.codes;
+const mapStateToProps = ({ shipment_type, customer, zoneCode }) => {
+  const { CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition  } = shipment_type;
   const customerCode = customer.items;
   const origin_countrys = zoneCode.origin_country;
   const origin_citys = zoneCode.origin_city;
@@ -519,7 +613,7 @@ const mapStateToProps = ({ carrier, service, shipment_type, customer, zoneCode }
   const destination_citys = zoneCode.destination_city;
   const destination_districts = zoneCode.destination_district;
   const destination_wards = zoneCode.destination_ward;
-  return { carrierCode, serviceCode, shipment_typeCode, customerCode, origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards }
+  return { customerCode, CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition, origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards }
 }
 
 export default reduxForm({
@@ -533,9 +627,9 @@ export default reduxForm({
     calculate_unit: -1
   }
 })(injectIntl(connect(mapStateToProps, {
-  getCarrierCodeList,
-  getServiceCodeList,
-  getShipmentTypeCodeList,
+  getCarrierCodeByCondition,
+  getServiceCodeByCondition,
+  getShipmentTypeCodeByCondition,
   getCustomerList,
   getOriginCountryList, getOriginCityList, getOriginDistrictList, getOriginWardList,
   getDestinationCountryList, getDestinationCityList, getDestinationDistrictList, getDestinationWardList

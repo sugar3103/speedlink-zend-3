@@ -42,7 +42,7 @@ class ShipmentTypeController extends CoreController
         ];
 
         $fieldsMap = ['code', 'name', 'name_en', 'status'];
-        list($start, $limit, $sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);
+        list($start, $limit, $sortField, $sortDirection, $filters) = $this->getRequestData($fieldsMap);
         $dataShipmentType = $this->shipmentTypeManager->getListShipmentTypeByCondition($start, $limit, $sortField, $sortDirection, $filters);
 
         $result['error_code'] = 1;
@@ -151,7 +151,7 @@ class ShipmentTypeController extends CoreController
         $shipmentType = $this->entityManager->getRepository(ShipmentType::class)->find($data['id']);
 
         //validate form
-        if(!empty($shipmentType)) {
+        if (!empty($shipmentType)) {
             try {
                 $this->shipmentTypeManager->deleteShipmentType($shipmentType, $user);
                 $this->error_code = 1;
@@ -170,17 +170,19 @@ class ShipmentTypeController extends CoreController
 
     public function codeByConditionAction()
     {
-        $result = array("data" => []);
-        $param = $this->getRequestData([]);
-        $sortField = $param['type'];
-        unset($param['type']);
-        $dataShipmentType = $this->shipmentTypeManager->getListCodeByCondition($sortField, $param);
+        if ($this->getRequest()->isPost()) {
+            $result = array("data" => []);
+            $param = $this->getRequestData([]);
+            $sortField = $param['type'];
+            unset($param['type']);
+            $dataShipmentType = $this->shipmentTypeManager->getListCodeByCondition($sortField, $param);
 
-        $result['error_code'] = 1;
-        $result['message'] = 'Success';
-        $result["data"] = !empty($dataShipmentType) ? $dataShipmentType : [];
-        $this->apiResponse = $result;
-
+            $result['error_code'] = 1;
+            $result['message'] = 'Success';
+            $result["data"] = !empty($dataShipmentType) ? $dataShipmentType : [];
+            $this->apiResponse = $result;
+        }
         return $this->createResponse();
+
     }
 }
