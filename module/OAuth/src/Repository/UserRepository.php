@@ -65,9 +65,11 @@ class UserRepository extends EntityRepository {
             ->leftJoin(
                 'u.roles',
                 'r'
-            )->andWhere('u.id <> 0')->groupBy('u.id')
-            ->setMaxResults($limit)
-            ->setFirstResult(($start - 1) * $limit);
+            )->andWhere('u.id <> 0')->groupBy('u.id');
+
+            if($limit) {
+                $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
+            }
 
             return $queryBuilder;
 
