@@ -4,10 +4,12 @@ namespace Management\Controller;
 use Core\Controller\CoreController;
 use Management\Form\PricingForm;
 use Doctrine\ORM\EntityManager;
+use Management\Service\PricingDataManager;
 use Management\Service\PricingManager;
 use Management\Entity\Pricing;
 
-class PricingController extends CoreController {
+class PricingController extends CoreController
+{
     /**
      * EntityManager.
      * @var EntityManager
@@ -21,25 +23,28 @@ class PricingController extends CoreController {
     protected $pricingManager;
 
     /**
+     * Pricing Data Manager.
+     * @var $pricingDataManager
+     */
+    protected $pricingDataManager;
+
+    /**
      * PricingController constructor.
      * @param $entityManager
-     * @param $pricingManager
+     * @param PricingManager $pricingManager
+     * @param PricingDataManager $pricingDataManager
      */
-
-    public function __construct($entityManager, $pricingManager) 
+    public function __construct($entityManager, $pricingManager, $pricingDataManager)
     {
         parent::__construct($entityManager);
         $this->entityManager = $entityManager;
         $this->pricingManager = $pricingManager;
+        $this->pricingDataManager = $pricingDataManager;
     }
 
     public function indexAction()
     {
-        $result = [
-            "total" => 0,
-            "data" => []
-        ];
-
+        $result = ["total" => 0, "data" => []];
         $fieldsMap = ['name'];
         list($start, $limit, $sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);
         $dataShipmentType = $this->pricingManager->getListPricingByCondition($start, $limit, $sortField, $sortDirection, $filters);
@@ -56,15 +61,15 @@ class PricingController extends CoreController {
     public function addAction()
     {
         $user = $this->tokenPayload;
-        $data = $this->getRequestData();
-        if (empty($data)) {
+        $param = $this->getRequestData();
+        if (empty($param)) {
             $this->error_code = -1;
             $this->apiResponse['message'] = 'Missing data';
             return $this->createResponse();
         }
-        //Create New Form Pricing
+
         $form = new PricingForm('create', $this->entityManager);
-        $form->setData($data);
+        $form->setData($param);
 
         //validate form
         if ($form->isValid()) {
@@ -73,6 +78,7 @@ class PricingController extends CoreController {
                 $data = $form->getData();
                 // add new pricing
                 $this->pricingManager->addPricing($data, $user);
+                $this->pricingDataManager->addPricingData($data, $user);
                 $this->error_code = 1;
                 $this->apiResponse['message'] = "Success: You have added a pricing!";
             } catch (\Exception $e) {

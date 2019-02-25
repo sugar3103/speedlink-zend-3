@@ -11,6 +11,7 @@ export * from './master-data/address/ward/actions';
 export * from './pricing-management/range-weight/actions';
 export * from './pricing-management/zone-code/actions';
 export * from './pricing-management/customer/actions';
+export * from './pricing-management/pricing/actions';
 export * from './master-data/service-shipment/carrier/actions';
 export * from './master-data/service-shipment/service/actions';
 export * from './master-data/service-shipment/shipmnet-type/actions';

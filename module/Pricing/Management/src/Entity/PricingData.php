@@ -30,13 +30,6 @@ class PricingData
     /**
      * @var int
      *
-     * @ORM\Column(name="carrier_id", type="integer", nullable=false)
-     */
-    private $carrier_id;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="service_id", type="integer", nullable=false)
      */
     private $service_id;
@@ -84,7 +77,7 @@ class PricingData
     private $updated_by;
 
     /**
-     * @var \DateTime|null
+     * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
@@ -96,13 +89,6 @@ class PricingData
      * @ORM\Column(name="is_deleted", type="boolean", nullable=false)
      */
     private $is_deleted = '0';
-
-    /**
-     *
-     * @ORM\OneToOne(targetEntity="\ServiceShipment\Entity\Carrier")
-     * @ORM\JoinColumn(name="carrier_id", referencedColumnName="id", nullable=true)
-     */
-    private $join_carrier;
 
     /**
      *
@@ -162,22 +148,6 @@ class PricingData
     public function setPricingId($pricing_id)
     {
         $this->pricing_id = $pricing_id;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCarrierId()
-    {
-        return $this->carrier_id;
-    }
-
-    /**
-     * @param int $carrier_id
-     */
-    public function setCarrierId($carrier_id)
-    {
-        $this->carrier_id = $carrier_id;
     }
 
     /**
@@ -322,22 +292,6 @@ class PricingData
     public function setIsDeleted($is_deleted)
     {
         $this->is_deleted = $is_deleted;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getJoinCarrier()
-    {
-        return $this->join_carrier;
-    }
-
-    /**
-     * @param mixed $join_carrier
-     */
-    public function setJoinCarrier($join_carrier)
-    {
-        $this->join_carrier = $join_carrier;
     }
 
     /**
