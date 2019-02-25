@@ -16,7 +16,7 @@ import {
   ROLE_CHANGE_TYPE_MODAL
 } from '../../../../constants/actionTypes';
 
-export const toggleRoleModal = (type,data) => ({
+export const toggleRoleModal = (type, data) => ({
   type: ROLE_TOGGLE_MODAL,
   payload: { type, data }
 })

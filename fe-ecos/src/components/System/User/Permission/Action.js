@@ -32,7 +32,9 @@ class Action extends Component {
   }
 
   render() {
-    const { modalType } = this.props;    
+    const { modalType } = this.props; 
+    
+       
     let className = 'success';
     switch (modalType) {
       case MODAL_ADD:

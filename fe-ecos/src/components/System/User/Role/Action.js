@@ -33,6 +33,7 @@ class Action extends Component {
 
   render() {
     const { modalType } = this.props;    
+    
     let className = 'success';
     switch (modalType) {
       case MODAL_ADD:
@@ -60,7 +61,7 @@ class Action extends Component {
 }
 
 Action.propTypes = {
-  modalData: PropTypes.object,
+  modalType: PropTypes.string,  
   addRoleItem: PropTypes.func.isRequired,
   updateRoleItem: PropTypes.func.isRequired,
   toggleRoleModal: PropTypes.func.isRequired,

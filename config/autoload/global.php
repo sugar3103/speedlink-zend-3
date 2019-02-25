@@ -58,4 +58,5 @@ return [
             'baseDn'                 => 'OU=Users,DC=mlc-itl,DC=local'
         ],
     ],
+    'default_timezone' => 'Asia/Ho_Chi_Minh',
 ];

@@ -8,6 +8,7 @@ import CustomField from '../../../../containers/Shared/form/CustomField';
 import validate from './validateActionForm';
 import { MODAL_ADD, MODAL_VIEW, MODAL_EDIT } from '../../../../constants/defaultValues';
 import PropTypes from 'prop-types';
+import Moment from 'react-moment';
 
 class ActionForm extends PureComponent {
 
@@ -43,7 +44,7 @@ class ActionForm extends PureComponent {
   }
 
   render() {
-    const { messages } = this.props.intl;
+    const { messages,locale } = this.props.intl;
     const { handleSubmit, modalData, modalType } = this.props;
     
     let className = 'success';
@@ -125,13 +126,18 @@ class ActionForm extends PureComponent {
                 <Col md={6}>
                   <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name_created}</span>
                   <br />
-                  <span><i className="label-info-data">{messages['created-at']}:</i>{modalData.created_at}</span>
+                  <span><i className="label-info-data">{messages['created-at']}:</i>
+                    <Moment fromNow locale={locale}>{ new Date(modalData.created_at) }</Moment>
+                  </span>
                 </Col>
                 {modalData.updated_at &&
                   <Col md={6}>
                     <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.full_name_updated}</span>
                     <br />
-                    <span><i className="label-info-data">{messages['updated-at']}:</i>{modalData.updated_at}</span>
+                    <span><i className="label-info-data">{messages['updated-at']}:</i>
+                    <Moment fromNow locale={locale}>{ new Date(modalData.updated_at) }</Moment>                    
+                    
+                    </span>
                   </Col>
                 }
               </Row>

@@ -2,13 +2,13 @@
 import React, { Component, Fragment } from 'react';
 import { Card, CardBody, Col, Button, ButtonToolbar } from 'reactstrap';
 import PropTypes from 'prop-types';
-import Item from './Item';
 import Table from '../../../../containers/Shared/table/Table';
 import { SELECTED_PAGE_SIZE } from '../../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import Action from './Action';
 import MagnifyIcon from 'mdi-react/MagnifyIcon';
+import Moment from 'react-moment';
 
 import { confirmAlert } from 'react-confirm-alert';
 import ConfirmPicker from '../../../../containers/Shared/picker/ConfirmPicker';
@@ -100,24 +100,6 @@ class List extends Component {
     }
   }
 
-  showPermissionItem = (items, messages) => {
-    let result = null;
-    if (items.length > 0) {
-      result = items.map((item, index) => {
-        return (
-          <Item
-            key={index}
-            permission={item}
-          />
-        )
-      })
-    } else {
-      result = (
-        <tr><td colSpan={8} className="text-center">{messages['no-result']}</td></tr>
-      )
-    }
-    return result;
-  }
 
   handleSearch = (e) => {
     e.preventDefault();    
@@ -144,7 +126,8 @@ class List extends Component {
   
   renderHeader = (selected) => {
     const { modalOpen } = this.props.permission;
-    const { messages } = this.props.intl;
+    const { messages,locale } = this.props.intl;
+    
     return (
       <Fragment>
         <ButtonToolbar className="master-data-list__btn-toolbar-top">
@@ -199,6 +182,12 @@ class List extends Component {
         {
           Header: messages['created-at'],
           accessor: "created_at",
+          Cell: ({original}) => {
+            return (
+              <Moment fromNow format="D/MM/YYYY" locale={locale}>{new Date(original.created_at)}</Moment>
+            )
+          },
+          className: 'text-center',
           sortable: false,
         },
         {

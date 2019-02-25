@@ -33,8 +33,7 @@ class ActionForm extends PureComponent {
     //Paran Role
     this.props.getRoleListAll(param);
 
-    const data = this.props.modalData;
-    console.log(this.props);
+    const data = this.props.modalData;    
     
     if (data) {
       this.props.initialize(data);
@@ -232,13 +231,13 @@ ActionForm.propTypes = {
 
 
 const mapStateToProps = ({ users }) => {
-  const { role, permission } = users;
-  const { modalData, modalType } = users.permission;
+  const { role, permission } = users;  
+  const { modalData, modalType } = role;
   const permissions = permission.items;
   return {
     modalData,
     modalType,
-    permissions,
+    permissions    
   }
 }
 
