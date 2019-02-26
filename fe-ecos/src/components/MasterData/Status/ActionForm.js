@@ -1,43 +1,77 @@
-import React, { Component } from 'react';
-import { Button, ButtonToolbar } from 'reactstrap';
+import React, { Component, Fragment } from 'react';
+import { Button, ButtonToolbar, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleStatusModal } from '../../../redux/actions';
+import { toggleStatusModal, changeTypeStatusModal } from '../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../containers/Shared/form/CustomField';
 import renderRadioButtonField from '../../../containers/Shared/form/RadioButton';
 import validate from './validateActionForm';
 import PropTypes from 'prop-types';
+import { MODAL_ADD, MODAL_VIEW, MODAL_EDIT } from '../../../constants/defaultValues';
 
 class ActionForm extends Component {
 
-  constructor() {
-    super()
-
+  constructor(props) {
+    super(props);
     this.state = {
-      view: true
+      modalType: ''
     }
   }
+  
+
   componentDidMount() {
     const data = this.props.modalData;
+    
     if (data) {
       this.props.initialize(data);
     }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.modalType !== this.props.modalType) {
+      this.setState({
+        modalType: prevProps.modalType
+      });
+    }
+    
   }
 
   toggleModal = () => {
     this.props.toggleStatusModal();
   }
 
+  changeTypeModal = () => {
+    this.props.changeTypeStatusModal(MODAL_VIEW);
+  }
+
   render() {
     const { messages } = this.props.intl;
-    const { handleSubmit, modalData } = this.props;
-    const className = modalData ? 'primary' : 'success';
-    const title = modalData ? messages['status.update'] : messages['status.add-new'];
+    const { handleSubmit, modalType, modalData } = this.props;
+    let className = 'success';
+    let title = messages['status.add-new'];
+    const disabled = modalType === MODAL_VIEW ? true : false;
+    switch (modalType) {
+      case MODAL_ADD:
+        className = 'success';
+        title = messages['status.add-new'];
+        break;
+      case MODAL_EDIT:
+        className = 'primary';
+        title = messages['status.update'];
+        break;
+      case MODAL_VIEW:
+        className = 'info';
+        title = messages['status.view'];
+        break;
+      default:
+        break;
+    }
 
     return (
       <form className="form" onSubmit={handleSubmit}>
         <div className="modal__header">
+          <button className="lnr lnr-cross modal__close-btn" onClick={this.toggleModal} />
           <h4 className="bold-text  modal__title">{title}</h4>
         </div>
         <div className="modal__body">
@@ -52,7 +86,8 @@ class ActionForm extends Component {
                 component={CustomField}
                 type="text"
                 placeholder={messages['name']}
-                messages={messages}                
+                messages={messages} 
+                disabled={disabled} 
               />
             </div>
             <div className="form__form-group-field">
@@ -65,6 +100,7 @@ class ActionForm extends Component {
                 type="text"
                 placeholder={messages['name']}
                 messages={messages}
+                disabled={disabled} 
               />
             </div>
           </div>
@@ -79,6 +115,7 @@ class ActionForm extends Component {
                 component="textarea"
                 type="text"
                 placeholder={messages['description']}
+                disabled={disabled} 
               />
             </div>
             <div className="form__form-group-field">
@@ -90,32 +127,53 @@ class ActionForm extends Component {
                 component="textarea"
                 type="text"
                 placeholder={messages['description']}
+                disabled={disabled} 
               />
             </div>
           </div>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['status']}</span>
-            <div className="form__form-group-field">
+            <span className="form__form-group-label radio-button-group">{messages['status']}</span>
               <Field
                 name="status"
                 component={renderRadioButtonField}
                 label={messages['active']}
                 radioValue={1}
                 defaultChecked
+                disabled={disabled} 
               />
               <Field
                 name="status"
                 component={renderRadioButtonField}
                 label={messages['inactive']}
                 radioValue={0}
+                disabled={disabled} 
               />
-            </div>
           </div>
-          <span><u>Update at: 2/2/2019 - Update by: Admin</u></span>
+          {modalData &&
+            <Fragment>
+              <hr />
+              <Row>
+                <Col md={6}>
+                  <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.created_by}</span>
+                  <br />
+                  <span><i className="label-info-data">{messages['created-at']}:</i>{modalData.created_at}</span>
+                </Col>
+                {modalData.updated_at && 
+                  <Col md={6}>
+                    <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.updated_by}</span>
+                    <br />
+                    <span><i className="label-info-data">{messages['updated-at']}:</i>{modalData.updated_at}</span>
+                  </Col>
+                }
+              </Row>
+            </Fragment>
+          }
         </div>
         <ButtonToolbar className="modal__footer">
-          <Button outline onClick={this.toggleModal}>{messages['cancel']}</Button>{' '}
-          <Button color={className} type="submit">{messages['save']}</Button>
+          {this.state.modalType === MODAL_VIEW &&
+            <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
+          }
+          <Button color={className} type="submit">{ modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
         </ButtonToolbar>
       </form>
     );
@@ -124,14 +182,17 @@ class ActionForm extends Component {
 
 ActionForm.propTypes = {
   modalData: PropTypes.object,
+  modalType: PropTypes.string,
   handleSubmit: PropTypes.func.isRequired,
   toggleStatusModal: PropTypes.func.isRequired,
+  changeTypeStatusModal: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = ({ status }) => {
-  const { modalData } = status;
+  const { modalData, modalType } = status;
   return {
-    modalData
+    modalData,
+    modalType
   }
 }
 
@@ -139,5 +200,6 @@ export default reduxForm({
   form: 'status_action_form',
   validate
 })(injectIntl(connect(mapStateToProps, {
-  toggleStatusModal
+  toggleStatusModal,
+  changeTypeStatusModal
 })(ActionForm)));

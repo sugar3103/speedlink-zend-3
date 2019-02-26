@@ -62,7 +62,9 @@ module.exports = {
   'role.name': 'Role',
   'role.add-new': 'Add New Role',  
   'role.update': 'Update Role',  
+  'role.view': 'View Role',  
   'role.title-confirm': 'Delete Role',  
+  'role.update-success': 'Update role Success',
   //validate
   'role.validate-name-empty': 'Name shouldn’t be empty',
   'role.validate-name-minlength': 'Name must be 2 characters or more',
@@ -70,11 +72,13 @@ module.exports = {
   'role.validate-nameEn-empty': 'English name shouldn’t be empty',
   'role.validate-nameEn-minlength': 'English name must be 2 characters or more',
   'role.validate-nameEn-maxlength': 'English name must be 128 characters or less',
+  'role.inherit-roles' : 'Inherit Roles',
 
   //Role
   'permission.list': 'Permissions',
   'permission.name': 'Permission',
   'permission.add-new': 'Add New Permission',
+  'permission.view': 'Permission Role',  
   'permission.update': 'Edit Permission',
   'permission.validate-name-exists': 'Another permission with such nam already exists',
   'permission.add-success': 'You have added a permission!',

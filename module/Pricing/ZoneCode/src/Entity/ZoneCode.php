@@ -296,10 +296,24 @@ class ZoneCode
      *
      * @ORM\OneToOne(targetEntity="Customer\Entity\Customer")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id", unique=true, nullable=false)
+     *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id", unique=true, nullable=true)
      * })
      */
     private $customer;
+
+    /**
+     * 
+     * @ORM\OneToOne(targetEntity="OAuth\Entity\User")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
+     */
+    protected $user_create;
+
+    /**
+     * 
+     * @ORM\OneToOne(targetEntity="OAuth\Entity\User")
+     * @ORM\JoinColumn(name="updated_by", referencedColumnName="id", nullable=true)
+     */
+    protected $user_update;
 
     /**
      * @return int
@@ -542,7 +556,7 @@ class ZoneCode
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getCustomerId()
     {
@@ -550,7 +564,7 @@ class ZoneCode
     }
 
     /**
-     * @param int $customer_id
+     * @param int|null $customer_id
      */
     public function setCustomerId($customer_id)
     {
@@ -959,6 +973,54 @@ class ZoneCode
     public function getCustomer()
     {
         return $this->customer;
+    }
+
+    /**
+     * Set city.
+     *
+     * @param \OAuth\Entity\User|null $city
+     *
+     * @return Hub
+     */
+    public function setUserCreate(\OAuth\Entity\User $user_create = null)
+    {
+        $this->user_create = $user_create;
+
+        return $this;
+    }
+
+    /**
+     * Get city.
+     *
+     * @return \OAuth\Entity\User|null
+     */
+    public function getUserCreate()
+    {
+        return $this->user_create;
+    }
+
+    /**
+     * Set city.
+     *
+     * @param \OAuth\Entity\User|null $city
+     *
+     * @return Hub
+     */
+    public function setUserUpdate(\OAuth\Entity\User $user_update = null)
+    {
+        $this->user_update = $user_update;
+
+        return $this;
+    }
+
+    /**
+     * Get city.
+     *
+     * @return \OAuth\Entity\User|null
+     */
+    public function getUserUpdate()
+    {
+        return $this->user_update;
     }
 
 }

@@ -5,13 +5,13 @@ use OAuth\Entity\Role;
 use OAuth\Validator\RoleExistsValidator;
 use Doctrine\ORM\EntityManager;
 use Zend\Filter\StringTrim;
-use Zend\Form\Element\Csrf;
-use Zend\Form\Element\Select;
-use Zend\Form\Element\Submit;
-use Zend\Form\Element\Text;
-use Zend\Form\Element\Textarea;
+use Zend\Filter\ToInt;
 use Zend\Form\Form;
 use Zend\Validator\StringLength;
+use Zend\InputFilter\ArrayInput;
+use Zend\Validator\GreaterThan;
+use Zend\Validator\Identical;
+use Zend\Validator\InArray;
 
 /**
  * The form for collecting information about Role.
@@ -126,6 +126,36 @@ class RoleForm extends Form {
         $inputFilter->add([
             'name' => 'inherit_roles',
             'required' => false,
+        ]);
+
+        $inputFilter->add([
+            'name'  => 'status',
+            'required'  => true,
+            'filters' => [
+                [
+                    'name' => ToInt::class
+                ]
+            ] 
+        ]);  
+
+         // Add input for "roles" field
+         $inputFilter->add([
+            'class' => ArrayInput::class,
+            'name' => 'permissions',
+            'required' => false,
+            'filters' => [
+                [
+                    'name' => ToInt::class
+                ]
+            ],
+            'validators' => [
+                [
+                    'name' => GreaterThan::class,
+                    'options' => [
+                        'min' => 0
+                    ]
+                ]
+            ]
         ]);
     }
 }

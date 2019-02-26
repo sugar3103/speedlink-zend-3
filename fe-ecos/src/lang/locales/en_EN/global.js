@@ -2,10 +2,10 @@ module.exports = {
     //Global
     'cancel': 'Cancel',
     'save': 'Save',    
-    'title-confirm': 'Delete Status',
-    'desc-confirm': 'Are you sure delete this?',
-    'confirm-no': 'No',
-    'confirm-yes': 'Yes, delete it!',
+    'edit': 'Edit',    
+    'ok': 'OK',    
+    'warning': 'Warning',
+    'delete-confirm': 'Are you sure you want to delete?',
     'description': 'Description',
     'name': 'Name',  
     'status': 'Status',
@@ -22,6 +22,9 @@ module.exports = {
     'all': 'All',
 
     'created-at': 'Created At',
+    'created-by': 'Created By',
+    'updated-at': 'Updated At',
+    'updated-by': 'Updated By',
     'search': 'Search',
     'clear': 'Clear',
     'no-result': 'No result found',
@@ -40,7 +43,9 @@ module.exports = {
     'notification.warning': 'Warning',
     'notification.error': 'Error',
 
+    //category option
     'inbound': 'Inbound',
     'outbound': 'Outbound',
-    'domestic': 'Domestic'
+    'domestic': 'Domestic',
+    'ACCESS_DENIED': 'Access Denied'
 }

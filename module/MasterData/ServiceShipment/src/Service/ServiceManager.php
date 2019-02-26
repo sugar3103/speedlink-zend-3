@@ -79,21 +79,13 @@ class ServiceManager
     public function getListServiceCodeByCondition()
     {
         $services = [];
-
-        //get orm carrier
         $ormService = $this->entityManager->getRepository(Service::class)->getListServiceCodeByCondition();
-
         if($ormService){
             $ormPaginator = new ORMPaginator($ormService, true);
             $ormPaginator->setUseOutputWalkers(false);
             $services = $ormPaginator->getIterator()->getArrayCopy();
         }
-
-        //set return data
-        $dataService = [
-            'listService' => $services,
-        ];
-        return $dataService;
+        return $services;
     }
 
     /**

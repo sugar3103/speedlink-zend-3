@@ -11,12 +11,13 @@ import {
   PERMISSION_UPDATE_ITEM_ERROR,
   PERMISSION_DELETE_ITEM,
   PERMISSION_DELETE_ITEM_SUCCESS,
-  PERMISSION_DELETE_ITEM_ERROR
+  PERMISSION_DELETE_ITEM_ERROR,
+  PERMISSION_CHANGE_TYPE_MODAL
 } from '../../../../constants/actionTypes';
 
-export const togglePermissionModal = (status = null) => ({
+export const togglePermissionModal = (type, data) => ({
   type: PERMISSION_TOGGLE_MODAL,
-  payload: status
+  payload: { type, data }
 })
 
 export const getPermissionList = (params) => ({
@@ -75,3 +76,8 @@ export const deletePermissionItemError = (error) => ({
   type: PERMISSION_DELETE_ITEM_ERROR,
   payload: error
 });
+
+export const changeTypePermissionModal = (type) => ({
+  type: PERMISSION_CHANGE_TYPE_MODAL,
+  payload: type
+})

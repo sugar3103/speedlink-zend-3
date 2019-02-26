@@ -49,7 +49,8 @@ class HubController extends CoreController {
           1 => 'name_en',
           2 => 'status',
           3 => 'code',
-          4 => 'city'
+          4 => 'city',
+          5 => 'country'
       ];
       
       list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);
@@ -77,16 +78,16 @@ class HubController extends CoreController {
         // check if user has submitted the form.
         if ($this->getRequest()->isPost()) {
             // fill in the form with POST data.
-          
             $user = $this->tokenPayload;
-            
+            $data = $this->getRequestData();
+
             $form = new HubForm('create', $this->entityManager);
 
-            $form->setData($this->getRequestData());
+            $form->setData($data);
             //validate form
             if ($form->isValid()) {
               $data = $form->getData();
-
+              $data['created_by'] = $user->id;
               $result = $this->hubManager->addHub($data,$user); 
                 // Check result
               
@@ -139,18 +140,27 @@ class HubController extends CoreController {
 
       public function deleteAction() {
         $data = $this->getRequestData();
-        if(isset($data['id'])) {
+        if(isset($data['id']) && count($data['id']) > 0 ) {
+          try {
+            foreach ($data['id'] as $id) {
             // Find existing status in the database.
-            $hub = $this->entityManager->getRepository(Hub::class)->findOneBy(array('id' => $data['id']));    
+            $hub = $this->entityManager->getRepository(Hub::class)->findOneBy(array('id' => $id));    
             if ($hub == null) {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = "Hub Not Found";
+                exit();
             } else {
                 //remove status
                 $this->hubManager->deleteHub($hub);
+            }
+          }
                 $this->error_code = 1;
                 $this->apiResponse['message'] = "Success: You have deleted hub!";
-            }          
+          }
+          catch (\Throwable $th) {
+            $this->error_code = 0;
+            $this->apiResponse['message'] = "Status request Id!";
+          }        
         } else {
             $this->error_code = 0;
             $this->apiResponse['message'] = "Hub request id !";

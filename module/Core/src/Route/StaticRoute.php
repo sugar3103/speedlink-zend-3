@@ -153,21 +153,23 @@ class StaticRoute implements RouteInterface
      */
     protected function parseRouteDefinition($def)
     {
+        
+
         $currentPos = 0;
         $length     = strlen($def);
         $parts      = [];
         $levelParts = [&$parts];
         $level      = 0;
-
+        
         while ($currentPos < $length) {
             preg_match('(\G(?P<literal>[^:{\[\]]*)(?P<token>[:{\[\]]|$))', $def, $matches, 0, $currentPos);
 
             $currentPos += strlen($matches[0]);
-
+           
             if (! empty($matches['literal'])) {
                 $levelParts[$level][] = ['literal', $matches['literal']];
             }
-
+            
             if ($matches['token'] === ':') {
                 if (! preg_match(
                     '(\G(?P<name>[^:/{\[\]]+)(?:{(?P<delimiters>[^}]+)})?:?)',

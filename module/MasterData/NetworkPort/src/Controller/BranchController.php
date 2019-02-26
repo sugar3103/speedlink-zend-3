@@ -115,6 +115,7 @@ class BranchController extends CoreController
       $data = $this->getRequestData();
       $user = $this->tokenPayload;
       $data['updated_by'] = $user->id;
+
       $branch = $this->entityManager->getRepository(Branch::class)->find($data['id']);
       if ($branch) {
         $form = new BranchForm('update', $this->entityManager, $branch);
@@ -140,18 +141,26 @@ class BranchController extends CoreController
   public function deleteAction()
   {
     $data = $this->getRequestData();
-    if (isset($data['id'])) {
+    if (isset($data['id']) && count($data['id']) > 0 ) {
+      try {
+        foreach ($data['id'] as $id) {
             // Find existing status in the database.
-      $branch = $this->entityManager->getRepository(Branch::class)->findOneBy(array('id' => $data['id']));
-      if ($branch == null) {
-        $this->error_code = 0;
-        $this->apiResponse['message'] = "Branch Not Found";
-      } else {
-                //remove status
-        $this->branchManager->deleteBranch($branch);
-
+          $branch = $this->entityManager->getRepository(Branch::class)->findOneBy(array('id' => $id));
+            if ($branch == null) {
+              $this->error_code = 0;
+              $this->apiResponse['message'] = "Branch Not Found";
+              exit();
+            } else {
+                      //remove status
+              $this->branchManager->deleteBranch($branch);
+            }
+        }
         $this->error_code = 1;
         $this->apiResponse['message'] = "Success: You have deleted branch!";
+      }
+      catch (\Throwable $th) {
+        $this->error_code = 0;
+        $this->apiResponse['message'] = "Status request Id!";
       }
     } else {
       $this->error_code = 0;

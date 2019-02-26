@@ -37,7 +37,7 @@ class PricingCodMinController extends CoreController {
     public function indexAction()
     {
       $this->apiResponse = [
-          'message' => 'Pricing Cod Min Index Action'
+          'message' => 'Not Thing to see here'
       ];
       return $this->createResponse();
     }

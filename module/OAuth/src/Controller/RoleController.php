@@ -73,17 +73,16 @@ class RoleController extends CoreController {
     /**
      * Add role
      *
-     * @return \Zend\Http\Response|ViewModel
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function addAction() {
-        // create form
-        $form = new RoleForm('create', $this->entityManager);
-
         // check if user has submitted the form
         if ($this->getRequest()->isPost()) {
-
+            $user = $this->tokenPayload;
+            // create form
+            $form = new RoleForm('create', $this->entityManager);
+            
             // fill in the form with POST data
             $data = $this->getRequestData();
 
@@ -96,7 +95,7 @@ class RoleController extends CoreController {
                 $data = $form->getData();
 
                 // add role
-                $this->roleManager->addRole($data);
+                $this->roleManager->addRole($data,$user);
 
                 $this->error_code = 1;
                 $this->apiResponse['message'] = "Success: You have add new role.";
@@ -109,202 +108,43 @@ class RoleController extends CoreController {
     }
 
     /**
-     * The "view" action displays a page allowing to view role's details.
-     */
-    public function viewAction() {
-        $id = (int) $this->params()->fromRoute('id', -1);
-
-        if ($id < 1) {
-            $this->getResponse()->setStatusCode(404);
-            return $this->getResponse();
-        }
-
-        // find a role with such ID.
-        $role = $this->entityManager->getRepository(Role::class)
-            ->find($id);
-
-        if ($role == null) {
-            $this->getResponse()->setStatusCode(404);
-            return $this->getResponse();
-        }
-
-        $allPermissions = $this->entityManager->getRepository(Permission::class)
-            ->findBy([], ['name' => 'ASC']);
-
-        $effectivePermissions = $this->roleManager->getEffectivePermissions($role);
-
-        return new ViewModel(
-            [
-                'role' => $role,
-                'allPermissions' => $allPermissions,
-                'effectivePermissions' => $effectivePermissions
-            ]
-        );
-    }
-
-    /**
      * This action displays a page allowing to edit existing role.
      *
-     * @return \Zend\Http\Response|\Zend\Stdlib\ResponseInterface|ViewModel
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
+    
     public function editAction() {
-        $id = (int) $this->params()->fromRoute('id', -1);
-
-        if ($id < 1) {
-            $this->getResponse()->getStatusCode(404);
-            return $this->getResponse();
-        }
-
-        $role = $this->entityManager->getRepository(Role::class)
-            ->find($id);
-
-        if ($role == null) {
-            $this->getResponse()->setStatusCode(404);
-            return $this->getResponse();
-        }
-
-        // create form
-        $form = new RoleForm('update', $this->entityManager, $role);
-
-        $roleList = [];
-        $selectedRoles = [];
-        $roles = $this->entityManager->getRepository(Role::class)
-            ->findBy([], ['name' => 'ASC']);
-
-        foreach ($roles as $role2) {
-
-            if ((int) $role2->getId() == (int) $role->getId())
-                continue; // do not inherit from ourselves
-
-            $roleList[$role2->getId()] = $role2->getName();
-
-            if ($role->hasParent($role2))
-                $selectedRoles[] = (int) $role2->getId();
-        }
-
-
-        $form->get('inherit_roles')->setValueOptions($roleList);
-
-        $form->get('inherit_roles')->setValue($selectedRoles);
-
-        // check if user has submitted the form
         if ($this->getRequest()->isPost()) {
-
-            // fill in the form with post data
-            $data = $this->params()->fromPost();
-
-            $form->setData($data);
-
-            // validate form
-            if ($form->isValid()) {
-
-                // get filtered and validated data
-                $data = $form->getData();
-
-                // update permission
-                $this->roleManager->updateRole($role, $data);
-
-                // add a flash message
-                $this->flashMessenger()->addSuccessMessage('Update the role.');
-
-                // redirect to "index" page
-                return $this->redirect()->toRoute('roles', ['action' => 'index']);
-            }
-        } else {
-            $form->setData([
-                'name' => $role->getName(),
-                'description' => $role->getDescription()
-            ]);
-        }
-        return new ViewModel([
-            'form' => $form,
-            'role' => $role
-        ]);
+            $data = $this->getRequestData();
+            
+            $user = $this->tokenPayload;
+            $role = $this->entityManager->getRepository(Role::class)
+            ->find($data['id']);
+           
+           if(isset($data['id']) && $role) {
+               //Create New Form Permission
+               $form = new RoleForm('update', $this->entityManager, $role);
+               $form->setData($data);
+               if ($form->isValid()) {
+                  $data = $form->getData();                                     
+                  $this->roleManager->updateRole($role, $data, $user);                                    
+                  $this->error_code = 1;
+                  $this->apiResponse['message'] = "You have modified Role!";
+              } else {
+                  $this->error_code = 0;
+                  $this->apiResponse['data'] = $form->getMessages(); 
+              }      
+           }   else {
+               $this->error_code = 0;
+               $this->apiResponse['message'] = 'NOT_FOUND'; 
+           }         
+            
+       } 
+       
+       return $this->createResponse();
     }
 
-
-    /**
-     * The "editPermissions" action allows to edit permissions assigned to the given role.
-     *
-     * @return \Zend\Http\Response|\Zend\Stdlib\ResponseInterface|ViewModel
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function editPermissionsAction() {
-        $id = (int) $this->params()->fromRoute('id', -1);
-
-        if ($id < 1) {
-            $this->getResponse()->setStatusCode(404);
-            return $this->getResponse();
-        }
-
-        $role = $this->entityManager->getRepository(Role::class)
-            ->find($id);
-
-        if ($role == null) {
-            $this->getResponse()->setStatusCode(404);
-            return $this->getResponse();
-        }
-
-        $allPermissions = $this->entityManager->getRepository(Permission::class)
-            ->findBy([], ['name' => 'ASC']);
-
-        $effectivePermissions = $this->roleManager->getEffectivePermissions($role);
-
-
-        // create form
-        $form = new RolePermissionForm($this->entityManager);
-        foreach ($allPermissions as $permission) {
-            $label = $permission->getName();
-            $isDisabled = false;
-            if ($effectivePermissions && isset($effectivePermissions[$permission->getName()]) && $effectivePermissions[$permission->getName()] == 'inherited') {
-                $label .= ' (inherited)';
-                $isDisabled = true;
-            }
-            $form->addPermissionField($permission->getName(), $label, $isDisabled);
-        }
-
-        // check if user has submitted the form
-        if ($this->getRequest()->isPost()) {
-
-            // fill in the form with POST data
-            $data = $this->params()->fromPost();
-
-            $form->setData($data);
-
-            // validate form
-            if ($form->isValid()) {
-
-                // get filtered and validated data
-                $data = $form->getData();
-
-                // update permissions.
-                $this->roleManager->updateRolePermissions($role, $data);
-
-                // add a flash message.
-                $this->flashMessenger()->addSuccessMessage('Updated permission for the role.');
-
-                // redirect to "index" page
-                return $this->redirect()->toRoute('roles', ['action' => 'view', 'id' => $role->getId()]);
-            }
-        } else {
-            $data = [];
-            foreach ($effectivePermissions as $name => $inherited) {
-                $data['permissions'][$name] = 1;
-            }
-
-            $form->setData($data);
-        }
-
-        return new ViewModel([
-            'form' => $form,
-            'role' => $role,
-            'allPermissions' => $allPermissions,
-            'effectivePermissions' => $effectivePermissions
-        ]);
-    }
 
     /**
      * This action delete a permission.

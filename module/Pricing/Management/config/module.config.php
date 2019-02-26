@@ -47,11 +47,11 @@ $router = [
                 ]
             ]
         ],
-        'pricing_code' => [
+        'pricing_cod' => [
             'type' => StaticRoute::class,
             'options' => [
                 'verb' => 'POST',
-                'route' => '/pricing_code[/:action]',
+                'route' => '/pricing_cod[/:action]',
                 'constraints' => [
                     'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
                 ],
@@ -62,11 +62,11 @@ $router = [
                 ]
             ]
         ],
-        'pricing_code_min' => [
+        'pricing_cod_min' => [
             'type' => StaticRoute::class,
             'options' => [
                 'verb' => 'POST',
-                'route' => '/pricing_code_min[/:action]',
+                'route' => '/pricing_cod_min[/:action]',
                 'constraints' => [
                     'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
                 ],

@@ -2,7 +2,7 @@
   width: 100%;
   position: fixed;
   top: 0;
-  height: 60px;
+  height: 45px;
   z-index: 101;
   box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.05);
 
@@ -14,12 +14,12 @@
 .topbar__wrapper {
   position: relative;
   display: flex;
-  height: 60px;
+  height: 45px;
 }
 
 .topbar__button {
   width: 60px;
-  height: 60px;
+  height: 45px;
   display: flex;
   background: transparent;
   border: none;
@@ -116,8 +116,8 @@
 
 .topbar__avatar-img {
   border-radius: 50%;
-  height: 36px;
-  width: 36px;
+  height: 30px;
+  width: 30px;
 }
 
 .topbar__avatar-name {
@@ -172,7 +172,7 @@
   width: 100%;
   padding: 0 10px;
   min-width: 220px;
-  right: 0;
+  right: -10px;
 }
 
 .topbar__link {
@@ -237,7 +237,7 @@
 
 .topbar__profile {
   margin-bottom: 0;
-  margin-left: 20px;
+  margin-left: 0px;
   position: relative;
 }
 

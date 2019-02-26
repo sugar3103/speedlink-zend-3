@@ -11,6 +11,7 @@
 @import './component/card';
 @import './component/check-box';
 @import './component/modal';
+@import './component/date-picker';
 @import './component/edit-table';
 @import './component/select-options';
 @import './component/sidebar';
@@ -19,6 +20,7 @@
 @import './component/load';
 @import './component/form';
 @import './component/radio-btn';
+@import './component/react-table';
 @import './component/tabs';
 @import './component/toggle-btn'; 
 @import './component/pagination'; 
@@ -27,6 +29,7 @@
 //pages...
 @import 'containers/account';
 @import 'containers/profile';
+@import 'containers/products-list';
 
 //objects...
 @import 'objects/layout.scss';

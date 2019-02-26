@@ -1,19 +1,9 @@
 <?php
 namespace OAuth;
 
-use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-use DoctrineExtensions\Query\Mysql\GroupConcat;
-use Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter;
-use Gedmo\SoftDeleteable\SoftDeleteableListener;
-use Gedmo\Timestampable\TimestampableListener;
 use Zend\Authentication\AuthenticationService;
-use Zend\Cache\Storage\Adapter\Filesystem;
-use Zend\Log\Formatter\Simple;
-use Zend\Log\Logger;
-use Zend\Log\LoggerAbstractServiceFactory;
 use Core\Route\StaticRoute;
-use Core\DBAL\Types\UTCDateTimeType;
 
 $router = [
     'routes' => [
@@ -90,6 +80,7 @@ $router = [
         ],
     ]
 ];
+
 $controllers = [
     'factories' => [
         Controller\AuthController::class        => Factory\AuthControllerFactory::class,
@@ -102,7 +93,7 @@ $controllers = [
 $service_manager = [
     'factories' => [
         AuthenticationService::class => Factory\AuthenticationServiceFactory::class,
-        // RbacAssertionManager::class => RbacAssertionManagerFactory::class,
+        Service\RbacAssertionManager::class => Factory\RbacAssertionManagerFactory::class,
         Service\AuthAdapter::class  => Factory\AuthAdapterFactory::class,
         Service\AuthManager::class  => Factory\AuthManagerFactory::class,
         Service\PermissionManager::class => Factory\PermissionManageFactory::class,
@@ -110,31 +101,6 @@ $service_manager = [
         Service\RoleManager::class => Factory\RoleManagerFactory::class,
         Service\UserManager::class => Factory\UserManagerFactory::class,        
     ],
-];
-$view_manager = [
-    'strategies' => [
-        'ViewJsonStrategy'        
-    ]
-];
-
-$caches = [
-    FilesystemCache::class => [
-        'adapter' => [
-            'name' => Filesystem::class,
-            'options' => [
-                // store cache data in directory.
-                'cache_dir' => './data/cache',
-                // store cached data for 1 hour
-                'ttl' => 60*60*1
-            ]
-        ],
-        'plugins' => [
-            [
-                'name' => 'serializer',
-                'options' => []
-            ]
-        ]
-    ]
 ];
 
 $doctrine = [
@@ -150,83 +116,36 @@ $doctrine = [
             'drivers' => [
                 __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
             ]
-        ],
-        'orm_report' => [
-            'drivers' => [
-                __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
-            ]
-        ],
-        'orm_read_only' => [
-            'drivers' => [
-                __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
-            ]
         ]
+    ]
+];
+
+$access_filter = [
+    'options' => [
+        'mode' => 'permissive'//restrictive or permissive
     ],
-    'eventmanager' => [
-        'orm_default' => [
-            'subscribers' => [
-                SoftDeleteableListener::class,
-                TimestampableListener::class,
-            ],
+    'controllers' => [
+        Controller\UserController::class => [
+            ['actions' => ['index','edit','view'], 'allow' => '+user.manage'],
+            ['actions' => ['edit'], 'allow' => '+user.edit'],
+            ['actions' => ['index'], 'allow' => '+user.view'],
         ],
-        'orm_report' => [
-            'subscribers' => [
-                SoftDeleteableListener::class,
-                TimestampableListener::class,
-            ],
+        Controller\RoleController::class => [
+            ['actions' => ['index', 'add', 'edit'], 'allow' => '+role.manage'],
+            ['actions' => ['index'], 'allow' => '+role.view']
         ],
-        'orm_read_only' => [
-            'subscribers' => [
-                SoftDeleteableListener::class,
-                TimestampableListener::class,
-            ],
-        ],
-    ],
-    'configuration' => [
-        'orm_default' => [
-            'datetime_functions' => [
-                'DATE' => \Zend\Validator\Date::class,
-            ],
-            'filters' => [
-                'soft-deletable' => SoftDeleteableFilter::class,
-            ],
-            'types' => [
-                'datetime' => UTCDateTimeType::class,
-            ],
-            'string_functions' => [
-                'GROUP_CONCAT' => GroupConcat::class
-            ]
-        ],
-        'orm_read_only' => [
-            'datetime_functions' => [
-                'DATE' => Date::class,
-            ],
-            'filters' => [
-                'soft-deletable' => SoftDeleteableFilter::class,
-            ],
-            'types' => [
-                'datetime' => UTCDateTimeType::class,
-            ],
-        ],
-        'orm_report' => [
-            'datetime_functions' => [
-                'DATE' => Date::class,
-            ],
-            'filters' => [
-                'soft-deletable' => SoftDeleteableFilter::class,
-            ],
-            'types' => [
-                'datetime' => UTCDateTimeType::class,
-            ],
+        Controller\PermissionController::class => [            
+            ['actions' => ['index','add','edit'], 'allow' => '+permission.manage'],
+            ['actions' => ['index'], 'allow' => '+permission.view'],
+            ['actions' => ['add'], 'allow' => '+permission.add'],
         ]
     ]
 ];
 
 return [
     'router'            => $router,
-    'controllers'       => $controllers,
-    'caches'            => $caches,
+    'controllers'       => $controllers,        
     'service_manager'   => $service_manager,
     'doctrine'          => $doctrine,
-    'view_manager'      => $view_manager
+    'access_filter'     => $access_filter
 ];

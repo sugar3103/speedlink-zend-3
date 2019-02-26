@@ -16,6 +16,10 @@ class Item extends Component {
     this.props.toggleHubModal(hub);
   }
 
+  toggleDetailModal = (hub) => {
+    this.props.toggleHubDetailModal(hub);
+  }
+
   onDelete = (id) => {
     const { messages } = this.props.intl;
     confirmAlert({
@@ -39,7 +43,7 @@ class Item extends Component {
     const { hub } = this.props;
     const { messages,locale } = this.props.intl;
     return (
-      <tr>
+      <tr onClick={() => this.toggleDetailModal(hub)} >
         <th scope="row">{hub.id}</th>
         <td>{hub.code}</td>
         <td>{ (locale ==='en-US' && hub.name_en) ? hub.name_en : hub.name }</td>

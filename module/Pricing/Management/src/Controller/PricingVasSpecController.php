@@ -37,7 +37,7 @@ class PricingVasSpecController extends CoreController {
     public function indexAction()
     {
       $this->apiResponse = [
-          'message' => 'Pricing Vas Spec Index Action'
+          'message' => 'Not Thing to see here'
       ];
       return $this->createResponse();
     }

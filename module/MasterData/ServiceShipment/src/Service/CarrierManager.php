@@ -80,7 +80,6 @@ class CarrierManager
     public function getListCarrierCodeByCondition()
     {
         $carriers = [];
-
         //get orm carrier
         $ormCarrier = $this->entityManager->getRepository(Carrier::class)->getListCarrierCodeByCondition();
 
@@ -89,12 +88,7 @@ class CarrierManager
             $ormPaginator->setUseOutputWalkers(false);
             $carriers = $ormPaginator->getIterator()->getArrayCopy();
         }
-
-        //set return data
-        $dataCarrier = [
-            'listCarrier' => $carriers,
-        ];
-        return $dataCarrier;
+        return $carriers;
     }
 
     /**

@@ -36,9 +36,21 @@ class PricingDataController extends CoreController {
 
     public function indexAction()
     {
-      $this->apiResponse = [
-          'message' => 'Pricing Data Index Action'
-      ];
-      return $this->createResponse();
+        $result = [
+            "total" => 0,
+            "data" => []
+        ];
+
+        $fieldsMap = ['pricing_id'];
+        list($start, $limit, $sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);
+        $dataShipmentType = $this->pricingDataManager->getListPricingDataByCondition($start, $limit, $sortField, $sortDirection, $filters);
+
+        $result['error_code'] = 1;
+        $result['message'] = 'Success';
+        $result["total"] = $dataShipmentType['totalPricingData'];
+        $result["data"] = !empty($dataShipmentType['listPricingData']) ? $dataShipmentType['listPricingData'] : [];
+        $this->apiResponse = $result;
+
+        return $this->createResponse();
     }
 }

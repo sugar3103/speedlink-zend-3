@@ -83,7 +83,7 @@ class ZoneCodeController extends CoreController {
       if ($this->getRequest()->isPost()) {
         $user = $this->tokenPayload;
         $data = $this->getRequestData();
-
+ //  var_dump($result);die();
         $check_exits = $this->entityManager->getRepository(ZoneCode::class)->findOneBy(array('carrier_id' => $data['carrier_id'], 'category' => $data['category'], 'service_id' => $data['service_id'], 'shipment_type_id' => $data['shipment_type_id'], 'code' => $data['code']));    
         if($check_exits)
         {
@@ -98,7 +98,6 @@ class ZoneCodeController extends CoreController {
         if ($form->isValid()) {
           $data = $form->getData();
           $data['created_by'] = $user->id;
-          // var_dump($data);die();
           $result = $this->zonecodeManager->addZoneCode($data);                
           // Check result
           $this->error_code = 1;
@@ -155,18 +154,27 @@ class ZoneCodeController extends CoreController {
     public function deleteAction()
     {
         $data = $this->getRequestData();
-        if(isset($data['id'])) {
+        if(isset($data['id']) && count($data['id']) > 0) {
+          try {
+            foreach ($data['id'] as $id) {
             // Find existing zonecode in the database.
             $zonecode = $this->entityManager->getRepository(ZoneCode::class)->findOneBy(array('id' => $data['id']));    
             if ($zonecode == null) {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = "ZoneCode Not Found";
+                exit();
             } else {
                 //remove zonecode
                 $this->zonecodeManager->removeZoneCode($zonecode);
+            }
+          }
                 $this->error_code = 1;
                 $this->apiResponse['message'] = "Success: You have deleted ZoneCode!";
-            }          
+            }   
+        catch (\Throwable $th) {
+          $this->error_code = 0;
+          $this->apiResponse['message'] = "Status request Id!";
+        }          
         } else {
             $this->error_code = 0;
             $this->apiResponse['message'] = "ZoneCode request Id!";

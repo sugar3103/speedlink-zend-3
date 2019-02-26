@@ -2,6 +2,7 @@
 namespace Management\Factory;
 
 use Management\Controller\PricingController;
+use Management\Service\PricingDataManager;
 use Management\Service\PricingManager;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
@@ -19,8 +20,9 @@ class PricingControllerFactory implements FactoryInterface {
     {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
         $pricingManager = $container->get(PricingManager::class);
+        $pricingDataManager = $container->get(PricingDataManager::class);
 
         // instantiate the controller and inject dependencies.
-        return new PricingController($entityManager,$pricingManager);
+        return new PricingController($entityManager,$pricingManager,$pricingDataManager);
     }
 }

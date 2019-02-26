@@ -13,12 +13,10 @@ class CoreControllerFactory implements FactoryInterface {
      * @param ContainerInterface $container
      * @param string $requestedName
      * @param array|null $options
-     * @return UserManager|object
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
-        $documentManager = $container->get('doctrine.documentmanager.odm_default');
         
         return new CoreController($entityManager);
     }

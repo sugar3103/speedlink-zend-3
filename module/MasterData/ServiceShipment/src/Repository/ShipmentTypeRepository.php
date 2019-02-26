@@ -67,6 +67,41 @@ class ShipmentTypeRepository extends EntityRepository
         }
     }
 
+    public function getListCodeByCondition($sortField = 'code', $filters = [])
+    {
+        try {
+            $queryBuilder = $this->buildShipmentTypeQueryBuilder($sortField, 'asc', $filters);
+            $queryBuilder->select("
+                smt.id AS shipment_type_id,
+                smt.code AS shipment_type_code,
+                smt.name AS shipment_type_name,
+                smt.name_en AS shipment_type_name_en,
+                smt.carrier_id,
+                c.code AS carrier_code,
+                c.name AS carrier_name,
+                c.name_en AS carrier_name_en,
+                smt.service_id,
+                s.code AS service_code,
+                s.name AS service_name,
+                s.name_en AS service_name_en
+            ")->andWhere('smt.is_deleted = 0')
+              ->andWhere('smt.status = 1');
+            if ($sortField == 'carrier_id') {
+                $queryBuilder->andWhere('c.is_deleted = 0');
+                $queryBuilder->andWhere('c.status = 1');
+                $queryBuilder->groupBy('smt.carrier_id');
+            } else if ($sortField == 'service_id') {
+                $queryBuilder->andWhere('s.is_deleted = 0');
+                $queryBuilder->andWhere('s.status = 1');
+                $queryBuilder->groupBy('smt.service_id');
+            }
+            return $queryBuilder;
+
+        } catch (QueryException $e) {
+            return [];
+        }
+    }
+
     /**
      * Build query builder
      *
@@ -86,6 +121,22 @@ class ShipmentTypeRepository extends EntityRepository
             'code' => [
                 'alias' => 'smt.code',
                 'operator' => 'contains'
+            ],
+            'category_code' => [
+                'alias' => 'smt.category_code',
+                'operator' => 'eq'
+            ],
+            'carrier_id' => [
+                'alias' => 'smt.carrier_id',
+                'operator' => 'eq'
+            ],
+            'service_id' => [
+                'alias' => 'smt.service_id',
+                'operator' => 'in'
+            ],
+            'shipment_type_id' => [
+                'alias' => 'smt.id',
+                'operator' => 'in'
             ],
         ];
 

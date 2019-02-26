@@ -1,17 +1,27 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { Button, ButtonToolbar, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleRoleModal, getPermissionList, getRoleListAll } from '../../../../redux/actions';
+import { toggleRoleModal, getPermissionList, getRoleListAll, changeTypeRoleModal } from '../../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
-
+import { MODAL_ADD, MODAL_VIEW, MODAL_EDIT } from '../../../../constants/defaultValues';
 import renderRadioButtonField from '../../../../containers/Shared/form/RadioButton';
 import CustomField from '../../../../containers/Shared/form/CustomField';
+import renderMultiSelectField from '../../../../containers/Shared/form/MultiSelect';
 import CheckBoxGroup from '../../../../containers/Shared/form/CheckBoxGroup';
+import PropTypes from 'prop-types';
+import Moment from 'react-moment';
 
 import validate from './validateActionForm';
 
-class Action extends PureComponent {
+class ActionForm extends PureComponent {
+
+  constructor() {
+    super();
+    this.state = {
+      modalType: ''
+    }
+  }
 
   componentDidMount() {
     //Param Permission
@@ -26,8 +36,17 @@ class Action extends PureComponent {
     this.props.getRoleListAll(param);
 
     const data = this.props.modalData;
+
     if (data) {
       this.props.initialize(data);
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.modalType !== this.props.modalType) {
+      this.setState({
+        modalType: prevProps.modalType
+      });
     }
   }
 
@@ -39,21 +58,59 @@ class Action extends PureComponent {
           value: item.id,
           label: item.name
         }
+
       })
     }
     return result;
+  }
+
+  showOptions = (items) => {
+    const data = this.props.modalData;
+    
+    if (data && items.length > 0) {
+      const roles = items.filter(item => item.id !== data.id).map(item => {
+        return {
+          'value': item.id,
+          'label': item.name
+        }
+
+      });
+      return roles;
+    }
+   
   }
 
   toggleModal = () => {
     this.props.toggleRoleModal();
   }
 
+  changeTypeModal = () => {
+    this.props.changeTypeRoleModal(MODAL_VIEW);
+  }
+
   render() {
-    const { messages } = this.props.intl;
-    const { handleSubmit, modalData } = this.props;
-    const className = modalData ? 'primary' : 'success';
-    const { permissions } = this.props;
-    const title = modalData ? messages['role.update'] : messages['role.add-new'];
+    const { messages, locale } = this.props.intl;
+    const { handleSubmit, modalData, modalType, permissions, role } = this.props;
+
+    let className = 'success';
+    let title = messages['role.add-new'];
+    const disabled = modalType === MODAL_VIEW ? true : false;
+    switch (modalType) {
+      case MODAL_ADD:
+        className = 'success';
+        title = messages['role.add-new'];
+        break;
+      case MODAL_EDIT:
+        className = 'primary';
+        title = messages['role.update'];
+        break;
+      case MODAL_VIEW:
+        className = 'info';
+        title = messages['role.view'];
+        break;
+      default:
+        break;
+    }
     return (
       <form className="form" onSubmit={handleSubmit}>
         <div className="modal__header">
@@ -75,6 +132,7 @@ class Action extends PureComponent {
                     type="text"
                     placeholder={messages['role.name']}
                     messages={messages}
+                    disabled={disabled}
                   />
                 </div>
                 <div className="form__form-group-field">
@@ -87,6 +145,7 @@ class Action extends PureComponent {
                     type="text"
                     placeholder={messages['role.name']}
                     messages={messages}
+                    disabled={disabled}
                   />
                 </div>
               </div>
@@ -102,6 +161,7 @@ class Action extends PureComponent {
                     type="text"
                     placeholder={messages['description']}
                     messages={messages}
+                    disabled={disabled}
                   />
 
                 </div>
@@ -115,7 +175,21 @@ class Action extends PureComponent {
                     type="text"
                     placeholder={messages['description']}
                     messages={messages}
+                    disabled={disabled}
                   />
+                </div>
+                <div className="form__form-group">
+                  <span className="form__form-group-label">{messages['role.inherit-roles']}</span>
+                  <div className="form__form-group-field">
+                    <Field
+                      name="inherit_roles"
+                      component={renderMultiSelectField}
+                      options={role.items && this.showOptions(role.items)}
+                      messages={messages}
+                      disabled={disabled}
+                      placeholder={messages['please-select']}
+                    />
+                  </div>
                 </div>
               </div>
             </Col>
@@ -124,10 +198,11 @@ class Action extends PureComponent {
                 <span className="form__form-group-label">{messages['permission.list']}</span>
                 <div className="form__form-group-field">
                   {permissions &&
-                    <CheckBoxGroup 
-                      name="inherit_roles" 
-                      options={this.showPermissionOption(permissions)} 
+                    <CheckBoxGroup
+                      name="permissions"
+                      options={this.showPermissionOption(permissions)}
                       messages={messages}
+                      disabled={disabled}
                     />
                   }
                 </div>
@@ -141,33 +216,71 @@ class Action extends PureComponent {
                     label={messages['active']}
                     radioValue={1}
                     defaultChecked
+                    disabled={disabled}
                   />
                   <Field
                     name="status"
                     component={renderRadioButtonField}
                     label={messages['inactive']}
                     radioValue={0}
+                    disabled={disabled}
                   />
                 </div>
               </div>
             </Col>
           </Row>
+          {modalData &&
+            <Fragment>
+              <hr />
+              <Row>
+                <Col md={6}>
+                  <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name_created}</span>
+                  <br />
+                  <span><i className="label-info-data">{messages['created-at']}:</i>
+                    <Moment fromNow locale={locale}>{new Date(modalData.created_at)}</Moment>
+                  </span>
+                </Col>
+                {modalData.updated_at &&
+                  <Col md={6}>
+                    <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.full_name_updated}</span>
+                    <br />
+                    <span><i className="label-info-data">{messages['updated-at']}:</i>
+                      <Moment fromNow locale={locale}>{new Date(modalData.updated_at)}</Moment>
+
+                    </span>
+                  </Col>
+                }
+              </Row>
+            </Fragment>
+          }
         </div>
         <ButtonToolbar className="modal__footer">
-          <Button outline onClick={this.toggleModal}>{messages['cancel']}</Button>{' '}
-          <Button color={className} type="submit">{messages['save']}</Button>
+          {this.state.modalType === MODAL_VIEW &&
+            <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
+          }
+          <Button color={className} type="submit">{modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
         </ButtonToolbar>
       </form>
     );
   }
 }
 
+ActionForm.propTypes = {
+  modalData: PropTypes.object,
+  modalType: PropTypes.string,
+  handleSubmit: PropTypes.func.isRequired,
+  toggleRoleModal: PropTypes.func.isRequired,
+  changeTypeRoleModal: PropTypes.func.isRequired,
+}
+
+
 const mapStateToProps = ({ users }) => {
   const { role, permission } = users;
-  const { modalData } = role;
+  const { modalData, modalType } = role;
   const permissions = permission.items;
   return {
     modalData,
+    modalType,
     permissions,
     role
   }
@@ -179,5 +292,6 @@ export default reduxForm({
 })(injectIntl(connect(mapStateToProps, {
   toggleRoleModal,
   getPermissionList,
-  getRoleListAll
-})(Action)));
+  getRoleListAll,
+  changeTypeRoleModal
+})(ActionForm)));

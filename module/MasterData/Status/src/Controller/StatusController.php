@@ -130,24 +130,29 @@ class StatusController extends CoreController {
     public function deleteAction()
     {
         $data = $this->getRequestData();
-        if(isset($data['id'])) {
-            // Find existing status in the database.
-            $status = $this->entityManager->getRepository(Status::class)->findOneBy(array('id' => $data['id']));    
-            if ($status == null) {
-                $this->error_code = 0;
-                $this->apiResponse['message'] = "Status Not Found";
-            } else {
-                //remove status
-                $this->statusManager->removeStatus($status);
-    
+        if(isset($data['ids']) && count($data['ids']) > 0) {
+            try {
+                foreach ($data['ids'] as $id) {
+                    $status = $this->entityManager->getRepository(Status::class)->findOneBy(array('id' => $id));    
+                    if ($status == null) {
+                        $this->error_code = 0;
+                        $this->apiResponse['message'] = "Status Not Found";
+                        exit();
+                    } else {
+                        $this->statusManager->removeStatus($status);
+                    }  
+                }
                 $this->error_code = 1;
                 $this->apiResponse['message'] = "Success: You have deleted status!";
-            }          
+            } catch (\Throwable $th) {
+                $this->error_code = 0;
+                $this->apiResponse['message'] = "Status request Id!";
+            }
         } else {
             $this->error_code = 0;
             $this->apiResponse['message'] = "Status request Id!";
         }
-       
+
         return $this->createResponse();
     }
 }

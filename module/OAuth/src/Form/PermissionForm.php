@@ -88,7 +88,7 @@ class PermissionForm extends Form
         // Add input for "description" field.
         $inputFilter->add([
             'name' => 'description',
-            'required' => true,
+            'required' => false,
             'filters' => [
                 [
                     'name' => StringTrim::class
@@ -106,7 +106,7 @@ class PermissionForm extends Form
         ]);
         $inputFilter->add([
             'name' => 'description_en',
-            'required' => true,
+            'required' => false,
             'filters' => [
                 [
                     'name' => StringTrim::class

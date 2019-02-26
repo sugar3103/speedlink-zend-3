@@ -6,8 +6,11 @@ use Zend\Mvc\Controller\AbstractRestfulController;
 use OAuth\Entity\User;
 use Zend\View\Model\JsonModel;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Firebase\JWT\JWT;
 use Zend\EventManager\EventManagerInterface;
+use OAuth\Service\AuthManager;
+use Zend\Mvc\MvcEvent;
 
 class ApiController extends AbstractRestfulController
 {
@@ -17,6 +20,12 @@ class ApiController extends AbstractRestfulController
      */
     private $entityManager;
 
+    /**
+     * @var DocumentManager
+     */
+
+     private $documentManager;
+    
     /**
      * @var Integer $httpStatusCode Define Api Response code.
      */
@@ -52,28 +61,38 @@ class ApiController extends AbstractRestfulController
      */
     public $tokenPayload;
 
-    public function __construct($entityManager) {
-        
-        $this->entityManager = $entityManager;
+    public function __construct($entityManager) {        
+        $this->entityManager = $entityManager;        
     }
+
+    /**
+     * @var \Zend\EventManager\EventManagerInterface
+     */
+
+    public $event;
+
     /**
      * set Event Manager to check Authorization
      * @param \Zend\EventManager\EventManagerInterface $events
      */
     public function setEventManager(EventManagerInterface $events)
     {
-        parent::setEventManager($events);
-        $events->attach('dispatch', array($this, 'checkAuthorization'), 10);
+        parent::setEventManager($events);        
+        $events->attach('dispatch', array($this, 'checkAuthorization'), 100);
     }
 
+    public function getEvents()
+    {
+        return $this->event;
+    }
     /**
      * This Function call from eventmanager to check authntication and token validation
      * @param type $event
      * 
      */
     public function checkAuthorization($event)
-    {
-        
+    {   
+        $this->event = $event;        
         $request = $event->getRequest();
         $response = $event->getResponse();
         $isAuthorizationRequired = $event->getRouteMatch()->getParam('isAuthorizationRequired');
@@ -84,12 +103,11 @@ class ApiController extends AbstractRestfulController
         if($request->isOptions()) {
             return;
         }
+        if (!$isAuthorizationRequired) return;
 
         if (isset($config['ApiRequest'])) { 
             $responseStatusKey = $config['ApiRequest']['responseFormat']['statusKey'];
-            
-            if (!$isAuthorizationRequired) return;
-            
+
             $jwtToken = $this->findJwtToken($request);
             
             if($request->isPost()) { 
@@ -104,7 +122,19 @@ class ApiController extends AbstractRestfulController
                             $config['ApiRequest']['responseFormat']['dataKey'] => [],
                             $config['ApiRequest']['responseFormat']['messageKey'] => 'Your API key is wrong'
                         ];
-                    } else { return; }
+                    } else { 
+                       if(!$this->accessFilter($event)) {
+                        $response->setStatusCode(200);
+                        $jsonModelArr = [
+                            $responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'],                             
+                            $config['ApiRequest']['responseFormat']['errorKey'] => 0,                            
+                            $config['ApiRequest']['responseFormat']['messageKey'] => 'ACCESS_DENIED'
+                        ];
+                       } else{
+                         return;
+                       }
+                        
+                    }
                 } else {
                     $response->setStatusCode(200);
                     $jsonModelArr = [
@@ -124,8 +154,8 @@ class ApiController extends AbstractRestfulController
             $response->setStatusCode(400);
             $jsonModelArr = ['status' => 'NOK', 'result' => ['error' => 'Require copy this file vender\multidots\zf3-rest-api\config\restapi.global.php and paste to root config\autoload\restapi.global.php']];
         }
-        $response->getHeaders()->addHeaderLine('Content-Type', 'application/json');
-        $jsonModelArr['total'] = 0;
+
+        $response->getHeaders()->addHeaderLine('Content-Type', 'application/json');        
         $view = new JsonModel($jsonModelArr);
         $response->setContent($view->serialize());
        
@@ -267,5 +297,28 @@ class ApiController extends AbstractRestfulController
                 $this->error = false;
                 break;
         }
+    }
+
+    private function accessFilter(MvcEvent $event) {
+         // get controller and action to which the HTTP request was dispatched.
+        $controller = $event->getTarget();
+        $controllerName = $event->getRouteMatch()->getParam('controller', null);
+        $actionName = $event->getRouteMatch()->getParam('action', null);
+        
+        // convert dash-style action name to camel-case.
+        $actionName = str_replace('-', '', lcfirst(ucwords($actionName, '-')));
+        
+        // get the instance of AuthManager service.
+        $authManager = $event->getApplication()->getServiceManager()->get(AuthManager::class);        
+        
+        $authManager->login($this->tokenPayload->username, $this->tokenPayload->password,$this->tokenPayload->remember_me);
+        
+        if($authManager->filterAccess($controllerName, $actionName)  == AuthManager::ACCESS_DENIED) {
+            // redirect the user to the "Not Authorized" page.
+            return false;
+        } else {
+            return true;
+        }
+        
     }
 }

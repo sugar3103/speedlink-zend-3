@@ -22,6 +22,8 @@ use ServiceShipment\Entity\Carrier;
 use ServiceShipment\Entity\Service;
 use ServiceShipment\Entity\ShipmentType;
 use Customer\Entity\Customer;
+use OAuth\Entity\User;
+
 /**
  * This service is responsible for adding/editing users
  * and changing user password.
@@ -141,12 +143,25 @@ class RangeWeightManager {
 
         $rangeweight->setShipmenttype($shipmenttype);
 
-        $customer = $this->entityManager->getRepository(Customer::class)->find($data['customer_id']);
-        if ($customer == null)
-            throw new \Exception('Not found Customer by ID');
-
-        $rangeweight->setCustomer($customer);
-
+        if($data['customer_id']) {
+            $customer = $this->entityManager->getRepository(Customer::class)->find($data['customer_id']);
+            if ($customer == null)
+                throw new \Exception('Not found Customer by ID');
+            $rangeweight->setCustomer($customer);
+        }
+        if($data['created_by']) {
+            $user_create = $this->entityManager->getRepository(User::class)->find($data['created_by']);
+            if ($user_create == null)
+                throw new \Exception('Not found User by ID');
+            $rangeweight->setUserCreate($user_create);
+        }
+      
+        if($data['updated_by']){
+            $user_update = $this->entityManager->getRepository(User::class)->find($data['updated_by']);
+            if ($user_update == null)
+                throw new \Exception('Not found User by ID');
+            $rangeweight->setUserUpdate($user_update);
+        }
     }
 
     /**
@@ -186,6 +201,7 @@ class RangeWeightManager {
             //   $rangeweight['status'] = Branch::getIsActiveList($rangeweight['status']);
             //set created_at
                 $rangeweight['created_at'] =  ($rangeweight['created_at']) ?Utils::checkDateFormat($rangeweight['created_at'],'d/m/Y') : '';
+                $rangeweight['updated_at'] =  ($rangeweight['updated_at']) ? Utils::checkDateFormat($rangeweight['updated_at'],'d/m/Y H:i:s') : '';
             // $countRow++;
             }
         }

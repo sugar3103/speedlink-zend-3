@@ -275,8 +275,38 @@
     }
   }
 
-  &, &.btn-primary, &.btn-danger, &.btn-warning, &.btn-success, &.btn-outline-secondary, &.btn-secondary,
-  &.btn-outline-primary, &.btn-outline-danger, &.btn-outline-warning, &.btn-outline-success,
+  &.btn-info {
+    background-color: $color-info;
+    border-color: $color-info;
+
+    &:before {
+      background-color: $color-info-hover;
+    }
+
+    &:hover, &:focus, &:active, &:active:focus {
+      border-color: $color-info-hover;
+    }
+  }
+
+  &.btn-outline-info {
+    color: $color-info;
+    border-color: $color-info;
+
+    p {
+      color: $color-info;
+    }
+
+    svg {
+      fill: $color-info;
+    }
+
+    &:before {
+      background-color: $color-info;
+    }
+  }
+
+  &, &.btn-primary, &.btn-danger, &.btn-warning, &.btn-info, &.btn-success, &.btn-outline-secondary, &.btn-secondary,
+  &.btn-outline-primary, &.btn-outline-danger, &.btn-outline-warning, &.btn-outline-info, &.btn-outline-success,
   &.icon, &.icon.btn-secondary {
 
     &.disabled {
@@ -296,7 +326,7 @@
     }
   }
 
-  &.btn-primary, &.btn-danger, &.btn-warning, &.btn-success {
+  &.btn-primary, &.btn-danger, &.btn-warning, &.btn-success, &.btn-info {
     p {
       color: #ffffff;
     }
@@ -314,8 +344,8 @@
     }
   }
 
-  &.btn-primary, &.btn-danger, &.btn-warning, &.btn-success,
-  &.btn-outline-primary, &.btn-outline-danger, &.btn-outline-warning, &.btn-outline-success {
+  &.btn-primary, &.btn-danger, &.btn-warning, &.btn-success, &.btn-info,
+  &.btn-outline-primary, &.btn-outline-danger, &.btn-outline-warning, &.btn-outline-success, &.btn-outline-info {
 
     &:hover, &:focus,
     &:active, &:active:focus {

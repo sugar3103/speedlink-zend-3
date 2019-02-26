@@ -198,3 +198,9 @@
     opacity: 1;
   }
 }
+.checkbox-btn__checkbox:indeterminate + .checkbox-btn__checkbox-custom {
+
+  svg {
+    opacity: 1;
+  }
+}

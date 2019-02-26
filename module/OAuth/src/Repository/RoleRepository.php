@@ -39,7 +39,12 @@ class RoleRepository extends EntityRepository {
                  r.status,
                  r.description,
                  r.description_en,
-                 r.created_at"
+                 r.created_at,
+                 cr.username as created_by,
+                 CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
+                 CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated,
+                 up.username as updated_by,
+                 r.updated_at"
             )->andWhere('r.id <> 0')->groupBy('r.id');
             if($limit){
                 $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
@@ -82,7 +87,9 @@ class RoleRepository extends EntityRepository {
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(Role::class, 'r');
+        $queryBuilder->from(Role::class, 'r')
+        ->leftJoin('r.join_created', 'cr')
+        ->leftJoin('r.join_updated', 'up');
 
         if ($sortField != NULL && $sortDirection != NULL)
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

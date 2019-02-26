@@ -60,7 +60,7 @@ class CarrierController extends CoreController
 
         $result['error_code'] = 1;
         $result['message'] = 'Success';
-        $result["data"] = !empty($dataCarrier['listCarrier']) ? $dataCarrier['listCarrier'] : [];
+        $result["data"] = !empty($dataCarrier) ? $dataCarrier : [];
         $this->apiResponse = $result;
 
         return $this->createResponse();
@@ -71,7 +71,6 @@ class CarrierController extends CoreController
         $user = $this->tokenPayload;
         $data = $this->getRequestData();
         if (empty($data)) {
-            // TODO: Check error_code
             $this->error_code = -1;
             $this->apiResponse['message'] = 'Missing data';
             return $this->createResponse();
@@ -82,15 +81,18 @@ class CarrierController extends CoreController
 
         //validate form
         if ($form->isValid()) {
-            // get filtered and validated data
-            $data = $form->getData();
-            // add new carrier
-            $this->carrierManager->addCarrier($data, $user);
-
-            $this->error_code = 1;
-            $this->apiResponse['message'] = "Success: You have added a carrier!";
+            try {
+                // get filtered and validated data
+                $data = $form->getData();
+                // add new carrier
+                $this->carrierManager->addCarrier($data, $user);
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have added a carrier!";
+            } catch (\Exception $e) {
+                $this->error_code = -1;
+                $this->apiResponse['message'] = "Fail: Please contact System Admin";
+            }
         } else {
-            //TODO: Check error_code
             $this->error_code = -1;
             $this->apiResponse = $form->getMessages();
         }
@@ -103,7 +105,6 @@ class CarrierController extends CoreController
         $user = $this->tokenPayload;
         $data = $this->getRequestData();
         if (empty($data)) {
-            // TODO: Check error_code
             $this->error_code = -1;
             $this->apiResponse['message'] = 'Missing data';
             return $this->createResponse();
@@ -116,15 +117,18 @@ class CarrierController extends CoreController
 
         //validate form
         if ($form->isValid()) {
-            // get filtered and validated data
-            $data = $form->getData();
-            // add new carrier
-            $this->carrierManager->updateCarrier($carrier, $data, $user);
-
-            $this->error_code = 1;
-            $this->apiResponse['message'] = "Success: You have edited a carrier!";
+            try {
+                // get filtered and validated data
+                $data = $form->getData();
+                // add new carrier
+                $this->carrierManager->updateCarrier($carrier, $data, $user);
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have edited a carrier!";
+            } catch (\Exception $e) {
+                $this->error_code = -1;
+                $this->apiResponse['message'] = "Fail: Please contact System Admin";
+            }
         } else {
-            //TODO: Check error_code
             $this->error_code = -1;
             $this->apiResponse = $form->getMessages();
         }
@@ -137,7 +141,6 @@ class CarrierController extends CoreController
         $user = $this->tokenPayload;
         $data = $this->getRequestData();
         if (empty($data)) {
-            // TODO: Check error_code
             $this->error_code = -1;
             $this->apiResponse['message'] = 'Missing data';
             return $this->createResponse();
@@ -147,9 +150,14 @@ class CarrierController extends CoreController
 
         //validate form
         if(!empty($carrier)) {
-            $this->carrierManager->deleteCarrier($carrier, $user);
-            $this->error_code = 1;
-            $this->apiResponse['message'] = "Success: You have deleted carrier!";
+            try {
+                $this->carrierManager->deleteCarrier($carrier, $user);
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have deleted carrier!";
+            } catch (\Exception $e) {
+                $this->error_code = -1;
+                $this->apiResponse['message'] = "Fail: Please contact System Admin";
+            }
         } else {
             $this->httpStatusCode = 200;
             $this->error_code = -1;

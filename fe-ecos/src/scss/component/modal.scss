@@ -69,7 +69,7 @@
 }
 
 .modal__footer {
-  margin-top: 20px;
+  margin-top: 10px;
   display: flex;
   justify-content: center;
   margin-bottom: 0;
@@ -106,6 +106,13 @@
 
   .modal__title-icon {
     color: $color-red;
+  }
+}
+
+.modal-dialog--info {
+
+  .modal__title-icon {
+    color: $color-info;
   }
 }
 
@@ -153,6 +160,10 @@
   &.modal-dialog--danger .modal-content {
     background-color: $color-red;
   }
+
+  &.modal-dialog--info .modal-content {
+    background-color: $color-info;
+  }
 }
 
 .modal-dialog--header {
@@ -166,7 +177,7 @@
 
   .modal__header {
     color: white;
-    padding: 15px 20px;
+    padding: 10px 20px;
     position: relative;
   }
 
@@ -214,5 +225,8 @@
 
   &.modal-dialog--danger .modal__header {
     background-color: $color-red;
+  }
+  &.modal-dialog--info .modal__header {
+    background-color: $color-info;
   }
 }

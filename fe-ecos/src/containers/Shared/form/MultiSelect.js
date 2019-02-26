@@ -14,11 +14,13 @@ class MultiSelectField extends PureComponent {
       ]),
       label: PropTypes.string,
     })),
+    disabled: PropTypes.bool
   };
 
   static defaultProps = {
     placeholder: '',
     options: [],
+    disabled: false
   };
 
   handleChange = (selectedOptions) => {
@@ -27,7 +29,7 @@ class MultiSelectField extends PureComponent {
 
   render() {
     const {
-      value, name, placeholder, options,
+      value, name, placeholder, options,disabled
     } = this.props;    
     return (
       <Select
@@ -41,6 +43,7 @@ class MultiSelectField extends PureComponent {
         closeOnSelect={false}
         removeSelected={false}
         placeholder={placeholder}
+        disabled = {disabled}
       />
     );
   }
@@ -52,6 +55,7 @@ const renderMultiSelectField = props => (
       {...props.input}
       options={props.options}
       placeholder={props.placeholder}
+      disabled={props.disabled}
     />    
     {props.meta.touched && props.meta.error && <span className="form__form-group-error">{props.messages[props.meta.error]}</span>}
   </div>
@@ -74,12 +78,14 @@ renderMultiSelectField.propTypes = {
     label: PropTypes.string,
   })),
   placeholder: PropTypes.string,
+  disabled: PropTypes.bool
 };
 
 renderMultiSelectField.defaultProps = {
   meta: null,
   options: [],
   placeholder: '',
+  disabled: false
 };
 
 export default renderMultiSelectField;

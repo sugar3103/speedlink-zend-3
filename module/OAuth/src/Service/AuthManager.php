@@ -93,63 +93,64 @@ class AuthManager
         $this->authService->clearIdentity();
     }
 
-    public function hasIdentity()
-    {
-        
-    }
-
     public function filterAccess($controllerName, $actionName)
     {
+        $result = self::ACCESS_GRANTED;
+
         $mode = isset($this->config['options']['mode']) ? $this->config['options']['mode'] : 'restrictive';
+
         if ($mode != 'restrictive' && $mode != 'permissive')
             throw new \Exception("Invalid filter access mode (expected either restrictive or permissive mode).");
-
+        
         if (isset($this->config['controllers'][$controllerName])) {
-            $items = $this->config['controllers'][$controllerName];
+            $items = $this->config['controllers'][$controllerName];   
+            
             foreach ($items as $item) {
-                $actionList = $item['actions'];
+                $actionList = $item['actions'];                
                 $allow = $item['allow'];
                 if (is_array($actionList) && in_array($actionName, $actionList) ||
                     $actionList == '*') {
                     if ($allow == '*')
                         // anyone is allowed to see the page.
-                        return self::ACCESS_GRANTED;
+                         $result = self::ACCESS_GRANTED;
                     elseif (!$this->authService->hasIdentity())
                         // ony authenticated user is allowed to see the page
                         return self::AUTH_REQUIRED;
 
                     if ($allow == '@')
                         // any authenticated user is allowed to see the page
-                        return self::ACCESS_GRANTED;
+                        $result = self::ACCESS_GRANTED;
                     elseif (substr($allow, 0, 1) == '@') {
                         // only the user with specific identity is allowed to see the page
                         $identity = substr($allow, 1);
                         if ($this->authService->getIdentity() == $identity)
-                            return self::ACCESS_GRANTED;
+                            $result = self::ACCESS_GRANTED;
                         else
-                            return self::ACCESS_DENIED;
-                    } elseif (substr($allow, 0, 1) == '+') {
+                            $result = self::ACCESS_DENIED;
+                    } elseif (substr($allow, 0, 1) == '+') { 
                         // only the user with this permission is allowed to see the page
-                        $permission = substr($allow, 1);
+                        $permission = substr($allow, 1);                                              
                         if ($this->rbacManager->isGranted(null, $permission))
-                            return self::ACCESS_GRANTED;
+                            $result = self::ACCESS_GRANTED;
                         else
-                            return self::ACCESS_DENIED;
+                            $result = self::ACCESS_DENIED;
                     } else
                         throw new \Exception("Unexpected value for \"allow\" - expected either \"?\", \"@\", \"@identity\" or \"+permission\".");
                 }
+              
             }
         }
-
+         
+       
         // in restrictive mode, we forbid access for authenticated users to any
         // action not listed under 'access_filter' key (for security reasons).
         if ($mode == 'restrictive' && !$this->authService->hasIdentity())
             if (!$this->authService->hasIdentity())
-                return self::AUTH_REQUIRED;
+                $result = self::AUTH_REQUIRED;
             else
-                return self::ACCESS_DENIED;
+                $result = self::ACCESS_DENIED;
 
         // permit access to this page.
-        return self::ACCESS_GRANTED;
+        return $result;
     }
 }

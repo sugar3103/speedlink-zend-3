@@ -11,21 +11,15 @@ class CoreController extends ApiController
      * @var EntityManager
      */
     private $entityManager;
-
-    private $documentManager;
-
+    
     public function __construct($entityManager) {
         parent::__construct($entityManager);        
         $this->entityManager = $entityManager;
-        // $this->documentManager = $documentManager;
+        
     }
 
     public function indexAction()
     {
-        // echo "Test MongoDB";
-        // $qb = $this->documentManager->createQueryBuilder('Notification');
-        // $query = $qb->getQuery();
-        // die;
         $this->apiResponse = [
             'message' => 'ECos System Api'
         ];

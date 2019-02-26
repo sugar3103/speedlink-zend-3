@@ -7,9 +7,9 @@ import Hub from './hub';
 const NetworkPort = ({ match }) => (
   <Fragment>
       <Switch>
-          <Redirect exact from={`${match.url}/`} to={`${match.url}/branch`} />
-          <Route path={`${match.url}/branch`} component={Branch} />     
-          <Route path={`${match.url}/hub`} component={Hub} />          
+          <Redirect exact from={`${match.url}/`} to={`${match.url}/hub`} />
+          <Route path={`${match.url}/hub`} component={Hub} />  
+          <Route path={`${match.url}/branch`} component={Branch} />           
           <Redirect to="/error" />
       </Switch>
   </Fragment>

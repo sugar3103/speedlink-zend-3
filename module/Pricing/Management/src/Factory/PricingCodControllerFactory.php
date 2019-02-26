@@ -4,6 +4,7 @@ namespace Management\Factory;
 use Management\Controller\PricingCodController;
 use Management\Service\PricingCodManager;
 use Interop\Container\ContainerInterface;
+use Management\Service\PricingCodMinManager;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\ServiceManager\ServiceManager;
 use Doctrine\Common\Cache\FilesystemCache;
@@ -19,8 +20,9 @@ class PricingCodControllerFactory implements FactoryInterface {
     {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
         $pricingCodManager = $container->get(PricingCodManager::class);
+        $pricingCodMinManager = $container->get(PricingCodMinManager::class);
 
         // instantiate the controller and inject dependencies.
-        return new PricingCodController($entityManager,$pricingCodManager);
+        return new PricingCodController($entityManager, $pricingCodManager, $pricingCodMinManager);
     }
 }

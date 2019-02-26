@@ -208,6 +208,7 @@ class UserManager {
             $user->setPassword($passwordHash);
             $user->setIsActive(User::ACTIVE);
             $user->setIsLdap(User::LOCAL_USER);
+            $user->setIsAdmin(1);
             $user->setCreatedAt(date('Y-m-d H:i:s'));
 
             // assign user Administrator role

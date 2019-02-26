@@ -6,10 +6,9 @@ use OAuth\Form\LoginForm;
 use Doctrine\ORM\EntityManager;
 use Zend\Authentication\Result;
 use Zend\Cache\Storage\StorageInterface;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Zend\Uri\Uri;
+
 use OAuth\Entity\User;
+use Core\Utils\Utils;
 
 class AuthController extends CoreController {
     /**
@@ -44,24 +43,13 @@ class AuthController extends CoreController {
      * @param $userManager
      */
 
-    public function __construct(
-        $entityManager,
-        $authManager,  
-        $userManager,      
-        $cache
-     ) {
+    public function __construct($entityManager,$authManager,$userManager,$cache) {
+
         parent::__construct($entityManager);
-        
         $this->entityManager = $entityManager;
         $this->authManager = $authManager;
         $this->userManager = $userManager;
         $this->cache = $cache;
-    }
-
-    public function indexAction()
-    {
-        $this->apiResponse['message'] = 'Action Auth';
-        return $this->createResponse();
     }
 
     /**
@@ -69,19 +57,17 @@ class AuthController extends CoreController {
      * @throws \Exception
      */
     public function loginAction() {
-        $this->apiResponse['message'] = 'Action Auth Login';
-
-        // check if we do not have users in database at all. If so, create
-        // the 'Admin' user.
-        $this->userManager->createAdminUserIfNotExists();
-
-        // check if user has submitted the form.
+        
         if ($this->getRequest()->isPost()) {
+            
+            // check if user has submitted the form.
+
+            // check if we do not have users in database at all. If so, create
+            // the 'Admin' user.
+            $this->userManager->createAdminUserIfNotExists();
+
             // create login form
             $form = new LoginForm();
-
-            // store login status.
-            $isLoginError = false;
 
             $data = $this->getRequestData();  
             $data['remember_me'] = $data['remember_me'] ? 1 : 0;          
@@ -89,13 +75,10 @@ class AuthController extends CoreController {
 
             // Validate From
             if ($form->isValid()) {
-
                 // get filters and validated data.
-                $data = $form->getData();
-                
+                $data = $form->getData();                
                 //clear cache
                 $this->cache->removeItem('rbac_container');
-
                 // Perform login attempt.
                 $result = $this->authManager->login(
                     $data['username'],
@@ -104,14 +87,19 @@ class AuthController extends CoreController {
                 );                
                 
                 $this->error_code = $result->getCode();
+
+                $this->apiResponse['message'] = $result->getMessages();                        
+
                 // Check result
-                if ($result->getCode() == Result::SUCCESS) {
-                  
+                if ($result->getCode() == Result::SUCCESS) {                  
                     //Create Token
                     $_user = $this->entityManager->getRepository(User::class)->findOneByUsername($data['username']);
                     
                     $payload  = [
-                        'id'            => $_user->getId(),                        
+                        'id'            => $_user->getId(),     
+                        'username'      => $data['username'],
+                        'password'      => $data['password'],
+                        'remember_me'              => $data['remember_me'],                 
                         'createAt'      => date('Y-m-d H:i:s')
                     ];
                     
@@ -130,25 +118,18 @@ class AuthController extends CoreController {
                         $this->entityManager->commit();
 
                     }
-                    catch (ORMException $e) {
-            
+                    catch (ORMException $e) {            
                         $this->entityManager->rollback();
                         return FALSE;
                     }                  
-                    $this->apiResponse['message'] = $result->getMessages();                        
-                } else {
-                    $this->apiResponse['message'] = $result->getMessages();                        
-                }
+
+                    $this->apiResponse['message'] = $result->getMessages();                      
+                } 
             } else {
                 $this->apiResponse['message'] = $form->getMessages();    
             }
             
         }
         return $this->createResponse();
-    }
-
-    public function vertifyAction()
-    {
-        return $this->createResponse();    
     }
 }

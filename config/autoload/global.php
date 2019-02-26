@@ -35,6 +35,7 @@ return [
             Adapter::class => AdapterServiceFactory::class
         ],
     ],
+    
     'session_config' => [],
     'session_storage' => ['type' => SessionArrayStorage::class],
     'ldap' => [
@@ -57,4 +58,5 @@ return [
             'baseDn'                 => 'OU=Users,DC=mlc-itl,DC=local'
         ],
     ],
+    'default_timezone' => 'Asia/Ho_Chi_Minh',
 ];

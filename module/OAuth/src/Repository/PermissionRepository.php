@@ -39,8 +39,16 @@ class PermissionRepository extends EntityRepository
                  p.name,
                  p.description,
                  p.description_en,
-                 p.created_at"
-            ])->andWhere('p.id <> 0')->groupBy('p.id');
+                 p.created_at,
+                 p.status,
+                 cr.username as created_by,
+                 CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
+                 CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated,
+                 p.created_at,
+                 up.username as updated_by,
+                 p.updated_at"
+            ])->andWhere('p.id <> 0')->andWhere('p.is_deleted = 0')->groupBy('p.id');
+            
             if($limit) {
                 $queryBuilder->setMaxResults($limit)
                     ->setFirstResult(($start - 1) * $limit);
@@ -81,13 +89,19 @@ class PermissionRepository extends EntityRepository
                 'operator' => 'contains'
             ],
             'created_at' => [
-                'alias' => 'p.createdAt',
+                'alias' => 'p.created_at',
                 'operator' => 'contains'
-            ]
+            ],
+            'status' => [
+                'alias' => 'p.status',
+                'operator' => 'eq'
+            ],
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(Permission::class, 'p');
+        $queryBuilder->from(Permission::class, 'p')
+            ->leftJoin('p.join_created', 'cr')
+            ->leftJoin('p.join_updated', 'up');
 
         if ($sortField != NULL && $sortDirection != NULL)
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

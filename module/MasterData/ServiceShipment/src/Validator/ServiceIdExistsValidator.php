@@ -65,7 +65,7 @@ class ServiceIdExistsValidator extends AbstractValidator {
 
         if ($this->options['shipmentType'] == null) {
             $isValid = $service;
-        } elseif ($this->options['shipmentType']->getCode() != $value && $service != null) {
+        } elseif ($this->options['shipmentType']->getId() != $value && $service != null) {
             $isValid = true;
         } else {
             $isValid = false;

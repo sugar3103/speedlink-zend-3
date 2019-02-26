@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import TopbarSidebarButton from './TopbarSidebarButton';
 import TopbarProfile from './TopbarProfile';
 import TopbarLanguage from './TopbarLanguage';
-import TopbarMail from './TopbarMail';
+// import TopbarMail from './TopbarMail';
 import TopbarNotification from './TopbarNotification';
 import TopbarSearch from './TopbarSearch';
 
@@ -25,12 +25,12 @@ class Topbar extends PureComponent {
               changeMobileSidebarVisibility={changeMobileSidebarVisibility}
               changeSidebarVisibility={changeSidebarVisibility}
             />
-            <Link className="topbar__logo" to="/dashboard_default" />
+            <Link className="topbar__logo" to="/app/dashboards" />
           </div>
           <div className="topbar__right">
             <TopbarSearch />
             <TopbarNotification />
-            <TopbarMail new />
+            {/* <TopbarMail new /> */}
             <TopbarProfile />
             <TopbarLanguage />
           </div>

@@ -5,7 +5,7 @@ import { Collapse } from 'reactstrap';
 import TopbarMenuLink from './TopbarMenuLink';
 import { logoutUser} from '../../../redux/actions';
 import PropTypes from 'prop-types';
-
+const Ava = `${process.env.PUBLIC_URL}/img/ava.png`;
 class TopbarProfile extends PureComponent {
   constructor() {
     super();
@@ -30,8 +30,9 @@ class TopbarProfile extends PureComponent {
     return (
       <div className="topbar__profile">
         <button className="topbar__avatar" onClick={this.toggle}>
-          {/* <img className="topbar__avatar-img" src={Ava} alt="avatar" /> */}
-          <p className="topbar__avatar-name">{(currentUser.first_name || currentUser.last_name) ? currentUser.first_name +' '+ currentUser.last_name : currentUser.username }</p>
+          <img className="topbar__avatar-img" src={Ava} alt="avatar" />
+          <p className="topbar__avatar-name">
+            {(currentUser.fullname) ? currentUser.fullname : currentUser.username}</p>
           <DownIcon className="topbar__icon" />
         </button>
         {this.state.collapse && <button className="topbar__back" onClick={this.toggle} />}

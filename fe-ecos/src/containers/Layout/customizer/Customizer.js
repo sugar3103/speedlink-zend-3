@@ -4,10 +4,10 @@ import CloseIcon from 'mdi-react/CloseIcon';
 import PropTypes from 'prop-types';
 import { SidebarProps, ThemeProps } from '../../Shared/prop-types/ReducerProps';
 import ToggleTheme from './ToggleTheme';
+import ToggleCollapsedMenu from './ToggleCollapsedMenu';
 import { injectIntl } from 'react-intl';
 
 const settings = `${process.env.PUBLIC_URL}/img/settings.svg`;
-
 
 class Customizer extends PureComponent {
   static propTypes = {
@@ -15,6 +15,7 @@ class Customizer extends PureComponent {
     theme: ThemeProps.isRequired,
     changeToDark: PropTypes.func.isRequired,
     changeToLight: PropTypes.func.isRequired,
+    changeSidebarVisibility: PropTypes.func.isRequired,
     setting: PropTypes.any
   };
 
@@ -36,7 +37,9 @@ class Customizer extends PureComponent {
       theme,
       changeToDark,
       changeToLight,
-      setting
+      setting,
+      changeSidebarVisibility,
+      sidebar
     } = this.props;
     
     const { messages } = this.props.intl;
@@ -56,6 +59,7 @@ class Customizer extends PureComponent {
                 </button>
               </div>
               <p className="customizer__caption">{messages['theme.desc-setting']}</p>
+              <ToggleCollapsedMenu changeSidebarVisibility={changeSidebarVisibility} sidebar={sidebar} />
               <ToggleTheme changeToDark={changeToDark} changeToLight={changeToLight} theme={theme} />
             </div>
           </div>

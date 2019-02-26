@@ -52,7 +52,7 @@ function* getPermissionListItems({ payload }) {
       case EC_FAILURE:
         yield put(getPermissionListError(response.message));
         break;
-
+      
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authPermission');
         yield call(history.push, '/login');
@@ -138,7 +138,7 @@ const updatePermissionItemRequest = async item => {
   return await updatePermissionApi(item).then(res => res.data).catch(err => err)
 };
 
-function* updatePermissionItem({ payload }) {
+function* updatePermissionItem ({ payload }) {
   const { item, messages } = payload;
   try {
     const response = yield call(updatePermissionItemRequest, item);

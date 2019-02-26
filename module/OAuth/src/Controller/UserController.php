@@ -28,25 +28,24 @@ class UserController extends CoreController {
     }
 
     public function indexAction()
-    {
-        if ($this->getRequest()->isPost()) {
+    {     
+        if ($this->getRequest()->isPost()) {   
             // get the filters
             $fieldsMap = [
                 0 => 'username',                
                 1 => 'status'
             ];
-
-            list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
+            
+            list($start,$limit,$sortField,$sortDirection,$filters, $fields) = $this->getRequestData($fieldsMap); 
             
             //get list User by condition
             $dataUser = $this->userManager->getListUserByCondition($start, $limit, $sortField, $sortDirection,$filters);            
             
-            $result = ($dataUser['listUser']) ? $dataUser['listUser'] : [] ;
+            $results = $this->filterByField($dataUser['listUser'], $fields);
             
             $this->error_code = 1;
             $this->apiResponse =  array(
-                'message'   => "Get List User Success",
-                'data'      => $result,
+                'data'      => $results,
                 'total'     => $dataUser['totalUser']
             );                         
         } 
@@ -56,7 +55,6 @@ class UserController extends CoreController {
     
     public function addAction()
     {   
-        
         // check if user  has submitted the form
         if ($this->getRequest()->isPost()) {
             $user = $this->tokenPayload;
@@ -108,8 +106,7 @@ class UserController extends CoreController {
             }   else {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = 'User Not Found'; 
-            }         
-             
+            }
         } 
         
         return $this->createResponse();
@@ -147,6 +144,7 @@ class UserController extends CoreController {
                 'username'      => $user->getUsername(),
                 'first_name'    => $user->getFirstName(),
                 'last_name'     => $user->getLastName(),
+                'fullname'      =>$user->getFirstName() . ' ' .$user->getLastName(),
                 'email'         => $user->getEmail(),
                 'roles'         => $user->getRoleIds(),
                 'is_active'     => $user->getIsActive()
@@ -162,7 +160,10 @@ class UserController extends CoreController {
         if($user->id === $id) {
             return true;
         } else {
-            var_dump($user);die;
+            $admin = $this->entityManager->getRepository(User::class)->findOneById($user->id);
+            if($admin->getIsAdmin()) {
+                return true;
+            }
         }
     }
 }
