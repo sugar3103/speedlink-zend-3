@@ -284,18 +284,6 @@ class ActionForm extends Component {
     this.props.change('origin_district',null);
     this.props.change('origin_ward',null);
     this.props.getOriginCityList(params,'onchange');
-    // params = {
-    //   query: {
-    //     city: 0
-    //   }
-    // }
-    // this.props.getOriginDistrictList(params);
-    // params = {
-    //   query: {
-    //     district: 0
-    //   }
-    // }
-    // this.props.getOriginWardList(params);
   }
 
   onChangeOriginCity = value => {
@@ -311,12 +299,6 @@ class ActionForm extends Component {
     this.props.change('origin_district',null);
     this.props.change('origin_ward',null);
     this.props.getOriginDistrictList(params,'onchange');
-    // params = {
-    //   query: {
-    //     district: 0
-    //   }
-    // }
-    // this.props.getOriginWardList(params);
   }
 
   onChangeOriginDistrict = value => {
@@ -347,18 +329,6 @@ class ActionForm extends Component {
     this.props.change('destination_district',null);
     this.props.change('destination_ward',null);
     this.props.getDestinationCityList(params,'onchange');
-    // params = {
-    //   query: {
-    //     city: 0
-    //   }
-    // }
-    // this.props.getDestinationDistrictList(params);
-    // params = {
-    //   query: {
-    //     district: 0
-    //   }
-    // }
-    // this.props.getDestinationWardList(params);
   }
 
   onChangeDestinationCity = value => {
@@ -374,12 +344,6 @@ class ActionForm extends Component {
     this.props.change('destination_district',null);
     this.props.change('destination_ward',null);
     this.props.getDestinationDistrictList(params,'onchange');
-    // params = {
-    //   query: {
-    //     district: 0
-    //   }
-    // }
-    // this.props.getDestinationWardList(params);
   }
 
   onChangeDestinationDistrict = value => {
@@ -406,8 +370,6 @@ class ActionForm extends Component {
     return countries;
   }
 
-
-
  hanldeChangeType = value => {
     if (value === 1) {
       this.setState({
@@ -425,7 +387,6 @@ class ActionForm extends Component {
   };
   componentWillReceiveProps(nextProps) {
       if (nextProps && nextProps.modalData) {
-      // const data = nextProps.modalData;
     }
   }
   changeTypeModal = () => {
