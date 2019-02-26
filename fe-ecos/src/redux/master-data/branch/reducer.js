@@ -12,7 +12,19 @@ import {
   BRANCH_DELETE_ITEM,
   BRANCH_DELETE_ITEM_SUCCESS,
   BRANCH_DELETE_ITEM_ERROR,
-  BRANCH_CHANGE_TYPE_MODAL
+  BRANCH_CHANGE_TYPE_MODAL,
+  BRANCH_COUNTRY_GET_LIST,
+  BRANCH_COUNTRY_GET_LIST_SUCCESS,
+  BRANCH_COUNTRY_GET_LIST_ERROR,
+  BRANCH_CITY_GET_LIST,
+  BRANCH_CITY_GET_LIST_SUCCESS,
+  BRANCH_CITY_GET_LIST_ERROR,
+  BRANCH_DISTRICT_GET_LIST,
+  BRANCH_DISTRICT_GET_LIST_SUCCESS,
+  BRANCH_DISTRICT_GET_LIST_ERROR,
+  BRANCH_WARD_GET_LIST,
+  BRANCH_WARD_GET_LIST_SUCCESS,
+  BRANCH_WARD_GET_LIST_ERROR,
 } from '../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -23,10 +35,16 @@ const INIT_STATE = {
   modalOpen: false,
   modalType: null,
   modalData: null,
-  paramSearch: null
+  paramSearch: null,
+  countries:null,
+  cities:null,
+  districts:null,
+  wards:null,
 };
 
 export default (state = INIT_STATE, action) => {
+  let types,params = null;
+
   switch (action.type) {
 
     case BRANCH_TOGGLE_MODAL:
@@ -45,7 +63,7 @@ export default (state = INIT_STATE, action) => {
       };
 
     case BRANCH_GET_LIST:
-      const { params } = action.payload;
+       params  = action.payload;
       return { 
         ...state, 
         loading: true,
@@ -124,6 +142,100 @@ export default (state = INIT_STATE, action) => {
         ...state, 
         errors: action.payload 
       };
+    
+      case BRANCH_COUNTRY_GET_LIST:
+      params = action.payload.params;
+      return { 
+        ...state, 
+      };
+    
+      case BRANCH_COUNTRY_GET_LIST_SUCCESS:
+        const { countries } = action.payload;
+        return { 
+          ...state, 
+          countries
+        };
+    
+      case BRANCH_COUNTRY_GET_LIST_ERROR:
+        return { 
+          ...state, 
+          errors: action.payload 
+        };
+    
+        case BRANCH_CITY_GET_LIST:
+        params = action.payload.params;
+        return { 
+          ...state, 
+        };
+    
+      case BRANCH_CITY_GET_LIST_SUCCESS:
+        const { cities } = action.payload;
+        types = action.payload.types;
+        if(types ==='onchange')
+          return {
+            ...state, 
+            cities,
+            districts: null,
+            wards: null
+          }
+        else
+        return { 
+          ...state, 
+          cities
+        };
+    
+      case BRANCH_CITY_GET_LIST_ERROR:
+        return { 
+          ...state, 
+          errors: action.payload 
+        };
+    
+        case BRANCH_DISTRICT_GET_LIST:
+        params = action.payload.params;
+        return { 
+          ...state, 
+        };
+    
+      case BRANCH_DISTRICT_GET_LIST_SUCCESS:
+        const { districts } = action.payload;
+        types = action.payload.types;
+        if(types ==='onchange')
+          return { 
+            ...state, 
+            districts,
+            wards: null
+          };
+        else
+          return{
+            ...state, 
+            districts
+          };
+    
+      case BRANCH_DISTRICT_GET_LIST_ERROR:
+        return { 
+          ...state, 
+          errors: action.payload 
+        };
+    
+        case BRANCH_WARD_GET_LIST:
+        params = action.payload.params;
+        return { 
+          ...state, 
+        };
+    
+      case BRANCH_WARD_GET_LIST_SUCCESS:
+        const { wards } = action.payload;
+        types = action.payload.types;
+        return { 
+          ...state, 
+          wards
+        };
+    
+      case BRANCH_WARD_GET_LIST_ERROR:
+        return { 
+          ...state, 
+          errors: action.payload 
+        };
 
     default: 
       return { ...state };
