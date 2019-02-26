@@ -25,14 +25,6 @@ class PricingRepository extends EntityRepository
                 cr.name AS carrier_name,
                 cr.name_en AS carrier_name_en,
                 pr.category_code,
-                pr.service_id,
-                sr.code AS service_code,
-                sr.name AS service_name,
-                sr.name_en AS service_name_en,
-                pr.shipment_type_id,
-                st.code AS shipment_type_code,
-                st.name AS shipment_type_name,
-                st.name_en AS shipment_type_name_en,
                 pr.origin_country_id,
                 ocr.name AS origin_country_name,
                 ocr.name_en AS origin_country_name_en,
@@ -45,18 +37,6 @@ class PricingRepository extends EntityRepository
                 pr.origin_ward_id,
                 owd.name AS origin_ward_name,
                 owd.name_en AS origin_ward_name_en,
-                pr.destination_country_id,
-                dct.name AS destination_country_name,
-                dct.name_en AS destination_country_name_en,
-                pr.destination_city_id,
-                dcy.name AS destination_city_name,
-                dcy.name_en AS destination_city_name_en,
-                pr.destination_district_id,
-                dds.name AS destination_district_name,
-                dds.name_en AS destination_district_name_en,
-                pr.destination_ward_id,
-                dwd.name AS destination_ward_name,
-                dwd.name_en AS destination_ward_name_en,
                 pr.effected_date,
                 pr.expired_date,
                 pr.saleman_id,
@@ -65,6 +45,7 @@ class PricingRepository extends EntityRepository
                 sl.last_name,
                 pr.is_private,
                 pr.customer_id,
+                pr.name AS customer_name,
                 pr.status,
                 pr.approval_status,
                 pr.approval_by,
@@ -101,6 +82,9 @@ class PricingRepository extends EntityRepository
     public function buildPricingQueryBuilder($sortField, $sortDirection, $filters)
     {
         $operatorsMap = [
+            'name' => [
+                'alias' => 'pr.name', 'operator' => 'eq'
+            ],
             'status' => [
                 'alias' => 'pr.status', 'operator' => 'eq'
             ],
@@ -148,16 +132,10 @@ class PricingRepository extends EntityRepository
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(Pricing::class, 'pr')
             ->leftJoin('pr.join_carrier', 'cr')
-            ->leftJoin('pr.join_service', 'sr')
-            ->leftJoin('pr.join_shipment_type', 'st')
             ->leftJoin('pr.join_origin_country', 'ocr')
             ->leftJoin('pr.join_origin_city', 'ocy')
             ->leftJoin('pr.join_origin_district', 'ods')
             ->leftJoin('pr.join_origin_ward', 'owd')
-            ->leftJoin('pr.join_destination_country', 'dct')
-            ->leftJoin('pr.join_destination_city', 'dcy')
-            ->leftJoin('pr.join_destination_district', 'dds')
-            ->leftJoin('pr.join_destination_ward', 'dwd')
             ->leftJoin('pr.join_saleman', 'sl')
             ->leftJoin('pr.join_customer', 'cus')
             ->leftJoin('pr.join_approval', 'app')

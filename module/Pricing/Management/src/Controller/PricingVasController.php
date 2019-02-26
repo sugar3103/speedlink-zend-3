@@ -6,9 +6,7 @@ use Management\Form\PricingVasForm;
 use Doctrine\ORM\EntityManager;
 use Management\Service\PricingVasManager;
 use Management\Service\PricingVasSpecManager;
-use Zend\Cache\Storage\StorageInterface;
 use Management\Entity\PricingVas;
-use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 
 class PricingVasController extends CoreController {
     /**
@@ -68,6 +66,108 @@ class PricingVasController extends CoreController {
         $result['message'] = 'Success';
         $result['data']['list'] = !empty($dataVas) ? $dataVas : [];
         $this->apiResponse = $result;
+
+        return $this->createResponse();
+    }
+
+    public function addAction()
+    {
+        $user = $this->tokenPayload;
+        $param = $this->getRequestData();
+        if (empty($param)) {
+            $this->error_code = -1;
+            $this->apiResponse['message'] = 'Missing data';
+            return $this->createResponse();
+        }
+
+        $form = new PricingVasForm('create', $this->entityManager);
+        $form->setData($param);
+
+        //validate form
+        if ($form->isValid()) {
+            try {
+                // get filtered and validated data
+                $data = $form->getData();
+                // add new pricing
+                $this->pricingVasManager->addPricingVas($data, $user);
+                $this->pricingVasSpecManager->addPricingVasSpec($data, $user);
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have added a pricing!";
+            } catch (\Exception $e) {
+                $this->error_code = -1;
+                $this->apiResponse['message'] = "Fail: Please contact System Admin";
+            }
+        } else {
+            $this->error_code = -1;
+            $this->apiResponse = $form->getMessages();
+        }
+
+        return $this->createResponse();
+    }
+
+    public function editAction()
+    {
+        $user = $this->tokenPayload;
+        $data = $this->getRequestData();
+        if (empty($data)) {
+            $this->error_code = -1;
+            $this->apiResponse['message'] = 'Missing data';
+            return $this->createResponse();
+        }
+
+        //Create New Form PricingVas
+        $pricing = $this->entityManager->getRepository(PricingVas::class)->find($data['id']);
+        $form = new PricingVasForm('update', $this->entityManager, $pricing);
+        $form->setData($data);
+
+        //validate form
+        if ($form->isValid()) {
+            try {
+                // get filtered and validated data
+                $data = $form->getData();
+                // add new pricing
+                $this->pricingVasManager->updatePricingVas($pricing, $data, $user);
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have edited a pricing!";
+            } catch (\Exception $e) {
+                $this->error_code = -1;
+                $this->apiResponse['message'] = "Fail: Please contact System Admin";
+            }
+        } else {
+            $this->error_code = -1;
+            $this->apiResponse = $form->getMessages();
+        }
+
+        return $this->createResponse();
+    }
+
+    public function deleteAction()
+    {
+        $user = $this->tokenPayload;
+        $data = $this->getRequestData();
+        if (empty($data)) {
+            $this->error_code = -1;
+            $this->apiResponse['message'] = 'Missing data';
+            return $this->createResponse();
+        }
+        //Create New Form PricingVas
+        $pricing = $this->entityManager->getRepository(PricingVas::class)->find($data['id']);
+
+        //validate form
+        if(!empty($pricing)) {
+            try {
+                $this->pricingVasManager->deletePricingVas($pricing, $user);
+                $this->error_code = 1;
+                $this->apiResponse['message'] = "Success: You have deleted pricing!";
+            } catch (\Exception $e) {
+                $this->error_code = -1;
+                $this->apiResponse['message'] = "Fail: Please contact System Admin";
+            }
+        } else {
+            $this->httpStatusCode = 200;
+            $this->error_code = -1;
+            $this->apiResponse['message'] = "Not Found Pricing";
+        }
 
         return $this->createResponse();
     }

@@ -24,7 +24,8 @@ class PricingVasRepository extends EntityRepository
                 pv.formula,
                 pv.min,
                 pv.type
-            ")->andWhere('pv.is_deleted = 0');
+            ")->andWhere('pv.is_deleted = 0')
+              ->andWhere('pd.status = 1');
 
             return $queryBuilder;
         } catch (QueryException $e) {
@@ -34,7 +35,6 @@ class PricingVasRepository extends EntityRepository
 
     /**
      * Build query builder
-     *
      * @param string $sortField
      * @param string $sortDirection
      * @param $filters
@@ -51,7 +51,8 @@ class PricingVasRepository extends EntityRepository
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(PricingVas::class, 'pv');
+        $queryBuilder->from(PricingVas::class, 'pv')
+            ->innerJoin('pv.join_pricing_data', 'pd');
         $queryBuilder->orderBy('pv.id', 'ASC');
 
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);

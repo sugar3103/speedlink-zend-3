@@ -1,10 +1,11 @@
-import React, { PureComponent,Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { Button, ButtonToolbar, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { togglePermissionModal, changeTypePermissionModal } from '../../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../../containers/Shared/form/CustomField';
+import Can from '../../../../containers/Shared/Can';
 import validate from './validateActionForm';
 import { MODAL_ADD, MODAL_VIEW, MODAL_EDIT } from '../../../../constants/defaultValues';
 import PropTypes from 'prop-types';
@@ -22,7 +23,7 @@ class ActionForm extends PureComponent {
   componentDidMount() {
     const data = this.props.modalData;
 
-    if (data) { 
+    if (data) {
       this.props.initialize(data);
     }
   }
@@ -44,8 +45,8 @@ class ActionForm extends PureComponent {
   }
 
   render() {
-    const { messages,locale } = this.props.intl;
-    const { handleSubmit, modalData, modalType } = this.props;
+    const { messages, locale } = this.props.intl;
+    const { handleSubmit, modalData, modalType, user } = this.props;
     
     let className = 'success';
     let title = messages['permission.add-new'];
@@ -127,7 +128,7 @@ class ActionForm extends PureComponent {
                   <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name_created}</span>
                   <br />
                   <span><i className="label-info-data">{messages['created-at']}:</i>
-                    <Moment fromNow locale={locale}>{ new Date(modalData.created_at) }</Moment>
+                    <Moment fromNow locale={locale}>{new Date(modalData.created_at)}</Moment>
                   </span>
                 </Col>
                 {modalData.updated_at &&
@@ -135,8 +136,8 @@ class ActionForm extends PureComponent {
                     <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.full_name_updated}</span>
                     <br />
                     <span><i className="label-info-data">{messages['updated-at']}:</i>
-                    <Moment fromNow locale={locale}>{ new Date(modalData.updated_at) }</Moment>                    
-                    
+                      <Moment fromNow locale={locale}>{new Date(modalData.updated_at)}</Moment>
+
                     </span>
                   </Col>
                 }
@@ -144,12 +145,14 @@ class ActionForm extends PureComponent {
             </Fragment>
           }
         </div>
-        <ButtonToolbar className="modal__footer">
-          {this.state.modalType === MODAL_VIEW &&
-            <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
-          }
-          <Button color={className} type="submit">{ modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
-        </ButtonToolbar>
+        <Can user={this.props.authUser.user} permission="permission" action="edit">
+          <ButtonToolbar className="modal__footer">
+            {this.state.modalType === MODAL_VIEW &&
+              <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
+            }
+            <Button color={className} type="submit">{modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
+          </ButtonToolbar>
+        </Can>
       </form >
     );
   }
@@ -163,11 +166,12 @@ ActionForm.propTypes = {
   changeTypePermissionModal: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ users }) => {
+const mapStateToProps = ({ users, authUser }) => {
   const { modalData, modalType } = users.permission;
-  return {    
+  return {
     modalData,
-    modalType
+    modalType,
+    authUser
   }
 }
 

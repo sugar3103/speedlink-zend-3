@@ -23,7 +23,8 @@ class PricingVasSpecRepository extends EntityRepository
                 pvs.from,
                 pvs.to,
                 pvs.value
-            ")->andWhere('pvs.is_deleted = 0');
+            ")->andWhere('pvs.is_deleted = 0')
+              ->andWhere('pd.status = 1');
 
             return $queryBuilder;
         } catch (QueryException $e) {
@@ -54,7 +55,8 @@ class PricingVasSpecRepository extends EntityRepository
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(PricingVasSpec::class, 'pvs');
+        $queryBuilder->from(PricingVasSpec::class, 'pvs')
+            ->innerJoin('pvs.join_pricing_data', 'pd');
         $queryBuilder->orderBy('pvs.from', 'ASC');
         $queryBuilder->addOrderBy('pvs.to', 'ASC');
 
