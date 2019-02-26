@@ -62,6 +62,7 @@ const INIT_STATE = {
 
 export default (state = INIT_STATE, action) => {
   let params= null;
+  let types = null;
   switch (action.type) {
 
     case ZONE_CODE_TOGGLE_MODAL:
@@ -170,9 +171,7 @@ export default (state = INIT_STATE, action) => {
     const { origin_country } = action.payload;
     return { 
       ...state, 
-      origin_country,
-      origin_district:null,
-      origin_ward:null
+      origin_country
     };
 
   case ORIGIN_COUNTRY_GET_LIST_ERROR:
@@ -189,10 +188,12 @@ export default (state = INIT_STATE, action) => {
 
   case ORIGIN_CITY_GET_LIST_SUCCESS:
     const { origin_city } = action.payload;
+    types = action.payload.types;
     return { 
       ...state, 
       origin_city,
-      origin_ward:null
+      origin_district: types ==='onchange' ? null : '',
+      origin_ward: types ==='onchange' ? null : '' 
     };
 
   case ORIGIN_CITY_GET_LIST_ERROR:
@@ -209,9 +210,11 @@ export default (state = INIT_STATE, action) => {
 
   case ORIGIN_DISTRICT_GET_LIST_SUCCESS:
     const { origin_district } = action.payload;
+    types = action.payload.types;
     return { 
       ...state, 
-      origin_district
+      origin_district,
+      origin_ward: types ==='onchange' ? null : ''
     };
 
   case ORIGIN_DISTRICT_GET_LIST_ERROR:
@@ -228,6 +231,7 @@ export default (state = INIT_STATE, action) => {
 
   case ORIGIN_WARD_GET_LIST_SUCCESS:
     const { origin_ward } = action.payload;
+    types = action.payload.types;
     return { 
       ...state, 
       origin_ward
@@ -249,9 +253,8 @@ export default (state = INIT_STATE, action) => {
     const { destination_country } = action.payload;
     return { 
       ...state, 
-      destination_country,
-      destination_district:null,
-      destination_ward:null
+      destination_country
+      
     };
 
   case DESTINATION_COUNTRY_GET_LIST_ERROR:
@@ -271,6 +274,7 @@ export default (state = INIT_STATE, action) => {
     return { 
       ...state, 
       destination_city,
+      destination_district:null,
       destination_ward:null
     };
 
@@ -290,7 +294,8 @@ export default (state = INIT_STATE, action) => {
     const { destination_district } = action.payload;
     return { 
       ...state, 
-      destination_district
+      destination_district,
+      destination_ward:null
     };
 
   case DESTINATION_DISTRICT_GET_LIST_ERROR:

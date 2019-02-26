@@ -121,14 +121,14 @@ export const getOriginCountryListError = (error) => ({
   payload: error
 });
 
-export const getOriginCityList = (params) => ({
+export const getOriginCityList = (params, types) => ({
   type: ORIGIN_CITY_GET_LIST,
-  payload: { params }
+  payload: { params, types }
 });
 
-export const getOriginCityListSuccess = (origin_city) => ({
+export const getOriginCityListSuccess = (origin_city, types) => ({
   type: ORIGIN_CITY_GET_LIST_SUCCESS,
-  payload: { origin_city }
+  payload: { origin_city, types }
 });
 
 export const getOriginCityListError = (error) => ({
@@ -136,14 +136,14 @@ export const getOriginCityListError = (error) => ({
   payload: error
 });
 
-export const getOriginDistrictList = (params) => ({
+export const getOriginDistrictList = (params, types) => ({
   type: ORIGIN_DISTRICT_GET_LIST,
-  payload: { params }
+  payload: { params, types }
 });
 
-export const getOriginDistrictListSuccess = (origin_district) => ({
+export const getOriginDistrictListSuccess = (origin_district, types) => ({
   type: ORIGIN_DISTRICT_GET_LIST_SUCCESS,
-  payload: { origin_district }
+  payload: { origin_district, types }
 });
 
 export const getOriginDistrictListError = (error) => ({
@@ -151,14 +151,14 @@ export const getOriginDistrictListError = (error) => ({
   payload: error
 });
 
-export const getOriginWardList = (params) => ({
+export const getOriginWardList = (params, types) => ({
   type: ORIGIN_WARD_GET_LIST,
-  payload: { params }
+  payload: { params, types }
 });
 
-export const getOriginWardListSuccess = (origin_ward) => ({
+export const getOriginWardListSuccess = (origin_ward, types) => ({
   type: ORIGIN_WARD_GET_LIST_SUCCESS,
-  payload: { origin_ward }
+  payload: { origin_ward, types }
 });
 
 export const getOriginWardListError = (error) => ({

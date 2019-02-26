@@ -331,12 +331,12 @@ const getOriginCityListRequest = async (params) => {
 };
 
 function* getOriginCityListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params, messages, types } = payload;
   try {
     const response = yield call(getOriginCityListRequest, params);
     switch (response.error_code) {
       case EC_SUCCESS:
-        yield put(getOriginCityListSuccess(response.data));
+        yield put(getOriginCityListSuccess(response.data, types));
         break;
 
       case EC_FAILURE:
@@ -377,12 +377,12 @@ const getOriginDistrictListRequest = async (params) => {
 };
 
 function* getOriginDistrictListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params, messages, types } = payload;
   try {
     const response = yield call(getOriginDistrictListRequest, params);
     switch (response.error_code) {
       case EC_SUCCESS:
-        yield put(getOriginDistrictListSuccess(response.data));
+        yield put(getOriginDistrictListSuccess(response.data, types));
         break;
 
       case EC_FAILURE:
@@ -423,12 +423,12 @@ const getOriginWardListRequest = async (params) => {
 };
 
 function* getOriginWardListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params, messages, types } = payload;
   try {
     const response = yield call(getOriginWardListRequest, params);
     switch (response.error_code) {
       case EC_SUCCESS:
-        yield put(getOriginWardListSuccess(response.data));
+        yield put(getOriginWardListSuccess(response.data, types));
         break;
 
       case EC_FAILURE:

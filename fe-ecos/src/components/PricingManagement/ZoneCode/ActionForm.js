@@ -280,19 +280,22 @@ class ActionForm extends Component {
         country: value
       }
     }
-    this.props.getOriginCityList(params);
-    params = {
-      query: {
-        city: 0
-      }
-    }
-    this.props.getOriginDistrictList(params);
-    params = {
-      query: {
-        district: 0
-      }
-    }
-    this.props.getOriginWardList(params);
+    this.props.change('origin_city',null);
+    this.props.change('origin_district',null);
+    this.props.change('origin_ward',null);
+    this.props.getOriginCityList(params,'editview');
+    // params = {
+    //   query: {
+    //     city: 0
+    //   }
+    // }
+    // this.props.getOriginDistrictList(params);
+    // params = {
+    //   query: {
+    //     district: 0
+    //   }
+    // }
+    // this.props.getOriginWardList(params);
   }
 
   onChangeOriginCity = value => {
@@ -305,13 +308,15 @@ class ActionForm extends Component {
         city: value
       }
     }
-    this.props.getOriginDistrictList(params);
-    params = {
-      query: {
-        district: 0
-      }
-    }
-    this.props.getOriginWardList(params);
+    this.props.change('origin_district',null);
+    this.props.change('origin_ward',null);
+    this.props.getOriginDistrictList(params,'editview');
+    // params = {
+    //   query: {
+    //     district: 0
+    //   }
+    // }
+    // this.props.getOriginWardList(params);
   }
 
   onChangeOriginDistrict = value => {
@@ -324,7 +329,8 @@ class ActionForm extends Component {
         district: value
       }
     }
-    this.props.getOriginWardList(params);
+    this.props.change('origin_ward',null);
+    this.props.getOriginWardList(params,'editview');
   }
 
   onChangeDestinationCountry = value => {
@@ -337,19 +343,22 @@ class ActionForm extends Component {
         country: value
       }
     }
+    this.props.change('destination_city',null);
+    this.props.change('destination_district',null);
+    this.props.change('destination_ward',null);
     this.props.getDestinationCityList(params);
-    params = {
-      query: {
-        city: 0
-      }
-    }
-    this.props.getDestinationDistrictList(params);
-    params = {
-      query: {
-        district: 0
-      }
-    }
-    this.props.getDestinationWardList(params);
+    // params = {
+    //   query: {
+    //     city: 0
+    //   }
+    // }
+    // this.props.getDestinationDistrictList(params);
+    // params = {
+    //   query: {
+    //     district: 0
+    //   }
+    // }
+    // this.props.getDestinationWardList(params);
   }
 
   onChangeDestinationCity = value => {
@@ -362,13 +371,15 @@ class ActionForm extends Component {
         city: value
       }
     }
+    this.props.change('destination_district',null);
+    this.props.change('destination_ward',null);
     this.props.getDestinationDistrictList(params);
-    params = {
-      query: {
-        district: 0
-      }
-    }
-    this.props.getDestinationWardList(params);
+    // params = {
+    //   query: {
+    //     district: 0
+    //   }
+    // }
+    // this.props.getDestinationWardList(params);
   }
 
   onChangeDestinationDistrict = value => {
@@ -381,87 +392,20 @@ class ActionForm extends Component {
         district: value
       }
     }
+    this.props.change('destination_ward',null);
     this.props.getDestinationWardList(params);
   }
 
-  showOptionsOriginCountry = (country_items) => {
-    const countries = country_items.map(country_item => {
+  showOptions = (items) => {
+    const countries = items.map(item => {
       return {
-        'value': country_item.id,
-        'label': country_item.name
+        'value': item.id,
+        'label': item.name
       }
     });
     return countries;
   }
 
-  showOptionsOriginCity = (city_items) => {
-    const cities = city_items.map(city_item => {
-      return {
-        'value': city_item.id,
-        'label': city_item.name
-      }
-    });
-    return cities;
-  }
-
-  showOptionsOriginDistrict = (district_items) => {
-    const districts = district_items.map(district_item => {
-      return {
-        'value': district_item.id,
-        'label': district_item.name
-      }
-    });
-    return districts;
-  }
-
-  showOptionsOriginWard = (ward_items) => {
-    const wards = ward_items.map(ward_item => {
-      return {
-        'value': ward_item.id,
-        'label': ward_item.name
-      }
-    });
-    return wards;
-  }
-  showOptionsDestinationCountry = (country_items) => {
-    const countries = country_items.map(country_item => {
-      return {
-        'value': country_item.id,
-        'label': country_item.name
-      }
-    });
-    return countries;
-  }
-
-  showOptionsDestinationCity = (city_items) => {
-    const cities = city_items.map(city_item => {
-      return {
-        'value': city_item.id,
-        'label': city_item.name
-      }
-    });
-    return cities;
-  }
-
-  showOptionsDestinationDistrict = (district_items) => {
-    const districts = district_items.map(district_item => {
-      return {
-        'value': district_item.id,
-        'label': district_item.name
-      }
-    });
-    return districts;
-  }
-
-  showOptionsDestinationWard = (ward_items) => {
-    const wards = ward_items.map(ward_item => {
-      return {
-        'value': ward_item.id,
-        'label': ward_item.name
-      }
-    });
-    return wards;
-  }
 
 
  hanldeChangeType = value => {
@@ -656,7 +600,7 @@ class ActionForm extends Component {
                   name="origin_country_id"
                   component={renderSelectField}
                   type="text"
-                  options={origin_countrys && this.showOptionsOriginCountry(origin_countrys)}
+                  options={origin_countrys && this.showOptions(origin_countrys)}
                   onChange={this.onChangeOriginCountry}
                   messages={messages}
                   disabled={disabled} 
@@ -672,7 +616,7 @@ class ActionForm extends Component {
                   name="origin_city_id"
                   component={renderSelectField}
                   type="text"
-                  options={origin_citys && this.showOptionsOriginCity(origin_citys)}
+                  options={origin_citys && this.showOptions(origin_citys)}
                   onChange={this.onChangeOriginCity}
                   messages={messages}
                   disabled={disabled} 
@@ -688,7 +632,7 @@ class ActionForm extends Component {
                   name="origin_district_id"
                   component={renderSelectField}
                   type="text"
-                  options={origin_districts && this.showOptionsOriginDistrict(origin_districts)}
+                  options={origin_districts && this.showOptions(origin_districts)}
                   onChange={this.onChangeOriginDistrict}
                   messages={messages}
                   disabled={disabled} 
@@ -704,7 +648,7 @@ class ActionForm extends Component {
                   name="origin_ward_id"
                   component={renderSelectField}
                   type="text"
-                  options={origin_wards && this.showOptionsOriginWard(origin_wards)}
+                  options={origin_wards && this.showOptions(origin_wards)}
                   onChange={this.onChangeOriginWard}
                   messages={messages}
                   disabled={disabled} 
@@ -720,7 +664,7 @@ class ActionForm extends Component {
                   name="destination_country_id"
                   component={renderSelectField}
                   type="text"
-                  options={destination_countrys && this.showOptionsDestinationCountry(destination_countrys)}
+                  options={destination_countrys && this.showOptions(destination_countrys)}
                   onChange={this.onChangeDestinationCountry}
                   messages={messages}
                   disabled={disabled} 
@@ -736,7 +680,7 @@ class ActionForm extends Component {
                     name="destination_city_id"
                     component={renderSelectField}
                     type="text"
-                    options={destination_citys && this.showOptionsDestinationCity(destination_citys)}
+                    options={destination_citys && this.showOptions(destination_citys)}
                     onChange={this.onChangeDestinationCity}
                     messages={messages}
                     disabled={disabled} 
@@ -752,7 +696,7 @@ class ActionForm extends Component {
                   name="destination_district_id"
                   component={renderSelectField}
                   type="text"
-                  options={destination_districts && this.showOptionsDestinationDistrict(destination_districts)}
+                  options={destination_districts && this.showOptions(destination_districts)}
                   onChange={this.onChangeDestinationDistrict}
                   messages={messages}
                   disabled={disabled} 
@@ -768,7 +712,7 @@ class ActionForm extends Component {
                   name="destination_ward_id"
                   component={renderSelectField}
                   type="text"
-                  options={destination_wards && this.showOptionsDestinationWard(destination_wards)}
+                  options={destination_wards && this.showOptions(destination_wards)}
                   onChange={this.onChangeDestinationWard}
                   messages={messages}
                   disabled={disabled} 
