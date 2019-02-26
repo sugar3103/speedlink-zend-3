@@ -126,8 +126,8 @@ $access_filter = [
     ],
     'controllers' => [
         Controller\UserController::class => [
-            ['actions' => ['index','edit','view'], 'allow' => '+user.manage'],
-            ['actions' => ['edit'], 'allow' => '+user.edit'],
+            ['actions' => ['index','edit','view'], 'allow' => '+user.manage'],            
+            ['actions' => ['edit'], 'allow' => '+user.own.edit'],
             ['actions' => ['index'], 'allow' => '+user.view'],
         ],
         Controller\RoleController::class => [

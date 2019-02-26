@@ -103,6 +103,9 @@ class UserController extends CoreController {
                     $this->error_code = 0;
                     $this->apiResponse = $form->getMessages(); 
                     }   
+                } else {
+                    $this->error_code = 0;
+                    $this->apiResponse['message'] = 'MODIFIED_ERROR';
                 }
             }   else {
                 $this->error_code = 0;
