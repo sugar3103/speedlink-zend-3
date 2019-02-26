@@ -5,6 +5,7 @@ use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Management\Entity\PricingVas;
 use Doctrine\ORM\EntityManager;
+use Management\Entity\PricingVasSpec;
 
 /**
  * @package Managerment\Service
@@ -54,26 +55,45 @@ class PricingVasManager {
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
-            $pricingVas = new PricingVas();
-            $pricingVas->setName($data['name']);
-            $pricingVas->setFormula($data['formula']);
-            $pricingVas->setMin($data['min']);
-            $pricingVas->setPricingDataId($data['price_data_id']);
-            $pricingVas->setType($data['type']);
-            $pricingVas->setCreatedAt(date('Y-m-d H:i:s'));
-            $pricingVas->setCreatedBy($user->id);
-            $pricingVas->setUpdatedAt(date('Y-m-d H:i:s'));
-            $pricingVas->setUpdatedBy($user->id);
-
-            $this->entityManager->persist($pricingVas);
-            $this->entityManager->flush();
+            $date = date('Y-m-d H:i:s');
+            foreach ($data as $vas) {
+                $pricingVas = new PricingVas();
+                $pricingVas->setName($vas['name']);
+                $pricingVas->setFormula($vas['formula']);
+                $pricingVas->setMin($vas['min']);
+                $pricingVas->setPricingDataId($vas['price_data_id']);
+                $pricingVas->setType($vas['type']);
+                $pricingVas->setCreatedAt($date);
+                $pricingVas->setCreatedBy($user->id);
+                $pricingVas->setUpdatedAt($date);
+                $pricingVas->setUpdatedBy($user->id);
+                $this->entityManager->persist($pricingVas);
+                $this->entityManager->flush();
+                if ($vas['type'] == '1' && !empty($vas['spec'])) {
+                    foreach ($vas['spec'] as $row) {
+                        $pricingVasSpec = new PricingVasSpec();
+                        $pricingVasSpec->setPricingDataId($vas['price_data_id']);
+                        $pricingVasSpec->setPricingVasId($pricingVas->getId());
+                        $pricingVasSpec->setFrom($row['from']);
+                        $pricingVasSpec->setTo($row['to']);
+                        $pricingVasSpec->setValue($row['value']);
+                        $pricingVasSpec->setCreatedAt($date);
+                        $pricingVasSpec->setCreatedBy($user->id);
+                        $pricingVasSpec->setUpdatedAt($date);
+                        $pricingVasSpec->setUpdatedBy($user->id);
+                        $this->entityManager->persist($pricingVasSpec);
+                    }
+                    $this->entityManager->flush();
+                    $this->entityManager->clear();
+                }
+            }
             $this->entityManager->commit();
 
-            return $pricingVas;
+            return true;
         }
         catch (ORMException $e) {
             $this->entityManager->rollback();
-            return FALSE;
+            return false;
         }
     }
 

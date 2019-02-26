@@ -90,7 +90,6 @@ class PricingVasController extends CoreController {
                 $data = $form->getData();
                 // add new pricing
                 $this->pricingVasManager->addPricingVas($data, $user);
-                $this->pricingVasSpecManager->addPricingVasSpec($data, $user);
                 $this->error_code = 1;
                 $this->apiResponse['message'] = "Success: You have added a pricing!";
             } catch (\Exception $e) {
@@ -171,4 +170,5 @@ class PricingVasController extends CoreController {
 
         return $this->createResponse();
     }
+
 }
