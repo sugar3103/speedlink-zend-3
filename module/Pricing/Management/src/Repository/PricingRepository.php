@@ -82,6 +82,9 @@ class PricingRepository extends EntityRepository
     public function buildPricingQueryBuilder($sortField, $sortDirection, $filters)
     {
         $operatorsMap = [
+            'name' => [
+                'alias' => 'pr.name', 'operator' => 'eq'
+            ],
             'status' => [
                 'alias' => 'pr.status', 'operator' => 'eq'
             ],
