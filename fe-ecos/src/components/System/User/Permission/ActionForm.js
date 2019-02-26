@@ -46,8 +46,8 @@ class ActionForm extends PureComponent {
 
   render() {
     const { messages, locale } = this.props.intl;
-    const { handleSubmit, modalData, modalType, user } = this.props;
-    
+    const { handleSubmit, modalData, modalType } = this.props;
+
     let className = 'success';
     let title = messages['permission.add-new'];
     const disabled = modalType === MODAL_VIEW ? true : false;
@@ -145,14 +145,20 @@ class ActionForm extends PureComponent {
             </Fragment>
           }
         </div>
-        <Can user={this.props.authUser.user} permission="permission" action="edit">
-          <ButtonToolbar className="modal__footer">
-            {this.state.modalType === MODAL_VIEW &&
-              <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
-            }
+
+        <ButtonToolbar className="modal__footer">
+          {this.state.modalType === MODAL_VIEW &&
+            <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
+          }
+          <Can user={this.props.authUser.user} permission="permission" action="edit">
             <Button color={className} type="submit">{modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
-          </ButtonToolbar>
-        </Can>
+          </Can>
+          {modalType === MODAL_ADD &&
+            <Can user={this.props.authUser.user} permission="permission" action="add">
+              <Button color={className} type="submit">{messages['save']}</Button>
+            </Can>
+          }
+        </ButtonToolbar>
       </form >
     );
   }

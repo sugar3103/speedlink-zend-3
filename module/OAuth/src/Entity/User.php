@@ -163,6 +163,13 @@ class User
     private $roles;
 
     /**
+     *
+     * @ORM\OneToOne(targetEntity="\OAuth\Entity\User")
+     * @ORM\JoinColumn(name="updated_by", referencedColumnName="id", nullable=true)
+     */
+    private $join_updated;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -555,5 +562,21 @@ class User
             return $status[$value];
         }
         return $status;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinUpdated()
+    {
+        return $this->join_updated;
+    }
+
+    /**
+     * @param mixed $join_updated
+     */
+    public function setJoinUpdated($join_updated)
+    {
+        $this->join_updated = $join_updated;
     }
 }

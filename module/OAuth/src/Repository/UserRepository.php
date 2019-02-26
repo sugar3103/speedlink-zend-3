@@ -59,7 +59,10 @@ class UserRepository extends EntityRepository {
                  u.first_name,
                  u.last_name,
                  CONCAT(COALESCE(u.first_name,''), ' ', COALESCE(u.last_name,'')) as full_name,
+                 CONCAT(COALESCE(u.first_name,''), ' ', COALESCE(u.last_name,'')) as full_name_created,
+                 CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated,
                  u.created_at,
+                 u.updated_at,
                  GROUP_CONCAT(r.id) AS roles"
             )
             ->leftJoin(
@@ -110,7 +113,7 @@ class UserRepository extends EntityRepository {
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(User::class, 'u');
+        $queryBuilder->from(User::class, 'u')->leftJoin('u.join_updated', 'up');
             
 
         if ($sortField != NULL && $sortDirection != NULL)

@@ -98,7 +98,7 @@ class UserController extends CoreController {
                                         
                     $this->userManager->updateUser($_user, $data,$user);
                     $this->error_code = 1;
-                    $this->apiResponse['message'] = "Success: You have modified user!";
+                    $this->apiResponse['message'] = "SUCCESS_MODIFIED";
                     }  else {
                     $this->error_code = 0;
                     $this->apiResponse = $form->getMessages(); 
@@ -106,7 +106,7 @@ class UserController extends CoreController {
                 }
             }   else {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = 'User Not Found'; 
+                $this->apiResponse['message'] = 'NOT_FOUND'; 
             }
         } 
         

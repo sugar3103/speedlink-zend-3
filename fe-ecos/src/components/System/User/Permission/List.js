@@ -144,7 +144,7 @@ class List extends Component {
           <Action modalOpen={modalOpen} />
           <form className="form">
             <div className="form__form-group products-list__search">
-              <input placeholder="Search..." name="search" onKeyPress={this.handleKeyPress} onChange={event => { this.setState({ searchPermission: event.target.value }) }} />
+              <input placeholder={messages['search']} name="search" onKeyPress={this.handleKeyPress} onChange={event => { this.setState({ searchPermission: event.target.value }) }} />
               <MagnifyIcon />
             </div>
           </form>

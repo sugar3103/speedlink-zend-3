@@ -3,6 +3,7 @@ import React, { Component, Fragment } from 'react';
 import { Card, CardBody, Col, Button, ButtonToolbar, Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Table from '../../../containers/Shared/table/Table';
+import Can from '../../../containers/Shared/Can';
 import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
@@ -110,7 +111,7 @@ class List extends Component {
           <Action modalOpen={modalOpen} />
           <form className="form">
             <div className="form__form-group products-list__search">
-              <input placeholder="Search..." name="search" onKeyPress={this.handleKeyPress} onChange={event => { this.setState({ searchUser: event.target.value }) }} />
+              <input placeholder={messages['search']} name="search" onKeyPress={this.handleKeyPress} onChange={event => { this.setState({ searchUser: event.target.value }) }} />
               <MagnifyIcon />
             </div>
           </form>
@@ -144,6 +145,19 @@ class List extends Component {
           Header: messages['user.username'],
           accessor: "username",
           sortable: false,
+          Cell: ({ original }) => {
+              if(this.props.authUser.user.id === original.id) {
+                return (
+                  <Fragment>
+                    {original.username}<Badge color="danger" style={{margin: '0 0 0 12px'}}>It' You</Badge> 
+                  </Fragment>
+                )
+              } else {
+                return (
+                  original.username
+                )
+              }
+          }
         }, {
           Header: messages['user.fullname'],
           accessor: "full_name",
@@ -152,8 +166,8 @@ class List extends Component {
           Header: messages['user.email'],
           accessor: "email",
           sortable: false,
-        }, 
-        
+        },
+
         {
           Header: messages['status'],
           accessor: "status",
@@ -176,11 +190,17 @@ class List extends Component {
           Header: messages['action'],
           accessor: "",
           width: 100,
-          className: "text-center",
+          className: "text-left",
           Cell: ({ original }) => {
             return (
               <Fragment>
-                <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
+                <Can user={this.props.authUser.user} permission="user" action="view">
+                  <Button color="success" size="sm" onClick={(e) => this.toggleModal(e, 'view', original)}><span className="lnr lnr-eye" /></Button> &nbsp;
+                </Can>
+                <Can user={this.props.authUser.user} permission="user" action="edit">
+                  <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
+                </Can>
+                { (this.props.authUser.user.id === original.id) && <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button>}
               </Fragment>
             );
           },
@@ -222,10 +242,11 @@ List.propTypes = {
   toggleUserModal: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ users }) => {
+const mapStateToProps = ({ users, authUser }) => {
   const { user } = users;
   return {
-    user
+    user,
+    authUser
   };
 };
 
