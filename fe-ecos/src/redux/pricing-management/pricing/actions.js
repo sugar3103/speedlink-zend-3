@@ -2,23 +2,36 @@ import {
   PRICING_COUNTRY_GET_LIST,
   PRICING_COUNTRY_GET_LIST_SUCCESS,
   PRICING_COUNTRY_GET_LIST_ERROR,
+  
   PRICING_CITY_GET_LIST,
   PRICING_CITY_GET_LIST_SUCCESS,
   PRICING_CITY_GET_LIST_ERROR,
+
   PRICING_DISTRICT_GET_LIST,
   PRICING_DISTRICT_GET_LIST_SUCCESS,
   PRICING_DISTRICT_GET_LIST_ERROR,
+
   PRICING_WARD_GET_LIST,
   PRICING_WARD_GET_LIST_SUCCESS,
   PRICING_WARD_GET_LIST_ERROR,
+
   PRICING_SALEMAN_GET_LIST,
   PRICING_SALEMAN_GET_LIST_SUCCESS,
   PRICING_SALEMAN_GET_LIST_ERROR,
+
+  PRICING_APPROVED_BY_GET_LIST,
+  PRICING_APPROVED_BY_GET_LIST_SUCCESS,
+  PRICING_APPROVED_BY_GET_LIST_ERROR,
+
+  PRICING_GET_LIST,
+  PRICING_GET_LIST_SUCCESS,
+  PRICING_GET_LIST_ERROR,
+
 } from '../../../constants/actionTypes';
 
-export const getCountryPricingList = (params) => ({
+export const getCountryPricingList = (params, messages) => ({
   type: PRICING_COUNTRY_GET_LIST,
-  payload: { params }
+  payload: { params, messages }
 });
 
 export const getCountryPricingListSuccess = (countries) => ({
@@ -31,9 +44,9 @@ export const getCountryPricingListError = (error) => ({
   payload: error
 });
 
-export const getCityPricingList = (params) => ({
+export const getCityPricingList = (params, messages) => ({
   type: PRICING_CITY_GET_LIST,
-  payload: { params }
+  payload: { params, messages }
 });
 
 export const getCityPricingListSuccess = (cities) => ({
@@ -46,9 +59,9 @@ export const getCityPricingListError = (error) => ({
   payload: error
 });
 
-export const getDistrictPricingList = (params) => ({
+export const getDistrictPricingList = (params, messages) => ({
   type: PRICING_DISTRICT_GET_LIST,
-  payload: { params }
+  payload: { params, messages }
 });
 
 export const getDistrictPricingListSuccess = (districts) => ({
@@ -61,9 +74,9 @@ export const getDistrictPricingListError = (error) => ({
   payload: error
 });
 
-export const getWardPricingList = (params) => ({
+export const getWardPricingList = (params, messages) => ({
   type: PRICING_WARD_GET_LIST,
-  payload: { params }
+  payload: { params, messages }
 });
 
 export const getWardPricingListSuccess = (wards) => ({
@@ -76,9 +89,9 @@ export const getWardPricingListError = (error) => ({
   payload: error
 });
 
-export const getSalemanList = (params) => ({
+export const getSalemanList = (params, messages) => ({
   type: PRICING_SALEMAN_GET_LIST,
-  payload: { params }
+  payload: { params, messages }
 });
 
 export const getSalemanListSuccess = (salemans) => ({
@@ -88,5 +101,36 @@ export const getSalemanListSuccess = (salemans) => ({
 
 export const getSalemanListError = (error) => ({
   type: PRICING_SALEMAN_GET_LIST_ERROR,
+  payload: error
+});
+
+export const getApprovedByList = (params, messages) => ({
+  type: PRICING_APPROVED_BY_GET_LIST,
+  payload: { params, messages }
+});
+
+export const getApprovedByListSuccess = (approvedBys) => ({
+  type: PRICING_APPROVED_BY_GET_LIST_SUCCESS,
+  payload: { approvedBys }
+});
+
+export const getApprovedByListError = (error) => ({
+  type: PRICING_APPROVED_BY_GET_LIST_ERROR,
+  payload: error
+});
+
+
+export const getPricingList = (params, messages) => ({
+  type: PRICING_GET_LIST,
+  payload: { params, messages }
+});
+
+export const getPricingListSuccess = (items, total) => ({
+  type: PRICING_GET_LIST_SUCCESS,
+  payload: { items, total }
+});
+
+export const getPricingListError = (error) => ({
+  type: PRICING_GET_LIST_ERROR,
   payload: error
 });

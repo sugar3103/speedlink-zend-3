@@ -11,6 +11,14 @@ module.exports = {
     'pri_man.public': 'Public',
     'pri_man.customer': 'Customer',
 
+    //validate
+    'pri_man.validate-private-empty': 'Type shouldn’t be empty',
+    'pri_man.validate-carrier-empty': 'Carrier shouldn’t be empty',
+    'pri_man.validate-customer-empty': 'Customer shouldn’t be empty',
+    'pri_man.validate-category-empty': 'Category shouldn’t be empty',
+    'pri_man.validate-status-empty': 'Status shouldn’t be empty',
+    'pri_man.validate-service-empty': 'Service shouldn’t be empty',
+    'pri_man.validate-shipment_type-empty': 'Shipment Type shouldn’t be empty',
 
     //master-data --- RangeWeight
     'range_weight.list-title': 'Range Weight',
@@ -33,13 +41,6 @@ module.exports = {
     'range_weight.validate-code-minlength': 'Name must be 5 characters or more',
     'range_weight.validate-code-maxlength': 'Name must be 20 characters or less',
     'range_weight.validate-code-exists': 'Name already exists',
-    'range_weight.validate-private-empty': 'Type shouldn’t be empty',
-    'range_weight.validate-carrier-empty': 'Carrier shouldn’t be empty',
-    'range_weight.validate-customer-empty': 'Customer shouldn’t be empty',
-    'range_weight.validate-category-empty': 'Category shouldn’t be empty',
-    'range_weight.validate-status-empty': 'Status shouldn’t be empty',
-    'range_weight.validate-service-empty': 'Service shouldn’t be empty',
-    'range_weight.validate-shipment_type-empty': 'Shipment Type shouldn’t be empty',
     'range_weight.validate-from-empty' : 'From Type shouldn’t be empty',
     'range_weight.validate-to-empty' : 'To Type shouldn’t be empty',
     'range_weight.validate-calculate_unit-empty' : 'Calculate Unit Type shouldn’t be empty',
@@ -75,13 +76,6 @@ module.exports = {
     'zone_code.validate-code-minlength': 'Name must be 5 characters or more',
     'zone_code.validate-code-maxlength': 'Name must be 20 characters or less',
     'zone_code.validate-code-exists': 'Name already exists',
-    'zone_code.validate-private-empty': 'Type shouldn’t be empty',
-    'zone_code.validate-carrier-empty': 'Carrier shouldn’t be empty',
-    'zone_code.validate-customer-empty': 'Customer shouldn’t be empty',
-    'zone_code.validate-category-empty': 'Category shouldn’t be empty',
-    'zone_code.validate-status-empty': 'Status shouldn’t be empty',
-    'zone_code.validate-service-empty': 'Service shouldn’t be empty',
-    'zone_code.validate-shipment_type-empty': 'Shipment Type shouldn’t be empty',
     'zone_code.validate-origin_city-empty': 'Origin City shouldn’t be empty',
     'zone_code.validate-destination_city-empty': 'Destination City shouldn’t be empty',
 
@@ -89,5 +83,15 @@ module.exports = {
     'pricing.saleman': 'Saleman',
     'pricing.effected-date': 'Effected Date',
     'pricing.expired-date': 'Expired Date',
+    'pricing.approved-status': 'Approved Status',
+    'pricing.approved': 'Approved',
+    'pricing.draft': 'Draft',
+    'pricing.new': 'New',
+    'pricing.approved-by': 'Approved By',
+    'pricing.add-new': 'Add New Pricing',
+    'pricing.edit': 'Edit Pricing',
+    'pricing.view': 'View Pricing',
+    'pricing.delete': 'Delete Pricing',
+    'pricing.name': 'Pricing Name',
 
   }

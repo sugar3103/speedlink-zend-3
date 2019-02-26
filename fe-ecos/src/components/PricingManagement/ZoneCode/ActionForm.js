@@ -433,7 +433,6 @@ class ActionForm extends Component {
                     { value: 1, label: messages['pri_man.public'] },
                     { value: 2, label: messages['pri_man.customer'] }
                     ]} 
-                    messages={messages}
                     onChange={this.hanldeChangeType}
                     disabled={disabled} 
                   />
@@ -452,7 +451,6 @@ class ActionForm extends Component {
                   options={customerCode && this.showOptionsCustomer(customerCode)}
                   placeholder={messages['pri_man.customer']}
                   disabled={this.state.disabled}
-                  messages={messages}
                 />
               </div>
             </div>
@@ -466,7 +464,6 @@ class ActionForm extends Component {
                     name="code"
                     component={CustomField}
                     type="text"
-                    messages={messages}
                     disabled={disabled} 
                   />
                 </div>
@@ -480,7 +477,6 @@ class ActionForm extends Component {
                   { value: 1, label: messages['active'] },
                   { value: 0, label: messages['inactive'] }
                   ]}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>
@@ -496,7 +492,6 @@ class ActionForm extends Component {
                       { value: 'Outbound', label: messages['outbound'] },
                       { value: 'Domestic', label: messages['domestic'] }
                       ]}
-                      messages={messages}
                       disabled={disabled} 
                       onChange={this.onChangeCategory}
                     />
@@ -514,7 +509,6 @@ class ActionForm extends Component {
                   type="text"
                   options={CarrierCodeByCondition && this.showOptionCarrier(CarrierCodeByCondition)}
                   onChange={this.onChangeCarrier}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>
@@ -531,7 +525,6 @@ class ActionForm extends Component {
                   type="text"
                   options={ServiceCodeByCondition && this.showOptionService(ServiceCodeByCondition)}
                   onChange={this.onChangeService}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>
@@ -547,7 +540,6 @@ class ActionForm extends Component {
                   component={renderSelectField}
                   type="text"
                   options={codeByCondition && this.showOptionShipmenttype(codeByCondition)}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>
@@ -563,7 +555,6 @@ class ActionForm extends Component {
                   type="text"
                   options={origin_countrys && this.showOptions(origin_countrys)}
                   onChange={this.onChangeOriginCountry}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>
@@ -579,7 +570,6 @@ class ActionForm extends Component {
                   type="text"
                   options={origin_citys && this.showOptions(origin_citys)}
                   onChange={this.onChangeOriginCity}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>
@@ -595,7 +585,6 @@ class ActionForm extends Component {
                   type="text"
                   options={origin_districts && this.showOptions(origin_districts)}
                   onChange={this.onChangeOriginDistrict}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>
@@ -611,7 +600,6 @@ class ActionForm extends Component {
                   type="text"
                   options={origin_wards && this.showOptions(origin_wards)}
                   onChange={this.onChangeOriginWard}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>
@@ -627,7 +615,6 @@ class ActionForm extends Component {
                   type="text"
                   options={destination_countrys && this.showOptions(destination_countrys)}
                   onChange={this.onChangeDestinationCountry}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>
@@ -643,7 +630,6 @@ class ActionForm extends Component {
                     type="text"
                     options={destination_citys && this.showOptions(destination_citys)}
                     onChange={this.onChangeDestinationCity}
-                    messages={messages}
                     disabled={disabled} 
                   />
                 </div>
@@ -659,7 +645,6 @@ class ActionForm extends Component {
                   type="text"
                   options={destination_districts && this.showOptions(destination_districts)}
                   onChange={this.onChangeDestinationDistrict}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>
@@ -675,7 +660,6 @@ class ActionForm extends Component {
                   type="text"
                   options={destination_wards && this.showOptions(destination_wards)}
                   onChange={this.onChangeDestinationWard}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>

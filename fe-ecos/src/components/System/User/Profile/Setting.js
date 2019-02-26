@@ -71,7 +71,6 @@ class Setting extends PureComponent {
                   component="input"
                   type="text"
                   placeholder={messages['user.username']}
-                  messages={messages}
                   disabled
                 />
               </div>
@@ -91,7 +90,6 @@ class Setting extends PureComponent {
                     component={CustomField}
                     type="email"
                     placeholder={messages['user.email']}
-                    messages={messages}
                   />
                 </div>
               </div>
@@ -107,7 +105,6 @@ class Setting extends PureComponent {
                     component={CustomField}
                     type="text"
                     placeholder={messages['user.firstname']}
-                    messages={messages}
                   />
                 </div>
               </div>
@@ -123,7 +120,6 @@ class Setting extends PureComponent {
                     component={CustomField}
                     type="text"
                     placeholder={messages['user.lastname']}
-                    messages={messages}
                   />
                 </div>
               </div>
@@ -136,7 +132,6 @@ class Setting extends PureComponent {
                 name="roles"
                 component={renderMultiSelectField}
                 options={items && this.showOptions(items)}
-                messages={messages}
                 disabled
                 readOnly
               />
@@ -152,7 +147,6 @@ class Setting extends PureComponent {
                     component={CustomField}
                     type={this.state.showPassword ? 'text' : 'password'}
                     placeholder={messages['user.password']}
-                    messages={messages}
                     autocomplete='off' 
                   />
                 </div>
@@ -174,7 +168,6 @@ class Setting extends PureComponent {
                     component={CustomField}
                     type={this.state.showPassword ? 'text' : 'password'}
                     placeholder={messages['user.confirm_password']}
-                    messages={messages}
                     autocomplete='off' 
                   />
                 </div>

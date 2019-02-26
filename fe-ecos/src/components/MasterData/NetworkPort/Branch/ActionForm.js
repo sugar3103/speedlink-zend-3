@@ -204,7 +204,6 @@ class ActionForm extends PureComponent {
                         component={CustomField}
                         type="text"
                         placeholder={messages['name']}
-                        messages={messages}
                         disabled={disabled} 
                       />
                     </div>
@@ -217,7 +216,6 @@ class ActionForm extends PureComponent {
                         component={CustomField}
                         type="text"
                         placeholder={messages['branch.name']}
-                        messages={messages}
                         disabled={disabled} 
                       />
                     </div>
@@ -229,7 +227,6 @@ class ActionForm extends PureComponent {
                         name="code"
                         component={CustomField}
                         type="text"
-                        messages={messages}
                         disabled={disabled} 
                       />
                     </div>
@@ -243,7 +240,6 @@ class ActionForm extends PureComponent {
                         type="text"
                         options={hubs && this.showOptionsHub(hubs)}
                         onInputChange={this.onInputChange}
-                        messages={messages}
                         disabled={disabled} 
                       />
                     </div>
@@ -292,7 +288,6 @@ class ActionForm extends PureComponent {
                         type="text"
                         options={countries && this.showOptions(countries)}
                         onChange={this.onChangeCountry}
-                        messages={messages}
                         disabled={disabled} 
                       />
                     </div>
@@ -308,7 +303,6 @@ class ActionForm extends PureComponent {
                         options={cities && this.showOptions(cities)}
                         onChange={this.onChangeCity}
                         onInputChange={this.onInputChangeCity}
-                        messages={messages}
                         disabled={disabled} 
                       />
                     </div>
@@ -324,7 +318,6 @@ class ActionForm extends PureComponent {
                         options={districts && this.showOptions(districts)}
                         onChange={this.onChangeDistrict}
                         onInputChange={this.onInputChangeDistrict}
-                        messages={messages}
                         disabled={disabled} 
                       />
                     </div>
@@ -339,8 +332,6 @@ class ActionForm extends PureComponent {
                         type="text"
                         options={wards && this.showOptions(wards)}
                         onChange={this.onChangeWard}
-                        // onInputChange={this.onInputChangeWard}
-                        messages={messages}
                         disabled={disabled} 
                       />
                     </div>

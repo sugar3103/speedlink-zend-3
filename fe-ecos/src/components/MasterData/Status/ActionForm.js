@@ -86,7 +86,6 @@ class ActionForm extends Component {
                 component={CustomField}
                 type="text"
                 placeholder={messages['name']}
-                messages={messages} 
                 disabled={disabled} 
               />
             </div>
@@ -99,7 +98,6 @@ class ActionForm extends Component {
                 component={CustomField}
                 type="text"
                 placeholder={messages['name']}
-                messages={messages}
                 disabled={disabled} 
               />
             </div>

@@ -1,26 +1,18 @@
-import React, { Component } from 'react';
-import { Col, Container, Row } from 'reactstrap';
-import { injectIntl } from 'react-intl';
-import { List } from '../../components/PricingManagement/Pricing';
+import React, { Fragment } from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
-class ZoneCode extends Component {
-  render() {
-    return (
-      <Container>
-        <Row>
-          <Col md={12}>
-            <h3 className="page-title">Pricing</h3>
-            <h3 className="page-subhead subhead">Use this elements, if you want to show some hints or additional
-                  information
-            </h3>
-          </Col>
-        </Row>
-        <Row>
-          <List />
-        </Row>
-      </Container>
-    )
-  }
-};
+import PricingIndex from './pricing/index';
+import PricingDetail from './pricing/detail';
 
-export default injectIntl(ZoneCode);
+const PricingManagement = ({ match }) => (
+  <Fragment>
+      <Switch>
+          <Route exact path={`${match.url}` || `${match.url}/`} component={PricingIndex} />
+          <Route exact path={`${match.url}/add`} render={() => <PricingDetail type="add" />} />     
+          <Route exact path={`${match.url}/edit/:id`} render={() => <PricingDetail type="edit" />} />     
+          <Route exact path={`${match.url}/view/:id`} render={() => <PricingDetail type="view" />} />     
+          <Redirect to="/error" />
+      </Switch>
+  </Fragment>
+);
+export default PricingManagement;

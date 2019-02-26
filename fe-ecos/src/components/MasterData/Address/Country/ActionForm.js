@@ -45,7 +45,6 @@ class ActionForm extends Component {
                 component={CustomField}
                 type="text"
                 placeholder={messages['name']}
-                messages={messages}
               />
             </div>
             <div className="form__form-group-field">
@@ -57,7 +56,6 @@ class ActionForm extends Component {
                 component={CustomField}
                 type="text"
                 placeholder={messages['name']}
-                messages={messages}
               />
             </div>
           </div>
@@ -112,7 +110,6 @@ class ActionForm extends Component {
                 component={CustomField}
                 type="text"
                 placeholder={messages['country.iso_code']}
-                messages={messages}
               />
             </div>
           </div>

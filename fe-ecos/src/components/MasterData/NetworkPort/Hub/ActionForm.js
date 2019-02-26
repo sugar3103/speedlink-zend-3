@@ -162,7 +162,6 @@ class ActionForm extends Component {
                         name="name"
                         component={CustomField}
                         type="text"
-                        messages={messages}
                         disabled={disabled} 
                       />
                     </div>
@@ -174,7 +173,6 @@ class ActionForm extends Component {
                         name="name_en"
                         component={CustomField}
                         type="text"
-                        messages={messages}
                         disabled={disabled} 
                       />
                     </div>
@@ -221,7 +219,6 @@ class ActionForm extends Component {
                         name="code"
                         component={CustomField}
                         type="text"
-                        messages={messages}
                         disabled={disabled} 
                       />
                     </div>
@@ -236,7 +233,6 @@ class ActionForm extends Component {
                         type="text"
                         options={countries && this.showOptionsCountry(countries)}
                         onChange={this.onChangeCountry}
-                        messages={messages}
                         disabled={disabled} 
                       />
                     </div>
@@ -252,7 +248,6 @@ class ActionForm extends Component {
                         options={cities && this.showOptions(cities)}
                         placeholder={messages['hub.name']}
                         onInputChange={this.onInputChange}
-                        messages={messages}
                         disabled={disabled} 
                       />
                     </div>
