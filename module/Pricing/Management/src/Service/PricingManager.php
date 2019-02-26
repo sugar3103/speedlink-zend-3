@@ -30,7 +30,8 @@ class PricingManager {
         $this->entityManager = $entityManager;
     }
 
-    /** set objects to update and insert
+    /**
+     * Set objects to update and insert
      * @param Pricing $pricing
      * @param $data
      * @param $user
@@ -91,6 +92,15 @@ class PricingManager {
         $pricing->setJoinOriginWard($origin_ward);
     }
 
+    /**
+     * Get list Pricing
+     * @param $start
+     * @param $limit
+     * @param string $sortField
+     * @param string $sortDirection
+     * @param array $filters
+     * @return array
+     */
     public function getListPricingByCondition($start, $limit, $sortField = '', $sortDirection = 'asc', $filters = [])
     {
         $pricingList = [];
@@ -126,7 +136,6 @@ class PricingManager {
 
     /**
      * Add Pricing
-     *
      * @param $data
      * @param $user
      * @return Pricing|bool
@@ -174,7 +183,6 @@ class PricingManager {
 
     /**
      * Update Pricing
-     *
      * @param Pricing $pricing
      * @param $data
      * @param $user
@@ -220,7 +228,6 @@ class PricingManager {
 
     /**
      * Remove Pricing
-     *
      * @param Pricing $pricing
      * @return Pricing|bool
      * @throws \Exception

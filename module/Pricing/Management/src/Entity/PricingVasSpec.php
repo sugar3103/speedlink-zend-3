@@ -84,11 +84,18 @@ class PricingVasSpec
     private $updated_at;
 
     /**
-     * @var bool
+     * @var int
      *
      * @ORM\Column(name="is_deleted", type="boolean", nullable=false)
      */
     private $is_deleted = '0';
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\Management\Entity\PricingData")
+     * @ORM\JoinColumn(name="pricing_data_id", referencedColumnName="id", nullable=true)
+     */
+    private $join_pricing_data;
 
     /**
      * @return int
@@ -264,6 +271,22 @@ class PricingVasSpec
     public function setIsDeleted($is_deleted)
     {
         $this->is_deleted = $is_deleted;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinPricingData()
+    {
+        return $this->join_pricing_data;
+    }
+
+    /**
+     * @param mixed $join_pricing_data
+     */
+    public function setJoinPricingData($join_pricing_data)
+    {
+        $this->join_pricing_data = $join_pricing_data;
     }
 
 }
