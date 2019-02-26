@@ -24,7 +24,8 @@ class PricingCodMinRepository extends EntityRepository
                 pc.internal_city_ras_min,
                 pc.external_city_min,
                 pc.external_city_ras_min
-            ")->andWhere('pc.is_deleted = 0');
+            ")->andWhere('pc.is_deleted = 0')
+              ->andWhere('pd.status = 1');
 
             return $queryBuilder;
         } catch (QueryException $e) {
@@ -51,7 +52,8 @@ class PricingCodMinRepository extends EntityRepository
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(PricingCodMin::class, 'pc');
+        $queryBuilder->from(PricingCodMin::class, 'pc')
+            ->innerJoin('pv.join_pricing_data', 'pd');
 
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
