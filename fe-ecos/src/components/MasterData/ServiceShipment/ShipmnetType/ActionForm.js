@@ -52,7 +52,7 @@ class ActionForm extends Component {
             <span className="form__form-group-label">{messages['shipment_type.code']}</span>
             <div className="form__form-group-field">
               <Field name="code" component={CustomField} type="text"
-                     placeholder={messages['shipment_type.code']} messages={messages} />
+                     placeholder={messages['shipment_type.code']} />
             </div>
           </div>
           <div className="form__form-group">
@@ -62,20 +62,20 @@ class ActionForm extends Component {
                 <div className="flag vn"></div>
               </div>
               <Field name="name" component={CustomField} type="text"
-                     placeholder={messages['shipment_type.name']} messages={messages} />
+                     placeholder={messages['shipment_type.name']}  />
             </div>
             <div className="form__form-group-field">
               <div className="form__form-group-icon">
                 <div className="flag us"></div>
               </div>
               <Field name="name_en" component={CustomField} type="text"
-                     placeholder={messages['shipment_type.name-en']} messages={messages} />
+                     placeholder={messages['shipment_type.name-en']}  />
             </div>
           </div>
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['shipment_type.category_code']}</span>
             <div className="form__form-group-field">
-              <Field name="category_code" component={renderSelectField} type="text" messages={messages} options={[
+              <Field name="category_code" component={renderSelectField} type="text"  options={[
                 { value: "Inbound", label: messages['shipment_type.inbound'] },
                 { value: "Outbound", label: messages['shipment_type.outbound'] },
                 { value: "Domestic", label: messages['shipment_type.domestic'] },
@@ -86,7 +86,7 @@ class ActionForm extends Component {
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['shipment_type.product_type_code']}</span>
             <div className="form__form-group-field">
-              <Field name="product_type_code" component={renderSelectField} type="text" messages={messages} options={[
+              <Field name="product_type_code" component={renderSelectField} type="text"  options={[
                 { value: "Dox", label: messages['shipment_type.dox'] },
                 { value: "Parcel", label: messages['shipment_type.parcel'] }
               ]}
@@ -97,21 +97,21 @@ class ActionForm extends Component {
             <span className="form__form-group-label">{messages['shipment_type.carrier_code']}</span>
             <div className="form__form-group-field">
               <Field name="carrier_id" component={renderSelectField} type="text"
-                     options={carrierCode && this.showOption(carrierCode)} messages={messages}/>
+                     options={carrierCode && this.showOption(carrierCode)} />
             </div>
           </div>
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['shipment_type.service_code']}</span>
             <div className="form__form-group-field">
               <Field name="service_id" component={renderSelectField} type="text"
-                     options={serviceCode && this.showOption(serviceCode)} messages={messages}/>
+                     options={serviceCode && this.showOption(serviceCode)} />
             </div>
           </div>
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['shipment_type.volumetric_number']}</span>
             <div className="form__form-group-field">
               <Field name="volumetric_number" component={CustomField} type="text"
-                     placeholder={messages['shipment_type.volumetric_number']} messages={messages} />
+                     placeholder={messages['shipment_type.volumetric_number']}  />
             </div>
           </div>
           <div className="form__form-group">
@@ -141,7 +141,7 @@ class ActionForm extends Component {
               <span className="form__form-group-label">{messages['shipment_type.created-by']}</span>
               <div className="form__form-group-field">
                 <Field name="created_by" component="input" type="text" disabled
-                       placeholder={messages['shipment_type.created-by']} messages={messages}/>
+                       placeholder={messages['shipment_type.created-by']} />
               </div>
             </div>
           }
@@ -150,7 +150,7 @@ class ActionForm extends Component {
               <span className="form__form-group-label">{messages['shipment_type.created-at']}</span>
               <div className="form__form-group-field">
                 <Field name="created_at" component="input" type="text" disabled
-                       placeholder={messages['shipment_type.created-at']} messages={messages}/>
+                       placeholder={messages['shipment_type.created-at']} />
               </div>
             </div>
           }
@@ -159,7 +159,7 @@ class ActionForm extends Component {
               <span className="form__form-group-label">{messages['shipment_type.updated-by']}</span>
               <div className="form__form-group-field">
                 <Field name="updated_by" component="input" type="text" disabled
-                       placeholder={messages['shipment_type.updated-by']} messages={messages}/>
+                       placeholder={messages['shipment_type.updated-by']} />
               </div>
             </div>
           }
@@ -168,7 +168,7 @@ class ActionForm extends Component {
               <span className="form__form-group-label">{messages['shipment_type.updated-at']}</span>
               <div className="form__form-group-field">
                 <Field name="updated_at" component="input" type="text" disabled
-                       placeholder={messages['shipment_type.updated-at']} messages={messages}/>
+                       placeholder={messages['shipment_type.updated-at']} />
               </div>
             </div>
           }

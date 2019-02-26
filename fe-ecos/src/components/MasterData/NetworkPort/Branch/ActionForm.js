@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { Button, ButtonToolbar, Card, CardBody, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleBranchModal, changeTypeBranchModal, getCityList, getDistrictList, getWardList, getCountryList, getHubList } from '../../../../redux/actions';
+import { toggleBranchModal, changeTypeBranchModal, getCityBranchList, getDistrictBranchList, getWardBranchList, getCountryBranchList, getHubList } from '../../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../../containers/Shared/form/CustomField';
 import renderRadioButtonField from '../../../../containers/Shared/form/RadioButton';
@@ -35,7 +35,7 @@ class ActionForm extends PureComponent {
           id: data.country_id
         }
       }
-      this.props.getCountryList(paramsCountry);
+      this.props.getCountryBranchList(paramsCountry,'editview');
     }
     if (data && data.city_id) {
       let paramsCity = {
@@ -47,7 +47,7 @@ class ActionForm extends PureComponent {
           country: data.country_id
         }
       }
-      this.props.getCityList(paramsCity);
+      this.props.getCityBranchList(paramsCity,'editview');
     }
 
     if (data && data.district_id) {
@@ -60,7 +60,7 @@ class ActionForm extends PureComponent {
           city: data.city_id
         }
       }
-      this.props.getDistrictList(paramsDistrict);
+      this.props.getDistrictBranchList(paramsDistrict,'editview');
     }
 
     if (data && data.ward_id) {
@@ -73,7 +73,7 @@ class ActionForm extends PureComponent {
           district: data.district_id
         }
       }
-      this.props.getWardList(paramsWard);
+      this.props.getWardBranchList(paramsWard,'editview');
     }
   }
 
@@ -92,10 +92,13 @@ class ActionForm extends PureComponent {
         limit: 0
       },
       query: {
-        country: values
+        country: values ? values : 0
       }
     }
-    this.props.getCityList(params);
+    this.props.change('cities',null);
+    this.props.change('districts',null);
+    this.props.change('wards',null);
+    this.props.getCityBranchList(params,'onchange');
   }
 
   onChangeCity = values => {
@@ -105,10 +108,12 @@ class ActionForm extends PureComponent {
         limit: 0
       },
       query: {
-        city: values
+        city: values ? values : 0
       }
     }
-    this.props.getDistrictList(params);
+    this.props.change('districts',null);
+    this.props.change('wards',null);
+    this.props.getDistrictBranchList(params,'onchange');
   }
 
   onChangeDistrict = values => {
@@ -118,50 +123,21 @@ class ActionForm extends PureComponent {
         limit: 0
       },
       query: {
-        district: values
+        district: values ? values : 0
       }
     }
-    this.props.getWardList(params);
+    this.props.change('wards',null);
+    this.props.getWardBranchList(params,'onchange');
   }
 
-  showOptionsCity = (items) => {
-    const cities = items.map(item => {
+  showOptions = (items) => {
+    const select_options = items.map(item => {
       return {
         'value': item.id,
         'label': item.name
       }
     });
-    return cities;
-  }
-
-  showOptionsDistrict = (items) => {
-    const districts = items.map(item => {
-      return {
-        'value': item.id,
-        'label': item.name
-      }
-    });
-    return districts;
-  }
-
-  showOptionsWard = (items) => {
-    const wards = items.map(item => {
-      return {
-        'value': item.id,
-        'label': item.name
-      }
-    });
-    return wards;
-  }
-
-  showOptionsCountry = (items) => {
-    const Countries = items.map(item => {
-      return {
-        'value': item.id,
-        'label': item.name
-      }
-    });
-    return Countries;
+    return select_options;
   }
 
   showOptionsHub = (items) => {
@@ -228,7 +204,6 @@ class ActionForm extends PureComponent {
                         component={CustomField}
                         type="text"
                         placeholder={messages['name']}
-                        messages={messages}
                         disabled={disabled} 
                       />
                     </div>
@@ -241,7 +216,6 @@ class ActionForm extends PureComponent {
                         component={CustomField}
                         type="text"
                         placeholder={messages['branch.name']}
-                        messages={messages}
                         disabled={disabled} 
                       />
                     </div>
@@ -253,7 +227,6 @@ class ActionForm extends PureComponent {
                         name="code"
                         component={CustomField}
                         type="text"
-                        messages={messages}
                         disabled={disabled} 
                       />
                     </div>
@@ -267,7 +240,6 @@ class ActionForm extends PureComponent {
                         type="text"
                         options={hubs && this.showOptionsHub(hubs)}
                         onInputChange={this.onInputChange}
-                        messages={messages}
                         disabled={disabled} 
                       />
                     </div>
@@ -314,9 +286,8 @@ class ActionForm extends PureComponent {
                         name="country_id"
                         component={renderSelectField}
                         type="text"
-                        options={countries && this.showOptionsCountry(countries)}
+                        options={countries && this.showOptions(countries)}
                         onChange={this.onChangeCountry}
-                        messages={messages}
                         disabled={disabled} 
                       />
                     </div>
@@ -329,10 +300,9 @@ class ActionForm extends PureComponent {
                         name="city_id"
                         component={renderSelectField}
                         type="text"
-                        options={cities && this.showOptionsCity(cities)}
+                        options={cities && this.showOptions(cities)}
                         onChange={this.onChangeCity}
                         onInputChange={this.onInputChangeCity}
-                        messages={messages}
                         disabled={disabled} 
                       />
                     </div>
@@ -345,10 +315,9 @@ class ActionForm extends PureComponent {
                         name="district_id"
                         component={renderSelectField}
                         type="text"
-                        options={districts && this.showOptionsDistrict(districts)}
+                        options={districts && this.showOptions(districts)}
                         onChange={this.onChangeDistrict}
                         onInputChange={this.onInputChangeDistrict}
-                        messages={messages}
                         disabled={disabled} 
                       />
                     </div>
@@ -361,10 +330,8 @@ class ActionForm extends PureComponent {
                         name="ward_id"
                         component={renderSelectField}
                         type="text"
-                        options={wards && this.showOptionsWard(wards)}
+                        options={wards && this.showOptions(wards)}
                         onChange={this.onChangeWard}
-                        // onInputChange={this.onInputChangeWard}
-                        messages={messages}
                         disabled={disabled} 
                       />
                     </div>
@@ -437,19 +404,15 @@ ActionForm.propTypes = {
   hubs: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,
   toggleBranchModal: PropTypes.func.isRequired,
-  getCityList: PropTypes.func.isRequired,
-  getDistrictList: PropTypes.func.isRequired,
-  getCountryList: PropTypes.func.isRequired,
-  getWardList: PropTypes.func.isRequired,
+  getCityBranchList: PropTypes.func.isRequired,
+  getDistrictBranchList: PropTypes.func.isRequired,
+  getCountryBranchList: PropTypes.func.isRequired,
+  getWardBranchList: PropTypes.func.isRequired,
   getHubList: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = ({ branch, address, hub }) => {
-  const { modalData, modalType } = branch;
-  const cities = address.city.items;
-  const districts = address.district.items;
-  const countries = address.country.items;
-  const wards = address.ward.items;
+  const { modalData, modalType, countries, cities, districts, wards } = branch;
   const hubs = hub.items;
 
   return {
@@ -465,9 +428,9 @@ export default reduxForm({
 })(injectIntl(connect(mapStateToProps, {
   toggleBranchModal,
   changeTypeBranchModal,
-  getCityList,
-  getDistrictList,
-  getCountryList,
-  getWardList,
+  getCityBranchList,
+  getDistrictBranchList,
+  getCountryBranchList,
+  getWardBranchList,
   getHubList
 })(ActionForm)));

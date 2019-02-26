@@ -83,7 +83,6 @@ class ActionForm extends PureComponent {
                 component={CustomField}
                 type="text"
                 placeholder={messages['permissions.name']}
-                messages={messages}
                 disabled={disabled}
               />
             </div>
@@ -99,7 +98,6 @@ class ActionForm extends PureComponent {
                 component="textarea"
                 type="text"
                 placeholder={messages['description']}
-                messages={messages}
                 disabled={disabled}
               />
             </div>
@@ -115,7 +113,6 @@ class ActionForm extends PureComponent {
                 component="textarea"
                 type="text"
                 placeholder={messages['description']}
-                messages={messages}
                 disabled={disabled}
               />
             </div>

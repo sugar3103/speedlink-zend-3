@@ -8,6 +8,7 @@ import CheckIcon from 'mdi-react/CheckIcon';
 import MinusIcon from 'mdi-react/MinusIcon';
 import Loading from './Loading';
 import NoData from './NoData';
+import { MODAL_VIEW } from '../../../constants/defaultValues';
 
 class RenderTable extends PureComponent {
 
@@ -153,7 +154,7 @@ class RenderTable extends PureComponent {
                     NoDataComponent={NoData}
                     getNoDataProps={this.getNoDataProps}
                     getTrProps={(state, rowInfo) => ({
-                        onClick: (e) => onRowClick(e, 'view', rowInfo.original)
+                        onClick: (e) => onRowClick(e, MODAL_VIEW, rowInfo.original)
                     })}
                 />
                 <Pagination pagination={pages.pagination} total={pages.total} onChangePage={pages.onChangePage} />

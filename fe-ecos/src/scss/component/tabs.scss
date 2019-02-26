@@ -1,5 +1,4 @@
 .tabs {
-  overflow: auto;
 
   .tabs__wrap {
     min-width: min-content;
@@ -114,11 +113,15 @@
 
     .tabs__wrap {
       display: flex;
+
+      .tab-content {
+        width: 100%;
+      }
     }
 
     .nav-tabs {
       border-bottom: none;
-      width: 90px;
+      width: 120px;
       height: 100%;
       flex-wrap: wrap;
 

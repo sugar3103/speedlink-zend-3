@@ -10,6 +10,8 @@ import {
   PRICING_DISTRICT_GET_LIST,
   PRICING_WARD_GET_LIST,
   PRICING_SALEMAN_GET_LIST,
+  PRICING_APPROVED_BY_GET_LIST,
+  PRICING_GET_LIST,
 
 } from "../../../constants/actionTypes";
 
@@ -24,6 +26,10 @@ import {
   getWardPricingListError,
   getSalemanListSuccess,
   getSalemanListError,
+  getApprovedByListSuccess,
+  getApprovedByListError,
+  getPricingListSuccess,
+  getPricingListError,
 } from "./actions";
 
 import createNotification from '../../../util/notifications';
@@ -215,7 +221,7 @@ function* getWardPricingListItems({ payload }) {
 
 //list saleman
 
-function getSalemanListApi(params) {
+function getUserListApi(params) {
   return axios.request({
     method: 'post',
     url: `${apiUrl}users`,
@@ -224,14 +230,14 @@ function getSalemanListApi(params) {
   });
 }
 
-const getSalemanListRequest = async (params) => {
-  return await getSalemanListApi(params).then(res => res.data).catch(err => err)
+const getUserListRequest = async (params) => {
+  return await getUserListApi(params).then(res => res.data).catch(err => err)
 };
 
 function* getSalemanListItems({ payload }) {
   const { params, messages } = payload;
   try {
-    const response = yield call(getSalemanListRequest, params);
+    const response = yield call(getUserListRequest, params);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(getSalemanListSuccess(response.data));
@@ -259,6 +265,84 @@ function* getSalemanListItems({ payload }) {
   }
 }
 
+function* getApprovedByListItems({ payload }) {
+  const { params, messages } = payload;
+  try {
+    const response = yield call(getUserListRequest, params);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(getApprovedByListSuccess(response.data));
+        break;
+
+      case EC_FAILURE:
+        yield put(getApprovedByListError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning', 
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+      default:
+        break;
+    }
+    
+  } catch (error) {
+    yield put(getSalemanListError(error));
+  }
+}
+
+
+//list pricing
+
+function getListApi(params) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}pricing`,
+    headers: authHeader(),
+    data: JSON.stringify(params)
+  });
+}
+
+const getPricingListRequest = async (params) => {
+  return await getListApi(params).then(res => res.data).catch(err => err)
+};
+
+function* getPricingListItems({ payload }) {
+  const { params, messages } = payload;
+  try {
+    const response = yield call(getPricingListRequest, params);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(getPricingListSuccess(response.data, response.total));
+        break;
+
+      case EC_FAILURE:
+        yield put(getPricingListError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning', 
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+      default:
+        break;
+    }
+    
+  } catch (error) {
+    yield put(getPricingListError(error));
+  }
+}
+
 export function* watchCountryPricingGetList() {
   yield takeEvery(PRICING_COUNTRY_GET_LIST, getCountryPricingListItems);
 }
@@ -274,6 +358,12 @@ export function* watchWardPricingGetList() {
 export function* watchSalemanGetList() {
   yield takeEvery(PRICING_SALEMAN_GET_LIST, getSalemanListItems);
 }
+export function* watchApprovedByGetList() {
+  yield takeEvery(PRICING_APPROVED_BY_GET_LIST, getApprovedByListItems);
+}
+export function* watchPricingGetList() {
+  yield takeEvery(PRICING_GET_LIST, getPricingListItems);
+}
 
 export default function* rootSaga() {
   yield all([
@@ -281,6 +371,8 @@ export default function* rootSaga() {
     fork(watchCityPricingGetList), 
     fork(watchDistrictPricingGetList), 
     fork(watchWardPricingGetList),
-    fork(watchSalemanGetList)
+    fork(watchSalemanGetList),
+    fork(watchApprovedByGetList),
+    fork(watchPricingGetList)
   ]);
 }

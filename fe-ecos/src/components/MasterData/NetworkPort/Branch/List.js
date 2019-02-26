@@ -52,7 +52,6 @@ class List extends Component {
           <ConfirmPicker 
             onClose={onClose}
             onDelete={() => this.props.deleteBranchItem(ids, messages)}
-            messages={messages}
           />
         )
       }

@@ -118,7 +118,6 @@ class ActionForm extends PureComponent {
                     component={CustomField}
                     type="text"
                     placeholder={messages['user.username']}
-                    messages={messages}
                     disabled={disabled}
                   />
                 </div>
@@ -133,7 +132,6 @@ class ActionForm extends PureComponent {
                     component={CustomField}
                     type="text"
                     placeholder={messages['user.email']}
-                    messages={messages}
                     disabled={disabled}
                   />
                 </div>
@@ -182,7 +180,6 @@ class ActionForm extends PureComponent {
                     component={CustomField}
                     type={this.state.showPassword ? 'text' : 'password'}
                     placeholder={messages['user.password']}
-                    messages={messages}
                     disabled={disabled}
                   />
                   <button
@@ -202,7 +199,6 @@ class ActionForm extends PureComponent {
                     component={CustomField}
                     type={this.state.showConfirmPassword ? 'text' : 'password'}
                     placeholder={messages['user.password']}
-                    messages={messages}
                     disabled={disabled}
                   />
                   <button
@@ -242,7 +238,6 @@ class ActionForm extends PureComponent {
                     name="roles"
                     component={renderMultiSelectField}
                     options={items && this.showOptions(items)}
-                    messages={messages}
                     disabled={disabled}
                   />
                 </div>

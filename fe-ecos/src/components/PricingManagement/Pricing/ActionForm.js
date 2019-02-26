@@ -11,8 +11,9 @@ import {
     getApprovedByList
 } from '../../../redux/actions';
 import CalendarBlankIcon from 'mdi-react/CalendarBlankIcon';
+import validate from './validateActionForm';
 
-class SearchForm extends Component {
+class ActionForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -143,7 +144,8 @@ class SearchForm extends Component {
     }
     render() {
         const { messages } = this.props.intl;
-        const { handleSubmit, reset, customers, salemans, carriers, countries, cities, districts, wards, approvedBys } = this.props;
+        
+        const { handleSubmit, customers, salemans, carriers, countries, cities, districts, wards, approvedBys, type } = this.props;
         return (
             <form className="form form_custom" onSubmit={handleSubmit}>
                 <Row>
@@ -155,7 +157,6 @@ class SearchForm extends Component {
                                     name="is_private" 
                                     component={renderSelectField} 
                                     options={[
-                                        { value: -1, label: messages['all'] },
                                         { value: 1, label: messages['pri_man.public'] },
                                         { value: 2, label: messages['pri_man.customer'] }
                                     ]}
@@ -170,7 +171,7 @@ class SearchForm extends Component {
                             <span className="form__form-group-label">{messages['pri_man.customer']}</span>
                             <div className="form__form-group-field">
                                 <Field
-                                    name="customer"
+                                    name="customer_id"
                                     component={renderSelectField}
                                     options={customers && this.showOption(customers)}
                                     disabled={!this.state.showCustomerField}
@@ -183,7 +184,7 @@ class SearchForm extends Component {
                             <span className="form__form-group-label">{messages['pricing.saleman']}</span>
                             <div className="form__form-group-field">
                                 <Field
-                                    name="saleman"
+                                    name="saleman_id"
                                     component={renderSelectField}
                                     options={salemans && this.showOptionUser(salemans)}
                                 />
@@ -198,7 +199,6 @@ class SearchForm extends Component {
                                     name="status"
                                     component={renderSelectField}
                                     options={[
-                                        { value: -1, label: messages['all'] },
                                         { value: 1, label: messages['active'] },
                                         { value: 0, label: messages['inactive'] }
                                     ]}
@@ -214,10 +214,9 @@ class SearchForm extends Component {
                             <span className="form__form-group-label">{messages['pri_man.category']}</span>
                             <div className="form__form-group-field">
                                 <Field
-                                    name="category"
+                                    name="category_code"
                                     component={renderSelectField}
                                     options={[
-                                        { value: '', label: messages['all'] },
                                         { value: 'Inbound', label: messages['inbound'] },
                                         { value: 'Outbound', label: messages['outbound'] },
                                         { value: 'Domestic', label: messages['domestic'] }
@@ -273,7 +272,7 @@ class SearchForm extends Component {
                             <span className="form__form-group-label">{messages['zone_code.country_origin']}</span>
                             <div className="form__form-group-field">
                                 <Field
-                                    name="country"
+                                    name="origin_country_id"
                                     component={renderSelectField}
                                     options={countries && this.showOption(countries)}
                                     onChange={this.onChangeCountry}
@@ -286,7 +285,7 @@ class SearchForm extends Component {
                             <span className="form__form-group-label">{messages['zone_code.city_origin']}</span>
                             <div className="form__form-group-field">
                                 <Field
-                                    name="city"
+                                    name="origin_city_id"
                                     component={renderSelectField}
                                     options={cities && this.showOption(cities)}
                                     onChange={this.onChangeCity}
@@ -299,7 +298,7 @@ class SearchForm extends Component {
                             <span className="form__form-group-label">{messages['zone_code.district_origin']}</span>
                             <div className="form__form-group-field">
                                 <Field
-                                    name="district"
+                                    name="origin_district_id"
                                     component={renderSelectField}
                                     options={districts && this.showOption(districts)}
                                     onChange={this.onChangeDistrict}
@@ -312,7 +311,7 @@ class SearchForm extends Component {
                             <span className="form__form-group-label">{messages['zone_code.ward_origin']}</span>
                             <div className="form__form-group-field">
                                 <Field
-                                    name="ward"
+                                    name="origin_ward_id"
                                     component={renderSelectField}
                                     options={wards && this.showOption(wards)}
                                 />
@@ -329,7 +328,6 @@ class SearchForm extends Component {
                                     name="approved_status"
                                     component={renderSelectField}
                                     options={[
-                                        { value: '', label: messages['all'] },
                                         { value: 'approved', label: messages['pricing.approved'] },
                                         { value: 'draft', label: messages['pricing.draft'] },
                                         { value: 'new', label: messages['pricing.new'] },
@@ -352,20 +350,15 @@ class SearchForm extends Component {
                         </div>
                     </Col>
                 </Row>
-                <Row>
-                    <Col md={12} className="text-right search-group-button">
-                        <Button size="sm" outline onClick={(e) => {
-                            reset();
-                            setTimeout(() => {
-                                handleSubmit();
-                            }, 200);
-                        }} >
-                            {messages['clear']}</Button>
-                        <Button size="sm" color="primary" id="search" >
-                            {messages['search']}
-                        </Button>
-                    </Col>
-                </Row>
+                {type !== "view" &&
+                    <Row>
+                        <Col md={12} className="text-right search-group-button">
+                            <Button size="sm" color="primary" id="search" >
+                                {messages['save']}
+                            </Button>
+                        </Col>
+                    </Row>
+                }
             </form>
         );
     }
@@ -388,7 +381,8 @@ const mapStateToProps = ({ customer, carrier, pricing }) => {
 }
 
 export default reduxForm({
-    form: 'pricing_search_form'
+    form: 'pricing_action_form',
+    validate
 })(injectIntl(connect(mapStateToProps, {
     getCustomerList,
     getSalemanList,
@@ -398,4 +392,4 @@ export default reduxForm({
     getDistrictPricingList,
     getWardPricingList,
     getApprovedByList,
-})(SearchForm)));
+})(ActionForm)));

@@ -251,7 +251,6 @@ class ActionForm extends Component {
                 { value: 1, label: messages['pri_man.public'] },
                 { value: 2, label: messages['pri_man.customer'] }
                 ]}
-                messages={messages}
                 onChange={this.hanldeChangeType}
                 disabled={disabled} 
               />
@@ -269,7 +268,6 @@ class ActionForm extends Component {
                 component={renderSelectField}
                 type="text"
                 options={customerCode && this.showOptionsCustomer(customerCode)}
-                messages={messages}
                 disabled={this.state.disabled}
                 
               />
@@ -286,7 +284,6 @@ class ActionForm extends Component {
                 name="code"
                 component={CustomField}
                 type="text"
-                messages={messages}
                 disabled={disabled} 
               />
             </div>
@@ -304,7 +301,6 @@ class ActionForm extends Component {
                 { value: 'Outbound', label: messages['outbound'] },
                 { value: 'Domestic', label: messages['domestic'] }
                 ]}
-                messages={messages}
                 disabled={disabled} 
                 onChange={this.onChangeCategory}
               />
@@ -321,7 +317,6 @@ class ActionForm extends Component {
               name="carrier_id"
               component={renderSelectField}
               type="text"
-              messages={messages}
               disabled={disabled} 
               options={CarrierCodeByCondition && this.showOptionCarrier(CarrierCodeByCondition)}
               onChange={this.onChangeCarrier}
@@ -340,7 +335,6 @@ class ActionForm extends Component {
                 type="text"
                 options={ServiceCodeByCondition && this.showOptionService(ServiceCodeByCondition)}
                 onChange={this.onChangeService}
-                messages={messages}
                 disabled={disabled} 
               />
             </div>
@@ -357,7 +351,6 @@ class ActionForm extends Component {
               component={renderSelectField}
               type="text"
               options={codeByCondition && this.showOptionShipmenttype(codeByCondition)}
-              messages={messages}
               disabled={disabled} 
             />
           </div>
@@ -371,7 +364,6 @@ class ActionForm extends Component {
             <span className="text-danger">{'*'}</span>
             <div className="form__form-group-field">
               <Field name="from" component="input" type="number" step="0.1" min="0" 
-                     messages={messages}
                      disabled={disabled} 
                       /> 
             </div>
@@ -383,7 +375,6 @@ class ActionForm extends Component {
             <span className="text-danger">{'*'}</span>
             <div className="form__form-group-field">
               <Field name="to" component="input" type="number" step="0.1" min="0" 
-                     messages={messages}
                      disabled={disabled} 
                       />
             </div>
@@ -399,7 +390,6 @@ class ActionForm extends Component {
                 { value: 1, label: messages['yes'] },
                 { value: 0, label: messages['no'] }
                 ]}
-                messages={messages}
                 disabled={disabled} 
               />
             </div>
@@ -412,7 +402,6 @@ class ActionForm extends Component {
               <span className="text-danger">{'*'}</span>
               <div className="form__form-group-field">
                 <Field name="unit" component="input" type="number" step="0.1" min="0" 
-                       messages={messages}
                        disabled={disabled} 
                         />
               </div>
@@ -450,7 +439,7 @@ class ActionForm extends Component {
             <span className="text-danger">{'*'}</span>
             <div className="form__form-group-field">
               <Field component="input" type="number" min="0" 
-                    name='round_up'  messages={messages} disabled={disabled}  /> 
+                    name='round_up'  disabled={disabled}  /> 
             </div>
           </div>
         </Col>
@@ -462,7 +451,6 @@ class ActionForm extends Component {
               { value: 1, label: messages['active'] },
               { value: 0, label: messages['inactive'] }
               ]}
-              messages={messages}
               disabled={disabled} 
             />
           </div>

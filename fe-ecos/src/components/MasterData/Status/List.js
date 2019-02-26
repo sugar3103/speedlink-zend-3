@@ -51,7 +51,6 @@ class List extends Component {
           <ConfirmPicker 
             onClose={onClose}
             onDelete={() => this.props.deleteStatusItem(ids, messages)}
-            messages={messages}
           />
         )
       }
