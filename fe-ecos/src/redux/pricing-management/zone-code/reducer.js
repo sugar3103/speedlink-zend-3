@@ -189,11 +189,17 @@ export default (state = INIT_STATE, action) => {
   case ORIGIN_CITY_GET_LIST_SUCCESS:
     const { origin_city } = action.payload;
     types = action.payload.types;
+    if(types ==='onchange')
+      return {
+        ...state, 
+        origin_city,
+        origin_district: null,
+        origin_ward: null
+      }
+    else
     return { 
       ...state, 
-      origin_city,
-      origin_district: types ==='onchange' ? null : '',
-      origin_ward: types ==='onchange' ? null : '' 
+      origin_city
     };
 
   case ORIGIN_CITY_GET_LIST_ERROR:
@@ -211,11 +217,17 @@ export default (state = INIT_STATE, action) => {
   case ORIGIN_DISTRICT_GET_LIST_SUCCESS:
     const { origin_district } = action.payload;
     types = action.payload.types;
-    return { 
-      ...state, 
-      origin_district,
-      origin_ward: types ==='onchange' ? null : ''
-    };
+    if(types ==='onchange')
+      return { 
+        ...state, 
+        origin_district,
+        origin_ward: null
+      };
+    else
+      return{
+        ...state, 
+        origin_district
+      };
 
   case ORIGIN_DISTRICT_GET_LIST_ERROR:
     return { 
@@ -271,11 +283,18 @@ export default (state = INIT_STATE, action) => {
 
   case DESTINATION_CITY_GET_LIST_SUCCESS:
     const { destination_city } = action.payload;
-    return { 
+    types = action.payload.types;
+    if(types ==='onchange')
+      return {
       ...state, 
       destination_city,
       destination_district:null,
       destination_ward:null
+      }
+    else
+      return { 
+      ...state, 
+      destination_city
     };
 
   case DESTINATION_CITY_GET_LIST_ERROR:
@@ -292,10 +311,17 @@ export default (state = INIT_STATE, action) => {
 
   case DESTINATION_DISTRICT_GET_LIST_SUCCESS:
     const { destination_district } = action.payload;
+    types = action.payload.types;
+    if(types ==='onchange')
+      return { 
+        ...state, 
+        destination_district,
+        destination_ward:null
+      };
+    else
     return { 
       ...state, 
-      destination_district,
-      destination_ward:null
+      destination_district
     };
 
   case DESTINATION_DISTRICT_GET_LIST_ERROR:

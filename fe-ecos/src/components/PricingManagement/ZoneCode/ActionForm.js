@@ -70,7 +70,7 @@ class ActionForm extends Component {
           id: data.origin_country_id
         }
       }
-      this.props.getOriginCountryList(paramsCountry);
+      this.props.getOriginCountryList(paramsCountry,'editview');
     }
     if (data && data.origin_city_id) {
       let paramsCity = {
@@ -82,7 +82,7 @@ class ActionForm extends Component {
           country: data.origin_country_id
         }
       }
-      this.props.getOriginCityList(paramsCity);
+      this.props.getOriginCityList(paramsCity,'editview');
     }
 
     if (data && data.origin_district_id) {
@@ -95,7 +95,7 @@ class ActionForm extends Component {
           city: data.origin_city_id
         }
       }
-      this.props.getOriginDistrictList(paramsDistrict);
+      this.props.getOriginDistrictList(paramsDistrict,'editview');
     }
 
     if (data && data.origin_ward_id) {
@@ -108,7 +108,7 @@ class ActionForm extends Component {
           district: data.origin_district_id
         }
       }
-      this.props.getOriginWardList(paramsWard);
+      this.props.getOriginWardList(paramsWard,'editview');
     }
 
     if (data && data.destination_country_id) {
@@ -120,7 +120,7 @@ class ActionForm extends Component {
           id: data.destination_country_id
         }
       }
-      this.props.getDestinationCountryList(paramsCountry);
+      this.props.getDestinationCountryList(paramsCountry,'editview');
     }
     if (data && data.destination_city_id) {
       let paramsCity = {
@@ -132,7 +132,7 @@ class ActionForm extends Component {
           country: data.destination_country_id
         }
       }
-      this.props.getDestinationCityList(paramsCity);
+      this.props.getDestinationCityList(paramsCity,'editview');
     }
 
     if (data && data.destination_district_id) {
@@ -145,7 +145,7 @@ class ActionForm extends Component {
           city: data.destination_city_id
         }
       }
-      this.props.getDestinationDistrictList(paramsDistrict);
+      this.props.getDestinationDistrictList(paramsDistrict,'editview');
     }
 
     if (data && data.destination_ward_id) {
@@ -158,7 +158,7 @@ class ActionForm extends Component {
           district: data.destination_district_id
         }
       }
-      this.props.getDestinationWardList(paramsWard);
+      this.props.getDestinationWardList(paramsWard,'editview');
     }
   }
 
@@ -277,13 +277,13 @@ class ActionForm extends Component {
         limit: 0
       },
       query: {
-        country: value
+        country: value ? value : 0
       }
     }
     this.props.change('origin_city',null);
     this.props.change('origin_district',null);
     this.props.change('origin_ward',null);
-    this.props.getOriginCityList(params,'editview');
+    this.props.getOriginCityList(params,'onchange');
     // params = {
     //   query: {
     //     city: 0
@@ -305,12 +305,12 @@ class ActionForm extends Component {
         limit: 0
       },
       query: {
-        city: value
+        city: value ? value : 0
       }
     }
     this.props.change('origin_district',null);
     this.props.change('origin_ward',null);
-    this.props.getOriginDistrictList(params,'editview');
+    this.props.getOriginDistrictList(params,'onchange');
     // params = {
     //   query: {
     //     district: 0
@@ -326,11 +326,11 @@ class ActionForm extends Component {
         limit: 0
       },
       query: {
-        district: value
+        district: value ? value : 0
       }
     }
     this.props.change('origin_ward',null);
-    this.props.getOriginWardList(params,'editview');
+    this.props.getOriginWardList(params,'onchange');
   }
 
   onChangeDestinationCountry = value => {
@@ -340,13 +340,13 @@ class ActionForm extends Component {
         limit: 0
       },
       query: {
-        country: value
+        country: value ? value : 0
       }
     }
     this.props.change('destination_city',null);
     this.props.change('destination_district',null);
     this.props.change('destination_ward',null);
-    this.props.getDestinationCityList(params);
+    this.props.getDestinationCityList(params,'onchange');
     // params = {
     //   query: {
     //     city: 0
@@ -368,12 +368,12 @@ class ActionForm extends Component {
         limit: 0
       },
       query: {
-        city: value
+        city: value ? value : 0
       }
     }
     this.props.change('destination_district',null);
     this.props.change('destination_ward',null);
-    this.props.getDestinationDistrictList(params);
+    this.props.getDestinationDistrictList(params,'onchange');
     // params = {
     //   query: {
     //     district: 0
@@ -389,11 +389,11 @@ class ActionForm extends Component {
         limit: 0
       },
       query: {
-        district: value
+        district: value ? value : 0
       }
     }
     this.props.change('destination_ward',null);
-    this.props.getDestinationWardList(params);
+    this.props.getDestinationWardList(params,'onchange');
   }
 
   showOptions = (items) => {
@@ -797,7 +797,7 @@ ActionForm.propTypes = {
   getDestinationWardList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({zoneCode, carrier, service, shipment_type, customer}) => {  
+const mapStateToProps = ({zoneCode,shipment_type, customer}) => {  
   const { errors, modalData, modalType } = zoneCode;
   const { CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition  } = shipment_type;
   const customerCode = customer.items;

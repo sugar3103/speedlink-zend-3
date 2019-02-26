@@ -86,7 +86,7 @@ class SearchForm extends Component {
     this.props.change('destination_city',null);
     this.props.change('destination_district',null);
     this.props.change('destination_ward',null);
-    this.props.getDestinationCityList(params);
+    this.props.getDestinationCityList(params,'onchange');
   }
 
   onChangeDestinationCity = value => {
@@ -101,7 +101,7 @@ class SearchForm extends Component {
     }
     this.props.change('destination_district',null);
     this.props.change('destination_ward',null);
-    this.props.getDestinationDistrictList(params);
+    this.props.getDestinationDistrictList(params,'onchange');
   }
 
   onChangeDestinationDistrict = value => {
@@ -115,7 +115,7 @@ class SearchForm extends Component {
       }
     }
     this.props.change('destination_ward',null);
-    this.props.getDestinationWardList(params);
+    this.props.getDestinationWardList(params,'onchange');
   }
 
   onChangeCategory = value => {
