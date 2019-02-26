@@ -148,8 +148,8 @@ class UserController extends CoreController {
                 
                 $role = $this->entityManager->getRepository(Role::class)->findOneById($role_id);
                 foreach ($role->getPermissions() as $key => $permission) {      
-                    $module = explode('.', $permission->getName());
-                    $permissions[$module[0]][] = $module[1];
+                    $module = explode('.', $permission->getName());                    
+                    $permissions[array_shift($module)][] = implode('.',$module);
                 }
 
             }

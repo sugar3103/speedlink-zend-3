@@ -283,13 +283,6 @@ class ActionForm extends PureComponent {
             <Button color={className} type="submit">{modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
           </Can>
          
-          {this.state.modalType === MODAL_VIEW && modalData && (this.props.authUser.user.id === modalData.id) &&
-            <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
-          }
-          
-          {modalData && (this.props.authUser.user.id === modalData.id) &&
-              <Button color={className} type="submit">{modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>     
-          }
         </ButtonToolbar>
 
       </form>

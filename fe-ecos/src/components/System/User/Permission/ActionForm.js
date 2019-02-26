@@ -137,7 +137,6 @@ class ActionForm extends PureComponent {
                     <br />
                     <span><i className="label-info-data">{messages['updated-at']}:</i>
                       <Moment fromNow locale={locale}>{new Date(modalData.updated_at)}</Moment>
-
                     </span>
                   </Col>
                 }
@@ -153,11 +152,7 @@ class ActionForm extends PureComponent {
           <Can user={this.props.authUser.user} permission="permission" action="edit">
             <Button color={className} type="submit">{modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
           </Can>
-          {modalType === MODAL_ADD &&
-            <Can user={this.props.authUser.user} permission="permission" action="add">
-              <Button color={className} type="submit">{messages['save']}</Button>
-            </Can>
-          }
+          
         </ButtonToolbar>
       </form >
     );

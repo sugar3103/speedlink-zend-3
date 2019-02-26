@@ -200,7 +200,6 @@ class List extends Component {
                 <Can user={this.props.authUser.user} permission="user" action="edit">
                   <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
                 </Can>
-                { (this.props.authUser.user.id === original.id) && <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button>}
               </Fragment>
             );
           },
