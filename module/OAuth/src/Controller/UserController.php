@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Zend\Cache\Storage\StorageInterface;
 use Zend\View\Model\ViewModel;
 use OAuth\Entity\User;
+use OAuth\Entity\Role;
 use OAuth\Form\UserForm;
 
 class UserController extends CoreController {
@@ -137,8 +138,20 @@ class UserController extends CoreController {
     {
         if ($this->getRequest()->isPost()) {
             $user = $this->tokenPayload;
-            $user = $this->entityManager->getRepository(User::class)
-                 ->findOneById($user->id);
+            $user = $this->entityManager->getRepository(User::class)->findOneById($user->id);
+            
+            $permissions = [];
+            foreach ($user->getRoleIds() as $role_id) {
+                
+                $role = $this->entityManager->getRepository(Role::class)->findOneById($role_id);
+                foreach ($role->getPermissions() as $key => $permission) {      
+                    $module = explode('.', $permission->getName());
+                    $permissions[$module[0]][] = $module[1];
+                }
+
+            }
+
+            //Get permission
             $user_info = [
                 'id'            => $user->getId(),
                 'username'      => $user->getUsername(),
@@ -147,7 +160,9 @@ class UserController extends CoreController {
                 'fullname'      =>$user->getFirstName() . ' ' .$user->getLastName(),
                 'email'         => $user->getEmail(),
                 'roles'         => $user->getRoleIds(),
-                'is_active'     => $user->getIsActive()
+                'permissions'   => (object) ($permissions),
+                'is_active'     => $user->getIsActive(),
+                'is_admin'      => $user->getIsAdmin()
             ];
             
             $this->apiResponse['data'] = $user_info;            

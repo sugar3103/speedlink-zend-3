@@ -288,6 +288,7 @@ class RoleManager {
         
         return $effectivePermissions;
     }
+    
     public function getInheritRoles($role_id) {
         $role = $this->entityManager->getRepository(Role::class)->findOneById($role_id);
         $roles = array();

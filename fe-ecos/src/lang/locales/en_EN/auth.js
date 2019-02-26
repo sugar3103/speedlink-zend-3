@@ -80,6 +80,7 @@ module.exports = {
   'permission.add-new': 'Add New Permission',
   'permission.view': 'Permission Role',  
   'permission.update': 'Edit Permission',
+  'permission.delete': 'Delete Permission',
   'permission.validate-name-exists': 'Another permission with such nam already exists',
   'permission.add-success': 'You have added a permission!',
   'permission.update-success': 'You have modified permission!',
