@@ -26,7 +26,8 @@ class PricingCodRepository extends EntityRepository
                 pc.internal_city_ras,
                 pc.external_city,
                 pc.external_city_ras
-            ")->andWhere('pc.is_deleted = 0');
+            ")->andWhere('pc.is_deleted = 0')
+              ->andWhere('pd.status = 1');
 
             return $queryBuilder;
         } catch (QueryException $e) {
@@ -53,7 +54,8 @@ class PricingCodRepository extends EntityRepository
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(PricingCod::class, 'pc');
+        $queryBuilder->from(PricingCod::class, 'pc')
+            ->innerJoin('pv.join_pricing_data', 'pd');
         $queryBuilder->orderBy('pc.from', 'ASC');
         $queryBuilder->addOrderBy('pc.to', 'ASC');
 
