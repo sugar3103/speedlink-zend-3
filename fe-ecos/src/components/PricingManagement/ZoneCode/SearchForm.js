@@ -15,12 +15,24 @@ class SearchForm extends Component {
   constructor(props){
     super(props);
     this.state = {
-      disabled: false,
+      customer_disable: false,
       category_code: null,
       carrier_id: null
     }
   }
   
+  hanldeChangeType = value => {
+    if (value === 2) {
+      this.setState({
+        customer_disable: false
+      });
+    } else {
+      this.setState({
+        customer_disable: true
+      })
+    }
+  }
+
   componentDidMount() {
     this.props.getCustomerList();
     this.props.getOriginCountryList();
@@ -28,6 +40,7 @@ class SearchForm extends Component {
   }
 
   onChangeOriginCountry = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
@@ -40,11 +53,12 @@ class SearchForm extends Component {
     this.props.change('origin_city',null);
     this.props.change('origin_district',null);
     this.props.change('origin_ward',null);
-    this.props.getOriginCityList(params, 'onchange');
+    this.props.getOriginCityList(params, messages, 'onchange');
    
   }
 
   onChangeOriginCity = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
@@ -56,10 +70,11 @@ class SearchForm extends Component {
     }
     this.props.change('origin_district',null);
     this.props.change('origin_ward',null);
-    this.props.getOriginDistrictList(params ,'onchange');
+    this.props.getOriginDistrictList(params , messages, 'onchange');
   }
 
   onChangeOriginDistrict = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
@@ -70,10 +85,11 @@ class SearchForm extends Component {
       }
     }
     this.props.change('origin_ward',null);
-    this.props.getOriginWardList(params, 'onchange'); 
+    this.props.getOriginWardList(params, messages, 'onchange'); 
   }
 
   onChangeDestinationCountry = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
@@ -86,10 +102,11 @@ class SearchForm extends Component {
     this.props.change('destination_city',null);
     this.props.change('destination_district',null);
     this.props.change('destination_ward',null);
-    this.props.getDestinationCityList(params,'onchange');
+    this.props.getDestinationCityList(params, messages, 'onchange');
   }
 
   onChangeDestinationCity = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
@@ -101,10 +118,11 @@ class SearchForm extends Component {
     }
     this.props.change('destination_district',null);
     this.props.change('destination_ward',null);
-    this.props.getDestinationDistrictList(params,'onchange');
+    this.props.getDestinationDistrictList(params, messages, 'onchange');
   }
 
   onChangeDestinationDistrict = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
@@ -115,10 +133,11 @@ class SearchForm extends Component {
       }
     }
     this.props.change('destination_ward',null);
-    this.props.getDestinationWardList(params,'onchange');
+    this.props.getDestinationWardList(params, messages, 'onchange');
   }
 
   onChangeCategory = value => {
+    const { messages } = this.props.intl;
     this.setState({
       category_code: value
     });
@@ -126,23 +145,17 @@ class SearchForm extends Component {
       type : "carrier_id",
       category_code : value
     }
-    this.props.getCarrierCodeByCondition(params);
-    params = {
-      type : "carrier_id",
-      category_code : value,
-      carrier_id: 0
-    }
-    this.props.getServiceCodeByCondition(params);
-    params = {
-      type : "carrier_id",
-      category_code : value,
-      carrier_id: 0,
-      service_id: [0]
-    }
-    this.props.getShipmentTypeCodeByCondition(params);
+    this.props.getCarrierCodeByCondition(params, messages);
+    
+    params = { ...params,carrier_id: 0}
+    this.props.getServiceCodeByCondition(params, messages);
+    
+    params = { ...params, service_id: [0] }
+    this.props.getShipmentTypeCodeByCondition(params, messages);
   }
 
   onChangeCarrier = value => {
+    const { messages } = this.props.intl;
     this.setState({
       carrier_id: value
     });
@@ -151,24 +164,25 @@ class SearchForm extends Component {
       carrier_id : value,
       category_code : this.state.category_code
     }
-    this.props.getServiceCodeByCondition(params);
+    this.props.getServiceCodeByCondition(params, messages);
     params = {
       type : "carrier_id",
       category_code : value,
       carrier_id: 0,
       service_id: [0]
     }
-    this.props.getShipmentTypeCodeByCondition(params);
+    this.props.getShipmentTypeCodeByCondition(params, messages);
   }
 
   onChangeService = value => {
+    const { messages } = this.props.intl;
     let params = {
       type : "shipment_type_id",
       category_code : this.state.category_code,
       carrier_id : this.state.carrier_id,
       service_id : [ value ] 
     }
-    this.props.getShipmentTypeCodeByCondition(params);
+    this.props.getShipmentTypeCodeByCondition(params, messages);
   }
 
   showOptionCarrier = (items) => {
@@ -241,18 +255,6 @@ class SearchForm extends Component {
     return select_options;
   }
 
-  hanldeChangeType = value => {
-    if (value === 1) {
-      this.setState({
-        disabled: true
-      });
-    } else {
-      this.setState({
-        disabled: false
-      })
-    }
-  }
-
 
   render() {
     const { handleSubmit, reset, CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition , customerCode, origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards  } = this.props;
@@ -281,7 +283,7 @@ class SearchForm extends Component {
             <div className="form__form-group-field">
               <Field name="customer" component={renderSelectField} type="text"
                      options={customerCode && this.showOptionCustomer(customerCode)}
-                     disabled={this.state.disabled}
+                     disabled={this.state.customer_disable}
               />
             </div>
           </div>
@@ -289,7 +291,7 @@ class SearchForm extends Component {
 
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.name']}</span>
+            <span className="form__form-group-label">{messages['zone_code.name']}</span>
             <div className="form__form-group-field">
               <Field component="input" type="text" 
                      name='code' />

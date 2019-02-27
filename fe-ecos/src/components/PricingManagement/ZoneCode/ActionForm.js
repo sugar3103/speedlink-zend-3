@@ -18,11 +18,25 @@ class ActionForm extends Component {
     super(props);
     this.state = {
       modalType: '',
-      disabled: false
+      customer_disabled: true,
+    }
+  }
+
+  hanldeChangeType = value => {
+    this.props.change('customer', '');
+    if (value === 2) {
+      this.setState({
+        customer_disabled: false
+      });
+    } else {
+      this.setState({
+        customer_disabled: true
+      })
     }
   }
 
   componentDidMount() {
+    const { messages } = this.props.intl;
     const data = this.props.modalData;
     if (data) {
       this.props.initialize(data);
@@ -39,7 +53,7 @@ class ActionForm extends Component {
         type : "carrier_id",
         category_code : data.category
       }
-      this.props.getCarrierCodeByCondition(paramsCarier);
+      this.props.getCarrierCodeByCondition(paramsCarier, messages);
     }
 
     if (data && data.service_id) {
@@ -48,7 +62,7 @@ class ActionForm extends Component {
         carrier_id : data.carrier_id,
         category_code :  data.category
       }
-      this.props.getServiceCodeByCondition(paramsCity);
+      this.props.getServiceCodeByCondition(paramsCity, messages);
     }
 
     if (data && data.shipment_type_id) {
@@ -58,7 +72,7 @@ class ActionForm extends Component {
         carrier_id :  data.carrier_id,
         service_id : [ data.service_id ]
       }
-      this.props.getShipmentTypeCodeByCondition(paramsShipmenttype);
+      this.props.getShipmentTypeCodeByCondition(paramsShipmenttype, messages);
     }
 
     if (data && data.origin_country_id) {
@@ -70,7 +84,7 @@ class ActionForm extends Component {
           id: data.origin_country_id
         }
       }
-      this.props.getOriginCountryList(paramsCountry,'editview');
+      this.props.getOriginCountryList(paramsCountry, messages, 'editview');
     }
     if (data && data.origin_city_id) {
       let paramsCity = {
@@ -82,7 +96,7 @@ class ActionForm extends Component {
           country: data.origin_country_id
         }
       }
-      this.props.getOriginCityList(paramsCity,'editview');
+      this.props.getOriginCityList(paramsCity, messages, 'editview');
     }
 
     if (data && data.origin_district_id) {
@@ -95,7 +109,7 @@ class ActionForm extends Component {
           city: data.origin_city_id
         }
       }
-      this.props.getOriginDistrictList(paramsDistrict,'editview');
+      this.props.getOriginDistrictList(paramsDistrict, messages, 'editview');
     }
 
     if (data && data.origin_ward_id) {
@@ -108,7 +122,7 @@ class ActionForm extends Component {
           district: data.origin_district_id
         }
       }
-      this.props.getOriginWardList(paramsWard,'editview');
+      this.props.getOriginWardList(paramsWard, messages, 'editview');
     }
 
     if (data && data.destination_country_id) {
@@ -120,7 +134,7 @@ class ActionForm extends Component {
           id: data.destination_country_id
         }
       }
-      this.props.getDestinationCountryList(paramsCountry,'editview');
+      this.props.getDestinationCountryList(paramsCountry, messages, 'editview');
     }
     if (data && data.destination_city_id) {
       let paramsCity = {
@@ -132,7 +146,7 @@ class ActionForm extends Component {
           country: data.destination_country_id
         }
       }
-      this.props.getDestinationCityList(paramsCity,'editview');
+      this.props.getDestinationCityList(paramsCity, messages, 'editview');
     }
 
     if (data && data.destination_district_id) {
@@ -145,7 +159,7 @@ class ActionForm extends Component {
           city: data.destination_city_id
         }
       }
-      this.props.getDestinationDistrictList(paramsDistrict,'editview');
+      this.props.getDestinationDistrictList(paramsDistrict, messages, 'editview');
     }
 
     if (data && data.destination_ward_id) {
@@ -158,7 +172,7 @@ class ActionForm extends Component {
           district: data.destination_district_id
         }
       }
-      this.props.getDestinationWardList(paramsWard,'editview');
+      this.props.getDestinationWardList(paramsWard, messages, 'editview');
     }
   }
 
@@ -171,6 +185,7 @@ class ActionForm extends Component {
   }
 
   onChangeCategory = value => {
+    const { messages } = this.props.intl;
     this.setState({
       category_code: value
     });
@@ -178,23 +193,17 @@ class ActionForm extends Component {
       type : "carrier_id",
       category_code : value
     }
-    this.props.getCarrierCodeByCondition(params);
-    params = {
-      type : "carrier_id",
-      category_code : value,
-      carrier_id: 0
-    }
-    this.props.getServiceCodeByCondition(params);
-    params = {
-      type : "carrier_id",
-      category_code : value,
-      carrier_id: 0,
-      service_id: [0]
-    }
-    this.props.getShipmentTypeCodeByCondition(params);
+    this.props.getCarrierCodeByCondition(params, messages);
+  
+    params = { ...params,carrier_id: 0}
+    this.props.getServiceCodeByCondition(params, messages);
+   
+    params = { ...params, service_id: [0] }
+    this.props.getShipmentTypeCodeByCondition(params, messages);
   }
 
   onChangeCarrier = value => {
+    const { messages } = this.props.intl;
     this.setState({
       carrier_id: value
     });
@@ -203,24 +212,21 @@ class ActionForm extends Component {
       carrier_id : value,
       category_code : this.state.category_code
     }
-    this.props.getServiceCodeByCondition(params);
-    params = {
-      type : "carrier_id",
-      category_code : value,
-      carrier_id: 0,
-      service_id: [0]
-    }
-    this.props.getShipmentTypeCodeByCondition(params);
+    this.props.getServiceCodeByCondition(params, messages);
+   
+    params = { ...params, service_id: [0] }
+    this.props.getShipmentTypeCodeByCondition(params, messages);
   }
 
   onChangeService = value => {
+    const { messages } = this.props.intl;
     let params = {
       type : "shipment_type_id",
       category_code : this.state.category_code,
       carrier_id : this.state.carrier_id,
       service_id : [ value ] 
     }
-    this.props.getShipmentTypeCodeByCondition(params);
+    this.props.getShipmentTypeCodeByCondition(params, messages);
   }
 
   showOptionCarrier = (items) => {
@@ -271,6 +277,7 @@ class ActionForm extends Component {
   }
 
   onChangeOriginCountry = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
@@ -283,10 +290,11 @@ class ActionForm extends Component {
     this.props.change('origin_city',null);
     this.props.change('origin_district',null);
     this.props.change('origin_ward',null);
-    this.props.getOriginCityList(params,'onchange');
+    this.props.getOriginCityList(params, messages, 'onchange');
   }
 
   onChangeOriginCity = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
@@ -298,10 +306,11 @@ class ActionForm extends Component {
     }
     this.props.change('origin_district',null);
     this.props.change('origin_ward',null);
-    this.props.getOriginDistrictList(params,'onchange');
+    this.props.getOriginDistrictList(params, messages, 'onchange');
   }
 
   onChangeOriginDistrict = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
@@ -312,10 +321,11 @@ class ActionForm extends Component {
       }
     }
     this.props.change('origin_ward',null);
-    this.props.getOriginWardList(params,'onchange');
+    this.props.getOriginWardList(params, messages, 'onchange');
   }
 
   onChangeDestinationCountry = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
@@ -328,10 +338,11 @@ class ActionForm extends Component {
     this.props.change('destination_city',null);
     this.props.change('destination_district',null);
     this.props.change('destination_ward',null);
-    this.props.getDestinationCityList(params,'onchange');
+    this.props.getDestinationCityList(params, messages, 'onchange');
   }
 
   onChangeDestinationCity = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
@@ -343,10 +354,11 @@ class ActionForm extends Component {
     }
     this.props.change('destination_district',null);
     this.props.change('destination_ward',null);
-    this.props.getDestinationDistrictList(params,'onchange');
+    this.props.getDestinationDistrictList(params, messages, 'onchange');
   }
 
   onChangeDestinationDistrict = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
@@ -357,7 +369,7 @@ class ActionForm extends Component {
       }
     }
     this.props.change('destination_ward',null);
-    this.props.getDestinationWardList(params,'onchange');
+    this.props.getDestinationWardList(params, messages, 'onchange');
   }
 
   showOptions = (items) => {
@@ -368,18 +380,6 @@ class ActionForm extends Component {
       }
     });
     return countries;
-  }
-
- hanldeChangeType = value => {
-    if (value === 1) {
-      this.setState({
-        disabled: true
-      });
-    } else {
-      this.setState({
-        disabled: false
-      })
-    }
   }
 
   toggleModal = () => {
@@ -450,7 +450,7 @@ class ActionForm extends Component {
                   type="text"
                   options={customerCode && this.showOptionsCustomer(customerCode)}
                   placeholder={messages['pri_man.customer']}
-                  disabled={this.state.disabled}
+                  disabled={this.state.customer_disabled}
                 />
               </div>
             </div>

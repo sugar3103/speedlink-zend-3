@@ -106,9 +106,9 @@ export const deleteZoneCodeItemError = (error) => ({
   payload: error
 });
 
-export const getOriginCountryList = (params) => ({
+export const getOriginCountryList = (params, messages) => ({
   type: ORIGIN_COUNTRY_GET_LIST,
-  payload: { params }
+  payload: { params, messages }
 });
 
 export const getOriginCountryListSuccess = (origin_country) => ({
@@ -121,9 +121,9 @@ export const getOriginCountryListError = (error) => ({
   payload: error
 });
 
-export const getOriginCityList = (params, types) => ({
+export const getOriginCityList = (params, messages, types) => ({
   type: ORIGIN_CITY_GET_LIST,
-  payload: { params, types }
+  payload: { params, messages, types }
 });
 
 export const getOriginCityListSuccess = (origin_city, types) => ({
@@ -136,9 +136,9 @@ export const getOriginCityListError = (error) => ({
   payload: error
 });
 
-export const getOriginDistrictList = (params, types) => ({
+export const getOriginDistrictList = (params, messages, types) => ({
   type: ORIGIN_DISTRICT_GET_LIST,
-  payload: { params, types }
+  payload: { params, messages, types }
 });
 
 export const getOriginDistrictListSuccess = (origin_district, types) => ({
@@ -151,9 +151,9 @@ export const getOriginDistrictListError = (error) => ({
   payload: error
 });
 
-export const getOriginWardList = (params, types) => ({
+export const getOriginWardList = (params, messages, types) => ({
   type: ORIGIN_WARD_GET_LIST,
-  payload: { params, types }
+  payload: { params, messages, types }
 });
 
 export const getOriginWardListSuccess = (origin_ward, types) => ({
@@ -166,9 +166,9 @@ export const getOriginWardListError = (error) => ({
   payload: error
 });
 
-export const getDestinationCountryList = (params, types) => ({
+export const getDestinationCountryList = (params, messages, types) => ({
   type: DESTINATION_COUNTRY_GET_LIST,
-  payload: { params, types }
+  payload: { params, messages, types }
 });
 
 export const getDestinationCountryListSuccess = (destination_country, types) => ({
@@ -181,9 +181,9 @@ export const getDestinationCountryListError = (error) => ({
   payload: error
 });
 
-export const getDestinationCityList = (params, types) => ({
+export const getDestinationCityList = (params, messages, types) => ({
   type: DESTINATION_CITY_GET_LIST,
-  payload: { params, types }
+  payload: { params, messages, types }
 });
 
 export const getDestinationCityListSuccess = (destination_city, types) => ({
@@ -196,9 +196,9 @@ export const getDestinationCityListError = (error) => ({
   payload: error
 });
 
-export const getDestinationDistrictList = (params, types) => ({
+export const getDestinationDistrictList = (params, messages, types) => ({
   type: DESTINATION_DISTRICT_GET_LIST,
-  payload: { params, types }
+  payload: { params, messages, types }
 });
 
 export const getDestinationDistrictListSuccess = (destination_district, types) => ({
@@ -211,9 +211,9 @@ export const getDestinationDistrictListError = (error) => ({
   payload: error
 });
 
-export const getDestinationWardList = (params, types) => ({
+export const getDestinationWardList = (params, messages, types) => ({
   type: DESTINATION_WARD_GET_LIST,
-  payload: { params, types }
+  payload: { params, messages, types }
 });
 
 export const getDestinationWardListSuccess = (destination_ward, types) => ({
