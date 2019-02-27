@@ -34,7 +34,8 @@ class List extends Component {
         return (
           <ConfirmPicker 
             onClose={onClose}
-            // onDelete={() => this.props.deletePricingItem(ids, messages)}
+            onDelete={() => this.props.deletePricingItem(ids, messages)}
+            messages ={messages}
           />
         )
       }

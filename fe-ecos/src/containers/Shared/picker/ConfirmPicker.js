@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { CardBody, ButtonToolbar, Button } from 'reactstrap';
-import { injectIntl } from 'react-intl';
 
 class ConfirmPicker extends Component {
     render() {
-        const { onClose, onDelete } = this.props;
-        const { messages } = this.props.intl;
+        const { onClose, onDelete, messages } = this.props;
         return (
             <div className='custom-ui-confirm'>
                 <CardBody>
@@ -30,4 +28,4 @@ class ConfirmPicker extends Component {
     }
 }
 
-export default injectIntl(ConfirmPicker);
+export default ConfirmPicker;
