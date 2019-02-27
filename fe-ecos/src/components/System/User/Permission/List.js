@@ -51,6 +51,7 @@ class List extends Component {
           <ConfirmPicker
             onClose={onClose}
             onDelete={() => this.props.deletePermissionItem(ids, messages)}
+            messages ={messages}
           />
         )
       }

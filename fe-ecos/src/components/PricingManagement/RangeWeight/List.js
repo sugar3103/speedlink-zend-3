@@ -68,6 +68,7 @@ class List extends Component {
           <ConfirmPicker 
             onClose={onClose}
             onDelete={() => this.props.deleteRangeWeightItem(ids, messages)}
+            messages ={messages}
           />
         )
       }
