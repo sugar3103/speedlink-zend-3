@@ -41,7 +41,11 @@ class CityRepository extends EntityRepository {
                 c.zip_code,
                 c.country_id,
                 c.created_by,
-                c.created_at
+                c.created_at,
+                c.updated_by,
+                c.updated_at,
+                CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
+                CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated
             ")->andWhere("c.is_deleted = 0")
             ->groupBy('c.id');
             
@@ -80,7 +84,10 @@ class CityRepository extends EntityRepository {
                 'alias' => 'c.name',
                 'operator' => 'contains'
             ],
-
+            'name_en' => [
+                'alias' => 'c.name_en',
+                'operator' => 'contains'
+            ],
             'created_at' => [
                 'alias' => 'c.created_at',
                 'operator' => 'contains'
@@ -92,7 +99,9 @@ class CityRepository extends EntityRepository {
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(City::class, 'c');
+        $queryBuilder->from(City::class, 'c')
+        ->leftJoin('c.join_created', 'cr')
+        ->leftJoin('c.join_updated', 'up');
 
         if ($sortField != NULL && $sortDirection != NULL){
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

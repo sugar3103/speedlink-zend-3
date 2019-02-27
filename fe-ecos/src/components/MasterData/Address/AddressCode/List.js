@@ -10,9 +10,7 @@ import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import Search from './Search';
 
-import {
-  getCodeList,
-} from "../../../../redux/actions";
+import { getCodeList } from "../../../../redux/actions";
 
 class List extends Component {
   constructor() {

@@ -135,8 +135,7 @@ class RbacManager {
         $roles = $user->getRoles();
         
         // loop through all roles of current user to check permission.
-        foreach ($roles as $role) {           
-            
+        foreach ($roles as $role) {                       
             if ($this->rbac->isGranted($role->getName(), $permission)) {                
                 if ($params == null)
                     return true;
@@ -156,7 +155,7 @@ class RbacManager {
                 if ($this->rbac->isGranted($parentRole->getName(), $permission))
                     return true;
         }  
-                      
+        
         return false;
     }
 }

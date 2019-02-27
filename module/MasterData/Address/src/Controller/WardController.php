@@ -35,7 +35,8 @@ class WardController extends CoreController {
             $fieldsMap = [
                 0 => 'name',
                 1 => 'district',
-                2 => 'status'
+                2 => 'status',
+                3 => 'name_en',
             ];
 
             list($start,$limit,$sortField,$sortDirection,$filters,$fileds) = $this->getRequestData($fieldsMap);                        
@@ -45,15 +46,13 @@ class WardController extends CoreController {
                 $start, $limit, $sortField, $sortDirection,$filters);            
             
             $result = $this->filterByField($dataWard['listWard'],$fileds);
-            $this->error_code = 1;
+            
             $this->apiResponse =  array(
-                'message' => 'Get list success',
+                'message' => 'SUCCESS',
                 'data' => $result,
                 'total' => $dataWard['totalWard']
             );
 
-        } else {
-            $this->apiResponse['message'] = 'Ward List';
         }
 
         return $this->createResponse();
@@ -74,17 +73,14 @@ class WardController extends CoreController {
                 $data = $form->getData();
                 // add user.
                 $ward = $this->wardManager->addWard($data,$user);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "You have modified Wards!";
+                
+                $this->apiResponse['message'] = "ADD_SUCCESS_WARD";
             } else {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = $form->getMessages(); 
                 
             }            
-        } else {
-            $this->httpStatusCode = 404;
-            $this->apiResponse['message'] = "Page Not Found";                 
-        }
+        } 
 
         return $this->createResponse();
     }
@@ -105,20 +101,17 @@ class WardController extends CoreController {
                    $data = $form->getData();
                    
                    $this->wardManager->updateWard($ward, $data,$user);
-                   $this->error_code = 1;
-                   $this->apiResponse['message'] = "You have modified ward!";
+                   
+                   $this->apiResponse['message'] = "MODIFIED_SUCCESS_WARD";
                 }  else {
                    $this->error_code = 0;
                    $this->apiResponse['message'] = $form->getMessages(); 
                 }   
             }   else {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = 'Ward Not Found'; 
+                $this->apiResponse['message'] = 'NOT_FOUND'; 
             }         
              
-        } else {
-            $this->httpStatusCode = 404;
-            $this->apiResponse['message'] = "Page Not Found";
         }
         
         return $this->createResponse();
@@ -127,25 +120,28 @@ class WardController extends CoreController {
     public function deleteAction()
     {
         if ($this->getRequest()->isPost()) {
-              // fill in the form with POST data.
-              $payload = file_get_contents('php://input');
-              $data = $this->getRequestData();
- 
-              $user = $this->tokenPayload;
-              $ward = $this->entityManager->getRepository(Ward::class)
-                 ->findOneBy(array('id' => $data['id']));
-            if($ward) {
-                $this->wardManager->deleteWard($ward);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "You have deleted ward!";
+            $data = $this->getRequestData();
+            if(isset($data['ids']) && count($data['ids']) > 0) {
+                try {
+                    foreach ($data['ids'] as $id) {
+                        $ward = $this->entityManager->getRepository(District::class)->findOneBy(array('id' => $id));    
+                        if ($status == null) {
+                            $this->error_code = 0;
+                            $this->apiResponse['message'] = "NOT_FOUND";                        
+                        } else {
+                            $this->wardManager->deleteWard($ward);
+                        }  
+                    }
+                                        
+                    $this->apiResponse['message'] = "DELETE_SUCCESS_WARD";
+                } catch (\Throwable $th) {
+                    $this->error_code = 0;
+                    $this->apiResponse['message'] = "WARD_REQUEST_ID";
+                }
             } else {
-                $this->httpStatusCode = 200;
                 $this->error_code = 0;
-                $this->apiResponse['data'] = "Not Found Ward";
+                $this->apiResponse['message'] = "WARD_REQUEST_ID";
             }
-        } else {
-            $this->httpStatusCode = 404;
-            $this->apiResponse['message'] = "Page Not Found";            
         }
         return $this->createResponse();
     }

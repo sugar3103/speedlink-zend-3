@@ -25,6 +25,15 @@ class ActionForm extends PureComponent {
     };
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.modalType !== this.props.modalType) {
+      this.setState({
+        modalType: prevProps.modalType
+      });
+    }
+  }
+
+  
   componentDidMount() {
     this.props.getRoleList();
     const data = this.props.modalData;
@@ -274,7 +283,7 @@ class ActionForm extends PureComponent {
           {this.state.modalType === MODAL_VIEW &&
             <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
           }
-          <Can user={this.props.authUser.user} permission="user" action="edit">
+          <Can user={this.props.authUser.user} permission="user" action="edit" own={modalData && modalData.username}>
             <Button color={className} type="submit">{modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
           </Can>
          

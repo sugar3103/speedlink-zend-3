@@ -67,7 +67,7 @@ function* getStatusListItems({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(getStatusListError(response.data));
+        yield put(getStatusListError(response.message));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -121,7 +121,7 @@ function* addStatusItem({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(addStatusItemError(response.data));
+        yield put(addStatusItemError(response.message));
         yield put(validateStatus(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:

@@ -40,7 +40,11 @@ class CountryRepository extends EntityRepository {
                 ct.iso_code,
                 ct.status,
                 ct.created_by,
-                ct.created_at
+                ct.created_at,
+                ct.updated_by,
+                ct.updated_at,
+                CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
+                CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated
             ")->andWhere("ct.is_deleted = 0")
             ->groupBy('ct.id');
 
@@ -76,6 +80,10 @@ class CountryRepository extends EntityRepository {
                 'alias' => 'ct.name',
                 'operator' => 'contains'
             ],
+            'name_en' => [
+                'alias' => 'ct.name_en',
+                'operator' => 'contains'
+            ],
             'created_at' => [
                 'alias' => 'ct.created_at',
                 'operator' => 'contains'
@@ -87,7 +95,9 @@ class CountryRepository extends EntityRepository {
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(Country::class, 'ct');
+        $queryBuilder->from(Country::class, 'ct')
+        ->leftJoin('ct.join_created', 'cr')
+        ->leftJoin('ct.join_updated', 'up');
 
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

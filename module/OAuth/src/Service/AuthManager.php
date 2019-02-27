@@ -95,7 +95,7 @@ class AuthManager
 
     public function filterAccess($controllerName, $actionName)
     {
-        $result = self::ACCESS_GRANTED;
+        $result = 0;
 
         $mode = isset($this->config['options']['mode']) ? $this->config['options']['mode'] : 'restrictive';
 
@@ -106,6 +106,7 @@ class AuthManager
             $items = $this->config['controllers'][$controllerName];   
             
             foreach ($items as $item) {
+                if($result == self::ACCESS_GRANTED) break;
                 $actionList = $item['actions'];                
                 $allow = $item['allow'];
                 if (is_array($actionList) && in_array($actionName, $actionList) ||

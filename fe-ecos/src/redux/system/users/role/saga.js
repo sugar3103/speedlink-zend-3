@@ -6,13 +6,16 @@ import history from '../../../../util/history';
 
 import {
   ROLE_GET_LIST,
-  ROLE_UPDATE_ITEM
+  ROLE_UPDATE_ITEM,
+  ROLE_ADD_ITEM
 } from "../../../../constants/actionTypes";
 
 import {
   getRoleListSuccess,
   getRoleListError,
   updateRoleItemSuccess,
+  addRoleItemSuccess,
+  addRoleItemError,
   getRoleList,
   toggleRoleModal,
   updateRoleItemError
@@ -65,6 +68,60 @@ export function* watchGetList() {
   yield takeEvery(ROLE_GET_LIST, getRoleListItem);
 }
 
+//Add Roles
+function addRoleApi(item) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}roles/add`,
+    headers: authHeader(),
+    data: item
+  });
+}
+
+const addRoleItemRequest = async item => {
+  return await addRoleApi(item).then(res => res.data).catch(err => err)
+};
+
+function* addRoleItem ({ payload }) {
+  const { item, messages } = payload;
+  try {
+    const response = yield call(addRoleItemRequest, item);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(addRoleItemSuccess());
+        yield put(getRoleList(null, messages));
+        yield put(toggleRoleModal());
+        createNotification({
+          type: 'success', 
+          message: messages['role.add-success'], 
+          title: messages['notification.success']
+        });
+        break;
+
+      case EC_FAILURE:
+        yield put(updateRoleItemError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning', 
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(addRoleItemError(error));
+  }
+}
+
+export function* watchAddItem() {
+  yield takeEvery(ROLE_ADD_ITEM, addRoleItem);
+}
 
 //Edit Roles
 function updateRoleApi(item) {
@@ -122,5 +179,5 @@ export function* watchUpdateItem() {
 }
 
 export default function* rootSaga() {
-  yield all([fork(watchGetList),fork(watchUpdateItem)]);
+  yield all([fork(watchGetList),fork(watchUpdateItem), fork(watchAddItem)]);
 }

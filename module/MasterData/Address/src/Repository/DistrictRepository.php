@@ -40,7 +40,11 @@ class DistrictRepository extends EntityRepository {
                 d.status,
                 d.city_id,
                 d.created_by,
-                d.created_at
+                d.created_at,
+                d.updated_by,
+                d.updated_at,
+                CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
+                CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated
             ")->andWhere("d.is_deleted = 0")
             ->groupBy('d.id');
             
@@ -78,6 +82,10 @@ class DistrictRepository extends EntityRepository {
                 'alias' => 'd.name',
                 'operator' => 'contains'
             ],
+            'name_en' => [
+                'alias' => 'd.name_en',
+                'operator' => 'contains'
+            ],
             'created_at' => [
                 'alias' => 'd.created_at',
                 'operator' => 'contains'
@@ -90,7 +98,9 @@ class DistrictRepository extends EntityRepository {
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(District::class, 'd');
+        $queryBuilder->from(District::class, 'd')
+        ->leftJoin('d.join_created', 'cr')
+        ->leftJoin('d.join_updated', 'up');
 
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

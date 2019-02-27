@@ -3,6 +3,7 @@ namespace OAuth\Service;
 
 use OAuth\Entity\Permission;
 use OAuth\Entity\Role;
+use OAuth\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
@@ -37,6 +38,21 @@ class RoleManager {
         $this->rbacManager = $rbacManager;
     }
 
+    private function getReferenced(&$role, $data, $user, $mode = '')
+    {
+        $user_data = $this->entityManager->getRepository(User::class)->find($user->id);
+        if ($user_data == null) {
+            throw new \Exception('Not found User by ID');
+        }
+
+        if ($mode == 'add') {
+            $role->setJoinCreated($user_data);
+        }
+
+        $role->setJoinUpdated($user_data);
+
+    }
+
     /**
      * Add new role.
      * @param $data
@@ -60,6 +76,7 @@ class RoleManager {
             $role->setCreatedAt($addTime->format('Y-m-d H:i:s'));
             $role->setCreatedBy($user->id);
             
+            $this->getReferenced($role, $data, $user,'add');
             // add parent roles to inherit
             $inheritedRoles = $data['inherit_roles'];
             if (!empty($inheritedRoles)) {
@@ -74,6 +91,17 @@ class RoleManager {
                 }
             }
 
+            foreach ($data['permissions'] as $permission) {
+                $permisson = $this->entityManager->getRepository(Permission::class)
+                    ->findOneById($permission);
+
+                if ($permisson == null)
+                    throw new \Exception("Permission with such name doesn't exist");
+
+                $role->getPermissions()->add($permisson);
+            }
+
+            
             $this->entityManager->persist($role);
 
             // apply changes to database

@@ -12,6 +12,7 @@ class Action extends Component {
   handleSubmit = values => {
     const { messages } = this.props.intl;   
     const { modalType } = this.props;
+    console.log(modalType);
     
     switch (modalType) {
       case MODAL_ADD:

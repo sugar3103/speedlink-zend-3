@@ -174,15 +174,11 @@ class WardManager  {
 
             // $adapter = new DoctrineAdapter($ormPaginator);  
             $wards = $ormPaginator->getIterator()->getArrayCopy();
-            //set countRow default
-            $countRow = 1;
             
             foreach ($wards as &$ward) {//loop
 
-                //set created_at
-                $ward['created_at'] =  ($ward['created_at']) ? Utils::checkDateFormat($ward['created_at'],'d/m/Y') : '';
-
-                $countRow++;
+                $ward['created_at'] =  ($ward['created_at']) ? Utils::checkDateFormat($ward['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $ward['updated_at'] =  ($ward['updated_at']) ? Utils::checkDateFormat($ward['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
             }
            
         }

@@ -17,7 +17,7 @@ import {
   deleteStatusItem
 } from "../../../redux/actions";
 import ConfirmPicker from '../../../containers/Shared/picker/ConfirmPicker';
-
+import Moment from 'react-moment';
 
 const StatusFormatter = ({ value }) => (
   value === 'Enabled' ? <span className="badge badge-success">Enabled</span> :
@@ -97,10 +97,10 @@ class List extends Component {
     });
   };
 
-  componentDidMount() {
-    const { messages } = this.props.intl;
-    this.props.getStatusList(null, messages);
-  }
+  // componentDidMount() {
+  //   const { messages } = this.props.intl;
+  //   this.props.getStatusList(null, messages);
+  // }
 
   renderHeader = (selected) => {
     const { messages } = this.props.intl;
@@ -156,7 +156,7 @@ class List extends Component {
         {
           Header: messages['status'],
           accessor: "status",
-          width: 120,
+          
           Cell: ({ original }) => {
             return (
               original.status === 1 ? <Badge color="success">{messages['active']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>
@@ -164,12 +164,13 @@ class List extends Component {
           },
           className: "text-center",
           sortable: false,
+          width: 100
         },
         {
           Header: messages['created-at'],
           accessor: "created_at",
-          width: 120,
           className: "text-center", 
+          Cell: ({ original }) => { return (<Moment fromNow format="D/MM/YYYY" locale={locale}>{new Date(original.created_at)}</Moment>) },
           sortable: false,
         },
         {

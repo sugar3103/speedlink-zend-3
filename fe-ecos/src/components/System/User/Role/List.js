@@ -176,6 +176,11 @@ class List extends Component {
           Header: messages['name'],
           accessor: "name",
           width: 150,
+          Cell: ({ original }) => {
+            return(
+              locale === 'en-US' ? original.name_en : original.name
+            )
+          },
           sortable: false,
         }, {
           Header: messages['description'],
@@ -213,9 +218,9 @@ class List extends Component {
           Cell: ({ original }) => {
             return (
               <Fragment>
-                <Can user={this.props.authUser.user} permission="role" action="view"><Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'view', original)}><span className="lnr lnr-eye" /></Button> &nbsp;</Can>
-                <Can user={this.props.authUser.user} permission="role" action="edit"><Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button> &nbsp;</Can>
-                <Can user={this.props.authUser.user} permission="role" action="delete"><Button color="danger" size="sm" onClick={(e) => this.onDelete(e, [original.id])}><span className="lnr lnr-trash" /></Button></Can>
+                <Can user={this.props.authUser.user} permission="role" action="view" own={original.created_by}><Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'view', original)}><span className="lnr lnr-eye" /></Button> &nbsp;</Can>
+                <Can user={this.props.authUser.user} permission="role" action="edit" own={original.created_by}><Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button> &nbsp;</Can>
+                <Can user={this.props.authUser.user} permission="role" action="delete" own={original.created_by}><Button color="danger" size="sm" onClick={(e) => this.onDelete(e, [original.id])}><span className="lnr lnr-trash" /></Button></Can>
               </Fragment>
             );
           },

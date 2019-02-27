@@ -162,15 +162,11 @@ class CountryManager  {
 
             // $adapter = new DoctrineAdapter($ormPaginator);  
             $countries = $ormPaginator->getIterator()->getArrayCopy();
-            //set countRow default
-            $countRow = 1;
             
             foreach ($countries as &$country) {//loop
-
                 //set created_at
-                $country['created_at'] =  ($country['created_at']) ? Utils::checkDateFormat($country['created_at'],'d/m/Y') : '';
-
-                $countRow++;
+                $country['created_at'] =  ($country['created_at']) ? Utils::checkDateFormat($country['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $country['updated_at'] =  ($country['updated_at']) ? Utils::checkDateFormat($country['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
             }
            
         }

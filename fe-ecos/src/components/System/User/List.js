@@ -8,7 +8,6 @@ import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import MagnifyIcon from 'mdi-react/MagnifyIcon';
-// import Action from './Action';
 import Moment from 'react-moment';
 
 import {
@@ -194,10 +193,10 @@ class List extends Component {
           Cell: ({ original }) => {
             return (
               <Fragment>
-                <Can user={this.props.authUser.user} permission="user" action="view">
+                <Can user={this.props.authUser.user} permission="user" action="view" own={original.username}>
                   <Button color="success" size="sm" onClick={(e) => this.toggleModal(e, 'view', original)}><span className="lnr lnr-eye" /></Button> &nbsp;
                 </Can>
-                <Can user={this.props.authUser.user} permission="user" action="edit">
+                <Can user={this.props.authUser.user} permission="user" action="edit" own={original.username}>
                   <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
                 </Can>
               </Fragment>
