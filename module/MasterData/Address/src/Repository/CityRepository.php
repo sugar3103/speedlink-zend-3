@@ -40,9 +40,9 @@ class CityRepository extends EntityRepository {
                 c.status,
                 c.zip_code,
                 c.country_id,
-                c.created_by,
+                cr.username as created_by,
                 c.created_at,
-                c.updated_by,
+                up.username as updated_by,
                 c.updated_at,
                 CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
                 CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated

@@ -58,13 +58,14 @@ class ActionForm extends Component {
     this.props.getCityList(params);
   }
 
-  showOptionCity = (items) => {
+  showOptions = (items) => {
+    const { locale } = this.props.intl;
     let result = [];
     if (items.length > 0) {
       result = items.map(item => {
         return {
           value: item.id,
-          label: item.name
+          label: (locale === 'en-US' && item.name_en) ? item.name_en : item.name
         }
       })
     }
@@ -194,14 +195,28 @@ class ActionForm extends Component {
                 </div>
               </div>
               <div className="form__form-group">
+                <span className="form__form-group-label">{messages['city.country']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="country_id"
+                    component={renderSelectField}
+                    type="text"
+                    options={countries && this.showOptions(countries)}
+                    placeholder={messages['city.country']}
+                    onInputChange={this.onInputChange}
+                    disabled={disabled}
+                  />
+                </div>
+              </div>
+              <div className="form__form-group">
                 <span className="form__form-group-label">{messages['district.city']}</span>
                 <div className="form__form-group-field">
                   <Field
                     name="city_id"
                     component={renderSelectField}
                     type="text"
-                    options={cities && this.showOptionCity(cities)}
-                    placeholder={messages['city.country']}
+                    options={cities && this.showOptions(cities)}
+                    placeholder={messages['district.city']}
                     onInputChange={this.onInputChange}
                     disabled={disabled}
                   />

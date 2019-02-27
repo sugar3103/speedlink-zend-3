@@ -70,10 +70,6 @@ class List extends Component {
     });
   }
 
-  toggleModal = () => {    
-    this.props.toggleDistrictModal();
-  }
-
   onChangePage = (page) => {
     const { messages } = this.props.intl;
     let params = {
