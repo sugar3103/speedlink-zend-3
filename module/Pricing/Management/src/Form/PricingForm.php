@@ -3,7 +3,6 @@ namespace Management\Form;
 
 use Management\Entity\Pricing;
 use Doctrine\ORM\EntityManager;
-use Management\Validator\PricingNameExistsValidator;
 use Zend\Filter\StringTrim;
 use Zend\Filter\ToInt;
 use Zend\Form\Form;
@@ -29,7 +28,13 @@ class PricingForm extends Form {
      */
     private $pricing = null;
 
-    public function __construct($scenario = 'create', $entityManager = null, $pricing = null)
+    /**
+     * Current Data.
+     * @var $data
+     */
+    protected $data = null;
+
+    public function __construct($scenario = 'create', $entityManager = null, $pricing = null, $data = null)
     {
         // Define form name.
         parent::__construct('pricing-form');
@@ -38,40 +43,21 @@ class PricingForm extends Form {
         $this->scenario = $scenario;
         $this->entityManager = $entityManager;
         $this->pricing = $pricing;
-
+        $this->data = $data;
         $this->addInputFilter();
     }
 
      /**
      * This method creates input filter (used for form filtering/validation).
      */
-    private function addInputFilter() {
+    private function addInputFilter()
+    {
         // Create main input filter.
         $inputFilter = $this->getInputFilter();
 
         $inputFilter->add([
-            'name' => 'description',
-            'required' => false,
-            'filters' => [
-                [
-                    'name' => StringTrim::class
-                ]
-            ]
-        ]);
-
-        $inputFilter->add([
-            'name' => 'description_en',
-            'required' => false,
-            'filters' => [
-                [
-                    'name' => StringTrim::class
-                ]
-            ]
-        ]);
-
-        $inputFilter->add([
             'name' => 'status',
-            'required'  => true,
+            'required' => true,
             'filters' => [
                 [
                     'name' => ToInt::class
@@ -80,8 +66,8 @@ class PricingForm extends Form {
         ]);
 
         $inputFilter->add([
-            'category_code' => 'category_code',
-            'required'  => true,
+            'name' => 'category_code',
+            'required' => true,
             'filters' => [
                 [
                     'name' => StringTrim::class
@@ -103,8 +89,8 @@ class PricingForm extends Form {
         ]);
 
         $inputFilter->add([
-            'carrier_id' => 'carrier_id',
-            'required'  => true,
+            'name' => 'carrier_id',
+            'required' => true,
             'filters' => [
                 [
                     'name' => ToInt::class
@@ -113,8 +99,8 @@ class PricingForm extends Form {
         ]);
 
         $inputFilter->add([
-            'customer_id' => 'customer_id',
-            'required'  => true,
+            'name' => 'customer_id',
+            'required' => true,
             'filters' => [
                 [
                     'name' => ToInt::class
@@ -123,8 +109,8 @@ class PricingForm extends Form {
         ]);
 
         $inputFilter->add([
-            'saleman_id' => 'saleman_id',
-            'required'  => true,
+            'name' => 'saleman_id',
+            'required' => true,
             'filters' => [
                 [
                     'name' => ToInt::class
@@ -133,8 +119,8 @@ class PricingForm extends Form {
         ]);
 
         $inputFilter->add([
-            'status' => 'status',
-            'required'  => true,
+            'name' => 'is_private',
+            'required' => true,
             'filters' => [
                 [
                     'name' => ToInt::class
@@ -143,8 +129,8 @@ class PricingForm extends Form {
         ]);
 
         $inputFilter->add([
-            'is_private' => 'is_private',
-            'required'  => true,
+            'name' => 'approval_status',
+            'required' => true,
             'filters' => [
                 [
                     'name' => ToInt::class
@@ -153,8 +139,8 @@ class PricingForm extends Form {
         ]);
 
         $inputFilter->add([
-            'approval_status' => 'approval_status',
-            'required'  => true,
+            'name' => 'approval_by',
+            'required' => true,
             'filters' => [
                 [
                     'name' => ToInt::class
@@ -163,18 +149,36 @@ class PricingForm extends Form {
         ]);
 
         $inputFilter->add([
-            'approval_by' => 'approval_by',
-            'required'  => true,
+            'name' => 'effected_date',
+            'required' => true,
             'filters' => [
                 [
-                    'name' => ToInt::class
+                    'name' => \DateTime::class
                 ]
             ]
         ]);
 
         $inputFilter->add([
-            'affected_date' => 'affected_date',
-            'required'  => true,
+            'name' => 'expired_date',
+            'required' => true,
+            'filters' => [
+                [
+                    'name' => \DateTime::class
+                ]
+            ],
+            'validators' => [
+                [
+                    'name' => \DateTime::class,
+                    'options' => [
+                        'min' => $this->data['effected_date']
+                    ]
+                ]
+            ]
+        ]);
+
+        $inputFilter->add([
+            'name' => 'origin_country_id',
+            'required' => true,
             'filters' => [
                 [
                     'name' => StringTrim::class
@@ -183,51 +187,21 @@ class PricingForm extends Form {
         ]);
 
         $inputFilter->add([
-            'expired_date' => 'expired_date',
-            'required'  => true,
+            'name' => 'origin_city_id',
+            'required'  => $this->data['category_code'] == 'Domestic',
             'filters' => [
                 [
-                    'name' => StringTrim::class
+                    'name' => ToInt::class
                 ]
             ]
         ]);
 
         $inputFilter->add([
-            'origin_country_id' => 'origin_country_id',
-            'required'  => true,
+            'name' => 'customer_id',
+            'required' => $this->data['is_private'] == 1,
             'filters' => [
                 [
-                    'name' => StringTrim::class
-                ]
-            ]
-        ]);
-
-        $inputFilter->add([
-            'origin_city_id' => 'origin_city_id',
-            'required'  => true,
-            'filters' => [
-                [
-                    'name' => StringTrim::class
-                ]
-            ]
-        ]);
-
-        $inputFilter->add([
-            'origin_district_id' => 'origin_district_id',
-            'required'  => true,
-            'filters' => [
-                [
-                    'name' => StringTrim::class
-                ]
-            ]
-        ]);
-
-        $inputFilter->add([
-            'origin_ward_id' => 'origin_ward_id',
-            'required'  => true,
-            'filters' => [
-                [
-                    'name' => StringTrim::class
+                    'name' => ToInt::class
                 ]
             ]
         ]);

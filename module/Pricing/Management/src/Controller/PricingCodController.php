@@ -2,13 +2,10 @@
 namespace Management\Controller;
 
 use Core\Controller\CoreController;
-use Management\Form\PricingCodForm;
 use Doctrine\ORM\EntityManager;
 use Management\Service\PricingCodManager;
 use Management\Service\PricingCodMinManager;
-use Zend\Cache\Storage\StorageInterface;
 use Management\Entity\PricingCod;
-use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 
 class PricingCodController extends CoreController {
     /**
@@ -69,33 +66,22 @@ class PricingCodController extends CoreController {
     public function addAction()
     {
         $user = $this->tokenPayload;
-        $param = $this->getRequestData();
-        if (empty($param)) {
+        $data = $this->getRequestData();
+        if (empty($data)) {
             $this->error_code = -1;
             $this->apiResponse['message'] = 'Missing data';
             return $this->createResponse();
         }
 
-        $form = new PricingCodForm('create', $this->entityManager);
-        $form->setData($param);
-
-        //validate form
-        if ($form->isValid()) {
-            try {
-                // get filtered and validated data
-                $data = $form->getData();
-                // add new pricingCod
-                $this->pricingCodManager->addPricingCod($data['list'], $user);
-                $this->pricingCodMinManager->addPricingCodMin($data['min'], $user);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have added a pricingCod!";
-            } catch (\Exception $e) {
-                $this->error_code = -1;
-                $this->apiResponse['message'] = "Fail: Please contact System Admin";
-            }
-        } else {
+        try {
+            // add new pricingCod
+            $this->pricingCodManager->addPricingCod($data['list'], $user);
+            $this->pricingCodMinManager->addPricingCodMin($data['min'], $user);
+            $this->error_code = 1;
+            $this->apiResponse['message'] = "Success: You have added a pricingCod!";
+        } catch (\Exception $e) {
             $this->error_code = -1;
-            $this->apiResponse = $form->getMessages();
+            $this->apiResponse['message'] = "Fail: Please contact System Admin";
         }
 
         return $this->createResponse();
@@ -113,25 +99,15 @@ class PricingCodController extends CoreController {
 
         //Create New Form PricingCod
         $pricingCod = $this->entityManager->getRepository(PricingCod::class)->find($data['id']);
-        $form = new PricingCodForm('update', $this->entityManager, $pricingCod);
-        $form->setData($data);
 
-        //validate form
-        if ($form->isValid()) {
-            try {
-                // get filtered and validated data
-                $data = $form->getData();
-                // add new pricingCod
-                $this->pricingCodManager->updatePricingCod($pricingCod, $data, $user);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have edited a pricingCod!";
-            } catch (\Exception $e) {
-                $this->error_code = -1;
-                $this->apiResponse['message'] = "Fail: Please contact System Admin";
-            }
-        } else {
+        try {
+            // add new pricingCod
+            $this->pricingCodManager->updatePricingCod($pricingCod, $data, $user);
+            $this->error_code = 1;
+            $this->apiResponse['message'] = "Success: You have edited a pricingCod!";
+        } catch (\Exception $e) {
             $this->error_code = -1;
-            $this->apiResponse = $form->getMessages();
+            $this->apiResponse['message'] = "Fail: Please contact System Admin";
         }
 
         return $this->createResponse();

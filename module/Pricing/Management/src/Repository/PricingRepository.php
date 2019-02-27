@@ -52,8 +52,6 @@ class PricingRepository extends EntityRepository
                 app.username,
                 app.first_name,
                 app.last_name,
-                pr.description,
-                pr.description_en,
                 pr.created_at,
                 uc.username AS created_by,
                 pr.updated_at,

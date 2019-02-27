@@ -30,8 +30,6 @@ final class Version20190218022629 extends AbstractMigration
                 status                     TINYINT(1) NOT NULL DEFAULT 0,
                 approval_status            TINYINT(1) COMMENT '0 == new, 1 == approved',
                 approval_by                INT NULL COMMENT 'user_id',
-                description                TEXT NULL,
-                description_en             TEXT NULL,
                 created_by                 INT(11) NOT NULL,
                 created_at                 TIMESTAMP NOT NULL,
                 updated_by                 INT(11) NULL,

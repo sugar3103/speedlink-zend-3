@@ -2,12 +2,9 @@
 namespace Management\Controller;
 
 use Core\Controller\CoreController;
-use Management\Form\PricingCodMinForm;
 use Doctrine\ORM\EntityManager;
 use Management\Service\PricingCodMinManager;
-use Zend\Cache\Storage\StorageInterface;
 use Management\Entity\PricingCodMin;
-use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 
 class PricingCodMinController extends CoreController {
     /**
@@ -43,42 +40,6 @@ class PricingCodMinController extends CoreController {
       return $this->createResponse();
     }
 
-
-
-    public function addAction()
-    {
-        $user = $this->tokenPayload;
-        $param = $this->getRequestData();
-        if (empty($param)) {
-            $this->error_code = -1;
-            $this->apiResponse['message'] = 'Missing data';
-            return $this->createResponse();
-        }
-
-        $form = new PricingCodMinForm('create', $this->entityManager);
-        $form->setData($param);
-
-        //validate form
-        if ($form->isValid()) {
-            try {
-                // get filtered and validated data
-                $data = $form->getData();
-                // add new pricingCodMin
-                $this->pricingCodMinManager->addPricingCodMin($data, $user);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have added a pricingCodMin!";
-            } catch (\Exception $e) {
-                $this->error_code = -1;
-                $this->apiResponse['message'] = "Fail: Please contact System Admin";
-            }
-        } else {
-            $this->error_code = -1;
-            $this->apiResponse = $form->getMessages();
-        }
-
-        return $this->createResponse();
-    }
-
     public function editAction()
     {
         $user = $this->tokenPayload;
@@ -91,25 +52,14 @@ class PricingCodMinController extends CoreController {
 
         //Create New Form PricingCodMin
         $pricingCodMin = $this->entityManager->getRepository(PricingCodMin::class)->find($data['id']);
-        $form = new PricingCodMinForm('update', $this->entityManager, $pricingCodMin);
-        $form->setData($data);
-
-        //validate form
-        if ($form->isValid()) {
-            try {
-                // get filtered and validated data
-                $data = $form->getData();
-                // add new pricingCodMin
-                $this->pricingCodMinManager->updatePricingCodMin($pricingCodMin, $data, $user);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have edited a pricingCodMin!";
-            } catch (\Exception $e) {
-                $this->error_code = -1;
-                $this->apiResponse['message'] = "Fail: Please contact System Admin";
-            }
-        } else {
+        try {
+            // add new pricingCodMin
+            $this->pricingCodMinManager->updatePricingCodMin($pricingCodMin, $data, $user);
+            $this->error_code = 1;
+            $this->apiResponse['message'] = "Success: You have edited a pricingCodMin!";
+        } catch (\Exception $e) {
             $this->error_code = -1;
-            $this->apiResponse = $form->getMessages();
+            $this->apiResponse['message'] = "Fail: Please contact System Admin";
         }
 
         return $this->createResponse();

@@ -55,7 +55,7 @@ class PricingVasManager {
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
-            $date = date('Y-m-d H:i:s');
+            $date = new \DateTime();
             foreach ($data as $vas) {
                 $pricingVas = new PricingVas();
                 $pricingVas->setName($vas['name']);
@@ -105,17 +105,26 @@ class PricingVasManager {
      * @return PricingVas|bool
      * @throws \Exception
      */
-    public function updatePricingVas($pricingVas, $data, $user) {
-
-        // begin transaction
-        $this->entityManager->beginTransaction();
+    public function updatePricingVas($pricingVas, $data, $user)
+    {
         try {
+            // begin transaction
+            $this->entityManager->beginTransaction();
+
+            if ($pricingVas->getType() == 1 && $data['type'] != 1) {
+                $where = ['pricing_vas_id' => $pricingVas->getId()];
+                $pricing_vas_spec = $this->entityManager->getRepository(PricingVasSpec::class)->findBy($where);
+                foreach ($pricing_vas_spec as $obj) {
+                    $this->entityManager->remove($obj);
+                }
+            }
+
             $pricingVas->setName($data['name']);
             $pricingVas->setFormula($data['formula']);
             $pricingVas->setMin($data['min']);
             $pricingVas->setPricingDataId($data['price_data_id']);
             $pricingVas->setType($data['type']);
-            $pricingVas->setUpdatedAt(date('Y-m-d H:i:s'));
+            $pricingVas->setUpdatedAt(new \DateTime());
             $pricingVas->setUpdatedBy($user->id);
 
             $this->entityManager->persist($pricingVas);
@@ -133,6 +142,7 @@ class PricingVasManager {
     /**
      * Remove PricingVas
      * @param PricingVas $pricingVas
+     * @param $user
      * @return PricingVas|bool
      * @throws \Exception
      */
@@ -141,7 +151,7 @@ class PricingVasManager {
         $this->entityManager->beginTransaction();
         try {
             $pricingVas->setIsDeleted(1);
-            $pricingVas->setUpdatedAt(date('Y-m-d H:i:s'));
+            $pricingVas->setUpdatedAt(new \DateTime());
             $pricingVas->setUpdatedBy($user->id);
 
             $this->entityManager->persist($pricingVas);
