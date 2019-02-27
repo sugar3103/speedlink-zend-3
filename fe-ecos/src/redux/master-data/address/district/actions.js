@@ -11,12 +11,13 @@ import {
   DISTRICT_UPDATE_ITEM_ERROR,
   DISTRICT_DELETE_ITEM,
   DISTRICT_DELETE_ITEM_SUCCESS,
-  DISTRICT_DELETE_ITEM_ERROR
+  DISTRICT_DELETE_ITEM_ERROR,
+  DISTRICT_CHANGE_TYPE_MODAL
 } from '../../../../constants/actionTypes';
 
-export const toggleDistrictModal = (district = null) => ({
+export const toggleDistrictModal = (type, data) => ({
   type: DISTRICT_TOGGLE_MODAL,
-  payload: district
+  payload: { type, data }
 })
 
 export const getDistrictList = (params, messages) => ({
@@ -75,3 +76,8 @@ export const deleteDistrictItemError = (error) => ({
   type: DISTRICT_DELETE_ITEM_ERROR,
   payload: error
 });
+
+export const changeTypeDistrictModal = (type) => ({
+  type: DISTRICT_CHANGE_TYPE_MODAL,
+  payload: type
+})

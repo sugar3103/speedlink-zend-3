@@ -117,9 +117,41 @@ $doctrine = [
         
 ];
 
+$access_filter =  [
+    'options' => [
+        'mode' => 'permissive'//restrictive or permissive
+    ],
+    'controllers' => [
+        Controller\AddressController::class => [
+            ['actions' => ['index'], 'allow' => '*'],            
+        ],
+        Controller\CountryController::class => [
+            ['actions' => '*', 'allow' => '+masterdata_country.manage'],            
+            ['actions' => ['index'], 'allow' => '+masterdata_country.view'],
+            ['actions' => ['edit'], 'allow' => '+masterdata_country.edit']            
+        ],
+        Controller\CityController::class => [
+            ['actions' => '*', 'allow' => '+masterdata_city.manage'],            
+            ['actions' => ['index'], 'allow' => '+masterdata_city.view'],
+            ['actions' => ['edit'], 'allow' => '+masterdata_city.edit']            
+        ],
+        Controller\DistrictController::class => [
+            ['actions' => '*', 'allow' => '+masterdata_district.manage'],            
+            ['actions' => ['index'], 'allow' => '+masterdata_ditrict.view'],
+            ['actions' => ['edit'], 'allow' => '+masterdata_district.edit']            
+        ],
+        Controller\WardController::class => [
+            ['actions' => '*', 'allow' => '+masterdata_ward.manage'],            
+            ['actions' => ['index'], 'allow' => '+masterdata_ward.view'],
+            ['actions' => ['edit'], 'allow' => '+masterdata_ward.edit']            
+        ]
+    ]    
+];
+
 return [
     'router' => $router,
     'controllers' => $controllers,    
     'service_manager'   => $service_manager,
-    'doctrine'          => $doctrine    
+    'doctrine'          => $doctrine,
+    'access_filter'     => $access_filter
 ];

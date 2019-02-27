@@ -113,7 +113,7 @@ class AuthManager
                     $actionList == '*') {
                     if ($allow == '*')
                         // anyone is allowed to see the page.
-                         $result = self::ACCESS_GRANTED;
+                        return self::ACCESS_GRANTED;
                     elseif (!$this->authService->hasIdentity())
                         // ony authenticated user is allowed to see the page
                         return self::AUTH_REQUIRED;

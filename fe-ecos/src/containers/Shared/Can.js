@@ -39,7 +39,7 @@ class RenderCan extends PureComponent {
         const permission = this.props.user.permissions;
         let isShow = false;
 
-        if(permission){
+        if(permission && permission[this.props.permission]){
             permission[this.props.permission].forEach(element => {                
                 isShow = this.hasOwnPermission(element) ? true : (permission[this.props.permission].indexOf(this.props.action) > -1) ? true : 
                     this.hasAnyPermission(element) ? true : this.isManager(element) ? true : false;

@@ -5,11 +5,13 @@ import { connect } from 'react-redux';
 import { toggleStatusModal, changeTypeStatusModal } from '../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../containers/Shared/form/CustomField';
+import Can from '../../../containers/Shared/Can';
 import renderRadioButtonField from '../../../containers/Shared/form/RadioButton';
 import validate from './validateActionForm';
 import PropTypes from 'prop-types';
 import { MODAL_ADD, MODAL_VIEW, MODAL_EDIT } from '../../../constants/defaultValues';
 import Moment from 'react-moment';
+
 
 class ActionForm extends Component {
 
@@ -47,7 +49,7 @@ class ActionForm extends Component {
   }
 
   render() {
-    const { messages,locale } = this.props.intl;
+    const { messages, locale } = this.props.intl;
     const { handleSubmit, modalType, modalData } = this.props;
     let className = 'success';
     let title = messages['status.add-new'];
@@ -176,7 +178,9 @@ class ActionForm extends Component {
           {this.state.modalType === MODAL_VIEW &&
             <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
           }
-          <Button color={className} type="submit">{modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
+          <Can user={this.props.authUser.user} permission="status" action="edit" own={modalData && modalData.created_by}>
+            <Button color={className} type="submit">{modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
+          </Can>
         </ButtonToolbar>
       </form>
     );
@@ -191,11 +195,12 @@ ActionForm.propTypes = {
   changeTypeStatusModal: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ status }) => {
+const mapStateToProps = ({ status, authUser }) => {
   const { modalData, modalType } = status;
   return {
     modalData,
-    modalType
+    modalType,
+    authUser
   }
 }
 

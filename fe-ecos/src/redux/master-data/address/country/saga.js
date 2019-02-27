@@ -51,7 +51,7 @@ function* getCountryListItems({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(getCountryListError(response.data));
+        yield put(getCountryListError(response.message));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -104,7 +104,7 @@ function* addCountryItem({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(addCountryItemError(response.data));
+        yield put(addCountryItemError(response.message));
         break;
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('user');
@@ -157,7 +157,7 @@ function* updateCountryItem({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(updateCountryItemError(response.data));
+        yield put(updateCountryItemError(response.message));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -208,7 +208,7 @@ function* deleteCountryItem({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(deleteCountryItemError(response.data));
+        yield put(deleteCountryItemError(response.message));
         break;
 
       case EC_FAILURE_AUTHENCATION:

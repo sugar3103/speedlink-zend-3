@@ -39,9 +39,9 @@ class CountryRepository extends EntityRepository {
                 ct.description_en,
                 ct.iso_code,
                 ct.status,
-                ct.created_by,
+                cr.username as created_by,
                 ct.created_at,
-                ct.updated_by,
+                up.username as updated_by,
                 ct.updated_at,
                 CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
                 CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated

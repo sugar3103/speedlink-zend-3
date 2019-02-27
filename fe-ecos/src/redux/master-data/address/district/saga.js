@@ -66,7 +66,7 @@ function* getDistrictListItems({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(getDistrictListError(response.data));
+        yield put(getDistrictListError(response.message));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -120,7 +120,7 @@ function* addDistrictItem({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(addDistrictItemError(response.data));
+        yield put(addDistrictItemError(response.message));
         yield put(validateDistrict(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
@@ -173,7 +173,7 @@ function* updateDistrictItem({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(updateDistrictItemError(response.data));
+        yield put(updateDistrictItemError(response.message));
         yield put(validateDistrict(response.data));
         break;
 
@@ -225,7 +225,7 @@ function* deleteDistrictItem({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(deleteDistrictItemError(response.data));
+        yield put(deleteDistrictItemError(response.message));
         break;
 
       case EC_FAILURE_AUTHENCATION:
