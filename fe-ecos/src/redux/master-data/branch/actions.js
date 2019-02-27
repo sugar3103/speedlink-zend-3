@@ -95,9 +95,9 @@ export const deleteBranchItemError = (error) => ({
   payload: error
 });
 
-export const getCountryBranchList = (params) => ({
+export const getCountryBranchList = (params, messages) => ({
   type: BRANCH_COUNTRY_GET_LIST,
-  payload: { params }
+  payload: { params, messages }
 });
 
 export const getCountryBranchListSuccess = (countries) => ({
@@ -110,9 +110,9 @@ export const getCountryBranchListError = (error) => ({
   payload: error
 });
 
-export const getCityBranchList = (params, types) => ({
+export const getCityBranchList = (params, messages, types) => ({
   type: BRANCH_CITY_GET_LIST,
-  payload: { params, types }
+  payload: { params, messages, types }
 });
 
 export const getCityBranchListSuccess = (cities, types) => ({
@@ -125,9 +125,9 @@ export const getCityBranchListError = (error) => ({
   payload: error
 });
 
-export const getDistrictBranchList = (params, types) => ({
+export const getDistrictBranchList = (params, messages, types) => ({
   type: BRANCH_DISTRICT_GET_LIST,
-  payload: { params, types }
+  payload: { params, messages, types }
 });
 
 export const getDistrictBranchListSuccess = (districts, types) => ({
@@ -140,9 +140,9 @@ export const getDistrictBranchListError = (error) => ({
   payload: error
 });
 
-export const getWardBranchList = (params, types) => ({
+export const getWardBranchList = (params, messages, types) => ({
   type: BRANCH_WARD_GET_LIST,
-  payload: { params, types }
+  payload: { params, messages, types }
 });
 
 export const getWardBranchListSuccess = (wards, types) => ({

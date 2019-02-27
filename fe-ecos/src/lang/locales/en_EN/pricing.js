@@ -19,7 +19,10 @@ module.exports = {
     'pri_man.validate-status-empty': 'Status shouldn’t be empty',
     'pri_man.validate-service-empty': 'Service shouldn’t be empty',
     'pri_man.validate-shipment_type-empty': 'Shipment Type shouldn’t be empty',
-
+    'pri_man.validate-origin_country-empty': 'Origin Country shouldn’t be empty',
+    'pri_man.validate-destination_country-empty': 'Destination Country shouldn’t be empty',
+    'pri_man.validate-origin_city-empty': 'Origin City shouldn’t be empty',
+    'pri_man.validate-destination_city-empty': 'Destination City shouldn’t be empty',
     //master-data --- RangeWeight
     'range_weight.list-title': 'Range Weight',
     'range_weight.add-new': 'Add New Range Weight',
@@ -52,6 +55,7 @@ module.exports = {
     'zone_code.add-new': 'Add New Zone Code',
     'zone_code.add': 'Add New Zone Code',
     'zone_code.view': 'View Zone Code',
+    'zone_code.name': 'Zone Code Name',
     'zone_code.update': 'Update Zone Code',
     'zone_code.delete': 'Delete Cone Code',
     'zone_code.type': 'Zone Type',
@@ -76,8 +80,6 @@ module.exports = {
     'zone_code.validate-code-minlength': 'Name must be 5 characters or more',
     'zone_code.validate-code-maxlength': 'Name must be 20 characters or less',
     'zone_code.validate-code-exists': 'Name already exists',
-    'zone_code.validate-origin_city-empty': 'Origin City shouldn’t be empty',
-    'zone_code.validate-destination_city-empty': 'Destination City shouldn’t be empty',
 
     //pricing
     'pricing.saleman': 'Saleman',
