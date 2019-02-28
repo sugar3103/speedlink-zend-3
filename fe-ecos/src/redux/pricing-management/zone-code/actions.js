@@ -106,9 +106,9 @@ export const deleteZoneCodeItemError = (error) => ({
   payload: error
 });
 
-export const getOriginCountryList = (params, messages) => ({
+export const getOriginCountryList = (params, messages, types) => ({
   type: ORIGIN_COUNTRY_GET_LIST,
-  payload: { params, messages }
+  payload: { params, messages, types }
 });
 
 export const getOriginCountryListSuccess = (origin_country) => ({

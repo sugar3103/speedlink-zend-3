@@ -38,9 +38,16 @@ class ActionForm extends Component {
   componentDidMount() {
     const { messages } = this.props.intl;
     const data = this.props.modalData;
+    const paramCustomer = {
+        field: ['id', 'name'],
+        offset: {
+            limit: 0
+        }
+    }
+
     if (data) {
       this.props.initialize(data);
-      this.props.getCustomerList();
+      this.props.getCustomerList(paramCustomer, messages);
       if(data.category){
         this.setState({
           category_code: data.category

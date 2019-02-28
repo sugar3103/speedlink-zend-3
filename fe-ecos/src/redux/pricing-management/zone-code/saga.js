@@ -285,12 +285,12 @@ const getOriginCountryListRequest = async (params) => {
 };
 
 function* getOriginCountryListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params, messages, types } = payload;
   try {
     const response = yield call(getOriginCountryListRequest, params);
     switch (response.error_code) {
       case EC_SUCCESS:
-        yield put(getOriginCountryListSuccess(response.data));
+        yield put(getOriginCountryListSuccess(response.data, types));
         break;
 
       case EC_FAILURE:

@@ -95,9 +95,9 @@ export const deleteBranchItemError = (error) => ({
   payload: error
 });
 
-export const getCountryBranchList = (params, messages) => ({
+export const getCountryBranchList = (params, messages, types) => ({
   type: BRANCH_COUNTRY_GET_LIST,
-  payload: { params, messages }
+  payload: { params, messages, types }
 });
 
 export const getCountryBranchListSuccess = (countries) => ({
