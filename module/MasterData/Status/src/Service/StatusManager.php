@@ -5,7 +5,7 @@ use Status\Entity\Status;
 use OAuth\Entity\User;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-
+use Core\Utils\Utils;
 /**
  * @package Status\Service
  */
@@ -172,17 +172,12 @@ class StatusManager {
 
             // $adapter = new DoctrineAdapter($ormPaginator);  
             $statuss = $ormPaginator->getIterator()->getArrayCopy();
-            //set countRow default
-            $countRow = 1;
             
             foreach ($statuss as &$status) {
                 //set created_at
-                $status['created_at'] =  ($status['created_at']) ? $this->checkDateFormat($status['created_at'],'d/m/Y') : '';
-                $status['updated_at'] =  ($status['updated_at']) ? $this->checkDateFormat($status['updated_at'],'d/m/Y') : '';
-
-                $countRow++;
-            }
-           
+                $status['created_at'] =  ($status['created_at']) ? Utils::checkDateFormat($status['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $status['updated_at'] =  ($status['updated_at']) ? Utils::checkDateFormat($status['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+            }           
         }
 
         //set data status
@@ -192,51 +187,4 @@ class StatusManager {
         ];
         return $dataStatus;
     }
-
-    /**
-     * Check date format
-     *
-     * @param $dateAction
-     * @param $dateFormat
-     * @return string
-     */
-    public function checkDateFormat($dateAction,$dateFormat)
-    {
-        $dateLast = '';
-        $dateCheck = ! empty($dateAction) ? $dateAction->format('Y-m-d H:i:s') : '';
-        if ($dateCheck) {
-            $datetime = new \DateTime($dateCheck, new \DateTimeZone('UTC'));
-            $laTime = new \DateTimeZone('Asia/Ho_Chi_Minh');
-            $datetime->setTimezone($laTime);
-            $dateLast = $datetime->format($dateFormat);
-        }
-        return $dateLast;
-    }
-
-    /**
-     * Get value filters search
-     *
-     * @param $params
-     * @param $fieldsMap
-     * @return array
-     */
-    public function getValueFiltersSearch($params,$fieldsMap)
-    {
-        $filters = [];
-
-        if (isset($params['query']) && !empty($params['query'])){
-          
-            foreach ($fieldsMap as $field)
-            {
-                
-                if(isset($params['query'][$field]) && $params['query'][$field] != -1)
-                    $filters [$field] = trim($params['query'][$field]);
-            }
-        }
-       
-        return $filters;
-    }
-
 }
-
-?>

@@ -61,24 +61,22 @@ class PricingController extends CoreController
     public function addAction()
     {
         $user = $this->tokenPayload;
-        $param = $this->getRequestData();
-        if (empty($param)) {
+        $data = $this->getRequestData();
+        if (empty($data)) {
             $this->error_code = -1;
             $this->apiResponse['message'] = 'Missing data';
             return $this->createResponse();
         }
 
-        $form = new PricingForm('create', $this->entityManager);
-        $form->setData($param);
+        $form = new PricingForm('create', $this->entityManager, null, $data);
+        $form->setData($data);
 
         //validate form
         if ($form->isValid()) {
             try {
-                // get filtered and validated data
-                $data = $form->getData();
                 // add new pricing
-                $this->pricingManager->addPricing($data, $user);
-                $this->pricingDataManager->addPricingData($data, $user);
+                $pricing = $this->pricingManager->addPricing($data, $user);
+                $this->pricingDataManager->addPricingData($pricing, $user);
                 $this->error_code = 1;
                 $this->apiResponse['message'] = "Success: You have added a pricing!";
             } catch (\Exception $e) {
@@ -103,18 +101,27 @@ class PricingController extends CoreController
             return $this->createResponse();
         }
 
-        //Create New Form Pricing
-        $pricing = $this->entityManager->getRepository(Pricing::class)->find($data['id']);
-        $form = new PricingForm('update', $this->entityManager, $pricing);
+        //Update Form Pricing
+        $pricing = $pricing = $this->entityManager->getRepository(Pricing::class)->find($data['id']);
+
+        $form = new PricingForm('update', $this->entityManager, $pricing, $data);
         $form->setData($data);
 
         //validate form
         if ($form->isValid()) {
             try {
-                // get filtered and validated data
-                $data = $form->getData();
                 // add new pricing
-                $this->pricingManager->updatePricing($pricing, $data, $user);
+                $pricing = $this->pricingManager->updatePricing($pricing, $data, $user);
+                $district_id = empty($data['origin_district_id'])? null : $data['origin_district_id'];
+                $ward_id = empty($data['origin_ward_id'])? null : $data['origin_ward_id'];
+                if ($pricing->getCarrierId() != $data['carrier_id']
+                 || $pricing->getCategoryCode()!= $data['category_code']
+                 || $pricing->getOriginCountryId() != $data['origin_country_id']
+                 || $pricing->getOriginCityId() != $data['origin_city_id']
+                 || $pricing->getOriginDistrictId() != $district_id
+                 || $pricing->getOriginWardId() != $ward_id) {
+                    $this->pricingDataManager->addPricingData($pricing, $user);
+                }
                 $this->error_code = 1;
                 $this->apiResponse['message'] = "Success: You have edited a pricing!";
             } catch (\Exception $e) {

@@ -51,7 +51,7 @@ class List extends Component {
           <ConfirmPicker
             onClose={onClose}
             onDelete={() => this.props.deletePermissionItem(ids, messages)}
-            messages={messages}
+            messages ={messages}
           />
         )
       }
@@ -144,7 +144,7 @@ class List extends Component {
           <Action modalOpen={modalOpen} />
           <form className="form">
             <div className="form__form-group products-list__search">
-              <input placeholder="Search..." name="search" onKeyPress={this.handleKeyPress} onChange={event => { this.setState({ searchPermission: event.target.value }) }} />
+              <input placeholder={messages['search']} name="search" onKeyPress={this.handleKeyPress} onChange={event => { this.setState({ searchPermission: event.target.value }) }} />
               <MagnifyIcon />
             </div>
           </form>
@@ -205,9 +205,9 @@ class List extends Component {
           Cell: ({ original }) => {
             return (
               <Fragment>
-                <Can user={user} permission="permission" action="view"><Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'view', original)}><span className="lnr lnr-eye" /></Button>&nbsp;&nbsp;</Can>
-                <Can user={user} permission="permission" action="edit"><Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button>&nbsp;</Can>
-                <Can user={user} permission="permission" action="delete"> <Button color="danger" size="sm" onClick={(e) => this.onDelete(e, [original.id])}><span className="lnr lnr-trash" /></Button>&nbsp;</Can>                
+                <Can user={user} permission="permission" action="view" own={original.created_by}><Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'view', original)}><span className="lnr lnr-eye" /></Button>&nbsp;&nbsp;</Can>
+                <Can user={user} permission="permission" action="edit" own={original.created_by}><Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button>&nbsp;</Can>
+                <Can user={user} permission="permission" action="delete" own={original.created_by}> <Button color="danger" size="sm" onClick={(e) => this.onDelete(e, [original.id])}><span className="lnr lnr-trash" /></Button>&nbsp;</Can>                
               </Fragment>
             );
           },

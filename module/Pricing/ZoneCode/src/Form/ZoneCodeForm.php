@@ -202,7 +202,7 @@ class ZoneCodeForm extends Form {
         ]); 
         $inputFilter->add([
             'name' => 'origin_city_id',
-            'required'  => true,
+            'required'  => false,
             'filters' => [
                 [
                     'name' => ToInt::class
@@ -211,7 +211,7 @@ class ZoneCodeForm extends Form {
         ]); 
         $inputFilter->add([
             'name' => 'origin_district_id',
-            'required'  => true,
+            'required'  => false,
             'filters' => [
                 [
                     'name' => ToInt::class
@@ -220,7 +220,7 @@ class ZoneCodeForm extends Form {
         ]); 
         $inputFilter->add([
             'name' => 'origin_ward_id',
-            'required'  => true,
+            'required'  => false,
             'filters' => [
                 [
                     'name' => ToInt::class
@@ -239,7 +239,7 @@ class ZoneCodeForm extends Form {
         ]); 
         $inputFilter->add([
             'name' => 'destination_city_id',
-            'required'  => true,
+            'required'  => false,
             'filters' => [
                 [
                     'name' => ToInt::class
@@ -248,7 +248,7 @@ class ZoneCodeForm extends Form {
         ]); 
         $inputFilter->add([
             'name' => 'destination_district_id',
-            'required'  => true,
+            'required'  => false,
             'filters' => [
                 [
                     'name' => ToInt::class
@@ -257,7 +257,7 @@ class ZoneCodeForm extends Form {
         ]); 
         $inputFilter->add([
             'name' => 'destination_ward_id',
-            'required'  => true,
+            'required'  => false,
             'filters' => [
                 [
                     'name' => ToInt::class

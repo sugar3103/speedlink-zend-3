@@ -67,7 +67,7 @@ function* getCityListItems({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(getCityListError(response.data));
+        yield put(getCityListError(response.message));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -121,7 +121,7 @@ function* addCityItem({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(addCityItemError(response.data));
+        yield put(addCityItemError(response.message));
         yield put(validateCity(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
@@ -174,7 +174,7 @@ function* updateCityItem({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(updateCityItemError(response.data));
+        yield put(updateCityItemError(response.message));
         yield put(validateCity(response.data));
         break;
 

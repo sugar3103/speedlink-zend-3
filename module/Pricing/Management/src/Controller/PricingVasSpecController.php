@@ -3,7 +3,6 @@ namespace Management\Controller;
 
 use Core\Controller\CoreController;
 use Management\Entity\PricingVasSpec;
-use Management\Form\PricingVasSpecForm;
 use Doctrine\ORM\EntityManager;
 use Management\Service\PricingVasSpecManager;
 
@@ -44,32 +43,21 @@ class PricingVasSpecController extends CoreController {
     public function addAction()
     {
         $user = $this->tokenPayload;
-        $param = $this->getRequestData();
-        if (empty($param)) {
+        $data = $this->getRequestData();
+        if (empty($data)) {
             $this->error_code = -1;
             $this->apiResponse['message'] = 'Missing data';
             return $this->createResponse();
         }
 
-        $form = new PricingVasSpecForm('create', $this->entityManager);
-        $form->setData($param);
-
-        //validate form
-        if ($form->isValid()) {
-            try {
-                // get filtered and validated data
-                $data = $form->getData();
-                // add new pricing
-                $this->pricingVasSpecManager->addPricingVasSpec($data, $user);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have added a pricing!";
-            } catch (\Exception $e) {
-                $this->error_code = -1;
-                $this->apiResponse['message'] = "Fail: Please contact System Admin";
-            }
-        } else {
+        try {
+            // add new pricing
+            $this->pricingVasSpecManager->addPricingVasSpec($data, $user);
+            $this->error_code = 1;
+            $this->apiResponse['message'] = "Success: You have added a pricing!";
+        } catch (\Exception $e) {
             $this->error_code = -1;
-            $this->apiResponse = $form->getMessages();
+            $this->apiResponse['message'] = "Fail: Please contact System Admin";
         }
 
         return $this->createResponse();
@@ -87,25 +75,15 @@ class PricingVasSpecController extends CoreController {
 
         //Create New Form PricingVasSpec
         $pricing = $this->entityManager->getRepository(PricingVasSpec::class)->find($data['id']);
-        $form = new PricingVasSpecForm('update', $this->entityManager, $pricing);
-        $form->setData($data);
 
-        //validate form
-        if ($form->isValid()) {
-            try {
-                // get filtered and validated data
-                $data = $form->getData();
-                // add new pricing
-                $this->pricingVasSpecManager->updatePricingVasSpec($pricing, $data, $user);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have edited a pricing!";
-            } catch (\Exception $e) {
-                $this->error_code = -1;
-                $this->apiResponse['message'] = "Fail: Please contact System Admin";
-            }
-        } else {
+        try {
+            // add new pricing
+            $this->pricingVasSpecManager->updatePricingVasSpec($pricing, $data, $user);
+            $this->error_code = 1;
+            $this->apiResponse['message'] = "Success: You have edited a pricing!";
+        } catch (\Exception $e) {
             $this->error_code = -1;
-            $this->apiResponse = $form->getMessages();
+            $this->apiResponse['message'] = "Fail: Please contact System Admin";
         }
 
         return $this->createResponse();

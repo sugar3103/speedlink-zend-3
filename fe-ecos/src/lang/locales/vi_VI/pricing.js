@@ -1,10 +1,32 @@
 module.exports = {
 
+    'pri_man.filter-type': 'Filter Type',
+    'pri_man.carrier': 'Carrier',
+    'pri_man.category': 'Category',
+    'pri_man.service': 'Service',
+    'pri_man.shipment-type': 'Shipment Type',
+    'pri_man.from': 'From',
+    'pri_man.to': 'To',
+    'pri_man.public': 'Public',
+    'pri_man.customer': 'Customer',
+    
+    'pri_man.validate-private-empty': 'Type không được bỏ trống',
+    'pri_man.validate-carrier-empty': 'Carrier không được bỏ trống',
+    'pri_man.validate-customer-empty': 'Customer không được bỏ trống',
+    'pri_man.validate-category-empty': 'Category không được bỏ trống',
+    'pri_man.validate-status-empty': 'Status không được bỏ trống',
+    'pri_man.validate-service-empty': 'Service không được bỏ trống',
+    'pri_man.validate-shipment_type-empty': 'Shipment Type không được bỏ trống',
+    'pri_man.validate-origin_country-empty': 'Origin Country không được bỏ trống',
+    'pri_man.validate-destination_country-empty': 'Destination Country không được bỏ trống',
+    'pri_man.validate-origin_city-empty': 'Origin City không được bỏ trống',
+    'pri_man.validate-destination_city-empty': 'Destination City không được bỏ trống',
     //master-data --- RangeWeight
     'range_weight.list-title': 'Range Weight',
     'range_weight.filtertype': 'Filter Type',
     'range_weight.add-new': 'Tạo mới RangeWeight',
     'range_weight.add': 'Thêm RangeWeight',
+    'range_weight.view': 'View Range Weight',
     'range_weight.update': 'Cập nhật RangeWeight',
     'range_weight.delete': 'Xóa Range Weight',
     'range_weight.type': 'RangeWeight Type',
@@ -29,16 +51,9 @@ module.exports = {
     //validate
    
     'range_weight.validate-code-empty': 'Tên không được bỏ trống',
-    'range_weight.validate-code-minlength': 'Tên phải có trên 5 ký tự',
+    'range_weight.validate-code-minlength': 'Tên phải có trên 1 ký tự',
     'range_weight.validate-code-maxlength': 'Tên phải có dưới 20 ký tự',
     'range_weight.validate-code-exists': 'Tên đã tồn tại',
-    'range_weight.validate-private-empty': 'Type không được bỏ trống',
-    'range_weight.validate-carrier-empty': 'Carrier không được bỏ trống',
-    'range_weight.validate-customer-empty': 'Khách hàng không được bỏ trống',
-    'range_weight.validate-category-empty': 'Category không được bỏ trống',
-    'range_weight.validate-status-empty': 'Trạng thái không được bỏ trống',
-    'range_weight.validate-service-empty': 'Dịch vụ không được bỏ trống',
-    'range_weight.validate-shipment_type-empty': 'Shipment Type không được bỏ trống',
     'range_weight.validate-from-empty' : 'From không được bỏ trống',
     'range_weight.validate-to-empty' : 'To không được bỏ trống',
     'range_weight.validate-calculate_unit-empty' : 'Calculate Unit không được bỏ trống',
@@ -51,6 +66,8 @@ module.exports = {
     'zone_code.add-new': 'Tạo mới ZoneCode',
     'zone_code.add': 'Thêm một ZoneCode',
     'zone_code.update': 'Cập nhật ZoneCode',
+    'zone_code.name': 'Tên Zone Code',
+    'zone_code.view': 'View Zone Code',
     'zone_code.delete': 'Xóa Range Weight',
     'zone_code.type': 'Zone Type',
     'zone_code.code': 'Zone Code',
@@ -82,17 +99,8 @@ module.exports = {
     //validate
    
     'zone_code.validate-code-empty': 'Tên không được bỏ trống',
-    'zone_code.validate-code-minlength': 'Tên phải có trên 5 ký tự',
+    'zone_code.validate-code-minlength': 'Tên phải có trên 1 ký tự',
     'zone_code.validate-code-maxlength': 'Tên phải có dưới 20 ký tự',
     'zone_code.validate-code-exists': 'Tên đã tồn tại',
-    'zone_code.validate-private-empty': 'Type không được bỏ trống',
-    'zone_code.validate-carrier-empty': 'Carrier không được bỏ trống',
-    'zone_code.validate-customer-empty': 'Customer không được bỏ trống',
-    'zone_code.validate-category-empty': 'Category không được bỏ trống',
-    'zone_code.validate-status-empty': 'Status không được bỏ trống',
-    'zone_code.validate-service-empty': 'Service không được bỏ trống',
-    'zone_code.validate-shipment_type-empty': 'Shipment Type không được bỏ trống',
-    'zone_code.validate-origin_city-empty': 'Origin City không được bỏ trống',
-    'zone_code.validate-destination_city-empty': 'Destination City không được bỏ trống'
-
+  
   }

@@ -20,8 +20,6 @@ class PricingDataRepository extends EntityRepository
             $queryBuilder->select("
                 pd.id,
                 pd.pricing_id,
-                pd.carrier_id,
-                cr.code AS carrier_code,
                 pd.service_id,
                 sr.code AS service_code,
                 sr.name AS service_name,
@@ -72,7 +70,6 @@ class PricingDataRepository extends EntityRepository
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(PricingData::class, 'pd')
-            ->leftJoin('pd.join_carrier', 'cr')
             ->leftJoin('pd.join_service', 'sr')
             ->leftJoin('pd.join_shipment_type', 'st')
             ->leftJoin('pd.join_created', 'uc')

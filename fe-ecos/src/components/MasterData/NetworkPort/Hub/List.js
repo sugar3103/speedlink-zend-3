@@ -52,7 +52,6 @@ class List extends Component {
           <ConfirmPicker 
             onClose={onClose}
             onDelete={() => this.props.deleteHubItem(ids, messages)}
-            messages={messages}
           />
         )
       }
@@ -155,29 +154,13 @@ class List extends Component {
       checkbox: true,
       columns: [
         {
-            Header: '#',
-            accessor: "#",
-            width: 30,
-            Cell: ({ original }) => {
-              return (
-               original.id
-              )
-            },
-            sortable: false,
-        },
-        {
           Header: messages['hub.code'],
-          accessor: "hub.code",
-          Cell: ({ original }) => {
-            return (
-             original.code
-            )
-          },
+          accessor: "code",
           sortable: false
         },
         {
-          Header: messages['hub.name'],
-          accessor: "hub.name",
+          Header: messages['name'],
+          accessor: "name",
           Cell: ({ original }) => {
             return (
               locale === 'en-US' ? original.name_en : original.name
@@ -197,10 +180,10 @@ class List extends Component {
         },
         {
             Header: messages['hub.city'],
-            accessor: "hub.city",
+            accessor: "city",
             Cell: ({ original }) => {
               return (
-               original.city
+                locale === 'en-US' ? original.city_en : original.city
               )
             },
             sortable: false

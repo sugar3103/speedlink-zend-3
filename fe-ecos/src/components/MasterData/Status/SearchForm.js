@@ -71,8 +71,7 @@ SearchForm.propTypes = {
 
 export default reduxForm({
   form: 'status_search_form',
-  initialValues: {
-    name: '',
+  initialValues: {    
     status: -1
   }
 })(injectIntl(SearchForm));

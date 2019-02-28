@@ -1,8 +1,9 @@
 /* eslint-disable react/no-unused-state */
 import React, { Component, Fragment } from 'react';
-import { Card, CardBody, Col, Button, ButtonToolbar,Badge } from 'reactstrap';
+import { Card, CardBody, Col, Button, ButtonToolbar, Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Table from '../../../../containers/Shared/table/Table';
+import Can from '../../../../containers/Shared/Can';
 import { SELECTED_PAGE_SIZE } from '../../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
@@ -49,7 +50,7 @@ class List extends Component {
           <ConfirmPicker
             onClose={onClose}
             onDelete={() => this.props.deleteRoleItem(ids, messages)}
-            messages={messages}
+            messages ={messages}
           />
         )
       }
@@ -135,12 +136,14 @@ class List extends Component {
     return (
       <Fragment>
         <ButtonToolbar className="master-data-list__btn-toolbar-top">
-          <Button
-            color="success"
-            onClick={(e) => this.toggleModal(e, 'add', null)}
-            className="master-data-btn"
-            size="sm"
-          >{messages['role.add-new']}</Button>
+          <Can user={this.props.authUser.user} permission="role" action="add">
+            <Button
+              color="success"
+              onClick={(e) => this.toggleModal(e, 'add', null)}
+              className="master-data-btn"
+              size="sm"
+            >{messages['role.add-new']}</Button>
+          </Can>
           <Action modalOpen={modalOpen} />
           <form className="form">
             <div className="form__form-group products-list__search">
@@ -148,14 +151,16 @@ class List extends Component {
               <MagnifyIcon />
             </div>
           </form>
-          {selected.length > 0 &&
-            <Button
-              color="danger"
-              onClick={(e) => this.onDelete(e, selected)}
-              className="master-data-btn"
-              size="sm"
-            >{messages['role.delete']}</Button>
-          }
+          <Can user={this.props.authUser.user} permission="role" action="delete">
+            {selected.length > 0 &&
+              <Button
+                color="danger"
+                onClick={(e) => this.onDelete(e, selected)}
+                className="master-data-btn"
+                size="sm"
+              >{messages['role.delete']}</Button>
+            }
+          </Can>
 
         </ButtonToolbar>
       </Fragment>
@@ -164,7 +169,7 @@ class List extends Component {
 
   render() {
     const { items, loading, total } = this.props.role;
-    const { messages,locale } = this.props.intl;
+    const { messages, locale } = this.props.intl;
     const columnTable = {
       checkbox: true,
       columns: [
@@ -172,6 +177,11 @@ class List extends Component {
           Header: messages['name'],
           accessor: "name",
           width: 150,
+          Cell: ({ original }) => {
+            return(
+              locale === 'en-US' ? original.name_en : original.name
+            )
+          },
           sortable: false,
         }, {
           Header: messages['description'],
@@ -193,24 +203,25 @@ class List extends Component {
           },
           className: "text-center",
           sortable: false,
-        },{
+        }, {
           Header: messages['created-at'],
           accessor: "created_at",
           width: 120,
-          className: "text-center", 
-          Cell: ({ original}) => { return (<Moment fromNow format="D/MM/YYYY" locale={locale}>{new Date(original.created_at)}</Moment> )},
+          className: "text-center",
+          Cell: ({ original }) => { return (<Moment fromNow format="D/MM/YYYY" locale={locale}>{new Date(original.created_at)}</Moment>) },
           sortable: false,
         },
         {
           Header: messages['action'],
           accessor: "",
           width: 100,
-          className: "text-center", 
+          className: "text-center",
           Cell: ({ original }) => {
             return (
               <Fragment>
-                <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
-                <Button color="danger" size="sm" onClick={(e) => this.onDelete(e, [original.id])}><span className="lnr lnr-trash" /></Button>
+                <Can user={this.props.authUser.user} permission="role" action="view" own={original.created_by}><Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'view', original)}><span className="lnr lnr-eye" /></Button> &nbsp;</Can>
+                <Can user={this.props.authUser.user} permission="role" action="edit" own={original.created_by}><Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button> &nbsp;</Can>
+                <Can user={this.props.authUser.user} permission="role" action="delete" own={original.created_by}><Button color="danger" size="sm" onClick={(e) => this.onDelete(e, [original.id])}><span className="lnr lnr-trash" /></Button></Can>
               </Fragment>
             );
           },
@@ -250,10 +261,11 @@ List.propTypes = {
   toggleRoleModal: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ users }) => {
+const mapStateToProps = ({ users, authUser }) => {
   const { role } = users;
   return {
     role,
+    authUser
   };
 };
 

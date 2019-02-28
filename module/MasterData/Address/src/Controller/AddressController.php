@@ -44,16 +44,15 @@ class AddressController extends CoreController {
                 6 => 'hub'
             ];
 
-            list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
+            list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);                        
             
             //get list User by condition
             $dataCode = $this->addressCodeManager->getListCodeByCondition($start, $limit, $sortField, $sortDirection,$filters);            
             
-            $result = ($dataCode['listCode']) ? $dataCode['listCode'] : [] ;
+            $result = $this->filterByField($dataCode['listCode'],$fields);
             
-            $this->error_code = 1;
             $this->apiResponse =  array(
-                'message'   => "Get List Success",
+                'message'   => "SUCCESS",
                 'data'      => $result,
                 'total'     => $dataCode['totalCode']
             ); 

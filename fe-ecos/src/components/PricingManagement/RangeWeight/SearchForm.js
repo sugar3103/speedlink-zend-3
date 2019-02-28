@@ -12,17 +12,38 @@ class SearchForm extends Component {
   constructor(props){
     super(props);
     this.state = {
-      disabled: false,
+      customer_disable: true,
       category_code: null,
       carrier_id: null
     }
   }
 
+  hanldeChangeType = value => {
+    if (value === 2) {
+      this.setState({
+        customer_disable: false
+      });
+    } else {
+      this.setState({
+        customer_disable: true
+      })
+    }
+  }
+
   componentDidMount() {
-    this.props.getCustomerList();
+    const { messages } = this.props.intl;
+        //get customer
+        const paramCustomer = {
+            field: ['id', 'name'],
+            offset: {
+                limit: 0
+            }
+        }
+    this.props.getCustomerList(paramCustomer, messages);
   }
   
   onChangeCategory = value => {
+    const { messages } = this.props.intl;
     this.setState({
       category_code: value
     });
@@ -30,49 +51,40 @@ class SearchForm extends Component {
       type : "carrier_id",
       category_code : value
     }
-    this.props.getCarrierCodeByCondition(params);
-    params = {
-      type : "carrier_id",
-      category_code : value,
-      carrier_id: 0
-    }
-    this.props.getServiceCodeByCondition(params);
-    params = {
-      type : "carrier_id",
-      category_code : value,
-      carrier_id: 0,
-      service_id: [0]
-    }
-    this.props.getShipmentTypeCodeByCondition(params);
+    this.props.getCarrierCodeByCondition(params, messages);
+
+    params = { ...params, carrier_id: 0 }
+    this.props.getServiceCodeByCondition(params, messages);
+
+    params = { ...params, service_id: [0] }
+    this.props.getShipmentTypeCodeByCondition(params, messages);
   }
 
   onChangeCarrier = value => {
+    const { messages } = this.props.intl;
     this.setState({
       carrier_id: value
     });
     let params = {
       type : "service_id",
-      carrier_id : value,
-      category_code : this.state.category_code
+      category_code : this.state.category_code,
+      carrier_id : value
     }
-    this.props.getServiceCodeByCondition(params);
-    params = {
-      type : "carrier_id",
-      category_code : value,
-      carrier_id: 0,
-      service_id: [0]
-    }
-    this.props.getShipmentTypeCodeByCondition(params);
+    this.props.getServiceCodeByCondition(params, messages);
+
+    params = { ...params, service_id: [0] }
+    this.props.getShipmentTypeCodeByCondition(params, messages);
   }
 
   onChangeService = value => {
+    const { messages } = this.props.intl;
     let params = {
       type : "shipment_type_id",
       category_code : this.state.category_code,
       carrier_id : this.state.carrier_id,
       service_id : [ value ] 
     }
-    this.props.getShipmentTypeCodeByCondition(params);
+    this.props.getShipmentTypeCodeByCondition(params, messages);
   }
 
   showOptionCarrier = (items) => {
@@ -124,19 +136,6 @@ class SearchForm extends Component {
     return result;
   }
 
-  hanldeChangeType = value => {
-    if (value === 1) {
-      this.setState({
-        disabled: true
-      });
-    } else {
-      this.setState({
-        disabled: false
-      })
-    }
-  }
-
-
   render() {
     const { handleSubmit, reset,  customerCode, CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition } = this.props;
     const { messages } = this.props.intl;
@@ -164,7 +163,7 @@ class SearchForm extends Component {
             <div className="form__form-group-field">
               <Field name="customer" component={renderSelectField} type="text"
                      options={customerCode && this.showOptionCustomer(customerCode)}
-                     disabled={this.state.disabled}
+                     disabled={this.state.customer_disable}
               />
             </div>
           </div>

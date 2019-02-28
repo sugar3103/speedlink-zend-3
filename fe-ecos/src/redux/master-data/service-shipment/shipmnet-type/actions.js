@@ -107,9 +107,9 @@ export const deleteShipmentTypeItemError = (error) => ({
 });
 
 
-export const getCarrierCodeByCondition = (params) => ({
+export const getCarrierCodeByCondition = (params, messages) => ({
   type: CARRIER_GET_CODE_BY_CONDITION,
-  payload: { params }
+  payload: { params, messages }
 });
 
 export const getCarrierCodeByConditionSuccess = ( CarrierCodeByCondition) => ({
@@ -122,9 +122,9 @@ export const getCarrierCodeByConditionError = (error) => ({
   payload: error
 });
 
-export const getServiceCodeByCondition = (params) => ({
+export const getServiceCodeByCondition = (params, messages) => ({
   type: SERVICE_GET_CODE_BY_CONDITION,
-  payload: { params }
+  payload: { params, messages }
 });
 
 export const getServiceCodeByConditionSuccess = (ServiceCodeByCondition) => ({
@@ -137,9 +137,9 @@ export const getServiceCodeByConditionError = (error) => ({
   payload: error
 });
 
-export const getShipmentTypeCodeByCondition = (params) => ({
+export const getShipmentTypeCodeByCondition = (params, messages) => ({
   type: SHIPMENT_TYPE_GET_CODE_BY_CONDITION,
-  payload: { params }
+  payload: { params, messages }
 });
 
 export const getShipmentTypeCodeByConditionSuccess = (codeByCondition) => ({

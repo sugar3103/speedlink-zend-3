@@ -18,15 +18,36 @@ class ActionForm extends Component {
     super(props);
     this.state = {
       modalType: '',
-      disabled: false
+      customer_disabled: true,
+    }
+  }
+
+  hanldeChangeType = value => {
+    this.props.change('customer', '');
+    if (value === 2) {
+      this.setState({
+        customer_disabled: false
+      });
+    } else {
+      this.setState({
+        customer_disabled: true
+      })
     }
   }
 
   componentDidMount() {
+    const { messages } = this.props.intl;
     const data = this.props.modalData;
+    const paramCustomer = {
+        field: ['id', 'name'],
+        offset: {
+            limit: 0
+        }
+    }
+
     if (data) {
       this.props.initialize(data);
-      this.props.getCustomerList();
+      this.props.getCustomerList(paramCustomer, messages);
       if(data.category){
         this.setState({
           category_code: data.category
@@ -39,7 +60,7 @@ class ActionForm extends Component {
         type : "carrier_id",
         category_code : data.category
       }
-      this.props.getCarrierCodeByCondition(paramsCarier);
+      this.props.getCarrierCodeByCondition(paramsCarier, messages);
     }
 
     if (data && data.service_id) {
@@ -48,7 +69,7 @@ class ActionForm extends Component {
         carrier_id : data.carrier_id,
         category_code :  data.category
       }
-      this.props.getServiceCodeByCondition(paramsCity);
+      this.props.getServiceCodeByCondition(paramsCity, messages);
     }
 
     if (data && data.shipment_type_id) {
@@ -58,7 +79,7 @@ class ActionForm extends Component {
         carrier_id :  data.carrier_id,
         service_id : [ data.service_id ]
       }
-      this.props.getShipmentTypeCodeByCondition(paramsShipmenttype);
+      this.props.getShipmentTypeCodeByCondition(paramsShipmenttype, messages);
     }
 
     if (data && data.origin_country_id) {
@@ -70,7 +91,7 @@ class ActionForm extends Component {
           id: data.origin_country_id
         }
       }
-      this.props.getOriginCountryList(paramsCountry);
+      this.props.getOriginCountryList(paramsCountry, messages, 'editview');
     }
     if (data && data.origin_city_id) {
       let paramsCity = {
@@ -82,7 +103,7 @@ class ActionForm extends Component {
           country: data.origin_country_id
         }
       }
-      this.props.getOriginCityList(paramsCity);
+      this.props.getOriginCityList(paramsCity, messages, 'editview');
     }
 
     if (data && data.origin_district_id) {
@@ -95,7 +116,7 @@ class ActionForm extends Component {
           city: data.origin_city_id
         }
       }
-      this.props.getOriginDistrictList(paramsDistrict);
+      this.props.getOriginDistrictList(paramsDistrict, messages, 'editview');
     }
 
     if (data && data.origin_ward_id) {
@@ -108,7 +129,7 @@ class ActionForm extends Component {
           district: data.origin_district_id
         }
       }
-      this.props.getOriginWardList(paramsWard);
+      this.props.getOriginWardList(paramsWard, messages, 'editview');
     }
 
     if (data && data.destination_country_id) {
@@ -120,7 +141,7 @@ class ActionForm extends Component {
           id: data.destination_country_id
         }
       }
-      this.props.getDestinationCountryList(paramsCountry);
+      this.props.getDestinationCountryList(paramsCountry, messages, 'editview');
     }
     if (data && data.destination_city_id) {
       let paramsCity = {
@@ -132,7 +153,7 @@ class ActionForm extends Component {
           country: data.destination_country_id
         }
       }
-      this.props.getDestinationCityList(paramsCity);
+      this.props.getDestinationCityList(paramsCity, messages, 'editview');
     }
 
     if (data && data.destination_district_id) {
@@ -145,7 +166,7 @@ class ActionForm extends Component {
           city: data.destination_city_id
         }
       }
-      this.props.getDestinationDistrictList(paramsDistrict);
+      this.props.getDestinationDistrictList(paramsDistrict, messages, 'editview');
     }
 
     if (data && data.destination_ward_id) {
@@ -158,7 +179,7 @@ class ActionForm extends Component {
           district: data.destination_district_id
         }
       }
-      this.props.getDestinationWardList(paramsWard);
+      this.props.getDestinationWardList(paramsWard, messages, 'editview');
     }
   }
 
@@ -171,6 +192,7 @@ class ActionForm extends Component {
   }
 
   onChangeCategory = value => {
+    const { messages } = this.props.intl;
     this.setState({
       category_code: value
     });
@@ -178,23 +200,17 @@ class ActionForm extends Component {
       type : "carrier_id",
       category_code : value
     }
-    this.props.getCarrierCodeByCondition(params);
-    params = {
-      type : "carrier_id",
-      category_code : value,
-      carrier_id: 0
-    }
-    this.props.getServiceCodeByCondition(params);
-    params = {
-      type : "carrier_id",
-      category_code : value,
-      carrier_id: 0,
-      service_id: [0]
-    }
-    this.props.getShipmentTypeCodeByCondition(params);
+    this.props.getCarrierCodeByCondition(params, messages);
+  
+    params = { ...params,carrier_id: 0}
+    this.props.getServiceCodeByCondition(params, messages);
+   
+    params = { ...params, service_id: [0] }
+    this.props.getShipmentTypeCodeByCondition(params, messages);
   }
 
   onChangeCarrier = value => {
+    const { messages } = this.props.intl;
     this.setState({
       carrier_id: value
     });
@@ -203,24 +219,21 @@ class ActionForm extends Component {
       carrier_id : value,
       category_code : this.state.category_code
     }
-    this.props.getServiceCodeByCondition(params);
-    params = {
-      type : "carrier_id",
-      category_code : value,
-      carrier_id: 0,
-      service_id: [0]
-    }
-    this.props.getShipmentTypeCodeByCondition(params);
+    this.props.getServiceCodeByCondition(params, messages);
+   
+    params = { ...params, service_id: [0] }
+    this.props.getShipmentTypeCodeByCondition(params, messages);
   }
 
   onChangeService = value => {
+    const { messages } = this.props.intl;
     let params = {
       type : "shipment_type_id",
       category_code : this.state.category_code,
       carrier_id : this.state.carrier_id,
       service_id : [ value ] 
     }
-    this.props.getShipmentTypeCodeByCondition(params);
+    this.props.getShipmentTypeCodeByCondition(params, messages);
   }
 
   showOptionCarrier = (items) => {
@@ -271,209 +284,109 @@ class ActionForm extends Component {
   }
 
   onChangeOriginCountry = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
         limit: 0
       },
       query: {
-        country: value
+        country: value ? value : 0
       }
     }
-    this.props.getOriginCityList(params);
-    params = {
-      query: {
-        city: 0
-      }
-    }
-    this.props.getOriginDistrictList(params);
-    params = {
-      query: {
-        district: 0
-      }
-    }
-    this.props.getOriginWardList(params);
+    this.props.change('origin_city',null);
+    this.props.change('origin_district',null);
+    this.props.change('origin_ward',null);
+    this.props.getOriginCityList(params, messages, 'onchange');
   }
 
   onChangeOriginCity = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
         limit: 0
       },
       query: {
-        city: value
+        city: value ? value : 0
       }
     }
-    this.props.getOriginDistrictList(params);
-    params = {
-      query: {
-        district: 0
-      }
-    }
-    this.props.getOriginWardList(params);
+    this.props.change('origin_district',null);
+    this.props.change('origin_ward',null);
+    this.props.getOriginDistrictList(params, messages, 'onchange');
   }
 
   onChangeOriginDistrict = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
         limit: 0
       },
       query: {
-        district: value
+        district: value ? value : 0
       }
     }
-    this.props.getOriginWardList(params);
+    this.props.change('origin_ward',null);
+    this.props.getOriginWardList(params, messages, 'onchange');
   }
 
   onChangeDestinationCountry = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
         limit: 0
       },
       query: {
-        country: value
+        country: value ? value : 0
       }
     }
-    this.props.getDestinationCityList(params);
-    params = {
-      query: {
-        city: 0
-      }
-    }
-    this.props.getDestinationDistrictList(params);
-    params = {
-      query: {
-        district: 0
-      }
-    }
-    this.props.getDestinationWardList(params);
+    this.props.change('destination_city',null);
+    this.props.change('destination_district',null);
+    this.props.change('destination_ward',null);
+    this.props.getDestinationCityList(params, messages, 'onchange');
   }
 
   onChangeDestinationCity = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
         limit: 0
       },
       query: {
-        city: value
+        city: value ? value : 0
       }
     }
-    this.props.getDestinationDistrictList(params);
-    params = {
-      query: {
-        district: 0
-      }
-    }
-    this.props.getDestinationWardList(params);
+    this.props.change('destination_district',null);
+    this.props.change('destination_ward',null);
+    this.props.getDestinationDistrictList(params, messages, 'onchange');
   }
 
   onChangeDestinationDistrict = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
         limit: 0
       },
       query: {
-        district: value
+        district: value ? value : 0
       }
     }
-    this.props.getDestinationWardList(params);
+    this.props.change('destination_ward',null);
+    this.props.getDestinationWardList(params, messages, 'onchange');
   }
 
-  showOptionsOriginCountry = (country_items) => {
-    const countries = country_items.map(country_item => {
+  showOptions = (items) => {
+    const countries = items.map(item => {
       return {
-        'value': country_item.id,
-        'label': country_item.name
+        'value': item.id,
+        'label': item.name
       }
     });
     return countries;
-  }
-
-  showOptionsOriginCity = (city_items) => {
-    const cities = city_items.map(city_item => {
-      return {
-        'value': city_item.id,
-        'label': city_item.name
-      }
-    });
-    return cities;
-  }
-
-  showOptionsOriginDistrict = (district_items) => {
-    const districts = district_items.map(district_item => {
-      return {
-        'value': district_item.id,
-        'label': district_item.name
-      }
-    });
-    return districts;
-  }
-
-  showOptionsOriginWard = (ward_items) => {
-    const wards = ward_items.map(ward_item => {
-      return {
-        'value': ward_item.id,
-        'label': ward_item.name
-      }
-    });
-    return wards;
-  }
-  showOptionsDestinationCountry = (country_items) => {
-    const countries = country_items.map(country_item => {
-      return {
-        'value': country_item.id,
-        'label': country_item.name
-      }
-    });
-    return countries;
-  }
-
-  showOptionsDestinationCity = (city_items) => {
-    const cities = city_items.map(city_item => {
-      return {
-        'value': city_item.id,
-        'label': city_item.name
-      }
-    });
-    return cities;
-  }
-
-  showOptionsDestinationDistrict = (district_items) => {
-    const districts = district_items.map(district_item => {
-      return {
-        'value': district_item.id,
-        'label': district_item.name
-      }
-    });
-    return districts;
-  }
-
-  showOptionsDestinationWard = (ward_items) => {
-    const wards = ward_items.map(ward_item => {
-      return {
-        'value': ward_item.id,
-        'label': ward_item.name
-      }
-    });
-    return wards;
-  }
-
-
- hanldeChangeType = value => {
-    if (value === 1) {
-      this.setState({
-        disabled: true
-      });
-    } else {
-      this.setState({
-        disabled: false
-      })
-    }
   }
 
   toggleModal = () => {
@@ -481,7 +394,6 @@ class ActionForm extends Component {
   };
   componentWillReceiveProps(nextProps) {
       if (nextProps && nextProps.modalData) {
-      // const data = nextProps.modalData;
     }
   }
   changeTypeModal = () => {
@@ -528,7 +440,6 @@ class ActionForm extends Component {
                     { value: 1, label: messages['pri_man.public'] },
                     { value: 2, label: messages['pri_man.customer'] }
                     ]} 
-                    messages={messages}
                     onChange={this.hanldeChangeType}
                     disabled={disabled} 
                   />
@@ -546,8 +457,7 @@ class ActionForm extends Component {
                   type="text"
                   options={customerCode && this.showOptionsCustomer(customerCode)}
                   placeholder={messages['pri_man.customer']}
-                  disabled={this.state.disabled}
-                  messages={messages}
+                  disabled={this.state.customer_disabled}
                 />
               </div>
             </div>
@@ -561,7 +471,6 @@ class ActionForm extends Component {
                     name="code"
                     component={CustomField}
                     type="text"
-                    messages={messages}
                     disabled={disabled} 
                   />
                 </div>
@@ -575,7 +484,6 @@ class ActionForm extends Component {
                   { value: 1, label: messages['active'] },
                   { value: 0, label: messages['inactive'] }
                   ]}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>
@@ -591,7 +499,6 @@ class ActionForm extends Component {
                       { value: 'Outbound', label: messages['outbound'] },
                       { value: 'Domestic', label: messages['domestic'] }
                       ]}
-                      messages={messages}
                       disabled={disabled} 
                       onChange={this.onChangeCategory}
                     />
@@ -609,7 +516,6 @@ class ActionForm extends Component {
                   type="text"
                   options={CarrierCodeByCondition && this.showOptionCarrier(CarrierCodeByCondition)}
                   onChange={this.onChangeCarrier}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>
@@ -626,7 +532,6 @@ class ActionForm extends Component {
                   type="text"
                   options={ServiceCodeByCondition && this.showOptionService(ServiceCodeByCondition)}
                   onChange={this.onChangeService}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>
@@ -642,7 +547,6 @@ class ActionForm extends Component {
                   component={renderSelectField}
                   type="text"
                   options={codeByCondition && this.showOptionShipmenttype(codeByCondition)}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>
@@ -656,9 +560,8 @@ class ActionForm extends Component {
                   name="origin_country_id"
                   component={renderSelectField}
                   type="text"
-                  options={origin_countrys && this.showOptionsOriginCountry(origin_countrys)}
+                  options={origin_countrys && this.showOptions(origin_countrys)}
                   onChange={this.onChangeOriginCountry}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>
@@ -672,9 +575,8 @@ class ActionForm extends Component {
                   name="origin_city_id"
                   component={renderSelectField}
                   type="text"
-                  options={origin_citys && this.showOptionsOriginCity(origin_citys)}
+                  options={origin_citys && this.showOptions(origin_citys)}
                   onChange={this.onChangeOriginCity}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>
@@ -688,9 +590,8 @@ class ActionForm extends Component {
                   name="origin_district_id"
                   component={renderSelectField}
                   type="text"
-                  options={origin_districts && this.showOptionsOriginDistrict(origin_districts)}
+                  options={origin_districts && this.showOptions(origin_districts)}
                   onChange={this.onChangeOriginDistrict}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>
@@ -704,9 +605,8 @@ class ActionForm extends Component {
                   name="origin_ward_id"
                   component={renderSelectField}
                   type="text"
-                  options={origin_wards && this.showOptionsOriginWard(origin_wards)}
+                  options={origin_wards && this.showOptions(origin_wards)}
                   onChange={this.onChangeOriginWard}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>
@@ -720,9 +620,8 @@ class ActionForm extends Component {
                   name="destination_country_id"
                   component={renderSelectField}
                   type="text"
-                  options={destination_countrys && this.showOptionsDestinationCountry(destination_countrys)}
+                  options={destination_countrys && this.showOptions(destination_countrys)}
                   onChange={this.onChangeDestinationCountry}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>
@@ -736,9 +635,8 @@ class ActionForm extends Component {
                     name="destination_city_id"
                     component={renderSelectField}
                     type="text"
-                    options={destination_citys && this.showOptionsDestinationCity(destination_citys)}
+                    options={destination_citys && this.showOptions(destination_citys)}
                     onChange={this.onChangeDestinationCity}
-                    messages={messages}
                     disabled={disabled} 
                   />
                 </div>
@@ -752,9 +650,8 @@ class ActionForm extends Component {
                   name="destination_district_id"
                   component={renderSelectField}
                   type="text"
-                  options={destination_districts && this.showOptionsDestinationDistrict(destination_districts)}
+                  options={destination_districts && this.showOptions(destination_districts)}
                   onChange={this.onChangeDestinationDistrict}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>
@@ -768,9 +665,8 @@ class ActionForm extends Component {
                   name="destination_ward_id"
                   component={renderSelectField}
                   type="text"
-                  options={destination_wards && this.showOptionsDestinationWard(destination_wards)}
+                  options={destination_wards && this.showOptions(destination_wards)}
                   onChange={this.onChangeDestinationWard}
-                  messages={messages}
                   disabled={disabled} 
                 />
               </div>
@@ -853,7 +749,7 @@ ActionForm.propTypes = {
   getDestinationWardList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({zoneCode, carrier, service, shipment_type, customer}) => {  
+const mapStateToProps = ({zoneCode,shipment_type, customer}) => {  
   const { errors, modalData, modalType } = zoneCode;
   const { CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition  } = shipment_type;
   const customerCode = customer.items;

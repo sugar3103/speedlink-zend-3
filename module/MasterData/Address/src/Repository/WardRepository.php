@@ -41,8 +41,12 @@ class WardRepository extends EntityRepository {
                 w.district_id,
                 w.postal_code,
                 w.status,
-                w.created_by,
-                w.created_at
+                cr.username as created_by,
+                w.created_at,
+                up.username as updated_by,
+                w.updated_at,
+                CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
+                CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated
             ")->andWhere("w.is_deleted = 0")
             ->groupBy('w.id');
             if($limit){
@@ -79,6 +83,10 @@ class WardRepository extends EntityRepository {
                 'alias' => 'w.name',
                 'operator' => 'contains'
             ],
+            'name_en' => [
+                'alias' => 'w.name_en',
+                'operator' => 'contains'
+            ],
             'created_at' => [
                 'alias' => 'w.created_at',
                 'operator' => 'contains'
@@ -91,7 +99,9 @@ class WardRepository extends EntityRepository {
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(Ward::class, 'w');
+        $queryBuilder->from(Ward::class, 'w')
+        ->leftJoin('w.join_created', 'cr')
+        ->leftJoin('w.join_updated', 'up');
 
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

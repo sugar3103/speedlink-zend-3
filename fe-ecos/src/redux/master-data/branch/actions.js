@@ -12,7 +12,20 @@ import {
   BRANCH_DELETE_ITEM,
   BRANCH_DELETE_ITEM_SUCCESS,
   BRANCH_DELETE_ITEM_ERROR,
-  BRANCH_CHANGE_TYPE_MODAL
+  BRANCH_CHANGE_TYPE_MODAL,
+  BRANCH_COUNTRY_GET_LIST,
+  BRANCH_COUNTRY_GET_LIST_SUCCESS,
+  BRANCH_COUNTRY_GET_LIST_ERROR,
+  BRANCH_CITY_GET_LIST,
+  BRANCH_CITY_GET_LIST_SUCCESS,
+  BRANCH_CITY_GET_LIST_ERROR,
+  BRANCH_DISTRICT_GET_LIST,
+  BRANCH_DISTRICT_GET_LIST_SUCCESS,
+  BRANCH_DISTRICT_GET_LIST_ERROR,
+  BRANCH_WARD_GET_LIST,
+  BRANCH_WARD_GET_LIST_SUCCESS,
+  BRANCH_WARD_GET_LIST_ERROR
+
 } from '../../../constants/actionTypes';
 
 export const toggleBranchModal = (type, data) => ({
@@ -81,3 +94,65 @@ export const deleteBranchItemError = (error) => ({
   type: BRANCH_DELETE_ITEM_ERROR,
   payload: error
 });
+
+export const getCountryBranchList = (params, messages, types) => ({
+  type: BRANCH_COUNTRY_GET_LIST,
+  payload: { params, messages, types }
+});
+
+export const getCountryBranchListSuccess = (countries) => ({
+  type: BRANCH_COUNTRY_GET_LIST_SUCCESS,
+  payload: { countries }
+});
+
+export const getCountryBranchListError = (error) => ({
+  type: BRANCH_COUNTRY_GET_LIST_ERROR,
+  payload: error
+});
+
+export const getCityBranchList = (params, messages, types) => ({
+  type: BRANCH_CITY_GET_LIST,
+  payload: { params, messages, types }
+});
+
+export const getCityBranchListSuccess = (cities, types) => ({
+  type: BRANCH_CITY_GET_LIST_SUCCESS,
+  payload: { cities, types }
+});
+
+export const getCityBranchListError = (error) => ({
+  type: BRANCH_CITY_GET_LIST_ERROR,
+  payload: error
+});
+
+export const getDistrictBranchList = (params, messages, types) => ({
+  type: BRANCH_DISTRICT_GET_LIST,
+  payload: { params, messages, types }
+});
+
+export const getDistrictBranchListSuccess = (districts, types) => ({
+  type: BRANCH_DISTRICT_GET_LIST_SUCCESS,
+  payload: { districts, types }
+});
+
+export const getDistrictBranchListError = (error) => ({
+  type: BRANCH_DISTRICT_GET_LIST_ERROR,
+  payload: error
+});
+
+export const getWardBranchList = (params, messages, types) => ({
+  type: BRANCH_WARD_GET_LIST,
+  payload: { params, messages, types }
+});
+
+export const getWardBranchListSuccess = (wards, types) => ({
+  type: BRANCH_WARD_GET_LIST_SUCCESS,
+  payload: { wards, types }
+});
+
+export const getWardBranchListError = (error) => ({
+  type: BRANCH_WARD_GET_LIST_ERROR,
+  payload: error
+});
+
+

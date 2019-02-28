@@ -39,8 +39,9 @@ class CountryManager  {
             $country->setIsoCode($data['iso_code']);
             // $country->setRefAsBy($data['ref_as_by']);
 
-            $currentDate = date('Y-m-d H:i:s');
-            $country->setCreatedAt($currentDate);
+           
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $country->setCreatedAt($addTime->format('Y-m-d H:i:s'));
             $country->setCreatedBy($user->id);
   
             // add the entity to the entity manager.
@@ -80,10 +81,9 @@ class CountryManager  {
             $country->setDescriptionEn($data['description_en']);
             $country->setStatus($data['status']);
             $country->setIsoCode($data['iso_code']);
-            // $country->setRefAsBy($data['ref_as_by']);
-
-            $currentDate = date('Y-m-d H:i:s');
-            $country->setUpdatedAt($currentDate);
+            
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $country->setUpdatedAt($addTime->format('Y-m-d H:i:s'));           
             $country->setUpdatedBy($user->id);
            
             // add the entity to the entity manager.
@@ -162,15 +162,11 @@ class CountryManager  {
 
             // $adapter = new DoctrineAdapter($ormPaginator);  
             $countries = $ormPaginator->getIterator()->getArrayCopy();
-            //set countRow default
-            $countRow = 1;
             
             foreach ($countries as &$country) {//loop
-
                 //set created_at
-                $country['created_at'] =  ($country['created_at']) ? Utils::checkDateFormat($country['created_at'],'d/m/Y') : '';
-
-                $countRow++;
+                $country['created_at'] =  ($country['created_at']) ? Utils::checkDateFormat($country['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $country['updated_at'] =  ($country['updated_at']) ? Utils::checkDateFormat($country['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
             }
            
         }

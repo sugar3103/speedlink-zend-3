@@ -44,16 +44,15 @@ class StatusController extends CoreController {
                 1 => 'status'
             ];
 
-            list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);                        
+            list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);                        
             
             //get list User by condition
             $dataStatus = $this->statusManager->getListStatusByCondition($start, $limit, $sortField, $sortDirection,$filters);            
             
-            $result = ($dataStatus['listStatus']) ? $dataStatus['listStatus'] : [] ;
-            
-            $this->error_code = 1;
+            $result = $this->filterByField($dataStatus['listStatus'], $fields);          
+                        
             $this->apiResponse =  array(
-                'message'   => "Success",
+                'message'   => "SUCCESS",
                 'data'      => $result,
                 'total'     => $dataStatus['totalStatus']
             );                         
@@ -78,9 +77,7 @@ class StatusController extends CoreController {
                 $data = $form->getData();
                 // add status.
                 $this->statusManager->addStatus($data,$user);
-
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have added a status!";
+                $this->apiResponse['message'] = "ADD_SUCCESS_STATUS";
             } else {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = "Error";
@@ -93,35 +90,35 @@ class StatusController extends CoreController {
 
     public function editAction() 
     {
-        $user = $this->tokenPayload;
-        $data = $this->getRequestData();
-        if(isset($data['id'])) {
-            // Find existing status in the database.
-            $status = $this->entityManager->getRepository(Status::class)->findOneBy(array('id' => $data['id']));    
-            if ($status) {
-                //Create Form Status
-                $form = new StatusForm('update', $this->entityManager, $status);
-                $form->setData($data);
-                //validate form
-                if ($form->isValid()) {
-                    // get filtered and validated data
-                    $data = $form->getData();
-                    // update status.
-                    $this->statusManager->updateStatus($status, $data,$user);
-
-                    $this->error_code = 1;
-                    $this->apiResponse['message'] = "You have modified status!";
+        if ($this->getRequest()->isPost()) {
+            $user = $this->tokenPayload;
+            $data = $this->getRequestData();
+            if(isset($data['id'])) {
+                // Find existing status in the database.
+                $status = $this->entityManager->getRepository(Status::class)->findOneBy(array('id' => $data['id']));    
+                if ($status) {
+                    //Create Form Status
+                    $form = new StatusForm('update', $this->entityManager, $status);
+                    $form->setData($data);
+                    //validate form
+                    if ($form->isValid()) {
+                        // get filtered and validated data
+                        $data = $form->getData();
+                        // update status.
+                        $this->statusManager->updateStatus($status, $data,$user);
+                        $this->apiResponse['message'] = "MODIFIED_SUCCESS_STATUS";
+                    } else {
+                        $this->error_code = 0;
+                        $this->apiResponse['data'] = $form->getMessages(); 
+                    }      
                 } else {
                     $this->error_code = 0;
-                    $this->apiResponse['data'] = $form->getMessages(); 
-                }      
+                    $this->apiResponse['message'] = "NOT_FOUND";
+                }
             } else {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = "Status Not Found";
+                $this->apiResponse['message'] = "STATUS_REQUEST_ID";
             }
-        } else {
-            $this->error_code = 0;
-            $this->apiResponse['message'] = "Status request Id!";
         }
 
         return $this->createResponse();
@@ -129,30 +126,30 @@ class StatusController extends CoreController {
 
     public function deleteAction()
     {
-        $data = $this->getRequestData();
-        if(isset($data['ids']) && count($data['ids']) > 0) {
-            try {
-                foreach ($data['ids'] as $id) {
-                    $status = $this->entityManager->getRepository(Status::class)->findOneBy(array('id' => $id));    
-                    if ($status == null) {
-                        $this->error_code = 0;
-                        $this->apiResponse['message'] = "Status Not Found";
-                        exit();
-                    } else {
-                        $this->statusManager->removeStatus($status);
-                    }  
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequestData();
+            if(isset($data['ids']) && count($data['ids']) > 0) {
+                try {
+                    foreach ($data['ids'] as $id) {
+                        $status = $this->entityManager->getRepository(Status::class)->findOneBy(array('id' => $id));    
+                        if ($status == null) {
+                            $this->error_code = 0;
+                            $this->apiResponse['message'] = "NOT_FOUND";                        
+                        } else {
+                            $this->statusManager->removeStatus($status);
+                        }  
+                    }
+                    
+                    $this->apiResponse['message'] = "DELETE_SUCCESS_STATUS";
+                } catch (\Throwable $th) {
+                    $this->error_code = 0;
+                    $this->apiResponse['message'] = "STATUS_REQUEST_ID";
                 }
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have deleted status!";
-            } catch (\Throwable $th) {
+            } else {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = "Status request Id!";
+                $this->apiResponse['message'] = "STATUS_REQUEST_ID";
             }
-        } else {
-            $this->error_code = 0;
-            $this->apiResponse['message'] = "Status request Id!";
         }
-
         return $this->createResponse();
     }
 }

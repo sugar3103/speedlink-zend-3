@@ -95,7 +95,7 @@ class AuthManager
 
     public function filterAccess($controllerName, $actionName)
     {
-        $result = self::ACCESS_GRANTED;
+        $result = 0;
 
         $mode = isset($this->config['options']['mode']) ? $this->config['options']['mode'] : 'restrictive';
 
@@ -106,16 +106,17 @@ class AuthManager
             $items = $this->config['controllers'][$controllerName];   
             
             foreach ($items as $item) {
+                if($result == self::ACCESS_GRANTED) break;
                 $actionList = $item['actions'];                
                 $allow = $item['allow'];
                 if (is_array($actionList) && in_array($actionName, $actionList) ||
                     $actionList == '*') {
                     if ($allow == '*')
                         // anyone is allowed to see the page.
-                         $result = self::ACCESS_GRANTED;
+                        $result = self::ACCESS_GRANTED;
                     elseif (!$this->authService->hasIdentity())
                         // ony authenticated user is allowed to see the page
-                        return self::AUTH_REQUIRED;
+                        $result = self::AUTH_REQUIRED;
 
                     if ($allow == '@')
                         // any authenticated user is allowed to see the page
@@ -129,7 +130,8 @@ class AuthManager
                             $result = self::ACCESS_DENIED;
                     } elseif (substr($allow, 0, 1) == '+') { 
                         // only the user with this permission is allowed to see the page
-                        $permission = substr($allow, 1);                                              
+                        $permission = substr($allow, 1);    
+                            
                         if ($this->rbacManager->isGranted(null, $permission))
                             $result = self::ACCESS_GRANTED;
                         else

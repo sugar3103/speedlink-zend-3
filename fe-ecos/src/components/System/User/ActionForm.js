@@ -1,11 +1,12 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { Button, ButtonToolbar, Row, Col } from 'reactstrap';
 import EyeIcon from 'mdi-react/EyeIcon';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleUserModal, getRoleList,changeTypeUserModal } from '../../../redux/actions';
+import { toggleUserModal, getRoleList, changeTypeUserModal } from '../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../containers/Shared/form/CustomField';
+import Can from '../../../containers/Shared/Can';
 import renderRadioButtonField from '../../../containers/Shared/form/RadioButton';
 import renderMultiSelectField from '../../../containers/Shared/form/MultiSelect';
 import validate from './validateActionForm';
@@ -24,6 +25,15 @@ class ActionForm extends PureComponent {
     };
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.modalType !== this.props.modalType) {
+      this.setState({
+        modalType: prevProps.modalType
+      });
+    }
+  }
+
+  
   componentDidMount() {
     this.props.getRoleList();
     const data = this.props.modalData;
@@ -77,8 +87,8 @@ class ActionForm extends PureComponent {
   }
 
   render() {
-    const { messages } = this.props.intl;
-    const { handleSubmit, modalData,modalType, dataUser } = this.props;
+    const { messages, locale } = this.props.intl;
+    const { handleSubmit, modalData, modalType } = this.props;
     const { items } = this.props.role;
     let className = 'success';
     let title = messages['user.add-new'];
@@ -117,7 +127,6 @@ class ActionForm extends PureComponent {
                     component={CustomField}
                     type="text"
                     placeholder={messages['user.username']}
-                    messages={messages}
                     disabled={disabled}
                   />
                 </div>
@@ -132,7 +141,6 @@ class ActionForm extends PureComponent {
                     component={CustomField}
                     type="text"
                     placeholder={messages['user.email']}
-                    messages={messages}
                     disabled={disabled}
                   />
                 </div>
@@ -150,6 +158,7 @@ class ActionForm extends PureComponent {
                     type="text"
                     placeholder={messages['user.firstname']}
                     disabled={disabled}
+                    messages={messages}
                   />
                 </div>
               </div>
@@ -164,6 +173,7 @@ class ActionForm extends PureComponent {
                     type="text"
                     placeholder={messages['user.lastname']}
                     disabled={disabled}
+                    messages={messages}
                   />
                 </div>
               </div>
@@ -179,7 +189,6 @@ class ActionForm extends PureComponent {
                     component={CustomField}
                     type={this.state.showPassword ? 'text' : 'password'}
                     placeholder={messages['user.password']}
-                    messages={messages}
                     disabled={disabled}
                   />
                   <button
@@ -199,7 +208,6 @@ class ActionForm extends PureComponent {
                     component={CustomField}
                     type={this.state.showConfirmPassword ? 'text' : 'password'}
                     placeholder={messages['user.password']}
-                    messages={messages}
                     disabled={disabled}
                   />
                   <button
@@ -215,7 +223,7 @@ class ActionForm extends PureComponent {
                 <span className="form__form-group-label">{messages['user.status']}</span>
                 <div className="form__form-group-field">
                   <Field
-                    name="status"
+                    name="is_active"
                     component={renderRadioButtonField}
                     label={messages['user.active']}
                     radioValue={1}
@@ -223,7 +231,7 @@ class ActionForm extends PureComponent {
                     disabled={disabled}
                   />
                   <Field
-                    name="status"
+                    name="is_active"
                     component={renderRadioButtonField}
                     label={messages['user.inactive']}
                     radioValue={0}
@@ -239,21 +247,48 @@ class ActionForm extends PureComponent {
                     name="roles"
                     component={renderMultiSelectField}
                     options={items && this.showOptions(items)}
-                    messages={messages}
                     disabled={disabled}
                   />
                 </div>
               </div>
             </Col>
           </Row>
+          {modalData &&
+            <Fragment>
+              <hr />
+              <Row>
+                <Col md={6}>
+                  <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name_created}</span>
+                  <br />
+                  <span><i className="label-info-data">{messages['created-at']}:</i>
+                    <Moment fromNow locale={locale}>{new Date(modalData.created_at)}</Moment>
+                  </span>
+                </Col>
+                {modalData.updated_at &&
+                  <Col md={6}>
+                    <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.full_name_updated}</span>
+                    <br />
+                    <span><i className="label-info-data">{messages['updated-at']}:</i>
+                      <Moment fromNow locale={locale}>{new Date(modalData.updated_at)}</Moment>
+
+                    </span>
+                  </Col>
+                }
+              </Row>
+            </Fragment>
+          }
         </div>
-        
+
         <ButtonToolbar className="modal__footer">
           {this.state.modalType === MODAL_VIEW &&
             <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
           }
-          <Button color={className} type="submit">{ modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
+          <Can user={this.props.authUser.user} permission="user" action="edit" own={modalData && modalData.username}>
+            <Button color={className} type="submit">{modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
+          </Can>
+         
         </ButtonToolbar>
+
       </form>
     );
   }
@@ -267,13 +302,14 @@ ActionForm.propTypes = {
   changeTypeUserModal: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ users }) => {
+const mapStateToProps = ({ users, authUser }) => {
   const { user, role } = users;
-  const { modalData,modalType } = user;
+  const { modalData, modalType } = user;
   return {
     modalData,
     modalType,
-    role
+    role,
+    authUser
   }
 }
 

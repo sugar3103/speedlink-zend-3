@@ -75,6 +75,16 @@ class UserManager {
         $this->config = $config;
     }   
 
+    private function getReferenced(&$user, $data,$assignee, $mode = '')
+    {
+        $user_data = $this->entityManager->getRepository(User::class)->find($assignee->id);
+        if ($user_data == null) {
+            throw new \Exception('Not found User by ID');
+        }
+
+        $user->setJoinUpdated($user_data);
+
+    }
 
     /**
      * Add user
@@ -88,7 +98,6 @@ class UserManager {
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
-
             $user = new User();
             $user->setUsername($data['username']);
             $user->setFirstName($data['first_name']);
@@ -101,8 +110,8 @@ class UserManager {
 
             $user->setIsActive($data['is_active']);
 
-            $currentDate = date('Y-m-d H:i:s');
-            $user->setCreatedAt($currentDate);
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $user->setCreatedAt($addTime->format('Y-m-d H:i:s'));
 
             // assign roles to user.
             $this->assignRoles($user, $data['roles']);
@@ -135,7 +144,7 @@ class UserManager {
      * @throws \Exception
      * @return bool
      */
-    public function updateUser($user, $data,$assignee) {
+    public function updateUser($user, $data, $assignee) {
         
         // begin transaction
         $this->entityManager->beginTransaction();
@@ -146,6 +155,12 @@ class UserManager {
             $user->setLastName($data['last_name']);
             $user->setIsActive($data['is_active']);
             $user->setEmail($data['email']);
+
+            $updatedTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            
+            $user->setUpdatedAt($updatedTime->format('Y-m-d H:i:s'));
+            $user->setUpdatedBy($assignee->id);
+            $this->getReferenced($user, $data, $assignee);
 
             // Assign roles to user.
             $this->assignRoles($user, $data['roles']);
@@ -431,7 +446,8 @@ class UserManager {
                 //set status
                 $user['status'] = $user['is_active'];                
                 //set created_at
-                $user['created_at'] =  ($user['created_at']) ? Utils::checkDateFormat($user['created_at'],'d/m/Y') : '';                
+                $user['created_at'] =  ($user['created_at']) ? Utils::checkDateFormat($user['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $user['updated_at'] =  ($user['updated_at']) ? Utils::checkDateFormat($user['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
             }
             
         }

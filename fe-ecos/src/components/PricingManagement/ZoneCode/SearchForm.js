@@ -15,133 +15,136 @@ class SearchForm extends Component {
   constructor(props){
     super(props);
     this.state = {
-      disabled: false,
+      customer_disable: false,
       category_code: null,
       carrier_id: null
     }
   }
   
+  hanldeChangeType = value => {
+    if (value === 2) {
+      this.setState({
+        customer_disable: false
+      });
+    } else {
+      this.setState({
+        customer_disable: true
+      })
+    }
+  }
+
   componentDidMount() {
-    this.props.getCustomerList();
-    this.props.getOriginCountryList();
-    this.props.getDestinationCountryList();
+    const { messages } = this.props.intl;
+    const params = {
+        field: ['id', 'name'],
+        offset: {
+            limit: 0
+        }
+    }
+    this.props.getCustomerList(params, messages, 'onchange');
+    this.props.getOriginCountryList(params, messages ,'onchange');
+    this.props.getDestinationCountryList(params, messages ,'onchange');
   }
 
   onChangeOriginCountry = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
         limit: 0
       },
       query: {
-        country: value
+        country: value ? value : 0
       }
     }
-    this.props.getOriginCityList(params);
-    params = {
-      query: {
-        city: 0
-      }
-    }
-    this.props.getOriginDistrictList(params);
-    params = {
-      query: {
-        district: 0
-      }
-    }
-    this.props.getOriginWardList(params);
+    this.props.change('origin_city',null);
+    this.props.change('origin_district',null);
+    this.props.change('origin_ward',null);
+    this.props.getOriginCityList(params, messages, 'onchange');
+   
   }
 
   onChangeOriginCity = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
         limit: 0
       },
       query: {
-        city: value
+        city:  value ? value : 0
       }
     }
-    this.props.getOriginDistrictList(params);
-    params = {
-      query: {
-        district: 0
-      }
-    }
-    this.props.getOriginWardList(params);
+    this.props.change('origin_district',null);
+    this.props.change('origin_ward',null);
+    this.props.getOriginDistrictList(params , messages, 'onchange');
   }
 
   onChangeOriginDistrict = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
         limit: 0
       },
       query: {
-        district: value
+        district:  value ? value : 0
       }
     }
-    this.props.getOriginWardList(params);
+    this.props.change('origin_ward',null);
+    this.props.getOriginWardList(params, messages, 'onchange'); 
   }
 
   onChangeDestinationCountry = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
         limit: 0
       },
       query: {
-        country: value
+        country: value ? value : 0
       }
     }
-    this.props.getDestinationCityList(params);
-    params = {
-      query: {
-        city: 0
-      }
-    }
-    this.props.getDestinationDistrictList(params);
-    params = {
-      query: {
-        district: 0
-      }
-    }
-    this.props.getDestinationWardList(params);
+    this.props.change('destination_city',null);
+    this.props.change('destination_district',null);
+    this.props.change('destination_ward',null);
+    this.props.getDestinationCityList(params, messages, 'onchange');
   }
 
   onChangeDestinationCity = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
         limit: 0
       },
       query: {
-        city: value
+        city: value ? value : 0
       }
     }
-    this.props.getDestinationDistrictList(params);
-    params = {
-      query: {
-        district: 0
-      }
-    }
-    this.props.getDestinationWardList(params);
+    this.props.change('destination_district',null);
+    this.props.change('destination_ward',null);
+    this.props.getDestinationDistrictList(params, messages, 'onchange');
   }
 
   onChangeDestinationDistrict = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
         limit: 0
       },
       query: {
-        district: value
+        district:  value ? value : 0
       }
     }
-    this.props.getDestinationWardList(params);
+    this.props.change('destination_ward',null);
+    this.props.getDestinationWardList(params, messages, 'onchange');
   }
 
   onChangeCategory = value => {
+    const { messages } = this.props.intl;
     this.setState({
       category_code: value
     });
@@ -149,23 +152,17 @@ class SearchForm extends Component {
       type : "carrier_id",
       category_code : value
     }
-    this.props.getCarrierCodeByCondition(params);
-    params = {
-      type : "carrier_id",
-      category_code : value,
-      carrier_id: 0
-    }
-    this.props.getServiceCodeByCondition(params);
-    params = {
-      type : "carrier_id",
-      category_code : value,
-      carrier_id: 0,
-      service_id: [0]
-    }
-    this.props.getShipmentTypeCodeByCondition(params);
+    this.props.getCarrierCodeByCondition(params, messages);
+    
+    params = { ...params,carrier_id: 0}
+    this.props.getServiceCodeByCondition(params, messages);
+    
+    params = { ...params, service_id: [0] }
+    this.props.getShipmentTypeCodeByCondition(params, messages);
   }
 
   onChangeCarrier = value => {
+    const { messages } = this.props.intl;
     this.setState({
       carrier_id: value
     });
@@ -174,24 +171,25 @@ class SearchForm extends Component {
       carrier_id : value,
       category_code : this.state.category_code
     }
-    this.props.getServiceCodeByCondition(params);
+    this.props.getServiceCodeByCondition(params, messages);
     params = {
       type : "carrier_id",
       category_code : value,
       carrier_id: 0,
       service_id: [0]
     }
-    this.props.getShipmentTypeCodeByCondition(params);
+    this.props.getShipmentTypeCodeByCondition(params, messages);
   }
 
   onChangeService = value => {
+    const { messages } = this.props.intl;
     let params = {
       type : "shipment_type_id",
       category_code : this.state.category_code,
       carrier_id : this.state.carrier_id,
       service_id : [ value ] 
     }
-    this.props.getShipmentTypeCodeByCondition(params);
+    this.props.getShipmentTypeCodeByCondition(params, messages);
   }
 
   showOptionCarrier = (items) => {
@@ -244,95 +242,24 @@ class SearchForm extends Component {
     return result;
   }
 
-  showOptionsOriginCountry = (country_items) => {
-    const countries = country_items.map(country_item => {
+  showOptionsOrigin = (items) => {
+    const option_select = items.map(item => {
       return {
-        'value': country_item.id,
-        'label': country_item.name
+        'value': item.id,
+        'label': item.name
       }
     });
-    return countries;
+    return option_select;
   }
 
-  showOptionsOriginCity = (city_items) => {
-    const cities = city_items.map(city_item => {
+  showOptionsDestination = (items) => {
+    const select_options = items.map(item => {
       return {
-        'value': city_item.id,
-        'label': city_item.name
+        'value': item.id,
+        'label': item.name
       }
     });
-    return cities;
-  }
-
-  showOptionsOriginDistrict = (district_items) => {
-    const districts = district_items.map(district_item => {
-      return {
-        'value': district_item.id,
-        'label': district_item.name
-      }
-    });
-    return districts;
-  }
-
-  showOptionsOriginWard = (ward_items) => {
-    const wards = ward_items.map(ward_item => {
-      return {
-        'value': ward_item.id,
-        'label': ward_item.name
-      }
-    });
-    return wards;
-  }
-  showOptionsDestinationCountry = (country_items) => {
-    const countries = country_items.map(country_item => {
-      return {
-        'value': country_item.id,
-        'label': country_item.name
-      }
-    });
-    return countries;
-  }
-
-  showOptionsDestinationCity = (city_items) => {
-    const cities = city_items.map(city_item => {
-      return {
-        'value': city_item.id,
-        'label': city_item.name
-      }
-    });
-    return cities;
-  }
-
-  showOptionsDestinationDistrict = (district_items) => {
-    const districts = district_items.map(district_item => {
-      return {
-        'value': district_item.id,
-        'label': district_item.name
-      }
-    });
-    return districts;
-  }
-
-  showOptionsDestinationWard = (ward_items) => {
-    const wards = ward_items.map(ward_item => {
-      return {
-        'value': ward_item.id,
-        'label': ward_item.name
-      }
-    });
-    return wards;
-  }
-
-  hanldeChangeType = value => {
-    if (value === 1) {
-      this.setState({
-        disabled: true
-      });
-    } else {
-      this.setState({
-        disabled: false
-      })
-    }
+    return select_options;
   }
 
 
@@ -363,7 +290,7 @@ class SearchForm extends Component {
             <div className="form__form-group-field">
               <Field name="customer" component={renderSelectField} type="text"
                      options={customerCode && this.showOptionCustomer(customerCode)}
-                     disabled={this.state.disabled}
+                     disabled={this.state.customer_disable}
               />
             </div>
           </div>
@@ -371,7 +298,7 @@ class SearchForm extends Component {
 
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['rangeweight.name']}</span>
+            <span className="form__form-group-label">{messages['zone_code.name']}</span>
             <div className="form__form-group-field">
               <Field component="input" type="text" 
                      name='code' />
@@ -453,7 +380,7 @@ class SearchForm extends Component {
               <Field
                 name="origin_country"
                 component={renderSelectField}
-                options={origin_countrys && this.showOptionsOriginCountry(origin_countrys)}
+                options={origin_countrys && this.showOptionsOrigin(origin_countrys)}
                 onChange={this.onChangeOriginCountry}
               />
             </div>
@@ -467,7 +394,7 @@ class SearchForm extends Component {
               <Field
                 name="origin_city"
                 component={renderSelectField}
-                options={origin_citys && this.showOptionsOriginCity(origin_citys)}
+                options={origin_citys && this.showOptionsOrigin(origin_citys)}
                 onChange={this.onChangeOriginCity}
               />
             </div>
@@ -481,7 +408,7 @@ class SearchForm extends Component {
               <Field
                 name="origin_district"
                 component={renderSelectField}
-                options={origin_districts && this.showOptionsOriginDistrict(origin_districts)}
+                options={origin_districts && this.showOptionsOrigin(origin_districts)}
                 onChange={this.onChangeOriginDistrict}
               />
             </div>
@@ -495,7 +422,7 @@ class SearchForm extends Component {
               <Field
                 name="origin_ward"
                 component={renderSelectField}
-                options={origin_wards && this.showOptionsOriginWard(origin_wards)}
+                options={origin_wards && this.showOptionsOrigin(origin_wards)}
               />
             </div>
           </div>
@@ -508,7 +435,7 @@ class SearchForm extends Component {
               <Field
                 name="destination_country"
                 component={renderSelectField}
-                options={destination_countrys && this.showOptionsDestinationCountry(destination_countrys)}
+                options={destination_countrys && this.showOptionsDestination(destination_countrys)}
                 onChange={this.onChangeDestinationCountry}
               />
             </div>
@@ -522,7 +449,7 @@ class SearchForm extends Component {
               <Field
                 name="destination_city"
                 component={renderSelectField}
-                options={destination_citys && this.showOptionsDestinationCity(destination_citys)}
+                options={destination_citys && this.showOptionsDestination(destination_citys)}
                 onChange={this.onChangeDestinationCity}
               />
             </div>
@@ -536,7 +463,7 @@ class SearchForm extends Component {
               <Field
                 name="destination_district"
                 component={renderSelectField}
-                options={destination_districts && this.showOptionsDestinationDistrict(destination_districts)}
+                options={destination_districts && this.showOptionsDestination(destination_districts)}
                 onChange={this.onChangeDestinationDistrict}
               />
             </div>
@@ -550,7 +477,7 @@ class SearchForm extends Component {
               <Field
                 name="destination_ward"
                 component={renderSelectField}
-                options={destination_wards && this.showOptionsDestinationWard(destination_wards)}
+                options={destination_wards && this.showOptionsDestination(destination_wards)}
               />
             </div>
           </div>

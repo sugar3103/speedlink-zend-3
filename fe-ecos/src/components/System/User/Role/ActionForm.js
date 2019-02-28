@@ -6,6 +6,7 @@ import { toggleRoleModal, getPermissionList, getRoleListAll, changeTypeRoleModal
 import { Field, reduxForm } from 'redux-form';
 import { MODAL_ADD, MODAL_VIEW, MODAL_EDIT } from '../../../../constants/defaultValues';
 import renderRadioButtonField from '../../../../containers/Shared/form/RadioButton';
+import Can from '../../../../containers/Shared/Can';
 import CustomField from '../../../../containers/Shared/form/CustomField';
 import renderMultiSelectField from '../../../../containers/Shared/form/MultiSelect';
 import CheckBoxGroup from '../../../../containers/Shared/form/CheckBoxGroup';
@@ -66,7 +67,7 @@ class ActionForm extends PureComponent {
 
   showOptions = (items) => {
     const data = this.props.modalData;
-    
+
     if (data && items.length > 0) {
       const roles = items.filter(item => item.id !== data.id).map(item => {
         return {
@@ -77,7 +78,7 @@ class ActionForm extends PureComponent {
       });
       return roles;
     }
-   
+
   }
 
   toggleModal = () => {
@@ -131,7 +132,6 @@ class ActionForm extends PureComponent {
                     component={CustomField}
                     type="text"
                     placeholder={messages['role.name']}
-                    messages={messages}
                     disabled={disabled}
                   />
                 </div>
@@ -144,7 +144,6 @@ class ActionForm extends PureComponent {
                     component={CustomField}
                     type="text"
                     placeholder={messages['role.name']}
-                    messages={messages}
                     disabled={disabled}
                   />
                 </div>
@@ -160,7 +159,6 @@ class ActionForm extends PureComponent {
                     component="textarea"
                     type="text"
                     placeholder={messages['description']}
-                    messages={messages}
                     disabled={disabled}
                   />
 
@@ -174,7 +172,6 @@ class ActionForm extends PureComponent {
                     component="textarea"
                     type="text"
                     placeholder={messages['description']}
-                    messages={messages}
                     disabled={disabled}
                   />
                 </div>
@@ -201,7 +198,6 @@ class ActionForm extends PureComponent {
                     <CheckBoxGroup
                       name="permissions"
                       options={this.showPermissionOption(permissions)}
-                      messages={messages}
                       disabled={disabled}
                     />
                   }
@@ -254,13 +250,18 @@ class ActionForm extends PureComponent {
             </Fragment>
           }
         </div>
+
         <ButtonToolbar className="modal__footer">
-          {this.state.modalType === MODAL_VIEW &&
-            <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
+          {
+            this.state.modalType === MODAL_VIEW &&
+              <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
           }
-          <Button color={className} type="submit">{modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
+          <Can user={this.props.authUser.user} permission="role" action="edit" own={ modalData && modalData.created_by}>
+            <Button color={className} type="submit">{modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
+          </Can>          
         </ButtonToolbar>
-      </form>
+
+      </form >
     );
   }
 }
@@ -274,7 +275,7 @@ ActionForm.propTypes = {
 }
 
 
-const mapStateToProps = ({ users }) => {
+const mapStateToProps = ({ users, authUser }) => {
   const { role, permission } = users;
   const { modalData, modalType } = role;
   const permissions = permission.items;
@@ -282,7 +283,8 @@ const mapStateToProps = ({ users }) => {
     modalData,
     modalType,
     permissions,
-    role
+    role,
+    authUser
   }
 }
 

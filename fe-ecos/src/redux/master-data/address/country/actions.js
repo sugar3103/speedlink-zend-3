@@ -11,12 +11,13 @@ import {
   COUNTRY_UPDATE_ITEM_ERROR,
   COUNTRY_DELETE_ITEM,
   COUNTRY_DELETE_ITEM_SUCCESS,
-  COUNTRY_DELETE_ITEM_ERROR
+  COUNTRY_DELETE_ITEM_ERROR,
+  COUNTRY_CHANGE_TYPE_MODAL
 } from '../../../../constants/actionTypes';
 
-export const toggleCountryModal = (country = null) => ({
+export const toggleCountryModal = (type, data) => ({
   type: COUNTRY_TOGGLE_MODAL,
-  payload: country
+  payload: { type, data }
 })
 
 export const getCountryList = (params, messages) => ({
@@ -75,3 +76,8 @@ export const deleteCountryItemError = (error) => ({
   type: COUNTRY_DELETE_ITEM_ERROR,
   payload: error
 });
+
+export const changeTypeCountryModal = (type) => ({
+  type: COUNTRY_CHANGE_TYPE_MODAL,
+  payload: type
+})

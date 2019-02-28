@@ -41,12 +41,14 @@ class StatusRepository extends EntityRepository {
                  cr.username as created_by,
                  s.created_at,
                  up.username as updated_by,
-                 s.updated_at"                 
+                 s.updated_at,
+                 CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
+                 CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated"                 
             )->andWhere('s.is_deleted = 0')
             ->groupBy('s.id')
             ->setMaxResults($limit)
             ->setFirstResult(($start - 1) * $limit);
-
+                
             return $queryBuilder;
 
         } catch (QueryException $e) {
@@ -71,7 +73,10 @@ class StatusRepository extends EntityRepository {
                 'alias' => 's.name',
                 'operator' => 'contains'
             ],
-
+            'name_en' => [
+                'alias' => 's.name_en',
+                'operator' => 'contains'
+            ],
             'created_at' => [
                 'alias' => 's.created_at',
                 'operator' => 'contains'

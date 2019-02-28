@@ -11,12 +11,13 @@ import {
   CITY_UPDATE_ITEM_ERROR,
   CITY_DELETE_ITEM,
   CITY_DELETE_ITEM_SUCCESS,
-  CITY_DELETE_ITEM_ERROR
+  CITY_DELETE_ITEM_ERROR,
+  CITY_CHANGE_TYPE_MODAL
 } from '../../../../constants/actionTypes';
 
-export const toggleCityModal = (city = null) => ({
+export const toggleCityModal = (type, data) => ({
   type: CITY_TOGGLE_MODAL,
-  payload: city
+  payload: { type, data }
 })
 
 export const getCityList = (params, messages) => ({
@@ -75,3 +76,8 @@ export const deleteCityItemError = (error) => ({
   type: CITY_DELETE_ITEM_ERROR,
   payload: error
 });
+
+export const changeTypeCityModal = (type) => ({
+  type: CITY_CHANGE_TYPE_MODAL,
+  payload: type
+})

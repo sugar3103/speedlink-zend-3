@@ -390,7 +390,7 @@
 
 .form__form-group-icon {
   padding: 6px;
-  height: 32px;
+  height: auto;
 
   @include themify($themes) {
     background: themed('colorFieldsBorder');

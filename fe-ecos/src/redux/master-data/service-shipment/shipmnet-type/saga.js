@@ -310,7 +310,7 @@ const getShipmentTypeCodeByConditionRequest = async (params) => {
 };
 
 function* getShipmentTypeCodeByCondition({ payload }) {
-  const { params } = payload;
+  const { params, messages } = payload;
   try {
     const response = yield call(getShipmentTypeCodeByConditionRequest, params);
     switch (response.error_code) {
@@ -320,6 +320,16 @@ function* getShipmentTypeCodeByCondition({ payload }) {
 
       case EC_FAILURE:
         yield put(getShipmentTypeCodeByConditionError(response.data));
+        break;
+      
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning',
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
         break;
 
       default:
@@ -332,7 +342,7 @@ function* getShipmentTypeCodeByCondition({ payload }) {
 }
 
 function* getCarrierCodeByCondition({ payload }) {
-  const { params } = payload;
+  const { params, messages } = payload;
   try {
     const response = yield call(getShipmentTypeCodeByConditionRequest, params);
     switch (response.error_code) {
@@ -342,6 +352,16 @@ function* getCarrierCodeByCondition({ payload }) {
 
       case EC_FAILURE:
         yield put(getCarrierCodeByConditionError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning',
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
         break;
 
       default:
@@ -354,7 +374,7 @@ function* getCarrierCodeByCondition({ payload }) {
 }
 
 function* getServiceCodeByCondition({ payload }) {
-  const { params } = payload;
+  const { params, messages } = payload;
   try {
     const response = yield call(getShipmentTypeCodeByConditionRequest, params);
     switch (response.error_code) {
@@ -364,6 +384,16 @@ function* getServiceCodeByCondition({ payload }) {
 
       case EC_FAILURE:
         yield put(getServiceCodeByConditionError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning',
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
         break;
 
       default:

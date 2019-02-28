@@ -10,9 +10,9 @@ import {
     payload: customer
   });
   
-  export const getCustomerList = (params) => ({
+  export const getCustomerList = (params, messages) => ({
     type: CUSTOMER_GET_LIST,
-    payload: { params }
+    payload: { params, messages }
   });
   
   export const getCustomerListSuccess = (items, total) => ({

@@ -126,16 +126,16 @@ $access_filter = [
     ],
     'controllers' => [
         Controller\UserController::class => [
-            ['actions' => ['index','edit','view'], 'allow' => '+user.manage'],
-            ['actions' => ['edit'], 'allow' => '+user.edit'],
+            ['actions' => '*', 'allow' => '+user.manage'],            
+            ['actions' => ['edit','info'], 'allow' => '+user.own.edit'],
             ['actions' => ['index'], 'allow' => '+user.view'],
         ],
         Controller\RoleController::class => [
-            ['actions' => ['index', 'add', 'edit'], 'allow' => '+role.manage'],
+            ['actions' => '*', 'allow' => '+role.manage'],
             ['actions' => ['index'], 'allow' => '+role.view']
         ],
         Controller\PermissionController::class => [            
-            ['actions' => ['index','add','edit'], 'allow' => '+permission.manage'],
+            ['actions' => '*', 'allow' => '+permission.manage'],
             ['actions' => ['index'], 'allow' => '+permission.view'],
             ['actions' => ['add'], 'allow' => '+permission.add'],
         ]

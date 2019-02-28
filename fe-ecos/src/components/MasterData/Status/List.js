@@ -1,8 +1,9 @@
 /* eslint-disable react/no-unused-state */
 import React, { Component, Fragment } from 'react';
-import { Card, CardBody, Col,Button, Badge } from 'reactstrap';
+import { Card, CardBody, Col, Button, Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Table from '../../../containers/Shared/table/Table';
+import Can from '../../../containers/Shared/Can';
 import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
@@ -17,17 +18,7 @@ import {
   deleteStatusItem
 } from "../../../redux/actions";
 import ConfirmPicker from '../../../containers/Shared/picker/ConfirmPicker';
-
-
-const StatusFormatter = ({ value }) => (
-  value === 'Enabled' ? <span className="badge badge-success">Enabled</span> :
-    <span className="badge badge-disabled">Disabled</span>
-);
-
-StatusFormatter.propTypes = {
-  value: PropTypes.string.isRequired,
-};
-
+import Moment from 'react-moment';
 class List extends Component {
   constructor() {
     super();
@@ -36,7 +27,7 @@ class List extends Component {
       currentPage: 1,
     };
   }
-  
+
   toggleModal = (e, type, status) => {
     e.stopPropagation();
     this.props.toggleStatusModal(type, status);
@@ -48,10 +39,10 @@ class List extends Component {
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
-          <ConfirmPicker 
+          <ConfirmPicker
             onClose={onClose}
             onDelete={() => this.props.deleteStatusItem(ids, messages)}
-            messages={messages}
+            messages ={messages}
           />
         )
       }
@@ -98,31 +89,30 @@ class List extends Component {
     });
   };
 
-  componentDidMount() {
-    const { messages } = this.props.intl;
-    this.props.getStatusList(null, messages);
-  }
-
   renderHeader = (selected) => {
     const { messages } = this.props.intl;
     const { modalOpen } = this.props.status;
     return (
       <Fragment>
-        <Button
-          color="success"
-          onClick={(e) => this.toggleModal(e, 'add', null)}
-          className="master-data-btn"
-          size="sm"
-        >{messages['status.add-new']}</Button>
-        <Action modalOpen={modalOpen} />
-        {selected.length > 0 &&
-            <Button
-            color="danger"
-            onClick={(e) => this.onDelete(e, selected)}
+        <Can user={this.props.authUser.user} permission="status" action="add">
+          <Button
+            color="success"
+            onClick={(e) => this.toggleModal(e, 'add', null)}
             className="master-data-btn"
             size="sm"
-          >{messages['status.delete']}</Button>
-        }
+          >{messages['status.add-new']}</Button>
+        </Can>
+        <Action modalOpen={modalOpen} />
+        <Can user={this.props.authUser.user} permission="status" action="delete">
+          {selected.length > 0 &&
+            <Button
+              color="danger"
+              onClick={(e) => this.onDelete(e, selected)}
+              className="master-data-btn"
+              size="sm"
+            >{messages['status.delete']}</Button>
+          }
+        </Can>
       </Fragment>
     )
   }
@@ -157,7 +147,7 @@ class List extends Component {
         {
           Header: messages['status'],
           accessor: "status",
-          width: 120,
+
           Cell: ({ original }) => {
             return (
               original.status === 1 ? <Badge color="success">{messages['active']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>
@@ -165,24 +155,29 @@ class List extends Component {
           },
           className: "text-center",
           sortable: false,
+          width: 100
         },
         {
           Header: messages['created-at'],
           accessor: "created_at",
-          width: 120,
-          className: "text-center", 
+          className: "text-center",
+          Cell: ({ original }) => { return (<Moment fromNow format="D/MM/YYYY" locale={locale}>{new Date(original.created_at)}</Moment>) },
           sortable: false,
         },
         {
           Header: messages['action'],
           accessor: "",
           width: 100,
-          className: "text-center", 
+          className: "text-center",
           Cell: ({ original }) => {
             return (
               <Fragment>
-                <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
-                <Button color="danger" size="sm" onClick={(e) => this.onDelete(e, [original.id])}><span className="lnr lnr-trash" /></Button>
+                <Can user={this.props.authUser.user} permission="status" action="edit" own={original.created_at}>
+                  <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
+                </Can>
+                <Can user={this.props.authUser.user} permission="status" action="delete" own={original.created_at}>
+                  <Button color="danger" size="sm" onClick={(e) => this.onDelete(e, [original.id])}><span className="lnr lnr-trash" /></Button>
+                </Can>
               </Fragment>
             );
           },
@@ -190,7 +185,7 @@ class List extends Component {
         }
       ]
     };
-  
+
     return (
       <Col md={12} lg={12}>
         <Card>
@@ -226,10 +221,11 @@ List.propTypes = {
   toggleStatusModal: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ status, modal }) => {
+const mapStateToProps = ({ status, modal, authUser }) => {
   return {
     status,
-    modal
+    modal,
+    authUser
   };
 };
 

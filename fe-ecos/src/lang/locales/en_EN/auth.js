@@ -16,6 +16,7 @@ module.exports = {
   //User
   'user.avatar': 'Avatar',
   'user.list': 'User',
+  'user.view': 'View User',
   'user.active': 'Enable',
   'user.inactive': 'Disable',
   'user.username': 'Username',

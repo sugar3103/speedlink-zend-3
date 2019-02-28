@@ -36,7 +36,7 @@ class ActionForm extends Component {
             <span className="form__form-group-label">{messages['service.code']}</span>
             <div className="form__form-group-field">
               <Field name="code" component={CustomField} type="text"
-                     placeholder={messages['service.code']} messages={messages} />
+                     placeholder={messages['service.code']} />
             </div>
           </div>
           <div className="form__form-group">
@@ -46,14 +46,14 @@ class ActionForm extends Component {
                 <div className="flag vn"></div>
               </div>
               <Field name="name" component={CustomField} type="text"
-                     placeholder={messages['service.name']} messages={messages} />
+                     placeholder={messages['service.name']} />
             </div>
             <div className="form__form-group-field">
               <div className="form__form-group-icon">
                 <div className="flag us"></div>
               </div>
               <Field name="name_en" component={CustomField} type="text"
-                     placeholder={messages['service.name-en']} messages={messages} />
+                     placeholder={messages['service.name-en']} />
             </div>
           </div>
           <div className="form__form-group">
@@ -83,7 +83,7 @@ class ActionForm extends Component {
               <span className="form__form-group-label">{messages['service.created-by']}</span>
               <div className="form__form-group-field">
                 <Field name="created_by" component="input" type="text" disabled
-                       placeholder={messages['service.created-by']} messages={messages}/>
+                       placeholder={messages['service.created-by']} />
               </div>
             </div>
           }
@@ -92,7 +92,7 @@ class ActionForm extends Component {
               <span className="form__form-group-label">{messages['service.created-at']}</span>
               <div className="form__form-group-field">
                 <Field name="created_at" component="input" type="text" disabled
-                       placeholder={messages['service.created-at']} messages={messages}/>
+                       placeholder={messages['service.created-at']} />
               </div>
             </div>
           }
@@ -101,7 +101,7 @@ class ActionForm extends Component {
               <span className="form__form-group-label">{messages['service.updated-by']}</span>
               <div className="form__form-group-field">
                 <Field name="updated_by" component="input" type="text" disabled
-                       placeholder={messages['service.updated-by']} messages={messages}/>
+                       placeholder={messages['service.updated-by']} />
               </div>
             </div>
           }
@@ -110,7 +110,7 @@ class ActionForm extends Component {
               <span className="form__form-group-label">{messages['service.updated-at']}</span>
               <div className="form__form-group-field">
                 <Field name="updated_at" component="input" type="text" disabled
-                       placeholder={messages['service.updated-at']} messages={messages}/>
+                       placeholder={messages['service.updated-at']} />
               </div>
             </div>
           }

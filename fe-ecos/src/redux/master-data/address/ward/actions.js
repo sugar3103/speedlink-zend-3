@@ -11,12 +11,13 @@ import {
   WARD_UPDATE_ITEM_ERROR,
   WARD_DELETE_ITEM,
   WARD_DELETE_ITEM_SUCCESS,
-  WARD_DELETE_ITEM_ERROR
+  WARD_DELETE_ITEM_ERROR,
+  WARD_CHANGE_TYPE_MODAL
 } from '../../../../constants/actionTypes';
 
-export const toggleWardModal = (ward = null) => ({
+export const toggleWardModal = (type, data) => ({
   type: WARD_TOGGLE_MODAL,
-  payload: ward
+  payload: { type, data }
 })
 
 export const getWardList = (params, messages) => ({
@@ -75,3 +76,8 @@ export const deleteWardItemError = (error) => ({
   type: WARD_DELETE_ITEM_ERROR,
   payload: error
 });
+
+export const changeTypeWardModal = (type) => ( {
+  type: WARD_CHANGE_TYPE_MODAL,
+  payload: type
+})

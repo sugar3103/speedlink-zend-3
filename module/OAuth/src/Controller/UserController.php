@@ -98,15 +98,18 @@ class UserController extends CoreController {
                                         
                     $this->userManager->updateUser($_user, $data,$user);
                     $this->error_code = 1;
-                    $this->apiResponse['message'] = "Success: You have modified user!";
+                    $this->apiResponse['message'] = "SUCCESS_MODIFIED";
                     }  else {
                     $this->error_code = 0;
                     $this->apiResponse = $form->getMessages(); 
                     }   
+                } else {
+                    $this->error_code = 0;
+                    $this->apiResponse['message'] = 'MODIFIED_ERROR';
                 }
             }   else {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = 'User Not Found'; 
+                $this->apiResponse['message'] = 'NOT_FOUND'; 
             }
         } 
         
@@ -145,8 +148,8 @@ class UserController extends CoreController {
                 
                 $role = $this->entityManager->getRepository(Role::class)->findOneById($role_id);
                 foreach ($role->getPermissions() as $key => $permission) {      
-                    $module = explode('.', $permission->getName());
-                    $permissions[$module[0]][] = $module[1];
+                    $module = explode('.', $permission->getName());                    
+                    $permissions[array_shift($module)][] = implode('.',$module);
                 }
 
             }

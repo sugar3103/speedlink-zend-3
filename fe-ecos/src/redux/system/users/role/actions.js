@@ -42,9 +42,9 @@ export const getRoleListError = (error) => ({
   payload: error
 });
 
-export const addRoleItem = (item) => ({
+export const addRoleItem = (item, messages) => ({
   type: ROLE_ADD_ITEM,
-  payload: item
+  payload: {item, messages}
 });
 
 export const addRoleItemSuccess = () => ({

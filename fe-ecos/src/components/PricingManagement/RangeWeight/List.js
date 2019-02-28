@@ -68,7 +68,7 @@ class List extends Component {
           <ConfirmPicker 
             onClose={onClose}
             onDelete={() => this.props.deleteRangeWeightItem(ids, messages)}
-            messages={messages}
+            messages ={messages}
           />
         )
       }
@@ -129,12 +129,6 @@ class List extends Component {
     const columnTable = {
       checkbox: true,
       columns: [
-        {
-            Header: '#',
-            accessor: 'id',
-            width: 30,
-            sortable: false,
-        },
         {
           Header: messages['range_weight.name'],
           accessor: "code",

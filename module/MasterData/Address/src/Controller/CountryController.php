@@ -36,6 +36,7 @@ class CountryController extends CoreController {
                 0 => 'name',                
                 1 => 'id',
                 2 => 'status',
+                3 => 'name_en',
             ];
 
             list($start, $limit, $sortField, $sortDirection, $filters, $fields) = $this->getRequestData($fieldsMap);                        
@@ -48,7 +49,7 @@ class CountryController extends CoreController {
             
             $this->error_code = 1;
             $this->apiResponse =  array(
-                'message'   => "Get List Success",
+                'message'   => "SUCCESS",
                 'data'      => $results,
                 'total'     => $dataCountry['totalCountry']
             );       
@@ -73,7 +74,7 @@ class CountryController extends CoreController {
                 $this->countryManager->addCountry($data,$user);
 
                 $this->error_code = 1;
-                $this->apiResponse['message'] = "You have added a country!";
+                $this->apiResponse['message'] = "ADD_SUCCESS_COUNTRY";
             } else {
                 $this->error_code = 0;                
                 $this->apiResponse['message'] = $form->getMessages();  
@@ -102,18 +103,18 @@ class CountryController extends CoreController {
                     $this->countryManager->updateCountry($country, $data,$user);
 
                     $this->error_code = 1;
-                    $this->apiResponse['message'] = "You have modified country!";
+                    $this->apiResponse['message'] = "MODIFIED_SUCCESS_COUNTRY";
                 } else {
                     $this->error_code = 0;
                     $this->apiResponse['message'] = $form->getMessages(); 
                 }      
             } else {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = "Country Not Found";
+                $this->apiResponse['message'] = "NOT_FOUND";
             }
         } else {
             $this->error_code = 0;
-            $this->apiResponse['message'] = "Country request Id!";
+            $this->apiResponse['message'] = "COUNTRY_REQUEST_ID";
         }
 
         return $this->createResponse();
@@ -122,23 +123,29 @@ class CountryController extends CoreController {
     public function deleteAction()
     {
         $data = $this->getRequestData();
-        if(isset($data['id'])) {
-            // Find existing country in the database.
-            $country = $this->entityManager->getRepository(Country::class)->findOneBy(array('id' => $data['id']));    
-            if ($country == null) {
+        if(isset($data['ids']) && count($data['ids']) > 0) {
+            try {
+                foreach ($data['ids'] as $id) {
+                    $status = $this->entityManager->getRepository(City::class)->findOneBy(array('id' => $id));    
+                    if ($status == null) {
+                        $this->error_code = 0;
+                        $this->apiResponse['message'] = "NOT_FOUND";                        
+                    } else {
+                        $this->countryManager->deleteCountry($country);
+                    }  
+                }
+                
+                $this->apiResponse['message'] = "DELETED_SUCCESS_COUNTRY";
+            } catch (\Throwable $th) {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = "Country Not Found";
-            } else {
-                //remove country
-                $this->countryManager->deleteCountry($country);
-    
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "You have deleted country!";
-            }          
+                $this->apiResponse['message'] = "COUNTRY_REQUEST_ID";
+            }
         } else {
             $this->error_code = 0;
-            $this->apiResponse['message'] = "Country request Id!";
+            $this->apiResponse['message'] = "COUNTRY_REQUEST_ID";
         }
+
+
         return $this->createResponse();        
     }
 

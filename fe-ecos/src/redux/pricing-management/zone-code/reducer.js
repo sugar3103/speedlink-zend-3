@@ -62,6 +62,7 @@ const INIT_STATE = {
 
 export default (state = INIT_STATE, action) => {
   let params= null;
+  let types = null;
   switch (action.type) {
 
     case ZONE_CODE_TOGGLE_MODAL:
@@ -164,22 +165,18 @@ export default (state = INIT_STATE, action) => {
   params = action.payload.params;
   return { 
     ...state, 
-    loading: true,
-    paramSearch: (params && params.query) ? params.query : null
   };
 
   case ORIGIN_COUNTRY_GET_LIST_SUCCESS:
     const { origin_country } = action.payload;
     return { 
       ...state, 
-      loading: false, 
       origin_country
     };
 
   case ORIGIN_COUNTRY_GET_LIST_ERROR:
     return { 
       ...state, 
-      loading: false, 
       errors: action.payload 
     };
 
@@ -187,22 +184,27 @@ export default (state = INIT_STATE, action) => {
     params = action.payload.params;
     return { 
       ...state, 
-      loading: true,
-      paramSearch: (params && params.query) ? params.query : null
     };
 
   case ORIGIN_CITY_GET_LIST_SUCCESS:
     const { origin_city } = action.payload;
+    types = action.payload.types;
+    if(types ==='onchange')
+      return {
+        ...state, 
+        origin_city,
+        origin_district: null,
+        origin_ward: null
+      }
+    else
     return { 
       ...state, 
-      loading: false, 
       origin_city
     };
 
   case ORIGIN_CITY_GET_LIST_ERROR:
     return { 
       ...state, 
-      loading: false, 
       errors: action.payload 
     };
 
@@ -210,22 +212,26 @@ export default (state = INIT_STATE, action) => {
     params = action.payload.params;
     return { 
       ...state, 
-      loading: true,
-      paramSearch: (params && params.query) ? params.query : null
     };
 
   case ORIGIN_DISTRICT_GET_LIST_SUCCESS:
     const { origin_district } = action.payload;
-    return { 
-      ...state, 
-      loading: false, 
-      origin_district
-    };
+    types = action.payload.types;
+    if(types ==='onchange')
+      return { 
+        ...state, 
+        origin_district,
+        origin_ward: null
+      };
+    else
+      return{
+        ...state, 
+        origin_district
+      };
 
   case ORIGIN_DISTRICT_GET_LIST_ERROR:
     return { 
       ...state, 
-      loading: false, 
       errors: action.payload 
     };
 
@@ -233,22 +239,19 @@ export default (state = INIT_STATE, action) => {
     params = action.payload.params;
     return { 
       ...state, 
-      loading: true,
-      paramSearch: (params && params.query) ? params.query : null
     };
 
   case ORIGIN_WARD_GET_LIST_SUCCESS:
     const { origin_ward } = action.payload;
+    types = action.payload.types;
     return { 
       ...state, 
-      loading: false, 
       origin_ward
     };
 
   case ORIGIN_WARD_GET_LIST_ERROR:
     return { 
       ...state, 
-      loading: false, 
       errors: action.payload 
     };
 
@@ -256,22 +259,19 @@ export default (state = INIT_STATE, action) => {
     params = action.payload.params;
     return { 
       ...state, 
-      loading: true,
-      paramSearch: (params && params.query) ? params.query : null
     };
 
   case DESTINATION_COUNTRY_GET_LIST_SUCCESS:
     const { destination_country } = action.payload;
     return { 
       ...state, 
-      loading: false, 
       destination_country
+      
     };
 
   case DESTINATION_COUNTRY_GET_LIST_ERROR:
     return { 
       ...state, 
-      loading: false, 
       errors: action.payload 
     };
 
@@ -279,22 +279,27 @@ export default (state = INIT_STATE, action) => {
     params = action.payload.params;
     return { 
       ...state, 
-      loading: true,
-      paramSearch: (params && params.query) ? params.query : null
     };
 
   case DESTINATION_CITY_GET_LIST_SUCCESS:
     const { destination_city } = action.payload;
-    return { 
+    types = action.payload.types;
+    if(types ==='onchange')
+      return {
       ...state, 
-      loading: false, 
+      destination_city,
+      destination_district:null,
+      destination_ward:null
+      }
+    else
+      return { 
+      ...state, 
       destination_city
     };
 
   case DESTINATION_CITY_GET_LIST_ERROR:
     return { 
       ...state, 
-      loading: false, 
       errors: action.payload 
     };
 
@@ -302,22 +307,26 @@ export default (state = INIT_STATE, action) => {
     params = action.payload.params;
     return { 
       ...state, 
-      loading: true,
-      paramSearch: (params && params.query) ? params.query : null
     };
 
   case DESTINATION_DISTRICT_GET_LIST_SUCCESS:
     const { destination_district } = action.payload;
+    types = action.payload.types;
+    if(types ==='onchange')
+      return { 
+        ...state, 
+        destination_district,
+        destination_ward:null
+      };
+    else
     return { 
       ...state, 
-      loading: false, 
       destination_district
     };
 
   case DESTINATION_DISTRICT_GET_LIST_ERROR:
     return { 
       ...state, 
-      loading: false, 
       errors: action.payload 
     };
 
@@ -325,22 +334,18 @@ export default (state = INIT_STATE, action) => {
     params = action.payload.params;
     return { 
       ...state, 
-      loading: true,
-      paramSearch: (params && params.query) ? params.query : null
     };
 
   case DESTINATION_WARD_GET_LIST_SUCCESS:
     const { destination_ward } = action.payload;
     return { 
       ...state, 
-      loading: false, 
       destination_ward
     };
 
   case DESTINATION_WARD_GET_LIST_ERROR:
     return { 
       ...state, 
-      loading: false, 
       errors: action.payload 
     };
 

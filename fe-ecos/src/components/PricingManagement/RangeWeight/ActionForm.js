@@ -16,23 +16,43 @@ class ActionForm extends Component {
     super(props);
     this.state = {
       modalType: '',
-      disabled: false,
+      customer_disabled: true,
       category_code: null,
       carrier_id: null
     }
   }
 
+  hanldeChangeType = value => {
+    this.props.change('customer', '');
+    if (value === 2) {
+      this.setState({
+        customer_disabled: false
+      });
+    } else {
+      this.setState({
+        customer_disabled: true
+      })
+    }
+  }
+
+
   componentDidMount() {
     let data = this.props.modalData;
-    
+    const { messages } = this.props.intl;
+    const paramCustomer = {
+      field: ['id', 'name'],
+      offset: {
+          limit: 0
+      }
+  }
     if (data) {
       this.props.initialize(data);
  
-      this.props.getCustomerList();
-      if(data.is_private === 1)
+      this.props.getCustomerList(paramCustomer, messages);
+      if(data.is_private === 2)
       {
         this.setState({
-          disabled: true
+          customer_disabled: false
         });
       }
       if(data.category){
@@ -49,12 +69,13 @@ class ActionForm extends Component {
       };
       this.props.initialize(data);
     }
+
     if (data && data.carrier_id) {
       let paramsCarier = {
         type : "carrier_id",
         category_code : data.category
       }
-      this.props.getCarrierCodeByCondition(paramsCarier);
+      this.props.getCarrierCodeByCondition(paramsCarier, messages);
     }
 
     if (data && data.service_id) {
@@ -63,7 +84,7 @@ class ActionForm extends Component {
         carrier_id : data.carrier_id,
         category_code :  data.category
       }
-      this.props.getServiceCodeByCondition(paramsCity);
+      this.props.getServiceCodeByCondition(paramsCity, messages);
     }
 
     if (data && data.shipment_type_id) {
@@ -73,7 +94,7 @@ class ActionForm extends Component {
         carrier_id :  data.carrier_id,
         service_id : [ data.service_id ]
       }
-      this.props.getShipmentTypeCodeByCondition(paramsShipmenttype);
+      this.props.getShipmentTypeCodeByCondition(paramsShipmenttype, messages);
     }
 
   }
@@ -87,6 +108,7 @@ class ActionForm extends Component {
   }
 
   onChangeCategory = value => {
+    const { messages } = this.props.intl;
     this.setState({
       category_code: value
     });
@@ -94,23 +116,17 @@ class ActionForm extends Component {
       type : "carrier_id",
       category_code : value
     }
-    this.props.getCarrierCodeByCondition(params);
-    params = {
-      type : "carrier_id",
-      category_code : value,
-      carrier_id: 0
-    }
-    this.props.getServiceCodeByCondition(params);
-    params = {
-      type : "carrier_id",
-      category_code : value,
-      carrier_id: 0,
-      service_id: [0]
-    }
-    this.props.getShipmentTypeCodeByCondition(params);
+    this.props.getCarrierCodeByCondition(params, messages);
+    
+    params = { ...params, carrier_id: 0 }
+    this.props.getServiceCodeByCondition(params, messages);
+    
+    params = { ...params, service_id: [0] }
+    this.props.getShipmentTypeCodeByCondition(params, messages);
   }
 
   onChangeCarrier = value => {
+    const { messages } = this.props.intl;
     this.setState({
       carrier_id: value
     });
@@ -119,24 +135,21 @@ class ActionForm extends Component {
       carrier_id : value,
       category_code : this.state.category_code
     }
-    this.props.getServiceCodeByCondition(params);
-    params = {
-      type : "carrier_id",
-      category_code : value,
-      carrier_id: 0,
-      service_id: [0]
-    }
-    this.props.getShipmentTypeCodeByCondition(params);
+    this.props.getServiceCodeByCondition(params, messages);
+    
+    params = { ...params, service_id: [0] }
+    this.props.getShipmentTypeCodeByCondition(params, messages);
   }
 
   onChangeService = value => {
+    const { messages } = this.props.intl;
     let params = {
       type : "shipment_type_id",
       category_code : this.state.category_code,
       carrier_id : this.state.carrier_id,
       service_id : [ value ] 
     }
-    this.props.getShipmentTypeCodeByCondition(params);
+    this.props.getShipmentTypeCodeByCondition(params, messages);
   }
 
   showOptionCarrier = (items) => {
@@ -187,26 +200,10 @@ class ActionForm extends Component {
     return customers;
   }
 
-  hanldeChangeType = value => {
-    if (value === 1) {
-      this.setState({
-        disabled: true
-      });
-    } else {
-      this.setState({
-        disabled: false
-      })
-    }
-  }
-
   toggleModal = () => {
     this.props.toggleRangeWeightModal();
   };
-  componentWillReceiveProps(nextProps) {
-      if (nextProps && nextProps.modalData) {
-      // const data = nextProps.modalData;
-    }
-  }
+ 
   changeTypeModal = () => {
     this.props.changeTypeRangeWeightModal(MODAL_VIEW);
   }
@@ -247,11 +244,11 @@ class ActionForm extends Component {
             <span className="form__form-group-label">{messages['pri_man.filter-type'] }</span>
             <span className="text-danger">{'*'}</span>
             <div className="form__form-group-field">
-              <Field name="is_private" component={renderSelectField} type="text" options={[
+              <Field name="is_private" component={renderSelectField} options={[
                 { value: 1, label: messages['pri_man.public'] },
                 { value: 2, label: messages['pri_man.customer'] }
                 ]}
-                messages={messages}
+                clearable={false}
                 onChange={this.hanldeChangeType}
                 disabled={disabled} 
               />
@@ -267,10 +264,8 @@ class ActionForm extends Component {
               <Field
                 name="customer_id"
                 component={renderSelectField}
-                type="text"
                 options={customerCode && this.showOptionsCustomer(customerCode)}
-                messages={messages}
-                disabled={this.state.disabled}
+                disabled={this.state.customer_disabled}
                 
               />
             </div>
@@ -286,7 +281,6 @@ class ActionForm extends Component {
                 name="code"
                 component={CustomField}
                 type="text"
-                messages={messages}
                 disabled={disabled} 
               />
             </div>
@@ -304,7 +298,6 @@ class ActionForm extends Component {
                 { value: 'Outbound', label: messages['outbound'] },
                 { value: 'Domestic', label: messages['domestic'] }
                 ]}
-                messages={messages}
                 disabled={disabled} 
                 onChange={this.onChangeCategory}
               />
@@ -321,7 +314,6 @@ class ActionForm extends Component {
               name="carrier_id"
               component={renderSelectField}
               type="text"
-              messages={messages}
               disabled={disabled} 
               options={CarrierCodeByCondition && this.showOptionCarrier(CarrierCodeByCondition)}
               onChange={this.onChangeCarrier}
@@ -340,7 +332,6 @@ class ActionForm extends Component {
                 type="text"
                 options={ServiceCodeByCondition && this.showOptionService(ServiceCodeByCondition)}
                 onChange={this.onChangeService}
-                messages={messages}
                 disabled={disabled} 
               />
             </div>
@@ -357,7 +348,6 @@ class ActionForm extends Component {
               component={renderSelectField}
               type="text"
               options={codeByCondition && this.showOptionShipmenttype(codeByCondition)}
-              messages={messages}
               disabled={disabled} 
             />
           </div>
@@ -371,7 +361,6 @@ class ActionForm extends Component {
             <span className="text-danger">{'*'}</span>
             <div className="form__form-group-field">
               <Field name="from" component="input" type="number" step="0.1" min="0" 
-                     messages={messages}
                      disabled={disabled} 
                       /> 
             </div>
@@ -383,7 +372,6 @@ class ActionForm extends Component {
             <span className="text-danger">{'*'}</span>
             <div className="form__form-group-field">
               <Field name="to" component="input" type="number" step="0.1" min="0" 
-                     messages={messages}
                      disabled={disabled} 
                       />
             </div>
@@ -399,7 +387,6 @@ class ActionForm extends Component {
                 { value: 1, label: messages['yes'] },
                 { value: 0, label: messages['no'] }
                 ]}
-                messages={messages}
                 disabled={disabled} 
               />
             </div>
@@ -412,7 +399,6 @@ class ActionForm extends Component {
               <span className="text-danger">{'*'}</span>
               <div className="form__form-group-field">
                 <Field name="unit" component="input" type="number" step="0.1" min="0" 
-                       messages={messages}
                        disabled={disabled} 
                         />
               </div>
@@ -422,7 +408,7 @@ class ActionForm extends Component {
         <Row>
         <Col md={12} lg={6} xl={6} xs={12}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['range_weight.desc']}</span>
+            <span className="form__form-group-label">{messages['description']}</span>
             <div className="form__form-group-field">
               <div className="form__form-group-icon">
                 <div className="flag vn"></div>
@@ -450,7 +436,7 @@ class ActionForm extends Component {
             <span className="text-danger">{'*'}</span>
             <div className="form__form-group-field">
               <Field component="input" type="number" min="0" 
-                    name='round_up'  messages={messages} disabled={disabled}  /> 
+                    name='round_up'  disabled={disabled}  /> 
             </div>
           </div>
         </Col>
@@ -462,7 +448,6 @@ class ActionForm extends Component {
               { value: 1, label: messages['active'] },
               { value: 0, label: messages['inactive'] }
               ]}
-              messages={messages}
               disabled={disabled} 
             />
           </div>

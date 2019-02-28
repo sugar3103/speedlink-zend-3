@@ -52,8 +52,6 @@ class PricingRepository extends EntityRepository
                 app.username,
                 app.first_name,
                 app.last_name,
-                pr.description,
-                pr.description_en,
                 pr.created_at,
                 uc.username AS created_by,
                 pr.updated_at,
@@ -83,49 +81,64 @@ class PricingRepository extends EntityRepository
     {
         $operatorsMap = [
             'name' => [
-                'alias' => 'pr.name', 'operator' => 'eq'
+                'alias' => 'pr.name',
+                'operator' => 'eq'
             ],
             'status' => [
-                'alias' => 'pr.status', 'operator' => 'eq'
+                'alias' => 'pr.status',
+                'operator' => 'eq'
             ],
             'carrier_id' => [
-                'alias' => 'pr.carrier_id', 'operator' => 'eq'
+                'alias' => 'pr.carrier_id',
+                'operator' => 'eq'
             ],
             'category_code' => [
-                'alias' => 'pr.category_code', 'operator' => 'eq'
+                'alias' => 'pr.category_code',
+                'operator' => 'eq'
             ],
             'customer_id' => [
-                'alias' => 'pr.customer_id', 'operator' => 'in'
+                'alias' => 'pr.customer_id',
+                'operator' => 'in'
             ],
             'approved_id' => [
-                'alias' => 'pr.approved_id', 'operator' => 'eq'
+                'alias' => 'pr.approved_id',
+                'operator' => 'eq'
             ],
             'approved_status' => [
-                'alias' => 'pr.approved_status', 'operator' => 'eq'
+                'alias' => 'pr.approved_status',
+                'operator' => 'eq'
             ],
             'is_private' => [
-                'alias' => 'pr.is_private', 'operator' => 'eq'
+                'alias' => 'pr.is_private',
+                'operator' => 'eq'
             ],
             'affected_date' => [
-                'alias' => 'pr.affected_date', 'operator' => 'eq'
+                'alias' => 'pr.affected_date',
+                'operator' => 'eq'
             ],
             'expired_date' => [
-                'alias' => 'pr.expired_date', 'operator' => 'eq'
+                'alias' => 'pr.expired_date',
+                'operator' => 'eq'
             ],
             'saleman_id' => [
-                'alias' => 'pr.saleman_id', 'operator' => 'eq'
+                'alias' => 'pr.saleman_id',
+                'operator' => 'eq'
             ],
             'origin_country_id' => [
-                'alias' => 'pr.origin_country_id', 'operator' => 'eq'
+                'alias' => 'pr.origin_country_id',
+                'operator' => 'eq'
             ],
             'origin_city_id' => [
-                'alias' => 'pr.origin_city_id', 'operator' => 'eq'
+                'alias' => 'pr.origin_city_id',
+                'operator' => 'eq'
             ],
             'origin_district_id' => [
-                'alias' => 'pr.origin_district_id', 'operator' => 'eq'
+                'alias' => 'pr.origin_district_id',
+                'operator' => 'eq'
             ],
             'origin_ward_id' => [
-                'alias' => 'pr.origin_ward_id', 'operator' => 'eq'
+                'alias' => 'pr.origin_ward_id',
+                'operator' => 'eq'
             ],
         ];
 

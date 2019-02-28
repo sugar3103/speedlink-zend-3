@@ -67,7 +67,7 @@ function* getWardListItems({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(getWardListError(response.data));
+        yield put(getWardListError(response.message));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -121,7 +121,7 @@ function* addWardItem({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(addWardItemError(response.data));
+        yield put(addWardItemError(response.message));
         yield put(validateWard(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
@@ -174,7 +174,7 @@ function* updateWardItem({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(updateWardItemError(response.data));
+        yield put(updateWardItemError(response.message));
         yield put(validateWard(response.data));
         break;
 
@@ -226,7 +226,7 @@ function* deleteWardItem({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(deleteWardItemError(response.data));
+        yield put(deleteWardItemError(response.message));
         break;
 
       case EC_FAILURE_AUTHENCATION:

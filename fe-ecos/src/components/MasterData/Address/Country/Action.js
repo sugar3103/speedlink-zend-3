@@ -3,17 +3,25 @@ import { injectIntl } from 'react-intl';
 import { Modal } from 'reactstrap';
 import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
-import { addCountryItem, updateCountryItem, toggleCountryModal } from '../../../../redux/actions';
+import { addCountryItem, updateCountryItem, toggleCountryModal, changeTypeCountryModal } from '../../../../redux/actions';
 import PropTypes from 'prop-types';
-
+import { MODAL_ADD, MODAL_VIEW, MODAL_EDIT } from '../../../../constants/defaultValues';
 class Action extends Component {
 
   handleSubmit = values => {
     const { messages } = this.props.intl;
-    if (values.id) {
-      this.props.updateCountryItem(values, messages);
-    } else {
-      this.props.addCountryItem(values, messages);
+    switch (this.props.modalType) {
+      case MODAL_ADD:
+        this.props.addCountryItem(values, messages);
+        break;
+      case MODAL_EDIT:
+        this.props.updateCountryItem(values, messages);
+        break;
+      case MODAL_VIEW:
+        this.props.changeTypeCountryModal(MODAL_EDIT);
+        break;
+      default:
+        break;
     }
   }
 
@@ -22,13 +30,25 @@ class Action extends Component {
   }
 
   render() {
-    const { modalData } = this.props;
-    const className = modalData ? 'primary' : 'success';
+    let className = 'success';
+    switch (this.props.modalType) {
+      case MODAL_ADD:
+        className = 'success';
+        break;
+      case MODAL_EDIT:
+        className = 'primary';
+        break;
+      case MODAL_VIEW:
+        className = 'info';
+        break;
+      default:
+        break;
+    }
     return (
       <Modal
         isOpen={this.props.modalOpen}
         toggle={this.toggleModal}
-        className={`modal-dialog--${className} modal-dialog--header`}
+        className={`modal-dialog--${className} modal-dialog--header modal-lg`}
       >
         <ActionForm onSubmit={this.handleSubmit} />
       </Modal>
@@ -38,21 +58,24 @@ class Action extends Component {
 
 Action.propTypes = {
   modalData: PropTypes.object,
+  modalType: PropTypes.string,
   addCountryItem: PropTypes.func.isRequired,
   updateCountryItem: PropTypes.func.isRequired,
   toggleCountryModal: PropTypes.func.isRequired,
+  changeTypeCountryModal: PropTypes.func.isRequired
 }
 
 
 const mapStateToProps = ({address}) => {
-  const { modalData } = address.country;
+  const { modalType } = address.country;
   return {
-    modalData
+    modalType
   }
 }
 
 export default injectIntl(connect(mapStateToProps, {
   addCountryItem,
   updateCountryItem,
-  toggleCountryModal
+  toggleCountryModal,
+  changeTypeCountryModal
 })(Action));

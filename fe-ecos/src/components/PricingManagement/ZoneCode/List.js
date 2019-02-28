@@ -69,7 +69,7 @@ class List extends Component {
           <ConfirmPicker 
             onClose={onClose}
             onDelete={() => this.props.deleteZoneCodeItem(ids, messages)}
-            messages={messages}
+            messages ={messages}
           />
         )
       }
@@ -127,15 +127,10 @@ class List extends Component {
 
   render() {
     const { items, loading, total } = this.props.zoneCode;
-    const { messages } = this.props.intl;
+    const { messages, locale } = this.props.intl;
     const columnTable = {
       checkbox: true,
       columns: [
-        {
-            Header: '#',
-            accessor: "id",
-            sortable: false,
-        },
         {
           Header: messages['zone_code.code'],
           accessor: "code",
@@ -180,21 +175,41 @@ class List extends Component {
         {
             Header: messages['zone_code.country_origin'],
             accessor: "origin_country_name",
+            Cell: ({ original }) => {
+              return (
+                locale === 'en-US' ? original.origin_country_name_en : original.origin_country_name
+              )
+            },
             sortable: false,
         },
         {
           Header: messages['zone_code.city_origin'],
           accessor: "origin_city_name",
+          Cell: ({ original }) => {
+            return (
+              locale === 'en-US' ? original.origin_city_name_en : original.origin_city_name
+            )
+          },
           sortable: false,
         },
         {
           Header: messages['zone_code.country_destination'],
           accessor: "destination_country_name",
+          Cell: ({ original }) => {
+            return (
+              locale === 'en-US' ? original.destination_country_name_en : original.destination_country_name
+            )
+          },
           sortable: false,
         },
         {
           Header: messages['zone_code.city_destination'],
           accessor: "destination_city_name",
+          Cell: ({ original }) => {
+            return (
+              locale === 'en-US' ? original.destination_city_name_en : original.destination_city_name
+            )
+          },
           sortable: false,
         },
         {

@@ -175,15 +175,10 @@ class CityManager  {
             // $adapter = new DoctrineAdapter($ormPaginator);  
             $cities = $ormPaginator->getIterator()->getArrayCopy();
 
-            //set countRow default
-            $countRow = 1;
-            
             foreach ($cities as &$city) {//loop
-
                 //set created_at
-                $city['created_at'] =  ($city['created_at']) ? Utils::checkDateFormat($city['created_at'],'d/m/Y') : '';
-                
-                $countRow++;
+                $city['created_at'] =  ($city['created_at']) ? Utils::checkDateFormat($city['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $city['updated_at'] =  ($city['updated_at']) ? Utils::checkDateFormat($city['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
             }
            
         }

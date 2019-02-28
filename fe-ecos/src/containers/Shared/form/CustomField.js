@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
 
 const CustomField = ({
-    input, placeholder, type, meta: { touched, error }, messages, disabled, autocomplete, readOnly
+    input, placeholder, type, meta: { touched, error }, intl: { messages }, disabled, autocomplete, readOnly
   }) => (
     <div className="form__form-group-input-wrap">
       <input 
@@ -25,7 +26,6 @@ meta: PropTypes.shape({
     touched: PropTypes.bool,
     error: PropTypes.string,
 }),
-messages: PropTypes.object,
 disabled: PropTypes.bool,
 autocomplete: PropTypes.string,
 readOnly: PropTypes.bool
@@ -40,4 +40,4 @@ autocomplete: 'off',
 readOnly: false
 };
 
-export default CustomField;
+export default injectIntl(CustomField);

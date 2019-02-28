@@ -9,31 +9,31 @@ const validate = (values) => {
   }
 
     if (!values.is_private ) {
-      errors.is_private = 'range_weight.validate-private-empty';
+      errors.is_private = 'pri_man.validate-private-empty';
     }
 
     if (!values.carrier_id) {
-      errors.carrier_id = 'range_weight.validate-carrier-empty';
+      errors.carrier_id = 'pri_man.validate-carrier-empty';
     }
 
     if (!values.customer_id && values.is_private !== 1) {
-      errors.customer_id = 'range_weight.validate-customer-empty';
+      errors.customer_id = 'pri_man.validate-customer-empty';
     }
 
     if (!values.category) {
-      errors.category = 'range_weight.validate-category-empty';
+      errors.category = 'pri_man.validate-category-empty';
     }
 
     if (values.status  === undefined || values.status === null ) {
-      errors.status = 'range_weight.validate-status-empty';
+      errors.status = 'pri_man.validate-status-empty';
     }
 
     if (!values.service_id) {
-      errors.service_id = 'range_weight.validate-service-empty';
+      errors.service_id = 'pri_man.validate-service-empty';
     }
 
     if (!values.shipment_type_id) {
-      errors.shipment_type_id = 'range_weight.validate-shipment_type-empty';
+      errors.shipment_type_id = 'pri_man.validate-shipment_type-empty';
     }
 
   

@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import Select from 'react-select-v1';
 import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
 
 class SelectField extends PureComponent {
   static propTypes = {
@@ -54,19 +55,23 @@ class SelectField extends PureComponent {
   }
 }
 
-const renderSelectField = props => (
-  <div className="form__form-group-input-wrap">
-    <SelectField
-      {...props.input}
-      onInputChange={props.onInputChange}
-      options={props.options}
-      placeholder={props.placeholder}
-      disabled={props.disabled}
-      clearable={props.clearable}
-    />
-    {props.meta.touched && props.meta.error && <span className="form__form-group-error">{props.messages[props.meta.error]}</span>}
-  </div>
-);
+const renderSelectField = props => {
+  const { input, onInputChange, options, placeholder, disabled, clearable, meta } = props;
+  const { messages } = props.intl; 
+  return (
+    <div className="form__form-group-input-wrap">
+      <SelectField
+        {...input}
+        onInputChange={onInputChange}
+        options={options}
+        placeholder={placeholder}
+        disabled={disabled}
+        clearable={clearable}
+      />
+      {meta.touched && meta.error && <span className="form__form-group-error">{messages[meta.error]}</span>}
+    </div>
+  );
+}
 
 renderSelectField.propTypes = {
   input: PropTypes.shape({
@@ -98,4 +103,4 @@ renderSelectField.defaultProps = {
   clearable: true
 };
 
-export default renderSelectField;
+export default injectIntl(renderSelectField);

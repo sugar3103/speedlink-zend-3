@@ -172,15 +172,12 @@ class DistrictManager  {
 
             // $adapter = new DoctrineAdapter($ormPaginator);  
             $districts = $ormPaginator->getIterator()->getArrayCopy();
-            //set countRow default
-            $countRow = 1;
             
             foreach ($districts as &$district) {//loop
-
-                //set created_at
-                $district['created_at'] =  ($district['created_at']) ? Utils::checkDateFormat($district['created_at'],'d/m/Y') : '';
-
-                $countRow++;
+                $city = $this->entityManager->getRepository(City::class)->findOneById($district['city_id']);
+                $district['country_id'] = $city->getCountryId();
+                $district['created_at'] =  ($district['created_at']) ? Utils::checkDateFormat($district['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $district['updated_at'] =  ($district['updated_at']) ? Utils::checkDateFormat($district['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
             }
            
         }

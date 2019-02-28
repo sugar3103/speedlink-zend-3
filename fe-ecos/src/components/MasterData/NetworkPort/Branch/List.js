@@ -52,7 +52,6 @@ class List extends Component {
           <ConfirmPicker 
             onClose={onClose}
             onDelete={() => this.props.deleteBranchItem(ids, messages)}
-            messages={messages}
           />
         )
       }
@@ -155,24 +154,8 @@ class List extends Component {
       checkbox: true,
       columns: [
         {
-            Header: '#',
-            accessor: "#",
-            width: 30,
-            Cell: ({ original }) => {
-              return (
-               original.id
-              )
-            },
-            sortable: false,
-        },
-        {
           Header: messages['branch.code'],
-          accessor: "branch.code",
-          Cell: ({ original }) => {
-            return (
-             original.code
-            )
-          },
+          accessor: "code",
           sortable: false
         },
         {
@@ -197,10 +180,10 @@ class List extends Component {
         },
         {
             Header: messages['branch.city'],
-            accessor: "branch.city",
+            accessor: "city",
             Cell: ({ original }) => {
               return (
-               original.city
+                locale === 'en-US' ? original.city_en : original.city
               )
             },
             sortable: false
@@ -261,47 +244,6 @@ class List extends Component {
           </CardBody>
         </Card>
       </Col>
-
-      // <Col md={12} lg={12}>
-      //   <Card>
-      //     <CardBody className="master-data-list">
-      //     <Search />
-      //     <div className="mb-2">
-      //         <Button 
-      //           color="success" 
-      //           onClick={this.toggleModal}
-      //           className="master-data-btn"
-      //           size="sm"
-      //         >{messages['branch.add-new']}</Button>
-      //         <Action modalOpen={modalOpen} />
-      //         <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
-      //       </div>
-        
-      //       <Table responsive bordered hover>
-      //         <thead>
-      //           <tr>
-      //             <th>#</th>
-      //             <th>{messages['branch.code']}</th>
-      //             <th>{messages['name']}</th>
-      //             <th>{messages['description']}</th>
-      //             <th>{messages['branch.city']}</th>
-      //             <th>{messages['status']}</th>
-      //             <th>{messages['created-at']}</th>
-      //             <th>{messages['action']}</th>
-      //           </tr>
-      //         </thead>
-      //         <tbody>
-      //           {loading ? (
-      //             <tr><td colSpan={9} className="text-center"><div className="loading-table" /></td></tr>
-      //           ) : (
-      //               this.showBranchItem(items)
-      //             )}
-      //         </tbody>
-      //       </Table>
-      //       <Pagination pagination={this.state} total={total} onChangePage={this.onChangePage} />
-      //     </CardBody>
-      //   </Card>
-      // </Col>
     );
   }
 }
