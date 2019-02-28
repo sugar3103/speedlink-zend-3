@@ -1,8 +1,8 @@
 import axios from "axios";
 import { all, call, fork, put, takeEvery } from "redux-saga/effects";
 import { apiUrl, EC_SUCCESS} from '../../constants/defaultValues';
-import { authHeader } from '../../util/auth-header';
-import history from '../../util/history';
+// import { authHeader } from '../../util/auth-header';
+// import history from '../../util/history';
 
 import {
   SYSTEM_INFO
