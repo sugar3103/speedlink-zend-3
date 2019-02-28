@@ -130,12 +130,6 @@ class List extends Component {
       checkbox: true,
       columns: [
         {
-            Header: '#',
-            accessor: 'id',
-            width: 30,
-            sortable: false,
-        },
-        {
           Header: messages['range_weight.name'],
           accessor: "code",
           sortable: false,
