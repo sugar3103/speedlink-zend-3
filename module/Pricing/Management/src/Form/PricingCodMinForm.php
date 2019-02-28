@@ -34,7 +34,6 @@ class PricingCodMinForm extends Form {
         $this->scenario = $scenario;
         $this->entityManager = $entityManager;
         $this->pricingCodMin = $pricingCodMin;
-
         $this->addInputFilter();
     }
 

@@ -34,7 +34,6 @@ class PricingVasForm extends Form {
         $this->scenario = $scenario;
         $this->entityManager = $entityManager;
         $this->pricingVas = $pricingVas;
-
         $this->addInputFilter();
     }
 

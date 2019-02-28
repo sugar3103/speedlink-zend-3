@@ -34,7 +34,6 @@ class PricingCodForm extends Form {
         $this->scenario = $scenario;
         $this->entityManager = $entityManager;
         $this->pricingCod = $pricingCod;
-
         $this->addInputFilter();
     }
 

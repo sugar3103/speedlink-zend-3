@@ -126,20 +126,6 @@ class Pricing
     private $approval_by;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
-     */
-    private $description;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="description_en", type="text", length=65535, nullable=true)
-     */
-    private $description_en;
-
-    /**
      * @var int
      *
      * @ORM\Column(name="created_by", type="integer", nullable=false)
@@ -161,7 +147,7 @@ class Pricing
     private $updated_by;
 
     /**
-     * @var \DateTime|null
+     * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
@@ -498,38 +484,6 @@ class Pricing
     public function setApprovalBy($approval_by)
     {
         $this->approval_by = $approval_by;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string|null $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getDescriptionEn()
-    {
-        return $this->description_en;
-    }
-
-    /**
-     * @param string|null $description_en
-     */
-    public function setDescriptionEn($description_en)
-    {
-        $this->description_en = $description_en;
     }
 
     /**

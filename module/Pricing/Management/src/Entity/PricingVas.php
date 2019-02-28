@@ -178,15 +178,15 @@ class PricingVas
     }
 
     /**
-     * @return bool
+     * @return int
      */
-    public function isType()
+    public function getType()
     {
         return $this->type;
     }
 
     /**
-     * @param bool $type
+     * @param int $type
      */
     public function setType($type)
     {
@@ -258,15 +258,15 @@ class PricingVas
     }
 
     /**
-     * @return bool
+     * @return int
      */
-    public function isDeleted()
+    public function getisDeleted()
     {
         return $this->is_deleted;
     }
 
     /**
-     * @param bool $is_deleted
+     * @param int $is_deleted
      */
     public function setIsDeleted($is_deleted)
     {
