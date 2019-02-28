@@ -257,12 +257,12 @@ const getCountryListRequest = async (params) => {
 };
 
 function* getCountryBranchListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params, messages, types } = payload;
   try {
     const response = yield call(getCountryListRequest, params);
     switch (response.error_code) {
       case EC_SUCCESS:
-        yield put(getCountryBranchListSuccess(response.data));
+        yield put(getCountryBranchListSuccess(response.data, types));
         break;
 
       case EC_FAILURE:

@@ -34,9 +34,16 @@ class SearchForm extends Component {
   }
 
   componentDidMount() {
-    this.props.getCustomerList();
-    this.props.getOriginCountryList();
-    this.props.getDestinationCountryList();
+    const { messages } = this.props.intl;
+    const params = {
+        field: ['id', 'name'],
+        offset: {
+            limit: 0
+        }
+    }
+    this.props.getCustomerList(params, messages, 'onchange');
+    this.props.getOriginCountryList(params, messages ,'onchange');
+    this.props.getDestinationCountryList(params, messages ,'onchange');
   }
 
   onChangeOriginCountry = value => {

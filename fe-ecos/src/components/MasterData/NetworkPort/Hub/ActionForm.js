@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Button, ButtonToolbar, Card, CardBody, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -22,8 +22,8 @@ class ActionForm extends Component {
   }
 
   componentDidMount() {
+    const { messages } = this.props.intl;
     const data = this.props.modalData;
-
     if (data) {
       this.props.initialize(data);
     }
@@ -36,7 +36,7 @@ class ActionForm extends Component {
           id: data.country_id
         }
       }
-      this.props.getCountryList(paramsCountry);
+      this.props.getCountryList(paramsCountry, messages, 'onchange');
     }
     if (data && data.city_id) {
       let paramsCity = {
@@ -48,7 +48,7 @@ class ActionForm extends Component {
           country: data.country_id
         }
       }
-      this.props.getCityList(paramsCity);
+      this.props.getCityList(paramsCity, messages, 'onchange');
     }
   }
 
@@ -61,6 +61,7 @@ class ActionForm extends Component {
   }
 
   onChangeCountry = values => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
@@ -70,21 +71,9 @@ class ActionForm extends Component {
         country: values
       }
     }
-    this.props.getCityList(params);
+    this.props.getCityList(params, messages, 'onchange');
   }
 
-  onInputChange = value => {
-    const params = {
-      field: ['id', 'name'],
-      offset: {
-        limit: 0
-      },
-      query: {
-        name: value
-      }
-    }
-    this.props.getCityList(params);
-  }
 
   showOptionsCountry = (items) => {
     const Countries = items.map(item => {
@@ -119,8 +108,6 @@ class ActionForm extends Component {
   render() {
     const { messages } = this.props.intl;
     const { handleSubmit, modalType, modalData, countries, cities } = this.props;
-    // const className = modalData ? 'primary' : 'success';
-    // const title = modalData ? messages['hub.update'] : messages['hub.add-new'];
     let className = 'success';
     let title = messages['hub.add-new'];
     const disabled = modalType === MODAL_VIEW ? true : false;
@@ -247,7 +234,7 @@ class ActionForm extends Component {
                         type="text"
                         options={cities && this.showOptions(cities)}
                         placeholder={messages['hub.name']}
-                        onInputChange={this.onInputChange}
+                      
                         disabled={disabled} 
                       />
                     </div>
@@ -278,17 +265,29 @@ class ActionForm extends Component {
               </Card>
             </Col>
             <Col md={12} lg={12} xl={12} xs={12}>
-            { modalData ?
-              <span><u>{ modalData.updated_by ? "Update at: "+modalData.updated_at : "Created at: "+modalData.created_at } 
-              &nbsp;- { modalData.updated_by ? "Update by: "+modalData.user_update_name : "Created by: "+modalData.user_create_name }</u></span>
-             : '' }
+            {modalData &&
+                <Fragment>
+                  <hr />
+                  <Row>
+                    <Col md={6}>
+                      <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.user_create_name}</span>
+                      <br />
+                      <span><i className="label-info-data">{messages['created-at']}:</i>{modalData.created_at}</span>
+                    </Col>
+                    {modalData.updated_at && 
+                      <Col md={6}>
+                        <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.user_update_name}</span>
+                        <br />
+                        <span><i className="label-info-data">{messages['updated-at']}:</i>{modalData.updated_at}</span>
+                      </Col>
+                    }
+                  </Row>
+                </Fragment>
+              }
             </Col>
+            
           </Row>
         </div>
-        {/* <ButtonToolbar className="modal__footer">
-          <Button outline onClick={this.toggleModal}>{messages['cancel']}</Button>{' '}
-          <Button color={className} type="submit">{messages['save']}</Button>
-        </ButtonToolbar> */}
         <ButtonToolbar className="modal__footer">
           {this.state.modalType === MODAL_VIEW &&
             <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>

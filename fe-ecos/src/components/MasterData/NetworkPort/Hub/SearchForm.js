@@ -9,16 +9,18 @@ import PropTypes from 'prop-types';
 
 class SearchForm extends Component {
   componentDidMount() {
+    const { messages } = this.props.intl;
     const params = {
       field: ['id', 'name'],
       offset: {
         limit: 10
       }
     }
-    this.props.getCountryList(params);
+    this.props.getCountryList(params, messages ,'onchange');
   }
 
   onChangeCountry = value => {
+    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
@@ -28,7 +30,7 @@ class SearchForm extends Component {
         country_id: value
       }
     }
-    this.props.getCityList(params);
+    this.props.getCityList(params, messages, 'onchange');
   }
 
   showOptionsCountry = (country_items) => {
@@ -52,19 +54,6 @@ class SearchForm extends Component {
       })
     }
     return result;
-  }
-
-  onInputChange = value => {
-    const params = {
-      field: ['id', 'name'],
-      offset: {
-        limit: 0
-      },
-      query: {
-        name: value
-      }
-    }
-    this.props.getCityList(params);
   }
 
 
@@ -120,7 +109,6 @@ class SearchForm extends Component {
                 component={renderSelectField}
                 type="text"
                 options={cities && this.showOptionCity(cities)}
-                onInputChange={this.onInputChange}
               />
             </div>
           </div>
