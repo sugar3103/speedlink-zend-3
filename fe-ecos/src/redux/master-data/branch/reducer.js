@@ -48,6 +48,18 @@ export default (state = INIT_STATE, action) => {
   switch (action.type) {
 
     case BRANCH_TOGGLE_MODAL:
+    if(action.payload.type === 'add')
+    return {
+      ...state,
+      modalOpen: !state.modalOpen,
+      modalData: action.payload.data,
+      modalType: action.payload.type,
+      cities:null,
+      districts:null,
+      wards:null,
+      errors: null
+    }
+    else
       return {
         ...state,
         modalOpen: !state.modalOpen,
