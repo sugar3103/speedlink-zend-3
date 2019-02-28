@@ -3,6 +3,8 @@ namespace Address\Service;
 
 use Address\Entity\District;
 use Address\Entity\Ward;
+use Address\Entity\City;
+use Address\Entity\Country;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Core\Utils\Utils;
@@ -176,7 +178,12 @@ class WardManager  {
             $wards = $ormPaginator->getIterator()->getArrayCopy();
             
             foreach ($wards as &$ward) {//loop
+                $district = $this->entityManager->getRepository(District::class)->findOneById($ward['district_id']);
+                $city = $this->entityManager->getRepository(City::class)->findOneById($district->getCityId());
+                $country = $this->entityManager->getRepository(Country::class)->findOneById($city->getCountryId());
 
+                $ward['country_id'] = $country->getId();
+                $ward['city_id'] = $city->getId();                
                 $ward['created_at'] =  ($ward['created_at']) ? Utils::checkDateFormat($ward['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
                 $ward['updated_at'] =  ($ward['updated_at']) ? Utils::checkDateFormat($ward['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
             }

@@ -20,9 +20,9 @@ const validate = (values) => {
       errors.district_id = 'ward.validate-district-empty';
     }
 
-    if (!values.postal_code) {
-      errors.postal_code = 'ward.validate-postal-code-empty';
-    }
+    // if (!values.postal_code) {
+    //   errors.postal_code = 'ward.validate-postal-code-empty';
+    // }
 
     return errors;
   };

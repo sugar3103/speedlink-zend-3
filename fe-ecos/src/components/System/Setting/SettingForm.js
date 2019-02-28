@@ -46,7 +46,13 @@ class SettingForm extends Component {
             this.props.initialize(this.props.settings)
         }
     }
-   
+    // componentWillReceiveProps(nextProps) {
+        
+    //     if(Object.keys(nextProps.settings).length > 0) {
+    //         nextProps.initialize(nextProps.settings)
+    //     }  
+    // }
+
     toggle = (tab) => {
         if (this.state.activeTab !== tab) {
             this.setState({

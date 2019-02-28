@@ -3,53 +3,107 @@ import { injectIntl } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
 import renderSelectField from '../../../../containers/Shared/form/Select';
 import { Button, Col } from 'reactstrap';
-import { getDistrictList } from '../../../../redux/actions';
+import { getDistrictList, getCountryList, getCityList } from '../../../../redux/actions';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 class SearchForm extends Component {
+  constructor(props) {
+    super(props);
 
-  componentDidMount() {
-    const params = {
-      field: ['id', 'name'],
-      offset: {
-        limit: 10
-      }
+    this.state = {
+      district_disabled: true,
+      city_disabled: true,
     }
-    this.props.getDistrictList(params);
   }
 
-  showOptionDistrict = (items) => {
+  componentDidMount() {
+    this.props.getCountryList({ field: ['id', 'name', 'name_en'], offset: { limit: 0 } });
+
+  }
+
+  showOption = (items) => {
+    const { locale } = this.props.intl;
     let result = [];
     if (items.length > 0) {
       result = items.map(item => {
         return {
           value: item.id,
-          label: item.name
+          label: (locale === 'en-US' && item.name_en) ? item.name_en : item.name
         }
       })
     }
     return result;
   }
 
-  onInputChange = value => {
-    const params = {
-      field: ['id', 'name'],
-      offset: {
-        limit: 0
-      },
-      query: {
-        name: value
+  onChangeCountry = value => {
+    if (value === null) {
+      this.props.change('city_id','');
+      this.props.change('district_id','');
+      this.setState({ district_disabled: true})
+    } else {
+      const params = {
+        field: ['id', 'name','name_en'],
+        offset: {
+          limit: 0
+        },
+        query: {
+          country: value
+        }
       }
+      this.props.getCityList(params);
+      this.setState({ city_disabled: false})
     }
-    this.props.getDistrictList(params);
   }
 
+  onChangeCity = value => {
+    if(value === null) {
+      this.props.change('district_id','');      
+    } else {
+      this.props.getDistrictList({
+        field: ['id','name','name_en'],
+        offset: { limit : 0 },
+        query: { city: value }
+      })
+      this.setState({district_disabled: false})
+    }
+  }
   render() {
-    const { handleSubmit, reset, districts } = this.props;
+    const { handleSubmit, reset, districts, countries, cites } = this.props;
     const { messages } = this.props.intl;
     return (
       <form className="form" onSubmit={handleSubmit}>
+        <Col md={4}>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['address.country']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="country"
+                component={renderSelectField}
+                type="text"
+                options={countries && this.showOption(countries)}
+                onChange={this.onChangeCountry}
+                placeholder={messages['address.country']}
+              />
+            </div>
+          </div>
+        </Col>
+        <Col md={4}>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['address.city']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="city"
+                component={renderSelectField}
+                type="text"
+                options={cites && this.showOption(cites)}
+                onChange={this.onChangeCity}
+                placeholder={messages['address.city']}
+                disabled={this.state.city_disabled}
+              />
+            </div>
+          </div>
+        </Col>
         <Col md={4}>
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['district.list']}</span>
@@ -58,9 +112,9 @@ class SearchForm extends Component {
                 name="district"
                 component={renderSelectField}
                 type="text"
-                options={districts && this.showOptionDistrict(districts)}
-                onInputChange={this.onInputChange}
-                placeholder={messages['ward.district']}
+                options={districts && this.showOption(districts)}
+                placeholder={messages['address.district']}
+                disabled={this.state.district_disabled}
               />
             </div>
           </div>
@@ -126,8 +180,12 @@ SearchForm.propTypes = {
 }
 
 const mapStateToProps = ({ address }) => {
+  const countries = address.country.items;
+  const cites = address.city.items;
   const districts = address.district.items;
   return {
+    countries,
+    cites,
     districts
   }
 }
@@ -135,5 +193,7 @@ const mapStateToProps = ({ address }) => {
 export default reduxForm({
   form: 'ward_search_form',
 })(injectIntl(connect(mapStateToProps, {
-  getDistrictList
+  getDistrictList,
+  getCountryList,
+  getCityList
 })(SearchForm)));

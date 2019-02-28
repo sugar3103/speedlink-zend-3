@@ -10,9 +10,9 @@ class MainWrapper extends PureComponent {
   };
 
   addClassBody(theme) {
-    const { setting } = this.props;
+    const { system } = this.props;
 
-    let color = (setting.items) ? setting.items.default_color : 'light';
+    let color = (system.items) ? system.items.default_color : 'light';
     if (theme) {
       if (theme === "theme-light") {
         document.body.classList.remove('theme-dark');
@@ -27,10 +27,10 @@ class MainWrapper extends PureComponent {
     }
   }
   componentWillReceiveProps(nextProps) {    
-    const { setting, locale } = nextProps;
-    if (setting.items && Object.keys(setting.items).length > 0) {
-      document.title = (locale === 'en') ? setting.items.name_en : setting.items.name;
-      document.title += (setting.items.owner) ? ' - ' + setting.items.owner : '';
+    const { system, locale } = nextProps;
+    if (system.items && Object.keys(system.items).length > 0) {
+      document.title = (locale === 'en') ? system.items.name_en : system.items.name;
+      document.title += (system.items.owner) ? ' - ' + system.items.owner : '';
     }
   }
 
@@ -45,12 +45,12 @@ class MainWrapper extends PureComponent {
   }
 }
 
-const mapStateToProps = ({ settings, setting, authUser }) => {
+const mapStateToProps = ({ settings, system, authUser }) => {
   const { theme, locale } = settings;
   return {
     theme,
     locale,
-    setting,
+    system,
     authUser
   }
 }

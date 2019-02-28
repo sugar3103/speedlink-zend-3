@@ -15,6 +15,7 @@ import carrier from './master-data/service-shipment/carrier/reducer';
 import service from './master-data/service-shipment/service/reducer';
 import shipment_type from './master-data/service-shipment/shipmnet-type/reducer';
 import setting from './system/setting/reducer';
+import system from './system/reducer';
 
 const reducers = combineReducers({
   form: reduxFormReducer,
@@ -32,7 +33,8 @@ const reducers = combineReducers({
   rangeWeight,
   zoneCode,
   customer,
-  pricing
+  pricing,
+  system
 });
 
 export default reducers;

@@ -37,14 +37,14 @@ class Customizer extends PureComponent {
       theme,
       changeToDark,
       changeToLight,
-      setting,
+      system,
       changeSidebarVisibility,
       sidebar
     } = this.props;
     
     const { messages } = this.props.intl;
-    if(setting) {
-      if(setting.allow_customizer === '1') {
+    if(system) {
+      if(system.allow_customizer === '1') {
         return (
           <div className="customizer">
             <button className="customizer__btn" onClick={this.handleOpen}>

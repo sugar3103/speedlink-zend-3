@@ -6,13 +6,13 @@ import history from '../../../util/history';
 
 import {
   GET_SETTING,
-  UPDATE_SETTING
+  UPDATE_SETTING  
 } from "../../../constants/actionTypes";
 
 import {
   getSettingSuccess,
   getSettingError,  
-  getSetting
+  getSetting  
 } from "./action";
 
 import createNotification from '../../../util/notifications';
@@ -42,7 +42,7 @@ function* getSettingItems({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(getSettingError(response.data));
+        yield put(getSettingError(response.message));
         break;
 
       case EC_FAILURE_AUTHENCATION:
