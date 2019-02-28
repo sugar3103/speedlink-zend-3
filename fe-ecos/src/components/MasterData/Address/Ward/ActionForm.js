@@ -18,41 +18,89 @@ class ActionForm extends Component {
 
     this.state = {
       modalType: '',
-      city_disabled: true,
+      country_disabled: true,
       district_disabled: true,
-      ward_disabled: true,
+      city_disabled: true,
     }
   }
   componentDidMount() {
     const data = this.props.modalData;
+    const { modalType } = this.props;
+
+    if(modalType === MODAL_ADD )
+      this.setState({ country_disabled: false })
+    else if(modalType === MODAL_EDIT ){
+      this.setState({
+        country_disabled: false,
+        city_disabled: false,
+        district_disabled: false,
+      });
+    }
     if (data) {
       this.props.initialize(data);
     }
 
     let params = {
-      field: ['id', 'name'],
-      offset: {
-        limit: 5
-      }
-    }
-    if (data && data.district_id) {
-      params = { ...params, query: { id: data.district_id } }
-    }
-
-    this.props.getDistrictList(params);
-  }
-
-  onInputChange = value => {
-    const params = {
-      field: ['id', 'name'],
+      field: ['id', 'name','name_en'],
       offset: {
         limit: 0
-      },
-      query: {
-        name: value
       }
     }
-    this.props.getDistrictList(params);
+    
+    this.props.getCountryList();
+
+    if (data && data.country_id) {
+      params = { ...params, query: { country: data.country_id } }
+      this.props.getCityList(params);
+    }
+
+    if (data && data.city_id) {
+      params = { ...params, query: { city: data.city_id } }
+      this.props.getDistrictList(params);
+    }
+
+    
+  }
+
+  onChangeCountry = value => {
+    this.setState({
+      district_disabled: true
+    });
+    this.props.change('city_id','');
+    this.props.change('district_id','');  
+
+    if(value !==  null) {
+      const params = {
+        field: ['id', 'name', 'name_en'],
+        offset: {
+          limit: 0
+        },
+        query: {
+          country: value
+        }
+      }
+      this.props.getCityList(params);  
+      this.setState({ city_disabled: false})
+    }
+    
+  }
+
+  onChangeCity = value => {
+    this.props.change('district_id','');  
+    if(value !== null) {
+      const params = {
+        field: ['id', 'name', 'name_en'],
+        offset: {
+          limit: 0
+        },
+        query: {
+          city: value
+        }
+      }
+      this.props.getDistrictList(params);
+      this.setState({ district_disabled: false})
+    }
+    
   }
 
   showOption = (items) => {
@@ -73,19 +121,33 @@ class ActionForm extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.modalType !== this.props.modalType) {
+    if (prevProps.modalType !== this.props.modalType) {         
+               
       this.setState({
-        modalType: prevProps.modalType
+        modalType: prevProps.modalType,
+        country_disabled: prevProps.modalType === MODAL_ADD ? true : false
       });
     }
   }
+
   changeTypeModal = () => {
     this.props.changeTypeWardModal(MODAL_VIEW);
   }
 
+  componentWillUpdate(prevProps) {
+    if (prevProps.modalType !== this.props.modalType) {   
+      const disabled = prevProps.modalType === MODAL_ADD ? true : false;
+      this.setState({
+        country_disabled: disabled,
+        city_disabled: disabled,
+        district_disabled: disabled,
+      });
+    }
+  }
   render() {
     const { messages, locale } = this.props.intl;
     const { handleSubmit, modalType, modalData, cities, countries, districts } = this.props;
+    
     let className = 'success';
     let title = messages['ward.add-new'];
     const disabled = modalType === MODAL_VIEW ? true : false;
@@ -171,6 +233,62 @@ class ActionForm extends Component {
               </div>
             </Col>
             <Col md={12} lg={6} xl={6} xs={12}>
+            <div className="form__form-group">
+                <span className="form__form-group-label">{messages['address.country']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="country_id"
+                    component={renderSelectField}
+                    type="text"
+                    placeholder={messages['address.country']}
+                    options={countries && this.showOption(countries)}
+                    onChange={this.onChangeCountry}
+                    disabled={this.state.country_disabled}
+                  />
+                </div>
+              </div>
+            <div className="form__form-group">
+                <span className="form__form-group-label">{messages['address.city']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="city_id"
+                    component={renderSelectField}
+                    type="text"
+                    placeholder={messages['address.city']}
+                    options={cities && this.showOption(cities)}
+                    onChange={this.onChangeCity}
+                    disabled={this.state.city_disabled}
+                  />
+                </div>
+              </div>
+
+              <div className="form__form-group">
+                <span className="form__form-group-label">{messages['district.list']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="district_id"
+                    component={renderSelectField}
+                    type="text"
+                    placeholder={messages['ward.district']}
+                    options={districts && this.showOption(districts)}                    
+                    disabled={this.state.district_disabled}
+                  />
+                </div>
+              </div>
+              
+              <div className="form__form-group">
+                <span className="form__form-group-label">{messages['ward.postal-code']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="postal_code"
+                    component={CustomField}
+                    type="text"
+                    placeholder={messages['ward.postal-code']}
+                    disabled={disabled}
+                  />
+                </div>
+              </div>
+
               <div className="form__form-group">
                 <span className="form__form-group-label">{messages['status']}</span>
                 <div className="form__form-group-field">
@@ -187,34 +305,6 @@ class ActionForm extends Component {
                     component={renderRadioButtonField}
                     label={messages['inactive']}
                     radioValue={0}
-                    disabled={disabled}
-                  />
-                </div>
-              </div>
-
-              <div className="form__form-group">
-                <span className="form__form-group-label">{messages['district.list']}</span>
-                <div className="form__form-group-field">
-                  <Field
-                    name="district_id"
-                    component={renderSelectField}
-                    type="text"
-                    placeholder={messages['ward.district']}
-                    options={districts && this.showOption(districts)}
-                    onInputChange={this.onInputChange}
-                    disabled={disabled}
-                  />
-                </div>
-              </div>
-              
-              <div className="form__form-group">
-                <span className="form__form-group-label">{messages['ward.postal-code']}</span>
-                <div className="form__form-group-field">
-                  <Field
-                    name="postal_code"
-                    component={CustomField}
-                    type="text"
-                    placeholder={messages['ward.postal-code']}
                     disabled={disabled}
                   />
                 </div>
@@ -246,7 +336,7 @@ class ActionForm extends Component {
           }
         </div>
         <ButtonToolbar className="modal__footer">
-          {!this.state.modalType === MODAL_VIEW &&
+          {this.state.modalType === MODAL_VIEW &&
             <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
           }
           <Can user={this.props.authUser.user} permission="masterdata_ward" action="edit" own={modalData && modalData.created_by}>

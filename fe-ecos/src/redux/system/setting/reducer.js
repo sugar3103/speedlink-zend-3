@@ -56,7 +56,6 @@ export default (state = INIT_STATE, action) => {
         loading: false,
         errors: action.payload
       };
-
     default:
       return { ...state };
   }

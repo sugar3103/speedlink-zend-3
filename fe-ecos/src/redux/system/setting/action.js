@@ -4,7 +4,7 @@ import {
     GET_SETTING_ERROR,
     UPDATE_SETTING_SUCCESS,
     UPDATE_SETTING_ERROR,
-    UPDATE_SETTING
+    UPDATE_SETTING,
   } from '../../../constants/actionTypes';
   
   export const getSetting = (params, messages) => ({
@@ -35,4 +35,3 @@ import {
     type: UPDATE_SETTING_ERROR,
     payload: error
   });
-  

@@ -11,6 +11,7 @@ import validate from './validateLoginForm';
 import CustomField from '../../containers/Shared/form/CustomField';
 import { connect } from 'react-redux';
 import LoadingIcon from 'mdi-react/LoadingIcon';
+import { getSystemInfo } from '../../redux/actions';
 
 class LogInForm extends PureComponent {
   static propTypes = {
@@ -23,7 +24,10 @@ class LogInForm extends PureComponent {
       showPassword: false,
     };
   }
-
+  componentWillMount() {
+    this.props.getSystemInfo();    
+  }
+  
   showPassword = e => {
     e.preventDefault();
     console.log(e);
@@ -97,7 +101,7 @@ class LogInForm extends PureComponent {
   }
 }
 
-const mapStateToProps = ({authUser}) => {
+const mapStateToProps = ({ authUser }) => {
   const { loading } = authUser;
   return {
     loading
@@ -107,4 +111,4 @@ const mapStateToProps = ({authUser}) => {
 export default reduxForm({
   form: 'log_in_form',
   validate
-})(injectIntl(connect(mapStateToProps, null)(LogInForm)));
+})(injectIntl(connect(mapStateToProps, { getSystemInfo })(LogInForm)));
