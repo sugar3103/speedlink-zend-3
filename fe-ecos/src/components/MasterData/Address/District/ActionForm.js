@@ -1,5 +1,5 @@
-import React, { Component,Fragment } from 'react';
-import { Button, ButtonToolbar,Row,Col } from 'reactstrap';
+import React, { Component, Fragment } from 'react';
+import { Button, ButtonToolbar, Row, Col } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { toggleDistrictModal, getCityList, getCountryList, changeTypeDistrictModal } from '../../../../redux/actions';
@@ -17,7 +17,8 @@ class ActionForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalType: ''
+      modalType: '',
+      city_disabled: true,
     }
   }
   componentDidMount() {
@@ -32,11 +33,14 @@ class ActionForm extends Component {
         limit: 0
       }
     }
-    if (data && data.city_id) {
-      params = { ...params, query: { id: data.city_id } }
+    if (data && data.country_id) {
+      params = { ...params, query: { country: data.country_id } }
+      this.props.getCityList(params);
+      this.setState({
+        city_disabled: false
+      })
     }
-
-    this.props.getCityList(params);
+   
     this.props.getCountryList({
       field: ['id', 'name', 'name_en'],
       offset: {
@@ -46,16 +50,26 @@ class ActionForm extends Component {
   }
 
   onInputChange = value => {
-    const params = {
-      field: ['id', 'name'],
-      offset: {
-        limit: 0
-      },
-      query: {
-        name: value
+    if (value === null) {
+      this.setState({
+        city_disabled: true
+      });
+      this.props.change('city_id', '');
+    } else {
+      const params = {
+        field: ['id', 'name', 'name_en'],
+        offset: {
+          limit: 0
+        },
+        query: {
+          country: value
+        }
       }
+      this.props.getCityList(params);
+      this.setState({
+        city_disabled: false
+      })
     }
-    this.props.getCityList(params);
   }
 
   showOptions = (items) => {
@@ -89,7 +103,7 @@ class ActionForm extends Component {
 
   render() {
     const { messages, locale } = this.props.intl;
-    const { handleSubmit, modalType, modalData,cities,countries } = this.props;
+    const { handleSubmit, modalType, modalData, cities, countries } = this.props;
     let className = 'success';
     let title = messages['ditrist.add-new'];
     const disabled = modalType === MODAL_VIEW ? true : false;
@@ -203,7 +217,7 @@ class ActionForm extends Component {
                     type="text"
                     options={countries && this.showOptions(countries)}
                     placeholder={messages['city.country']}
-                    onInputChange={this.onInputChange}
+                    onChange={this.onInputChange}
                     disabled={disabled}
                   />
                 </div>
@@ -217,8 +231,7 @@ class ActionForm extends Component {
                     type="text"
                     options={cities && this.showOptions(cities)}
                     placeholder={messages['district.city']}
-                    onInputChange={this.onInputChange}
-                    disabled={disabled}
+                    disabled={this.state.city_disabled}
                   />
                 </div>
               </div>
