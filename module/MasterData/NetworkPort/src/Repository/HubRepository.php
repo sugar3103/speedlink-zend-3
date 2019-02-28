@@ -48,7 +48,9 @@ class HubRepository extends EntityRepository
                 uc.username AS user_create_name,
                 ud.username AS user_update_name,
                 c.name as city,
-                co.name as country
+                c.name_en as city_en,
+                co.name as country,
+                co.name_en as country_en
             ")->andWhere("h.is_deleted = 0")
             ->groupBy('h.id');
             if($limit) {

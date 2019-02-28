@@ -113,10 +113,10 @@ class AuthManager
                     $actionList == '*') {
                     if ($allow == '*')
                         // anyone is allowed to see the page.
-                        return self::ACCESS_GRANTED;
+                        $result = self::ACCESS_GRANTED;
                     elseif (!$this->authService->hasIdentity())
                         // ony authenticated user is allowed to see the page
-                        return self::AUTH_REQUIRED;
+                        $result = self::AUTH_REQUIRED;
 
                     if ($allow == '@')
                         // any authenticated user is allowed to see the page
@@ -130,7 +130,8 @@ class AuthManager
                             $result = self::ACCESS_DENIED;
                     } elseif (substr($allow, 0, 1) == '+') { 
                         // only the user with this permission is allowed to see the page
-                        $permission = substr($allow, 1);                                              
+                        $permission = substr($allow, 1);    
+                            
                         if ($this->rbacManager->isGranted(null, $permission))
                             $result = self::ACCESS_GRANTED;
                         else

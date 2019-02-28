@@ -41,9 +41,9 @@ class WardRepository extends EntityRepository {
                 w.district_id,
                 w.postal_code,
                 w.status,
-                w.created_by,
+                cr.username as created_by,
                 w.created_at,
-                w.updated_by,
+                up.username as updated_by,
                 w.updated_at,
                 CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
                 CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated

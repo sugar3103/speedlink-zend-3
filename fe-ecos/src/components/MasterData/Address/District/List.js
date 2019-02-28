@@ -47,8 +47,7 @@ class List extends Component {
       }
     })
   }
-
-
+  
   onChangePageSize = (size) => {
     const { messages } = this.props.intl;
     size = parseInt(size, 10);

@@ -39,8 +39,9 @@ class CountryManager  {
             $country->setIsoCode($data['iso_code']);
             // $country->setRefAsBy($data['ref_as_by']);
 
-            $currentDate = date('Y-m-d H:i:s');
-            $country->setCreatedAt($currentDate);
+           
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $country->setCreatedAt($addTime->format('Y-m-d H:i:s'));
             $country->setCreatedBy($user->id);
   
             // add the entity to the entity manager.
@@ -80,10 +81,9 @@ class CountryManager  {
             $country->setDescriptionEn($data['description_en']);
             $country->setStatus($data['status']);
             $country->setIsoCode($data['iso_code']);
-            // $country->setRefAsBy($data['ref_as_by']);
-
-            $currentDate = date('Y-m-d H:i:s');
-            $country->setUpdatedAt($currentDate);
+            
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $country->setUpdatedAt($addTime->format('Y-m-d H:i:s'));           
             $country->setUpdatedBy($user->id);
            
             // add the entity to the entity manager.
