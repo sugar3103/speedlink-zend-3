@@ -18,12 +18,14 @@ class ActionForm extends Component {
       modalType: '',
       customer_disabled: true,
       category_code: null,
-      carrier_id: null
+      carrier_id: null,
+      is_private : 0
     }
   }
 
   hanldeChangeType = value => {
-    this.props.change('customer', '');
+    this.props.change('customer_id', '');
+    this.setState({ is_private: value });
     if (value === 2) {
       this.setState({
         customer_disabled: false
@@ -35,7 +37,6 @@ class ActionForm extends Component {
     }
   }
 
-
   componentDidMount() {
     let data = this.props.modalData;
     const { messages } = this.props.intl;
@@ -44,15 +45,14 @@ class ActionForm extends Component {
       offset: {
           limit: 0
       }
-  }
+    }
     if (data) {
       this.props.initialize(data);
- 
       this.props.getCustomerList(paramCustomer, messages);
-      if(data.is_private === 2)
+      if(data.is_private === 2 && this.props.modalType !=='view')
       {
         this.setState({
-          customer_disabled: false
+          customer_disabled: true
         });
       }
       if(data.category){
@@ -68,6 +68,7 @@ class ActionForm extends Component {
         round_up: 0
       };
       this.props.initialize(data);
+      this.props.change('status',1);
     }
 
     if (data && data.carrier_id) {
@@ -75,7 +76,7 @@ class ActionForm extends Component {
         type : "carrier_id",
         category_code : data.category
       }
-      this.props.getCarrierCodeByCondition(paramsCarier, messages);
+      this.props.getCarrierCodeByCondition(paramsCarier, messages, 'editview');
     }
 
     if (data && data.service_id) {
@@ -84,7 +85,7 @@ class ActionForm extends Component {
         carrier_id : data.carrier_id,
         category_code :  data.category
       }
-      this.props.getServiceCodeByCondition(paramsCity, messages);
+      this.props.getServiceCodeByCondition(paramsCity, messages, 'editview');
     }
 
     if (data && data.shipment_type_id) {
@@ -94,7 +95,7 @@ class ActionForm extends Component {
         carrier_id :  data.carrier_id,
         service_id : [ data.service_id ]
       }
-      this.props.getShipmentTypeCodeByCondition(paramsShipmenttype, messages);
+      this.props.getShipmentTypeCodeByCondition(paramsShipmenttype, messages, 'editview');
     }
 
   }
@@ -107,6 +108,43 @@ class ActionForm extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps){
+    
+    if(nextProps.modalData && nextProps.modalData.is_private === 2 && this.state.is_private === 2  && nextProps.modalType ==='edit' &&  this.state.customer_disabled )
+    {
+      this.setState({
+        customer_disabled: false
+      });
+    }
+
+    if(nextProps.modalData && nextProps.modalData.is_private === 2  && nextProps.modalType ==='edit' &&  this.state.customer_disabled )
+    {
+      this.setState({
+        customer_disabled: false
+      });
+    }
+
+    if(nextProps.modalData && this.state.is_private === 1  && nextProps.modalType ==='edit' &&  this.state.customer_disabled )
+    {
+      this.setState({
+        customer_disabled: true
+      });
+    }
+    
+    if(nextProps.modalData && nextProps.modalData.is_private === 2 && this.state.is_private === 2 && nextProps.modalType ==='view' &&  this.state.customer_disabled === false )
+    {
+      this.setState({
+        customer_disabled: true
+      });
+    }
+    if(nextProps.modalData && nextProps.modalType ==='view' &&  this.state.customer_disabled === false )
+    {
+      this.setState({
+        customer_disabled: true
+      });
+    }
+   }
+  
   onChangeCategory = value => {
     const { messages } = this.props.intl;
     this.setState({
@@ -116,13 +154,13 @@ class ActionForm extends Component {
       type : "carrier_id",
       category_code : value
     }
-    this.props.getCarrierCodeByCondition(params, messages);
+    this.props.getCarrierCodeByCondition(params, messages, 'onchange');
     
     params = { ...params, carrier_id: 0 }
-    this.props.getServiceCodeByCondition(params, messages);
+    this.props.getServiceCodeByCondition(params, messages, 'onchange');
     
     params = { ...params, service_id: [0] }
-    this.props.getShipmentTypeCodeByCondition(params, messages);
+    this.props.getShipmentTypeCodeByCondition(params, messages, 'onchange');
   }
 
   onChangeCarrier = value => {
@@ -135,10 +173,10 @@ class ActionForm extends Component {
       carrier_id : value,
       category_code : this.state.category_code
     }
-    this.props.getServiceCodeByCondition(params, messages);
+    this.props.getServiceCodeByCondition(params, messages, 'onchange');
     
     params = { ...params, service_id: [0] }
-    this.props.getShipmentTypeCodeByCondition(params, messages);
+    this.props.getShipmentTypeCodeByCondition(params, messages, 'onchange');
   }
 
   onChangeService = value => {
@@ -149,7 +187,7 @@ class ActionForm extends Component {
       carrier_id : this.state.carrier_id,
       service_id : [ value ] 
     }
-    this.props.getShipmentTypeCodeByCondition(params, messages);
+    this.props.getShipmentTypeCodeByCondition(params, messages, 'onchange');
   }
 
   showOptionCarrier = (items) => {
@@ -206,11 +244,11 @@ class ActionForm extends Component {
  
   changeTypeModal = () => {
     this.props.changeTypeRangeWeightModal(MODAL_VIEW);
-  }
+  } 
 
   render() {
     const { messages } = this.props.intl;
-    const { handleSubmit, modalData, modalType, CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition, customerCode } = this.props;
+    const { handleSubmit, modalData, modalType, CarrierCodeByCondition, ServiceCodeByCondition, ShipmentCodeByCondition, customerCode } = this.props;
     let className = 'success';
     let title = messages['range_weight.add-new'];
     const disabled = modalType === MODAL_VIEW ? true : false;
@@ -347,7 +385,7 @@ class ActionForm extends Component {
               name="shipment_type_id"
               component={renderSelectField}
               type="text"
-              options={codeByCondition && this.showOptionShipmenttype(codeByCondition)}
+              options={ShipmentCodeByCondition && this.showOptionShipmenttype(ShipmentCodeByCondition)}
               disabled={disabled} 
             />
           </div>
@@ -490,7 +528,7 @@ class ActionForm extends Component {
 ActionForm.propTypes = {
   modalData: PropTypes.object,
   modalType: PropTypes.string,
-  codeByCondition: PropTypes.array,
+  ShipmentCodeByCondition: PropTypes.array,
   CarrierCodeByCondition: PropTypes.array,
   ServiceCodeByCondition: PropTypes.array,
   customerCode: PropTypes.array,
@@ -499,16 +537,15 @@ ActionForm.propTypes = {
   getCustomerList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({rangeWeight, shipment_type, customer}) => {  
-  const { errors, modalData, modalType } = rangeWeight;
-  const { CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition  } = shipment_type;
+const mapStateToProps = ({rangeWeight, customer}) => {  
+  const { errors, modalData, modalType, CarrierCodeByCondition, ServiceCodeByCondition, ShipmentCodeByCondition } = rangeWeight;
   const customerCode = customer.items;
   return {
     errors,
     modalData,
     modalType,
     customerCode,
-    CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition 
+    CarrierCodeByCondition, ServiceCodeByCondition, ShipmentCodeByCondition 
   };
 };
 

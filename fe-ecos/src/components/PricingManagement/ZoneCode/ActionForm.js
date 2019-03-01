@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Button, ButtonToolbar, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleZoneCodeModal, changeTypeZoneCodeModal,  getCarrierCodeByCondition, getServiceCodeByCondition, getShipmentTypeCodeByCondition, getCustomerList, 
+import { toggleZoneCodeModal, changeTypeZoneCodeModal,  getCarrierCodeZoneCodeByCondition, getServiceCodeZoneCodeByCondition, getShipmentTypeCodeZoneCodeByCondition, getCustomerList, 
   getOriginCountryList, getOriginCityList, getOriginDistrictList, getOriginWardList,
   getDestinationCountryList, getDestinationCityList, getDestinationDistrictList, getDestinationWardList  } from '../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
@@ -19,11 +19,13 @@ class ActionForm extends Component {
     this.state = {
       modalType: '',
       customer_disabled: true,
+      is_private : 0
     }
   }
 
   hanldeChangeType = value => {
-    this.props.change('customer', '');
+    this.props.change('customer_id', '');
+    this.setState({ is_private: value });
     if (value === 2) {
       this.setState({
         customer_disabled: false
@@ -37,7 +39,7 @@ class ActionForm extends Component {
 
   componentDidMount() {
     const { messages } = this.props.intl;
-    const data = this.props.modalData;
+    let data = this.props.modalData;
     const paramCustomer = {
         field: ['id', 'name'],
         offset: {
@@ -48,11 +50,21 @@ class ActionForm extends Component {
     if (data) {
       this.props.initialize(data);
       this.props.getCustomerList(paramCustomer, messages);
+      if(data.is_private === 2 && this.props.modalType !=='view')
+      {
+        this.setState({
+          customer_disabled: true
+        });
+      }
       if(data.category){
         this.setState({
           category_code: data.category
         });
       }
+    } 
+    else
+    {
+      this.props.change('status',1);
     }
 
     if (data && data.carrier_id) {
@@ -60,7 +72,7 @@ class ActionForm extends Component {
         type : "carrier_id",
         category_code : data.category
       }
-      this.props.getCarrierCodeByCondition(paramsCarier, messages);
+      this.props.getCarrierCodeZoneCodeByCondition(paramsCarier, messages, 'editview');
     }
 
     if (data && data.service_id) {
@@ -69,7 +81,7 @@ class ActionForm extends Component {
         carrier_id : data.carrier_id,
         category_code :  data.category
       }
-      this.props.getServiceCodeByCondition(paramsCity, messages);
+      this.props.getServiceCodeZoneCodeByCondition(paramsCity, messages, 'editview');
     }
 
     if (data && data.shipment_type_id) {
@@ -79,7 +91,7 @@ class ActionForm extends Component {
         carrier_id :  data.carrier_id,
         service_id : [ data.service_id ]
       }
-      this.props.getShipmentTypeCodeByCondition(paramsShipmenttype, messages);
+      this.props.getShipmentTypeCodeZoneCodeByCondition(paramsShipmenttype, messages, 'editview');
     }
 
     if (data && data.origin_country_id) {
@@ -191,6 +203,43 @@ class ActionForm extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps){
+    
+    if(nextProps.modalData && nextProps.modalData.is_private === 2 && this.state.is_private === 2  && nextProps.modalType ==='edit' &&  this.state.customer_disabled )
+    {
+      this.setState({
+        customer_disabled: false
+      });
+    }
+
+    if(nextProps.modalData && nextProps.modalData.is_private === 2  && nextProps.modalType ==='edit' &&  this.state.customer_disabled )
+    {
+      this.setState({
+        customer_disabled: false
+      });
+    }
+
+    if(nextProps.modalData && this.state.is_private === 1  && nextProps.modalType ==='edit' &&  this.state.customer_disabled )
+    {
+      this.setState({
+        customer_disabled: true
+      });
+    }
+    
+    if(nextProps.modalData && nextProps.modalData.is_private === 2 && this.state.is_private === 2 && nextProps.modalType ==='view' &&  this.state.customer_disabled === false )
+    {
+      this.setState({
+        customer_disabled: true
+      });
+    }
+    if(nextProps.modalData && nextProps.modalType ==='view' &&  this.state.customer_disabled === false )
+    {
+      this.setState({
+        customer_disabled: true
+      });
+    }
+   }
+
   onChangeCategory = value => {
     const { messages } = this.props.intl;
     this.setState({
@@ -200,13 +249,13 @@ class ActionForm extends Component {
       type : "carrier_id",
       category_code : value
     }
-    this.props.getCarrierCodeByCondition(params, messages);
+    this.props.getCarrierCodeZoneCodeByCondition(params, messages, 'onchange');
   
     params = { ...params,carrier_id: 0}
-    this.props.getServiceCodeByCondition(params, messages);
+    this.props.getServiceCodeZoneCodeByCondition(params, messages, 'onchange');
    
     params = { ...params, service_id: [0] }
-    this.props.getShipmentTypeCodeByCondition(params, messages);
+    this.props.getShipmentTypeCodeZoneCodeByCondition(params, messages, 'onchange');
   }
 
   onChangeCarrier = value => {
@@ -219,10 +268,10 @@ class ActionForm extends Component {
       carrier_id : value,
       category_code : this.state.category_code
     }
-    this.props.getServiceCodeByCondition(params, messages);
+    this.props.getServiceCodeZoneCodeByCondition(params, messages, 'onchange');
    
     params = { ...params, service_id: [0] }
-    this.props.getShipmentTypeCodeByCondition(params, messages);
+    this.props.getShipmentTypeCodeZoneCodeByCondition(params, messages, 'onchange');
   }
 
   onChangeService = value => {
@@ -233,7 +282,7 @@ class ActionForm extends Component {
       carrier_id : this.state.carrier_id,
       service_id : [ value ] 
     }
-    this.props.getShipmentTypeCodeByCondition(params, messages);
+    this.props.getShipmentTypeCodeZoneCodeByCondition(params, messages, 'onchange');
   }
 
   showOptionCarrier = (items) => {
@@ -392,32 +441,29 @@ class ActionForm extends Component {
   toggleModal = () => {
     this.props.toggleZoneCodeModal();
   };
-  componentWillReceiveProps(nextProps) {
-      if (nextProps && nextProps.modalData) {
-    }
-  }
+
   changeTypeModal = () => {
     this.props.changeTypeZoneCodeModal(MODAL_VIEW);
   }
 
   render() {
     const { messages } = this.props.intl;
-    const { handleSubmit, modalData, modalType,  CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition, customerCode, origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards } = this.props;
+    const { handleSubmit, modalData, modalType,  CarrierCodeZoneCodeByCondition, ServiceCodeZoneCodeByCondition, ShipmentCodeZoneCodeByCondition, customerCode, origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards } = this.props;
     let className = 'success';
-    let title = messages['hub.add-new'];
+    let title = messages['zone_code.add-new'];
     const disabled = modalType === MODAL_VIEW ? true : false;
     switch (modalType) {
       case MODAL_ADD:
         className = 'success';
-        title = messages['hub.add-new'];
+        title = messages['zone_code.add-new'];
         break;
       case MODAL_EDIT:
         className = 'primary';
-        title = messages['hub.update'];
+        title = messages['zone_code.update'];
         break;
       case MODAL_VIEW:
         className = 'info';
-        title = messages['hub.view'];
+        title = messages['zone_code.view'];
         break;
       default:
         break;
@@ -456,7 +502,6 @@ class ActionForm extends Component {
                   component={renderSelectField}
                   type="text"
                   options={customerCode && this.showOptionsCustomer(customerCode)}
-                  placeholder={messages['pri_man.customer']}
                   disabled={this.state.customer_disabled}
                 />
               </div>
@@ -514,7 +559,7 @@ class ActionForm extends Component {
                   name="carrier_id"
                   component={renderSelectField}
                   type="text"
-                  options={CarrierCodeByCondition && this.showOptionCarrier(CarrierCodeByCondition)}
+                  options={CarrierCodeZoneCodeByCondition && this.showOptionCarrier(CarrierCodeZoneCodeByCondition)}
                   onChange={this.onChangeCarrier}
                   disabled={disabled} 
                 />
@@ -530,7 +575,7 @@ class ActionForm extends Component {
                   name="service_id"
                   component={renderSelectField}
                   type="text"
-                  options={ServiceCodeByCondition && this.showOptionService(ServiceCodeByCondition)}
+                  options={ServiceCodeZoneCodeByCondition && this.showOptionService(ServiceCodeZoneCodeByCondition)}
                   onChange={this.onChangeService}
                   disabled={disabled} 
                 />
@@ -546,7 +591,7 @@ class ActionForm extends Component {
                   name="shipment_type_id"
                   component={renderSelectField}
                   type="text"
-                  options={codeByCondition && this.showOptionShipmenttype(codeByCondition)}
+                  options={ShipmentCodeZoneCodeByCondition && this.showOptionShipmenttype(ShipmentCodeZoneCodeByCondition)}
                   disabled={disabled} 
                 />
               </div>
@@ -732,9 +777,9 @@ class ActionForm extends Component {
 ActionForm.propTypes = {
   modalData: PropTypes.object,
   modalType: PropTypes.string,
-  codeByCondition: PropTypes.array,
-  CarrierCodeByCondition: PropTypes.array,
-  ServiceCodeByCondition: PropTypes.array,
+  ShipmentCodeZoneCodeByCondition: PropTypes.array,
+  CarrierCodeZoneCodeByCondition: PropTypes.array,
+  ServiceCodeZoneCodeByCondition: PropTypes.array,
   customerCode: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,
   toggleZoneCodeModal: PropTypes.func.isRequired,
@@ -751,7 +796,7 @@ ActionForm.propTypes = {
 
 const mapStateToProps = ({zoneCode,shipment_type, customer}) => {  
   const { errors, modalData, modalType } = zoneCode;
-  const { CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition  } = shipment_type;
+  const { CarrierCodeZoneCodeByCondition, ServiceCodeZoneCodeByCondition, ShipmentCodeZoneCodeByCondition  } = zoneCode;
   const customerCode = customer.items;
   const origin_countrys = zoneCode.origin_country;
   const origin_citys = zoneCode.origin_city;
@@ -765,7 +810,7 @@ const mapStateToProps = ({zoneCode,shipment_type, customer}) => {
     errors,
     modalData,
     modalType,
-    CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition ,customerCode,
+    CarrierCodeZoneCodeByCondition, ServiceCodeZoneCodeByCondition, ShipmentCodeZoneCodeByCondition ,customerCode,
     origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards
   };
 };
@@ -775,9 +820,9 @@ export default reduxForm({
   validate
 })(injectIntl(connect(mapStateToProps, {
   toggleZoneCodeModal,
-  getCarrierCodeByCondition,
-  getServiceCodeByCondition,
-  getShipmentTypeCodeByCondition,
+  getCarrierCodeZoneCodeByCondition,
+  getServiceCodeZoneCodeByCondition,
+  getShipmentTypeCodeZoneCodeByCondition,
   getCustomerList,
   getOriginCountryList, getOriginCityList, getOriginDistrictList, getOriginWardList,
   getDestinationCountryList, getDestinationCityList, getDestinationDistrictList, getDestinationWardList,

@@ -9,10 +9,8 @@ import {
   SHIPMENT_TYPE_ADD_ITEM,
   SHIPMENT_TYPE_UPDATE_ITEM,
   SHIPMENT_TYPE_DELETE_ITEM ,
-  SHIPMENT_TYPE_CODE_GET_LIST,
-  SHIPMENT_TYPE_GET_CODE_BY_CONDITION,
-  CARRIER_GET_CODE_BY_CONDITION,
-  SERVICE_GET_CODE_BY_CONDITION
+  SHIPMENT_TYPE_CODE_GET_LIST
+  
 } from "../../../../constants/actionTypes";
 
 import {
@@ -28,13 +26,8 @@ import {
   getShipmentTypeList,
   getShipmentTypeCodeList,
   getShipmentTypeCodeListSuccess,
-  getShipmentTypeCodeListError,
-  getShipmentTypeCodeByConditionSuccess,
-  getShipmentTypeCodeByConditionError,
-  getCarrierCodeByConditionSuccess,
-  getCarrierCodeByConditionError,
-  getServiceCodeByConditionSuccess,
-  getServiceCodeByConditionError
+  getShipmentTypeCodeListError
+  
 } from "./actions";
 
 import createNotification from '../../../../util/notifications';
@@ -295,116 +288,6 @@ function* deleteShipmentTypeItem({ payload }) {
   }
 }
 
-//list shipment_type code
-function getCodeByConditionApi(params) {
-  return axios.request({
-    method: 'post',
-    url: `${apiUrl}shipment_type/codeByCondition`,
-    headers: authHeader(),
-    data: JSON.stringify(params)
-  });
-}
-
-const getShipmentTypeCodeByConditionRequest = async (params) => {
-  return await getCodeByConditionApi(params).then(res => res.data).catch(err => err)
-};
-
-function* getShipmentTypeCodeByCondition({ payload }) {
-  const { params, messages } = payload;
-  try {
-    const response = yield call(getShipmentTypeCodeByConditionRequest, params);
-    switch (response.error_code) {
-      case EC_SUCCESS:
-        yield put(getShipmentTypeCodeByConditionSuccess(response.data));
-        break;
-
-      case EC_FAILURE:
-        yield put(getShipmentTypeCodeByConditionError(response.data));
-        break;
-      
-      case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning',
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
-        break;
-
-      default:
-        break;
-    }
-
-  } catch (error) {
-    yield put(getShipmentTypeCodeByConditionError(error));
-  }
-}
-
-function* getCarrierCodeByCondition({ payload }) {
-  const { params, messages } = payload;
-  try {
-    const response = yield call(getShipmentTypeCodeByConditionRequest, params);
-    switch (response.error_code) {
-      case EC_SUCCESS:
-        yield put(getCarrierCodeByConditionSuccess(response.data));
-        break;
-
-      case EC_FAILURE:
-        yield put(getCarrierCodeByConditionError(response.data));
-        break;
-
-      case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning',
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
-        break;
-
-      default:
-        break;
-    }
-
-  } catch (error) {
-    yield put(getCarrierCodeByConditionError(error));
-  }
-}
-
-function* getServiceCodeByCondition({ payload }) {
-  const { params, messages } = payload;
-  try {
-    const response = yield call(getShipmentTypeCodeByConditionRequest, params);
-    switch (response.error_code) {
-      case EC_SUCCESS:
-        yield put(getServiceCodeByConditionSuccess(response.data));
-        break;
-
-      case EC_FAILURE:
-        yield put(getServiceCodeByConditionError(response.data));
-        break;
-
-      case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning',
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
-        break;
-
-      default:
-        break;
-    }
-
-  } catch (error) {
-    yield put(getServiceCodeByConditionError(error));
-  }
-}
-
 
 export function* watchGetList() {
   yield takeEvery(SHIPMENT_TYPE_GET_LIST, getShipmentTypeListItems);
@@ -426,20 +309,7 @@ export function* watchDeleteItem() {
   yield takeEvery(SHIPMENT_TYPE_DELETE_ITEM, deleteShipmentTypeItem);
 }
 
-export function* watchGetListCodeByCondition() {
-  yield takeEvery(SHIPMENT_TYPE_GET_CODE_BY_CONDITION, getShipmentTypeCodeByCondition);
-}
-
-export function* watchGetListCarrierCodeByCondition() {
-  yield takeEvery(CARRIER_GET_CODE_BY_CONDITION, getCarrierCodeByCondition);
-}
-export function* watchGetListServiceCodeByCondition() {
-  yield takeEvery(SERVICE_GET_CODE_BY_CONDITION, getServiceCodeByCondition);
-}
 
 export default function* rootSaga() {
-  yield all([fork(watchGetList), fork(watchGetListCode), fork(watchAddItem), fork(watchUpdateItem), fork(watchDeleteItem),
-     fork(watchGetListCodeByCondition),
-     fork(watchGetListCarrierCodeByCondition),
-     fork(watchGetListServiceCodeByCondition)]);
+  yield all([fork(watchGetList), fork(watchGetListCode), fork(watchAddItem), fork(watchUpdateItem), fork(watchDeleteItem)]);
 }

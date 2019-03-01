@@ -3,7 +3,7 @@ import { injectIntl } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
 import renderSelectField from '../../../../containers/Shared/form/Select';
 import { Button, Col } from 'reactstrap';
-import { getCountryList, getCityList } from '../../../../redux/actions';
+import { getCountryHubList, getCityHubList } from '../../../../redux/actions';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -11,45 +11,37 @@ class SearchForm extends Component {
   componentDidMount() {
     const { messages } = this.props.intl;
     const params = {
-      field: ['id', 'name'],
+      field: ['id', 'name', 'name_en'],
       offset: {
         limit: 10
       }
     }
-    this.props.getCountryList(params, messages ,'onchange');
+    this.props.getCountryHubList(params, messages);
   }
 
   onChangeCountry = value => {
     const { messages } = this.props.intl;
     let params = {
-      field: ['id', 'name'],
+      field: ['id', 'name', 'name_en'],
       offset: {
         limit: 0
       },
       query: {
-        country_id: value
+        country: value ? value : 0
       }
     }
-    this.props.getCityList(params, messages, 'onchange');
+    this.props.change('cities',null);
+    this.props.getCityHubList(params, messages);
   }
 
-  showOptionsCountry = (country_items) => {
-    const countries = country_items.map(country_item => {
-      return {
-        'value': country_item.id,
-        'label': country_item.name
-      }
-    });
-    return countries;
-  }
-
-  showOptionCity = (items) => {
+  showOptions = (items) => {
+    const { locale } = this.props.intl;
     let result = [];
     if (items.length > 0) {
       result = items.map(item => {
         return {
           value: item.id,
-          label: item.name
+          label: locale ==='en-US' ? item.name_en : item.name
         }
       })
     }
@@ -93,7 +85,7 @@ class SearchForm extends Component {
               <Field
                 name="country"
                 component={renderSelectField}
-                options={countries && this.showOptionsCountry(countries)}
+                options={countries && this.showOptions(countries)}
                 onChange={this.onChangeCountry}
               />
             </div>
@@ -108,7 +100,7 @@ class SearchForm extends Component {
                 name="city"
                 component={renderSelectField}
                 type="text"
-                options={cities && this.showOptionCity(cities)}
+                options={cities && this.showOptions(cities)}
               />
             </div>
           </div>
@@ -159,13 +151,13 @@ SearchForm.propTypes = {
   reset: PropTypes.func.isRequired,
   countries: PropTypes.array,
   cities: PropTypes.array,
-  getCountryList: PropTypes.func.isRequired,
-  getCityList: PropTypes.func.isRequired
+  getCountryHubList: PropTypes.func.isRequired,
+  getCityHubList: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ address }) => {
-  const cities = address.city.items;
-  const countries = address.country.items;
+const mapStateToProps = ({ hub }) => {
+  const cities = hub.city_hub;
+  const countries = hub.country_hub;
   return {
     cities, countries
   }
@@ -175,9 +167,10 @@ export default reduxForm({
   form: 'hub_search_form',
   initialValues: {
     name: '',
+    name_en: '',
     status: -1
   }
 })(injectIntl(connect(mapStateToProps, {
-  getCityList,
-  getCountryList,
+  getCityHubList,
+  getCountryHubList,
 })(SearchForm)));

@@ -12,7 +12,7 @@ class SearchForm extends Component {
   componentDidMount() {
     const { messages } = this.props.intl;
     let params = {
-      field: ['id', 'name'],
+      field: ['id', 'name', 'name_en'],
       offset: {
           limit: 0
       }
@@ -24,7 +24,7 @@ class SearchForm extends Component {
   onChangeCountry = value => {
     const { messages } = this.props.intl;
     let params = {
-      field: ['id', 'name'],
+      field: ['id', 'name', 'name_en'],
       offset: {
         limit: 0
       },
@@ -32,7 +32,7 @@ class SearchForm extends Component {
         country: value ? value : 0
       }
     }
-    this.props.change('cities',null);
+    
     this.props.change('districts',null);
     this.props.change('wards',null);
     this.props.getCityBranchList(params, messages, 'onchange');
@@ -41,7 +41,7 @@ class SearchForm extends Component {
   onChangeCity = value => {
     const { messages } = this.props.intl;
     let params = {
-      field: ['id', 'name'],
+      field: ['id', 'name', 'name_en'],
       offset: {
         limit: 0
       },
@@ -57,7 +57,7 @@ class SearchForm extends Component {
   onChangeDistrict = value => {
     const { messages } = this.props.intl;
     let params = {
-      field: ['id', 'name'],
+      field: ['id', 'name', 'name_en'],
       offset: {
         limit: 0
       },
@@ -67,24 +67,25 @@ class SearchForm extends Component {
     }
     this.props.change('wards',null);
     this.props.getWardBranchList(params, messages, 'onchange');
-    
   }
 
   showOptionsHub = (items) => {
+    const { locale } = this.props.intl;
     const hubs = items.map(item => {
       return {
         'value': item.id,
-        'label': item.name
+        'label': locale ==='en-US' ? item.name_en : item.name
       }
     });
     return hubs;
   }
 
   showOptions = (items) => {
+    const { locale } = this.props.intl;
     const select_options = items.map(item => {
       return {
         'value': item.id,
-        'label': item.name
+        'label': locale ==='en-US' ? item.name_en : item.name
       }
     });
     return select_options;
