@@ -148,6 +148,18 @@ class PricingManager {
         return $dataPricing;
     }
 
+    public function getListCodeByCondition($field, $params)
+    {
+        $pricing = [];
+        $ormPricing = $this->entityManager->getRepository(Pricing::class)->getListCodeByCondition($field, $params);
+        if($ormPricing){
+            $ormPaginator = new ORMPaginator($ormPricing, true);
+            $ormPaginator->setUseOutputWalkers(false);
+            $pricing = $ormPaginator->getIterator()->getArrayCopy();
+        }
+        return $pricing;
+    }
+
     /**
      * Add Pricing
      * @param $data

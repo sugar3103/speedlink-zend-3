@@ -53,7 +53,7 @@ class PricingCodMinRepository extends EntityRepository
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(PricingCodMin::class, 'pc')
-            ->innerJoin('pv.join_pricing_data', 'pd');
+            ->innerJoin('pc.join_pricing_data', 'pd');
 
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }

@@ -58,6 +58,24 @@ class PricingController extends CoreController
         return $this->createResponse();
     }
 
+    public function codeByConditionAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            $result = array("data" => []);
+            $param = $this->getRequestData([]);
+            $sortField = $param['type'];
+            unset($param['type']);
+            $dataShipmentType = $this->pricingManager->getListCodeByCondition($sortField, $param);
+
+            $result['error_code'] = 1;
+            $result['message'] = 'Success';
+            $result["data"] = !empty($dataShipmentType) ? $dataShipmentType : [];
+            $this->apiResponse = $result;
+        }
+        return $this->createResponse();
+
+    }
+
     public function addAction()
     {
         $user = $this->tokenPayload;
