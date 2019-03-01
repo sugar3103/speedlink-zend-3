@@ -299,7 +299,7 @@ class SearchForm extends Component {
 
         <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['zone_code.name']}</span>
+            <span className="form__form-group-label">{messages['range_weight.name']}</span>
             <div className="form__form-group-field">
               <Field component="input" type="text" 
                      name='code' />

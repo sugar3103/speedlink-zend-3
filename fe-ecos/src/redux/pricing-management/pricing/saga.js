@@ -12,6 +12,7 @@ import {
   PRICING_SALEMAN_GET_LIST,
   PRICING_APPROVED_BY_GET_LIST,
   PRICING_GET_LIST,
+  PRICING_ADD_MASTER_DATA,
 
 } from "../../../constants/actionTypes";
 
@@ -30,6 +31,8 @@ import {
   getApprovedByListError,
   getPricingListSuccess,
   getPricingListError,
+  addPricingMasterDataItemSuccess,
+  addPricingMasterDataItemError
 } from "./actions";
 
 import createNotification from '../../../util/notifications';
@@ -343,6 +346,55 @@ function* getPricingListItems({ payload }) {
   }
 }
 
+//add pricing master data
+
+function addPricingMasterDataApi(item) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}pricing/add`,
+    headers: authHeader(),
+    data: item
+  });
+}
+
+const addPricingMasterDataItemRequest = async item => {
+  return await addPricingMasterDataApi(item).then(res => res.data).catch(err => err)
+};
+
+function* addPricingMasterDataItem({ payload }) {
+  const { item, messages } = payload;
+  try {
+    const response = yield call(addPricingMasterDataItemRequest, item);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(addPricingMasterDataItemSuccess());
+        createNotification({
+          type: 'success', 
+          message: messages['pricing.add-success'], 
+          title: messages['notification.success']
+        });
+        break;
+
+      case EC_FAILURE:
+        yield put(addPricingMasterDataItemError(response.data));
+        break;
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning', 
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(addPricingMasterDataItemError(error));
+  }
+}
+
 export function* watchCountryPricingGetList() {
   yield takeEvery(PRICING_COUNTRY_GET_LIST, getCountryPricingListItems);
 }
@@ -364,6 +416,9 @@ export function* watchApprovedByGetList() {
 export function* watchPricingGetList() {
   yield takeEvery(PRICING_GET_LIST, getPricingListItems);
 }
+export function* watchPricingAddMasterData() {
+  yield takeEvery(PRICING_ADD_MASTER_DATA, addPricingMasterDataItem);
+}
 
 export default function* rootSaga() {
   yield all([
@@ -373,6 +428,7 @@ export default function* rootSaga() {
     fork(watchWardPricingGetList),
     fork(watchSalemanGetList),
     fork(watchApprovedByGetList),
-    fork(watchPricingGetList)
+    fork(watchPricingGetList),
+    fork(watchPricingAddMasterData)
   ]);
 }

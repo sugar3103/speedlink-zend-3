@@ -177,15 +177,16 @@ form {
         animation: lds-dual-ring 1.2s linear infinite;
     }
 }
-  @keyframes lds-dual-ring {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-  .access_denied {
+@keyframes lds-dual-ring {
+0% {
+    transform: rotate(0deg);
+}
+100% {
+    transform: rotate(360deg);
+}
+}
+
+.access_denied {
     text-align: center;
     margin: 50px;
     h1 { color: red; }
@@ -286,3 +287,84 @@ form {
         }
     }
 }
+
+/* PRICING PAGE */
+
+.pricing {
+    .pricing-title {
+        h4 {
+            float: left;
+        }
+        button {
+            float: right;
+            margin: 0;
+        }
+    }
+
+    .react-grid-Grid {
+        min-height: 100% !important;
+    }
+
+    .react-grid-Container{
+        width: auto !important;
+    }
+
+    .react-grid-Canvas {
+        width: auto !important;
+        overflow-y: hidden !important;
+    }
+    
+
+    .react-grid-HeaderRow {
+        width: 100% !important;
+    }
+
+    .react-grid-Canvas > div{
+        &:nth-child(2) {
+            width: auto !important;
+        }
+    }
+    .rdg-last--frozen {
+        box-shadow: none !important;
+    }
+
+    .btn-grid {
+        margin: 10px 0 0 0;
+        float: right;
+    }
+
+    .pricing-vas {
+        .group-action {
+            .btn {
+                float: right;
+                padding: 4px 8px;
+                margin-right: 0;
+                margin-left: 15px;
+            }
+        }
+
+        .group-input {
+            .btn {
+                padding: 4px 8px;
+            }
+
+            &>div {
+                width: auto;
+                float: left;
+                margin-right: 15px;
+    
+                &:last-child {
+                    float: right;
+                    margin-right: 0;
+                }
+            }
+
+            .type-select {
+                width: 10% !important;
+            }
+        }
+
+    }
+}
+
+/* END PRICING PAGE */

@@ -95,5 +95,22 @@ module.exports = {
     'pricing.view': 'View Pricing',
     'pricing.delete': 'Delete Pricing',
     'pricing.name': 'Pricing Name',
+    'pricing.master-data': 'Master Data',
+    'pricing.transportation': 'Pricing: Transportation',
+    'pricing.value-services': 'Pricing: Value - Adding Services',
+    'pricing.normal': 'Normal',
+    'pricing.range': 'Range',
+    'pricing.type': 'Type',
+    'pricing.value': 'Value',
+    'pricing.minimun-value': 'Minimum Value',
+
+    //validate
+    'pricing.validate-saleman-empty': 'Saleman shouldn’t be empty',
+    'pricing.validate-effected-date-empty': 'Effected date shouldn’t be empty',
+    'pricing.validate-expired-date-empty': 'Expired date shouldn’t be empty',
+    'pricing.validate-expired-date-lesser': 'Expired date must not be less than expired date',
+    'pricing.validate-origin-country-empty': 'Country shouldn’t be empty',
+    'pricing.validate-origin-city-empty': 'City shouldn’t be empty',
+    'pricing.validate-approved-by-empty': 'Approved by shouldn’t be empty'
 
   }

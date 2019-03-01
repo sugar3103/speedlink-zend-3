@@ -26,6 +26,10 @@ import {
   PRICING_GET_LIST,
   PRICING_GET_LIST_SUCCESS,
   PRICING_GET_LIST_ERROR,
+  
+  PRICING_ADD_MASTER_DATA,
+  PRICING_ADD_MASTER_DATA_SUCCESS,
+  PRICING_ADD_MASTER_DATA_ERROR,
 } from '../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -175,6 +179,26 @@ export default (state = INIT_STATE, action) => {
 
     case PRICING_GET_LIST_ERROR:
       return { 
+        ...state, 
+        loading: false, 
+        errors: action.payload 
+      };
+
+    case PRICING_ADD_MASTER_DATA:
+			return { 
+        ...state, 
+        loading: false 
+      };
+
+		case PRICING_ADD_MASTER_DATA_SUCCESS:
+			return { 
+        ...state, 
+        loading: false, 
+        errors: null
+      };
+
+		case PRICING_ADD_MASTER_DATA_ERROR:
+			return { 
         ...state, 
         loading: false, 
         errors: action.payload 

@@ -17,7 +17,8 @@ class ActionForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showCustomerField: false
+            showCustomerField: false,
+            disableApprovedStatusField: false,
         }
     }
 
@@ -35,6 +36,14 @@ class ActionForm extends Component {
     }
 
     componentDidMount() {
+        //set approved status
+        if (this.props.type === 'add') {
+            this.props.change('approved_status', 'new');
+            this.setState({
+                disableApprovedStatusField: true
+            });
+        }
+
         const { messages } = this.props.intl;
         //get customer
         const paramCustomer = {
@@ -63,8 +72,18 @@ class ActionForm extends Component {
                 limit: 0
             }
         }
+
         //get countries
         this.props.getCountryPricingList(paramAddress, messages);
+
+        //get carrier
+        const paramCarrier = {
+            field: ['id', 'code'],
+            offset: {
+                limit: 0
+            }
+        }
+        this.props.getCarrierCodeList(paramCarrier, messages);
     }
 
     showOption = (items) => {
@@ -333,6 +352,7 @@ class ActionForm extends Component {
                                         { value: 'new', label: messages['pricing.new'] },
                                     ]}
                                     clearable={false}
+                                    disabled={this.state.disableApprovedStatusField}
                                 />
                             </div>
                         </div>

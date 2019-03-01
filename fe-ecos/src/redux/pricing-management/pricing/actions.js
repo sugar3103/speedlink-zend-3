@@ -27,6 +27,10 @@ import {
   PRICING_GET_LIST_SUCCESS,
   PRICING_GET_LIST_ERROR,
 
+  PRICING_ADD_MASTER_DATA,
+  PRICING_ADD_MASTER_DATA_SUCCESS,
+  PRICING_ADD_MASTER_DATA_ERROR
+
 } from '../../../constants/actionTypes';
 
 export const getCountryPricingList = (params, messages) => ({
@@ -132,5 +136,19 @@ export const getPricingListSuccess = (items, total) => ({
 
 export const getPricingListError = (error) => ({
   type: PRICING_GET_LIST_ERROR,
+  payload: error
+});
+
+export const addPricingMasterDataItem = (item, messages) => ({
+  type: PRICING_ADD_MASTER_DATA,
+  payload: { item, messages }
+});
+
+export const addPricingMasterDataItemSuccess = () => ({
+  type: PRICING_ADD_MASTER_DATA_SUCCESS,
+});
+
+export const addPricingMasterDataItemError = (error) => ({
+  type: PRICING_ADD_MASTER_DATA_ERROR,
   payload: error
 });

@@ -28,7 +28,7 @@ class List extends Component {
 
   onDelete = (e, ids) => {
     e.stopPropagation();
-    const { messages } = this.props.intl;
+    // const { messages } = this.props.intl;
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
