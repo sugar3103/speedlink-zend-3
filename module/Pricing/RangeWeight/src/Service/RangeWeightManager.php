@@ -74,7 +74,6 @@ class RangeWeightManager {
         $rangeweight->setCreatedBy($data['created_by']);
         $rangeweight->setCreatedAt(date('Y-m-d H:i:s'));
         $this->getReferenced($rangeweight, $data);
-        //  var_dump($data); die;
         $this->entityManager->persist($rangeweight);
         $this->entityManager->flush();       
         // $last_id = $rangeweight->getBranchId();

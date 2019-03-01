@@ -794,7 +794,7 @@ ActionForm.propTypes = {
   getDestinationWardList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({zoneCode,shipment_type, customer}) => {  
+const mapStateToProps = ({zoneCode, customer}) => {  
   const { errors, modalData, modalType } = zoneCode;
   const { CarrierCodeZoneCodeByCondition, ServiceCodeZoneCodeByCondition, ShipmentCodeZoneCodeByCondition  } = zoneCode;
   const customerCode = customer.items;
@@ -810,8 +810,12 @@ const mapStateToProps = ({zoneCode,shipment_type, customer}) => {
     errors,
     modalData,
     modalType,
-    CarrierCodeZoneCodeByCondition, ServiceCodeZoneCodeByCondition, ShipmentCodeZoneCodeByCondition ,customerCode,
-    origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards
+    CarrierCodeZoneCodeByCondition, 
+    ServiceCodeZoneCodeByCondition, 
+    ShipmentCodeZoneCodeByCondition, 
+    customerCode,
+    origin_countrys, origin_citys, origin_districts, origin_wards, 
+    destination_countrys, destination_citys, destination_districts, destination_wards
   };
 };
 

@@ -73,7 +73,6 @@ class BranchManager {
         $this->entityManager->beginTransaction();
         try {
         $branch = new Branch;
-        // var_dump($data); die;
         $branch->setCode($data['code']);
         $branch->setName($data['name']);
         $branch->setNameEn($data['name_en']);

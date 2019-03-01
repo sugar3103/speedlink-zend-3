@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { Button, ButtonToolbar, Card, CardBody, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleBranchModal, changeTypeBranchModal, getCityBranchList, getDistrictBranchList, getWardBranchList, getCountryBranchList, getHubList } from '../../../../redux/actions';
+import { toggleBranchModal, changeTypeBranchModal, getCityBranchList, getDistrictBranchList, getWardBranchList, getCountryBranchList, getHubBranchList } from '../../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../../containers/Shared/form/CustomField';
 import renderRadioButtonField from '../../../../containers/Shared/form/RadioButton';
@@ -414,17 +414,21 @@ ActionForm.propTypes = {
   getDistrictBranchList: PropTypes.func.isRequired,
   getCountryBranchList: PropTypes.func.isRequired,
   getWardBranchList: PropTypes.func.isRequired,
-  getHubList: PropTypes.func.isRequired,
+  getHubBranchList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ branch, address, hub }) => {
+const mapStateToProps = ({ branch }) => {
   const { modalData, modalType, countries, cities, districts, wards } = branch;
-  const hubs = hub.items;
+  const { hubs } = branch ;
 
   return {
     modalData,
     modalType,
-    cities, districts, countries, wards, hubs
+    countries, 
+    cities, 
+    districts,  
+    wards, 
+    hubs
   }
 }
 
@@ -438,5 +442,5 @@ export default reduxForm({
   getDistrictBranchList,
   getCountryBranchList,
   getWardBranchList,
-  getHubList
+  getHubBranchList
 })(ActionForm)));

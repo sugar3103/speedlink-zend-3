@@ -24,7 +24,10 @@ import {
   BRANCH_DISTRICT_GET_LIST_ERROR,
   BRANCH_WARD_GET_LIST,
   BRANCH_WARD_GET_LIST_SUCCESS,
-  BRANCH_WARD_GET_LIST_ERROR
+  BRANCH_WARD_GET_LIST_ERROR,
+  HUB_BRANCH_GET_LIST,
+  HUB_BRANCH_GET_LIST_SUCCESS,
+  HUB_BRANCH_GET_LIST_ERROR,
 
 } from '../../../constants/actionTypes';
 
@@ -155,4 +158,17 @@ export const getWardBranchListError = (error) => ({
   payload: error
 });
 
+export const getHubBranchList = (params, messages, types) => ({
+  type: HUB_BRANCH_GET_LIST,
+  payload: { params, messages, types }
+});
 
+export const getHubBranchListSuccess = (hubs) => ({
+  type: HUB_BRANCH_GET_LIST_SUCCESS,
+  payload: { hubs }
+});
+
+export const getHubBranchListError = (error) => ({
+  type: HUB_BRANCH_GET_LIST_ERROR,
+  payload: error
+});

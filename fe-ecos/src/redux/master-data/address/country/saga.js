@@ -140,7 +140,6 @@ const updateCountryItemRequest = async item => {
 
 function* updateCountryItem({ payload }) {
   const { item, messages } = payload;
-  console.log(item);
   
   try {
     const response = yield call(updateCountryItemRequest, item);

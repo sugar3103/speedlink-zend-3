@@ -16,7 +16,7 @@ class SearchForm extends Component {
         limit: 10
       }
     }
-    this.props.getCountryHubList(params, messages);
+    this.props.getCountryHubList(params, messages, 'onchange');
   }
 
   onChangeCountry = value => {
@@ -31,7 +31,7 @@ class SearchForm extends Component {
       }
     }
     this.props.change('cities',null);
-    this.props.getCityHubList(params, messages);
+    this.props.getCityHubList(params, messages, 'onchange');
   }
 
   showOptions = (items) => {

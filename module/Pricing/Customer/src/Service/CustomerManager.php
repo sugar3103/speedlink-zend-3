@@ -51,7 +51,6 @@ class CustomerManager {
         $this->entityManager->beginTransaction();
         try {
         $rangeweight = new RangeWeight;
-        // var_dump($data); die;
         $rangeweight->setCode($data['code']);
         $rangeweight->setCarrierId($data['carrier_id']);
         $rangeweight->setCategory($data['category']);
@@ -175,7 +174,6 @@ class CustomerManager {
         $customers     = [];
         $totalCustomer = 0;
         //get orm Customer
-        // var_dump('abcd'); die();
         $ormCustomer = $this->entityManager->getRepository(Customer::class)
             ->getListCustomerByCondition($start, $limit, $sortField, $sortDirection, $filters);
         if($ormCustomer){

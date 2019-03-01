@@ -48,7 +48,6 @@ class ZoneCodeForm extends Form {
         $this->scenario = $scenario;
         $this->entityManager = $entityManager;
         $this->zonecode = $zonecode;
-
         $this->addInputFilter();
     }
 

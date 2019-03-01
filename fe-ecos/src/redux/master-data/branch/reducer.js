@@ -25,6 +25,9 @@ import {
   BRANCH_WARD_GET_LIST,
   BRANCH_WARD_GET_LIST_SUCCESS,
   BRANCH_WARD_GET_LIST_ERROR,
+  HUB_BRANCH_GET_LIST,
+  HUB_BRANCH_GET_LIST_SUCCESS,
+  HUB_BRANCH_GET_LIST_ERROR,
 } from '../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -40,6 +43,7 @@ const INIT_STATE = {
   cities:null,
   districts:null,
   wards:null,
+  hubs:null
 };
 
 export default (state = INIT_STATE, action) => {
@@ -248,7 +252,29 @@ export default (state = INIT_STATE, action) => {
           ...state, 
           errors: action.payload 
         };
-
+    
+        case HUB_BRANCH_GET_LIST:
+        params  = action.payload;
+       return { 
+         ...state, 
+        
+       };
+ 
+     case HUB_BRANCH_GET_LIST_SUCCESS:
+       const { hubs } = action.payload;
+       return { 
+         ...state, 
+         loading: false, 
+         hubs
+       };
+ 
+     case HUB_BRANCH_GET_LIST_ERROR:
+       return { 
+         ...state, 
+         loading: false, 
+         errors: action.payload 
+       };
+ 
     default: 
       return { ...state };
   }
