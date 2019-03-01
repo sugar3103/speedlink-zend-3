@@ -134,9 +134,10 @@ class List extends Component {
           className: "text-center",
           Cell: ({ original }) => {
             return (
-              <div className="products-list__img-wrap">
-                <img src={Ava} alt="avatar" />
-              </div>
+              // <div className="products-list__img-wrap">
+              //   <img src={Ava} alt="avatar" />
+              // </div>
+              <i className="icon-avatar products-list__img-wrap" />
             )
           }
         },

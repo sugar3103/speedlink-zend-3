@@ -12,7 +12,7 @@ const SidebarLink = ({
     activeClassName="sidebar__link-active"
   >
     <li className="sidebar__link">
-      {icon ? <span className={`sidebar__link-icon lnr lnr-${icon}`} /> : ''}
+      {icon ? <span className={`sidebar__link-icon ${icon}`} /> : ''}
       <p className="sidebar__link-title">
         {title}
         {newLink ? <Badge className="sidebar__link-badge"><span>New</span></Badge> : ''}

@@ -128,7 +128,7 @@
 
   p {
     position: absolute;
-    left: 43px;
+    left: 55px;
     width: 160px;
     transition: left 0.3s;
     top: 50%;
@@ -158,9 +158,11 @@
 
 .sidebar__link-icon {
   margin-right: 10px;
-  font-size: 13px;
-  line-height: 13px;
-  color: #b1c3c8;
+  font-size: 20px;
+  line-height: 20px;
+  @include themify($themes) {
+    color: themed('colorFitness');
+  }
 }
 
 .sidebar__submenu {
@@ -197,7 +199,7 @@
 
   .sidebar__link {
     p {
-      left: 50px;
+      left: 60px;
     }
   }
 }

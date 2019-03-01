@@ -159,6 +159,7 @@ class Option extends Component {
                             options={[
                                 { value: 'light', label: messages['light'] },
                                 { value: 'dark', label:  messages['dark'] },
+                                { value: 'dark-blue', label:  messages['dark-blue'] }
                             ]}
                         />
                     </div>

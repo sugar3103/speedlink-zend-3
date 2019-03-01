@@ -174,7 +174,7 @@ class List extends Component {
         {
           Header: messages['name'],
           accessor: "name",
-          width: 150,
+          width: 250,
           sortable: false,
         },
         {

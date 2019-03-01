@@ -30,6 +30,22 @@ $themes: (
     colorBubbleActive: rgba(92, 104, 156, 0.6),
     colorScrollbar: #606071,
     colorFitness: #ffffff
+  ),
+  dark-blue: (
+    colorBackground: #343d45,
+    colorBackgroundBody: #495762,
+    colorText: #ffffff,
+    colorTextAdditional: #999999,
+    logoImg: url(/img/logo/logo.official.png),
+    colorHover: #4e5c69,
+    colorBorder: #333246,
+    colorIcon: #605f7b,
+    imgInvert: invert(100%),
+    colorFieldsBorder: #38424b,
+    colorBubble: rgba(68, 79, 97, 0.65),
+    colorBubbleActive: rgba(92, 104, 156, 0.6),
+    colorScrollbar: #606071,
+    colorFitness: #ffffff
   )
 );
 

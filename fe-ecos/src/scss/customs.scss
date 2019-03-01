@@ -190,3 +190,99 @@ form {
     margin: 50px;
     h1 { color: red; }
   }
+
+  .toggle-theme {
+    .form__form-group {
+        margin-bottom: 0;
+    }
+  }
+
+.theme-dark-blue {    
+    legend {
+        color: #fff
+    }
+    .form input:focus, .form input:active, .form textarea:focus, .form textarea:active {
+        outline: none;
+        border: none
+    }
+    .form{
+         input { 
+            border: none;
+            background-color: rgba(250, 250, 250, 0.1);
+            color: #fff;
+            font-size: 14px
+        }
+        
+        textarea { 
+            border: none;
+            background-color: rgba(250, 250, 250, 0.1);
+            color: #fff;
+            font-size: 14px
+        }
+        .form__form-group-select {
+            input{ background-color: transparent}
+            .Select-control{
+                border: none;
+                background-color: rgba(250, 250, 250, 0.1);
+            }
+        }
+    }
+    .sidebar {
+        box-shadow: none;
+        .sidebar__link-active {
+            li { background: #495762}
+        }
+    }
+    .sidebar__submenu {
+        background: none;
+        .sidebar__link {
+            &:hover{
+                background-color: #434f5a
+            }
+            .sidebar__link-icon { font-size: 15px}
+        }
+        
+    }
+    .card-body {
+        background: none;
+        padding: 0
+    }
+
+    .ReactTable{
+        .rt-tbody{
+          .rt-td{
+              color: #fff
+          }
+        }
+        .rt-table{
+            .rt-thead{
+                color: #fff
+            }
+        }
+    }   
+    
+    #setting {
+        .card-body { padding: 5px 0 !important}
+        .form.form--horizontal {
+            .form__form-group-label { width: 200px;}
+            .form__form-group-field {
+                width: calc(100% - 200px);
+            }
+        }        
+    }
+    .products-list__img-wrap {
+        &.icon-avatar {
+            border: none;            
+            font-size: 30px;
+        }
+    }
+}
+
+.topbar__avatar-img {
+    &.icon-avatar {
+        font-size: 25px;        
+        @include themify($themes) {            
+            color: themed('colorText');
+        }
+    }
+}

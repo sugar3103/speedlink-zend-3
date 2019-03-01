@@ -30,7 +30,9 @@ class TopbarProfile extends PureComponent {
     return (
       <div className="topbar__profile">
         <button className="topbar__avatar" onClick={this.toggle}>
-          <img className="topbar__avatar-img" src={Ava} alt="avatar" />
+          {/* {Ava ? (<img className="topbar__avatar-img" src={Ava} alt="avatar" />) : ( */}
+            <i className="icon-avatar topbar__avatar-img" />
+          {/* ) } */}
           <p className="topbar__avatar-name">
             {(currentUser.fullname) ? currentUser.fullname : currentUser.username}</p>
           <DownIcon className="topbar__icon" />

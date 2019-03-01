@@ -15,12 +15,19 @@ class MainWrapper extends PureComponent {
     let color = (system.items) ? system.items.default_color : 'light';
     if (theme) {
       if (theme === "theme-light") {
+        document.body.classList.remove('theme-dark'); 
+        document.body.classList.remove('theme-dark-blue');
+        document.body.classList.add(theme);
+      } else if (theme === "theme-dark") {
+        document.body.classList.remove('theme-light');
+        document.body.classList.remove('theme-dark-blue');
+        document.body.classList.add(theme);
+      } else if (theme === "theme-dark-blue") {
+        document.body.classList.remove('theme-light');
         document.body.classList.remove('theme-dark');
         document.body.classList.add(theme);
-      } else {
-        document.body.classList.remove('theme-light');
-        document.body.classList.add(theme);
       }
+      
     } else {
       document.body.classList.add('theme-' + color);
       localStorage.setItem('currentTheme', 'theme-' + color);

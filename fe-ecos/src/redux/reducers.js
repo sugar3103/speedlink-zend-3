@@ -16,6 +16,7 @@ import service from './master-data/service-shipment/service/reducer';
 import shipment_type from './master-data/service-shipment/shipmnet-type/reducer';
 import setting from './system/setting/reducer';
 import system from './system/reducer';
+import { LOGOUT_USER } from '../constants/actionTypes';
 
 const reducers = combineReducers({
   form: reduxFormReducer,
@@ -37,4 +38,13 @@ const reducers = combineReducers({
   system
 });
 
-export default reducers;
+const initialState = reducers({}, {})
+
+const rootReducer = (state, action) => {
+  if (action.type === LOGOUT_USER) {
+      state = initialState
+  }
+  return reducers(state, action);
+}
+
+export default rootReducer;

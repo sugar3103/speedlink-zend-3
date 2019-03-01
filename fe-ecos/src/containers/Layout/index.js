@@ -7,7 +7,15 @@ import Topbar from './topbar/Topbar';
 import Sidebar from './sidebar/Sidebar';
 import Customizer from './customizer/Customizer';
 
-import { changeMobileSidebarVisibility, changeSidebarVisibility, changeThemeToDark, changeThemeToLight,getVerifyAuth,getSystemInfo } from '../../redux/actions';
+import { 
+  changeMobileSidebarVisibility, 
+  changeSidebarVisibility, 
+  changeThemeToDark,
+  changeThemeToDarkBlue, 
+  changeThemeToLight,
+  getVerifyAuth,
+  getSystemInfo
+} from '../../redux/actions';
 
 class Layout extends Component {
   static propTypes = {
@@ -38,8 +46,12 @@ class Layout extends Component {
     this.props.changeThemeToLight();
   };
 
+  changeToDarkBlue = () => {
+    this.props.changeThemeToDarkBlue();
+  }
+
   render() {
-    const { sidebar, theme,system } = this.props;
+    const { sidebar, theme, system } = this.props;
     const layoutClass = classNames({
       layout: true,
       'layout--collapse': this.props.sidebar.collapse,
@@ -52,7 +64,8 @@ class Layout extends Component {
           theme={theme}
           changeToDark={this.changeToDark}
           changeToLight={this.changeToLight}
-          setting = {system.items}
+          changeToDarkBlue={this.changeToDarkBlue}
+          system = {system.items}
           changeSidebarVisibility={this.changeSidebarVisibility}
         />
         <Topbar
@@ -82,6 +95,7 @@ export default withRouter(connect(mapStateToProps, {
   changeSidebarVisibility,
   changeMobileSidebarVisibility,
   changeThemeToDark,
+  changeThemeToDarkBlue,
   changeThemeToLight,
   getVerifyAuth,
   getSystemInfo

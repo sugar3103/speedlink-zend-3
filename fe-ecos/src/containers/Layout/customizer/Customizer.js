@@ -14,9 +14,10 @@ class Customizer extends PureComponent {
     sidebar: SidebarProps.isRequired,
     theme: ThemeProps.isRequired,
     changeToDark: PropTypes.func.isRequired,
+    changeToDarkBlue: PropTypes.func.isRequired,
     changeToLight: PropTypes.func.isRequired,
     changeSidebarVisibility: PropTypes.func.isRequired,
-    setting: PropTypes.any
+    system: PropTypes.any
   };
 
   state = {
@@ -36,6 +37,7 @@ class Customizer extends PureComponent {
     const {
       theme,
       changeToDark,
+      changeToDarkBlue,
       changeToLight,
       system,
       changeSidebarVisibility,
@@ -60,7 +62,7 @@ class Customizer extends PureComponent {
               </div>
               <p className="customizer__caption">{messages['theme.desc-setting']}</p>
               <ToggleCollapsedMenu changeSidebarVisibility={changeSidebarVisibility} sidebar={sidebar} />
-              <ToggleTheme changeToDark={changeToDark} changeToLight={changeToLight} theme={theme} />
+              <ToggleTheme changeToDark={changeToDark} changeToLight={changeToLight} changeToDarkBlue={changeToDarkBlue} theme={theme} />
             </div>
           </div>
         );
