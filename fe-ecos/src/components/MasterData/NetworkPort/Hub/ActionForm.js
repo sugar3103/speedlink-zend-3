@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Button, ButtonToolbar, Card, CardBody, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleHubModal, getCountryList, getCityList, changeTypeHubModal } from '../../../../redux/actions';
+import { toggleHubModal, getCountryHubList, getCityHubList, changeTypeHubModal } from '../../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../../containers/Shared/form/CustomField';
 import renderSelectField from '../../../../containers/Shared/form/Select';
@@ -29,6 +29,7 @@ class ActionForm extends Component {
     }
     if (data && data.country_id) {
       let paramsCountry = {
+        field: ['id', 'name', 'name_en'],
         offset: {
           limit: 0
         },
@@ -36,11 +37,11 @@ class ActionForm extends Component {
           id: data.country_id
         }
       }
-      this.props.getCountryList(paramsCountry, messages, 'onchange');
+      this.props.getCountryHubList(paramsCountry, messages, 'onchange');
     }
     if (data && data.city_id) {
       let paramsCity = {
-        field: ['id', 'name'],
+        field: ['id', 'name', 'name_en'],
         offset: {
           limit: 0
         },
@@ -48,7 +49,7 @@ class ActionForm extends Component {
           country: data.country_id
         }
       }
-      this.props.getCityList(paramsCity, messages, 'onchange');
+      this.props.getCityHubList(paramsCity, messages, 'onchange');
     }
   }
 
@@ -63,35 +64,25 @@ class ActionForm extends Component {
   onChangeCountry = values => {
     const { messages } = this.props.intl;
     let params = {
-      field: ['id', 'name'],
+      field: ['id', 'name', 'name_en'],
       offset: {
         limit: 0
       },
       query: {
-        country: values
+        country: values ? values : 0
       }
     }
-    this.props.getCityList(params, messages, 'onchange');
-  }
-
-
-  showOptionsCountry = (items) => {
-    const Countries = items.map(item => {
-      return {
-        'value': item.id,
-        'label': item.name
-      }
-    });
-    return Countries;
+    this.props.getCityHubList(params, messages, 'onchange');
   }
 
   showOptions = (items) => {
+    const { locale } = this.props.intl;
     let result = [];
     if (items.length > 0) {
       result = items.map(item => {
         return {
           value: item.id,
-          label: item.name
+          label: locale ==='en-US' ? item.name_en : item.name
         }
       });
     }
@@ -218,7 +209,7 @@ class ActionForm extends Component {
                         name="country_id"
                         component={renderSelectField}
                         type="text"
-                        options={countries && this.showOptionsCountry(countries)}
+                        options={countries && this.showOptions(countries)}
                         onChange={this.onChangeCountry}
                         disabled={disabled} 
                       />
@@ -306,13 +297,13 @@ ActionForm.propTypes = {
   cities: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,
   toggleHubModal: PropTypes.func.isRequired,
-  getCityList: PropTypes.func.isRequired,
+  getCityHubList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ hub, address }) => {
+const mapStateToProps = ({ hub }) => {
   const { modalData, modalType } = hub;
-  const cities = address.city.items;
-  const countries = address.country.items;
+  const cities = hub.city_hub;
+  const countries = hub.country_hub;
   return {
     modalData,
     modalType,
@@ -326,7 +317,7 @@ export default reduxForm({
   validate
 })(injectIntl(connect(mapStateToProps, {
   toggleHubModal,
-  getCountryList,
-  getCityList,
+  getCountryHubList,
+  getCityHubList,
   changeTypeHubModal
 })(ActionForm)));

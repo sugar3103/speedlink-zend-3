@@ -17,6 +17,9 @@ import {
   DESTINATION_CITY_GET_LIST,
   DESTINATION_DISTRICT_GET_LIST,
   DESTINATION_WARD_GET_LIST,
+  SHIPMENT_TYPE_GET_CODE_ZONE_CODE_BY_CONDITION,
+  CARRIER_GET_CODE_ZONE_CODE_BY_CONDITION,
+  SERVICE_GET_CODE_ZONE_CODE_BY_CONDITION
 
 } from "../../../constants/actionTypes";
 
@@ -48,6 +51,13 @@ import {
   getDestinationDistrictListError,
   getDestinationWardListSuccess,
   getDestinationWardListError,
+
+  getShipmentTypeCodeZoneCodeByConditionSuccess,
+  getShipmentTypeCodeZoneCodeByConditionError,
+  getCarrierCodeZoneCodeByConditionSuccess,
+  getCarrierCodeZoneCodeByConditionError,
+  getServiceCodeZoneCodeByConditionSuccess,
+  getServiceCodeZoneCodeByConditionError
 } from "./actions";
 
 import createNotification from '../../../util/notifications';
@@ -637,6 +647,115 @@ function* getDestinationWardListItems({ payload }) {
   }
 }
 
+//list shipment_type code
+function getCodeByConditionApi(params) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}shipment_type/codeByCondition`,
+    headers: authHeader(),
+    data: JSON.stringify(params)
+  });
+}
+
+const getShipmentTypeCodeByConditionRequest = async (params) => {
+  return await getCodeByConditionApi(params).then(res => res.data).catch(err => err)
+};
+
+function* getShipmentTypeCodeZoneCodeByCondition({ payload }) {
+  const { params, messages, types } = payload;
+  try {
+    const response = yield call(getShipmentTypeCodeByConditionRequest, params);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(getShipmentTypeCodeZoneCodeByConditionSuccess(response.data, types));
+        break;
+
+      case EC_FAILURE:
+        yield put(getShipmentTypeCodeZoneCodeByConditionError(response.data));
+        break;
+      
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning',
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+
+      default:
+        break;
+    }
+
+  } catch (error) {
+    yield put(getShipmentTypeCodeZoneCodeByConditionError(error));
+  }
+}
+
+function* getCarrierCodeZoneCodeByCondition({ payload }) {
+  const { params, messages, types } = payload;
+  try {
+    const response = yield call(getShipmentTypeCodeByConditionRequest, params);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(getCarrierCodeZoneCodeByConditionSuccess(response.data, types));
+        break;
+
+      case EC_FAILURE:
+        yield put(getCarrierCodeZoneCodeByConditionError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning',
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+
+      default:
+        break;
+    }
+
+  } catch (error) {
+    yield put(getCarrierCodeZoneCodeByConditionError(error));
+  }
+}
+
+function* getServiceCodeZoneCodeByCondition({ payload }) {
+  const { params, messages, types } = payload;
+  try {
+    const response = yield call(getShipmentTypeCodeByConditionRequest, params);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(getServiceCodeZoneCodeByConditionSuccess(response.data, types));
+        break;
+
+      case EC_FAILURE:
+        yield put(getServiceCodeZoneCodeByConditionError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning',
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+
+      default:
+        break;
+    }
+
+  } catch (error) {
+    yield put(getServiceCodeZoneCodeByConditionError(error));
+  }
+}
 
 export function* watchGetList() {
   yield takeEvery(ZONE_CODE_GET_LIST, getZoneCodeListItems);
@@ -680,9 +799,22 @@ export function* watchDestinationWardGetList() {
   yield takeEvery(DESTINATION_WARD_GET_LIST, getDestinationWardListItems);
 }
 
+export function* watchGetListCodeByCondition() {
+  yield takeEvery(SHIPMENT_TYPE_GET_CODE_ZONE_CODE_BY_CONDITION, getShipmentTypeCodeZoneCodeByCondition);
+}
+export function* watchGetListCarrierCodeByCondition() {
+  yield takeEvery(CARRIER_GET_CODE_ZONE_CODE_BY_CONDITION, getCarrierCodeZoneCodeByCondition);
+}
+export function* watchGetListServiceCodeByCondition() {
+  yield takeEvery(SERVICE_GET_CODE_ZONE_CODE_BY_CONDITION, getServiceCodeZoneCodeByCondition);
+}
+// chua xong saga
 export default function* rootSaga() {
   yield all([fork(watchGetList), fork(watchAddItem), fork(watchUpdateItem), fork(watchDeleteItem),
     fork(watchOriginCountryGetList), fork(watchOriginCityGetList), fork(watchOriginDistrictGetList), fork(watchOriginWardGetList), 
-    fork(watchDestinationCountryGetList), fork(watchDestinationCityGetList), fork(watchDestinationDistrictGetList), fork(watchDestinationWardGetList)
+    fork(watchDestinationCountryGetList), fork(watchDestinationCityGetList), fork(watchDestinationDistrictGetList), fork(watchDestinationWardGetList),
+    fork(watchGetListCodeByCondition),
+    fork(watchGetListCarrierCodeByCondition),
+    fork(watchGetListServiceCodeByCondition)
   ]);
 }

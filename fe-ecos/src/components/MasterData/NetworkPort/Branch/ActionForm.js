@@ -40,7 +40,7 @@ class ActionForm extends PureComponent {
     }
     if (data && data.city_id) {
       let paramsCity = {
-        field: ['id', 'name'],
+        field: ['id', 'name', 'name_en'],
         offset: {
           limit: 0
         },
@@ -53,7 +53,7 @@ class ActionForm extends PureComponent {
 
     if (data && data.district_id) {
       let paramsDistrict = {
-        field: ['id', 'name'],
+        field: ['id', 'name', 'name_en'],
         offset: {
           limit: 0
         },
@@ -66,7 +66,7 @@ class ActionForm extends PureComponent {
 
     if (data && data.ward_id) {
       let paramsWard = {
-        field: ['id', 'name'],
+        field: ['id', 'name', 'name_en'],
         offset: {
           limit: 0
         },
@@ -89,7 +89,7 @@ class ActionForm extends PureComponent {
   onChangeCountry = values => {
     const { messages } = this.props.intl;
     let params = {
-      field: ['id', 'name'],
+      field: ['id', 'name', 'name_en'],
       offset: {
         limit: 0
       },
@@ -106,7 +106,7 @@ class ActionForm extends PureComponent {
   onChangeCity = values => {
     const { messages } = this.props.intl;
     let params = {
-      field: ['id', 'name'],
+      field: ['id', 'name', 'name_en'],
       offset: {
         limit: 0
       },
@@ -115,14 +115,14 @@ class ActionForm extends PureComponent {
       }
     }
     this.props.change('districts',null);
-    this.props.change('wards',null);
+     this.props.change('wards',null);
     this.props.getDistrictBranchList(params, messages, 'onchange');
   }
 
   onChangeDistrict = values => {
     const { messages } = this.props.intl;
     let params = {
-      field: ['id', 'name'],
+      field: ['id', 'name', 'name_en'],
       offset: {
         limit: 0
       },
@@ -135,20 +135,22 @@ class ActionForm extends PureComponent {
   }
 
   showOptions = (items) => {
+    const { locale } = this.props.intl;
     const select_options = items.map(item => {
       return {
         'value': item.id,
-        'label': item.name
+        'label': locale ==='en-US' ? item.name_en : item.name
       }
     });
     return select_options;
   }
 
   showOptionsHub = (items) => {
+    const { locale } = this.props.intl;
     const hubs = items.map(item => {
       return {
         'value': item.id,
-        'label': item.name
+        'label': locale ==='en-US' ? item.name_en : item.name
       }
     });
     return hubs;

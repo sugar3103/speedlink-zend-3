@@ -36,7 +36,18 @@ import {
   DESTINATION_WARD_GET_LIST,
   DESTINATION_WARD_GET_LIST_SUCCESS,
   DESTINATION_WARD_GET_LIST_ERROR,
-  ZONE_CODE_CHANGE_TYPE_MODAL
+  ZONE_CODE_CHANGE_TYPE_MODAL,
+  CARRIER_GET_CODE_ZONE_CODE_BY_CONDITION, 
+  CARRIER_GET_CODE_ZONE_CODE_BY_CONDITION_SUCCESS,
+  CARRIER_GET_CODE_ZONE_CODE_BY_CONDITION_ERROR, 
+
+  SERVICE_GET_CODE_ZONE_CODE_BY_CONDITION, 
+  SERVICE_GET_CODE_ZONE_CODE_BY_CONDITION_SUCCESS, 
+  SERVICE_GET_CODE_ZONE_CODE_BY_CONDITION_ERROR,
+
+  SHIPMENT_TYPE_GET_CODE_ZONE_CODE_BY_CONDITION,
+  SHIPMENT_TYPE_GET_CODE_ZONE_CODE_BY_CONDITION_SUCCESS,
+  SHIPMENT_TYPE_GET_CODE_ZONE_CODE_BY_CONDITION_ERROR
 } from '../../../constants/actionTypes';
 
 export const toggleZoneCodeModal = (type, data) => ({
@@ -223,5 +234,50 @@ export const getDestinationWardListSuccess = (destination_ward, types) => ({
 
 export const getDestinationWardListError = (error) => ({
   type: DESTINATION_WARD_GET_LIST_ERROR,
+  payload: error
+});
+
+export const getCarrierCodeZoneCodeByCondition = (params, messages, types) => ({
+  type: CARRIER_GET_CODE_ZONE_CODE_BY_CONDITION,
+  payload: { params, messages, types }
+});
+
+export const getCarrierCodeZoneCodeByConditionSuccess = ( CarrierCodeZoneCodeByCondition) => ({
+  type: CARRIER_GET_CODE_ZONE_CODE_BY_CONDITION_SUCCESS,
+  payload: { CarrierCodeZoneCodeByCondition }
+});
+
+export const getCarrierCodeZoneCodeByConditionError = (error) => ({
+  type: CARRIER_GET_CODE_ZONE_CODE_BY_CONDITION_ERROR,
+  payload: error
+});
+
+export const getServiceCodeZoneCodeByCondition = (params, messages, types) => ({
+  type: SERVICE_GET_CODE_ZONE_CODE_BY_CONDITION,
+  payload: { params, messages, types }
+});
+
+export const getServiceCodeZoneCodeByConditionSuccess = (ServiceCodeZoneCodeByCondition) => ({
+  type: SERVICE_GET_CODE_ZONE_CODE_BY_CONDITION_SUCCESS,
+  payload: { ServiceCodeZoneCodeByCondition }
+});
+
+export const getServiceCodeZoneCodeByConditionError = (error) => ({
+  type: SERVICE_GET_CODE_ZONE_CODE_BY_CONDITION_ERROR,
+  payload: error
+});
+
+export const getShipmentTypeCodeZoneCodeByCondition = (params, messages, types) => ({
+  type: SHIPMENT_TYPE_GET_CODE_ZONE_CODE_BY_CONDITION,
+  payload: { params, messages, types }
+});
+
+export const getShipmentTypeCodeZoneCodeByConditionSuccess = (ShipmentCodeZoneCodeByCondition) => ({
+  type: SHIPMENT_TYPE_GET_CODE_ZONE_CODE_BY_CONDITION_SUCCESS,
+  payload: { ShipmentCodeZoneCodeByCondition }
+});
+
+export const getShipmentTypeCodeZoneCodeByConditionError = (error) => ({
+  type: SHIPMENT_TYPE_GET_CODE_ZONE_CODE_BY_CONDITION_ERROR,
   payload: error
 });

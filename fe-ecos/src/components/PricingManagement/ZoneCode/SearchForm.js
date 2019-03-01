@@ -5,7 +5,7 @@ import renderSelectField from '../../../containers/Shared/form/Select';
 import { Button, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { getCarrierCodeByCondition, getServiceCodeByCondition, getShipmentTypeCodeByCondition, getCustomerList,
+import { getCarrierCodeZoneCodeByCondition, getServiceCodeZoneCodeByCondition, getShipmentTypeCodeZoneCodeByCondition, getCustomerList,
   getOriginCountryList, getOriginCityList, getOriginDistrictList, getOriginWardList,
   getDestinationCountryList, getDestinationCityList, getDestinationDistrictList, getDestinationWardList
  } from "../../../redux/actions";
@@ -15,7 +15,7 @@ class SearchForm extends Component {
   constructor(props){
     super(props);
     this.state = {
-      customer_disable: false,
+      customer_disable: true,
       category_code: null,
       carrier_id: null
     }
@@ -27,6 +27,7 @@ class SearchForm extends Component {
         customer_disable: false
       });
     } else {
+      this.props.change('customer','');
       this.setState({
         customer_disable: true
       })
@@ -152,13 +153,13 @@ class SearchForm extends Component {
       type : "carrier_id",
       category_code : value
     }
-    this.props.getCarrierCodeByCondition(params, messages);
+    this.props.getCarrierCodeZoneCodeByCondition(params, messages, 'onchange');
     
     params = { ...params,carrier_id: 0}
-    this.props.getServiceCodeByCondition(params, messages);
+    this.props.getServiceCodeZoneCodeByCondition(params, messages, 'onchange');
     
     params = { ...params, service_id: [0] }
-    this.props.getShipmentTypeCodeByCondition(params, messages);
+    this.props.getShipmentTypeCodeZoneCodeByCondition(params, messages, 'onchange');
   }
 
   onChangeCarrier = value => {
@@ -171,14 +172,14 @@ class SearchForm extends Component {
       carrier_id : value,
       category_code : this.state.category_code
     }
-    this.props.getServiceCodeByCondition(params, messages);
+    this.props.getServiceCodeZoneCodeByCondition(params, messages, 'onchange');
     params = {
       type : "carrier_id",
       category_code : value,
       carrier_id: 0,
       service_id: [0]
     }
-    this.props.getShipmentTypeCodeByCondition(params, messages);
+    this.props.getShipmentTypeCodeZoneCodeByCondition(params, messages, 'onchange');
   }
 
   onChangeService = value => {
@@ -189,7 +190,7 @@ class SearchForm extends Component {
       carrier_id : this.state.carrier_id,
       service_id : [ value ] 
     }
-    this.props.getShipmentTypeCodeByCondition(params, messages);
+    this.props.getShipmentTypeCodeZoneCodeByCondition(params, messages, 'onchange');
   }
 
   showOptionCarrier = (items) => {
@@ -264,7 +265,7 @@ class SearchForm extends Component {
 
 
   render() {
-    const { handleSubmit, reset, CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition , customerCode, origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards  } = this.props;
+    const { handleSubmit, reset, CarrierCodeZoneCodeByCondition, ServiceCodeZoneCodeByCondition, ShipmentCodeZoneCodeByCondition , customerCode, origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards  } = this.props;
     const { messages } = this.props.intl;
     return (
       <form className="form" onSubmit={handleSubmit}>
@@ -343,7 +344,7 @@ class SearchForm extends Component {
             <span className="form__form-group-label">{messages['pri_man.carrier']}</span>
             <div className="form__form-group-field">
               <Field name="carrier_id" component={renderSelectField} type="text"
-                     options={CarrierCodeByCondition && this.showOptionCarrier(CarrierCodeByCondition)}
+                     options={CarrierCodeZoneCodeByCondition && this.showOptionCarrier(CarrierCodeZoneCodeByCondition)}
                      onChange={this.onChangeCarrier} 
                      />
             </div>
@@ -355,7 +356,7 @@ class SearchForm extends Component {
             <span className="form__form-group-label">{messages['pri_man.service']}</span>
             <div className="form__form-group-field">
               <Field name="service_id" component={renderSelectField} type="text"
-                     options={ServiceCodeByCondition && this.showOptionService(ServiceCodeByCondition)}
+                     options={ServiceCodeZoneCodeByCondition && this.showOptionService(ServiceCodeZoneCodeByCondition)}
                      onChange={this.onChangeService}
                      />
             </div>
@@ -367,7 +368,7 @@ class SearchForm extends Component {
             <span className="form__form-group-label">{messages['pri_man.shipment-type']}</span>
             <div className="form__form-group-field">
               <Field name="shipmenttype" component={renderSelectField} type="text"
-                    options={codeByCondition && this.showOptionShipmenttype(codeByCondition)}
+                    options={ShipmentCodeZoneCodeByCondition && this.showOptionShipmenttype(ShipmentCodeZoneCodeByCondition)}
                     />
             </div>
           </div>
@@ -510,12 +511,12 @@ SearchForm.propTypes = {
   destination_districts: PropTypes.array,
   destination_countrys: PropTypes.array,
   destination_wards: PropTypes.array,
-  codeByCondition: PropTypes.array,
-  CarrierCodeByCondition: PropTypes.array,
-  ServiceCodeByCondition: PropTypes.array,
-  getCarrierCodeByCondition: PropTypes.func.isRequired,
-  getServiceCodeByCondition: PropTypes.func.isRequired,
-  getShipmentTypeCodeByCondition: PropTypes.func.isRequired,
+  ShipmentCodeZoneCodeByCondition: PropTypes.array,
+  CarrierCodeZoneCodeByCondition: PropTypes.array,
+  ServiceCodeZoneCodeByCondition: PropTypes.array,
+  getCarrierCodeZoneCodeByCondition: PropTypes.func.isRequired,
+  getServiceCodeZoneCodeByCondition: PropTypes.func.isRequired,
+  getShipmentTypeCodeZoneCodeByCondition: PropTypes.func.isRequired,
   getCustomerList: PropTypes.func.isRequired,
   getOriginCountryList: PropTypes.func.isRequired,
   getOriginCityList: PropTypes.func.isRequired,
@@ -529,8 +530,8 @@ SearchForm.propTypes = {
   reset: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ shipment_type, customer, zoneCode }) => {
-  const { CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition  } = shipment_type;
+const mapStateToProps = ({ customer, zoneCode }) => {
+  const { CarrierCodeZoneCodeByCondition, ServiceCodeZoneCodeByCondition, ShipmentCodeZoneCodeByCondition  } = zoneCode;
   const customerCode = customer.items;
   const origin_countrys = zoneCode.origin_country;
   const origin_citys = zoneCode.origin_city;
@@ -540,7 +541,7 @@ const mapStateToProps = ({ shipment_type, customer, zoneCode }) => {
   const destination_citys = zoneCode.destination_city;
   const destination_districts = zoneCode.destination_district;
   const destination_wards = zoneCode.destination_ward;
-  return { customerCode, CarrierCodeByCondition, ServiceCodeByCondition, codeByCondition, origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards }
+  return { customerCode, CarrierCodeZoneCodeByCondition, ServiceCodeZoneCodeByCondition, ShipmentCodeZoneCodeByCondition, origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards }
 }
 
 export default reduxForm({
@@ -554,9 +555,9 @@ export default reduxForm({
     calculate_unit: -1
   }
 })(injectIntl(connect(mapStateToProps, {
-  getCarrierCodeByCondition,
-  getServiceCodeByCondition,
-  getShipmentTypeCodeByCondition,
+  getCarrierCodeZoneCodeByCondition,
+  getServiceCodeZoneCodeByCondition,
+  getShipmentTypeCodeZoneCodeByCondition,
   getCustomerList,
   getOriginCountryList, getOriginCityList, getOriginDistrictList, getOriginWardList,
   getDestinationCountryList, getDestinationCityList, getDestinationDistrictList, getDestinationWardList
