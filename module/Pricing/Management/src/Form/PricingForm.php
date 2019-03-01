@@ -153,7 +153,7 @@ class PricingForm extends Form {
             'required' => true,
             'filters' => [
                 [
-                    'name' => \DateTime::class
+                    'name' => StringTrim::class
                 ]
             ]
         ]);
@@ -163,17 +163,17 @@ class PricingForm extends Form {
             'required' => true,
             'filters' => [
                 [
-                    'name' => \DateTime::class
+                    'name' => StringTrim::class
                 ]
-            ],
+            ]/*,
             'validators' => [
                 [
-                    'name' => \DateTime::class,
+                    'name' => StringTrim::class,
                     'options' => [
                         'min' => $this->data['effected_date']
                     ]
                 ]
-            ]
+            ]*/
         ]);
 
         $inputFilter->add([

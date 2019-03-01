@@ -68,6 +68,57 @@ class PricingRepository extends EntityRepository
         }
     }
 
+    public function getListCodeByCondition($sortField = 'code', $filters = [])
+    {
+        try {
+            $queryBuilder = $this->buildPricingQueryBuilder($sortField, 'asc', $filters);
+            $queryBuilder->andWhere('pr.is_deleted = 0');
+            if ($sortField == 'carrier_id') {
+                $queryBuilder->select("
+                    pr.carrier_id,
+                    cr.code AS carrier_code,
+                    cr.name AS carrier_name,
+                    cr.name_en AS carrier_name_en
+                ");
+                $queryBuilder->andWhere('cr.is_deleted = 0');
+                $queryBuilder->andWhere('cr.status = 1');
+                $queryBuilder->groupBy('pr.carrier_id');
+            } else if ($sortField == 'saleman_id') {
+                $queryBuilder->select("
+                    pr.saleman_id,
+                    sl.username,
+                    sl.first_name,
+                    sl.last_name
+                ");
+                $queryBuilder->andWhere('sl.is_deleted = 0');
+                $queryBuilder->andWhere('sl.status = 1');
+                $queryBuilder->groupBy('pr.saleman_id');
+            } else if ($sortField == 'approval_by'){
+                $queryBuilder->select("
+                    pr.approval_by,
+                    app.username,
+                    app.first_name,
+                    app.last_name
+                ");
+                $queryBuilder->andWhere('app.is_deleted = 0');
+                $queryBuilder->andWhere('app.status = 1');
+                $queryBuilder->groupBy('pr.saleman_id');
+            } else if ($sortField == 'customer_id') {
+                $queryBuilder->select("
+                    pr.customer_id,
+                    cus.name AS customer_name
+                ");
+                $queryBuilder->andWhere('cus.is_deleted = 0');
+                $queryBuilder->andWhere('cus.status = 1');
+                $queryBuilder->groupBy('pr.customer_id');
+            }
+            return $queryBuilder;
+
+        } catch (QueryException $e) {
+            return [];
+        }
+    }
+
     /**
      * Build query builder
      *
@@ -80,66 +131,21 @@ class PricingRepository extends EntityRepository
     public function buildPricingQueryBuilder($sortField, $sortDirection, $filters)
     {
         $operatorsMap = [
-            'name' => [
-                'alias' => 'pr.name',
-                'operator' => 'eq'
-            ],
-            'status' => [
-                'alias' => 'pr.status',
-                'operator' => 'eq'
-            ],
-            'carrier_id' => [
-                'alias' => 'pr.carrier_id',
-                'operator' => 'eq'
-            ],
-            'category_code' => [
-                'alias' => 'pr.category_code',
-                'operator' => 'eq'
-            ],
-            'customer_id' => [
-                'alias' => 'pr.customer_id',
-                'operator' => 'in'
-            ],
-            'approved_id' => [
-                'alias' => 'pr.approved_id',
-                'operator' => 'eq'
-            ],
-            'approved_status' => [
-                'alias' => 'pr.approved_status',
-                'operator' => 'eq'
-            ],
-            'is_private' => [
-                'alias' => 'pr.is_private',
-                'operator' => 'eq'
-            ],
-            'affected_date' => [
-                'alias' => 'pr.affected_date',
-                'operator' => 'eq'
-            ],
-            'expired_date' => [
-                'alias' => 'pr.expired_date',
-                'operator' => 'eq'
-            ],
-            'saleman_id' => [
-                'alias' => 'pr.saleman_id',
-                'operator' => 'eq'
-            ],
-            'origin_country_id' => [
-                'alias' => 'pr.origin_country_id',
-                'operator' => 'eq'
-            ],
-            'origin_city_id' => [
-                'alias' => 'pr.origin_city_id',
-                'operator' => 'eq'
-            ],
-            'origin_district_id' => [
-                'alias' => 'pr.origin_district_id',
-                'operator' => 'eq'
-            ],
-            'origin_ward_id' => [
-                'alias' => 'pr.origin_ward_id',
-                'operator' => 'eq'
-            ],
+            'name' => [ 'alias' => 'pr.name', 'operator' => 'eq' ],
+            'status' => [ 'alias' => 'pr.status', 'operator' => 'eq' ],
+            'carrier_id' => [ 'alias' => 'pr.carrier_id', 'operator' => 'eq' ],
+            'category_code' => [ 'alias' => 'pr.category_code', 'operator' => 'eq' ],
+            'customer_id' => [ 'alias' => 'pr.customer_id', 'operator' => 'in' ],
+            'approved_id' => [ 'alias' => 'pr.approved_id', 'operator' => 'eq' ],
+            'approved_status' => [ 'alias' => 'pr.approved_status', 'operator' => 'eq' ],
+            'is_private' => [ 'alias' => 'pr.is_private', 'operator' => 'eq' ],
+            'affected_date' => [ 'alias' => 'pr.affected_date', 'operator' => 'eq' ],
+            'expired_date' => [ 'alias' => 'pr.expired_date', 'operator' => 'eq' ],
+            'saleman_id' => [ 'alias' => 'pr.saleman_id', 'operator' => 'eq' ],
+            'origin_country_id' => [ 'alias' => 'pr.origin_country_id', 'operator' => 'eq' ],
+            'origin_city_id' => [ 'alias' => 'pr.origin_city_id', 'operator' => 'eq' ],
+            'origin_district_id' => [ 'alias' => 'pr.origin_district_id', 'operator' => 'eq' ],
+            'origin_ward_id' => [ 'alias' => 'pr.origin_ward_id', 'operator' => 'eq' ],
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();

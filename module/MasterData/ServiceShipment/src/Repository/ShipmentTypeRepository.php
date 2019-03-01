@@ -71,29 +71,35 @@ class ShipmentTypeRepository extends EntityRepository
     {
         try {
             $queryBuilder = $this->buildShipmentTypeQueryBuilder($sortField, 'asc', $filters);
-            $queryBuilder->select("
-                smt.id AS shipment_type_id,
-                smt.code AS shipment_type_code,
-                smt.name AS shipment_type_name,
-                smt.name_en AS shipment_type_name_en,
-                smt.carrier_id,
-                c.code AS carrier_code,
-                c.name AS carrier_name,
-                c.name_en AS carrier_name_en,
-                smt.service_id,
-                s.code AS service_code,
-                s.name AS service_name,
-                s.name_en AS service_name_en
-            ")->andWhere('smt.is_deleted = 0')
-              ->andWhere('smt.status = 1');
+            $queryBuilder->andWhere('smt.is_deleted = 0')
+                ->andWhere('smt.status = 1');
             if ($sortField == 'carrier_id') {
+                $queryBuilder->select("
+                    smt.carrier_id,
+                    c.code AS carrier_code,
+                    c.name AS carrier_name,
+                    c.name_en AS carrier_name_en
+                ");
                 $queryBuilder->andWhere('c.is_deleted = 0');
                 $queryBuilder->andWhere('c.status = 1');
                 $queryBuilder->groupBy('smt.carrier_id');
             } else if ($sortField == 'service_id') {
+                $queryBuilder->select("
+                    smt.service_id,
+                    s.code AS service_code,
+                    s.name AS service_name,
+                    s.name_en AS service_name_en
+                ");
                 $queryBuilder->andWhere('s.is_deleted = 0');
                 $queryBuilder->andWhere('s.status = 1');
                 $queryBuilder->groupBy('smt.service_id');
+            } else {
+                $queryBuilder->select("
+                    smt.id AS shipment_type_id,
+                    smt.code AS shipment_type_code,
+                    smt.name AS shipment_type_name,
+                    smt.name_en AS shipment_type_name_en
+                ");
             }
             return $queryBuilder;
 
