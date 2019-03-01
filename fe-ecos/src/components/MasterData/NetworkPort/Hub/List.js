@@ -2,7 +2,6 @@
 import React, { Component, Fragment } from 'react';
 import { Card, CardBody, Col, Button, Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
-import Item from './Item';
 import Table from '../../../../containers/Shared/table/Table';
 import { SELECTED_PAGE_SIZE } from '../../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
@@ -103,25 +102,7 @@ class List extends Component {
     this.props.getHubList(null, messages);
   }
 
-  showHubItem = (items) => {
-    const { messages } = this.props.intl;
-    let result = null;
-    if (items.length > 0) {
-      result = items.map((item, index) => {
-        return (
-          <Item 
-            key={index}
-            hub={item}
-          />
-        )
-      })
-    } else {
-      result = (
-        <tr><td colSpan={8} className="text-center">{messages['no-result']}</td></tr>
-      )
-    }
-    return result;
-  }
+ 
 
   renderHeader = (selected) => {
     const { messages } = this.props.intl;

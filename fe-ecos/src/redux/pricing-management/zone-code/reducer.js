@@ -38,7 +38,18 @@ import {
   DESTINATION_DISTRICT_GET_LIST_ERROR,
   DESTINATION_WARD_GET_LIST,
   DESTINATION_WARD_GET_LIST_SUCCESS,
-  DESTINATION_WARD_GET_LIST_ERROR
+  DESTINATION_WARD_GET_LIST_ERROR,
+  CARRIER_GET_CODE_ZONE_CODE_BY_CONDITION,
+  CARRIER_GET_CODE_ZONE_CODE_BY_CONDITION_SUCCESS,
+  CARRIER_GET_CODE_ZONE_CODE_BY_CONDITION_ERROR,
+
+  SERVICE_GET_CODE_ZONE_CODE_BY_CONDITION,
+  SERVICE_GET_CODE_ZONE_CODE_BY_CONDITION_SUCCESS,
+  SERVICE_GET_CODE_ZONE_CODE_BY_CONDITION_ERROR,
+
+  SHIPMENT_TYPE_GET_CODE_ZONE_CODE_BY_CONDITION,
+  SHIPMENT_TYPE_GET_CODE_ZONE_CODE_BY_CONDITION_SUCCESS,
+  SHIPMENT_TYPE_GET_CODE_ZONE_CODE_BY_CONDITION_ERROR
 } from '../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -57,7 +68,10 @@ const INIT_STATE = {
   destination_country:null,
   destination_city:null,
   destination_district:null,
-  destination_ward:null
+  destination_ward:null,
+  CarrierCodeZoneCodeByCondition: null,
+  ServiceCodeZoneCodeByCondition: null,
+  ShipmentCodeZoneCodeByCondition: null
 };
 
 export default (state = INIT_STATE, action) => {
@@ -66,6 +80,24 @@ export default (state = INIT_STATE, action) => {
   switch (action.type) {
 
     case ZONE_CODE_TOGGLE_MODAL:
+    if(action.payload.type === 'add')
+      return {
+        ...state,
+        modalOpen: !state.modalOpen,
+        modalData: action.payload.data,
+        modalType: action.payload.type,
+        origin_city:null,
+        origin_district:null,
+        origin_ward:null,
+        destination_city:null,
+        destination_district:null,
+        destination_ward:null,
+        errors: null,
+        CarrierCodeZoneCodeByCondition: null,
+        ServiceCodeZoneCodeByCondition: null,
+        ShipmentCodeZoneCodeByCondition: null
+      }
+    else
       return {
         ...state,
         modalOpen: !state.modalOpen,
@@ -347,6 +379,83 @@ export default (state = INIT_STATE, action) => {
     return { 
       ...state, 
       errors: action.payload 
+    };
+
+    case CARRIER_GET_CODE_ZONE_CODE_BY_CONDITION:
+    return {
+      ...state,
+    };
+
+  case CARRIER_GET_CODE_ZONE_CODE_BY_CONDITION_SUCCESS:
+    const { CarrierCodeZoneCodeByCondition } = action.payload;
+    types = action.payload.types;
+    if(types ==='onchange')
+      return {
+        ...state,
+        loading: false,
+        CarrierCodeZoneCodeByCondition,
+        ServiceCodeZoneCodeByCondition: null,
+        ShipmentCodeZoneCodeByCondition: null
+      };
+    else
+    return {
+      ...state,
+      loading: false,
+      CarrierCodeZoneCodeByCondition
+    };
+
+  case CARRIER_GET_CODE_ZONE_CODE_BY_CONDITION_ERROR:
+    return {
+      ...state,
+      loading: false,
+      errors: action.payload
+    };
+
+  case SERVICE_GET_CODE_ZONE_CODE_BY_CONDITION:
+    return {
+      ...state,
+    };
+
+  case SERVICE_GET_CODE_ZONE_CODE_BY_CONDITION_SUCCESS:
+    const { ServiceCodeZoneCodeByCondition } = action.payload;
+    types = action.payload.types;
+    if(types ==='onchange')
+    return {
+      ...state,
+      loading: false,
+      ServiceCodeZoneCodeByCondition,
+      ShipmentCodeZoneCodeByCondition: null
+    };
+    else
+    return {
+      ...state,
+      loading: false,
+      ServiceCodeZoneCodeByCondition
+    };
+
+  case SERVICE_GET_CODE_ZONE_CODE_BY_CONDITION_ERROR:
+    return {
+      ...state,
+      loading: false,
+      errors: action.payload
+    };
+
+  case SHIPMENT_TYPE_GET_CODE_ZONE_CODE_BY_CONDITION:
+    return {
+      ...state,
+    };
+
+  case SHIPMENT_TYPE_GET_CODE_ZONE_CODE_BY_CONDITION_SUCCESS:
+    const { ShipmentCodeZoneCodeByCondition } = action.payload;
+    return {
+      ...state,
+      ShipmentCodeZoneCodeByCondition
+    };
+
+  case SHIPMENT_TYPE_GET_CODE_ZONE_CODE_BY_CONDITION_ERROR:
+    return {
+      ...state,
+      errors: action.payload
     };
 
     default: 

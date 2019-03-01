@@ -126,8 +126,8 @@ class CountryController extends CoreController {
         if(isset($data['ids']) && count($data['ids']) > 0) {
             try {
                 foreach ($data['ids'] as $id) {
-                    $status = $this->entityManager->getRepository(City::class)->findOneBy(array('id' => $id));    
-                    if ($status == null) {
+                    $country = $this->entityManager->getRepository(Country::class)->findOneBy(array('id' => $id));    
+                    if ($country == null) {
                         $this->error_code = 0;
                         $this->apiResponse['message'] = "NOT_FOUND";                        
                     } else {

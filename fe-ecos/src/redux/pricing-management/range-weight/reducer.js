@@ -12,7 +12,18 @@ import {
     RANGE_WEIGHT_DELETE_ITEM,
     RANGE_WEIGHT_DELETE_ITEM_SUCCESS,
     RANGE_WEIGHT_DELETE_ITEM_ERROR,
-    RANGE_WEIGHT_CHANGE_TYPE_MODAL
+    RANGE_WEIGHT_CHANGE_TYPE_MODAL,
+    CARRIER_GET_CODE_BY_CONDITION,
+    CARRIER_GET_CODE_BY_CONDITION_SUCCESS,
+    CARRIER_GET_CODE_BY_CONDITION_ERROR,
+
+    SERVICE_GET_CODE_BY_CONDITION,
+    SERVICE_GET_CODE_BY_CONDITION_SUCCESS,
+    SERVICE_GET_CODE_BY_CONDITION_ERROR,
+
+    SHIPMENT_TYPE_GET_CODE_BY_CONDITION,
+    SHIPMENT_TYPE_GET_CODE_BY_CONDITION_SUCCESS,
+    SHIPMENT_TYPE_GET_CODE_BY_CONDITION_ERROR
   } from '../../../constants/actionTypes';
   
   const INIT_STATE = {
@@ -24,12 +35,28 @@ import {
     modalType: null,
     modalData: null,
     paramSearch: null,
-    codes: null
+    codes: null,
+    CarrierCodeByCondition: null,
+    ServiceCodeByCondition: null,
+    ShipmentCodeByCondition: null
   };
   
   export default (state = INIT_STATE, action) => {
+    let types = null;
     switch (action.type) {
       case RANGE_WEIGHT_TOGGLE_MODAL:
+      if(action.payload.type === 'add')
+        return {
+          ...state,
+          modalOpen: !state.modalOpen,
+          modalData: action.payload.data,
+          modalType: action.payload.type,
+          errors: null,
+          CarrierCodeByCondition: null,
+          ServiceCodeByCondition: null,
+          ShipmentCodeByCondition: null
+        };
+      else
         return {
           ...state,
           modalOpen: !state.modalOpen,
@@ -120,6 +147,83 @@ import {
         };
   
       case RANGE_WEIGHT_DELETE_ITEM_ERROR:
+        return {
+          ...state,
+          errors: action.payload
+        };
+
+      case CARRIER_GET_CODE_BY_CONDITION:
+        return {
+          ...state,
+        };
+  
+      case CARRIER_GET_CODE_BY_CONDITION_SUCCESS:
+        const { CarrierCodeByCondition } = action.payload;
+        types = action.payload.types;
+        if(types ==='onchange')
+          return {
+            ...state,
+            loading: false,
+            CarrierCodeByCondition,
+            ServiceCodeByCondition: null,
+            ShipmentCodeByCondition: null
+          };
+        else
+        return {
+          ...state,
+          loading: false,
+          CarrierCodeByCondition
+        };
+  
+      case CARRIER_GET_CODE_BY_CONDITION_ERROR:
+        return {
+          ...state,
+          loading: false,
+          errors: action.payload
+        };
+  
+      case SERVICE_GET_CODE_BY_CONDITION:
+        return {
+          ...state,
+        };
+  
+      case SERVICE_GET_CODE_BY_CONDITION_SUCCESS:
+        const { ServiceCodeByCondition } = action.payload;
+        types = action.payload.types;
+        if(types ==='onchange')
+        return {
+          ...state,
+          loading: false,
+          ServiceCodeByCondition,
+          ShipmentCodeByCondition: null
+        };
+        else
+        return {
+          ...state,
+          loading: false,
+          ServiceCodeByCondition
+        };
+  
+      case SERVICE_GET_CODE_BY_CONDITION_ERROR:
+        return {
+          ...state,
+          loading: false,
+          errors: action.payload
+        };
+  
+      case SHIPMENT_TYPE_GET_CODE_BY_CONDITION:
+        return {
+          ...state,
+        };
+  
+      case SHIPMENT_TYPE_GET_CODE_BY_CONDITION_SUCCESS:
+        const { ShipmentCodeByCondition } = action.payload;
+        return {
+          ...state,
+          ShipmentCodeByCondition
+        };
+  
+      case SHIPMENT_TYPE_GET_CODE_BY_CONDITION_ERROR:
         return {
           ...state,
           errors: action.payload
