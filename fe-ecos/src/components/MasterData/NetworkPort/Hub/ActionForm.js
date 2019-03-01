@@ -37,7 +37,7 @@ class ActionForm extends Component {
           id: data.country_id
         }
       }
-      this.props.getCountryHubList(paramsCountry, messages, 'onchange');
+      this.props.getCountryHubList(paramsCountry, messages, 'editview');
     }
     if (data && data.city_id) {
       let paramsCity = {
@@ -49,7 +49,7 @@ class ActionForm extends Component {
           country: data.country_id
         }
       }
-      this.props.getCityHubList(paramsCity, messages, 'onchange');
+      this.props.getCityHubList(paramsCity, messages, 'editview');
     }
   }
 

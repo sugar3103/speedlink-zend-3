@@ -99,10 +99,9 @@ class List extends Component {
 
   componentDidMount() {
     const { messages } = this.props.intl;
+    // this.props.change('hub','');
     this.props.getHubList(null, messages);
   }
-
- 
 
   renderHeader = (selected) => {
     const { messages } = this.props.intl;

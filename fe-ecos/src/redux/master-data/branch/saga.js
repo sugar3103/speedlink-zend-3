@@ -13,6 +13,7 @@ import {
   BRANCH_CITY_GET_LIST,
   BRANCH_DISTRICT_GET_LIST,
   BRANCH_WARD_GET_LIST,
+  HUB_BRANCH_GET_LIST,
 } from "../../../constants/actionTypes";
 
 import {
@@ -34,7 +35,8 @@ import {
   getDistrictBranchListError,
   getWardBranchListSuccess,
   getWardBranchListError,
-
+  getHubBranchListSuccess,
+  getHubBranchListError,
 } from "./actions";
 
 import createNotification from '../../../util/notifications';
@@ -104,7 +106,6 @@ function* addBranchItem({ payload }) {
   const { item, messages } = payload;
   try {
     const response = yield call(addBranchItemRequest, item);
-    console.log(response);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(addBranchItemSuccess());
@@ -425,6 +426,52 @@ function* getWardBranchListItems({ payload }) {
   }
 }
 
+//list hub
+
+function getListHubApi(params) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}hub`,
+    headers: authHeader(),
+    data: JSON.stringify(params)
+  });
+}
+
+const getHubListBranchRequest = async (params) => {
+  return await getListHubApi(params).then(res => res.data).catch(err => err)
+};
+
+function* getHubListBranchItems({ payload }) {
+  const { params, messages, types } = payload;
+  try {
+    const response = yield call(getHubListBranchRequest, params);
+
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(getHubBranchListSuccess(response.data, types));
+        break;
+
+      case EC_FAILURE:
+        yield put(getHubBranchListError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning', 
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+      default:
+        break;
+    }
+    
+  } catch (error) {
+    yield put(getHubBranchListError(error));
+  }
+}
 
 export function* watchGetList() {
   yield takeEvery(BRANCH_GET_LIST, getBranchListItems);
@@ -455,9 +502,13 @@ export function* watchBranchWardGetList() {
   yield takeEvery(BRANCH_WARD_GET_LIST, getWardBranchListItems);
 }
 
+export function* watchGetHubBranchList() {
+  yield takeEvery(HUB_BRANCH_GET_LIST, getHubListBranchItems);
+}
+
 export default function* rootSaga() {
   yield all([fork(watchGetList), fork(watchAddItem), fork(watchUpdateItem), fork(watchDeleteItem),
     fork(watchBranchCountryGetList), fork(watchBranchCityGetList), fork(watchBranchDistrictGetList),
-     fork(watchBranchWardGetList), 
+     fork(watchBranchWardGetList), fork(watchGetHubBranchList)
   ]);
 }

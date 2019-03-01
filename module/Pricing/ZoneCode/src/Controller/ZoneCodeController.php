@@ -83,7 +83,21 @@ class ZoneCodeController extends CoreController {
       if ($this->getRequest()->isPost()) {
         $user = $this->tokenPayload;
         $data = $this->getRequestData();
- //  var_dump($result);die();
+        if($data['category'] ==  'Domestic') {
+          if( ($data['origin_city_id'] == null || $data['origin_city_id'] == '' || intval($data['origin_city_id']) <= 0 )) {
+            $this->error_code = 0;
+            $this->apiResponse['message'] ="Error";
+            $this->apiResponse['data']['origin_city_id']['missingOriginCity'] = 'Missing Origin City!';
+            return $this->createResponse();
+          }
+          if( $data['destination_city_id']  == null || $data['destination_city_id'] == '' || intval($data['destination_city_id']) <= 0) {
+            $this->error_code = 0;
+            $this->apiResponse['message'] ="Error";
+            $this->apiResponse['data']['destination_city_id']['missingDetinationCity'] = 'Missing Destination City!';
+            return $this->createResponse();
+          }
+        }
+
         $check_exits = $this->entityManager->getRepository(ZoneCode::class)->findOneBy(array('carrier_id' => $data['carrier_id'], 'category' => $data['category'], 'service_id' => $data['service_id'], 'shipment_type_id' => $data['shipment_type_id'], 'code' => $data['code']));    
         if($check_exits)
         {
@@ -91,10 +105,11 @@ class ZoneCodeController extends CoreController {
           $this->apiResponse['data'] = "Already have this Zone Code!";
           return $this->createResponse();
         }
-
+        
         $form = new ZoneCodeForm('create', $this->entityManager);
         $form->setData($data);
-          //validate form
+
+        //validate form
         if ($form->isValid()) {
           $data = $form->getData();
           $data['created_by'] = $user->id;

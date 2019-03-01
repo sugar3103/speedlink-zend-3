@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { getHubList, getCityBranchList, getCountryBranchList, getWardBranchList, getDistrictBranchList } from '../../../../redux/actions';
+import { getHubBranchList, getCityBranchList, getCountryBranchList, getWardBranchList, getDistrictBranchList } from '../../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import renderSelectField from '../../../../containers/Shared/form/Select';
 import { Button, Col } from 'reactstrap';
@@ -17,7 +17,7 @@ class SearchForm extends Component {
           limit: 0
       }
   }
-    this.props.getHubList(params, messages);
+    this.props.getHubBranchList(params, messages);
     this.props.getCountryBranchList(params, messages, 'onchange');
   }
   
@@ -248,13 +248,13 @@ SearchForm.propTypes = {
   getDistrictBranchList: PropTypes.func.isRequired,
   getCountryBranchList: PropTypes.func.isRequired,
   getWardBranchList: PropTypes.func.isRequired,
-  getHubList: PropTypes.func.isRequired,
+  getHubBranchList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ hub, branch }) => {
+const mapStateToProps = ({ branch }) => {
 
   const { countries, cities, districts, wards} = branch;
-  const hubs = hub.items;
+  const { hubs } = branch;
 
   return {
     cities, districts, countries, wards, hubs
@@ -269,7 +269,7 @@ export default reduxForm({
 
   }
 })(injectIntl(connect(mapStateToProps, {
-  getHubList,
+  getHubBranchList,
   getCityBranchList,
   getCountryBranchList,
   getWardBranchList,

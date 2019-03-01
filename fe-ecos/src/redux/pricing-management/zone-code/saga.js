@@ -66,7 +66,6 @@ import { startSubmit, stopSubmit } from 'redux-form';
 //validate
 
 function validateZoneCode(errors) {
-  console.log(errors);
   
   if (errors.code && errors.code.zonecodeExists) {
     return stopSubmit('zone_code_action_form', {

@@ -545,7 +545,9 @@ const mapStateToProps = ({rangeWeight, customer}) => {
     modalData,
     modalType,
     customerCode,
-    CarrierCodeByCondition, ServiceCodeByCondition, ShipmentCodeByCondition 
+    CarrierCodeByCondition, 
+    ServiceCodeByCondition, 
+    ShipmentCodeByCondition 
   };
 };
 

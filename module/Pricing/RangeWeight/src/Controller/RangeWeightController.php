@@ -96,7 +96,6 @@ class RangeWeightController extends CoreController {
       if ($form->isValid()) {
         $data = $form->getData();
         $data['created_by'] = $user->id;
-        // var_dump($data);die();
         $result = $this->rangeweightManager->addRangeWeight($data);                
         // Check result
         $this->error_code = 1;
