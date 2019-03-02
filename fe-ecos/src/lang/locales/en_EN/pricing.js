@@ -111,6 +111,14 @@ module.exports = {
     'pricing.validate-expired-date-lesser': 'Expired date must not be less than expired date',
     'pricing.validate-origin-country-empty': 'Country shouldn’t be empty',
     'pricing.validate-origin-city-empty': 'City shouldn’t be empty',
-    'pricing.validate-approved-by-empty': 'Approved by shouldn’t be empty'
+    'pricing.validate-approved-by-empty': 'Approved by shouldn’t be empty',
 
+    //COD
+    'pricing.cod' : 'Pricing Cod',
+    'pricing.internal_city': 'Internal City',
+    'pricing.internal_city_ras': 'Internal City Ras',
+    'pricing.external_city' :'External City',
+    'pricing.external_city_ras' :'External City Ras',
+    'pricing.from' :'From',
+    'pricing.to' :'To'
   }

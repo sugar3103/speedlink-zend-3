@@ -3,7 +3,7 @@ import { Button } from 'reactstrap';
 import EditTable from '../../../containers/Shared/table/EditableTable';
 import { injectIntl } from 'react-intl';
 import PricingVas from './PricingVas';
-
+import PricingCod from './PricingCod';
 class PricingData extends Component {
 
     onSaveTransportation = (dataSent) => {
@@ -15,8 +15,6 @@ class PricingData extends Component {
         });
 
         const result = { title, data }
-
-        console.log(result);
         
     }
 
@@ -65,9 +63,13 @@ class PricingData extends Component {
                         onSaveTable={this.onSaveTransportation}
                     />
                 </fieldset>
-                <fieldset className="scheduler-border">
+                {/* <fieldset className="scheduler-border">
                     <legend className="scheduler-border">{messages['pricing.value-services']}</legend>
                     <PricingVas />
+                </fieldset> */}
+                <fieldset className="scheduler-border">
+                    <legend className="scheduler-border">{messages['pricing.cod']}</legend>
+                    <PricingCod />
                 </fieldset>
             </div>
         )

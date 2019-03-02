@@ -31,3 +31,5 @@ fe-ecos/package-lock.json
 #React-Redux
 fe-ecos/node_modules
 fe-ecos/package-lock.json
+
+public/msql
