@@ -352,15 +352,29 @@ form {
                 width: auto;
                 float: left;
                 margin-right: 15px;
-    
-                &:last-child {
-                    float: right;
-                    margin-right: 0;
-                }
             }
 
             .type-select {
                 width: 10% !important;
+            }
+
+            .input-value {
+                width: 30% !important;
+            }
+
+            .input-minimun-value {
+                float: right;
+                margin-right: 0;
+            }
+
+            .equal-span {
+                line-height: 32px;
+                span {
+                    font-size: 16px;
+                    @include themify($themes) {            
+                        color: themed('colorText');
+                    }
+                }
             }
         }
 
