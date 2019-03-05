@@ -3,9 +3,7 @@ namespace RangeWeight\Controller;
 
 use Core\Controller\CoreController;
 use Doctrine\ORM\EntityManager;
-use Zend\Cache\Storage\StorageInterface;
 use RangeWeight\Entity\RangeWeight;
-use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use RangeWeight\Form\RangeWeightForm;
 
 class RangeWeightController extends CoreController {
@@ -63,7 +61,7 @@ class RangeWeightController extends CoreController {
             
             $this->error_code = 1;
             $this->apiResponse =  array(
-                'message'   => "Success",
+                'message'   => "SUCCESS",
                 'data'      => $result,
                 'total'     => $dataRangeWeight['totalRangeWeight']
             );                         
@@ -86,7 +84,7 @@ class RangeWeightController extends CoreController {
         if($check_exits)
         {
           $this->error_code = 0;
-          $this->apiResponse['message'] = "Already have this Range Weight!";
+          $this->apiResponse['message'] = "ALEADY_EXISTS";
           return $this->createResponse();
         }
 
@@ -95,11 +93,10 @@ class RangeWeightController extends CoreController {
         //validate form
       if ($form->isValid()) {
         $data = $form->getData();
-        $data['created_by'] = $user->id;
-        $result = $this->rangeweightManager->addRangeWeight($data);                
+       
+       $this->rangeweightManager->addRangeWeight($data, $user);                
         // Check result
-        $this->error_code = 1;
-        $this->apiResponse['message'] = "Success: You have added a RangeWeight!";
+        $this->apiResponse['message'] = "ADD_SUCCESS";
       } else {
         $this->error_code = 0;
         $this->apiResponse['message'] = "Errors";
@@ -114,28 +111,26 @@ class RangeWeightController extends CoreController {
     if ($this->getRequest()->isPost()) {
       $data = $this->getRequestData();
       $user = $this->tokenPayload;
-
+      if(isset($data['id'])) {
       $check_exits = $this->entityManager->getRepository(RangeWeight::class)->findOneBy(array('carrier_id' => $data['carrier_id'], 'category' => $data['category'], 'service_id' => $data['service_id'], 'shipment_type_id' => $data['shipment_type_id'], 'code' => $data['code'], 'from' => $data['from'], 'to' => $data['to']));    
       if($check_exits)
       {
         $rangeweight_id = $check_exits->getId();
         if($rangeweight_id != $data['id']) {
         $this->error_code = 0;
-        $this->apiResponse['data'] = "Already have this Range Weight!";
+        $this->apiResponse['data'] = "ALEADY_EXISTS";
         return $this->createResponse();
         }
       }
 
-      $data['updated_by'] = $user->id;
       $rangeweight = $this->entityManager->getRepository(RangeWeight::class)->find($data['id']);
       if ($rangeweight) {
-        $form = new RangeWeightForm('update', $this->entityManager, $rangeweight);
+        $form = new RangeWeightForm('update', $this->entityManager, $rangeweight, $user);
         $form->setData($data);
         if ($form->isValid()) {
           $result = $this->rangeweightManager->updateRangeWeight($rangeweight, $data);                
         // Check result
-          $this->error_code = 1;
-          $this->apiResponse['message'] = "You have modified RangeWeight!";
+          $this->apiResponse['message'] = "MODIFIED_SUCCESS";
         } else {
           $this->error_code = 0;
           $this->apiResponse['message'] = "Errors";
@@ -143,7 +138,11 @@ class RangeWeightController extends CoreController {
         }
       } else {
         $this->error_code = 0;
-        $this->apiResponse['message'] = 'RangeWeight Not Found';
+        $this->apiResponse['message'] = 'NOT_FOUND';
+      }
+      } else {
+        $this->error_code = 0;
+        $this->apiResponse['message'] = "RANGE_WEIGHT_REQUEST_ID";
       }
     }
     return $this->createResponse();
@@ -152,30 +151,28 @@ class RangeWeightController extends CoreController {
     public function deleteAction()
     {
         $data = $this->getRequestData();
-        if(isset($data['id'])  && count($data['id']) > 0) {
+        if(isset($data['ids'])  && count($data['ids']) > 0) {
           try {
-            foreach ($data['id'] as $id) {
+            foreach ($data['ids'] as $id) {
             // Find existing rangeweight in the database.
-            $rangeweight = $this->entityManager->getRepository(RangeWeight::class)->findOneBy(array('id' => $data['id']));    
+            $rangeweight = $this->entityManager->getRepository(RangeWeight::class)->findOneBy(array('id' => $id));    
             if ($rangeweight == null) {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = "RangeWeight Not Found";
-                exit();
+                $this->apiResponse['message'] = "NOT_FOUND";
             } else {
                 //remove rangeweight
                 $this->rangeweightManager->removeRangeWeight($rangeweight);
             }
           }
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have deleted RangeWeight!";
+                $this->apiResponse['message'] = "DELETE_SUCCESS";
             }     
           catch (\Throwable $th) {
             $this->error_code = 0;
-            $this->apiResponse['message'] = "Status request Id!";
+            $this->apiResponse['message'] = "RANGE_WEIGHT_REQUEST_ID";
           }          
         } else {
             $this->error_code = 0;
-            $this->apiResponse['message'] = "RangeWeight request Id!";
+            $this->apiResponse['message'] = "RANGE_WEIGHT_REQUEST_ID";
         }
         return $this->createResponse();
     }

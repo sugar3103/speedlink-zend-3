@@ -4,9 +4,7 @@ namespace ZoneCode\Controller;
 use Core\Controller\CoreController;
 use ZoneCode\Form\ZoneCodeForm;
 use Doctrine\ORM\EntityManager;
-use Zend\Cache\Storage\StorageInterface;
 use ZoneCode\Entity\ZoneCode;
-use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 
 class ZoneCodeController extends CoreController {
     /**
@@ -70,7 +68,7 @@ class ZoneCodeController extends CoreController {
 
         $this->error_code = 1;
         $this->apiResponse = array(
-            'message' => 'Get list success',
+            'message' => 'SUCCESS',
             'data' => $results,
             'total' => $dataZoneCode['totalZoneCode']
         );
@@ -108,15 +106,12 @@ class ZoneCodeController extends CoreController {
         
         $form = new ZoneCodeForm('create', $this->entityManager);
         $form->setData($data);
-
         //validate form
         if ($form->isValid()) {
           $data = $form->getData();
-          $data['created_by'] = $user->id;
-          $result = $this->zonecodeManager->addZoneCode($data);                
+          $result = $this->zonecodeManager->addZoneCode($data, $user);                
           // Check result
-          $this->error_code = 1;
-          $this->apiResponse['message'] = "Success: You have added a ZoneCode!";
+          $this->apiResponse['message'] = "ADD_SUCCESS";
         } else {
           $this->error_code = 0;
           $this->apiResponse['message'] ="Error";
@@ -131,14 +126,14 @@ class ZoneCodeController extends CoreController {
     if ($this->getRequest()->isPost()) {
       $data = $this->getRequestData();
       $user = $this->tokenPayload;
-
+      if(isset($data['id'])) {
       $check_exits = $this->entityManager->getRepository(ZoneCode::class)->findOneBy(array('carrier_id' => $data['carrier_id'], 'category' => $data['category'], 'service_id' => $data['service_id'], 'shipment_type_id' => $data['shipment_type_id'], 'code' => $data['code']));    
         if($check_exits)
         {
           $zonecode_id = $check_exits->getId();
           if($zonecode_id != $data['id']) {
           $this->error_code = 0;
-          $this->apiResponse['data'] = "Already have this Zone Code!";
+          $this->apiResponse['data'] = "ALEADY_EXISTS";
           return $this->createResponse();
           }
         }
@@ -151,8 +146,7 @@ class ZoneCodeController extends CoreController {
         if ($form->isValid()) {
           $result = $this->zonecodeManager->updateZoneCode($zonecode, $data);                
         // Check result
-          $this->error_code = 1;
-          $this->apiResponse['message'] = "You have modified ZoneCode!";
+          $this->apiResponse['message'] = "MODIFIED_SUCCESS";
         } else {
           $this->error_code = 0;
           $this->apiResponse['message'] ="Error";
@@ -160,7 +154,11 @@ class ZoneCodeController extends CoreController {
         }
       } else {
         $this->error_code = 0;
-        $this->apiResponse['message'] = 'ZoneCode Not Found';
+        $this->apiResponse['message'] = 'NOT_FOUND';
+      }
+      } else {
+        $this->error_code = 0;
+        $this->apiResponse['message'] = "ZONE_CODE_REQUEST_ID";
       }
     }
     return $this->createResponse();
@@ -169,30 +167,29 @@ class ZoneCodeController extends CoreController {
     public function deleteAction()
     {
         $data = $this->getRequestData();
-        if(isset($data['id']) && count($data['id']) > 0) {
+        if(isset($data['ids']) && count($data['ids']) > 0) {
           try {
-            foreach ($data['id'] as $id) {
+            foreach ($data['ids'] as $id) {
             // Find existing zonecode in the database.
-            $zonecode = $this->entityManager->getRepository(ZoneCode::class)->findOneBy(array('id' => $data['id']));    
+            $zonecode = $this->entityManager->getRepository(ZoneCode::class)->findOneBy(array('id' => $id ));    
             if ($zonecode == null) {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = "ZoneCode Not Found";
+                $this->apiResponse['message'] = "NOT_FOUND";
                 exit();
             } else {
                 //remove zonecode
                 $this->zonecodeManager->removeZoneCode($zonecode);
             }
           }
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have deleted ZoneCode!";
+              $this->apiResponse['message'] = "DELETE_SUCCESS";
             }   
         catch (\Throwable $th) {
           $this->error_code = 0;
-          $this->apiResponse['message'] = "Status request Id!";
+          $this->apiResponse['message'] = "ZONE_CDDE_REQUEST_ID";
         }          
         } else {
             $this->error_code = 0;
-            $this->apiResponse['message'] = "ZoneCode request Id!";
+            $this->apiResponse['message'] = "ZONE_CDDE_REQUEST_ID";
         }
         return $this->createResponse();
     }

@@ -3,12 +3,6 @@ namespace NetworkPort\Controller;
 
 use Core\Controller\CoreController;
 use Doctrine\ORM\EntityManager;
-use Zend\Authentication\Result;
-use Zend\Cache\Storage\StorageInterface;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Zend\View\Model\JsonModel;
-use Zend\Uri\Uri;
 use NetworkPort\Entity\Hub;
 use NetworkPort\Form\HubForm;
 
@@ -37,7 +31,6 @@ class HubController extends CoreController {
         parent::__construct($entityManager);
         $this->entityManager = $entityManager;
         $this->hubManager = $hubManager;
-        // $this->cache = $cache;
     }
 
     public function indexAction()
@@ -60,9 +53,8 @@ class HubController extends CoreController {
 
       $results = $this->filterByField($dataHub['listHub'], $fields);
 
-      $this->error_code = 1;
       $this->apiResponse =  array(
-          'message' => 'Get list success',
+          'message' => 'SUCCESS',
           'data' => $results,
           'total' => $dataHub['totalHub']
       );
@@ -75,23 +67,16 @@ class HubController extends CoreController {
     * @throws \Exception
     */
     public function addAction() {     
-        // check if user has submitted the form.
         if ($this->getRequest()->isPost()) {
-            // fill in the form with POST data.
             $user = $this->tokenPayload;
             $data = $this->getRequestData();
-
             $form = new HubForm('create', $this->entityManager);
-
             $form->setData($data);
-            //validate form
+           
             if ($form->isValid()) {
               $data = $form->getData();
-              $data['created_by'] = $user->id;
-              $result = $this->hubManager->addHub($data,$user); 
-                // Check result
+              $this->hubManager->addHub($data,$user); 
               
-              $this->error_code = 1;
               $this->apiResponse['message'] = "Success: You have added a hub!";
             }
             else {
@@ -108,30 +93,31 @@ class HubController extends CoreController {
     * @throws \Exception
     */
     public function editAction() {
-        // check if user has submitted the form.
       if ($this->getRequest()->isPost()) {
           $data = $this->getRequestData();
           $user = $this->tokenPayload;
-          $data['updated_by'] = $user->id;
-
-          $hub = $this->entityManager->getRepository(Hub::class)->find($data['id']);
-          if($hub){
-            $form = new HubForm('update', $this->entityManager, $hub);
-            $form->setData($data);
-            if ($form->isValid()) {
-              // fill in the form with POST data.
-              $result = $this->hubManager->updateHub($hub, $data);                
-                // Check result
-              $this->error_code = 1;
-              $this->apiResponse['message'] = "You have modified hub!";
+          if(isset($data['id'])) {
+            $hub = $this->entityManager->getRepository(Hub::class)->find($data['id']);
+            if($hub){
+              $form = new HubForm('update', $this->entityManager, $hub);
+              $form->setData($data);
+              if ($form->isValid()) {
+               
+                $this->hubManager->updateHub($hub, $data, $user);                
+               
+                $this->apiResponse['message'] = "MODIFIED_SUCCESS";
+              } else {
+                $this->error_code = 0;
+                $this->apiResponse['message'] = "Errors";
+                $this->apiResponse['data'] = $form->getMessages();
+              }   
             } else {
               $this->error_code = 0;
-              $this->apiResponse['message'] = "Errors";
-              $this->apiResponse['data'] = $form->getMessages();
-            }   
+              $this->apiResponse['message'] = 'NOT_FOUND';   
+            }
           } else {
             $this->error_code = 0;
-            $this->apiResponse['message'] = 'Hub Not Found';   
+            $this->apiResponse['message'] = "HUB_REQUEST_ID";
           }
         }
         
@@ -140,30 +126,29 @@ class HubController extends CoreController {
 
       public function deleteAction() {
         $data = $this->getRequestData();
-        if(isset($data['id']) && count($data['id']) > 0 ) {
+        if(isset($data['ids']) && count($data['ids']) > 0 ) {
           try {
-            foreach ($data['id'] as $id) {
-            // Find existing status in the database.
+            foreach ($data['ids'] as $id) {
+            
             $hub = $this->entityManager->getRepository(Hub::class)->findOneBy(array('id' => $id));    
             if ($hub == null) {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = "Hub Not Found";
+                $this->apiResponse['message'] = "NOT_FOUND";
                 exit();
             } else {
-                //remove status
                 $this->hubManager->deleteHub($hub);
             }
           }
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have deleted hub!";
+
+            $this->apiResponse['message'] = "DELETE_SUCCESS_HUB";
           }
           catch (\Throwable $th) {
             $this->error_code = 0;
-            $this->apiResponse['message'] = "Status request Id!";
+            $this->apiResponse['message'] = "HUB_REQUEST_ID";
           }        
         } else {
             $this->error_code = 0;
-            $this->apiResponse['message'] = "Hub request id !";
+            $this->apiResponse['message'] = "HUB_REQUEST_ID";
         }
       return $this->createResponse();       
     }

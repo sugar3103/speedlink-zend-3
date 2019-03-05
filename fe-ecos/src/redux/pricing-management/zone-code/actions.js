@@ -103,9 +103,9 @@ export const updateZoneCodeItemError = (error) => ({
   payload: error
 });
 
-export const deleteZoneCodeItem = (id, messages) => ({
+export const deleteZoneCodeItem = (ids, messages) => ({
   type: ZONE_CODE_DELETE_ITEM,
-  payload: { id, messages }
+  payload: { ids, messages }
 });
 
 export const deleteZoneCodeItemSuccess = () => ({

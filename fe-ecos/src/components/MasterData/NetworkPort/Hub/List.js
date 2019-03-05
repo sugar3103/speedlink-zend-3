@@ -3,6 +3,7 @@ import React, { Component, Fragment } from 'react';
 import { Card, CardBody, Col, Button, Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Table from '../../../../containers/Shared/table/Table';
+import Moment from 'react-moment';
 import { SELECTED_PAGE_SIZE } from '../../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
@@ -11,6 +12,7 @@ import Search from './Search';
 import { confirmAlert } from 'react-confirm-alert';
 import ConfirmPicker from '../../../../containers/Shared/picker/ConfirmPicker';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import { MODAL_EDIT } from '../../../../constants/defaultValues';
 
 import {
   getHubList,
@@ -51,6 +53,7 @@ class List extends Component {
           <ConfirmPicker 
             onClose={onClose}
             onDelete={() => this.props.deleteHubItem(ids, messages)}
+            messages ={messages}
           />
         )
       }
@@ -183,6 +186,7 @@ class List extends Component {
           Header: messages['created-at'],
           accessor: "created_at",
           className: "text-center", 
+          Cell: ({ original }) => { return (<Moment fromNow format="D/MM/YYYY" locale={locale}>{new Date(original.created_at)}</Moment>) },
           sortable: false,
         },
         {
@@ -191,8 +195,11 @@ class List extends Component {
             Cell: ({ original }) => {
               return (
                 <Fragment>
-                  <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
+                  
+                  <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, MODAL_EDIT , original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
+                 
                   <Button color="danger" size="sm" onClick={(e) => this.onDelete(e, [original.id])}><span className="lnr lnr-trash" /></Button>
+                
                 </Fragment>
               );
             },
@@ -231,15 +238,14 @@ class List extends Component {
 
 List.propTypes = {
   hub: PropTypes.object.isRequired,
-  modal: PropTypes.object,
   getHubList: PropTypes.func.isRequired,
   toggleHubModal: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ hub, modal }) => {
+const mapStateToProps = ({ hub,  authUser }) => {
   return {
     hub,
-    modal
+    authUser
   };
 };
 

@@ -1,22 +1,10 @@
 <?php
 namespace ZoneCode\Service;
 
-use ZoneCode\Entity\RangeWeight;
 use ZoneCode\Entity\ZoneCode;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
-use Zend\Crypt\Password\Bcrypt;
-use Zend\Math\Rand;
-use Zend\View\Renderer\PhpRenderer;
-use Zend\Mime\Message as MimeMessage;
-use Zend\Mime\Part as MimePart;
-use Zend\Mail\Message;
-use Zend\Mail\Transport\Smtp as SmtpTransport;
-use Zend\Mail\Transport\SmtpOptions;
-use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-use Zend\Paginator\Paginator;
-use Zend\Authentication\Result;
 use Core\Utils\Utils;
 use Address\Entity\Country;
 use Address\Entity\City;
@@ -53,7 +41,7 @@ class ZoneCodeManager {
         $this->entityManager = $entityManager;
     }   
 
-    public function addZoneCode($data)
+    public function addZoneCode($data, $user)
     {
         $this->entityManager->beginTransaction();
         try {
@@ -77,13 +65,12 @@ class ZoneCodeManager {
         $zonecode->setDescription($data['description']);
         $zonecode->setDescriptionEn($data['description_en']);
        
-        $zonecode->setCreatedBy($data['created_by']);
+        $zonecode->setCreatedBy($user->id);
         $zonecode->setCreatedAt(date('Y-m-d H:i:s'));
-       
-        $this->getReferenced($zonecode, $data);
+        $this->getReferenced($zonecode, $data, $user, 'add');
+
         $this->entityManager->persist($zonecode);
         $this->entityManager->flush();        
-        // $last_id = $zonecode->getZoneCodeId();
         $this->entityManager->commit();
         return $zonecode;
         }
@@ -93,7 +80,7 @@ class ZoneCodeManager {
         }
     }
 
-     public function updateZoneCode($zonecode, $data) {
+     public function updateZoneCode($zonecode, $data, $user) {
 
         $this->entityManager->beginTransaction();
         try {
@@ -117,9 +104,9 @@ class ZoneCodeManager {
             $zonecode->setDescription($data['description']);
             $zonecode->setDescriptionEn($data['description_en']);
 
-            $zonecode->setUpdatedBy($data['updated_by']);
+            $zonecode->setUpdatedBy($user->id);
             $zonecode->setUpdatedAt(date('Y-m-d H:i:s'));
-            $this->getReferenced($zonecode, $data);
+            $this->getReferenced($zonecode, $data, $user);
             
             // apply changes to database.
             $this->entityManager->flush();
@@ -133,7 +120,7 @@ class ZoneCodeManager {
         }
     }
 
-    private function getReferenced($zonecode,$data) {
+    private function getReferenced($zonecode,$data, $user, $mode = '') {
 
         $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['carrier_id']);
         if ($carrier == null) {
@@ -219,19 +206,16 @@ class ZoneCodeManager {
 
             $zonecode->setDestinationWard($destination_ward);
         }
-        if($data['created_by']) {
-            $user_create = $this->entityManager->getRepository(User::class)->find($data['created_by']);
-            if ($user_create == null)
-                throw new \Exception('Not found User by ID');
-            $zonecode->setUserCreate($user_create);
+
+        $user_data = $this->entityManager->getRepository(User::class)->find($user->id);
+        if ($user_data == null) {
+            throw new \Exception('Not found User by ID');
         }
-      
-        if($data['updated_by']){
-            $user_update = $this->entityManager->getRepository(User::class)->find($data['updated_by']);
-            if ($user_update == null)
-                throw new \Exception('Not found User by ID');
-            $zonecode->setUserUpdate($user_update);
+
+        if ($mode == 'add') {
+            $zonecode->setUserCreate($user_data);
         }
+        $zonecode->setUserUpdate($user_data);
     }
 
     /**
@@ -264,14 +248,11 @@ class ZoneCodeManager {
             $totalZoneCode = $ormPaginator->count();
             //get user list
             $zonecodes = $ormPaginator->getIterator()->getArrayCopy();
-            // $countRow = 1;
+            
              foreach ($zonecodes as &$zonecode) {
-            //set status
-            //   $zonecode['status'] = Branch::getIsActiveList($zonecode['status']);
             //set created_at
-                $zonecode['created_at'] =  ($zonecode['created_at']) ?Utils::checkDateFormat($zonecode['created_at'],'d/m/Y') : '';
-                $zonecode['updated_at'] =  ($zonecode['updated_at']) ? Utils::checkDateFormat($zonecode['updated_at'],'d/m/Y H:i:s') : '';
-            // $countRow++;
+                $zonecode['created_at'] =  ($zonecode['created_at']) ?Utils::checkDateFormat($zonecode['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $zonecode['updated_at'] =  ($zonecode['updated_at']) ? Utils::checkDateFormat($zonecode['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
             }
         }
         //set data user

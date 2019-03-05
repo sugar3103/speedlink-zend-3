@@ -45,12 +45,14 @@ class HubRepository extends EntityRepository
                 h.description_en,
                 h.city_id,
                 h.country_id,
-                uc.username AS user_create_name,
-                ud.username AS user_update_name,
+                uc.username AS created_by,
+                ud.username AS updated_by,
                 c.name as city,
                 c.name_en as city_en,
                 co.name as country,
-                co.name_en as country_en
+                co.name_en as country_en,
+                CONCAT(COALESCE(uc.first_name,''), ' ', COALESCE(uc.last_name,'')) as full_name_created,
+                CONCAT(COALESCE(ud.first_name,''), ' ', COALESCE(ud.last_name,'')) as full_name_updated  
             ")->andWhere("h.is_deleted = 0")
             ->groupBy('h.id');
             if($limit) {
@@ -110,9 +112,6 @@ class HubRepository extends EntityRepository
          ->leftJoin('h.country', 'co')
          ->leftJoin('h.user_create', 'uc')
          ->leftJoin('h.user_update', 'ud');
-        // ->groupBy('u.id')
-        // ->where('u.deletedAt is null')
-        // ->andWhere('u.id <> 1')
             
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

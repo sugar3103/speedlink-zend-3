@@ -38,9 +38,7 @@ class BranchRepository extends EntityRepository
                 b.name_en,
                 b.status,
                 b.created_at,
-                b.created_by,
                 b.updated_at,
-                b.updated_by,
                 b.hub_id,
                 b.district_id,
                 b.city_id,
@@ -58,8 +56,10 @@ class BranchRepository extends EntityRepository
                 w.name_en AS ward_en,
                 b.description,
                 b.description_en,
-                uc.username AS user_create_name,
-                ud.username AS user_update_name
+                uc.username AS created_by,
+                ud.username AS updated_by,
+                CONCAT(COALESCE(uc.first_name,''), ' ', COALESCE(uc.last_name,'')) as full_name_created,
+                CONCAT(COALESCE(ud.first_name,''), ' ', COALESCE(ud.last_name,'')) as full_name_updated  
             ")->andWhere("h.is_deleted = 0")
             ->groupBy('b.id');
             
@@ -140,9 +140,6 @@ class BranchRepository extends EntityRepository
         ->leftJoin('b.hub', 'h')
         ->leftJoin('h.user_create', 'uc')
         ->leftJoin('h.user_update', 'ud');
-        // ->groupBy('b.id')
-        // ->where('b.deletedAt is null')
-        // ->andWhere('b.id <> 1')
             
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

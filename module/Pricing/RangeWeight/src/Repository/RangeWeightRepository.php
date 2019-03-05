@@ -45,9 +45,7 @@ class RangeWeightRepository extends EntityRepository
                 r.description,
                 r.description_en,
                 r.created_at,
-                r.created_by,
                 r.updated_at,
-                r.updated_by,
                 r.carrier_id,
                 r.service_id,
                 r.shipment_type_id,
@@ -56,8 +54,10 @@ class RangeWeightRepository extends EntityRepository
                 s.code AS service_code,
                 st.code AS shipmenttype_code,
                 cu.name AS customer_name,
-                uc.username AS user_create_name,
-                ud.username AS user_update_name
+                uc.username AS created_by,
+                ud.username AS updated_by,
+                CONCAT(COALESCE(uc.first_name,''), ' ', COALESCE(uc.last_name,'')) as full_name_created,
+                CONCAT(COALESCE(ud.first_name,''), ' ', COALESCE(ud.last_name,'')) as full_name_updated  
             ")->andWhere("r.is_deleted = 0")
             ->groupBy('r.id');
             
@@ -149,9 +149,7 @@ class RangeWeightRepository extends EntityRepository
         ->leftJoin('r.customer', 'cu')
         ->leftJoin('r.user_create', 'uc')
         ->leftJoin('r.user_update', 'ud');
-        // ->groupBy('b.id')
-        // ->where('b.deletedAt is null')
-        // ->andWhere('b.id <> 1')
+        
             
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
