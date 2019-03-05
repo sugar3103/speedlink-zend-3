@@ -69,9 +69,9 @@ export const updateHubItemError = (error) => ({
   payload: error
 });
 
-export const deleteHubItem = (id, messages) => ({
+export const deleteHubItem = (ids, messages) => ({
   type: HUB_DELETE_ITEM,
-  payload: { id, messages }
+  payload: { ids, messages }
 });
 
 export const deleteHubItemSuccess = () => ({

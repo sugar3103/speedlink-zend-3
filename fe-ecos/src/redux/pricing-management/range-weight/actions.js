@@ -79,9 +79,9 @@ import {
     payload: error
   });
   
-  export const deleteRangeWeightItem = (id, messages) => ({
+  export const deleteRangeWeightItem = (ids, messages) => ({
     type: RANGE_WEIGHT_DELETE_ITEM,
-    payload: { id, messages }
+    payload: { ids, messages }
   });
   
   export const deleteRangeWeightItemSuccess = () => ({

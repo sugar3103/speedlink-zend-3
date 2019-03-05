@@ -84,9 +84,9 @@ export const updateBranchItemError = (error) => ({
   payload: error
 });
 
-export const deleteBranchItem = (id, messages) => ({
+export const deleteBranchItem = (ids, messages) => ({
   type: BRANCH_DELETE_ITEM,
-  payload: { id, messages }
+  payload: { ids, messages }
 });
 
 export const deleteBranchItemSuccess = () => ({

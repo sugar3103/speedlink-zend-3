@@ -184,23 +184,23 @@ function* updateHubItem({ payload }) {
 
 //delete hub
 
-function deleteHubApi(id) {
+function deleteHubApi(ids) {
   return axios.request({
     method: 'post',
     url: `${apiUrl}hub/delete`,
     headers: authHeader(),
-    data: {  ids: id }
+    data: {  ids: ids }
   });
 }
 
-const deleteHubItemRequest = async id => {
-  return await deleteHubApi(id).then(res => res.data).catch(err => err)
+const deleteHubItemRequest = async ids => {
+  return await deleteHubApi(ids).then(res => res.data).catch(err => err)
 };
 
 function* deleteHubItem({ payload }) {
-  const { id, messages } = payload;
+  const { ids, messages } = payload;
   try {
-    const response = yield call(deleteHubItemRequest, id);
+    const response = yield call(deleteHubItemRequest, ids);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(deleteHubItemSuccess());
