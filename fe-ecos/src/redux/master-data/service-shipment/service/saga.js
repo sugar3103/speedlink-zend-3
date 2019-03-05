@@ -241,7 +241,7 @@ function deleteServiceApi(id) {
     method: 'post',
     url: `${apiUrl}service/delete`,
     headers: authHeader(),
-    data: {  id: id }
+    data: {  ids: id }
   });
 }
 

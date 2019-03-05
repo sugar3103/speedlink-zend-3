@@ -201,7 +201,7 @@ function deleteDistrictApi(id) {
     method: 'post',
     url: `${apiUrl}address/district/delete`,
     headers: authHeader(),
-    data: {  id: id }
+    data: {  ids: id }
   });
 }
 

@@ -43,6 +43,12 @@ function validateCarrier(errors) {
       name_en: 'carrier.validate-nameEn-exists'
     });
   }
+
+  if (errors.code && errors.code.carrierExists) {
+    return stopSubmit('carrier_action_form', {
+      code: 'carrier.validate-code-exists'
+    });
+  }
 }
 
 //list carrier
@@ -241,7 +247,7 @@ function deleteCarrierApi(id) {
     method: 'post',
     url: `${apiUrl}carrier/delete`,
     headers: authHeader(),
-    data: {  id: id }
+    data: {  ids: id }
   });
 }
 

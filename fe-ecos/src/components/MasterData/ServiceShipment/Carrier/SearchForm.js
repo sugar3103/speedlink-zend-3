@@ -31,7 +31,7 @@ class SearchForm extends Component {
     const { messages, locale } = this.props.intl;
     return (
       <form className="form" onSubmit={handleSubmit}>
-
+      
         <Col md={4}>
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['carrier.code']}</span>
@@ -43,16 +43,16 @@ class SearchForm extends Component {
         </Col>
         <Col md={4}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['carrier.name']}</span>
+            <span className="form__form-group-label">{messages['name']}</span>
             <div className="form__form-group-field">
-              <Field component="input" type="text" placeholder={messages['carrier.name']}
+              <Field component="input" type="text" placeholder={messages['name']}
                 name={locale === 'en-US' ? 'name_en' : 'name'} />
             </div>
           </div>
         </Col>
         <Col md={4}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['carrier.status']}</span>
+            <span className="form__form-group-label">{messages['status']}</span>
             <div className="form__form-group-field">
               <Field name="status" component={renderSelectField} type="text" options={[
                 { value: -1, label: messages['all'] },
@@ -97,7 +97,6 @@ const mapStateToProps = ({ carrier }) => {
 export default reduxForm({
   form: 'carrier_search_form',
   initialValues: {
-    name: '',
     carrier: -1
   }
 })(injectIntl(connect(mapStateToProps, {

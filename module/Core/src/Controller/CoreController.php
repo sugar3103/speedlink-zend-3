@@ -111,7 +111,11 @@ class CoreController extends ApiController
             return $results;            
         } else {
             return $data;
-        }
-        
+        }        
+    }
+
+    public function getDeleted()
+    {
+        return $this->tokenPayload->is_admin ? false : true;
     }
 }

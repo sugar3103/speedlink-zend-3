@@ -189,7 +189,7 @@ function deleteHubApi(id) {
     method: 'post',
     url: `${apiUrl}hub/delete`,
     headers: authHeader(),
-    data: {  id: id }
+    data: {  ids: id }
   });
 }
 

@@ -202,7 +202,7 @@ function deleteWardApi(id) {
     method: 'post',
     url: `${apiUrl}address/ward/delete`,
     headers: authHeader(),
-    data: {  id: id }
+    data: {  ids: id }
   });
 }
 

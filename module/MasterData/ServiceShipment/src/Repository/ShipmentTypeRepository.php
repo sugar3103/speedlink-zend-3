@@ -13,7 +13,7 @@ use ServiceShipment\Entity\ShipmentType;
  */
 class ShipmentTypeRepository extends EntityRepository
 {
-    public function getListShipmentTypeByCondition($start, $limit, $sortField = 'smt.id', $sortDirection = 'asc', $filters = [])
+    public function getListShipmentTypeByCondition($start, $limit, $sortField = 'smt.id', $sortDirection = 'asc', $filters = [],$deleted = true)
     {
         try {
             $queryBuilder = $this->buildShipmentTypeQueryBuilder($sortField, $sortDirection, $filters);
@@ -37,8 +37,14 @@ class ShipmentTypeRepository extends EntityRepository
                 smt.created_at,
                 cr.username as created_by,
                 smt.updated_at,
-                up.username as updated_by
-            ")->andWhere('smt.is_deleted = 0');
+                up.username as updated_by,
+                CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
+                 CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated
+            ");
+            
+            if($deleted) {
+                $queryBuilder->andWhere('smt.is_deleted = 0');
+            }
 
             if($limit) {
                 $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
@@ -59,7 +65,11 @@ class ShipmentTypeRepository extends EntityRepository
                 smt.code,
                 smt.name,
                 smt.name_en
-            ")->andWhere('smt.is_deleted = 0');
+            ");
+            if($deleted) {
+                $queryBuilder->andWhere('smt.is_deleted = 0');
+            }
+            
             return $queryBuilder;
 
         } catch (QueryException $e) {
@@ -67,12 +77,15 @@ class ShipmentTypeRepository extends EntityRepository
         }
     }
 
-    public function getListCodeByCondition($sortField = 'code', $filters = [])
+    public function getListCodeByCondition($sortField = 'code', $filters = [], $deleted = true)
     {
         try {
             $queryBuilder = $this->buildShipmentTypeQueryBuilder($sortField, 'asc', $filters);
-            $queryBuilder->andWhere('smt.is_deleted = 0')
-                ->andWhere('smt.status = 1');
+            if($deleted) {
+                $queryBuilder->andWhere('smt.is_deleted = 0');
+            }
+            
+            $queryBuilder->andWhere('smt.status = 1');
             if ($sortField == 'carrier_id') {
                 $queryBuilder->select("
                     smt.carrier_id,

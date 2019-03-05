@@ -39,6 +39,7 @@ class Utils {
      */
     public static function setCriteriaByFilters($filters, $operatorsMap, QueryBuilder $queryBuilder)
     {
+        
         foreach ($filters as $key => $value) {
             if (isset($operatorsMap[$key]) && $value !== "") {
                 $expr = Criteria::create()->andWhere(Criteria::expr()->{$operatorsMap[$key]['operator']}($operatorsMap[$key]['alias'], $value));

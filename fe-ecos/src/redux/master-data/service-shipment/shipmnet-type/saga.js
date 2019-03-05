@@ -243,7 +243,7 @@ function deleteShipmentTypeApi(id) {
     method: 'post',
     url: `${apiUrl}shipment_type/delete`,
     headers: authHeader(),
-    data: {  id: id }
+    data: {  ids: id }
   });
 }
 

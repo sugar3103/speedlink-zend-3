@@ -197,7 +197,7 @@ function deleteBranchApi(id) {
     method: 'post',
     url: `${apiUrl}branch/delete`,
     headers: authHeader(),
-    data: {  id: id }
+    data: {  ids: id }
   });
 }
 

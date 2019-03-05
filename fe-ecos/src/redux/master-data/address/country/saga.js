@@ -183,7 +183,7 @@ function deleteCountryApi(id) {
     method: 'post',
     url: `${apiUrl}address/country/delete`,
     headers: authHeader(),
-    data: {  id: id }
+    data: {  ids: id }
   });
 }
 

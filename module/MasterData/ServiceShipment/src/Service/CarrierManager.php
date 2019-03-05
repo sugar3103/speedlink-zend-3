@@ -42,17 +42,16 @@ class CarrierManager
             $carrier->setJoinCreated($user_data);
         }
         $carrier->setJoinUpdated($user_data);
-
     }
 
-    public function getListCarrierByCondition($start, $limit, $sortField = '', $sortDirection = 'asc', $filters = [])
+    public function getListCarrierByCondition($start, $limit, $sortField = '', $sortDirection = 'asc', $filters = [], $deleted = true)
     {
         $carriers = [];
         $totalCarrier = 0;
 
         //get orm carrier
         $ormCarrier = $this->entityManager->getRepository(Carrier::class)
-            ->getListCarrierByCondition($start, $limit, $sortField, $sortDirection, $filters);
+            ->getListCarrierByCondition($start, $limit, $sortField, $sortDirection,$filters, $deleted);
 
         if($ormCarrier){
             $ormPaginator = new ORMPaginator($ormCarrier, true);
@@ -62,10 +61,9 @@ class CarrierManager
             $totalCarrier = $ormPaginator->count();
             $carriers = $ormPaginator->getIterator()->getArrayCopy();
 
-            foreach ($carriers as $key => $carrier) {
-                $date_format = 'd/m/Y H:i:s';
-                $carriers[$key]['created_at'] = Utils::checkDateFormat($carrier['created_at'], $date_format);
-                $carriers[$key]['updated_at'] = Utils::checkDateFormat($carrier['updated_at'], $date_format);
+            foreach ($carriers as &$carrier) {  
+                $carrier['created_at'] =  ($carrier['created_at']) ? Utils::checkDateFormat($carrier['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $carrier['updated_at'] =  ($carrier['updated_at']) ? Utils::checkDateFormat($carrier['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
             }
         }
 
@@ -77,11 +75,12 @@ class CarrierManager
         return $dataCarrier;
     }
 
-    public function getListCarrierCodeByCondition()
+    public function getListCarrierCodeByCondition($deleted)
     {
+        
         $carriers = [];
         //get orm carrier
-        $ormCarrier = $this->entityManager->getRepository(Carrier::class)->getListCarrierCodeByCondition();
+        $ormCarrier = $this->entityManager->getRepository(Carrier::class)->getListCarrierCodeByCondition('code','asc', [], $deleted);
 
         if($ormCarrier){
             $ormPaginator = new ORMPaginator($ormCarrier, true);
@@ -116,6 +115,7 @@ class CarrierManager
             $carrier->setCreatedBy($user->id);
             $carrier->setUpdatedAt(date('Y-m-d H:i:s'));
             $carrier->setUpdatedBy($user->id);
+            $carrier->setIsDeleted(0);
             $this->getReferenced($carrier, $data, $user, 'add');
 
             $this->entityManager->persist($carrier);
@@ -151,6 +151,7 @@ class CarrierManager
             $carrier->setStatus($data['status']);
             $carrier->setCode($data['code']);
             $carrier->setUpdatedAt(date('Y-m-d H:i:s'));
+            $carrier->setIsDeleted(0);
             $carrier->setUpdatedBy($user->id);
             $this->getReferenced($carrier, $data, $user);
 
@@ -178,8 +179,10 @@ class CarrierManager
         $this->entityManager->beginTransaction();
         try {
             $carrier->setIsDeleted(1);
+            $carrier->setStatus(-1);
             $carrier->setUpdatedAt(date('Y-m-d H:i:s'));
             $carrier->setUpdatedBy($user->id);
+            $this->getReferenced($carrier, '', $user);            
 
             $this->entityManager->persist($carrier);
             $this->entityManager->flush();
@@ -188,6 +191,33 @@ class CarrierManager
             return $carrier;
         }
         catch (ORMException $e) {
+            $this->entityManager->rollback();
+            return FALSE;
+        }
+    }
+
+    /**
+     * Remove Status
+     *
+     * @param $status
+     * @return Status|bool
+     * @throws \Exception
+     */
+    public function removeCarrier($carrier) {
+        // begin transaction
+        $this->entityManager->beginTransaction();
+        try {
+
+            $this->entityManager->remove($carrier);
+        
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+
+            return $carrier;
+        }
+        catch (ORMException $e) {
+
             $this->entityManager->rollback();
             return FALSE;
         }

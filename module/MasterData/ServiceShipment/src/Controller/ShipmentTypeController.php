@@ -36,135 +36,137 @@ class ShipmentTypeController extends CoreController
 
     public function indexAction()
     {
-        $result = [
-            "total" => 0,
-            "data" => []
-        ];
+        if ($this->getRequest()->isPost()) {
 
-        $fieldsMap = ['code', 'name', 'name_en', 'status'];
-        list($start, $limit, $sortField, $sortDirection, $filters) = $this->getRequestData($fieldsMap);
-        $dataShipmentType = $this->shipmentTypeManager->getListShipmentTypeByCondition($start, $limit, $sortField, $sortDirection, $filters);
-
-        $result['error_code'] = 1;
-        $result['message'] = 'Success';
-        $result["total"] = $dataShipmentType['totalShipmentType'];
-        $result["data"] = !empty($dataShipmentType['listShipmentType']) ? $dataShipmentType['listShipmentType'] : [];
-        $this->apiResponse = $result;
+            $fieldsMap = ['code', 'name', 'name_en', 'status'];
+            list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);            
+            
+            
+            //get list User by condition
+            $dataShipmentType = $this->shipmentTypeManager->getListShipmentTypeByCondition($start, $limit, $sortField, $sortDirection,$filters,$this->getDeleted());            
+            
+            $result = $this->filterByField($dataShipmentType['listShipmentType'], $fields);          
+                        
+            $this->apiResponse =  array(
+                'message'   => "SUCCESS",
+                'data'      => $result,
+                'total'     => $dataShipmentType['totalShipmentType']
+            );
+        }
 
         return $this->createResponse();
     }
 
     public function codeAction()
     {
-        $result = array("data" => []);
-        $dataShipmentType = $this->shipmentTypeManager->getListShipmentTypeCodeByCondition();
+        if ($this->getRequest()->isPost()) {
+            $dataShipmentType = $this->shipmentTypeManager->getListShipmentTypeCodeByCondition($this->getDeleted());
 
-        $result['error_code'] = 1;
-        $result['message'] = 'Success';
-        $result["data"] = !empty($dataShipmentType) ? $dataShipmentType : [];
-        $this->apiResponse = $result;
+            $this->apiResponse =  array(
+                'message'   => "SUCCESS",
+                'data'      => !empty($dataShipmentType) ? $dataShipmentType : []            
+            );
+        }
 
         return $this->createResponse();
     }
 
     public function addAction()
     {
-        $user = $this->tokenPayload;
-        $data = $this->getRequestData();
+         // check if status  has submitted the form
+         if ($this->getRequest()->isPost()) {
+            $user = $this->tokenPayload;
+            $data = $this->getRequestData();
+            
+            //Create New Form Carrier
+            $form = new ShipmentTypeForm('create', $this->entityManager);
+            $form->setData($data);
 
-        if (empty($data)) {
-            $this->error_code = -1;
-            $this->apiResponse['message'] = 'Missing data';
-            return $this->createResponse();
+            //validate form
+            if ($form->isValid()) {
+                try {
+                    // get filtered and validated data
+                    $data = $form->getData();
+                    // add new carrier
+                    $this->shipmentTypeManager->addShipmentType($data, $user);
+                    
+                    $this->apiResponse['message'] = "ADDED_SUCCESS_SHIPMENT_TYPE";
+                } catch (\Exception $e) {
+                    $this->error_code = -1;
+                    $this->apiResponse['message'] = "ERROR_SUCCESS_SHIPMENT_TYPE";
+                }
+            } else {
+                $this->error_code = 0;
+                $this->apiResponse['message'] = "Error";
+                $this->apiResponse['data'] = $form->getMessages(); 
+            }   
         }
-        //Create New Form ShipmentType
-        $form = new ShipmentTypeForm('create', $this->entityManager);
-        $form->setData($data);
 
-        //validate form
-        if ($form->isValid()) {
-            try {
-                // get filtered and validated data
-                $data = $form->getData();
-                // add new Shipment Type
-                $this->shipmentTypeManager->addShipmentType($data, $user);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have added a Shipment Type!";
-            } catch (\Exception $e) {
-                $this->error_code = -1;
-                $this->apiResponse['message'] = "Fail: Please contact System Admin";
-            }
-        } else {
-            $this->error_code = -1;
-            $this->apiResponse = $form->getMessages();
-        }
 
         return $this->createResponse();
     }
 
     public function editAction()
     {
-        $user = $this->tokenPayload;
-        $data = $this->getRequestData();
-        if (empty($data)) {
-            $this->error_code = -1;
-            $this->apiResponse['message'] = 'Missing data';
-            return $this->createResponse();
-        }
+        if ($this->getRequest()->isPost()) {
+            $user = $this->tokenPayload;
+            $data = $this->getRequestData();
+            if(isset($data['id'])) {
+                //Create New Form Service
+                $shipmentType = $this->entityManager->getRepository(ShipmentType::class)->find($data['id']);
+                $form = new ShipmentTypeForm('update', $this->entityManager, $shipmentType);
+                $form->setData($data);
 
-        //Create New Form ShipmentType
-        $shipmentType = $this->entityManager->getRepository(ShipmentType::class)->find($data['id']);
-        $form = new ShipmentTypeForm('update', $this->entityManager, $shipmentType);
-        $form->setData($data);
-
-        //validate form
-        if ($form->isValid()) {
-            try {
-                // get filtered and validated data
-                $data = $form->getData();
-                // add new Shipment Type
-                $this->shipmentTypeManager->updateShipmentType($shipmentType, $data, $user);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have edited a Shipment Type!";
-            } catch (\Exception $e) {
-                $this->error_code = -1;
-                $this->apiResponse['message'] = "Fail: Please contact System Admin";
+                //validate form
+                if ($form->isValid()) {
+                    try {
+                        // get filtered and validated data
+                        $data = $form->getData();
+                        // add new service
+                        $this->shipmentTypeManager->updateShipmentType($shipmentType, $data, $user);                
+                        $this->apiResponse['message'] = "EDITED_SUCCESS_SHIPMENT_TYPE";
+                    } catch (\Exception $e) {
+                        $this->error_code = -1;
+                        $this->apiResponse['data'] = "ERROR_EDITED";
+                    }
+                } else {
+                    $this->error_code = 0;            
+                    $this->apiResponse['data'] = $form->getMessages(); 
+                }  
             }
-
-        } else {
-            $this->error_code = -1;
-            $this->apiResponse = $form->getMessages();
         }
+
         return $this->createResponse();
     }
 
     public function deleteAction()
     {
-        $user = $this->tokenPayload;
-        $data = $this->getRequestData();
-        if (empty($data)) {
-            $this->error_code = -1;
-            $this->apiResponse['message'] = 'Missing data';
-            return $this->createResponse();
-        }
-        //Create New Form ShipmentType
-        $shipmentType = $this->entityManager->getRepository(ShipmentType::class)->find($data['id']);
-
-        //validate form
-        if (!empty($shipmentType)) {
-            try {
-                $this->shipmentTypeManager->deleteShipmentType($shipmentType, $user);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have deleted Shipment Type!";
-            } catch (\Exception $e) {
-                $this->error_code = -1;
-                $this->apiResponse['message'] = "Fail: Please contact System Admin";
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequestData();
+            
+            if(isset($data['ids']) && count($data['ids']) > 0) {
+                try {
+                    foreach ($data['ids'] as $id) {
+                        $shipmentType = $this->entityManager->getRepository(ShipmentType::class)->find($id);
+                        if ($shipmentType == null) {
+                            $this->error_code = 0;
+                            $this->apiResponse['message'] = "NOT_FOUND";                        
+                        } else {
+                            $this->shipmentTypeManager->deleteShipmentType($shipmentType,$this->tokenPayload);
+                        }  
+                    }
+                    
+                    $this->apiResponse['message'] = "DELETE_SUCCESS_SHIPMENT_TYPE";
+                } catch (\Throwable $th) {
+                    $this->error_code = 0;
+                    $this->apiResponse['message'] = "SHIPMENT_TYPE_REQUEST_ID";
+                }
+            } else {
+                $this->error_code = 0;
+                $this->apiResponse['message'] = "SHIPMENT_TYPE_REQUEST_ID";
             }
-        } else {
-            $this->httpStatusCode = 200;
-            $this->error_code = -1;
-            $this->apiResponse['message'] = "Not Found Shipment Type";
         }
+
         return $this->createResponse();
     }
 
@@ -175,7 +177,7 @@ class ShipmentTypeController extends CoreController
             $param = $this->getRequestData([]);
             $sortField = $param['type'];
             unset($param['type']);
-            $dataShipmentType = $this->shipmentTypeManager->getListCodeByCondition($sortField, $param);
+            $dataShipmentType = $this->shipmentTypeManager->getListCodeByCondition($sortField, $param, $this->getDeleted());
 
             $result['error_code'] = 1;
             $result['message'] = 'Success';

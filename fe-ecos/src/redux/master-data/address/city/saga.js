@@ -202,7 +202,7 @@ function deleteCityApi(id) {
     method: 'post',
     url: `${apiUrl}address/city/delete`,
     headers: authHeader(),
-    data: {  id: id }
+    data: {  ids: id }
   });
 }
 

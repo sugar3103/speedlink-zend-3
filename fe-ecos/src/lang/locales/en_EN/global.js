@@ -19,6 +19,7 @@ module.exports = {
     'action': 'Action',
     'active': 'Enable',
     'inactive': 'Disable',
+    'deleted': 'Deleted',
     'all': 'All',
 
     'created-at': 'Created At',
