@@ -29,11 +29,11 @@ class ShipmentTypeRepository extends EntityRepository
                 smt.volumetric_number,
                 smt.status,
                 smt.carrier_id,
-                c.name_en AS carrier_name_en,
-                c.name AS carrier_name,
+                c.name_en AS carrier_en,
+                c.name AS carrier,
                 smt.service_id,
-                s.name_en AS service_name_en,
-                s.name AS service_name,
+                s.name_en AS service_en,
+                s.name AS service,
                 smt.created_at,
                 cr.username as created_by,
                 smt.updated_at,
@@ -56,7 +56,7 @@ class ShipmentTypeRepository extends EntityRepository
         }
     }
 
-    public function getListShipmentTypeCodeByCondition($sortField = 'code', $sortDirection = 'asc', $filters = [])
+    public function getListShipmentTypeCodeByCondition($sortField = 'code', $sortDirection = 'asc', $filters = [], $deleted = true)
     {
         try {
             $queryBuilder = $this->buildShipmentTypeQueryBuilder($sortField, $sortDirection, $filters);

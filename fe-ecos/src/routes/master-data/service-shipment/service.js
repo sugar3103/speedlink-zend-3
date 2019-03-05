@@ -1,11 +1,31 @@
 import React, { Component } from 'react';
 import { Col, Container, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
+import { connect } from "react-redux";
 import { List } from '../../../components/MasterData/ServiceShipment/Service';
-
+import { getServiceList } from '../../../redux/actions';
+import AccessDenied from '../../../containers/Layout/accessDenied';
 class Service extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loadPage: true
+    }
+  }
+
+  componentDidMount() {
+    this.props.getServiceList()
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.loadPage) {
+      this.setState({ loadPage: prevProps.loading })
+    }
+  }
+
   render() {
     const { messages } = this.props.intl;
+    const { errors } = this.props.service;
     return (
       <Container className={'panel__body'}>
         <Row>
@@ -15,11 +35,26 @@ class Service extends Component {
           </Col>
         </Row>
         <Row>
-          <List />
+        {!this.state.loadPage ? (
+            (errors && errors === 'ACCESS_DENIED') ? (<AccessDenied />) : (<List />)
+          ) : ''}
         </Row>
       </Container>
     )
   }
 }
 
-export default injectIntl(Service);
+const mapStateToProps = ({ service }) => {  
+  return {
+    service
+  };
+};
+
+
+export default injectIntl(connect(
+  mapStateToProps,
+  {
+    getServiceList    
+  }
+)(Service));
+

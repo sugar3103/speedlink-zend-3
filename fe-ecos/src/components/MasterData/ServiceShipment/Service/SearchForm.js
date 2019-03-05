@@ -36,7 +36,7 @@ class SearchForm extends Component {
             <span className="form__form-group-label">{messages['service.code']}</span>
             <div className="form__form-group-field">
               <Field name="code" component={renderSelectField} type="text"
-                     options={serviceCode && this.showOptionService(serviceCode)}/>
+                options={serviceCode && this.showOptionService(serviceCode)} />
             </div>
           </div>
         </Col>
@@ -45,7 +45,7 @@ class SearchForm extends Component {
             <span className="form__form-group-label">{messages['service.name']}</span>
             <div className="form__form-group-field">
               <Field component="input" type="text" placeholder={messages['service.name']}
-                     name={locale === 'en-US' ? 'name_en' : 'name'} />
+                name={locale === 'en-US' ? 'name_en' : 'name'} />
             </div>
           </div>
         </Col>
@@ -57,23 +57,25 @@ class SearchForm extends Component {
                 { value: -1, label: messages['all'] },
                 { value: 1, label: messages['active'] },
                 { value: 0, label: messages['inactive'] }
-                ]}
+              ]}
               />
             </div>
           </div>
         </Col>
-        <div className="search-group-button">
-          <Button size="sm" outline onClick={(e)=> {
-            reset();
-            setTimeout(() => {
-              handleSubmit();
-            }, 200);
-          }} >
-            {messages['clear']}</Button>{' '}
-          <Button size="sm" color="primary" id="search" >
-            {messages['search']}
-          </Button>
-        </div>
+        <Col md={12} className="text-right">
+          <div className="search-group-button">
+            <Button size="sm" outline onClick={(e) => {
+              reset();
+              setTimeout(() => {
+                handleSubmit();
+              }, 200);
+            }} >
+              {messages['clear']}</Button>{' '}
+            <Button size="sm" color="primary" id="search" >
+              {messages['search']}
+            </Button>
+          </div>
+        </Col>
       </form>
     );
   }
@@ -93,10 +95,6 @@ const mapStateToProps = ({ service }) => {
 
 export default reduxForm({
   form: 'service_search_form',
-  initialValues: {
-    name: '',
-    service: -1
-  }
 })(injectIntl(connect(mapStateToProps, {
   getServiceCodeList
 })(SearchForm)));

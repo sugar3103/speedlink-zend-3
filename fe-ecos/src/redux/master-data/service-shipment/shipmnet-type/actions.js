@@ -14,12 +14,13 @@ import {
   SHIPMENT_TYPE_DELETE_ITEM_ERROR,
   SHIPMENT_TYPE_CODE_GET_LIST,
   SHIPMENT_TYPE_CODE_GET_LIST_SUCCESS,
-  SHIPMENT_TYPE_CODE_GET_LIST_ERROR
+  SHIPMENT_TYPE_CODE_GET_LIST_ERROR,
+  SHIPMENT_TYPE_CHANGE_TYPE_MODAL
 } from '../../../../constants/actionTypes';
 
-export const toggleShipmentTypeModal = (shipment_type = null) => ({
+export const toggleShipmentTypeModal = (type, data) => ({
   type: SHIPMENT_TYPE_TOGGLE_MODAL,
-  payload: shipment_type
+  payload: { type, data}
 });
 
 export const getShipmentTypeList = (params) => ({
@@ -93,6 +94,11 @@ export const deleteShipmentTypeItemError = (error) => ({
   type: SHIPMENT_TYPE_DELETE_ITEM_ERROR,
   payload: error
 });
+
+export const changeTypeShipmentTypeModal = (type) => ({
+  type: SHIPMENT_TYPE_CHANGE_TYPE_MODAL,
+  payload: type
+})
 
 
 

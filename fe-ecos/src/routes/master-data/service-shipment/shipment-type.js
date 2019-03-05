@@ -2,10 +2,30 @@ import React, { Component } from 'react';
 import { Col, Container, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { List } from '../../../components/MasterData/ServiceShipment/ShipmnetType';
-
+import { connect } from "react-redux";
+import { getShipmentTypeList } from '../../../redux/actions';
+import AccessDenied from '../../../containers/Layout/accessDenied';
 class ShipmentType extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loadPage: true
+    }
+  }
+
+  componentDidMount() {
+    this.props.getShipmentTypeList()
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.loadPage) {
+      this.setState({ loadPage: prevProps.loading })
+    }
+  }
+
   render() {
-    const {messages} = this.props.intl;
+    const { messages } = this.props.intl;
+    const { errors } = this.props.shipment_type;
     return (
       <Container className={'panel__body'}>
         <Row>
@@ -15,11 +35,26 @@ class ShipmentType extends Component {
           </Col>
         </Row>
         <Row>
-          <List />
+        {!this.state.loadPage ? (
+            (errors && errors === 'ACCESS_DENIED') ? (<AccessDenied />) : (<List />)
+          ) : ''}
         </Row>
       </Container>
     )
   }
 }
 
-export default injectIntl(ShipmentType);
+const mapStateToProps = ({ shipment_type }) => {  
+  return {
+    shipment_type
+  };
+};
+
+
+export default injectIntl(connect(
+  mapStateToProps,
+  {
+    getShipmentTypeList    
+  }
+)(ShipmentType));
+

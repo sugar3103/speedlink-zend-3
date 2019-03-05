@@ -14,8 +14,8 @@ import {
   SHIPMENT_TYPE_DELETE_ITEM_ERROR,
   SHIPMENT_TYPE_CODE_GET_LIST,
   SHIPMENT_TYPE_CODE_GET_LIST_SUCCESS,
-  SHIPMENT_TYPE_CODE_GET_LIST_ERROR
-  
+  SHIPMENT_TYPE_CODE_GET_LIST_ERROR,
+  SHIPMENT_TYPE_CHANGE_TYPE_MODAL
 } from '../../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -25,6 +25,7 @@ const INIT_STATE = {
   loading: true,
   modalOpen: false,
   modalData: null,
+  modalType: null,
   paramSearch: null,
   codes: null
  
@@ -36,7 +37,8 @@ export default (state = INIT_STATE, action) => {
       return {
         ...state,
         modalOpen: !state.modalOpen,
-        modalData: action.payload,
+        modalData: action.payload.data,
+        modalType: action.payload.type,
         errors: null
       };
 
@@ -141,7 +143,11 @@ export default (state = INIT_STATE, action) => {
         ...state,
         errors: action.payload
       };
-
+    case SHIPMENT_TYPE_CHANGE_TYPE_MODAL: 
+    return{
+      ...state,
+      modalType: action.payload
+    }
     default:
       return { ...state };
   }

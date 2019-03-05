@@ -71,7 +71,7 @@ function* getShipmentTypeListItems({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(getShipmentTypeListError(response.data));
+        yield put(getShipmentTypeListError(response.message));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -115,7 +115,7 @@ function* getShipmentTypeCodeListItems() {
         break;
 
       case EC_FAILURE:
-        yield put(getShipmentTypeCodeListError(response.data));
+        yield put(getShipmentTypeCodeListError(response.message));
         break;
 
       default:
@@ -215,7 +215,7 @@ function* updateShipmentTypeItem({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(updateShipmentTypeItemError(response.data));
+        yield put(updateShipmentTypeItemError(response.message));
         yield put(validateShipmentType(response.data));
         break;
 

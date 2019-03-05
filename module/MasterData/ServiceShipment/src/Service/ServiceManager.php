@@ -180,7 +180,7 @@ class ServiceManager
         $this->entityManager->beginTransaction();
         try {
             $service->setIsDeleted(1);
-            $service->setStatus(0);
+            $service->setStatus(-1);
             $service->setUpdatedAt(date('Y-m-d H:i:s'));
             $service->setUpdatedBy($user->id);
 

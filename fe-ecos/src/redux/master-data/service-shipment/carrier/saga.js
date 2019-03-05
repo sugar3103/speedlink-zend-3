@@ -219,7 +219,7 @@ function* updateCarrierItem({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(updateCarrierItemError(response.data));
+        yield put(updateCarrierItemError(response.message));
         yield put(validateCarrier(response.data));
         break;
 
