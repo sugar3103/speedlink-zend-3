@@ -67,40 +67,10 @@ class ActionForm extends Component {
       this.props.change('status',1);
     }
 
-    if (data && data.carrier_id) {
-      let paramsCarier = {
-        type : "carrier_id",
-        category_code : data.category
-      }
-      this.props.getCarrierCodeZoneCodeByCondition(paramsCarier, messages, 'editview');
-    }
-
-    if (data && data.service_id) {
-      let paramsCity = {
-        type : "service_id",
-        carrier_id : data.carrier_id,
-        category_code :  data.category
-      }
-      this.props.getServiceCodeZoneCodeByCondition(paramsCity, messages, 'editview');
-    }
-
-    if (data && data.shipment_type_id) {
-      let paramsShipmenttype = {
-        type : "shipment_type_id",
-        category_code : data.category,
-        carrier_id :  data.carrier_id,
-        service_id : [ data.service_id ]
-      }
-      this.props.getShipmentTypeCodeZoneCodeByCondition(paramsShipmenttype, messages, 'editview');
-    }
-
     if (data && data.origin_country_id) {
       let paramsCountry = {
         offset: {
           limit: 0
-        },
-        query: {
-          id: data.origin_country_id
         }
       }
       this.props.getOriginCountryList(paramsCountry, messages, 'editview');
@@ -148,9 +118,6 @@ class ActionForm extends Component {
       let paramsCountry = {
         offset: {
           limit: 0
-        },
-        query: {
-          id: data.destination_country_id
         }
       }
       this.props.getDestinationCountryList(paramsCountry, messages, 'editview');
@@ -192,6 +159,32 @@ class ActionForm extends Component {
         }
       }
       this.props.getDestinationWardList(paramsWard, messages, 'editview');
+    }
+    if (data && data.carrier_id) {
+      let paramsCarier = {
+        type : "carrier_id",
+        category_code : data.category
+      }
+      this.props.getCarrierCodeZoneCodeByCondition(paramsCarier, messages, 'editview');
+    }
+
+    if (data && data.service_id) {
+      let paramsCity = {
+        type : "service_id",
+        carrier_id : data.carrier_id,
+        category_code :  data.category
+      }
+      this.props.getServiceCodeZoneCodeByCondition(paramsCity, messages, 'editview');
+    }
+
+    if (data && data.shipment_type_id) {
+      let paramsShipmenttype = {
+        type : "shipment_type_id",
+        category_code : data.category,
+        carrier_id :  data.carrier_id,
+        service_id : [ data.service_id ]
+      }
+      this.props.getShipmentTypeCodeZoneCodeByCondition(paramsShipmenttype, messages, 'editview');
     }
   }
 

@@ -31,9 +31,6 @@ class ActionForm extends PureComponent {
       let paramsCountry = {
         offset: {
           limit: 0
-        },
-        query: {
-          id: data.country_id
         }
       }
       this.props.getCountryBranchList(paramsCountry, messages, 'editview');
