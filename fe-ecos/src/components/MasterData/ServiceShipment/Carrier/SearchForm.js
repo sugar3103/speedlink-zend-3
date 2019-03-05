@@ -31,12 +31,13 @@ class SearchForm extends Component {
     const { messages, locale } = this.props.intl;
     return (
       <form className="form" onSubmit={handleSubmit}>
+
         <Col md={4}>
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['carrier.code']}</span>
             <div className="form__form-group-field">
               <Field name="code" component={renderSelectField} type="text"
-                     options={carrierCode && this.showOptionCarrier(carrierCode)}/>
+                options={carrierCode && this.showOptionCarrier(carrierCode)} />
             </div>
           </div>
         </Col>
@@ -45,7 +46,7 @@ class SearchForm extends Component {
             <span className="form__form-group-label">{messages['carrier.name']}</span>
             <div className="form__form-group-field">
               <Field component="input" type="text" placeholder={messages['carrier.name']}
-                     name={locale === 'en-US' ? 'name_en' : 'name'} />
+                name={locale === 'en-US' ? 'name_en' : 'name'} />
             </div>
           </div>
         </Col>
@@ -57,23 +58,25 @@ class SearchForm extends Component {
                 { value: -1, label: messages['all'] },
                 { value: 1, label: messages['active'] },
                 { value: 0, label: messages['inactive'] }
-                ]}
+              ]}
               />
             </div>
           </div>
         </Col>
-        <div className="search-group-button">
-          <Button size="sm" outline onClick={(e)=> {
-            reset();
-            setTimeout(() => {
-              handleSubmit();
-            }, 200);
-          }} >
-            {messages['clear']}</Button>{' '}
-          <Button size="sm" color="primary" id="search" >
-            {messages['search']}
-          </Button>
-        </div>
+        <Col md={12} className="text-right">
+          <div className="search-group-button">
+            <Button size="sm" outline onClick={(e) => {
+              reset();
+              setTimeout(() => {
+                handleSubmit();
+              }, 200);
+            }} >
+              {messages['clear']}</Button>{' '}
+            <Button size="sm" color="primary" id="search" >
+              {messages['search']}
+            </Button>
+          </div>
+        </Col>
       </form>
     );
   }
