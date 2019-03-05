@@ -69,7 +69,7 @@ function* getCarrierListItems({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(getCarrierListError(response.data));
+        yield put(getCarrierListError(response.message));
         break;
 
       case EC_FAILURE_AUTHENCATION:

@@ -63,10 +63,10 @@ class PricingData extends Component {
                         onSaveTable={this.onSaveTransportation}
                     />
                 </fieldset>
-                {/* <fieldset className="scheduler-border">
+                <fieldset className="scheduler-border">
                     <legend className="scheduler-border">{messages['pricing.value-services']}</legend>
                     <PricingVas />
-                </fieldset> */}
+                </fieldset>
                 <fieldset className="scheduler-border">
                     <legend className="scheduler-border">{messages['pricing.cod']}</legend>
                     <PricingCod />

@@ -14,7 +14,8 @@ import {
   SERVICE_DELETE_ITEM_ERROR,
   SERVICE_CODE_GET_LIST,
   SERVICE_CODE_GET_LIST_SUCCESS,
-  SERVICE_CODE_GET_LIST_ERROR
+  SERVICE_CODE_GET_LIST_ERROR,
+  SERVICE_CHANGE_TYPE_MODAL
 } from '../../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -23,6 +24,7 @@ const INIT_STATE = {
   errors: null,
   loading: true,
   modalOpen: false,
+  modalType: null,
   modalData: null,
   paramSearch: null,
   codes: null
@@ -34,7 +36,8 @@ export default (state = INIT_STATE, action) => {
       return {
         ...state,
         modalOpen: !state.modalOpen,
-        modalData: action.payload,
+        modalData: action.payload.data,
+        modalType: action.payload.type,
         errors: null
       };
 
@@ -139,7 +142,11 @@ export default (state = INIT_STATE, action) => {
         ...state,
         errors: action.payload
       };
-
+    case SERVICE_CHANGE_TYPE_MODAL:
+      return {
+        ...state,
+        modalType: action.payload
+      }
     default:
       return { ...state };
   }
