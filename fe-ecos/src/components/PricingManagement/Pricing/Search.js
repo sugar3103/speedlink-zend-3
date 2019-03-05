@@ -1,10 +1,22 @@
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import SearchForm from './SearchForm';
+import  { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
+import { getPricingList } from '../../../redux/actions';
 
 class Search extends Component {
   handleSubmit = values => {
-    console.log(values);
+    const { messages } = this.props.intl;
+    const params = {
+      offset: {
+        start: 1,
+        limit: SELECTED_PAGE_SIZE
+      },
+      query: values
+    }
+    this.props.getPricingList(params, messages);
     
   };
 
@@ -21,4 +33,10 @@ class Search extends Component {
   }
 }
 
-export default injectIntl(Search);
+Search.propTypes = {
+  getPricingList: PropTypes.func.isRequired
+}
+
+export default injectIntl(connect(null, {
+  getPricingList
+})(Search));

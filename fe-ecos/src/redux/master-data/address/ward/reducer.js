@@ -12,7 +12,8 @@ import {
   WARD_DELETE_ITEM,
   WARD_DELETE_ITEM_SUCCESS,
   WARD_DELETE_ITEM_ERROR,
-  WARD_CHANGE_TYPE_MODAL
+  WARD_CHANGE_TYPE_MODAL,
+  WARD_RESET_STATE
 } from '../../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -123,6 +124,9 @@ export default (state = INIT_STATE, action) => {
         ...state,
         modalType: action.payload
       }
+    case WARD_RESET_STATE:
+      return INIT_STATE;
+      
     default:
       return { ...state };
   }

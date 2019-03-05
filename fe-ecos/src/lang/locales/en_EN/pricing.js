@@ -120,5 +120,6 @@ module.exports = {
     'pricing.external_city' :'External City',
     'pricing.external_city_ras' :'External City Ras',
     'pricing.from' :'From',
-    'pricing.to' :'To'
+    'pricing.to' :'To',
+    'pricing.price': 'Price',
   }

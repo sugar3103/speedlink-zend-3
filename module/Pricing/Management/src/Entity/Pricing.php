@@ -121,9 +121,9 @@ class Pricing
     /**
      * @var int|null
      *
-     * @ORM\Column(name="approval_by", type="integer", nullable=true, options={"comment"="user_id"})
+     * @ORM\Column(name="approved_by", type="integer", nullable=true, options={"comment"="user_id"})
      */
-    private $approval_by;
+    private $approved_by;
 
     /**
      * @var int
@@ -212,7 +212,7 @@ class Pricing
     /**
      *
      * @ORM\OneToOne(targetEntity="\OAuth\Entity\User")
-     * @ORM\JoinColumn(name="approval_by", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="approved_by", referencedColumnName="id", nullable=true)
      */
     private $join_approval;
 
@@ -473,17 +473,17 @@ class Pricing
     /**
      * @return int|null
      */
-    public function getApprovalBy()
+    public function getApprovedBy()
     {
-        return $this->approval_by;
+        return $this->approved_by;
     }
 
     /**
-     * @param int|null $approval_by
+     * @param int|null $approved_by
      */
-    public function setApprovalBy($approval_by)
+    public function setApprovedBy($approved_by)
     {
-        $this->approval_by = $approval_by;
+        $this->approved_by = $approved_by;
     }
 
     /**

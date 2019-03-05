@@ -12,7 +12,8 @@ import {
   CITY_DELETE_ITEM,
   CITY_DELETE_ITEM_SUCCESS,
   CITY_DELETE_ITEM_ERROR,
-  CITY_CHANGE_TYPE_MODAL
+  CITY_CHANGE_TYPE_MODAL,
+  CITY_RESET_STATE
 } from '../../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -123,7 +124,8 @@ export default (state = INIT_STATE, action) => {
         ...state,
         modalType: action.payload
       };
-
+    case CITY_RESET_STATE:
+      return INIT_STATE;
     default:
       return { ...state };
   }

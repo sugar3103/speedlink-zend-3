@@ -10,8 +10,6 @@ import  { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 class Search extends Component {
 
   handleSubmit = values => {
-    console.log(values);
-    
     const { messages } = this.props.intl;
     const params = {
       offset: {

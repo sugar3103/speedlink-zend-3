@@ -139,7 +139,7 @@ class PricingForm extends Form {
         ]);
 
         $inputFilter->add([
-            'name' => 'approval_by',
+            'name' => 'approved_by',
             'required' => true,
             'filters' => [
                 [

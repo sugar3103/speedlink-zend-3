@@ -45,10 +45,10 @@ class PricingRepository extends EntityRepository
                 sl.last_name,
                 pr.is_private,
                 pr.customer_id,
-                pr.name AS customer_name,
+                cus.name AS customer_name,
                 pr.status,
                 pr.approval_status,
-                pr.approval_by,
+                pr.approved_by,
                 app.username,
                 app.first_name,
                 app.last_name,
@@ -90,12 +90,12 @@ class PricingRepository extends EntityRepository
                     sl.first_name,
                     sl.last_name
                 ");
-                $queryBuilder->andWhere('sl.is_deleted = 0');
-                $queryBuilder->andWhere('sl.status = 1');
+                // $queryBuilder->andWhere('sl.is_deleted = 0');
+                // $queryBuilder->andWhere('sl.status = 1');
                 $queryBuilder->groupBy('pr.saleman_id');
-            } else if ($sortField == 'approval_by'){
+            } else if ($sortField == 'approved_by'){
                 $queryBuilder->select("
-                    pr.approval_by,
+                    pr.approved_by,
                     app.username,
                     app.first_name,
                     app.last_name
@@ -136,10 +136,10 @@ class PricingRepository extends EntityRepository
             'carrier_id' => [ 'alias' => 'pr.carrier_id', 'operator' => 'eq' ],
             'category_code' => [ 'alias' => 'pr.category_code', 'operator' => 'eq' ],
             'customer_id' => [ 'alias' => 'pr.customer_id', 'operator' => 'in' ],
-            'approved_id' => [ 'alias' => 'pr.approved_id', 'operator' => 'eq' ],
-            'approved_status' => [ 'alias' => 'pr.approved_status', 'operator' => 'eq' ],
+            'approved_by' => [ 'alias' => 'pr.approved_by', 'operator' => 'eq' ],
+            'approval_status' => [ 'alias' => 'pr.approval_status', 'operator' => 'eq' ],
             'is_private' => [ 'alias' => 'pr.is_private', 'operator' => 'eq' ],
-            'affected_date' => [ 'alias' => 'pr.affected_date', 'operator' => 'eq' ],
+            'effected_date' => [ 'alias' => 'pr.effected_date', 'operator' => 'eq' ],
             'expired_date' => [ 'alias' => 'pr.expired_date', 'operator' => 'eq' ],
             'saleman_id' => [ 'alias' => 'pr.saleman_id', 'operator' => 'eq' ],
             'origin_country_id' => [ 'alias' => 'pr.origin_country_id', 'operator' => 'eq' ],

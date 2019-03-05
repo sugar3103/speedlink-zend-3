@@ -5,7 +5,6 @@ import { Collapse } from 'reactstrap';
 import TopbarMenuLink from './TopbarMenuLink';
 import { logoutUser} from '../../../redux/actions';
 import PropTypes from 'prop-types';
-const Ava = `${process.env.PUBLIC_URL}/img/ava.png`;
 class TopbarProfile extends PureComponent {
   constructor() {
     super();
