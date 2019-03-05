@@ -128,11 +128,11 @@ class DistrictController extends CoreController {
                 try {
                     foreach ($data['ids'] as $id) {
                         $district = $this->entityManager->getRepository(District::class)->findOneBy(array('id' => $id));    
-                        if ($status == null) {
+                        if ($district == null) {
                             $this->error_code = 0;
                             $this->apiResponse['message'] = "NOT_FOUND";                        
                         } else {
-                            $this->districtManager->deleteDistrict($status);
+                            $this->districtManager->deleteDistrict($district);
                         }  
                     }
                                         

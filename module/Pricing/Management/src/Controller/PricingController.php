@@ -44,18 +44,42 @@ class PricingController extends CoreController
 
     public function indexAction()
     {
-        $result = ["total" => 0, "data" => []];
-        $fieldsMap = ['name'];
-        list($start, $limit, $sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);
-        $dataShipmentType = $this->pricingManager->getListPricingByCondition($start, $limit, $sortField, $sortDirection, $filters);
+        if ($this->getRequest()->isPost()) {
+            $result = ["total" => 0, "data" => []];
+            $fieldsMap = [
+                'is_private', 'customer_id', 'saleman_id', 'status', 
+                'category_code', 'carrier_id', 'effected_date', 'expired_date', 
+                'origin_country_id', 'origin_city_id', 'origin_district_id', 'origin_ward_id', 
+                'approval_status', 'approved_by'
+            ];
+            list($start, $limit, $sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);
+            $dataShipmentType = $this->pricingManager->getListPricingByCondition($start, $limit, $sortField, $sortDirection, $filters);
 
-        $result['error_code'] = 1;
-        $result['message'] = 'Success';
-        $result["total"] = $dataShipmentType['totalPricing'];
-        $result["data"] = !empty($dataShipmentType['listPricing']) ? $dataShipmentType['listPricing'] : [];
-        $this->apiResponse = $result;
-
+            $result['error_code'] = 1;
+            $result['message'] = 'Success';
+            $result["total"] = $dataShipmentType['totalPricing'];
+            $result["data"] = !empty($dataShipmentType['listPricing']) ? $dataShipmentType['listPricing'] : [];
+            $this->apiResponse = $result;
+        }
         return $this->createResponse();
+    }
+
+    public function codeByConditionAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            $result = array("data" => []);
+            $param = $this->getRequestData([]);
+            $sortField = $param['type'];
+            unset($param['type']);
+            $dataShipmentType = $this->pricingManager->getListCodeByCondition($sortField, $param);
+
+            $result['error_code'] = 1;
+            $result['message'] = 'Success';
+            $result["data"] = !empty($dataShipmentType) ? $dataShipmentType : [];
+            $this->apiResponse = $result;
+        }
+        return $this->createResponse();
+
     }
 
     public function addAction()

@@ -43,6 +43,12 @@ function validateCarrier(errors) {
       name_en: 'carrier.validate-nameEn-exists'
     });
   }
+
+  if (errors.code && errors.code.carrierExists) {
+    return stopSubmit('carrier_action_form', {
+      code: 'carrier.validate-code-exists'
+    });
+  }
 }
 
 //list carrier
@@ -69,7 +75,7 @@ function* getCarrierListItems({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(getCarrierListError(response.data));
+        yield put(getCarrierListError(response.message));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -213,7 +219,7 @@ function* updateCarrierItem({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(updateCarrierItemError(response.data));
+        yield put(updateCarrierItemError(response.message));
         yield put(validateCarrier(response.data));
         break;
 
@@ -241,7 +247,7 @@ function deleteCarrierApi(id) {
     method: 'post',
     url: `${apiUrl}carrier/delete`,
     headers: authHeader(),
-    data: {  id: id }
+    data: {  ids: id }
   });
 }
 

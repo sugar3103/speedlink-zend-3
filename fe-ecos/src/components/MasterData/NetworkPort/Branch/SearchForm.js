@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { getHubList, getCityBranchList, getCountryBranchList, getWardBranchList, getDistrictBranchList } from '../../../../redux/actions';
+import { getHubBranchList, getCityBranchList, getCountryBranchList, getWardBranchList, getDistrictBranchList } from '../../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import renderSelectField from '../../../../containers/Shared/form/Select';
 import { Button, Col } from 'reactstrap';
@@ -12,19 +12,19 @@ class SearchForm extends Component {
   componentDidMount() {
     const { messages } = this.props.intl;
     let params = {
-      field: ['id', 'name'],
+      field: ['id', 'name', 'name_en'],
       offset: {
           limit: 0
       }
   }
-    this.props.getHubList(params, messages);
+    this.props.getHubBranchList(params, messages);
     this.props.getCountryBranchList(params, messages, 'onchange');
   }
   
   onChangeCountry = value => {
     const { messages } = this.props.intl;
     let params = {
-      field: ['id', 'name'],
+      field: ['id', 'name', 'name_en'],
       offset: {
         limit: 0
       },
@@ -32,7 +32,7 @@ class SearchForm extends Component {
         country: value ? value : 0
       }
     }
-    this.props.change('cities',null);
+    
     this.props.change('districts',null);
     this.props.change('wards',null);
     this.props.getCityBranchList(params, messages, 'onchange');
@@ -41,7 +41,7 @@ class SearchForm extends Component {
   onChangeCity = value => {
     const { messages } = this.props.intl;
     let params = {
-      field: ['id', 'name'],
+      field: ['id', 'name', 'name_en'],
       offset: {
         limit: 0
       },
@@ -57,7 +57,7 @@ class SearchForm extends Component {
   onChangeDistrict = value => {
     const { messages } = this.props.intl;
     let params = {
-      field: ['id', 'name'],
+      field: ['id', 'name', 'name_en'],
       offset: {
         limit: 0
       },
@@ -67,24 +67,25 @@ class SearchForm extends Component {
     }
     this.props.change('wards',null);
     this.props.getWardBranchList(params, messages, 'onchange');
-    
   }
 
   showOptionsHub = (items) => {
+    const { locale } = this.props.intl;
     const hubs = items.map(item => {
       return {
         'value': item.id,
-        'label': item.name
+        'label': locale ==='en-US' ? item.name_en : item.name
       }
     });
     return hubs;
   }
 
   showOptions = (items) => {
+    const { locale } = this.props.intl;
     const select_options = items.map(item => {
       return {
         'value': item.id,
-        'label': item.name
+        'label': locale ==='en-US' ? item.name_en : item.name
       }
     });
     return select_options;
@@ -247,13 +248,13 @@ SearchForm.propTypes = {
   getDistrictBranchList: PropTypes.func.isRequired,
   getCountryBranchList: PropTypes.func.isRequired,
   getWardBranchList: PropTypes.func.isRequired,
-  getHubList: PropTypes.func.isRequired,
+  getHubBranchList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ hub, branch }) => {
+const mapStateToProps = ({ branch }) => {
 
   const { countries, cities, districts, wards} = branch;
-  const hubs = hub.items;
+  const { hubs } = branch;
 
   return {
     cities, districts, countries, wards, hubs
@@ -268,7 +269,7 @@ export default reduxForm({
 
   }
 })(injectIntl(connect(mapStateToProps, {
-  getHubList,
+  getHubBranchList,
   getCityBranchList,
   getCountryBranchList,
   getWardBranchList,

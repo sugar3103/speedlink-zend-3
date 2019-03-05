@@ -12,7 +12,13 @@ import {
   HUB_DELETE_ITEM,
   HUB_DELETE_ITEM_SUCCESS,
   HUB_DELETE_ITEM_ERROR,
-  HUB_CHANGE_TYPE_MODAL
+  HUB_CHANGE_TYPE_MODAL,
+  HUB_COUNTRY_GET_LIST,
+  HUB_COUNTRY_GET_LIST_SUCCESS,
+  HUB_COUNTRY_GET_LIST_ERROR,
+  HUB_CITY_GET_LIST,
+  HUB_CITY_GET_LIST_SUCCESS,
+  HUB_CITY_GET_LIST_ERROR,
 } from '../../../constants/actionTypes';
 
 export const toggleHubModal = (type, data) => ({
@@ -63,9 +69,9 @@ export const updateHubItemError = (error) => ({
   payload: error
 });
 
-export const deleteHubItem = (id, messages) => ({
+export const deleteHubItem = (ids, messages) => ({
   type: HUB_DELETE_ITEM,
-  payload: { id, messages }
+  payload: { ids, messages }
 });
 
 export const deleteHubItemSuccess = () => ({
@@ -81,3 +87,33 @@ export const changeTypeHubModal = (type) => ({
   type: HUB_CHANGE_TYPE_MODAL,
   payload: type
 })
+
+export const getCountryHubList = (params, messages, types) => ({
+  type: HUB_COUNTRY_GET_LIST,
+  payload: { params, messages, types }
+});
+
+export const getCountryHubListSuccess = ( country_hub) => ({
+  type: HUB_COUNTRY_GET_LIST_SUCCESS,
+  payload: { country_hub }
+});
+
+export const getCountryHubListError = (error) => ({
+  type: HUB_COUNTRY_GET_LIST_ERROR,
+  payload: error
+});
+
+export const getCityHubList = (params, messages, types) => ({
+  type: HUB_CITY_GET_LIST,
+  payload: { params, messages, types }
+});
+
+export const getCityHubListSuccess = (city_hub) => ({
+  type: HUB_CITY_GET_LIST_SUCCESS,
+  payload: { city_hub }
+});
+
+export const getCityHubListError = (error) => ({
+  type: HUB_CITY_GET_LIST_ERROR,
+  payload: error
+});

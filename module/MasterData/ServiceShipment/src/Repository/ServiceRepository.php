@@ -13,7 +13,7 @@ use ServiceShipment\Entity\Service;
  */
 class ServiceRepository extends EntityRepository
 {
-    public function getListServiceByCondition($start, $limit, $sortField = 's.id', $sortDirection = 'asc', $filters = [])
+    public function getListServiceByCondition($start, $limit, $sortField = 's.id', $sortDirection = 'asc', $filters = [],$delete = true)
     {
         try {
             $queryBuilder = $this->buildServiceQueryBuilder($sortField, $sortDirection, $filters);
@@ -28,8 +28,12 @@ class ServiceRepository extends EntityRepository
                 s.created_at,
                 cr.username as created_by,
                 s.updated_at,
-                up.username as updated_by
-            ")->andWhere('s.is_deleted = 0');
+                up.username as updated_by,
+                CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
+                CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated
+            ");
+            
+            if($delete) { $queryBuilder->andWhere('s.is_deleted = 0'); }
 
             if($limit) {
                 $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
@@ -41,7 +45,7 @@ class ServiceRepository extends EntityRepository
         }
     }
 
-    public function getListServiceCodeByCondition($sortField = 'code', $sortDirection = 'asc', $filters = [])
+    public function getListServiceCodeByCondition($sortField = 'code', $sortDirection = 'asc', $filters = [],$delete)
     {
         try {
             $queryBuilder = $this->buildServiceQueryBuilder($sortField, $sortDirection, $filters);
@@ -50,7 +54,8 @@ class ServiceRepository extends EntityRepository
                 s.code,
                 s.name,
                 s.name_en
-            ")->andWhere('s.is_deleted = 0');
+            ");
+            if($delete) { $queryBuilder->andWhere('s.is_deleted = 0'); }
             return $queryBuilder;
 
         } catch (QueryException $e) {

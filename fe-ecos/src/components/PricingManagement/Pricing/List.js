@@ -144,18 +144,6 @@ class List extends Component {
           sortable: false,
         },
         {
-          Header: messages['pri_man.service'],
-          accessor: "service_code",
-          width: 110,
-          sortable: false,
-        },
-        {
-          Header: messages['pri_man.shipment-type'],
-          accessor: "shipment_type_code",
-          width: 110,
-          sortable: false,
-        },
-        {
           Header: messages['status'],
           accessor: "status",
           width: 110,
@@ -170,7 +158,7 @@ class List extends Component {
         {
           Header: messages['pri_man.customer'],
           accessor: "customer_name",
-          width: 120,
+          width: 150,
           sortable: false,
         },
         {
@@ -221,7 +209,6 @@ class List extends Component {
 
 List.propTypes = {
   pricing: PropTypes.object.isRequired,
-  modal: PropTypes.object,
   getPricingList: PropTypes.func.isRequired,
 }
 

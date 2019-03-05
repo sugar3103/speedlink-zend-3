@@ -15,23 +15,12 @@ import {
   SHIPMENT_TYPE_CODE_GET_LIST,
   SHIPMENT_TYPE_CODE_GET_LIST_SUCCESS,
   SHIPMENT_TYPE_CODE_GET_LIST_ERROR,
-
-  CARRIER_GET_CODE_BY_CONDITION, 
-  CARRIER_GET_CODE_BY_CONDITION_SUCCESS,
-  CARRIER_GET_CODE_BY_CONDITION_ERROR, 
-
-  SERVICE_GET_CODE_BY_CONDITION, 
-  SERVICE_GET_CODE_BY_CONDITION_SUCCESS, 
-  SERVICE_GET_CODE_BY_CONDITION_ERROR,
-
-  SHIPMENT_TYPE_GET_CODE_BY_CONDITION,
-  SHIPMENT_TYPE_GET_CODE_BY_CONDITION_SUCCESS,
-  SHIPMENT_TYPE_GET_CODE_BY_CONDITION_ERROR
+  SHIPMENT_TYPE_CHANGE_TYPE_MODAL
 } from '../../../../constants/actionTypes';
 
-export const toggleShipmentTypeModal = (shipment_type = null) => ({
+export const toggleShipmentTypeModal = (type, data) => ({
   type: SHIPMENT_TYPE_TOGGLE_MODAL,
-  payload: shipment_type
+  payload: { type, data}
 });
 
 export const getShipmentTypeList = (params) => ({
@@ -106,48 +95,10 @@ export const deleteShipmentTypeItemError = (error) => ({
   payload: error
 });
 
+export const changeTypeShipmentTypeModal = (type) => ({
+  type: SHIPMENT_TYPE_CHANGE_TYPE_MODAL,
+  payload: type
+})
 
-export const getCarrierCodeByCondition = (params, messages) => ({
-  type: CARRIER_GET_CODE_BY_CONDITION,
-  payload: { params, messages }
-});
 
-export const getCarrierCodeByConditionSuccess = ( CarrierCodeByCondition) => ({
-  type: CARRIER_GET_CODE_BY_CONDITION_SUCCESS,
-  payload: { CarrierCodeByCondition }
-});
 
-export const getCarrierCodeByConditionError = (error) => ({
-  type: CARRIER_GET_CODE_BY_CONDITION_ERROR,
-  payload: error
-});
-
-export const getServiceCodeByCondition = (params, messages) => ({
-  type: SERVICE_GET_CODE_BY_CONDITION,
-  payload: { params, messages }
-});
-
-export const getServiceCodeByConditionSuccess = (ServiceCodeByCondition) => ({
-  type: SERVICE_GET_CODE_BY_CONDITION_SUCCESS,
-  payload: { ServiceCodeByCondition }
-});
-
-export const getServiceCodeByConditionError = (error) => ({
-  type: SERVICE_GET_CODE_BY_CONDITION_ERROR,
-  payload: error
-});
-
-export const getShipmentTypeCodeByCondition = (params, messages) => ({
-  type: SHIPMENT_TYPE_GET_CODE_BY_CONDITION,
-  payload: { params, messages }
-});
-
-export const getShipmentTypeCodeByConditionSuccess = (codeByCondition) => ({
-  type: SHIPMENT_TYPE_GET_CODE_BY_CONDITION_SUCCESS,
-  payload: { codeByCondition }
-});
-
-export const getShipmentTypeCodeByConditionError = (error) => ({
-  type: SHIPMENT_TYPE_GET_CODE_BY_CONDITION_ERROR,
-  payload: error
-});

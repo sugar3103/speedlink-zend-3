@@ -75,10 +75,10 @@ class ShipmentTypeManager
             $totalShipmentType = $ormPaginator->count();
             $shipmentTypes = $ormPaginator->getIterator()->getArrayCopy();
 
-            foreach ($shipmentTypes as $key => $shipmentType) {
-                $date_format = 'd/m/Y H:i:s';
-                $shipmentTypes[$key]['created_at'] = Utils::checkDateFormat($shipmentType['created_at'], $date_format);
-                $shipmentTypes[$key]['updated_at'] = Utils::checkDateFormat($shipmentType['updated_at'], $date_format);
+            foreach ($shipmentTypes as &$shipmentType) {
+                //set created_at
+                $shipmentType['created_at'] =  ($shipmentType['created_at']) ? Utils::checkDateFormat($shipmentType['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $shipmentType['updated_at'] =  ($shipmentType['updated_at']) ? Utils::checkDateFormat($shipmentType['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
             }
         }
 
@@ -134,6 +134,8 @@ class ShipmentTypeManager
             $shipmentType->setUpdatedBy($user->id);
             $this->getReferenced($shipmentType, $data, $user, 'add');
 
+            $shipmentType->setIsDeleted(0);
+
             $this->entityManager->persist($shipmentType);
             $this->entityManager->flush();
             $this->entityManager->commit();
@@ -175,6 +177,7 @@ class ShipmentTypeManager
             $shipmentType->setUpdatedAt(date('Y-m-d H:i:s'));
             $shipmentType->setUpdatedBy($user->id);
             $this->getReferenced($shipmentType, $data, $user);
+            $shipmentType->setIsDeleted(0);
 
             $this->entityManager->persist($shipmentType);
             $this->entityManager->flush();
@@ -201,7 +204,8 @@ class ShipmentTypeManager
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
-            $shipmentType->setIsDeleted('1');
+            $shipmentType->setIsDeleted(1);
+            $shipmentType->setStatus(-1);
             $shipmentType->setUpdatedAt(date('Y-m-d H:i:s'));
             $shipmentType->setUpdatedBy($user->id);
 

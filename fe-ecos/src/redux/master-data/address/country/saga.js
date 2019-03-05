@@ -140,7 +140,6 @@ const updateCountryItemRequest = async item => {
 
 function* updateCountryItem({ payload }) {
   const { item, messages } = payload;
-  console.log(item);
   
   try {
     const response = yield call(updateCountryItemRequest, item);
@@ -184,7 +183,7 @@ function deleteCountryApi(id) {
     method: 'post',
     url: `${apiUrl}address/country/delete`,
     headers: authHeader(),
-    data: {  id: id }
+    data: {  ids: id }
   });
 }
 

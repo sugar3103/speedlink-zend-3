@@ -35,7 +35,7 @@ export default class SidebarCategory extends Component {
     return (
       <div className={categoryClass} id={id}>
         <button className="sidebar__link sidebar__category" onClick={toggleMenu}>
-          {icon ? <span className={`sidebar__link-icon lnr lnr-${icon}`} /> : ''}
+          {icon ? <span className={`sidebar__link-icon ${icon}`} /> : ''}
           <p className="sidebar__link-title">{title}
             {isNew && <span className="sidebar__category-new" />}
           </p>

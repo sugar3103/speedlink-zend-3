@@ -6,11 +6,19 @@ import renderDatePickerField from '../../../containers/Shared/form/DatePicker';
 import { Button, Col, Row } from 'reactstrap';
 import { connect } from 'react-redux';
 import {
-    getCustomerList, getSalemanList, getCarrierCodeList,
-    getCountryPricingList, getCityPricingList, getDistrictPricingList, getWardPricingList,
-    getApprovedByList
+    removeState,
+    getCustomerPricingList,
+    getSalemanPricingList,
+    getCarrierPricingList,
+    getCountryList,
+    getCityList,
+    getDistrictList,
+    getWardList,
+    getUserList
 } from '../../../redux/actions';
 import CalendarBlankIcon from 'mdi-react/CalendarBlankIcon';
+import PropTypes from 'prop-types';
+import { CITY_RESET_STATE, DISTRICT_RESET_STATE, WARD_RESET_STATE } from '../../../constants/actionTypes';
 
 class SearchForm extends Component {
     constructor(props) {
@@ -21,8 +29,14 @@ class SearchForm extends Component {
     }
 
     hanldeChangeType = value => {
-        this.props.change('customer', '');
+        const { messages } = this.props.intl;
+
+        this.props.change('customer_id', '');
         if (value === 2) {
+            const paramsCustomer = {
+                type: "customer_id"
+            };
+            this.props.getCustomerPricingList(paramsCustomer, messages);
             this.setState({
                 showCustomerField: true
             });
@@ -33,28 +47,15 @@ class SearchForm extends Component {
         }
     }
 
+    
+    componentWillMount() {
+        this.props.removeState(CITY_RESET_STATE);
+        this.props.removeState(DISTRICT_RESET_STATE);
+        this.props.removeState(WARD_RESET_STATE);
+    }
+    
     componentDidMount() {
         const { messages } = this.props.intl;
-        //get customer
-        const paramCustomer = {
-            field: ['id', 'name'],
-            offset: {
-                limit: 0
-            }
-        }
-        this.props.getCustomerList(paramCustomer, messages);
-
-        //get salemon
-        const paramUser = {
-            field: ['id', 'username'],
-            offset: {
-                limit: 0
-            }
-        }
-        this.props.getSalemanList(paramUser, messages);
-
-        //get approved by
-        this.props.getApprovedByList(paramUser, messages);
 
         const paramAddress = {
             field: ['id', 'name'],
@@ -63,7 +64,55 @@ class SearchForm extends Component {
             }
         }
         //get countries
-        this.props.getCountryPricingList(paramAddress, messages);
+        this.props.getCountryList(paramAddress, messages);
+
+        //get saleman
+        const paramSaleman = {
+            type: "saleman_id"
+        };
+        this.props.getSalemanPricingList(paramSaleman, messages);
+
+        //get approved by
+        const paramUser = {
+            field: ['id', 'username'],
+            offset: {
+                limit: 0
+            }
+        }
+        this.props.getUserList(paramUser, messages);
+
+        //get carrier
+        const params = {
+            type: "carrier_id",
+            category_code: ''
+        };
+        this.props.getCarrierPricingList(params, messages);
+    }
+
+    showOptionCustomer = (items) => {
+        let result = [];
+        if (items.length > 0) {
+            result = items.map(item => {
+                return {
+                    value: item.customer_id,
+                    label: item.customer_name
+                }
+            })
+        }
+        return result;
+    }
+
+    showOptionCarrier = (items) => {
+        let result = [];
+        if (items.length > 0) {
+            result = items.map(item => {
+                return {
+                    value: item.carrier_id,
+                    label: item.carrier_code
+                }
+            })
+        }
+        return result;
     }
 
     showOption = (items) => {
@@ -73,6 +122,19 @@ class SearchForm extends Component {
                 return {
                     value: item.id,
                     label: item.name
+                }
+            })
+        }
+        return result;
+    }
+
+    showOptionSaleman = (items) => {
+        let result = [];
+        if (items.length > 0) {
+            result = items.map(item => {
+                return {
+                    value: item.saleman_id,
+                    label: item.username
                 }
             })
         }
@@ -94,56 +156,84 @@ class SearchForm extends Component {
 
     onChangeCountry = value => {
         const { messages } = this.props.intl;
-        let params = {
-            field: ['id', 'name'],
-            offset: {
-                limit: 0
-            },
-            query: {
-                country: value ? value : 0
+        this.props.change('origin_city_id', null);
+        this.props.change('origin_district_id', null);
+        this.props.change('origin_ward_id', null);
+        if (value) {
+            let params = {
+                field: ['id', 'name'],
+                offset: {
+                    limit: 0
+                },
+                query: {
+                    country: value
+                }
             }
+            this.props.getCityList(params, messages);
+        } else {
+            this.props.removeState(CITY_RESET_STATE);
         }
-        this.props.change('city', null);
-        this.props.change('district', null);
-        this.props.change('ward', null);
-        this.props.getCityPricingList(params, messages);
+
+        this.props.removeState(DISTRICT_RESET_STATE);
+        this.props.removeState(WARD_RESET_STATE);
     }
 
     onChangeCity = value => {
         const { messages } = this.props.intl;
+        this.props.change('origin_district_id', null);
+        this.props.change('origin_ward_id', null);
 
-        let params = {
-            field: ['id', 'name'],
-            offset: {
-                limit: 0
-            },
-            query: {
-                city: value ? value : 0
+        if (value) {
+            let params = {
+                field: ['id', 'name'],
+                offset: {
+                    limit: 0
+                },
+                query: {
+                    city: value
+                }
             }
+            this.props.getDistrictList(params, messages);
+        } else {
+            this.props.removeState(DISTRICT_RESET_STATE);
         }
-        this.props.change('district', null);
-        this.props.change('ward', null);
-        this.props.getDistrictPricingList(params, messages);
+        
+        this.props.removeState(WARD_RESET_STATE);
     }
 
     onChangeDistrict = value => {
         const { messages } = this.props.intl;
+        this.props.change('origin_ward_id', null);
 
-        let params = {
-            field: ['id', 'name'],
-            offset: {
-                limit: 0
-            },
-            query: {
-                district: value ? value : 0
-            }
+        if(value) {
+            let params = {
+                field: ['id', 'name'],
+                offset: {
+                    limit: 0
+                },
+                query: {
+                    district: value 
+                }
+            }            
+            this.props.getWardList(params, messages);
+        } else {
+            this.props.removeState(WARD_RESET_STATE);
         }
-        this.props.change('ward', null);
-        this.props.getWardPricingList(params, messages);
     }
+
+    onChangeCategory = value => {
+        const { messages } = this.props.intl;
+        this.props.change('carrier_id', '');
+        const params = {
+            type: "carrier_id",
+            category_code: value
+        };
+        this.props.getCarrierPricingList(params, messages);
+    }
+
     render() {
         const { messages } = this.props.intl;
-        const { handleSubmit, reset, customers, salemans, carriers, countries, cities, districts, wards, approvedBys } = this.props;
+        const { handleSubmit, reset, countries, cities, districts, wards, customers, salemans, carriers, approvedBys } = this.props;
         return (
             <form className="form form_custom" onSubmit={handleSubmit}>
                 <Row>
@@ -151,11 +241,11 @@ class SearchForm extends Component {
                         <div className="form__form-group">
                             <span className="form__form-group-label">{messages['pri_man.filter-type']}</span>
                             <div className="form__form-group-field">
-                                <Field 
-                                    name="is_private" 
-                                    component={renderSelectField} 
+                                <Field
+                                    name="is_private"
+                                    component={renderSelectField}
                                     options={[
-                                        { value: -1, label: messages['all'] },
+                                        { value: '', label: messages['all'] },
                                         { value: 1, label: messages['pri_man.public'] },
                                         { value: 2, label: messages['pri_man.customer'] }
                                     ]}
@@ -170,9 +260,9 @@ class SearchForm extends Component {
                             <span className="form__form-group-label">{messages['pri_man.customer']}</span>
                             <div className="form__form-group-field">
                                 <Field
-                                    name="customer"
+                                    name="customer_id"
                                     component={renderSelectField}
-                                    options={customers && this.showOption(customers)}
+                                    options={customers && this.showOptionCustomer(customers)}
                                     disabled={!this.state.showCustomerField}
                                 />
                             </div>
@@ -183,9 +273,9 @@ class SearchForm extends Component {
                             <span className="form__form-group-label">{messages['pricing.saleman']}</span>
                             <div className="form__form-group-field">
                                 <Field
-                                    name="saleman"
+                                    name="saleman_id"
                                     component={renderSelectField}
-                                    options={salemans && this.showOptionUser(salemans)}
+                                    options={salemans && this.showOptionSaleman(salemans)}
                                 />
                             </div>
                         </div>
@@ -198,7 +288,7 @@ class SearchForm extends Component {
                                     name="status"
                                     component={renderSelectField}
                                     options={[
-                                        { value: -1, label: messages['all'] },
+                                        { value: '', label: messages['all'] },
                                         { value: 1, label: messages['active'] },
                                         { value: 0, label: messages['inactive'] }
                                     ]}
@@ -214,7 +304,7 @@ class SearchForm extends Component {
                             <span className="form__form-group-label">{messages['pri_man.category']}</span>
                             <div className="form__form-group-field">
                                 <Field
-                                    name="category"
+                                    name="category_code"
                                     component={renderSelectField}
                                     options={[
                                         { value: '', label: messages['all'] },
@@ -223,6 +313,7 @@ class SearchForm extends Component {
                                         { value: 'Domestic', label: messages['domestic'] }
                                     ]}
                                     clearable={false}
+                                    onChange={this.onChangeCategory}
                                 />
                             </div>
                         </div>
@@ -234,7 +325,8 @@ class SearchForm extends Component {
                                 <Field
                                     name="carrier_id"
                                     component={renderSelectField}
-                                    options={carriers && this.showOption(carriers)} />
+                                    options={carriers && this.showOptionCarrier(carriers)}
+                                />
                             </div>
                         </div>
                     </Col>
@@ -273,7 +365,7 @@ class SearchForm extends Component {
                             <span className="form__form-group-label">{messages['zone_code.country_origin']}</span>
                             <div className="form__form-group-field">
                                 <Field
-                                    name="country"
+                                    name="origin_country_id"
                                     component={renderSelectField}
                                     options={countries && this.showOption(countries)}
                                     onChange={this.onChangeCountry}
@@ -286,7 +378,7 @@ class SearchForm extends Component {
                             <span className="form__form-group-label">{messages['zone_code.city_origin']}</span>
                             <div className="form__form-group-field">
                                 <Field
-                                    name="city"
+                                    name="origin_city_id"
                                     component={renderSelectField}
                                     options={cities && this.showOption(cities)}
                                     onChange={this.onChangeCity}
@@ -299,7 +391,7 @@ class SearchForm extends Component {
                             <span className="form__form-group-label">{messages['zone_code.district_origin']}</span>
                             <div className="form__form-group-field">
                                 <Field
-                                    name="district"
+                                    name="origin_district_id"
                                     component={renderSelectField}
                                     options={districts && this.showOption(districts)}
                                     onChange={this.onChangeDistrict}
@@ -312,7 +404,7 @@ class SearchForm extends Component {
                             <span className="form__form-group-label">{messages['zone_code.ward_origin']}</span>
                             <div className="form__form-group-field">
                                 <Field
-                                    name="ward"
+                                    name="origin_ward_id"
                                     component={renderSelectField}
                                     options={wards && this.showOption(wards)}
                                 />
@@ -326,7 +418,7 @@ class SearchForm extends Component {
                             <span className="form__form-group-label">{messages['pricing.approved-status']}</span>
                             <div className="form__form-group-field">
                                 <Field
-                                    name="approved_status"
+                                    name="approval_status"
                                     component={renderSelectField}
                                     options={[
                                         { value: '', label: messages['all'] },
@@ -371,10 +463,31 @@ class SearchForm extends Component {
     }
 }
 
-const mapStateToProps = ({ customer, carrier, pricing }) => {
-    const customers = customer.items;
-    const { salemans, countries, cities, districts, wards, approvedBys } = pricing;
-    const carriers = carrier.codes;
+SearchForm.propTypes = {
+    handleSubmit: PropTypes.func.isRequired,
+    reset: PropTypes.func.isRequired,
+    getCustomerPricingList: PropTypes.func.isRequired,
+    getSalemanPricingList: PropTypes.func.isRequired,
+    getCarrierPricingList: PropTypes.func.isRequired,
+    getCountryList: PropTypes.func.isRequired,
+    getCityList: PropTypes.func.isRequired,
+    getDistrictList: PropTypes.func.isRequired,
+    getWardList: PropTypes.func.isRequired,
+    countries: PropTypes.array,
+    cities: PropTypes.array,
+    districts: PropTypes.array,
+    wards: PropTypes.array,
+    customers: PropTypes.array,
+    approvedBys: PropTypes.array,
+}
+
+const mapStateToProps = ({ address, pricing, users }) => {
+    const { customers, salemans, carriers } = pricing;
+    const countries = address.country.items;
+    const cities = address.city.items;
+    const districts = address.district.items;
+    const wards = address.ward.items;
+    const approvedBys = users.user.items;
     return {
         customers,
         salemans,
@@ -390,12 +503,13 @@ const mapStateToProps = ({ customer, carrier, pricing }) => {
 export default reduxForm({
     form: 'pricing_search_form'
 })(injectIntl(connect(mapStateToProps, {
-    getCustomerList,
-    getSalemanList,
-    getCarrierCodeList,
-    getCountryPricingList,
-    getCityPricingList,
-    getDistrictPricingList,
-    getWardPricingList,
-    getApprovedByList,
+    removeState,
+    getCustomerPricingList,
+    getSalemanPricingList,
+    getCarrierPricingList,
+    getCountryList,
+    getCityList,
+    getDistrictList,
+    getWardList,
+    getUserList
 })(SearchForm)));

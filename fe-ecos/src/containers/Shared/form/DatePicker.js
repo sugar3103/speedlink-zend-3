@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import DatePicker from 'react-datepicker';
 import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
 
 class DatePickerField extends PureComponent {
   static propTypes = {
@@ -36,11 +37,18 @@ class DatePickerField extends PureComponent {
   }
 }
 
-const renderDatePickerField = props => (
-  <DatePickerField
-    {...props.input}
-  />
-);
+const renderDatePickerField = props => {
+  const { input, meta } = props;
+  const { messages } = props.intl; 
+  return (
+    <div className="form__form-group-input-wrap">
+      <DatePickerField
+        {...input}
+      />
+      {meta.touched && meta.error && <span className="form__form-group-error">{messages[meta.error]}</span>}
+    </div>
+  )
+};
 
 renderDatePickerField.propTypes = {
   input: PropTypes.shape({
@@ -49,4 +57,4 @@ renderDatePickerField.propTypes = {
   }).isRequired,
 };
 
-export default renderDatePickerField;
+export default injectIntl(renderDatePickerField);

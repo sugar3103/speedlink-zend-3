@@ -21,7 +21,6 @@ class SearchForm extends Component {
       result = items.map(item => {
         return {
           value: item.code,
-          //label: (locale === 'en-US') ? item.code + ' - ' + item.name_en : item.code + ' - ' + item.name
           label: item.code
         }
       })
@@ -47,38 +46,38 @@ class SearchForm extends Component {
     const { messages, locale } = this.props.intl;
     return (
       <form className="form" onSubmit={handleSubmit}>
-        <Col md={4}>
+        <Col md={3}>
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['shipment_type.code']}</span>
             <div className="form__form-group-field">
               <Field name="code" component={renderSelectField} type="text"
-                     options={shipmentTypeCode && this.showOptionShipmentType(shipmentTypeCode, locale)}/>
+                options={shipmentTypeCode && this.showOptionShipmentType(shipmentTypeCode, locale)} />
             </div>
           </div>
         </Col>
-        <Col md={4}>
+        <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['shipment_type.name']}</span>
+            <span className="form__form-group-label">{messages['name']}</span>
             <div className="form__form-group-field">
-              <Field component="input" type="text" placeholder={messages['shipment_type.name']}
-                     name={locale === 'en-US' ? 'name_en' : 'name'} />
+              <Field component="input" type="text" placeholder={messages['name']}
+                name={locale === 'en-US' ? 'name_en' : 'name'} />
             </div>
           </div>
         </Col>
-        <Col md={4}>
+        <Col md={3}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['shipment_type.status']}</span>
+            <span className="form__form-group-label">{messages['status']}</span>
             <div className="form__form-group-field">
-              <Field name="status" component={renderSelectField} type="text" options={[
+              <Field name="status" component={renderSelectField} options={[
                 { value: -1, label: messages['all'] },
                 { value: 1, label: messages['active'] },
                 { value: 0, label: messages['inactive'] }
-                ]}
+              ]}
               />
             </div>
           </div>
         </Col>
-        <Col md={4}>
+        <Col md={3}>
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['shipment_type.category_code']}</span>
             <div className="form__form-group-field">
@@ -92,7 +91,7 @@ class SearchForm extends Component {
             </div>
           </div>
         </Col>
-        <Col md={4}>
+        <Col md={3}>
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['shipment_type.product_type_code']}</span>
             <div className="form__form-group-field">
@@ -105,36 +104,43 @@ class SearchForm extends Component {
             </div>
           </div>
         </Col>
-        <Col md={4}>
+        <Col md={3}>
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['shipment_type.carrier_code']}</span>
             <div className="form__form-group-field">
               <Field name="carrier_code" component={renderSelectField} type="text"
-                     options={carrierCode && this.showOption(carrierCode, locale)}/>
+                options={carrierCode && this.showOption(carrierCode, locale)} />
             </div>
           </div>
         </Col>
-        <Col md={4}>
+        <Col md={3}>
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['shipment_type.service_code']}</span>
             <div className="form__form-group-field">
               <Field name="service_code" component={renderSelectField} type="text"
-                     options={serviceCode && this.showOption(serviceCode, locale)}/>
+                options={serviceCode && this.showOption(serviceCode, locale)} />
             </div>
           </div>
         </Col>
-        <div className="search-group-button">
-          <Button size="sm" outline onClick={(e)=> {
-            reset();
-            setTimeout(() => {
-              handleSubmit();
-            }, 200);
-          }} >
-            {messages['clear']}</Button>{' '}
-          <Button size="sm" color="primary" id="search" >
-            {messages['search']}
-          </Button>
-        </div>
+        <Col md={3}>
+          <div className="form__form-group">
+            <span className="form__form-group-label"></span>
+            <div className="form__form-group-field">
+              <div className="search-group-button">
+                <Button size="sm" outline onClick={(e) => {
+                  reset();
+                  setTimeout(() => {
+                    handleSubmit();
+                  }, 200);
+                }} >
+                  {messages['clear']}</Button>{' '}
+                <Button size="sm" color="primary" id="search" >
+                  {messages['search']}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </Col>
       </form>
     );
   }

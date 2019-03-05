@@ -2,21 +2,9 @@
 namespace RangeWeight\Service;
 
 use RangeWeight\Entity\RangeWeight;
-use RangeWeight\Entity\ZoneCode;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
-use Zend\Crypt\Password\Bcrypt;
-use Zend\Math\Rand;
-use Zend\View\Renderer\PhpRenderer;
-use Zend\Mime\Message as MimeMessage;
-use Zend\Mime\Part as MimePart;
-use Zend\Mail\Message;
-use Zend\Mail\Transport\Smtp as SmtpTransport;
-use Zend\Mail\Transport\SmtpOptions;
-use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-use Zend\Paginator\Paginator;
-use Zend\Authentication\Result;
 use Core\Utils\Utils;
 use ServiceShipment\Entity\Carrier;
 use ServiceShipment\Entity\Service;
@@ -49,7 +37,7 @@ class RangeWeightManager {
         $this->entityManager = $entityManager;
     }   
 
-    public function addRangeWeight($data)
+    public function addRangeWeight($data, $user)
     {
         $this->entityManager->beginTransaction();
         try {
@@ -71,13 +59,15 @@ class RangeWeightManager {
         $rangeweight->setDescription($data['description']);
         $rangeweight->setDescriptionEn($data['description_en']);
         
-        $rangeweight->setCreatedBy($data['created_by']);
-        $rangeweight->setCreatedAt(date('Y-m-d H:i:s'));
-        $this->getReferenced($rangeweight, $data);
-        //  var_dump($data); die;
+        $rangeweight->setCreatedBy($user->id);
+        $currentDate = date('Y-m-d H:i:s');
+        $rangeweight->setCreatedAt($currentDate);
+        $this->getReferenced($rangeweight, $data, $user, 'add');
+
         $this->entityManager->persist($rangeweight);
+
         $this->entityManager->flush();       
-        // $last_id = $rangeweight->getBranchId();
+
         $this->entityManager->commit();
         return $rangeweight;
         }
@@ -87,7 +77,7 @@ class RangeWeightManager {
         }
     }
 
-     public function updateRangeWeight($rangeweight, $data) {
+     public function updateRangeWeight($rangeweight, $data, $user) {
 
         $this->entityManager->beginTransaction();
         try {
@@ -107,9 +97,10 @@ class RangeWeightManager {
             $rangeweight->setDescription($data['description']);
             $rangeweight->setDescriptionEn($data['description_en']);
 
-            $rangeweight->setUpdatedBy($data['updated_by']);
-            $rangeweight->setUpdatedAt(date('Y-m-d H:i:s'));
-            $this->getReferenced($rangeweight, $data);
+            $rangeweight->setUpdatedBy($user->id);
+            $currentDate = date('Y-m-d H:i:s');
+            $rangeweight->setUpdatedAt($currentDate);
+            $this->getReferenced($rangeweight, $data, $user);
             
             // apply changes to database.
             $this->entityManager->flush();
@@ -123,7 +114,7 @@ class RangeWeightManager {
         }
     }
 
-    private function getReferenced($rangeweight,$data) {
+    private function getReferenced($rangeweight,$data, $user, $mode = '') {
 
         $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['carrier_id']);
         if ($carrier == null)
@@ -149,19 +140,16 @@ class RangeWeightManager {
                 throw new \Exception('Not found Customer by ID');
             $rangeweight->setCustomer($customer);
         }
-        if($data['created_by']) {
-            $user_create = $this->entityManager->getRepository(User::class)->find($data['created_by']);
-            if ($user_create == null)
-                throw new \Exception('Not found User by ID');
-            $rangeweight->setUserCreate($user_create);
+
+        $user_data = $this->entityManager->getRepository(User::class)->find($user->id);
+        if ($user_data == null) {
+            throw new \Exception('Not found User by ID');
         }
-      
-        if($data['updated_by']){
-            $user_update = $this->entityManager->getRepository(User::class)->find($data['updated_by']);
-            if ($user_update == null)
-                throw new \Exception('Not found User by ID');
-            $rangeweight->setUserUpdate($user_update);
+
+        if ($mode == 'add') {
+            $rangeweight->setUserCreate($user_data);
         }
+        $rangeweight->setUserUpdate($user_data);
     }
 
     /**
@@ -195,14 +183,11 @@ class RangeWeightManager {
             $totalRangeWeight = $ormPaginator->count();
             //get user list
             $rangeweights = $ormPaginator->getIterator()->getArrayCopy();
-            // $countRow = 1;
+
              foreach ($rangeweights as &$rangeweight) {
-            //set status
-            //   $rangeweight['status'] = Branch::getIsActiveList($rangeweight['status']);
             //set created_at
-                $rangeweight['created_at'] =  ($rangeweight['created_at']) ?Utils::checkDateFormat($rangeweight['created_at'],'d/m/Y') : '';
-                $rangeweight['updated_at'] =  ($rangeweight['updated_at']) ? Utils::checkDateFormat($rangeweight['updated_at'],'d/m/Y H:i:s') : '';
-            // $countRow++;
+                $rangeweight['created_at'] =  ($rangeweight['created_at']) ?Utils::checkDateFormat($rangeweight['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $rangeweight['updated_at'] =  ($rangeweight['updated_at']) ? Utils::checkDateFormat($rangeweight['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
             }
         }
         //set data user

@@ -55,7 +55,7 @@ class PricingCodRepository extends EntityRepository
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(PricingCod::class, 'pc')
-            ->innerJoin('pv.join_pricing_data', 'pd');
+            ->innerJoin('pc.join_pricing_data', 'pd');
         $queryBuilder->orderBy('pc.from', 'ASC');
         $queryBuilder->addOrderBy('pc.to', 'ASC');
 

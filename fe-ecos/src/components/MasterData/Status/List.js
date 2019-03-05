@@ -19,6 +19,7 @@ import {
 } from "../../../redux/actions";
 import ConfirmPicker from '../../../containers/Shared/picker/ConfirmPicker';
 import Moment from 'react-moment';
+
 class List extends Component {
   constructor() {
     super();
@@ -216,15 +217,13 @@ class List extends Component {
 
 List.propTypes = {
   status: PropTypes.object.isRequired,
-  modal: PropTypes.object,
   getStatusList: PropTypes.func.isRequired,
   toggleStatusModal: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ status, modal, authUser }) => {
+const mapStateToProps = ({ status, authUser }) => {
   return {
     status,
-    modal,
     authUser
   };
 };

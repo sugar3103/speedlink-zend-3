@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Button, ButtonToolbar, Card, CardBody, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleHubModal, getCountryList, getCityList, changeTypeHubModal } from '../../../../redux/actions';
+import { toggleHubModal, getCountryHubList, getCityHubList, changeTypeHubModal } from '../../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../../containers/Shared/form/CustomField';
 import renderSelectField from '../../../../containers/Shared/form/Select';
@@ -10,7 +10,7 @@ import renderRadioButtonField from '../../../../containers/Shared/form/RadioButt
 import validate from './validateActionForm';
 import PropTypes from 'prop-types';
 import { MODAL_ADD, MODAL_VIEW, MODAL_EDIT } from '../../../../constants/defaultValues';
-
+import Moment from 'react-moment';
 
 class ActionForm extends Component {
 
@@ -29,18 +29,16 @@ class ActionForm extends Component {
     }
     if (data && data.country_id) {
       let paramsCountry = {
+        field: ['id', 'name', 'name_en'],
         offset: {
           limit: 0
-        },
-        query: {
-          id: data.country_id
         }
       }
-      this.props.getCountryList(paramsCountry, messages, 'onchange');
+      this.props.getCountryHubList(paramsCountry, messages, 'editview');
     }
     if (data && data.city_id) {
       let paramsCity = {
-        field: ['id', 'name'],
+        field: ['id', 'name', 'name_en'],
         offset: {
           limit: 0
         },
@@ -48,7 +46,7 @@ class ActionForm extends Component {
           country: data.country_id
         }
       }
-      this.props.getCityList(paramsCity, messages, 'onchange');
+      this.props.getCityHubList(paramsCity, messages, 'editview');
     }
   }
 
@@ -63,35 +61,25 @@ class ActionForm extends Component {
   onChangeCountry = values => {
     const { messages } = this.props.intl;
     let params = {
-      field: ['id', 'name'],
+      field: ['id', 'name', 'name_en'],
       offset: {
         limit: 0
       },
       query: {
-        country: values
+        country: values ? values : 0
       }
     }
-    this.props.getCityList(params, messages, 'onchange');
-  }
-
-
-  showOptionsCountry = (items) => {
-    const Countries = items.map(item => {
-      return {
-        'value': item.id,
-        'label': item.name
-      }
-    });
-    return Countries;
+    this.props.getCityHubList(params, messages, 'onchange');
   }
 
   showOptions = (items) => {
+    const { locale } = this.props.intl;
     let result = [];
     if (items.length > 0) {
       result = items.map(item => {
         return {
           value: item.id,
-          label: item.name
+          label: locale ==='en-US' ? item.name_en : item.name
         }
       });
     }
@@ -106,7 +94,7 @@ class ActionForm extends Component {
   }
 
   render() {
-    const { messages } = this.props.intl;
+    const { messages, locale } = this.props.intl;
     const { handleSubmit, modalType, modalData, countries, cities } = this.props;
     let className = 'success';
     let title = messages['hub.add-new'];
@@ -218,7 +206,7 @@ class ActionForm extends Component {
                         name="country_id"
                         component={renderSelectField}
                         type="text"
-                        options={countries && this.showOptionsCountry(countries)}
+                        options={countries && this.showOptions(countries)}
                         onChange={this.onChangeCountry}
                         disabled={disabled} 
                       />
@@ -270,15 +258,20 @@ class ActionForm extends Component {
                   <hr />
                   <Row>
                     <Col md={6}>
-                      <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.user_create_name}</span>
+                      <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name_created ? modalData.full_name_created : modalData.created_by}</span>
                       <br />
-                      <span><i className="label-info-data">{messages['created-at']}:</i>{modalData.created_at}</span>
+                      <span><i className="label-info-data">{messages['created-at']}:</i>
+                      <Moment fromNow locale={locale}>{new Date(modalData.created_at)}</Moment>
+                      </span>
                     </Col>
                     {modalData.updated_at && 
                       <Col md={6}>
-                        <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.user_update_name}</span>
+                        <span><i className="label-info-data">{messages['updated-by']}:</i>
+                        {(modalData.full_name_updated !== " ") ? modalData.full_name_updated : modalData.updated_by}</span>
                         <br />
-                        <span><i className="label-info-data">{messages['updated-at']}:</i>{modalData.updated_at}</span>
+                        <span><i className="label-info-data">{messages['updated-at']}:</i>
+                        <Moment fromNow locale={locale}>{new Date(modalData.updated_at)}</Moment>
+                        </span>
                       </Col>
                     }
                   </Row>
@@ -306,13 +299,13 @@ ActionForm.propTypes = {
   cities: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,
   toggleHubModal: PropTypes.func.isRequired,
-  getCityList: PropTypes.func.isRequired,
+  getCityHubList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ hub, address }) => {
+const mapStateToProps = ({ hub }) => {
   const { modalData, modalType } = hub;
-  const cities = address.city.items;
-  const countries = address.country.items;
+  const cities = hub.city_hub;
+  const countries = hub.country_hub;
   return {
     modalData,
     modalType,
@@ -326,7 +319,7 @@ export default reduxForm({
   validate
 })(injectIntl(connect(mapStateToProps, {
   toggleHubModal,
-  getCountryList,
-  getCityList,
+  getCountryHubList,
+  getCityHubList,
   changeTypeHubModal
 })(ActionForm)));

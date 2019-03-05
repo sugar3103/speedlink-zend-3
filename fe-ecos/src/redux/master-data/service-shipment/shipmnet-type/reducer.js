@@ -15,17 +15,7 @@ import {
   SHIPMENT_TYPE_CODE_GET_LIST,
   SHIPMENT_TYPE_CODE_GET_LIST_SUCCESS,
   SHIPMENT_TYPE_CODE_GET_LIST_ERROR,
-  CARRIER_GET_CODE_BY_CONDITION,
-  CARRIER_GET_CODE_BY_CONDITION_SUCCESS,
-  CARRIER_GET_CODE_BY_CONDITION_ERROR,
-
-  SERVICE_GET_CODE_BY_CONDITION,
-  SERVICE_GET_CODE_BY_CONDITION_SUCCESS,
-  SERVICE_GET_CODE_BY_CONDITION_ERROR,
-
-  SHIPMENT_TYPE_GET_CODE_BY_CONDITION,
-  SHIPMENT_TYPE_GET_CODE_BY_CONDITION_SUCCESS,
-  SHIPMENT_TYPE_GET_CODE_BY_CONDITION_ERROR
+  SHIPMENT_TYPE_CHANGE_TYPE_MODAL
 } from '../../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -35,11 +25,10 @@ const INIT_STATE = {
   loading: true,
   modalOpen: false,
   modalData: null,
+  modalType: null,
   paramSearch: null,
-  codes: null,
-  CarrierCodeByCondition: null,
-  ServiceCodeByCondition: null,
-  codeByCondition: null
+  codes: null
+ 
 };
 
 export default (state = INIT_STATE, action) => {
@@ -48,7 +37,8 @@ export default (state = INIT_STATE, action) => {
       return {
         ...state,
         modalOpen: !state.modalOpen,
-        modalData: action.payload,
+        modalData: action.payload.data,
+        modalType: action.payload.type,
         errors: null
       };
 
@@ -153,70 +143,11 @@ export default (state = INIT_STATE, action) => {
         ...state,
         errors: action.payload
       };
-
-    case CARRIER_GET_CODE_BY_CONDITION:
-      return {
-        ...state,
-        loading: true
-      };
-
-    case CARRIER_GET_CODE_BY_CONDITION_SUCCESS:
-      const { CarrierCodeByCondition } = action.payload;
-      return {
-        ...state,
-        loading: false,
-        CarrierCodeByCondition
-      };
-
-    case CARRIER_GET_CODE_BY_CONDITION_ERROR:
-      return {
-        ...state,
-        loading: false,
-        errors: action.payload
-      };
-
-    case SERVICE_GET_CODE_BY_CONDITION:
-      return {
-        ...state,
-        loading: true
-      };
-
-    case SERVICE_GET_CODE_BY_CONDITION_SUCCESS:
-      const { ServiceCodeByCondition } = action.payload;
-      return {
-        ...state,
-        loading: false,
-        ServiceCodeByCondition
-      };
-
-    case SERVICE_GET_CODE_BY_CONDITION_ERROR:
-      return {
-        ...state,
-        loading: false,
-        errors: action.payload
-      };
-
-    case SHIPMENT_TYPE_GET_CODE_BY_CONDITION:
-      return {
-        ...state,
-        loading: true
-      };
-
-    case SHIPMENT_TYPE_GET_CODE_BY_CONDITION_SUCCESS:
-      const { codeByCondition } = action.payload;
-      return {
-        ...state,
-        loading: false,
-        codeByCondition
-      };
-
-    case SHIPMENT_TYPE_GET_CODE_BY_CONDITION_ERROR:
-      return {
-        ...state,
-        loading: false,
-        errors: action.payload
-      };
-
+    case SHIPMENT_TYPE_CHANGE_TYPE_MODAL: 
+    return{
+      ...state,
+      modalType: action.payload
+    }
     default:
       return { ...state };
   }

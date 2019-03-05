@@ -35,66 +35,69 @@ class CarrierController extends CoreController
 
     public function indexAction()
     {
-        $result = [
-            "total" => 0,
-            "data" => []
-        ];
+        if ($this->getRequest()->isPost()) {
 
-        $fieldsMap = ['code', 'name', 'name_en', 'status'];
-        list($start, $limit, $sortField, $sortDirection, $filters) = $this->getRequestData($fieldsMap);
-        $dataCarrier = $this->carrierManager->getListCarrierByCondition($start, $limit, $sortField, $sortDirection, $filters);
-
-        $result['error_code'] = 1;
-        $result['message'] = 'Success';
-        $result["total"] = $dataCarrier['totalCarrier'];
-        $result["data"] = !empty($dataCarrier['listCarrier']) ? $dataCarrier['listCarrier'] : [];
-        $this->apiResponse = $result;
+            $fieldsMap = ['code', 'name', 'name_en', 'status'];
+            list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);            
+            
+            
+            //get list User by condition
+            $dataCarrier = $this->carrierManager->getListCarrierByCondition($start, $limit, $sortField, $sortDirection,$filters,$this->getDeleted());            
+            
+            $result = $this->filterByField($dataCarrier['listCarrier'], $fields);          
+                        
+            $this->apiResponse =  array(
+                'message'   => "SUCCESS",
+                'data'      => $result,
+                'total'     => $dataCarrier['totalCarrier']
+            );
+        }
 
         return $this->createResponse();
     }
 
     public function codeAction()
     {
-        $result = array("data" => []);
-        $dataCarrier = $this->carrierManager->getListCarrierCodeByCondition();
+        if ($this->getRequest()->isPost()) {
+            $dataCarrier = $this->carrierManager->getListCarrierCodeByCondition($this->getDeleted());
 
-        $result['error_code'] = 1;
-        $result['message'] = 'Success';
-        $result["data"] = !empty($dataCarrier) ? $dataCarrier : [];
-        $this->apiResponse = $result;
-
+            $this->apiResponse =  array(
+                'message'   => "SUCCESS",
+                'data'      => !empty($dataCarrier) ? $dataCarrier : []            
+            );
+        }
         return $this->createResponse();
     }
 
     public function addAction()
     {
-        $user = $this->tokenPayload;
-        $data = $this->getRequestData();
-        if (empty($data)) {
-            $this->error_code = -1;
-            $this->apiResponse['message'] = 'Missing data';
-            return $this->createResponse();
-        }
-        //Create New Form Carrier
-        $form = new CarrierForm('create', $this->entityManager);
-        $form->setData($data);
+        // check if status  has submitted the form
+        if ($this->getRequest()->isPost()) {
+            $user = $this->tokenPayload;
+            $data = $this->getRequestData();
+            
+            //Create New Form Carrier
+            $form = new CarrierForm('create', $this->entityManager);
+            $form->setData($data);
 
-        //validate form
-        if ($form->isValid()) {
-            try {
-                // get filtered and validated data
-                $data = $form->getData();
-                // add new carrier
-                $this->carrierManager->addCarrier($data, $user);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have added a carrier!";
-            } catch (\Exception $e) {
-                $this->error_code = -1;
-                $this->apiResponse['message'] = "Fail: Please contact System Admin";
-            }
-        } else {
-            $this->error_code = -1;
-            $this->apiResponse = $form->getMessages();
+            //validate form
+            if ($form->isValid()) {
+                try {
+                    // get filtered and validated data
+                    $data = $form->getData();
+                    // add new carrier
+                    $this->carrierManager->addCarrier($data, $user);
+                    
+                    $this->apiResponse['message'] = "ADDED_SUCCESS_CARRIER";
+                } catch (\Exception $e) {
+                    $this->error_code = -1;
+                    $this->apiResponse['message'] = "ERROR_SUCCESS_CARRIER";
+                }
+            } else {
+                $this->error_code = 0;
+                $this->apiResponse['message'] = "Error";
+                $this->apiResponse['data'] = $form->getMessages(); 
+            }   
         }
 
         return $this->createResponse();
@@ -102,66 +105,93 @@ class CarrierController extends CoreController
 
     public function editAction()
     {
-        $user = $this->tokenPayload;
-        $data = $this->getRequestData();
-        if (empty($data)) {
-            $this->error_code = -1;
-            $this->apiResponse['message'] = 'Missing data';
-            return $this->createResponse();
-        }
+        if ($this->getRequest()->isPost()) {
+            $user = $this->tokenPayload;
+            $data = $this->getRequestData();
+            if(isset($data['id'])) {
+                //Create New Form Carrier
+                $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['id']);
+                $form = new CarrierForm('update', $this->entityManager, $carrier);
+                $form->setData($data);
 
-        //Create New Form Carrier
-        $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['id']);
-        $form = new CarrierForm('update', $this->entityManager, $carrier);
-        $form->setData($data);
-
-        //validate form
-        if ($form->isValid()) {
-            try {
-                // get filtered and validated data
-                $data = $form->getData();
-                // add new carrier
-                $this->carrierManager->updateCarrier($carrier, $data, $user);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have edited a carrier!";
-            } catch (\Exception $e) {
-                $this->error_code = -1;
-                $this->apiResponse['message'] = "Fail: Please contact System Admin";
+                //validate form
+                if ($form->isValid()) {
+                    try {
+                        // get filtered and validated data
+                        $data = $form->getData();
+                        // add new carrier
+                        $this->carrierManager->updateCarrier($carrier, $data, $user);                
+                        $this->apiResponse['message'] = "EDITED_SUCCESS_CARRIER";
+                    } catch (\Exception $e) {
+                        $this->error_code = -1;
+                        $this->apiResponse['data'] = "ERROR_EDITED";
+                    }
+                } else {
+                    $this->error_code = 0;            
+                    $this->apiResponse['data'] = $form->getMessages(); 
+                }  
             }
-        } else {
-            $this->error_code = -1;
-            $this->apiResponse = $form->getMessages();
         }
-
         return $this->createResponse();
     }
 
     public function deleteAction()
     {
-        $user = $this->tokenPayload;
-        $data = $this->getRequestData();
-        if (empty($data)) {
-            $this->error_code = -1;
-            $this->apiResponse['message'] = 'Missing data';
-            return $this->createResponse();
-        }
-        //Create New Form Carrier
-        $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['id']);
-
-        //validate form
-        if(!empty($carrier)) {
-            try {
-                $this->carrierManager->deleteCarrier($carrier, $user);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have deleted carrier!";
-            } catch (\Exception $e) {
-                $this->error_code = -1;
-                $this->apiResponse['message'] = "Fail: Please contact System Admin";
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequestData();
+            
+            if(isset($data['ids']) && count($data['ids']) > 0) {
+                try {
+                    foreach ($data['ids'] as $id) {
+                        $carrier = $this->entityManager->getRepository(Carrier::class)->find($id);
+                        if ($carrier == null) {
+                            $this->error_code = 0;
+                            $this->apiResponse['message'] = "NOT_FOUND";                        
+                        } else {
+                            $this->carrierManager->deleteCarrier($carrier,$this->tokenPayload);
+                        }  
+                    }
+                    
+                    $this->apiResponse['message'] = "DELETE_SUCCESS_CARRIER";
+                } catch (\Throwable $th) {
+                    $this->error_code = 0;
+                    $this->apiResponse['message'] = "CARRIER_REQUEST_ID";
+                }
+            } else {
+                $this->error_code = 0;
+                $this->apiResponse['message'] = "CARRIER_REQUEST_IDs";
             }
-        } else {
-            $this->httpStatusCode = 200;
-            $this->error_code = -1;
-            $this->apiResponse['message'] = "Not Found Carrier";
+        }
+
+        return $this->createResponse();
+    }
+
+    public function removeAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequestData();
+            
+            if(isset($data['ids']) && count($data['ids']) > 0) {
+                try {
+                    foreach ($data['ids'] as $id) {
+                        $carrier = $this->entityManager->getRepository(Carrier::class)->find($id);
+                        if ($carrier == null) {
+                            $this->error_code = 0;
+                            $this->apiResponse['message'] = "NOT_FOUND";                        
+                        } else {
+                            $this->carrierManager->removeCarrier($carrier);
+                        }  
+                    }
+                    
+                    $this->apiResponse['message'] = "REMOVE_SUCCESS_CARRIER";
+                } catch (\Throwable $th) {
+                    $this->error_code = 0;
+                    $this->apiResponse['message'] = "CARRIER_REQUEST_ID";
+                }
+            } else {
+                $this->error_code = 0;
+                $this->apiResponse['message'] = "CARRIER_REQUEST_IDs";
+            }
         }
 
         return $this->createResponse();

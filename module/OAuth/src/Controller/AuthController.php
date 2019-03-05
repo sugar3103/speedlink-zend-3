@@ -96,7 +96,8 @@ class AuthController extends CoreController {
                     $_user = $this->entityManager->getRepository(User::class)->findOneByUsername($data['username']);
                     
                     $payload  = [
-                        'id'            => $_user->getId(),     
+                        'id'            => $_user->getId(),  
+                        'is_admin'      => $_user->getIsAdmin(),
                         'username'      => $data['username'],
                         'password'      => $data['password'],
                         'remember_me'              => $data['remember_me'],                 

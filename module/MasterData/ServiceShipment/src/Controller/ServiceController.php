@@ -35,66 +35,71 @@ class ServiceController extends CoreController
 
     public function indexAction()
     {
-        $result = [
-            "total" => 0,
-            "data" => []
-        ];
+      
+        if ($this->getRequest()->isPost()) {
 
-        $fieldsMap = ['code', 'name', 'name_en', 'status'];
-        list($start, $limit, $sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);
-        $dataService = $this->serviceManager->getListServiceByCondition($start, $limit, $sortField, $sortDirection, $filters);
+            $fieldsMap = ['code', 'name', 'name_en', 'status'];
+            list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);            
+            
+            
+            //get list User by condition
+            $dataService = $this->serviceManager->getListServiceByCondition($start, $limit, $sortField, $sortDirection,$filters,$this->getDeleted());            
+            
+            $result = $this->filterByField($dataService['listService'], $fields);          
+                        
+            $this->apiResponse =  array(
+                'message'   => "SUCCESS",
+                'data'      => $result,
+                'total'     => $dataService['totalService']
+            );
+        }
 
-        $result['error_code'] = 1;
-        $result['message'] = 'Success';
-        $result["total"] = $dataService['totalService'];
-        $result["data"] = !empty($dataService['listService']) ? $dataService['listService'] : [];
-        $this->apiResponse = $result;
 
         return $this->createResponse();
     }
 
     public function codeAction()
     {
-        $result = array("data" => []);
-        $dataService = $this->serviceManager->getListServiceCodeByCondition();
+        if ($this->getRequest()->isPost()) {
+            $dataService = $this->serviceManager->getListServiceCodeByCondition($this->getDeleted());
 
-        $result['error_code'] = 1;
-        $result['message'] = 'Success';
-        $result["data"] = !empty($dataService) ? $dataService : [];
-        $this->apiResponse = $result;
-
+            $this->apiResponse =  array(
+                'message'   => "SUCCESS",
+                'data'      => !empty($dataService) ? $dataService : []            
+            );
+        }
         return $this->createResponse();
     }
 
     public function addAction()
     {
-        $user = $this->tokenPayload;
-        $data = $this->getRequestData();
-        if (empty($data)) {
-            $this->error_code = -1;
-            $this->apiResponse['message'] = 'Missing data';
-            return $this->createResponse();
-        }
-        //Create New Form Service
-        $form = new ServiceForm('create', $this->entityManager);
-        $form->setData($data);
+        // check if status  has submitted the form
+        if ($this->getRequest()->isPost()) {
+            $user = $this->tokenPayload;
+            $data = $this->getRequestData();
+            
+            //Create New Form Carrier
+            $form = new ServiceForm('create', $this->entityManager);
+            $form->setData($data);
 
-        //validate form
-        if ($form->isValid()) {
-            try {
-                // get filtered and validated data
-                $data = $form->getData();
-                // add new service
-                $this->serviceManager->addService($data, $user);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have added a service!";
-            } catch (\Exception $e) {
-                $this->error_code = -1;
-                $this->apiResponse['message'] = "Fail: Please contact System Admin";
-            }
-        } else {
-            $this->error_code = -1;
-            $this->apiResponse = $form->getMessages();
+            //validate form
+            if ($form->isValid()) {
+                try {
+                    // get filtered and validated data
+                    $data = $form->getData();
+                    // add new carrier
+                    $this->serviceManager->addService($data, $user);
+                    
+                    $this->apiResponse['message'] = "ADDED_SUCCESS_SERVICE";
+                } catch (\Exception $e) {
+                    $this->error_code = -1;
+                    $this->apiResponse['message'] = "ERROR_SUCCESS_SERVICE";
+                }
+            } else {
+                $this->error_code = 0;
+                $this->apiResponse['message'] = "Error";
+                $this->apiResponse['data'] = $form->getMessages(); 
+            }   
         }
 
         return $this->createResponse();
@@ -102,66 +107,96 @@ class ServiceController extends CoreController
 
     public function editAction()
     {
-        $user = $this->tokenPayload;
-        $data = $this->getRequestData();
-        if (empty($data)) {
-            $this->error_code = -1;
-            $this->apiResponse['message'] = 'Missing data';
-            return $this->createResponse();
-        }
+        if ($this->getRequest()->isPost()) {
+            $user = $this->tokenPayload;
+            $data = $this->getRequestData();
+            if(isset($data['id'])) {
+                //Create New Form Service
+                $service = $this->entityManager->getRepository(Service::class)->find($data['id']);
+                $form = new ServiceForm('update', $this->entityManager, $service);
+                $form->setData($data);
 
-        //Create New Form Service
-        $service = $this->entityManager->getRepository(Service::class)->find($data['id']);
-        $form = new ServiceForm('update', $this->entityManager, $service);
-        $form->setData($data);
-
-        //validate form
-        if ($form->isValid()) {
-            try {
-                // get filtered and validated data
-                $data = $form->getData();
-                // add new service
-                $this->serviceManager->updateService($service, $data, $user);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have edited a service!";
-            } catch (\Exception $e) {
-                $this->error_code = -1;
-                $this->apiResponse['message'] = "Fail: Please contact System Admin";
+                //validate form
+                if ($form->isValid()) {
+                    try {
+                        // get filtered and validated data
+                        $data = $form->getData();
+                        // add new service
+                        $this->serviceManager->updateService($service, $data, $user);                
+                        $this->apiResponse['message'] = "EDITED_SUCCESS_SERVICE";
+                    } catch (\Exception $e) {
+                        $this->error_code = -1;
+                        $this->apiResponse['data'] = "ERROR_EDITED";
+                    }
+                } else {
+                    $this->error_code = 0;            
+                    $this->apiResponse['data'] = $form->getMessages(); 
+                }  
             }
-        } else {
-            $this->error_code = -1;
-            $this->apiResponse = $form->getMessages();
         }
+
         return $this->createResponse();
     }
 
     public function deleteAction()
     {
-        $user = $this->tokenPayload;
-        $data = $this->getRequestData();
-        if (empty($data)) {
-            $this->error_code = -1;
-            $this->apiResponse['message'] = 'Missing data';
-            return $this->createResponse();
-        }
-        //Create New Form Service
-        $service = $this->entityManager->getRepository(Service::class)->find($data['id']);
-
-        //validate form
-        if(!empty($service)) {
-            try {
-                $this->serviceManager->deleteService($service, $user);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have deleted service!";
-            } catch (\Exception $e) {
-                $this->error_code = -1;
-                $this->apiResponse['message'] = "Fail: Please contact System Admin";
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequestData();
+            
+            if(isset($data['ids']) && count($data['ids']) > 0) {
+                try {
+                    foreach ($data['ids'] as $id) {
+                        $service = $this->entityManager->getRepository(Service::class)->find($id);
+                        if ($service == null) {
+                            $this->error_code = 0;
+                            $this->apiResponse['message'] = "NOT_FOUND";                        
+                        } else {
+                            $this->serviceManager->deleteService($service,$this->tokenPayload);
+                        }  
+                    }
+                    
+                    $this->apiResponse['message'] = "DELETE_SUCCESS_SERVICE";
+                } catch (\Throwable $th) {
+                    $this->error_code = 0;
+                    $this->apiResponse['message'] = "SERVICE_REQUEST_ID";
+                }
+            } else {
+                $this->error_code = 0;
+                $this->apiResponse['message'] = "SERVICE_REQUEST_ID";
             }
-        } else {
-            $this->httpStatusCode = 200;
-            $this->error_code = -1;
-            $this->apiResponse['message'] = "Not Found Service";
         }
+
+        return $this->createResponse();
+    }
+
+    public function removeAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequestData();
+            
+            if(isset($data['ids']) && count($data['ids']) > 0) {
+                try {
+                    foreach ($data['ids'] as $id) {
+                        $service = $this->entityManager->getRepository(Service::class)->find($id);
+                        if ($service == null) {
+                            $this->error_code = 0;
+                            $this->apiResponse['message'] = "NOT_FOUND";                        
+                        } else {
+                            $this->serviceManager->removeService($service,$this->tokenPayload);
+                        }  
+                    }
+                    
+                    $this->apiResponse['message'] = "REMOVE_SUCCESS_SERVICE";
+                } catch (\Throwable $th) {
+                    $this->error_code = 0;
+                    $this->apiResponse['message'] = "SERVICE_REQUEST_ID";
+                }
+            } else {
+                $this->error_code = 0;
+                $this->apiResponse['message'] = "SERVICE_REQUEST_ID";
+            }
+        }
+
         return $this->createResponse();
     }
 }

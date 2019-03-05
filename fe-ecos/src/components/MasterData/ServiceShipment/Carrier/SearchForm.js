@@ -31,49 +31,52 @@ class SearchForm extends Component {
     const { messages, locale } = this.props.intl;
     return (
       <form className="form" onSubmit={handleSubmit}>
+      
         <Col md={4}>
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['carrier.code']}</span>
             <div className="form__form-group-field">
               <Field name="code" component={renderSelectField} type="text"
-                     options={carrierCode && this.showOptionCarrier(carrierCode)}/>
+                options={carrierCode && this.showOptionCarrier(carrierCode)} />
             </div>
           </div>
         </Col>
         <Col md={4}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['carrier.name']}</span>
+            <span className="form__form-group-label">{messages['name']}</span>
             <div className="form__form-group-field">
-              <Field component="input" type="text" placeholder={messages['carrier.name']}
-                     name={locale === 'en-US' ? 'name_en' : 'name'} />
+              <Field component="input" type="text" placeholder={messages['name']}
+                name={locale === 'en-US' ? 'name_en' : 'name'} />
             </div>
           </div>
         </Col>
         <Col md={4}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['carrier.status']}</span>
+            <span className="form__form-group-label">{messages['status']}</span>
             <div className="form__form-group-field">
               <Field name="status" component={renderSelectField} type="text" options={[
                 { value: -1, label: messages['all'] },
                 { value: 1, label: messages['active'] },
                 { value: 0, label: messages['inactive'] }
-                ]}
+              ]}
               />
             </div>
           </div>
         </Col>
-        <div className="search-group-button">
-          <Button size="sm" outline onClick={(e)=> {
-            reset();
-            setTimeout(() => {
-              handleSubmit();
-            }, 200);
-          }} >
-            {messages['clear']}</Button>{' '}
-          <Button size="sm" color="primary" id="search" >
-            {messages['search']}
-          </Button>
-        </div>
+        <Col md={12} className="text-right">
+          <div className="search-group-button">
+            <Button size="sm" outline onClick={(e) => {
+              reset();
+              setTimeout(() => {
+                handleSubmit();
+              }, 200);
+            }} >
+              {messages['clear']}</Button>{' '}
+            <Button size="sm" color="primary" id="search" >
+              {messages['search']}
+            </Button>
+          </div>
+        </Col>
       </form>
     );
   }
@@ -94,7 +97,6 @@ const mapStateToProps = ({ carrier }) => {
 export default reduxForm({
   form: 'carrier_search_form',
   initialValues: {
-    name: '',
     carrier: -1
   }
 })(injectIntl(connect(mapStateToProps, {

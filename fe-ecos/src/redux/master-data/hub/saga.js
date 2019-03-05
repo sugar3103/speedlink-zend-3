@@ -8,7 +8,9 @@ import {
   HUB_GET_LIST,
   HUB_ADD_ITEM,
   HUB_UPDATE_ITEM,
-  HUB_DELETE_ITEM 
+  HUB_DELETE_ITEM,
+  HUB_COUNTRY_GET_LIST,
+  HUB_CITY_GET_LIST,
 } from "../../../constants/actionTypes";
 
 import {
@@ -22,6 +24,10 @@ import {
   deleteHubItemSuccess,
   deleteHubItemError,
   getHubList,
+  getCountryHubListSuccess,
+  getCountryHubListError,
+  getCityHubListSuccess,
+  getCityHubListError,
 
 } from "./actions";
 
@@ -178,23 +184,23 @@ function* updateHubItem({ payload }) {
 
 //delete hub
 
-function deleteHubApi(id) {
+function deleteHubApi(ids) {
   return axios.request({
     method: 'post',
     url: `${apiUrl}hub/delete`,
     headers: authHeader(),
-    data: {  id: id }
+    data: {  ids: ids }
   });
 }
 
-const deleteHubItemRequest = async id => {
-  return await deleteHubApi(id).then(res => res.data).catch(err => err)
+const deleteHubItemRequest = async ids => {
+  return await deleteHubApi(ids).then(res => res.data).catch(err => err)
 };
 
 function* deleteHubItem({ payload }) {
-  const { id, messages } = payload;
+  const { ids, messages } = payload;
   try {
-    const response = yield call(deleteHubItemRequest, id);
+    const response = yield call(deleteHubItemRequest, ids);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(deleteHubItemSuccess());
@@ -228,6 +234,96 @@ function* deleteHubItem({ payload }) {
 }
 
 
+function getCountryHubListApi(params) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}address/country`,
+    headers: authHeader(),
+    data: JSON.stringify(params)
+  });
+}
+
+const getCountryHubListRequest = async (params) => {
+  return await getCountryHubListApi(params).then(res => res.data).catch(err => err)
+};
+
+function* getCountryHubListItems({ payload }) {
+  const { params, messages, types } = payload;
+  try {
+    const response = yield call(getCountryHubListRequest, params);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(getCountryHubListSuccess(response.data, types));
+        break;
+
+      case EC_FAILURE:
+        yield put(getCountryHubListError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning', 
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+      default:
+        break;
+    }
+    
+  } catch (error) {
+    yield put(getCountryHubListError(error));
+  }
+}
+
+function getCityHubListApi(params) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}address/city`,
+    headers: authHeader(),
+    data: JSON.stringify(params)
+  });
+}
+
+const getCityHubListRequest = async (params) => {
+  return await getCityHubListApi(params).then(res => res.data).catch(err => err)
+};
+
+function* getCityHubListItems({ payload }) {
+  const { params, messages } = payload;
+  try {
+    const response = yield call(getCityHubListRequest, params);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(getCityHubListSuccess(response.data, response.total));
+        break;
+
+      case EC_FAILURE:
+        yield put(getCityHubListError(response.message));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning', 
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+      default:
+        break;
+    }
+    
+  } catch (error) {
+    yield put(getCityHubListError(error));
+  }
+}
+
+
+
 export function* watchGetList() {
   yield takeEvery(HUB_GET_LIST, getHubListItems);
 }
@@ -244,9 +340,15 @@ export function* watchDeleteItem() {
   yield takeEvery(HUB_DELETE_ITEM, deleteHubItem);
 }
 
-
-
+export function* watchCountryHubGetList() {
+  yield takeEvery(HUB_COUNTRY_GET_LIST, getCountryHubListItems);
+}
+export function* watchCityHubGetList() {
+  yield takeEvery(HUB_CITY_GET_LIST, getCityHubListItems);
+}
 
 export default function* rootSaga() {
-  yield all([fork(watchGetList), fork(watchAddItem), fork(watchUpdateItem), fork(watchDeleteItem)]);
+  yield all([fork(watchGetList), fork(watchAddItem), fork(watchUpdateItem), fork(watchDeleteItem),
+    fork(watchCountryHubGetList),  fork(watchCityHubGetList)
+  ]);
 }

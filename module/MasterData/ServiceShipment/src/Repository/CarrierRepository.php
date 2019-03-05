@@ -13,7 +13,7 @@ use Core\Utils\Utils;
  */
 class CarrierRepository extends EntityRepository
 {
-    public function getListCarrierByCondition($start, $limit, $sortField = null, $sortDirection = 'asc', $filters = [])
+    public function getListCarrierByCondition($start, $limit, $sortField = null, $sortDirection = 'asc', $filters = [], $deleted = true)
     {
         try {
             $queryBuilder = $this->buildCarrierQueryBuilder($sortField, $sortDirection, $filters);
@@ -24,12 +24,16 @@ class CarrierRepository extends EntityRepository
                 c.description,
                 c.description_en,
                 c.code,
-                c.status,
+                c.status,                
                 c.created_at,
                 cr.username as created_by,
+                CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
+                CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated,
                 c.updated_at,
                 up.username as updated_by
-            ")->andWhere('c.is_deleted = 0');
+            ");
+
+            if($deleted){ $queryBuilder->andWhere('c.is_deleted = 0'); }
 
             if($limit) {
                 $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
@@ -42,7 +46,7 @@ class CarrierRepository extends EntityRepository
         }
     }
 
-    public function getListCarrierCodeByCondition($sortField = 'code', $sortDirection = 'asc', $filters = [])
+    public function getListCarrierCodeByCondition($sortField = 'code', $sortDirection = 'asc', $filters = [],$deleted)
     {
         try {
             $queryBuilder = $this->buildCarrierQueryBuilder($sortField, $sortDirection, $filters);
@@ -51,7 +55,11 @@ class CarrierRepository extends EntityRepository
                 c.code,
                 c.name,
                 c.name_en
-            ")->andwhere('c.is_deleted = 0');
+            ");
+            
+            if($deleted) {
+                $queryBuilder->andwhere('c.is_deleted = 0');
+            }
             return $queryBuilder;
 
         } catch (QueryException $e) {
@@ -79,6 +87,14 @@ class CarrierRepository extends EntityRepository
                 'alias' => 'c.code',
                 'operator' => 'contains'
             ],
+            'name' => [
+                'alias' => 'c.name',
+                'operator' => 'contains'
+            ],
+            'name_en' => [
+                'alias' => 'c.name_en',
+                'operator' => 'contains'
+            ]
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();

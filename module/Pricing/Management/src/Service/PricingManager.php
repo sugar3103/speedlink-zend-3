@@ -148,6 +148,18 @@ class PricingManager {
         return $dataPricing;
     }
 
+    public function getListCodeByCondition($field, $params)
+    {
+        $pricing = [];
+        $ormPricing = $this->entityManager->getRepository(Pricing::class)->getListCodeByCondition($field, $params);
+        if($ormPricing){
+            $ormPaginator = new ORMPaginator($ormPricing, true);
+            $ormPaginator->setUseOutputWalkers(false);
+            $pricing = $ormPaginator->getIterator()->getArrayCopy();
+        }
+        return $pricing;
+    }
+
     /**
      * Add Pricing
      * @param $data
@@ -161,8 +173,20 @@ class PricingManager {
             // begin transaction
             $this->entityManager->beginTransaction();
             $date = new \DateTime();
+
+            $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['carrier_id']);
+            $country = $this->entityManager->getRepository(Country::class)->find($data['origin_country_id']);
+            $title = $carrier->getCode().'.'.$data['category_code'].'.'.$country->getIsoCode();
+            if (!empty($data['origin_city_id'])) {
+                $city = $this->entityManager->getRepository(City::class)->find($data['origin_city_id']);
+                $title .= '-'.$city->getNameEn();
+            }
+            $title .= '.'.date('y-M-d');
+            $pricing_count = $this->entityManager->getRepository(Pricing::class)->findBy(['name'=>$title]);
+            $title .= '.'.(count($pricing_count)+1);
+
             $pricing = new Pricing();
-            $pricing->setName($data['name']);
+            $pricing->setName($title);
             $pricing->setCarrierId($data['carrier_id']);
             $pricing->setCategoryCode($data['category_code']);
             $pricing->setOriginCountryId($data['origin_country_id']);
@@ -176,8 +200,8 @@ class PricingManager {
             $pricing->setSalemanId($data['saleman_id']);
             $pricing->setIsPrivate($data['is_private']);
             $pricing->setCustomerId($data['customer_id']);
-            $pricing->setApprovalStatus($data['approved_status']);
-            $pricing->setApprovalBy($data['approved_by']);
+            $pricing->setApprovalStatus($data['approval_status']);
+            $pricing->setApprovedBy($data['approved_by']);
             $pricing->setStatus($data['status']);
             $pricing->setCreatedAt($date);
             $pricing->setCreatedBy($user->id);
@@ -261,7 +285,7 @@ class PricingManager {
             $pricing->setSalemanId($data['saleman_id']);
             $pricing->setIsPrivate($data['is_private']);
             $pricing->setApprovalStatus($data['approval_status']);
-            $pricing->setApprovalBy($data['approval_by']);
+            $pricing->setApprovedBy($data['approved_by']);
             $pricing->setStatus($data['status']);
             $pricing->setUpdatedAt(new \DateTime());
             $pricing->setUpdatedBy($user->id);

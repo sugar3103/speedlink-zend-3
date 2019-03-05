@@ -1,25 +1,19 @@
 /* eslint-disable react/no-unused-state */
-import React, { Component } from 'react';
-import { Card, CardBody, Col, Table, Button } from 'reactstrap';
+import React, { Component,Fragment } from 'react';
+import { Card, CardBody, Col, Badge, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
-import Item from './Item';
-import Pagination from '../../../../containers/Shared/pagination/Pagination';
-import ItemPerPage from '../../../../containers/Shared/pagination/ItemPerPage';
+import Table from '../../../../containers/Shared/table/Table';
+import Can from '../../../../containers/Shared/Can';
 import { SELECTED_PAGE_SIZE } from '../../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import Action from './Action';
 import Search from './Search';
-import { getServiceList, toggleServiceModal } from "../../../../redux/actions";
-
-const ServiceFormatter = ({ value }) => (
-  value === 'Enabled' ? <span className="badge badge-success">Enabled</span> :
-    <span className="badge badge-disabled">Disabled</span>
-);
-
-ServiceFormatter.propTypes = {
-  value: PropTypes.string.isRequired,
-};
+import { getServiceList, toggleServiceModal, deleteServiceItem } from "../../../../redux/actions";
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import ConfirmPicker from '../../../../containers/Shared/picker/ConfirmPicker';
+import Moment from 'react-moment';
 
 class List extends Component {
   constructor() {
@@ -28,6 +22,26 @@ class List extends Component {
       selectedPageSize: SELECTED_PAGE_SIZE,
       currentPage: 1,
     };
+  }
+  toggleModal = (e, type, status) => {
+    e.stopPropagation();
+    this.props.toggleServiceModal(type, status);
+  }
+
+  onDelete = (e, ids) => {
+    e.stopPropagation();
+    const { messages } = this.props.intl;
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <ConfirmPicker
+            onClose={onClose}
+            onDelete={() => this.props.deleteServiceItem(ids, messages)}
+            messages={messages}
+          />
+        )
+      }
+    })
   }
 
   onChangePageSize = (size) => {
@@ -51,10 +65,6 @@ class List extends Component {
     });
   };
 
-toggleModal = () => {
-  this.props.toggleServiceModal();
-};
-
   onChangePage = (page) => {
     const { messages } = this.props.intl;
     let params = {
@@ -73,69 +83,120 @@ toggleModal = () => {
       currentPage: page
     });
   };
-
-  componentDidMount() {
+  
+  renderHeader = (selected) => {
     const { messages } = this.props.intl;
-    this.props.getServiceList(null, messages);
+    const { modalOpen } = this.props.service;
+    return (
+      <Fragment>
+        <Can user={this.props.authUser.user} permission="service" action="add">
+          <Button
+            color="success"
+            onClick={(e) => this.toggleModal(e, 'add', null)}
+            className="master-data-btn"
+            size="sm"
+          >{messages['service.add-new']}</Button>
+        </Can>
+        <Action modalOpen={modalOpen} />
+        <Can user={this.props.authUser.user} permission="service" action="delete">
+          {selected.length > 0 &&
+            <Button
+              color="danger"
+              onClick={(e) => this.onDelete(e, selected)}
+              className="master-data-btn"
+              size="sm"
+            >{messages['service.delete']}</Button>
+          }
+        </Can>
+      </Fragment>
+    )
   }
 
-  showServiceItem = (items) => {
-    const { messages } = this.props.intl;
-    let result = null;
-    if (items != null && items.length > 0) {
-      result = items.map((item, index) => {
-        return (
-          <Item key={index} service={item} />
-        );
-      })
-    } else {
-      result = (
-        <tr><td colSpan={8} className="text-center">{messages['no-result']}</td></tr>
-      );
-    }
-    return result;
-  };
-
-
   render() {
-    const { items, loading, modalOpen, total } = this.props.service;
+    
+    const { items, loading, total } = this.props.service;
     const { messages, locale } = this.props.intl;
+    const columnTable = {
+      checkbox: true,
+      columns: [
+        {
+          Header: messages['carrier.code'],
+          accessor: "code",
+          width: 100,
+          sortable: false,
+        },
+        {
+          Header: messages['name'],
+          accessor: "name",
+          Cell: ({ original }) => {
+            return (
+              locale === 'en-US' ? original.name_en : original.name
+            )
+          },
+          sortable: false,
+        },       
+        {
+          Header: messages['status'],
+          accessor: "status",
+
+          Cell: ({ original }) => {
+            return (
+              original.status === 1 ? <Badge color="success">{messages['active']}</Badge> : original.status === -1 ? <Badge color="dark">{messages['deleted']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>
+            )
+          },
+          className: "text-center",
+          sortable: false,
+        },
+        {
+          Header: messages['created-at'],
+          accessor: "created_at",
+          className: "text-center",
+          Cell: ({ original }) => { return (<Moment fromNow format="D/MM/YYYY" locale={locale}>{new Date(original.created_at)}</Moment>) },
+          sortable: false,
+        },
+        {
+          Header: messages['action'],
+          accessor: "",
+          width: 100,
+          className: "text-center",
+          Cell: ({ original }) => {
+            return (
+              <Fragment>
+                <Can user={this.props.authUser.user} permission="service" action="edit" own={original.created_at}>
+                  <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
+                </Can>
+                <Can user={this.props.authUser.user} permission="service" action="delete" own={original.created_at}>
+                  <Button color="danger" size="sm" onClick={(e) => this.onDelete(e, [original.id])}><span className="lnr lnr-trash" /></Button>
+                </Can>
+              </Fragment>
+            );
+          },
+          sortable: false,
+        }
+      ]
+    };
+
     return (
       <Col md={12} lg={12}>
         <Card>
           <CardBody className="master-data-list">
             <Search />
-            <div className="mb-2">
-              <Button 
-                color="success" 
-                onClick={this.toggleModal}
-                className="master-data-btn"
-                size="sm"
-              >{messages['service.add-new']}</Button>
-              <Action modalOpen={modalOpen} />
-              <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
-            </div>
-            <Table responsive bordered hover>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>{messages['service.code']}</th>
-                  <th>{locale === 'en-US' ? (messages['service.name-en']) : (messages['service.name'])}</th>
-                  <th>{messages['service.status']}</th>
-                  <th>{messages['service.created-at']}</th>
-                  <th>{messages['service.updated-at']}</th>
-                  <th>{messages['action']}</th>
-                </tr>
-                </thead>
-                <tbody>
-                {loading ? (
-                  <tr><td colSpan={8} className="text-center"><div className="loading-table" /></td></tr>
-                ) : (
-                  this.showServiceItem(items)
-                )}
-                </tbody>
-              </Table>
-              <Pagination pagination={this.state} total={total} onChangePage={this.onChangePage} />
+            <Table
+              renderHeader={this.renderHeader}
+              loading={loading}
+              columnTable={columnTable}
+              pages={{
+                pagination: this.state,
+                total: total,
+                onChangePage: this.onChangePage
+              }}
+              size={{
+                selectedPageSize: this.state.selectedPageSize,
+                changePageSize: this.onChangePageSize
+              }}
+              data={items}
+              onRowClick={this.toggleModal}
+            />
           </CardBody>
         </Card>
       </Col>
@@ -144,20 +205,20 @@ toggleModal = () => {
 }
 
 List.propTypes = {
-  service: PropTypes.object.isRequired,
-  modal: PropTypes.object,
+  service: PropTypes.object.isRequired,  
   getServiceList: PropTypes.func.isRequired,
   toggleServiceModal: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({ service, modal }) => {
+const mapStateToProps = ({ service, authUser }) => {
   return {
     service,
-    modal
+    authUser
   };
 };
 
 export default injectIntl(connect(mapStateToProps, {
   getServiceList,
-  toggleServiceModal
+  toggleServiceModal,
+  deleteServiceItem
 })(List));

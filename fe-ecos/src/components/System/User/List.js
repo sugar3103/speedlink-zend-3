@@ -16,17 +16,6 @@ import {
 } from "../../../redux/actions";
 import Action from './Action';
 
-const Ava = `${process.env.PUBLIC_URL}/img/ava.png`;
-
-const UserFormatter = ({ value }) => (
-  value === 'Enabled' ? <span className="badge badge-success">Enabled</span> :
-    <span className="badge badge-disabled">Disabled</span>
-);
-
-UserFormatter.propTypes = {
-  value: PropTypes.string.isRequired,
-};
-
 class List extends Component {
   constructor() {
     super();
@@ -134,9 +123,10 @@ class List extends Component {
           className: "text-center",
           Cell: ({ original }) => {
             return (
-              <div className="products-list__img-wrap">
-                <img src={Ava} alt="avatar" />
-              </div>
+              // <div className="products-list__img-wrap">
+              //   <img src={Ava} alt="avatar" />
+              // </div>
+              <i className="icon-avatar products-list__img-wrap" />
             )
           }
         },

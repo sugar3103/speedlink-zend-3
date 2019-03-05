@@ -13,7 +13,7 @@ use ServiceShipment\Entity\ShipmentType;
  */
 class ShipmentTypeRepository extends EntityRepository
 {
-    public function getListShipmentTypeByCondition($start, $limit, $sortField = 'smt.id', $sortDirection = 'asc', $filters = [])
+    public function getListShipmentTypeByCondition($start, $limit, $sortField = 'smt.id', $sortDirection = 'asc', $filters = [],$deleted = true)
     {
         try {
             $queryBuilder = $this->buildShipmentTypeQueryBuilder($sortField, $sortDirection, $filters);
@@ -29,16 +29,22 @@ class ShipmentTypeRepository extends EntityRepository
                 smt.volumetric_number,
                 smt.status,
                 smt.carrier_id,
-                c.name_en AS carrier_name_en,
-                c.name AS carrier_name,
+                c.name_en AS carrier_en,
+                c.name AS carrier,
                 smt.service_id,
-                s.name_en AS service_name_en,
-                s.name AS service_name,
+                s.name_en AS service_en,
+                s.name AS service,
                 smt.created_at,
                 cr.username as created_by,
                 smt.updated_at,
-                up.username as updated_by
-            ")->andWhere('smt.is_deleted = 0');
+                up.username as updated_by,
+                CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
+                 CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated
+            ");
+            
+            if($deleted) {
+                $queryBuilder->andWhere('smt.is_deleted = 0');
+            }
 
             if($limit) {
                 $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
@@ -50,7 +56,7 @@ class ShipmentTypeRepository extends EntityRepository
         }
     }
 
-    public function getListShipmentTypeCodeByCondition($sortField = 'code', $sortDirection = 'asc', $filters = [])
+    public function getListShipmentTypeCodeByCondition($sortField = 'code', $sortDirection = 'asc', $filters = [], $deleted = true)
     {
         try {
             $queryBuilder = $this->buildShipmentTypeQueryBuilder($sortField, $sortDirection, $filters);
@@ -59,7 +65,11 @@ class ShipmentTypeRepository extends EntityRepository
                 smt.code,
                 smt.name,
                 smt.name_en
-            ")->andWhere('smt.is_deleted = 0');
+            ");
+            if($deleted) {
+                $queryBuilder->andWhere('smt.is_deleted = 0');
+            }
+            
             return $queryBuilder;
 
         } catch (QueryException $e) {
@@ -67,33 +77,42 @@ class ShipmentTypeRepository extends EntityRepository
         }
     }
 
-    public function getListCodeByCondition($sortField = 'code', $filters = [])
+    public function getListCodeByCondition($sortField = 'code', $filters = [], $deleted = true)
     {
         try {
             $queryBuilder = $this->buildShipmentTypeQueryBuilder($sortField, 'asc', $filters);
-            $queryBuilder->select("
-                smt.id AS shipment_type_id,
-                smt.code AS shipment_type_code,
-                smt.name AS shipment_type_name,
-                smt.name_en AS shipment_type_name_en,
-                smt.carrier_id,
-                c.code AS carrier_code,
-                c.name AS carrier_name,
-                c.name_en AS carrier_name_en,
-                smt.service_id,
-                s.code AS service_code,
-                s.name AS service_name,
-                s.name_en AS service_name_en
-            ")->andWhere('smt.is_deleted = 0')
-              ->andWhere('smt.status = 1');
+            if($deleted) {
+                $queryBuilder->andWhere('smt.is_deleted = 0');
+            }
+            
+            $queryBuilder->andWhere('smt.status = 1');
             if ($sortField == 'carrier_id') {
+                $queryBuilder->select("
+                    smt.carrier_id,
+                    c.code AS carrier_code,
+                    c.name AS carrier_name,
+                    c.name_en AS carrier_name_en
+                ");
                 $queryBuilder->andWhere('c.is_deleted = 0');
                 $queryBuilder->andWhere('c.status = 1');
                 $queryBuilder->groupBy('smt.carrier_id');
             } else if ($sortField == 'service_id') {
+                $queryBuilder->select("
+                    smt.service_id,
+                    s.code AS service_code,
+                    s.name AS service_name,
+                    s.name_en AS service_name_en
+                ");
                 $queryBuilder->andWhere('s.is_deleted = 0');
                 $queryBuilder->andWhere('s.status = 1');
                 $queryBuilder->groupBy('smt.service_id');
+            } else {
+                $queryBuilder->select("
+                    smt.id AS shipment_type_id,
+                    smt.code AS shipment_type_code,
+                    smt.name AS shipment_type_name,
+                    smt.name_en AS shipment_type_name_en
+                ");
             }
             return $queryBuilder;
 

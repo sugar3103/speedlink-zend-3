@@ -45,13 +45,13 @@ class ServiceManager
 
     }
 
-    public function getListServiceByCondition($start, $limit, $sortField = '', $sortDirection = 'asc', $filters = [])
+    public function getListServiceByCondition($start, $limit, $sortField = '', $sortDirection = 'asc', $filters = [],$deleted)
     {
         $services = [];
         $totalService = 0;
 
         //get orm carrier
-        $ormService = $this->entityManager->getRepository(Service::class)->getListServiceByCondition($start, $limit, $sortField, $sortDirection, $filters);
+        $ormService = $this->entityManager->getRepository(Service::class)->getListServiceByCondition($start, $limit, $sortField, $sortDirection, $filters,$deleted);
 
         if($ormService){
             $ormPaginator = new ORMPaginator($ormService, true);
@@ -61,10 +61,10 @@ class ServiceManager
             $totalService = $ormPaginator->count();
             $services = $ormPaginator->getIterator()->getArrayCopy();
 
-            foreach ($services as $key => $service) {
-                $date_format = 'd/m/Y H:i:s';
-                $services[$key]['created_at'] = Utils::checkDateFormat($service['created_at'], $date_format);
-                $services[$key]['updated_at'] = Utils::checkDateFormat($service['updated_at'], $date_format);
+            foreach ($services as &$service) {
+                //set created_at
+                $service['created_at'] =  ($service['created_at']) ? Utils::checkDateFormat($service['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $service['updated_at'] =  ($service['updated_at']) ? Utils::checkDateFormat($service['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
             }
         }
 
@@ -76,10 +76,10 @@ class ServiceManager
         return $dataService;
     }
 
-    public function getListServiceCodeByCondition()
+    public function getListServiceCodeByCondition($deleted)
     {
         $services = [];
-        $ormService = $this->entityManager->getRepository(Service::class)->getListServiceCodeByCondition();
+        $ormService = $this->entityManager->getRepository(Service::class)->getListServiceCodeByCondition('code','asc',[],$deleted);
         if($ormService){
             $ormPaginator = new ORMPaginator($ormService, true);
             $ormPaginator->setUseOutputWalkers(false);
@@ -113,6 +113,7 @@ class ServiceManager
             $service->setCreatedBy($user->id);
             $service->setUpdatedAt(date('Y-m-d H:i:s'));
             $service->setUpdatedBy($user->id);
+            $service->setIsDeleted(0);
             $this->getReferenced($service, $data, $user, 'add');
 
             $this->entityManager->persist($service);
@@ -147,6 +148,7 @@ class ServiceManager
             $service->setDescriptionEn($data['description_en']);
             $service->setStatus($data['status']);
             $service->setCode($data['code']);
+            $service->setIsDeleted(0);
             //TODO: check timezone
             $service->setUpdatedAt(date('Y-m-d H:i:s'));
             $service->setUpdatedBy($user->id);
@@ -177,11 +179,38 @@ class ServiceManager
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
-            $service->setIsDeleted('1');
+            $service->setIsDeleted(1);
+            $service->setStatus(-1);
             $service->setUpdatedAt(date('Y-m-d H:i:s'));
             $service->setUpdatedBy($user->id);
 
             $this->entityManager->persist($service);
+            $this->entityManager->flush();
+            $this->entityManager->commit();
+
+            return $service;
+        }
+        catch (ORMException $e) {
+            $this->entityManager->rollback();
+            return FALSE;
+        }
+    }
+
+    /**
+     * Remove Service
+     *
+     * @param $service
+     * @param $user
+     * @return Service|bool
+     * @throws \Exception
+     */
+    public function removeService($service)
+    {
+        // begin transaction
+        $this->entityManager->beginTransaction();
+        try {
+            $this->entityManager->remove($service);
+            
             $this->entityManager->flush();
             $this->entityManager->commit();
 

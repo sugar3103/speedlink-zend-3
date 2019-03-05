@@ -5,17 +5,7 @@ use NetworkPort\Entity\Branch;
 use NetworkPort\Entity\Hub;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
-use Zend\Crypt\Password\Bcrypt;
-use Zend\Math\Rand;
-use Zend\View\Renderer\PhpRenderer;
-use Zend\Mime\Message as MimeMessage;
-use Zend\Mime\Part as MimePart;
-use Zend\Mail\Message;
-use Zend\Mail\Transport\Smtp as SmtpTransport;
-use Zend\Mail\Transport\SmtpOptions;
-use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-use Zend\Paginator\Paginator;
 use Zend\Authentication\Result;
 use Core\Utils\Utils;
 use Address\Entity\Country;
@@ -68,18 +58,17 @@ class BranchManager {
      * @throws \Exception
      */
     // public function add($code, $name, $hubId, $status, $createdBy, $createdAt, $countryId, $cityId, $districtId, $wardId, $includingWardIds, $description )
-    public function addBranch($data)
+    public function addBranch($data, $user)
     {
         $this->entityManager->beginTransaction();
         try {
         $branch = new Branch;
-        // var_dump($data); die;
         $branch->setCode($data['code']);
         $branch->setName($data['name']);
         $branch->setNameEn($data['name_en']);
         $branch->setHubId($data['hub_id']);
         $branch->setStatus($data['status']);
-        $branch->setCreatedBy($data['created_by']);
+        $branch->setCreatedBy($user->id);
         $branch->setCreatedAt(date('Y-m-d H:i:s'));
         $branch->setCountryId($data['country_id']);
         $branch->setCityId($data['city_id']);
@@ -87,12 +76,12 @@ class BranchManager {
         $branch->setWardId($data['ward_id']);
         $branch->setDescription($data['description']);
         $branch->setDescriptionEn($data['description_en']);
-        $this->getReferenced($branch, $data);
+        $this->getReferenced($branch, $data, $user, 'add');
         
         $this->entityManager->persist($branch);
+
         $this->entityManager->flush();        
         
-        // $last_id = $branch->getBranchId();
         $this->entityManager->commit();
         return $branch;
         }
@@ -102,7 +91,7 @@ class BranchManager {
         }
     }
 
-     public function updateBranch($branch, $data) {
+     public function updateBranch($branch, $data, $user) {
 
         $this->entityManager->beginTransaction();
         try {
@@ -111,20 +100,19 @@ class BranchManager {
             $branch->setNameEn($data['name_en']);
             $branch->setHubId($data['hub_id']);
             $branch->setStatus($data['status']);
-            $branch->setUpdatedBy($data['updated_by']);
-            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
-            $branch->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+            $branch->setUpdatedBy($user->id);
+            $currentDate = date('Y-m-d H:i:s');
+            $branch->setUpdatedAt($currentDate);
             $branch->setCountryId($data['country_id']);
             $branch->setCityId($data['city_id']);
             $branch->setDistrictId($data['district_id']);
             $branch->setWardId($data['ward_id']);
             $branch->setDescription($data['description']);
             $branch->setDescriptionEn($data['description_en']);
-            $this->getReferenced($branch, $data);
+            $this->getReferenced($branch, $data, $user);
             
             // apply changes to database.
             $this->entityManager->flush();
-            // $last_id = $branch->getBranchId();
             $this->entityManager->commit();
            return $branch;
         }
@@ -134,7 +122,7 @@ class BranchManager {
         }
     }
 
-    private function getReferenced($branch,$data) {
+    private function getReferenced($branch,$data, $user, $mode = '') {
        
         $country = $this->entityManager->getRepository(Country::class)->find($data['country_id']);
         if ($country == null)
@@ -165,19 +153,16 @@ class BranchManager {
             throw new \Exception('Not found Hub by ID');
         $branch->setHub($hub);
 
-        if($data['created_by']) {
-        $user_create = $this->entityManager->getRepository(User::class)->find($data['created_by']);
-        if ($user_create == null)
+        $user_data = $this->entityManager->getRepository(User::class)->find($user->id);
+        if ($user_data == null) {
             throw new \Exception('Not found User by ID');
-        $branch->setUserCreate($user_create);
         }
 
-        if($data['updated_by']){
-        $user_update = $this->entityManager->getRepository(User::class)->find($data['updated_by']);
-        if ($user_update == null)
-            throw new \Exception('Not found User by ID');
-        $branch->setUserUpdate($user_update);
+        if ($mode == 'add') {
+            $branch->setUserCreate($user_data);
         }
+        $branch->setUserUpdate($user_data);
+
     }
 
     /**
@@ -214,18 +199,12 @@ class BranchManager {
 
             //get user list
             $branches = $ormPaginator->getIterator()->getArrayCopy();
-            $countRow = 1;
 
              foreach ($branches as &$branche) {
-                //set status
-             //   $branche['status'] = Branch::getIsActiveList($branche['status']);
                 //set created_at
-                $branche['created_at'] =  ($branche['created_at']) ?Utils::checkDateFormat($branche['created_at'],'d/m/Y') : '';
-                $branche['updated_at'] =  ($branche['updated_at']) ? Utils::checkDateFormat($branche['updated_at'],'d/m/Y H:i:s') : '';
-                $countRow++;
+                $branche['created_at'] =  ($branche['created_at']) ?Utils::checkDateFormat($branche['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $branche['updated_at'] =  ($branche['updated_at']) ? Utils::checkDateFormat($branche['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
             }
-
-            // $totalBranch = $paginator->getTotalItemCount();
         }
 
         //set data user
@@ -240,8 +219,8 @@ class BranchManager {
 
         $this->entityManager->beginTransaction();
         try {
-            
             $this->entityManager->remove($branch);
+
             $this->entityManager->flush();
 
             $this->entityManager->commit();

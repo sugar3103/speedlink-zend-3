@@ -4,17 +4,7 @@ namespace NetworkPort\Service;
 use NetworkPort\Entity\Hub;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
-use Zend\Crypt\Password\Bcrypt;
-use Zend\Math\Rand;
-use Zend\View\Renderer\PhpRenderer;
-use Zend\Mime\Message as MimeMessage;
-use Zend\Mime\Part as MimePart;
-use Zend\Mail\Message;
-use Zend\Mail\Transport\Smtp as SmtpTransport;
-use Zend\Mail\Transport\SmtpOptions;
-use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-use Zend\Paginator\Paginator;
 use Zend\Authentication\Result;
 use Core\Utils\Utils;
 use Address\Entity\Country;
@@ -76,20 +66,18 @@ class HubManager {
         $hub->setName($data['name']);
         $hub->setNameEn($data['name_en']);
         $hub->setStatus($data['status']);
-        $hub->setCreatedBy($data['created_by']);
-        $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
-        $hub->setCreatedAt($addTime->format('Y-m-d H:i:s'));
-        // $hub->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+        $hub->setCreatedBy($user->id);
+        $currentDate = date('Y-m-d H:i:s');
+        $hub->setCreatedAt($currentDate);
         $hub->setDescription($data['description']);
         $hub->setDescriptionEn($data['description_en']);
-
-        $this->getReferenced($hub, $data);
+        $this->getReferenced($hub, $data, $user, 'add');
 
         $this->entityManager->persist($hub);
-        $this->entityManager->flush();
-        // $last_id = $hub->getHubId();
-        $this->entityManager->commit();
 
+        $this->entityManager->flush();
+        
+        $this->entityManager->commit();
         return $hub;
         }
         catch (ORMException $e) {
@@ -98,7 +86,7 @@ class HubManager {
         }
     }
 
-     public function updateHub($hub, $data) {
+     public function updateHub($hub, $data, $user) {
 
         $this->entityManager->beginTransaction();
         try {
@@ -108,15 +96,15 @@ class HubManager {
             $hub->setName($data['name']);
             $hub->setNameEn($data['name_en']);
             $hub->setStatus($data['status']);
-            $hub->setUpdatedBy($data['updated_by']);
-            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
-            $hub->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+            $hub->setUpdatedBy($user->id);
+            $currentDate = date('Y-m-d H:i:s');
+            $hub->setUpdatedAt($currentDate);
             $hub->setDescription($data['description']);
             $hub->setDescriptionEn($data['description_en']);
-            $this->getReferenced($hub, $data);
-            // apply changes to database.
+            $this->getReferenced($hub, $data, $user);
+            
             $this->entityManager->flush();
-            // $last_id = $hub->getHubId();
+            
             $this->entityManager->commit();
             return $hub;
         }
@@ -126,7 +114,7 @@ class HubManager {
         }
     }
 
-    private function getReferenced($hub,$data) {
+    private function getReferenced($hub,$data, $user, $mode = '') {
 
       $country = $this->entityManager->getRepository(Country::class)->find($data['country_id']);
       if ($country == null)
@@ -138,19 +126,16 @@ class HubManager {
           throw new \Exception('Not found City by ID');
       $hub->setCity($city);
 
-      if($data['created_by']) {
-      $user_create = $this->entityManager->getRepository(User::class)->find($data['created_by']);
-      if ($user_create == null)
-          throw new \Exception('Not found User by ID');
-      $hub->setUserCreate($user_create);
-      }
+      $user_data = $this->entityManager->getRepository(User::class)->find($user->id);
+        if ($user_data == null) {
+            throw new \Exception('Not found User by ID');
+        }
 
-      if($data['updated_by']){
-      $user_update = $this->entityManager->getRepository(User::class)->find($data['updated_by']);
-      if ($user_update == null)
-          throw new \Exception('Not found User by ID');
-      $hub->setUserUpdate($user_update);
-      }
+        if ($mode == 'add') {
+            $hub->setUserCreate($user_data);
+        }
+        $hub->setUserUpdate($user_data);
+
     }
 
     /**
@@ -175,7 +160,6 @@ class HubManager {
         $hubs     = [];
         $totalHub = 0;
 
-        //get orm branch
         $ormHub = $this->entityManager->getRepository(Hub::class)
             ->getListHubByCondition($start, $limit, $sortField, $sortDirection, $filters);
 
@@ -184,17 +168,12 @@ class HubManager {
             $ormPaginator->setUseOutputWalkers(false);
             $totalHub = $ormPaginator->count();
 
-            //get hub list
             $hubs = $ormPaginator->getIterator()->getArrayCopy();
-            $countRow = 1;
 
             foreach ($hubs as &$hub) {
-                //set status
-                // $hub['status'] = Hub::getIsActiveList($hub['status']);
                 //set created_at
-                $hub['created_at'] =  ($hub['created_at']) ? Utils::checkDateFormat($hub['created_at'],'d/m/Y') : '';
-                $hub['updated_at'] =  ($hub['updated_at']) ? Utils::checkDateFormat($hub['updated_at'],'d/m/Y H:i:s') : '';
-                $countRow++;
+                $hub['created_at'] =  ($hub['created_at']) ? Utils::checkDateFormat($hub['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $hub['updated_at'] =  ($hub['updated_at']) ? Utils::checkDateFormat($hub['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
             }
         }
 

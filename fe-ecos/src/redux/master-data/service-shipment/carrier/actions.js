@@ -14,12 +14,13 @@ import {
   CARRIER_DELETE_ITEM_ERROR,
   CARRIER_CODE_GET_LIST,
   CARRIER_CODE_GET_LIST_SUCCESS,
-  CARRIER_CODE_GET_LIST_ERROR
+  CARRIER_CODE_GET_LIST_ERROR,
+  CARRIER_CHANGE_TYPE_MODAL
 } from '../../../../constants/actionTypes';
 
-export const toggleCarrierModal = (carrier = null) => ({
+export const toggleCarrierModal = (type, data) => ({
   type: CARRIER_TOGGLE_MODAL,
-  payload: carrier
+  payload: { type, data}
 });
 
 export const getCarrierList = (params) => ({
@@ -93,3 +94,8 @@ export const deleteCarrierItemError = (error) => ({
   type: CARRIER_DELETE_ITEM_ERROR,
   payload: error
 });
+
+export const changeTypeCarrierModal = (type) => ({
+  type: CARRIER_CHANGE_TYPE_MODAL,
+  payload: type
+})

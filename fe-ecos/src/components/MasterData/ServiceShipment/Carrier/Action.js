@@ -3,16 +3,25 @@ import { injectIntl } from 'react-intl';
 import { Modal } from 'reactstrap';
 import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
-import { addCarrierItem, updateCarrierItem, toggleCarrierModal } from '../../../../redux/actions';
+import { addCarrierItem, updateCarrierItem, toggleCarrierModal,changeTypeCarrierModal } from '../../../../redux/actions';
 import PropTypes from 'prop-types';
+import { MODAL_EDIT, MODAL_ADD, MODAL_VIEW } from '../../../../constants/defaultValues';
 
 class Action extends Component {
   handleSubmit = values => {
-    const { messages } = this.props.intl;
-    if (values.id) {
-      this.props.updateCarrierItem(values, messages);
-    } else {
-      this.props.addCarrierItem(values, messages);
+    const { messages } = this.props.intl;    
+    switch (this.props.modalType) {
+      case MODAL_ADD:
+        this.props.addCarrierItem(values, messages);
+        break;
+      case MODAL_EDIT:
+        this.props.updateCarrierItem(values, messages);
+        break;
+      case MODAL_VIEW:
+        this.props.changeTypeCarrierModal(MODAL_EDIT);
+        break;
+      default:
+        break;
     }
   };
 
@@ -21,8 +30,22 @@ class Action extends Component {
   };
 
   render() {
-    const { modalData } = this.props;
-    const className = modalData ? 'primary' : 'success';
+    const { modalType } = this.props;
+    let className = 'success';
+    switch (modalType) {
+      case MODAL_ADD:
+        className = 'success';
+        break;
+      case MODAL_EDIT:
+        className = 'primary';
+        break;
+      case MODAL_VIEW:
+        className = 'info';
+        break;
+      default:
+        break;
+    }
+
     return (
       <Modal isOpen={this.props.modalOpen} toggle={this.toggleModal}
              className={`modal-dialog--${className} modal-dialog--header`}>
@@ -33,19 +56,20 @@ class Action extends Component {
 }
 
 Action.propTypes = {
-  modalData: PropTypes.object,
+  modalType: PropTypes.object,
   addCarrierItem: PropTypes.func.isRequired,
   updateCarrierItem: PropTypes.func.isRequired,
   toggleCarrierModal: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = ({ carrier }) => {
-  const { modalData } = carrier;
-  return { modalData };
+  const { modalType } = carrier;
+  return { modalType };
 };
 
 export default injectIntl(connect(mapStateToProps, {
   addCarrierItem,
   updateCarrierItem,
-  toggleCarrierModal
+  toggleCarrierModal,
+  changeTypeCarrierModal
 })(Action));

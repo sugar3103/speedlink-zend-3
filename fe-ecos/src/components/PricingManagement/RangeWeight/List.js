@@ -3,6 +3,7 @@ import React, { Component, Fragment} from 'react';
 import { Card, CardBody, Col, Button, Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Table from '../../../containers/Shared/table/Table';
+// import Moment from 'react-moment';
 import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
@@ -251,10 +252,10 @@ List.propTypes = {
   toggleRangeWeightModal: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({ rangeWeight, modal }) => {
+const mapStateToProps = ({ rangeWeight, authUser }) => {
   return {
     rangeWeight,
-    modal
+    authUser
   };
 };
 

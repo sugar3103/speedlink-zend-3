@@ -45,5 +45,6 @@ module.exports = {
     'file_max_size': 'Max File Size',
     'file_mime_allowed': 'Allowed File Mime Types',
     'file_ext_allowed': 'Allowed File Extensions',
-    'setting.update-success': 'Update setting success'
+    'setting.update-success': 'Update setting success',
+    'dark-blue': 'Dark Blue'
 }

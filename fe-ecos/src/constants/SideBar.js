@@ -4,55 +4,55 @@ export default {
       id: 'dashboard',
       title: 'menu.dashboard',
       route: '/app/dashboards',
-      icon: 'home'
+      icon: 'icon-dasbhoard'
     },
     {
       id: 'master-data',
       title: 'menu.master-data',
       route: '/app/master-data',
-      icon: 'database',
+      icon: 'icon-navigation',
       childrens: [
         {
           id: 'status',
           title: 'menu.status',
           route: '/app/master-data/status',
-          icon: 'dice',
+          icon: 'lnr lnr-dice',
         },
         {
           id: 'address',
           title: 'menu.address',
           route: '/app/master-data/address',
-          icon: 'store',
+          icon: 'icon-geo-location',
           childrens: [
             {
               id: 'address_code',
               title: 'menu.address_code',
               route: '/app/master-data/address/code',
-              icon: 'license'
+              icon: 'lnr lnr-license'
             },
             {
               id: 'country',
               title: 'menu.address_country',
               route: '/app/master-data/address/country',
-              icon: 'map'
+              icon: 'lnr lnr-map'
             },
             {
               id: 'country',
               title: 'menu.address_city',
               route: '/app/master-data/address/city',
-              icon: 'apartment'
+              icon: 'lnr lnr-apartment'
             },
             {
               id: 'district',
               title: 'menu.address_district',
               route: '/app/master-data/address/district',
-              icon: 'location'
+              icon: 'lnr lnr-location'
             },
             {
               id: 'ward',
               title: 'menu.address_ward',
               route: '/app/master-data/address/ward',
-              icon: 'construction'
+              icon: 'lnr lnr-construction'
             }
           ]
         },
@@ -60,25 +60,25 @@ export default {
           id: 'customer_service',
           title: 'menu.customer_service',
           route: '/app/master-data/service-shipment',
-          icon: 'store',
+          icon: 'icon-modal',
           childrens: [
             {
               id: 'carrier',
               title: 'menu.cs_carrier',
               route: '/app/master-data/service-shipment/carrier',
-              icon: 'license'
+              icon: 'lnr lnr-license'
             },
             {
               id: 'service',
               title: 'menu.cs_service',
               route: '/app/master-data/service-shipment/service',
-              icon: 'map'
+              icon: 'lnr lnr-map'
             },
             {
               id: 'shipment_type',
               title: 'menu.cs_shipment_type',
               route: '/app/master-data/service-shipment/shipment-type',
-              icon: 'apartment'
+              icon: 'lnr lnr-apartment'
             }
           ]
           },
@@ -86,19 +86,19 @@ export default {
           id: 'networkport',
           title: 'menu.networkport',
           route: '/app/master-data/networkport',
-          icon: 'store',
+          icon: 'icon-product-grid',
           childrens: [
             {
               id: 'hub',
               title: 'menu.hub',
               route: '/app/master-data/networkport/hub',
-              icon: 'map'
+              icon: 'lnr lnr-map'
             },
             {
               id: 'branch',
               title: 'menu.branch',
               route: '/app/master-data/networkport/branch',
-              icon: 'license'
+              icon: 'lnr lnr-license'
             }
           ]
         },
@@ -108,25 +108,25 @@ export default {
       id: 'pricing_management',
       title: 'menu.pricing_management',
       route: '/app/pricing-management',
-      icon: 'dice',
+      icon: 'icon-pricing-table',
       childrens: [
         {
           id: 'pricing',
           title: 'menu.pricing',
           route: '/app/pricing-management/pricing',
-          icon: 'map'
+          icon: 'lnr lnr-map'
         },
         {
           id: 'range_weight',
           title: 'menu.range_weight',
           route: '/app/pricing-management/range-weight',
-          icon: 'license'
+          icon: 'lnr lnr-license'
         },
         {
           id: 'zone_code',
           title: 'menu.zone_code',
           route: '/app/pricing-management/zone-code',
-          icon: 'map'
+          icon: 'lnr lnr-map'
         }
       ]
     },
@@ -134,37 +134,37 @@ export default {
       id: 'system',
       title: 'menu.system',
       route: '/app/system',
-      icon: 'cog',
+      icon: 'lnr lnr-cog',
       childrens: [
         {
           id: 'setting',
           title: 'menu.setting',
           route: '/app/system/setting',
-          icon: 'layers'
+          icon: 'lnr lnr-layers'
         },
         {
           id: 'users',
           title: 'menu.user',
           route: '/app/system/user',
-          icon: 'users',
+          icon: 'lnr lnr-users',
           childrens: [            
             {
               id: 'user',
               title: 'menu.user.list',
               route: '/app/system/user/list',
-              icon: 'users'
+              icon: 'lnr lnr-users'
             },
             {
               id: 'role',
               title: 'menu.user.role',
               route: '/app/system/user/role',
-              icon: 'link'
+              icon: 'lnr lnr-link'
             },
             {
               id: 'permission',
               title: 'menu.user.permission',
               route: '/app/system/user/permission',
-              icon: 'lock'
+              icon: 'lnr lnr-lock'
             }
           ]
         }        

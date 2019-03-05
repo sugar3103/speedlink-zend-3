@@ -3,7 +3,8 @@ import {
   CHANGE_MOBILE_SIDEBAR_VISIBILITY,
   CHANGE_THEME_TO_DARK,
   CHANGE_THEME_TO_LIGHT,
-  CHANGE_LOCALE
+  CHANGE_LOCALE,
+  CHANGE_THEME_TO_DARK_BLUE
 } from '../../constants/actionTypes';
 
 export function changeSidebarVisibility() {
@@ -30,6 +31,13 @@ export function changeThemeToLight() {
   return {
     type: CHANGE_THEME_TO_LIGHT,
   };
+}
+export function changeThemeToDarkBlue() {
+  localStorage.setItem('currentTheme','theme-dark-blue');
+
+  return{
+    type: CHANGE_THEME_TO_DARK_BLUE
+  }
 }
 
 export function changeLocale(locale) {

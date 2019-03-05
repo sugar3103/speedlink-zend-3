@@ -20,3 +20,7 @@ export * from './system/users/role/actions';
 export * from './system/users/user/actions';
 export * from './system/setting/action';
 export * from './system/action';
+
+export const removeState = type => ({
+   type: type
+});
