@@ -32,9 +32,6 @@ class ActionForm extends Component {
         field: ['id', 'name', 'name_en'],
         offset: {
           limit: 0
-        },
-        query: {
-          id: data.country_id
         }
       }
       this.props.getCountryHubList(paramsCountry, messages, 'editview');
