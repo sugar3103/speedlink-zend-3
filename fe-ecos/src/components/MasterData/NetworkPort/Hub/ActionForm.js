@@ -10,7 +10,7 @@ import renderRadioButtonField from '../../../../containers/Shared/form/RadioButt
 import validate from './validateActionForm';
 import PropTypes from 'prop-types';
 import { MODAL_ADD, MODAL_VIEW, MODAL_EDIT } from '../../../../constants/defaultValues';
-
+import Moment from 'react-moment';
 
 class ActionForm extends Component {
 
@@ -94,7 +94,7 @@ class ActionForm extends Component {
   }
 
   render() {
-    const { messages } = this.props.intl;
+    const { messages, locale } = this.props.intl;
     const { handleSubmit, modalType, modalData, countries, cities } = this.props;
     let className = 'success';
     let title = messages['hub.add-new'];
@@ -258,15 +258,20 @@ class ActionForm extends Component {
                   <hr />
                   <Row>
                     <Col md={6}>
-                      <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.user_create_name}</span>
+                      <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name_created ? modalData.full_name_created : modalData.created_by}</span>
                       <br />
-                      <span><i className="label-info-data">{messages['created-at']}:</i>{modalData.created_at}</span>
+                      <span><i className="label-info-data">{messages['created-at']}:</i>
+                      <Moment fromNow locale={locale}>{new Date(modalData.created_at)}</Moment>
+                      </span>
                     </Col>
                     {modalData.updated_at && 
                       <Col md={6}>
-                        <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.user_update_name}</span>
+                        <span><i className="label-info-data">{messages['updated-by']}:</i>
+                        {(modalData.full_name_updated !== " ") ? modalData.full_name_updated : modalData.updated_by}</span>
                         <br />
-                        <span><i className="label-info-data">{messages['updated-at']}:</i>{modalData.updated_at}</span>
+                        <span><i className="label-info-data">{messages['updated-at']}:</i>
+                        <Moment fromNow locale={locale}>{new Date(modalData.updated_at)}</Moment>
+                        </span>
                       </Col>
                     }
                   </Row>

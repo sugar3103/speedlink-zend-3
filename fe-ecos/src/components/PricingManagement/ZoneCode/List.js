@@ -2,7 +2,7 @@
 import React, { Component, Fragment} from 'react';
 import { Card, CardBody, Col, Button, Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
-
+import Moment from 'react-moment';
 import Table from '../../../containers/Shared/table/Table';
 import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
@@ -13,7 +13,7 @@ import { getZoneCodeList, toggleZoneCodeModal, deleteZoneCodeItem } from "../../
 import { confirmAlert } from 'react-confirm-alert';
 import ConfirmPicker from '../../../containers/Shared/picker/ConfirmPicker';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { MODAL_VIEW } from '../../../constants/defaultValues';
+import { MODAL_EDIT } from '../../../constants/defaultValues';
 
 
 const ZoneCodeFormatter = ({ value }) => (
@@ -219,7 +219,7 @@ class List extends Component {
             Cell: ({ original }) => {
               return (
                 <Fragment>
-                  <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, MODAL_VIEW , original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
+                  <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, MODAL_EDIT , original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
                   <Button color="danger" size="sm" onClick={(e) => this.onDelete(e, [original.id])}><span className="lnr lnr-trash" /></Button>
                 </Fragment>
               );
@@ -259,15 +259,14 @@ class List extends Component {
 
 List.propTypes = {
   zoneCode: PropTypes.object.isRequired,
-  modal: PropTypes.object,
   getZoneCodeList: PropTypes.func.isRequired,
   toggleZoneCodeModal: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({ zoneCode, modal }) => {
+const mapStateToProps = ({ zoneCode, authUser }) => {
   return {
     zoneCode,
-    modal
+    authUser
   };
 };
 

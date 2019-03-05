@@ -201,23 +201,23 @@ function* updateRangeWeightItem({ payload }) {
 
 //delete rangeweight
 
-function deleteRangeWeightApi(id) {
+function deleteRangeWeightApi(ids) {
   return axios.request({
     method: 'post',
     url: `${apiUrl}range-weight/delete`,
     headers: authHeader(),
-    data: {  id: id }
+    data: {  ids: ids }
   });
 }
 
-const deleteRangeWeightItemRequest = async id => {
-  return await deleteRangeWeightApi(id).then(res => res.data).catch(err => err)
+const deleteRangeWeightItemRequest = async ids => {
+  return await deleteRangeWeightApi(ids).then(res => res.data).catch(err => err)
 };
 
 function* deleteRangeWeightItem({ payload }) {
-  const { id, messages } = payload;
+  const { ids, messages } = payload;
   try {
-    const response = yield call(deleteRangeWeightItemRequest, id);
+    const response = yield call(deleteRangeWeightItemRequest, ids);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(deleteRangeWeightItemSuccess());

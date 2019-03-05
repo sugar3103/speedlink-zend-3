@@ -3,6 +3,7 @@ import React, { Component, Fragment } from 'react';
 import { Card, CardBody, Col, Button, Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Table from '../../../../containers/Shared/table/Table';
+import Moment from 'react-moment';
 import { SELECTED_PAGE_SIZE } from '../../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
@@ -51,6 +52,7 @@ class List extends Component {
           <ConfirmPicker 
             onClose={onClose}
             onDelete={() => this.props.deleteBranchItem(ids, messages)}
+            messages ={messages}
           />
         )
       }
@@ -181,6 +183,8 @@ class List extends Component {
         {
           Header: messages['created-at'],
           accessor: "created_at",
+          className: "text-center", 
+          Cell: ({ original }) => { return (<Moment fromNow format="D/MM/YYYY" locale={locale}>{new Date(original.created_at)}</Moment>) },
           sortable: false,
         },
         {
@@ -234,10 +238,10 @@ List.propTypes = {
   toggleBranchModal: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ branch, modal }) => {
+const mapStateToProps = ({ branch, authUser }) => {
   return {
     branch,
-    modal
+    authUser
   };
 };
 

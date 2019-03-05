@@ -229,23 +229,23 @@ function* updateZoneCodeItem({ payload }) {
 
 //delete zonecode
 
-function deleteZoneCodeApi(id) {
+function deleteZoneCodeApi(ids) {
   return axios.request({
     method: 'post',
     url: `${apiUrl}zone-code/delete`,
     headers: authHeader(),
-    data: {  id: id }
+    data: {  ids: ids }
   });
 }
 
-const deleteZoneCodeItemRequest = async id => {
-  return await deleteZoneCodeApi(id).then(res => res.data).catch(err => err)
+const deleteZoneCodeItemRequest = async ids => {
+  return await deleteZoneCodeApi(ids).then(res => res.data).catch(err => err)
 };
 
 function* deleteZoneCodeItem({ payload }) {
-  const { id, messages } = payload;
+  const { ids, messages } = payload;
   try {
-    const response = yield call(deleteZoneCodeItemRequest, id);
+    const response = yield call(deleteZoneCodeItemRequest, ids);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(deleteZoneCodeItemSuccess());

@@ -192,23 +192,23 @@ function* updateBranchItem({ payload }) {
 
 //delete branch
 
-function deleteBranchApi(id) {
+function deleteBranchApi(ids) {
   return axios.request({
     method: 'post',
     url: `${apiUrl}branch/delete`,
     headers: authHeader(),
-    data: {  id: id }
+    data: {  ids: ids }
   });
 }
 
-const deleteBranchItemRequest = async id => {
-  return await deleteBranchApi(id).then(res => res.data).catch(err => err)
+const deleteBranchItemRequest = async ids => {
+  return await deleteBranchApi(ids).then(res => res.data).catch(err => err)
 };
 
 function* deleteBranchItem({ payload }) {
-  const { id, messages } = payload;
+  const { ids, messages } = payload;
   try {
-    const response = yield call(deleteBranchItemRequest, id);
+    const response = yield call(deleteBranchItemRequest, ids);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(deleteBranchItemSuccess());
