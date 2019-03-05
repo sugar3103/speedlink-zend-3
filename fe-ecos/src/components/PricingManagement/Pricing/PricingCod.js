@@ -73,29 +73,50 @@ class PricingCod extends Component {
     headerTable() {
         const { messages } = this.props.intl;
         let headers = Object.keys(data.list[0]).map((item, index) => {
-            if (index > 1) {                
+            if (index > 1) {
                 return {
                     key: item,
                     name: messages['pricing.' + item],
-                    editable: false,
+                    editable: true,
                     width: 120
                 }
-                
+
             }
-        })   
-        
-        return headers.slice(2);        
+        })
+        let _headers = headers.slice(2);
+
+        _headers.unshift({
+            key: 'action',
+            name: '',
+            editable: false,
+            width: 120
+        })
+
+        return _headers;
     }
 
     rowTable() {
         let rows = Object.keys(data.list).map((item, index) => {
-            return data.list[item]
+            let row = {'action': '', ...data.list[item]};
+            return row
         })
         return rows;
     }
+
+    getCellActionDelete(column, row) {
+        const actionDelete = {
+            icon: <span className="icon-edit"></span>,
+            callback: () => {
+                alert("Option 1 clicked");
+              }
+        }
+
+       const _action = { action: actionDelete}
+       return _action[column.key];
+    }
     render() {
-        const { messages } = this.props.intl;       
-        this.headerTable() 
+        const { messages } = this.props.intl;
+        this.headerTable()
         return (
             <form className="form form_custom pricing-cod">
                 <div className="group-action">
@@ -104,9 +125,10 @@ class PricingCod extends Component {
                     <div className="clearfix"></div>
                 </div>
                 <div className="group-input">
-                <EditTable
+                    <EditTable
                         heads={this.headerTable()}
-                        rows={this.rowTable()}                        
+                        rows={this.rowTable()}
+                        getCellActions={this.getCellActionDelete}
                     />
                 </div>
             </form>

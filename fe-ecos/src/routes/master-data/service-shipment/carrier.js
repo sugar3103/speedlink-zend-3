@@ -2,10 +2,30 @@ import React, { Component } from 'react';
 import { Col, Container, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { List } from '../../../components/MasterData/ServiceShipment/Carrier';
-
+import { connect } from "react-redux";
+import { getCarrierList } from '../../../redux/actions';
+import AccessDenied from '../../../containers/Layout/accessDenied';
 class Carrier extends Component {
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      loadPage: true
+    }
+  }
+
+  componentDidMount() {
+    this.props.getCarrierList()
+  }
+  componentDidUpdate(prevProps, prevState) {
+
+    if (this.state.loadPage) {
+      this.setState({ loadPage: prevProps.loading })
+    }
+  }
   render() {
     const { messages } = this.props.intl;
+    const { errors } = this.props.carrier;
     return (
       <Container className={'panel__body'}>
         <Row>
@@ -15,11 +35,24 @@ class Carrier extends Component {
           </Col>
         </Row>
         <Row>
-          <List />
+           {!this.state.loadPage ? (
+            (errors && errors === 'ACCESS_DENIED') ? (<AccessDenied />) : (<List />)
+          ) : ''}
         </Row>
       </Container>
     )
   }
 }
+const mapStateToProps = ({ carrier }) => {  
+  return {
+    carrier
+  };
+};
 
-export default injectIntl(Carrier);
+
+export default injectIntl(connect(
+  mapStateToProps,
+  {
+    getCarrierList    
+  }
+)(Carrier));

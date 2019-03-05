@@ -69,7 +69,7 @@ function* getServiceListItems({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(getServiceListError(response.data));
+        yield put(getServiceListError(response.message));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -113,7 +113,7 @@ function* getServiceCodeListItems() {
         break;
 
       case EC_FAILURE:
-        yield put(getServiceCodeListError(response.data));
+        yield put(getServiceCodeListError(response.message));
         break;
 
       default:
@@ -158,7 +158,7 @@ function* addServiceItem({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(addServiceItemError(response.data));
+        yield put(addServiceItemError(response.message));
         yield put(validateService(response.data));
         break;
 
@@ -213,7 +213,7 @@ function* updateServiceItem({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(updateServiceItemError(response.data));
+        yield put(updateServiceItemError(response.message));
         yield put(validateService(response.data));
         break;
 
@@ -265,7 +265,7 @@ function* deleteServiceItem({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(deleteServiceItemError(response.data));
+        yield put(deleteServiceItemError(response.message));
         break;
 
       case EC_FAILURE_AUTHENCATION:

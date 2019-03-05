@@ -14,7 +14,8 @@ class EditableTable extends PureComponent {
       sortable: PropTypes.bool,
     })).isRequired,
     rows: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-    onSaveTable: PropTypes.func
+    onSaveTable: PropTypes.func,
+    getCellActions: PropTypes.func
   };
 
   constructor(props, context) {
@@ -53,6 +54,7 @@ class EditableTable extends PureComponent {
           rowsCount={this.state.rows.length}
           onGridRowsUpdated={this.handleGridRowsUpdated}
           rowHeight={44}
+          getCellActions={this.props.getCellActions}
         />
         {this.state.enableButton && 
           <Button 

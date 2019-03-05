@@ -14,12 +14,13 @@ import {
   SERVICE_DELETE_ITEM_ERROR,
   SERVICE_CODE_GET_LIST,
   SERVICE_CODE_GET_LIST_SUCCESS,
-  SERVICE_CODE_GET_LIST_ERROR
+  SERVICE_CODE_GET_LIST_ERROR,
+  SERVICE_CHANGE_TYPE_MODAL
 } from '../../../../constants/actionTypes';
 
-export const toggleServiceModal = (service = null) => ({
+export const toggleServiceModal = (type, data) => ({
   type: SERVICE_TOGGLE_MODAL,
-  payload: service
+  payload: { type, data}
 });
 
 export const getServiceList = (params) => ({
@@ -93,3 +94,8 @@ export const deleteServiceItemError = (error) => ({
   type: SERVICE_DELETE_ITEM_ERROR,
   payload: error
 });
+
+export const changeTypeServiceModal = (type) => ({
+  type: SERVICE_CHANGE_TYPE_MODAL,
+  payload: type
+})
