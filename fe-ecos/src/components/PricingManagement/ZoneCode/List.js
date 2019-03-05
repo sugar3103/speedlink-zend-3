@@ -2,7 +2,7 @@
 import React, { Component, Fragment} from 'react';
 import { Card, CardBody, Col, Button, Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
-import Moment from 'react-moment';
+// import Moment from 'react-moment';
 import Table from '../../../containers/Shared/table/Table';
 import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';

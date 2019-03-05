@@ -45,7 +45,7 @@ import {
     let types = null;
     switch (action.type) {
       case RANGE_WEIGHT_TOGGLE_MODAL:
-      if(action.payload.type === 'add')
+      if(action.payload.type === 'add' || state.modalOpen)
         return {
           ...state,
           modalOpen: !state.modalOpen,

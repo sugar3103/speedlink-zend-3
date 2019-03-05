@@ -236,6 +236,9 @@ class ActionForm extends Component {
 
   onChangeCategory = value => {
     const { messages } = this.props.intl;
+    this.props.change('carrier_id',null);
+    this.props.change('service_id',null);
+    this.props.change('shipment_type_id',null);
     this.setState({
       category_code: value
     });
@@ -254,6 +257,8 @@ class ActionForm extends Component {
 
   onChangeCarrier = value => {
     const { messages } = this.props.intl;
+    this.props.change('service_id',null);
+    this.props.change('shipment_type_id',null);
     this.setState({
       carrier_id: value
     });
@@ -269,6 +274,7 @@ class ActionForm extends Component {
   }
 
   onChangeService = value => {
+    this.props.change('shipment_type_id',null);
     const { messages } = this.props.intl;
     let params = {
       type : "shipment_type_id",

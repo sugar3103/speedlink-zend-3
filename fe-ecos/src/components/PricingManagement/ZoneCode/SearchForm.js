@@ -146,6 +146,9 @@ class SearchForm extends Component {
 
   onChangeCategory = value => {
     const { messages } = this.props.intl;
+    this.props.change('carrier_id',null);
+    this.props.change('service_id',null);
+    this.props.change('shipment_type_id',null);
     this.setState({
       category_code: value
     });
@@ -163,6 +166,8 @@ class SearchForm extends Component {
   }
 
   onChangeCarrier = value => {
+    this.props.change('service_id',null);
+    this.props.change('shipment_type_id',null);
     const { messages } = this.props.intl;
     this.setState({
       carrier_id: value
@@ -183,6 +188,7 @@ class SearchForm extends Component {
   }
 
   onChangeService = value => {
+    this.props.change('shipment_type_id',null);
     const { messages } = this.props.intl;
     let params = {
       type : "shipment_type_id",
@@ -367,7 +373,7 @@ class SearchForm extends Component {
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['pri_man.shipment-type']}</span>
             <div className="form__form-group-field">
-              <Field name="shipmenttype" component={renderSelectField} type="text"
+              <Field name="shipment_type_id" component={renderSelectField} type="text"
                     options={ShipmentCodeZoneCodeByCondition && this.showOptionShipmenttype(ShipmentCodeZoneCodeByCondition)}
                     />
             </div>
