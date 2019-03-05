@@ -145,9 +145,9 @@ class ActionForm extends Component {
         <ButtonToolbar className="modal__footer">
           {this.state.modalType === MODAL_VIEW &&
             <Button outline onClick={this.toggleModal}>{messages['cancel']}</Button>
-        }
+          }
           <Can user={this.props.authUser.user} permission="status" action="edit" own={modalData && modalData.created_by}>
-            <Button color={className} type="submit">{messages['save']}</Button>
+            <Button color={className} type="submit">{modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
           </Can>
         </ButtonToolbar>
       </form>
