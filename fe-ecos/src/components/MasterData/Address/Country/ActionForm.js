@@ -41,7 +41,7 @@ class ActionForm extends Component {
   }
 
   changeTypeModal = () => {
-    this.props.changeTypeStatusModal(MODAL_VIEW);
+    this.props.changeTypeCountryModal(MODAL_VIEW);
   }
 
   render() {
@@ -165,29 +165,31 @@ class ActionForm extends Component {
 
             </Col>
           </Row>
-          {modalData &&
-            <Fragment>
-              <hr />
-              <Row>
-                <Col md={6}>
-                  <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name_created !== " " ? modalData.full_name_created : modalData.created_by}</span>
-                  <br />
-                  <span><i className="label-info-data">{messages['created-at']}:</i>
-                    <Moment fromNow locale={locale}>{new Date(modalData.created_at)}</Moment>
-                  </span>
-                </Col>
-                {modalData.updated_at &&
+          <div className="footer">
+            {modalData &&
+              <Fragment>
+                <hr />
+                <Row>
                   <Col md={6}>
-                    <span><i className="label-info-data">{messages['updated-by']}:</i>{(modalData.full_name_updated !== " ") ? modalData.full_name_updated : modalData.updated_by}</span>
+                    <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name_created !== " " ? modalData.full_name_created : modalData.created_by}</span>
                     <br />
-                    <span><i className="label-info-data">{messages['updated-at']}:</i>
-                      <Moment fromNow locale={locale}>{new Date(modalData.updated_at)}</Moment>
+                    <span><i className="label-info-data">{messages['created-at']}:</i>
+                      <Moment fromNow locale={locale}>{new Date(modalData.created_at)}</Moment>
                     </span>
                   </Col>
-                }
-              </Row>
-            </Fragment>
-          }
+                  {modalData.updated_at &&
+                    <Col md={6}>
+                      <span><i className="label-info-data">{messages['updated-by']}:</i>{(modalData.full_name_updated !== " ") ? modalData.full_name_updated : modalData.updated_by}</span>
+                      <br />
+                      <span><i className="label-info-data">{messages['updated-at']}:</i>
+                        <Moment fromNow locale={locale}>{new Date(modalData.updated_at)}</Moment>
+                      </span>
+                    </Col>
+                  }
+                </Row>
+              </Fragment>
+            }
+          </div>
         </div>
         <ButtonToolbar className="modal__footer">
           {this.state.modalType === MODAL_VIEW &&

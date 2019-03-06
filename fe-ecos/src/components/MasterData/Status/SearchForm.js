@@ -11,7 +11,7 @@ class SearchForm extends Component {
     const { messages,locale } = this.props.intl;    
     return (
       <form className="form" onSubmit={handleSubmit}>
-        <div className="form__half">
+        <div className="form__third">
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['name']}</span>
             <div className="form__form-group-field">
@@ -25,7 +25,7 @@ class SearchForm extends Component {
             </div>
           </div>
         </div>
-        <div className="form__half">
+        <div className="form__third">
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['status']}</span>
             <div className="form__form-group-field">

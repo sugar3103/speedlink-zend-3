@@ -28,7 +28,6 @@ import createNotification from '../../../util/notifications';
 import { startSubmit, stopSubmit } from 'redux-form';
 
 //validate
-
 function validateStatus(errors) {
   if (errors.name && errors.name.statusExists) {
     return stopSubmit('status_action_form', {

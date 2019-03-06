@@ -3,7 +3,7 @@ import { Col } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { getRoleList } from '../../../../redux/actions';
-const Ava = `${process.env.PUBLIC_URL}/img/ava.png`;
+// const Ava = `${process.env.PUBLIC_URL}/img/ava.png`;
 class Main extends PureComponent {
 
   componentDidMount() {
@@ -29,7 +29,8 @@ class Main extends PureComponent {
       <Col md={12} lg={12} xl={12}>
         <div className="profile__information">
           <div className="profile__avatar">
-            <img src={Ava} alt="avatar" />
+            {/* <img src={Ava} alt="avatar" /> */}
+            <i className="icon-avatar" />
           </div>
           <div className="profile__data">
             <p className="profile__name">{(user.first_name || user.last_name) ? user.first_name +' '+ user.last_name : user.username }</p>

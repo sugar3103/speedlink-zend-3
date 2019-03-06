@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { getUserList } from '../../../redux/actions';
 import { List } from '../../../components/System/User';
 import AccessDenied from '../../../containers/Layout/accessDenied';
+import PageTitle from '../../../containers/Shared/PageTitle';
 class Lists extends Component {
   constructor(props) {
     super(props);
@@ -28,6 +29,7 @@ class Lists extends Component {
     const { errors } = this.props.user;
     return (
       <Container>
+        <PageTitle title={messages['user.list']} />
         <Row>
           <Col md={12}>
             <h3 className="page-title">{messages['user.list']}</h3>

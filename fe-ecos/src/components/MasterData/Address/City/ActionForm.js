@@ -1,8 +1,8 @@
-import React, { Component,Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Button, ButtonToolbar, Row, Col } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { toggleCityModal, getCountryList,changeTypeCityModal } from '../../../../redux/actions';
+import { toggleCityModal, getCountryList, changeTypeCityModal } from '../../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../../containers/Shared/form/CustomField';
 import Can from '../../../../containers/Shared/Can';
@@ -84,8 +84,8 @@ class ActionForm extends Component {
   }
 
   render() {
-    const { messages,locale } = this.props.intl;
-    const { handleSubmit, modalType,modalData, countries } = this.props;
+    const { messages, locale } = this.props.intl;
+    const { handleSubmit, modalType, modalData, countries } = this.props;
     let className = 'success';
     let title = messages['city.add-new'];
     const disabled = modalType === MODAL_VIEW ? true : false;
@@ -218,29 +218,31 @@ class ActionForm extends Component {
               </div>
             </Col>
           </Row>
-          {modalData &&
-            <Fragment>
-              <hr />
-              <Row>
-                <Col md={6}>
-                  <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name_created ? modalData.full_name_created : modalData.created_by}</span>
-                  <br />
-                  <span><i className="label-info-data">{messages['created-at']}:</i>
-                    <Moment fromNow locale={locale}>{new Date(modalData.created_at)}</Moment>
-                  </span>
-                </Col>
-                {modalData.updated_at &&
+          <div className="footer">
+            {modalData &&
+              <Fragment>
+                <hr />
+                <Row>
                   <Col md={6}>
-                    <span><i className="label-info-data">{messages['updated-by']}:</i>{(modalData.full_name_updated !== " ") ? modalData.full_name_updated : modalData.updated_by}</span>
+                    <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name_created ? modalData.full_name_created : modalData.created_by}</span>
                     <br />
-                    <span><i className="label-info-data">{messages['updated-at']}:</i>
-                      <Moment fromNow locale={locale}>{new Date(modalData.updated_at)}</Moment>
+                    <span><i className="label-info-data">{messages['created-at']}:</i>
+                      <Moment fromNow locale={locale}>{new Date(modalData.created_at)}</Moment>
                     </span>
                   </Col>
-                }
-              </Row>
-            </Fragment>
-          }
+                  {modalData.updated_at &&
+                    <Col md={6}>
+                      <span><i className="label-info-data">{messages['updated-by']}:</i>{(modalData.full_name_updated !== " ") ? modalData.full_name_updated : modalData.updated_by}</span>
+                      <br />
+                      <span><i className="label-info-data">{messages['updated-at']}:</i>
+                        <Moment fromNow locale={locale}>{new Date(modalData.updated_at)}</Moment>
+                      </span>
+                    </Col>
+                  }
+                </Row>
+              </Fragment>
+            }
+          </div>
         </div>
         <ButtonToolbar className="modal__footer">
           {this.state.modalType === MODAL_VIEW &&
@@ -264,8 +266,8 @@ ActionForm.propTypes = {
   getCountryList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ address,authUser }) => {
-  const { modalData,modalType } = address.city;
+const mapStateToProps = ({ address, authUser }) => {
+  const { modalData, modalType } = address.city;
   const countries = address.country.items;
   return {
     modalData,

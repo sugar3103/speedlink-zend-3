@@ -54,7 +54,7 @@ legend.scheduler-border {
     margin-left: auto;
     .btn {
         margin-bottom: 10px;
-        margin-top: 10px;
+        margin-top: 25px;
     }
 }
 
@@ -275,7 +275,23 @@ form {
         &.icon-avatar {
             border: none;            
             font-size: 30px;
+            line-height: 1;
         }
+    }
+
+    .topbar__title {
+        display: flex;
+        left: 240px;
+        position: absolute;
+        font-weight: 300;
+        text-transform: capitalize;
+        font-size: 18px;
+        line-height: 2.5;
+        color: #fff;
+    }
+
+    .page-title {
+        display: none;
     }
 }
 
@@ -398,3 +414,17 @@ form {
 }
 
 /* END PRICING PAGE */
+
+.modal-content {
+    .form__form-group {
+        margin-bottom: 10px;
+    }
+    .footer {
+        hr {
+            margin: 2px
+        }
+        span {
+            font-size: 13px;
+        }
+    }
+}

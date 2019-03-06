@@ -237,6 +237,7 @@ class ActionForm extends Component {
               </div>
             </Col>
           </Row>
+          <div className="footer">
           {modalData &&
             <Fragment>
               <hr />
@@ -260,6 +261,7 @@ class ActionForm extends Component {
               </Row>
             </Fragment>
           }
+          </div>
         </div>
         <ButtonToolbar className="modal__footer">
           {this.state.modalType === MODAL_VIEW &&

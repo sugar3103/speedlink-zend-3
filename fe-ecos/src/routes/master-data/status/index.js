@@ -5,7 +5,7 @@ import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import { getStatusList } from '../../../redux/actions';
 import AccessDenied from '../../../containers/Layout/accessDenied';
-
+import PageTitle from '../../../containers/Shared/PageTitle';
 class Status extends Component {
   constructor(props) {
     super(props);
@@ -30,6 +30,7 @@ class Status extends Component {
     const { errors } = this.props.status;
     return (
       <Container>
+        <PageTitle title={messages['status.list-title']} />
         <Row>
           <Col md={12}>
             <h3 className="page-title">{messages['status.list-title']}

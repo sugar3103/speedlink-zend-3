@@ -5,6 +5,7 @@ import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import { getCityList } from '../../../redux/actions';
 import AccessDenied from '../../../containers/Layout/accessDenied';
+import PageTitle from '../../../containers/Shared/PageTitle';
 
 class City extends Component {
   constructor(props) {
@@ -30,6 +31,7 @@ class City extends Component {
     const { errors } = this.props.city;
     return (
       <Container>
+        <PageTitle title={messages['address.cites']} />
         <Row>
           <Col md={12}>
             <h3 className="page-title">{messages['address.cites']}

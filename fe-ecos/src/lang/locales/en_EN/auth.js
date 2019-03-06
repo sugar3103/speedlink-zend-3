@@ -32,6 +32,7 @@ module.exports = {
   'user.password': 'Password',
   'user.confirm_password': 'Confirm password',
   'user.update-success': 'You have modified user!',
+  'user.you': 'It\'s You',
   //validate
   'user.validate-username-empty': 'Username shouldn’t be empty',
   'user.validate-username-minlength': 'Username must be 5 characters or more',

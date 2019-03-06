@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { List } from '../../../components/System/User/Permission';
 import { getPermissionList } from '../../../redux/actions';
 import AccessDenied from '../../../containers/Layout/accessDenied';
+import PageTitle from '../../../containers/Shared/PageTitle';
 
 class Permission extends Component {
   constructor(props) {
@@ -32,6 +33,7 @@ class Permission extends Component {
     
     return (
       <Container>
+        <PageTitle title={messages['permission.list']}/>
         <Row>
           <Col md={12}>
             <h3 className="page-title">{messages['permission.list']}

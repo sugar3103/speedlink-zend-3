@@ -35,29 +35,30 @@ class SearchForm extends Component {
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['service.code']}</span>
             <div className="form__form-group-field">
-              <Field name="code" component={renderSelectField} type="text"
+              <Field name="code" component={renderSelectField} type="text" placeholder={messages['service.code']}
                 options={serviceCode && this.showOptionService(serviceCode)} />
             </div>
           </div>
         </Col>
         <Col md={4}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['service.name']}</span>
+            <span className="form__form-group-label">{messages['name']}</span>
             <div className="form__form-group-field">
-              <Field component="input" type="text" placeholder={messages['service.name']}
+              <Field component="input" type="text" placeholder={messages['name']}
                 name={locale === 'en-US' ? 'name_en' : 'name'} />
             </div>
           </div>
         </Col>
         <Col md={4}>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['service.status']}</span>
+            <span className="form__form-group-label">{messages['status']}</span>
             <div className="form__form-group-field">
               <Field name="status" component={renderSelectField} type="text" options={[
                 { value: -1, label: messages['all'] },
                 { value: 1, label: messages['active'] },
                 { value: 0, label: messages['inactive'] }
               ]}
+              placeholder={messages['status']}
               />
             </div>
           </div>

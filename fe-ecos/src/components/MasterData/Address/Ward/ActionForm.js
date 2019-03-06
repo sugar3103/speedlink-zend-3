@@ -27,9 +27,9 @@ class ActionForm extends Component {
     const data = this.props.modalData;
     const { modalType } = this.props;
 
-    if(modalType === MODAL_ADD )
+    if (modalType === MODAL_ADD)
       this.setState({ country_disabled: false })
-    else if(modalType === MODAL_EDIT ){
+    else if (modalType === MODAL_EDIT) {
       this.setState({
         country_disabled: false,
         city_disabled: false,
@@ -41,12 +41,12 @@ class ActionForm extends Component {
     }
 
     let params = {
-      field: ['id', 'name','name_en'],
+      field: ['id', 'name', 'name_en'],
       offset: {
         limit: 0
       }
     }
-    
+
     this.props.getCountryList();
 
     if (data && data.country_id) {
@@ -59,17 +59,17 @@ class ActionForm extends Component {
       this.props.getDistrictList(params);
     }
 
-    
+
   }
 
   onChangeCountry = value => {
     this.setState({
       district_disabled: true
     });
-    this.props.change('city_id','');
-    this.props.change('district_id','');  
+    this.props.change('city_id', '');
+    this.props.change('district_id', '');
 
-    if(value !==  null) {
+    if (value !== null) {
       const params = {
         field: ['id', 'name', 'name_en'],
         offset: {
@@ -79,15 +79,15 @@ class ActionForm extends Component {
           country: value
         }
       }
-      this.props.getCityList(params);  
-      this.setState({ city_disabled: false})
+      this.props.getCityList(params);
+      this.setState({ city_disabled: false })
     }
-    
+
   }
 
   onChangeCity = value => {
-    this.props.change('district_id','');  
-    if(value !== null) {
+    this.props.change('district_id', '');
+    if (value !== null) {
       const params = {
         field: ['id', 'name', 'name_en'],
         offset: {
@@ -98,9 +98,9 @@ class ActionForm extends Component {
         }
       }
       this.props.getDistrictList(params);
-      this.setState({ district_disabled: false})
+      this.setState({ district_disabled: false })
     }
-    
+
   }
 
   showOption = (items) => {
@@ -121,8 +121,8 @@ class ActionForm extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.modalType !== this.props.modalType) {         
-               
+    if (prevProps.modalType !== this.props.modalType) {
+
       this.setState({
         modalType: prevProps.modalType,
         country_disabled: prevProps.modalType === MODAL_ADD ? true : false
@@ -135,7 +135,7 @@ class ActionForm extends Component {
   }
 
   componentWillUpdate(prevProps) {
-    if (prevProps.modalType !== this.props.modalType) {   
+    if (prevProps.modalType !== this.props.modalType) {
       const disabled = prevProps.modalType === MODAL_ADD ? true : false;
       this.setState({
         country_disabled: disabled,
@@ -147,7 +147,7 @@ class ActionForm extends Component {
   render() {
     const { messages, locale } = this.props.intl;
     const { handleSubmit, modalType, modalData, cities, countries, districts } = this.props;
-    
+
     let className = 'success';
     let title = messages['ward.add-new'];
     const disabled = modalType === MODAL_VIEW ? true : false;
@@ -233,7 +233,7 @@ class ActionForm extends Component {
               </div>
             </Col>
             <Col md={12} lg={6} xl={6} xs={12}>
-            <div className="form__form-group">
+              <div className="form__form-group">
                 <span className="form__form-group-label">{messages['address.country']}</span>
                 <div className="form__form-group-field">
                   <Field
@@ -247,7 +247,7 @@ class ActionForm extends Component {
                   />
                 </div>
               </div>
-            <div className="form__form-group">
+              <div className="form__form-group">
                 <span className="form__form-group-label">{messages['address.city']}</span>
                 <div className="form__form-group-field">
                   <Field
@@ -270,12 +270,12 @@ class ActionForm extends Component {
                     component={renderSelectField}
                     type="text"
                     placeholder={messages['ward.district']}
-                    options={districts && this.showOption(districts)}                    
+                    options={districts && this.showOption(districts)}
                     disabled={this.state.district_disabled}
                   />
                 </div>
               </div>
-              
+
               <div className="form__form-group">
                 <span className="form__form-group-label">{messages['ward.postal-code']}</span>
                 <div className="form__form-group-field">
@@ -311,29 +311,31 @@ class ActionForm extends Component {
               </div>
             </Col>
           </Row>
-          {modalData &&
-            <Fragment>
-              <hr />
-              <Row>
-                <Col md={6}>
-                  <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name_created ? modalData.full_name_created : modalData.created_by}</span>
-                  <br />
-                  <span><i className="label-info-data">{messages['created-at']}:</i>
-                    <Moment fromNow locale={locale}>{new Date(modalData.created_at)}</Moment>
-                  </span>
-                </Col>
-                {modalData.updated_at &&
+          <div className="footer">
+            {modalData &&
+              <Fragment>
+                <hr />
+                <Row>
                   <Col md={6}>
-                    <span><i className="label-info-data">{messages['updated-by']}:</i>{(modalData.full_name_updated !== " ") ? modalData.full_name_updated : modalData.updated_by}</span>
+                    <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name_created ? modalData.full_name_created : modalData.created_by}</span>
                     <br />
-                    <span><i className="label-info-data">{messages['updated-at']}:</i>
-                      <Moment fromNow locale={locale}>{new Date(modalData.updated_at)}</Moment>
+                    <span><i className="label-info-data">{messages['created-at']}:</i>
+                      <Moment fromNow locale={locale}>{new Date(modalData.created_at)}</Moment>
                     </span>
                   </Col>
-                }
-              </Row>
-            </Fragment>
-          }
+                  {modalData.updated_at &&
+                    <Col md={6}>
+                      <span><i className="label-info-data">{messages['updated-by']}:</i>{(modalData.full_name_updated !== " ") ? modalData.full_name_updated : modalData.updated_by}</span>
+                      <br />
+                      <span><i className="label-info-data">{messages['updated-at']}:</i>
+                        <Moment fromNow locale={locale}>{new Date(modalData.updated_at)}</Moment>
+                      </span>
+                    </Col>
+                  }
+                </Row>
+              </Fragment>
+            }
+          </div>
         </div>
         <ButtonToolbar className="modal__footer">
           {this.state.modalType === MODAL_VIEW &&

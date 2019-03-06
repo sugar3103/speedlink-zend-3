@@ -1,6 +1,6 @@
 module.exports = {
   //Carrier
-  'carrier.list-title': 'Carrier List',
+  'carrier.list-title': 'Carriers',
   'carrier.add-new': 'Add New Carrier',
   'carrier.export': 'Export',
   'carrier.delete': 'Delete Carrier',
@@ -25,7 +25,7 @@ module.exports = {
   'carrier.validate-code-exists': 'Code carrier already exists',
   
   //Service
-  'service.list-title': 'Service List',
+  'service.list-title': 'Services',
   'service.add-new': 'New Service',
   'service.export': 'Export Service',
   'service.delete': 'Delete Service',
@@ -50,7 +50,7 @@ module.exports = {
   'service.validate-nameEn-exists': 'English name already exists',
   
   //Shipment Type
-  'shipment_type.list-title': 'Shipment Type List',
+  'shipment_type.list-title': 'Shipment Type',
   'shipment_type.add-new': 'Add New Shipment Type',
   'shipment_type.export': 'Export Shipment Type',
   'shipment_type.delete': 'Delete Shipment Type',

@@ -123,7 +123,7 @@ $access_filter =  [
     ],
     'controllers' => [
         Controller\AddressController::class => [
-            ['actions' => ['index'], 'allow' => '*'],            
+            ['actions' => ['index'], 'allow' => '+masterdata_address.code'],            
         ],
         Controller\CountryController::class => [
             ['actions' => '*', 'allow' => '+masterdata_country.manage'],            

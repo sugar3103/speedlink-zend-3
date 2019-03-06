@@ -21,13 +21,16 @@ class Topbar extends PureComponent {
       <div className="topbar">
         <div className="topbar__wrapper">
           <div className="topbar__left">
-            <TopbarSidebarButton
-              changeMobileSidebarVisibility={changeMobileSidebarVisibility}
-              changeSidebarVisibility={changeSidebarVisibility}
-            />
-            <Link className="topbar__logo" to="/app/dashboards" />
+              <TopbarSidebarButton
+                changeMobileSidebarVisibility={changeMobileSidebarVisibility}
+                changeSidebarVisibility={changeSidebarVisibility}
+              />
+              <Link className="topbar__logo" to="/app/dashboards" />
+            
           </div>
+          <span className="topbar__title">Page Title</span>
           <div className="topbar__right">
+
             <TopbarSearch />
             <TopbarNotification />
             {/* <TopbarMail new /> */}

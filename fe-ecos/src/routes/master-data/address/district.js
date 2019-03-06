@@ -5,6 +5,7 @@ import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import { getDistrictList } from '../../../redux/actions';
 import AccessDenied from '../../../containers/Layout/accessDenied';
+import PageTitle from '../../../containers/Shared/PageTitle';
 
 class District extends Component {
   constructor(props) {
@@ -30,6 +31,7 @@ class District extends Component {
     const { errors } = this.props.district;
     return (
       <Container>
+        <PageTitle title={messages['address.districts']} />
         <Row>
           <Col md={12}>
             <h3 className="page-title">{messages['address.districts']}

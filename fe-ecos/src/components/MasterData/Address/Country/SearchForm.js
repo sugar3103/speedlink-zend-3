@@ -8,10 +8,10 @@ import PropTypes from 'prop-types';
 class SearchForm extends Component {
   render() {
     const { handleSubmit, reset } = this.props;
-    const { messages,locale } = this.props.intl;
+    const { messages, locale } = this.props.intl;
     return (
       <form className="form" onSubmit={handleSubmit}>
-        <div className="form__half">
+        <div className="form__third">
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['name']}</span>
             <div className="form__form-group-field">
@@ -24,7 +24,7 @@ class SearchForm extends Component {
             </div>
           </div>
         </div>
-        <div className="form__half">
+        <div className="form__third">
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['status']}</span>
             <div className="form__form-group-field">
@@ -43,21 +43,21 @@ class SearchForm extends Component {
           </div>
         </div>
         <div className="search-group-button">
-          <Button 
-            size="sm" 
-            outline 
-            onClick={(e)=> {
+          <Button
+            size="sm"
+            outline
+            onClick={(e) => {
               reset();
               setTimeout(() => {
-                handleSubmit();  
+                handleSubmit();
               }, 200);
             }}
           >{messages['clear']}</Button>{' '}
-          <Button 
-            size="sm" 
+          <Button
+            size="sm"
             color="primary"
-            id="search" 
-          >{ messages['search'] }</Button>
+            id="search"
+          >{messages['search']}</Button>
         </div>
       </form>
     );

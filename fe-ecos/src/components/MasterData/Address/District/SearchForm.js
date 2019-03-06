@@ -131,7 +131,7 @@ class SearchForm extends Component {
             </div>
           </div>
         </Col>
-        <Col md={12} className="text-right search-group-button">
+        <Col md={8} className="text-right search-group-button">
           <Button
             size="sm"
             outline

@@ -61,11 +61,12 @@
 }
 
 .profile__avatar {
-  height: 140px;
-  width: 140px;
-  overflow: hidden;
-  border-radius: 50%;
-  border: 1px solid #ccc;
+  cursor: pointer;
+  i {
+    font-size: 100px;
+    line-height: 50px;
+    color: #fff;
+  }
   img {
     height: 100%;
   }
