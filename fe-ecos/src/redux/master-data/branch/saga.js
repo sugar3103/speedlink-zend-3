@@ -40,7 +40,25 @@ import {
 } from "./actions";
 
 import createNotification from '../../../util/notifications';
+import { startSubmit, stopSubmit } from 'redux-form';
 
+function validateBranch(errors) {
+  if (errors.name && errors.name.branchExists) {
+    return stopSubmit('branch_action_form', {
+      name: 'branch.validate-name-exists'
+    });
+  }
+  if (errors.name_en && errors.name_en.branchExists) {
+    return stopSubmit('branch_action_form', {
+      name_en: 'branch.validate-nameEn-exists'
+    });
+  }
+  if (errors.code && errors.code.branchExists) {
+    return stopSubmit('branch_action_form', {
+      code: 'branch.validate-code-exists'
+    });
+  }
+}
 //list branch
 
 function getListApi(params) {
@@ -104,6 +122,7 @@ const addBranchItemRequest = async item => {
 
 function* addBranchItem({ payload }) {
   const { item, messages } = payload;
+  yield put(startSubmit('branch_action_form'));
   try {
     const response = yield call(addBranchItemRequest, item);
     switch (response.error_code) {
@@ -120,6 +139,7 @@ function* addBranchItem({ payload }) {
 
       case EC_FAILURE:
         yield put(addBranchItemError(response.data));
+        yield put(validateBranch(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('user');
@@ -155,6 +175,7 @@ const updateBranchItemRequest = async item => {
 
 function* updateBranchItem({ payload }) {
   const { item, messages } = payload;
+  yield put(startSubmit('branch_action_form'));
   try {
     const response = yield call(updateBranchItemRequest, item);
     switch (response.error_code) {
@@ -171,6 +192,7 @@ function* updateBranchItem({ payload }) {
 
       case EC_FAILURE:
         yield put(updateBranchItemError(response.data));
+        yield put(validateBranch(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:
