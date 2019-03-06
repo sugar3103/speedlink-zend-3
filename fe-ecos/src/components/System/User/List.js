@@ -16,7 +16,7 @@ import {
 } from "../../../redux/actions";
 import Action from './Action';
 
-const Ava = `${process.env.PUBLIC_URL}/img/ava.png`;
+// const Ava = `${process.env.PUBLIC_URL}/img/ava.png`;
 
 const UserFormatter = ({ value }) => (
   value === 'Enabled' ? <span className="badge badge-success">Enabled</span> :

@@ -13,7 +13,7 @@ import { getShipmentTypeList, deleteShipmentTypeItem, toggleShipmentTypeModal } 
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import ConfirmPicker from '../../../../containers/Shared/picker/ConfirmPicker';
-import Moment from 'react-moment';
+// import Moment from 'react-moment';
 
 class List extends Component {
   constructor() {

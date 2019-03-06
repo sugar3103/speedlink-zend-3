@@ -167,7 +167,7 @@ ActionForm.propTypes = {
 
 const mapStateToProps = ({ service,authUser }) => {
   const { modalData,modalType } = service;
-  return { modalData,authUser };
+  return { modalData,authUser,modalType };
 };
 
 export default reduxForm({
