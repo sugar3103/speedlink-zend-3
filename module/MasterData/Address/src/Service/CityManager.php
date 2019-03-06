@@ -45,10 +45,10 @@ class CityManager  {
             $city->setStatus($data['status']);
             $city->setZipCode($data['zip_code']);
             $city->setCountryId($data['country_id']);
-            // $city->setRefAsBy($data['ref_as_by']);
             
-            $currentDate = date('Y-m-d H:i:s');
-            $city->setCreatedAt($currentDate);
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $city->setCreatedAt($addTime->format('Y-m-d H:i:s'));
+
             $city->setCreatedBy($user->id);
             
             $this->getReferenced($city,$data);
@@ -91,10 +91,10 @@ class CityManager  {
             $city->setStatus($data['status']);
             $city->setZipCode($data['zip_code']);
             $city->setCountryId($data['country_id']);
-            // $city->setRefAsBy($data['ref_as_by']);
+            
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $city->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
 
-            $currentDate = date('Y-m-d H:i:s');
-            $city->setUpdatedAt($currentDate);
             $city->setUpdatedBy($user->id);
 
             $this->getReferenced($city,$data);

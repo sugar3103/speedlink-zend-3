@@ -21,6 +21,7 @@ module.exports = {
   'country.list-title': 'Country List',
   'country.add-new': 'Add New Country',
   'country.update': 'Update Country',  
+  'country.view': 'View Country',  
   'country.iso-code': 'ISO Code',
   
   'country.title-confirm': 'Delete Country',
@@ -44,6 +45,7 @@ module.exports = {
   'city.list-title': 'City List',
   'city.add-new': 'Add New City',
   'city.update': 'Update City',
+  'city.view': 'View City',  
   'city.country': 'Country',
   'city.zip-code': 'Zip Code',
   'city.title-confirm': 'Delete City',

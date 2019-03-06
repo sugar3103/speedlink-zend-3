@@ -46,9 +46,9 @@ class DistrictManager  {
             $district->setDescriptionEn($data['description_en']);
             $district->setStatus($data['status']);            
             $district->setCityId($data['city_id']);
-
-            $currentDate = date('Y-m-d H:i:s');
-            $district->setCreatedAt($currentDate);
+    
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $district->setCreatedAt($addTime->format('Y-m-d H:i:s'));
             $district->setCreatedBy($user->id);
 
             $this->getReferenced($district,$data);
@@ -90,10 +90,9 @@ class DistrictManager  {
             $district->setDescriptionEn($data['description_en']);
             $district->setStatus($data['status']);
             $district->setCityId($data['city_id']);
-            // $district->setRefAsBy($data['ref_as_by']);
-
-            $currentDate = date('Y-m-d H:i:s');
-            $district->setUpdatedAt($currentDate);
+            
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $district->setUpdatedAt($addTime->format('Y-m-d H:i:s'));       
             $district->setUpdatedBy($user->id);
            
             $this->getReferenced($district,$data);

@@ -58,9 +58,9 @@ class StatusManager {
             $status->setDescriptionEn($data['description_en']);
             $status->setStatus($data['status']);
 
-            $currentDate = date('Y-m-d H:i:s');
-            $status->setCreatedAt($currentDate);
-
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $status->setCreatedAt($addTime->format('Y-m-d H:i:s'));
+            
             $status->setCreatedBy($user->id);
             $this->getReferenced($status, $data, $user, 'add');
            
@@ -101,8 +101,9 @@ class StatusManager {
             $status->setDescriptionEn($data['description_en']);
             $status->setStatus($data['status']);
             
-            $currentDate = date('Y-m-d H:i:s');
-            $status->setUpdatedAt($currentDate);
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $status->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+                        
             $status->setUpdatedBy($user->id);
             $this->getReferenced($status, $data, $user);
 
