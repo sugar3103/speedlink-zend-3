@@ -107,7 +107,7 @@ class RangeWeightRepository extends EntityRepository
                 'alias' => 'r.service_id',
                 'operator' => 'eq'
             ],
-            'shipmenttype' => [
+            'shipment_type_id' => [
                 'alias' => 'r.shipment_type_id',
                 'operator' => 'eq'
             ],

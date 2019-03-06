@@ -201,7 +201,7 @@ class PricingManager {
             $pricing->setIsPrivate($data['is_private']);
             $pricing->setCustomerId($data['customer_id']);
             $pricing->setApprovalStatus($data['approval_status']);
-            $pricing->setApprovalBy($data['approval_by']);
+            $pricing->setApprovedBy($data['approved_by']);
             $pricing->setStatus($data['status']);
             $pricing->setCreatedAt($date);
             $pricing->setCreatedBy($user->id);
@@ -285,7 +285,7 @@ class PricingManager {
             $pricing->setSalemanId($data['saleman_id']);
             $pricing->setIsPrivate($data['is_private']);
             $pricing->setApprovalStatus($data['approval_status']);
-            $pricing->setApprovalBy($data['approval_by']);
+            $pricing->setApprovedBy($data['approved_by']);
             $pricing->setStatus($data['status']);
             $pricing->setUpdatedAt(new \DateTime());
             $pricing->setUpdatedBy($user->id);

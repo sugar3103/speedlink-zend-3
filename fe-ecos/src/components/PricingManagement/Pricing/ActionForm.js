@@ -6,9 +6,7 @@ import renderDatePickerField from '../../../containers/Shared/form/DatePicker';
 import { Button, Col, Row } from 'reactstrap';
 import { connect } from 'react-redux';
 import {
-    getCustomerList, getSalemanList, getCarrierCodeList,
-    getCountryPricingList, getCityPricingList, getDistrictPricingList, getWardPricingList,
-    getApprovedByList
+    getCountryList
 } from '../../../redux/actions';
 import CalendarBlankIcon from 'mdi-react/CalendarBlankIcon';
 import validate from './validateActionForm';
@@ -164,7 +162,7 @@ class ActionForm extends Component {
     render() {
         const { messages } = this.props.intl;
         
-        const { handleSubmit, customers, salemans, carriers, countries, cities, districts, wards, approvedBys, type } = this.props;
+        const { handleSubmit, countries } = this.props;
         return (
             <form className="form form_custom" onSubmit={handleSubmit}>
                 <Row>
@@ -192,7 +190,7 @@ class ActionForm extends Component {
                                 <Field
                                     name="customer_id"
                                     component={renderSelectField}
-                                    options={customers && this.showOption(customers)}
+                                    options={[]}
                                     disabled={!this.state.showCustomerField}
                                 />
                             </div>
@@ -205,7 +203,7 @@ class ActionForm extends Component {
                                 <Field
                                     name="saleman_id"
                                     component={renderSelectField}
-                                    options={salemans && this.showOptionUser(salemans)}
+                                    options={[]}
                                 />
                             </div>
                         </div>
@@ -252,7 +250,8 @@ class ActionForm extends Component {
                                 <Field
                                     name="carrier_id"
                                     component={renderSelectField}
-                                    options={carriers && this.showOption(carriers)} />
+                                    options={[]}
+                                />
                             </div>
                         </div>
                     </Col>
@@ -306,7 +305,7 @@ class ActionForm extends Component {
                                 <Field
                                     name="origin_city_id"
                                     component={renderSelectField}
-                                    options={cities && this.showOption(cities)}
+                                    options={[]}
                                     onChange={this.onChangeCity}
                                 />
                             </div>
@@ -319,7 +318,7 @@ class ActionForm extends Component {
                                 <Field
                                     name="origin_district_id"
                                     component={renderSelectField}
-                                    options={districts && this.showOption(districts)}
+                                    options={[]}
                                     onChange={this.onChangeDistrict}
                                 />
                             </div>
@@ -332,7 +331,7 @@ class ActionForm extends Component {
                                 <Field
                                     name="origin_ward_id"
                                     component={renderSelectField}
-                                    options={wards && this.showOption(wards)}
+                                    options={[]}
                                 />
                             </div>
                         </div>
@@ -364,39 +363,28 @@ class ActionForm extends Component {
                                 <Field
                                     name="approved_by"
                                     component={renderSelectField}
-                                    options={approvedBys && this.showOptionUser(approvedBys)}
+                                    options={[]}
                                 />
                             </div>
                         </div>
                     </Col>
                 </Row>
-                {type !== "view" &&
-                    <Row>
-                        <Col md={12} className="text-right search-group-button">
-                            <Button size="sm" color="primary" id="search" >
-                                {messages['save']}
-                            </Button>
-                        </Col>
-                    </Row>
-                }
+                <Row>
+                    <Col md={12} className="text-right search-group-button">
+                        <Button size="sm" color="primary" id="search" >
+                            {messages['save']}
+                        </Button>
+                    </Col>
+                </Row>
             </form>
         );
     }
 }
 
-const mapStateToProps = ({ customer, carrier, pricing }) => {
-    const customers = customer.items;
-    const { salemans, countries, cities, districts, wards, approvedBys } = pricing;
-    const carriers = carrier.codes;
+const mapStateToProps = ({ address }) => {
+    const countries = address.country.items;
     return {
-        customers,
-        salemans,
-        carriers,
         countries,
-        cities,
-        districts,
-        wards,
-        approvedBys
     }
 }
 
@@ -404,12 +392,5 @@ export default reduxForm({
     form: 'pricing_action_form',
     validate
 })(injectIntl(connect(mapStateToProps, {
-    getCustomerList,
-    getSalemanList,
-    getCarrierCodeList,
-    getCountryPricingList,
-    getCityPricingList,
-    getDistrictPricingList,
-    getWardPricingList,
-    getApprovedByList,
+    getCountryList
 })(ActionForm)));

@@ -43,7 +43,7 @@ class RangeWeightController extends CoreController {
               3 => 'carrier_id',
               4 => 'category',
               5 => 'service_id',
-              6 => 'shipmenttype',
+              6 => 'shipment_type_id',
               7 => 'status',
               8 => 'from',
               9 => 'to',

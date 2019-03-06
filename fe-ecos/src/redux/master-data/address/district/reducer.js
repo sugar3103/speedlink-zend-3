@@ -12,7 +12,8 @@ import {
   DISTRICT_DELETE_ITEM,
   DISTRICT_DELETE_ITEM_SUCCESS,
   DISTRICT_DELETE_ITEM_ERROR,
-  DISTRICT_CHANGE_TYPE_MODAL
+  DISTRICT_CHANGE_TYPE_MODAL,
+  DISTRICT_RESET_STATE
 } from '../../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -123,6 +124,9 @@ export default (state = INIT_STATE, action) => {
         ...state,
         modalType: action.payload
       }
+    case DISTRICT_RESET_STATE:
+      return INIT_STATE;
+
     default:
       return { ...state };
   }

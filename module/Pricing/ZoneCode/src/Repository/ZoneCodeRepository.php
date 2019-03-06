@@ -127,7 +127,7 @@ class ZoneCodeRepository extends EntityRepository
                 'alias' => 'z.service_id',
                 'operator' => 'eq'
             ],
-            'shipmenttype' => [
+            'shipment_type_id' => [
                 'alias' => 'z.shipment_type_id',
                 'operator' => 'eq'
             ],

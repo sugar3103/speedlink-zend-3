@@ -52,7 +52,7 @@ export default (state = INIT_STATE, action) => {
   switch (action.type) {
 
     case BRANCH_TOGGLE_MODAL:
-    if(action.payload.type === 'add')
+    if(action.payload.type === 'add' || state.modalOpen)
     return {
       ...state,
       modalOpen: !state.modalOpen,
