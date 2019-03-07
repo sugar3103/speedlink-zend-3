@@ -12,18 +12,6 @@ import {
   ZONE_CODE_DELETE_ITEM,
   ZONE_CODE_DELETE_ITEM_SUCCESS,
   ZONE_CODE_DELETE_ITEM_ERROR,
-  ORIGIN_COUNTRY_GET_LIST,
-  ORIGIN_COUNTRY_GET_LIST_SUCCESS,
-  ORIGIN_COUNTRY_GET_LIST_ERROR,
-  ORIGIN_CITY_GET_LIST,
-  ORIGIN_CITY_GET_LIST_SUCCESS,
-  ORIGIN_CITY_GET_LIST_ERROR,
-  ORIGIN_DISTRICT_GET_LIST,
-  ORIGIN_DISTRICT_GET_LIST_SUCCESS,
-  ORIGIN_DISTRICT_GET_LIST_ERROR,
-  ORIGIN_WARD_GET_LIST,
-  ORIGIN_WARD_GET_LIST_SUCCESS,
-  ORIGIN_WARD_GET_LIST_ERROR,
   DESTINATION_COUNTRY_GET_LIST,
   DESTINATION_COUNTRY_GET_LIST_SUCCESS,
   DESTINATION_COUNTRY_GET_LIST_ERROR,
@@ -114,66 +102,6 @@ export const deleteZoneCodeItemSuccess = () => ({
 
 export const deleteZoneCodeItemError = (error) => ({
   type: ZONE_CODE_DELETE_ITEM_ERROR,
-  payload: error
-});
-
-export const getOriginCountryList = (params, messages, types) => ({
-  type: ORIGIN_COUNTRY_GET_LIST,
-  payload: { params, messages, types }
-});
-
-export const getOriginCountryListSuccess = (origin_country) => ({
-  type: ORIGIN_COUNTRY_GET_LIST_SUCCESS,
-  payload: { origin_country }
-});
-
-export const getOriginCountryListError = (error) => ({
-  type: ORIGIN_COUNTRY_GET_LIST_ERROR,
-  payload: error
-});
-
-export const getOriginCityList = (params, messages, types) => ({
-  type: ORIGIN_CITY_GET_LIST,
-  payload: { params, messages, types }
-});
-
-export const getOriginCityListSuccess = (origin_city, types) => ({
-  type: ORIGIN_CITY_GET_LIST_SUCCESS,
-  payload: { origin_city, types }
-});
-
-export const getOriginCityListError = (error) => ({
-  type: ORIGIN_CITY_GET_LIST_ERROR,
-  payload: error
-});
-
-export const getOriginDistrictList = (params, messages, types) => ({
-  type: ORIGIN_DISTRICT_GET_LIST,
-  payload: { params, messages, types }
-});
-
-export const getOriginDistrictListSuccess = (origin_district, types) => ({
-  type: ORIGIN_DISTRICT_GET_LIST_SUCCESS,
-  payload: { origin_district, types }
-});
-
-export const getOriginDistrictListError = (error) => ({
-  type: ORIGIN_DISTRICT_GET_LIST_ERROR,
-  payload: error
-});
-
-export const getOriginWardList = (params, messages, types) => ({
-  type: ORIGIN_WARD_GET_LIST,
-  payload: { params, messages, types }
-});
-
-export const getOriginWardListSuccess = (origin_ward, types) => ({
-  type: ORIGIN_WARD_GET_LIST_SUCCESS,
-  payload: { origin_ward, types }
-});
-
-export const getOriginWardListError = (error) => ({
-  type: ORIGIN_WARD_GET_LIST_ERROR,
   payload: error
 });
 

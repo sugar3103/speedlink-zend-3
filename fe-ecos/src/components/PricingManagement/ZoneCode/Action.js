@@ -3,9 +3,10 @@ import { injectIntl } from 'react-intl';
 import { Modal } from 'reactstrap';
 import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
-import { addZoneCodeItem, updateZoneCodeItem, toggleZoneCodeModal, changeTypeZoneCodeModal } from '../../../redux/actions';
+import { addZoneCodeItem, updateZoneCodeItem, toggleZoneCodeModal, changeTypeZoneCodeModal, removeState } from '../../../redux/actions';
 import PropTypes from 'prop-types';
 import { MODAL_EDIT, MODAL_ADD, MODAL_VIEW } from '../../../constants/defaultValues';
+import { CITY_RESET_STATE, DISTRICT_RESET_STATE, WARD_RESET_STATE } from '../../../constants/actionTypes';
 
 class Action extends Component {
   handleSubmit = values => {
@@ -27,6 +28,9 @@ class Action extends Component {
   };
 
   toggleModal = () => {
+    this.props.removeState(CITY_RESET_STATE);
+    this.props.removeState(DISTRICT_RESET_STATE);
+    this.props.removeState(WARD_RESET_STATE);
     this.props.toggleZoneCodeModal();
   };
 
@@ -72,5 +76,6 @@ export default injectIntl(connect(mapStateToProps, {
   addZoneCodeItem,
   updateZoneCodeItem,
   toggleZoneCodeModal,
-  changeTypeZoneCodeModal
+  changeTypeZoneCodeModal,
+  removeState
 })(Action));
