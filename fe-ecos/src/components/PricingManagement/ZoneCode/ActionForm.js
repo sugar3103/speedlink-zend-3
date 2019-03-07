@@ -94,7 +94,7 @@ class ActionForm extends Component {
       this.props.getCityList(paramsCity, messages, 'editview');
     }
 
-    if (data && data.origin_district_id || data && data.origin_city_id ) {
+    if ( (data && data.origin_district_id) || (data && data.origin_city_id) ) {
       let paramsDistrict = {
         field: ['id', 'name'],
         offset: {
