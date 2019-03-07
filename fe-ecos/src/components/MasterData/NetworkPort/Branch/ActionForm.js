@@ -62,7 +62,7 @@ class ActionForm extends PureComponent {
       this.props.getDistrictBranchList(paramsDistrict, messages, 'editview');
     }
 
-    if (data && data.ward_id) {
+    if ( (data && data.ward_id) || (data && data.district_id) ) {
       let paramsWard = {
         field: ['id', 'name', 'name_en'],
         offset: {
