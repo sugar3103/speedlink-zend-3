@@ -8,7 +8,6 @@ import { toggleZoneCodeModal, changeTypeZoneCodeModal,  getCarrierCodeZoneCodeBy
   getCityList,
   getDistrictList,
   getWardList,
-  getOriginCountryList, getOriginCityList, getOriginDistrictList, getOriginWardList,
   getDestinationCountryList, getDestinationCityList, getDestinationDistrictList, getDestinationWardList  } from '../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../containers/Shared/form/CustomField';
@@ -95,7 +94,7 @@ class ActionForm extends Component {
       this.props.getCityList(paramsCity, messages, 'editview');
     }
 
-    if (data && data.origin_district_id) {
+    if (data && data.origin_district_id || data && data.origin_city_id ) {
       let paramsDistrict = {
         field: ['id', 'name'],
         offset: {
@@ -108,7 +107,7 @@ class ActionForm extends Component {
       this.props.getDistrictList(paramsDistrict, messages, 'editview');
     }
 
-    if (data && data.origin_ward_id) {
+    if ( (data && data.origin_ward_id) || (data && data.origin_district_id) ) {
       let paramsWard = {
         field: ['id', 'name'],
         offset: {
@@ -142,7 +141,7 @@ class ActionForm extends Component {
       this.props.getDestinationCityList(paramsCity, messages, 'editview');
     }
 
-    if (data && data.destination_district_id) {
+    if ( (data && data.destination_district_id) || (data && data.destination_city_id) ) {
       let paramsDistrict = {
         field: ['id', 'name'],
         offset: {
@@ -155,7 +154,7 @@ class ActionForm extends Component {
       this.props.getDestinationDistrictList(paramsDistrict, messages, 'editview');
     }
 
-    if (data && data.destination_ward_id) {
+    if ( (data && data.destination_ward_id) || (data && data.destination_district_id) ) {
       let paramsWard = {
         field: ['id', 'name'],
         offset: {
