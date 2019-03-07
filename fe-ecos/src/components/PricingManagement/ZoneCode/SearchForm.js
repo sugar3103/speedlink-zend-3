@@ -5,10 +5,15 @@ import renderSelectField from '../../../containers/Shared/form/Select';
 import { Button, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { getCarrierCodeZoneCodeByCondition, getServiceCodeZoneCodeByCondition, getShipmentTypeCodeZoneCodeByCondition, getCustomerList,
-  getOriginCountryList, getOriginCityList, getOriginDistrictList, getOriginWardList,
+import { removeState, getCarrierCodeZoneCodeByCondition, getServiceCodeZoneCodeByCondition, getShipmentTypeCodeZoneCodeByCondition, getCustomerList,
+  getCountryList,
+  getCityList,
+  getDistrictList,
+  getWardList,
   getDestinationCountryList, getDestinationCityList, getDestinationDistrictList, getDestinationWardList
  } from "../../../redux/actions";
+ import { CITY_RESET_STATE, DISTRICT_RESET_STATE, WARD_RESET_STATE } from '../../../constants/actionTypes';
+
 
 class SearchForm extends Component {
 
@@ -34,6 +39,12 @@ class SearchForm extends Component {
     }
   }
 
+  componentWillMount() {
+    this.props.removeState(CITY_RESET_STATE);
+    this.props.removeState(DISTRICT_RESET_STATE);
+    this.props.removeState(WARD_RESET_STATE);
+  }
+
   componentDidMount() {
     const { messages } = this.props.intl;
     const params = {
@@ -43,7 +54,7 @@ class SearchForm extends Component {
         }
     }
     this.props.getCustomerList(params, messages, 'onchange');
-    this.props.getOriginCountryList(params, messages ,'onchange');
+    this.props.getCountryList(params, messages ,'onchange');
     this.props.getDestinationCountryList(params, messages ,'onchange');
   }
 
@@ -61,8 +72,14 @@ class SearchForm extends Component {
     this.props.change('origin_city',null);
     this.props.change('origin_district',null);
     this.props.change('origin_ward',null);
-    this.props.getOriginCityList(params, messages, 'onchange');
-   
+    if(value) {
+      this.props.getCityList(params, messages, 'onchange');
+    }
+   else {
+    this.props.removeState(CITY_RESET_STATE);
+   }
+    this.props.removeState(DISTRICT_RESET_STATE);
+    this.props.removeState(WARD_RESET_STATE);
   }
 
   onChangeOriginCity = value => {
@@ -78,7 +95,12 @@ class SearchForm extends Component {
     }
     this.props.change('origin_district',null);
     this.props.change('origin_ward',null);
-    this.props.getOriginDistrictList(params , messages, 'onchange');
+    if(value) {
+      this.props.getDistrictList(params , messages, 'onchange');
+    }else {
+      this.props.removeState(DISTRICT_RESET_STATE);
+    }
+    this.props.removeState(WARD_RESET_STATE);
   }
 
   onChangeOriginDistrict = value => {
@@ -93,7 +115,11 @@ class SearchForm extends Component {
       }
     }
     this.props.change('origin_ward',null);
-    this.props.getOriginWardList(params, messages, 'onchange'); 
+    if(value) {
+    this.props.getWardList(params, messages, 'onchange'); 
+    } else {
+      this.props.removeState(WARD_RESET_STATE);
+    }
   }
 
   onChangeDestinationCountry = value => {
@@ -271,7 +297,9 @@ class SearchForm extends Component {
 
 
   render() {
-    const { handleSubmit, reset, CarrierCodeZoneCodeByCondition, ServiceCodeZoneCodeByCondition, ShipmentCodeZoneCodeByCondition , customerCode, origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards  } = this.props;
+    const { handleSubmit, reset, CarrierCodeZoneCodeByCondition, ServiceCodeZoneCodeByCondition, ShipmentCodeZoneCodeByCondition , customerCode,
+      countries, cities, districts, wards,
+      destination_countrys, destination_citys, destination_districts, destination_wards  } = this.props;
     const { messages } = this.props.intl;
     return (
       <form className="form" onSubmit={handleSubmit}>
@@ -387,7 +415,7 @@ class SearchForm extends Component {
               <Field
                 name="origin_country"
                 component={renderSelectField}
-                options={origin_countrys && this.showOptionsOrigin(origin_countrys)}
+                options={countries && this.showOptionsOrigin(countries)}
                 onChange={this.onChangeOriginCountry}
               />
             </div>
@@ -401,7 +429,7 @@ class SearchForm extends Component {
               <Field
                 name="origin_city"
                 component={renderSelectField}
-                options={origin_citys && this.showOptionsOrigin(origin_citys)}
+                options={cities && this.showOptionsOrigin(cities)}
                 onChange={this.onChangeOriginCity}
               />
             </div>
@@ -415,7 +443,7 @@ class SearchForm extends Component {
               <Field
                 name="origin_district"
                 component={renderSelectField}
-                options={origin_districts && this.showOptionsOrigin(origin_districts)}
+                options={districts && this.showOptionsOrigin(districts)}
                 onChange={this.onChangeOriginDistrict}
               />
             </div>
@@ -429,7 +457,7 @@ class SearchForm extends Component {
               <Field
                 name="origin_ward"
                 component={renderSelectField}
-                options={origin_wards && this.showOptionsOrigin(origin_wards)}
+                options={wards && this.showOptionsOrigin(wards)}
               />
             </div>
           </div>
@@ -509,10 +537,10 @@ class SearchForm extends Component {
 
 SearchForm.propTypes = {
   carrierCode: PropTypes.array,
-  origin_citys: PropTypes.array,
-  origin_districts: PropTypes.array,
-  origin_countrys: PropTypes.array,
-  origin_wards: PropTypes.array,
+  cities: PropTypes.array,
+  districts: PropTypes.array,
+  countries: PropTypes.array,
+  wards: PropTypes.array,
   destination_citys: PropTypes.array,
   destination_districts: PropTypes.array,
   destination_countrys: PropTypes.array,
@@ -524,10 +552,10 @@ SearchForm.propTypes = {
   getServiceCodeZoneCodeByCondition: PropTypes.func.isRequired,
   getShipmentTypeCodeZoneCodeByCondition: PropTypes.func.isRequired,
   getCustomerList: PropTypes.func.isRequired,
-  getOriginCountryList: PropTypes.func.isRequired,
-  getOriginCityList: PropTypes.func.isRequired,
-  getOriginDistrictList: PropTypes.func.isRequired,
-  getOriginWardList: PropTypes.func.isRequired,
+  getCountryList: PropTypes.func.isRequired,
+  getCityList: PropTypes.func.isRequired,
+  getDistrictList: PropTypes.func.isRequired,
+  getWardList: PropTypes.func.isRequired,
   getDestinationCountryList: PropTypes.func.isRequired,
   getDestinationCityList: PropTypes.func.isRequired,
   getDestinationDistrictList: PropTypes.func.isRequired,
@@ -536,18 +564,25 @@ SearchForm.propTypes = {
   reset: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ customer, zoneCode }) => {
+const mapStateToProps = ({ customer, zoneCode, address }) => {
   const { CarrierCodeZoneCodeByCondition, ServiceCodeZoneCodeByCondition, ShipmentCodeZoneCodeByCondition  } = zoneCode;
   const customerCode = customer.items;
-  const origin_countrys = zoneCode.origin_country;
-  const origin_citys = zoneCode.origin_city;
-  const origin_districts = zoneCode.origin_district;
-  const origin_wards = zoneCode.origin_ward;
+ 
+  const countries = address.country.items;
+  const cities = address.city.items;
+  const districts = address.district.items;
+  const wards = address.ward.items;
+
   const destination_countrys = zoneCode.destination_country;
   const destination_citys = zoneCode.destination_city;
   const destination_districts = zoneCode.destination_district;
   const destination_wards = zoneCode.destination_ward;
-  return { customerCode, CarrierCodeZoneCodeByCondition, ServiceCodeZoneCodeByCondition, ShipmentCodeZoneCodeByCondition, origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards }
+  return { customerCode, CarrierCodeZoneCodeByCondition, ServiceCodeZoneCodeByCondition, ShipmentCodeZoneCodeByCondition,
+    countries,
+    cities,
+    districts,
+    wards, 
+    destination_countrys, destination_citys, destination_districts, destination_wards }
 }
 
 export default reduxForm({
@@ -565,6 +600,10 @@ export default reduxForm({
   getServiceCodeZoneCodeByCondition,
   getShipmentTypeCodeZoneCodeByCondition,
   getCustomerList,
-  getOriginCountryList, getOriginCityList, getOriginDistrictList, getOriginWardList,
-  getDestinationCountryList, getDestinationCityList, getDestinationDistrictList, getDestinationWardList
+  getDestinationCountryList, getDestinationCityList, getDestinationDistrictList, getDestinationWardList,
+  getCountryList,
+  getCityList,
+  getDistrictList,
+  getWardList,
+  removeState
 })(SearchForm)));

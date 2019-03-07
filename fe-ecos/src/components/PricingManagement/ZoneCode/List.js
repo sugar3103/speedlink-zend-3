@@ -9,12 +9,12 @@ import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import Action from './Action';
 import Search from './Search';
-import { getZoneCodeList, toggleZoneCodeModal, deleteZoneCodeItem } from "../../../redux/actions";
+import { getZoneCodeList, toggleZoneCodeModal, deleteZoneCodeItem, removeState } from "../../../redux/actions";
 import { confirmAlert } from 'react-confirm-alert';
 import ConfirmPicker from '../../../containers/Shared/picker/ConfirmPicker';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { MODAL_EDIT } from '../../../constants/defaultValues';
-
+import { CITY_RESET_STATE, DISTRICT_RESET_STATE, WARD_RESET_STATE } from '../../../constants/actionTypes';
 
 const ZoneCodeFormatter = ({ value }) => (
   value === 'Enabled' ? <span className="badge badge-success">Enabled</span> :
@@ -57,6 +57,9 @@ class List extends Component {
 
   toggleModal = (e, type, zoneCode) => {
     e.stopPropagation();
+    this.props.removeState(CITY_RESET_STATE);
+    this.props.removeState(DISTRICT_RESET_STATE);
+    this.props.removeState(WARD_RESET_STATE);
     this.props.toggleZoneCodeModal(type, zoneCode);
   };
 
@@ -273,5 +276,6 @@ const mapStateToProps = ({ zoneCode, authUser }) => {
 export default injectIntl(connect(mapStateToProps, {
   getZoneCodeList,
   toggleZoneCodeModal,
-  deleteZoneCodeItem
+  deleteZoneCodeItem,
+  removeState
 })(List));
