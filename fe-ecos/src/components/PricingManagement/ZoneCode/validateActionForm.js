@@ -4,7 +4,7 @@ const validate = (values) => {
     const errors = {};
     if (!values.code) {
       errors.code = 'zone_code.validate-code-empty';
-    } else if (values.code.length < 5) {
+    } else if (values.code.length < 2) {
       errors.code = 'zone_code.validate-code-minlength';
     } else if (values.code.length > 20) {
       errors.code = 'zone_code.validate-code-maxlength';

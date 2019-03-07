@@ -41,7 +41,7 @@ module.exports = {
     //validate
    
     'range_weight.validate-code-empty': 'Name shouldn’t be empty',
-    'range_weight.validate-code-minlength': 'Name must be 5 characters or more',
+    'range_weight.validate-code-minlength': 'Name must be 2 characters or more',
     'range_weight.validate-code-maxlength': 'Name must be 20 characters or less',
     'range_weight.validate-code-exists': 'Name already exists',
     'range_weight.validate-from-empty' : 'From Type shouldn’t be empty',
@@ -77,7 +77,7 @@ module.exports = {
     //validate
    
     'zone_code.validate-code-empty': 'Name shouldn’t be empty',
-    'zone_code.validate-code-minlength': 'Name must be 5 characters or more',
+    'zone_code.validate-code-minlength': 'Name must be 2 characters or more',
     'zone_code.validate-code-maxlength': 'Name must be 20 characters or less',
     'zone_code.validate-code-exists': 'Name already exists',
 
