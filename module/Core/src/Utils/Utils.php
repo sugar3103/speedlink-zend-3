@@ -73,12 +73,12 @@ class Utils {
     public static function Broadcast($user_id,$type,$message)
     {
         $socketio = new SocketIO('localhost',3000);
-        $socketio->setQueryParams(['token' => rand(11)]);
+        $socketio->setQueryParams(['token' => rand(0,11)]);
 
         $success = $socketio->emit('client event', [
             'id' => $user_id,
             'type' => $type,
-            'message' => $message
+            'message' => is_array($message) ? json_encode($message) : $message
         ]);
 
         if(!$success)

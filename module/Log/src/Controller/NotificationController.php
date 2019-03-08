@@ -20,8 +20,6 @@ class NotificationController extends CoreController {
 
     public function indexAction()
     {
-        $this->apiResponse['message'] = 'Action notification';
-        // var_dump($this->tokenPayload->id);die;
         if ($this->getRequest()->isPost()) {
             $notifications = $this->documentManager->getRepository(Notification::class)->findBy(array('user_id' => $this->tokenPayload->id));            
         }
@@ -40,14 +38,5 @@ class NotificationController extends CoreController {
         $this->documentManager->persist($notification);
 
         $this->docuementManager->flush();
-    }
-
-    public function sendAction()
-    {
-     
-        Utils::Broadcast('1','notification','Nofitication for Adminsjhasdjkashdkjash');
-        
-        $this->apiResponse['message'] = 'Action send notification';
-        return $this->createResponse();
     }
 }

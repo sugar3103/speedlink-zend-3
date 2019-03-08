@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { ThemeProps } from '../Shared/prop-types/ReducerProps';
+import SocketHandle from './SocketHandle';
 
 class MainWrapper extends PureComponent {
   static propTypes = {
@@ -46,6 +47,7 @@ class MainWrapper extends PureComponent {
     this.addClassBody(theme.className)    
     return (
       <div className="wrapper">
+        <SocketHandle />
         {this.props.children}
       </div>
     );
