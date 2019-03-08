@@ -85,23 +85,23 @@ class UserController extends CoreController {
 
     public function editAction() {
         if ($this->getRequest()->isPost()) {
-            $data = $this->getRequestData();             
-            $user = $this->tokenPayload;
-            $_user = $this->entityManager->getRepository(User::class)->findOneById($data['id']);
-            if(isset($data['id']) && $_user) {                
+            $data = $this->getRequestData();                   
+            $user = $this->tokenPayload;            
+            if(isset($data['id'])) {                
+                $_user = $this->entityManager->getRepository(User::class)->findOneById($data['id']);
                 if($this->checkAllow($user,$data['id'])) {
                     //Create New Form User
                     $form = new UserForm('update', $this->entityManager, $_user);
                     $form->setData($data);
-                    if ($form->isValid()) {
-                    $data = $form->getData(); 
-                                        
-                    $this->userManager->updateUser($_user, $data,$user);
-                    $this->error_code = 1;
-                    $this->apiResponse['message'] = "SUCCESS_MODIFIED";
+                        if ($form->isValid()) {
+                        $data = $form->getData(); 
+                                            
+                        $this->userManager->updateUser($_user, $data,$user);
+                        $this->error_code = 1;
+                        $this->apiResponse['message'] = "SUCCESS_MODIFIED";
                     }  else {
-                    $this->error_code = 0;
-                    $this->apiResponse = $form->getMessages(); 
+                        $this->error_code = 0;
+                        $this->apiResponse = $form->getMessages(); 
                     }   
                 } else {
                     $this->error_code = 0;

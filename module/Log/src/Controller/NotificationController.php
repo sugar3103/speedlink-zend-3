@@ -4,6 +4,7 @@ namespace Log\Controller;
 use Core\Controller\CoreController;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Log\Entity\Notification;
+use Core\Utils\Utils;
 
 class NotificationController extends CoreController {
     /**
@@ -39,5 +40,14 @@ class NotificationController extends CoreController {
         $this->documentManager->persist($notification);
 
         $this->docuementManager->flush();
+    }
+
+    public function sendAction()
+    {
+     
+        Utils::Broadcast('1','notification','Nofitication for Adminsjhasdjkashdkjash');
+        
+        $this->apiResponse['message'] = 'Action send notification';
+        return $this->createResponse();
     }
 }

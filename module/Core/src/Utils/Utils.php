@@ -4,6 +4,7 @@ namespace Core\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use Log\Factory\NotificationControllerFactory;
+use Core\Utils\SocketIO;
 
 class Utils {
 
@@ -69,8 +70,22 @@ class Utils {
         return $list;
     }
 
-    public static function createNotification($user_id,$type,$text)
+    public static function Broadcast($user_id,$type,$message)
     {
-        
+        $socketio = new SocketIO('localhost',3000);
+        $socketio->setQueryParams(['token' => rand(11)]);
+
+        $success = $socketio->emit('client event', [
+            'id' => $user_id,
+            'type' => $type,
+            'message' => $message
+        ]);
+
+        if(!$success)
+        {
+            return $socketio->getErrors();
+        } else {
+            return 'SUCCESS';
+        }
     }
 }

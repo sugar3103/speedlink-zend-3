@@ -25,6 +25,8 @@
 @import './component/toggle-btn'; 
 @import './component/pagination'; 
 @import './component/customizer';
+@import './component/panel.scss';
+@import './component/dashboard.scss';
 
 //pages...
 @import 'containers/account';

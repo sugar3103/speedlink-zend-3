@@ -8,7 +8,7 @@ class Edit extends Component {
   render() {
     return (
       <Container>
-        <PageTitle title="" />
+        <PageTitle title="Profile" />
         <Col md={12} lg={12} xl={12}>
           <Row>
             <Main />

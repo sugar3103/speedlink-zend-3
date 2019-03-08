@@ -4,21 +4,33 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '../../scss/app.scss';
 import Router from './Router';
 import ScrollToTop from './ScrollToTop';
-
+import socketIOClient from 'socket.io-client';
+import createNotification from '../../util/notifications';
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      loading: true,
-      loaded: false,
+      loading: false,
+      loaded: true,
     };
   }
-
+  
+  send = () => {
+    // const socket = socketIOClient('localhost:3000');    
+  }
   componentDidMount() {
-    window.addEventListener('load', () => {
-      this.setState({ loading: false });
-      setTimeout(() => this.setState({ loaded: true }), 500);
-    });
+    // window.addEventListener('load', () => {
+    //   this.setState({ loading: false });
+    //   setTimeout(() => this.setState({ loaded: true }), 500);
+    // });
+    const socket = socketIOClient('localhost:3000');    
+    socket.on("notification-1",(nofify) => {
+      createNotification({
+        type: 'success', 
+        message: nofify, 
+        title: 'success'
+      });      
+    })
   }
 
   render() {

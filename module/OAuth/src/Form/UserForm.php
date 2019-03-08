@@ -6,18 +6,15 @@ use OAuth\Validator\UserExistsValidator;
 use Doctrine\ORM\EntityManager;
 use Zend\Filter\StringTrim;
 use Zend\Filter\ToInt;
-use Zend\Form\Element\Button;
-use Zend\Form\Element\Csrf;
-use Zend\Form\Element\Password;
-use Zend\Form\Element\Select;
-use Zend\Form\Element\Submit;
-use Zend\Form\Element\Text;
 use Zend\Form\Form;
 use Zend\InputFilter\ArrayInput;
 use Zend\Validator\GreaterThan;
 use Zend\Validator\Identical;
 use Zend\Validator\InArray;
 use Zend\Validator\StringLength;
+use Zend\Validator\File\IsImage;
+use Zend\Validator\File\Extension;
+use Zend\Filter\File\RenameUpload;
 
 class UserForm extends Form {
 
@@ -143,7 +140,34 @@ class UserForm extends Form {
             ]
         ]);
 
-        
+        $inputFilter->add([
+            'name' => 'avatar',
+            'required'=> false,
+            'validators'=> [
+                [
+                    'name' => Extension::class,
+                    'options'=> [
+                        'extension' => ['jpg','png','gif','jpeg'],
+                        'case' => false
+                    ],
+                    [
+                        'name' => IsImage::class,
+                    ],
+                ]
+            ],
+            'filters' => [
+                [
+                    'name' => RenameUpload::class,
+                    'options' => [
+                        'target' => 'data/',
+                        'use_upload_name' => true,
+                        'use_upload_extension' => false,
+                        'overwrite' => true,
+                        'randomize' => true
+                    ]
+                ]
+            ]
+        ]);
             // Add input for "password" field.
             $inputFilter->add([
                 'name' => 'password',

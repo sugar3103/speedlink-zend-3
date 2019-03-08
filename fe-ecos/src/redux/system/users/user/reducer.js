@@ -12,7 +12,8 @@ import {
   USER_DELETE_ITEM,
   USER_DELETE_ITEM_SUCCESS,
   USER_DELETE_ITEM_ERROR,
-  USER_CHANGE_TYPE_MODAL
+  USER_CHANGE_TYPE_MODAL,
+  USER_UPLOAD_AVATAR
 } from '../../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -123,7 +124,11 @@ export default (state = INIT_STATE, action) => {
         ...state,
         modalType: action.payload
       };
-
+    case USER_UPLOAD_AVATAR:
+      return {
+        ...state,
+        loading: false
+      }
     default:
       return { ...state };
   }
