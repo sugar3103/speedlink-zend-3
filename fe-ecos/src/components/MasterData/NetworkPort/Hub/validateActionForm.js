@@ -2,7 +2,7 @@ const validate = (values) => {
     const errors = {};
     if (!values.name) {
       errors.name = 'hub.validate-name-empty';
-    } else if (values.name.length < 1) {
+    } else if (values.name.length < 2) {
       errors.name = 'hub.validate-name-minlength';
     } else if (values.name.length > 21) {
       errors.name = 'hub.validate-name-maxlength';
