@@ -39,4 +39,18 @@ class NotificationController extends CoreController {
 
         $this->docuementManager->flush();
     }
+
+    public function sendAction()
+    {
+        $broadcast = Utils::BroadcastChannel(1,'notification',
+        [
+            'type' => 'info',
+            'title'=> 'Edit Information',
+            'message' => 'Your Information edited by '
+        ]);
+
+        var_dump($broadcast);
+
+        die;
+    }
 }

@@ -1,11 +1,10 @@
-import React, { Component,Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import { injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
 import socketIOClient from 'socket.io-client';
+import { connect } from 'react-redux';
 import createNotification from '../../util/notifications';
 import { socketUrl } from '../../constants/defaultValues';
 import { getVerifyAuth } from '../../redux/actions';
-
 
 class SocketHandle extends Component {
     constructor() {
@@ -13,30 +12,38 @@ class SocketHandle extends Component {
         this.socket = socketIOClient(socketUrl);
     }
 
-    notifications() {        
-        this.socket.on("notification-"+ this.props.authUser.user.id ,(notify) => {
-            notify = JSON.parse(notify);            
-            createNotification({
-              type: notify.type, 
-              message: notify.message, 
-              title: notify.title
-            });      
-          })
+    componentDidMount() {      
+        this.socket.emit('subscribe',{
+            'channel': 'private-user'
+        });
+
+        this.socket.on('reconnecting', (number) => {
+            if(number === 10) { this.socket.disconnect() }
+        });  
+        this.notifications();
+        this.updateUser();
     }
 
     updateUser() {
-        this.socket.on('verify-'+ this.props.authUser.user.id, (reload) => {            
-            if(reload) {
+        this.socket.on('verify-' + this.props.user, (reload) => {
+            if (reload) {
                 this.props.getVerifyAuth();
             }
         })
     }
-    render() {        
-        if(this.props.authUser.user) {
-            this.notifications();
-            this.updateUser();
-        }
+    
+    notifications() {
+        this.socket.on("notification-"+ this.props.user, (notify) => {         
+            notify = JSON.parse(notify);
+            createNotification({
+                type: notify.type,
+                message: notify.message,
+                title: notify.title
+            });
+        })
+    }
 
+    render() {
         return (
             <Fragment></Fragment>
 
@@ -44,8 +51,5 @@ class SocketHandle extends Component {
     }
 }
 
-const mapStateToProps = ({authUser}) => {
-    return { authUser }
-  }
 
-export default injectIntl(connect(mapStateToProps, {getVerifyAuth})(SocketHandle));
+export default injectIntl(connect(null, { getVerifyAuth })(SocketHandle));

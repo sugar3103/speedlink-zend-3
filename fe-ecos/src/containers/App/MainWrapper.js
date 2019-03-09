@@ -47,7 +47,7 @@ class MainWrapper extends PureComponent {
     this.addClassBody(theme.className)    
     return (
       <div className="wrapper">
-        <SocketHandle />
+        { this.props.authUser.user && <SocketHandle user={this.props.authUser.user.id} /> }
         {this.props.children}
       </div>
     );

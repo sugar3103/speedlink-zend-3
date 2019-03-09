@@ -70,16 +70,21 @@ class Utils {
         return $list;
     }
 
-    public static function Broadcast($user_id,$type,$message)
+    public static function BroadcastChannel($user_id,$type,$message)
     {
+        // [
+        //     'id' => $user_id,
+        //     'type' => $type,
+        //     'message' => is_array($message) ? json_encode($message) : $message
+        // ]
+        $param = [
+            'channel' => 'private-'. $user_id,
+            'event' => 'client',
+        ];
         $socketio = new SocketIO('localhost',3000);
         $socketio->setQueryParams(['token' => rand(0,11)]);
 
-        $success = $socketio->emit('client event', [
-            'id' => $user_id,
-            'type' => $type,
-            'message' => is_array($message) ? json_encode($message) : $message
-        ]);
+        $success = $socketio->emit('client event', $param);
 
         if(!$success)
         {

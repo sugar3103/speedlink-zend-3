@@ -102,7 +102,7 @@ class UserController extends CoreController {
                         $this->apiResponse['message'] = "SUCCESS_MODIFIED";
                         
                         //Send Notification For User if infortion edited by diff user
-                        // Utils::Broadcast($_user->getId(), 'verify', true);
+                        Utils::Broadcast($_user->getId(), 'verify', true);
                         Utils::Broadcast($_user->getId(),'notification',
                         [
                             'type' => 'info',
