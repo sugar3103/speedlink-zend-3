@@ -17,7 +17,7 @@
 
     @include themify($themes) {
       color: themed('colorText');
-      border-bottom-color: themed('colorBorder');
+      border-bottom-color: themed('colorText');
     }
   }
 

@@ -12,7 +12,8 @@ import {
   USER_DELETE_ITEM,
   USER_DELETE_ITEM_SUCCESS,
   USER_DELETE_ITEM_ERROR,
-  USER_CHANGE_TYPE_MODAL
+  USER_CHANGE_TYPE_MODAL,
+  USER_UPLOAD_AVATAR
 } from '../../../../constants/actionTypes';
 
 export const toggleUserModal = (type, data) => ({
@@ -80,4 +81,9 @@ export const deleteUserItemError = (error) => ({
 export const changeTypeUserModal = (type) => ({
   type: USER_CHANGE_TYPE_MODAL,
   payload: type
+})
+
+export const uploadAvatarUser = (item, messages) => ({
+  type: USER_UPLOAD_AVATAR,
+  payload: {item, messages}
 })

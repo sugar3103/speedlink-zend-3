@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 class Action extends Component {
 
   handleSubmit = values => {
-    if (!Array.isArray(values.roles)) {
+    if (!Array.isArray(values.roles) && values.roles) {
       values.roles = values.roles.split(',');
     } 
     const { messages } = this.props.intl;

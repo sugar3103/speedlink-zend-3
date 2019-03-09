@@ -10,7 +10,8 @@ import {
   PRICING_CARRIER_GET_LIST,
   PRICING_GET_LIST,
   PRICING_ADD_MASTER_DATA,
-
+  PRICING_GET_DATA,
+  PRICING_UPDATE_DATA
 } from "../../../constants/actionTypes";
 
 import {
@@ -20,6 +21,9 @@ import {
   getCarrierPricingListSuccess,
   getPricingListSuccess,
   addPricingMasterDataItemSuccess,
+  getPricingData,
+  getPricingDataSuccess,
+  updatePricingDataItemSuccess
 } from "./actions";
 
 import createNotification from '../../../util/notifications';
@@ -211,6 +215,106 @@ function* addPricingMasterDataItem({ payload }) {
           message: messages['pricing.add-success'], 
           title: messages['notification.success']
         });
+        const params = {
+          query: {
+            pricing_id: response.data
+          }
+        };
+        yield put(getPricingData(params, messages));
+        yield call(history.push, `/app/pricing-management/pricing/edit/${response.data}`);
+        break;
+
+      case EC_FAILURE:
+        yield put(pricingError(response.data));
+        break;
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning', 
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(pricingError(error));
+  }
+}
+
+//get pricing data
+function getPricingDataApi(params) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}pricing_data`,
+    headers: authHeader(),
+    data: JSON.stringify(params)
+  });
+}
+
+const getPricingDataItemsRequest = async (params) => {
+  return await getPricingDataApi(params).then(res => res.data).catch(err => err)
+};
+
+function* getPricingDataItems({ payload }) {
+  const { params, messages } = payload;
+  try {
+    const response = yield call(getPricingDataItemsRequest, params);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(getPricingDataSuccess(response.data));
+        break;
+
+      case EC_FAILURE:
+        yield put(pricingError(response.message));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning', 
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+      default:
+        break;
+    }
+    
+  } catch (error) {
+    yield put(pricingError(error));
+  }
+}
+
+//update pricing data
+function updatePricingDataApi(params) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}pricing_data/edit`,
+    headers: authHeader(),
+    data: params
+  });
+}
+
+const updatePricingDataItemRequest = async params => {
+  return await updatePricingDataApi(params).then(res => res.data).catch(err => err)
+};
+
+function* updatePricingDataItem({ payload }) {
+  const { params, messages } = payload;
+  try {
+    const response = yield call(updatePricingDataItemRequest, params);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(updatePricingDataItemSuccess());
+        createNotification({
+          type: 'success', 
+          message: messages['pricing.update-data-success'], 
+          title: messages['notification.success']
+        });
         break;
 
       case EC_FAILURE:
@@ -248,6 +352,12 @@ export function* watchPricingGetList() {
 export function* watchPricingAddMasterData() {
   yield takeEvery(PRICING_ADD_MASTER_DATA, addPricingMasterDataItem);
 }
+export function* watchPricingGetData() {
+  yield takeEvery(PRICING_GET_DATA, getPricingDataItems);
+}
+export function* watchPricingUpdateData() {
+  yield takeEvery(PRICING_UPDATE_DATA, updatePricingDataItem);
+}
 
 export default function* rootSaga() {
   yield all([
@@ -255,6 +365,8 @@ export default function* rootSaga() {
     fork(watchSalemanPricingGetList),
     fork(watchCarrierPricingGetList),
     fork(watchPricingGetList),
-    fork(watchPricingAddMasterData)
+    fork(watchPricingAddMasterData),
+    fork(watchPricingGetData),
+    fork(watchPricingUpdateData),
   ]);
 }

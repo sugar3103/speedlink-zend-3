@@ -307,6 +307,10 @@ form {
 /* PRICING PAGE */
 
 .pricing {
+    .nav {
+        display: block;
+    }
+
     .pricing-title {
         h4 {
             float: left;
@@ -317,31 +321,13 @@ form {
         }
     }
 
-    .react-grid-Grid {
-        min-height: 100% !important;
-    }
+    .react-bs-table-bordered {
+        border: none;
 
-    .react-grid-Container{
-        width: auto !important;
-    }
-
-    .react-grid-Canvas {
-        width: auto !important;
-        overflow-y: hidden !important;
-    }
-    
-
-    .react-grid-HeaderRow {
-        width: 100% !important;
-    }
-
-    .react-grid-Canvas > div{
-        &:nth-child(2) {
-            width: auto !important;
+        .form-control {
+            height: 25px;
+            color: #343d45;
         }
-    }
-    .rdg-last--frozen {
-        box-shadow: none !important;
     }
 
     .btn-grid {
@@ -427,4 +413,8 @@ form {
             font-size: 13px;
         }
     }
+}
+
+.topbar__title {
+    display: none;
 }

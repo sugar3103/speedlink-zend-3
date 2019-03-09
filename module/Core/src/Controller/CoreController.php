@@ -32,6 +32,12 @@ class CoreController extends ApiController
         if ($this->getRequest()->isPost()) {
             $payload = file_get_contents('php://input');
             $params = !empty(json_decode($payload, true)) ? json_decode($payload, true) : array();
+
+            if(empty($params)) {
+                $params = $this->getRequest()->getPost() ? (array) $this->getRequest()->getPost() : array();                
+                $params = $this->getRequest()->getFiles() ? array_merge($params, (array)$this->getRequest()->getFiles()) : $params;
+            }
+            
             if(!empty($fieldsMap)) {
                 //the current page number.
                 $start = isset( $params['offset']['start']) ? (int) $params['offset']['start'] : 1;

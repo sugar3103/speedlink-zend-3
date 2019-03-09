@@ -44,18 +44,16 @@ class CustomerController extends CoreController {
               3 => 'created_at'
             ];
 
-            list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);          
+            list($start,$limit,$sortField,$sortDirection,$filters, $fields) = $this->getRequestData($fieldsMap);          
             //get list User by condition
-            $dataCustome = $this->customertManager->getListCustomerByCondition($start, $limit, $sortField, $sortDirection,$filters);            
+            $dataCustome = $this->customertManager->getListCustomerByCondition($start, $limit, $sortField, $sortDirection,$filters); 
             
-            $result = ($dataCustome['listCustomer']) ? $dataCustome['listCustomer'] : [] ;
+            $result = $this->filterByField($dataCustome['listCustomer'], $fields);     
             
-            $this->error_code = 1;
             $this->apiResponse =  array(
-                'message'   => "Success",
                 'data'      => $result,
                 'total'     => $dataCustome['totalCustomer']
-            );                         
+            );                        
         } 
 
         return $this->createResponse();

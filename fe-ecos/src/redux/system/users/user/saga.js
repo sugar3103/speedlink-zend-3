@@ -7,6 +7,7 @@ import history from '../../../../util/history';
 import {
   USER_GET_LIST,
   USER_UPDATE_ITEM,  
+  USER_UPLOAD_AVATAR
 } from "../../../../constants/actionTypes";
 
 import {
@@ -15,7 +16,7 @@ import {
   updateUserItemSuccess,
   updateUserItemError,
   getUserList,
-  toggleUserModal
+  toggleUserModal,
 } from "./actions";
 
 import { getVerifyAuth } from '../../../actions';
@@ -82,6 +83,7 @@ export function* watchGetList() {
 //update user
 
 function updateUserApi(item) {
+  
   return axios.request({
     method: 'post',
     url: `${apiUrl}user/edit`,
@@ -133,9 +135,71 @@ function* updateUserItem({ payload }) {
     yield put(updateUserItemError(error));
   }
 }
+
 export function* wathcUpdateItem() {
   yield takeEvery(USER_UPDATE_ITEM, updateUserItem);
 }
+
+//Upload
+
+//update user
+
+function updateUserAvatarApi(item) {
+  console.log(item);
+  
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}user/edit`,
+    headers: authHeader(),
+    data: item
+  });
+}
+
+const updateUserAvatarItemRequest = async item => {
+  return await updateUserAvatarApi(item).then(res => res.data).catch(err => err)
+};
+
+function* updateUserAvatarItem({ payload }) {
+  const { item, messages } = payload;  
+  try {
+    const response = yield call(updateUserAvatarItemRequest, item);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(updateUserItemSuccess());
+        yield put(getVerifyAuth());
+        createNotification({
+          type: 'success', 
+          message: messages['user.update-success'], 
+          title: messages['notification.success']
+        });
+        break;
+
+      case EC_FAILURE:
+        yield put(updateUserItemError(response.data));
+        yield put(validateUser(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning', 
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(updateUserItemError(error));
+  }
+}
+
+export function* wathcUpdateAvatarItem() {
+  yield takeEvery(USER_UPLOAD_AVATAR, updateUserAvatarItem);
+}
+
 export default function* rootSaga() {
-  yield all([fork(watchGetList),fork(wathcUpdateItem)]);
+  yield all([fork(watchGetList),fork(wathcUpdateItem),fork(wathcUpdateAvatarItem)]);
 }

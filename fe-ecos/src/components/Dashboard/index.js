@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
-import { Card, CardBody, Col } from 'reactstrap';
+import { Row, Col, Container } from 'reactstrap';
+import VisitorsSessions from './VisitorsSessions';
 
 class Dashborad extends Component {
   render() {
     return (
-      <Col md={12}>
-        <Card>
-          <CardBody>
-            <div className="card__title">
-              <h5 className="bold-text">Example title</h5>
-              <h5 className="subhead">Example subhead</h5>
-            </div>
-            <p>Your content here</p>
-          </CardBody>
-        </Card>
-      </Col>
+      <Container className="dashboard">
+        <Row>
+          <Col md={12}>
+            <h3 className="page-title">dashboard_default.page_title</h3>
+          </Col>
+        </Row>
+        <Row>
+          <VisitorsSessions />
+        </Row>
+      </Container>
     );
   }
 }

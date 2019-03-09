@@ -187,7 +187,7 @@ class UserManager {
      * @throws \Exception
      */
 
-    private function assignRoles($user, $roleIds) {
+    private function assignRoles($user, $roleIds) {        
         // remove old user role(s).
         $user->getRoles()->clear();
 

@@ -3,7 +3,7 @@ export function authHeader() {
     let token = JSON.parse(localStorage.getItem('authUser'));
     
     if (token) {
-        return { 'Authorization': `Bearer  ${token}` };
+        return { 'Authorization': `Bearer  ${token}`};
     } else {
         return {};
     }

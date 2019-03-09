@@ -16,6 +16,12 @@ import {
   PRICING_ADD_MASTER_DATA,
   PRICING_ADD_MASTER_DATA_SUCCESS,
 
+  PRICING_GET_DATA,
+  PRICING_GET_DATA_SUCCESS,
+
+  PRICING_UPDATE_DATA,
+  PRICING_UPDATE_DATA_SUCCESS,
+
 } from '../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -26,7 +32,8 @@ const INIT_STATE = {
   salemans: null,
   carriers: null,
   total: 0,
-  paramSearch: null
+  paramSearch: null,
+  data: null
 };
 
 export default (state = INIT_STATE, action) => {
@@ -101,6 +108,32 @@ export default (state = INIT_STATE, action) => {
       };
 
 		case PRICING_ADD_MASTER_DATA_SUCCESS:
+			return { 
+        ...state, 
+        loading: false, 
+        errors: null
+      };
+
+    case PRICING_GET_DATA:
+			return { 
+        ...state, 
+        loading: false 
+      };
+
+    case PRICING_GET_DATA_SUCCESS:
+			return { 
+        ...state, 
+        loading: false,
+        data: action.payload
+      };
+
+    case PRICING_UPDATE_DATA:
+			return { 
+        ...state, 
+        loading: false 
+      };
+
+		case PRICING_UPDATE_DATA_SUCCESS:
 			return { 
         ...state, 
         loading: false, 

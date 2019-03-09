@@ -4,6 +4,7 @@ namespace Log\Controller;
 use Core\Controller\CoreController;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Log\Entity\Notification;
+use Core\Utils\Utils;
 
 class NotificationController extends CoreController {
     /**
@@ -19,8 +20,6 @@ class NotificationController extends CoreController {
 
     public function indexAction()
     {
-        $this->apiResponse['message'] = 'Action notification';
-        // var_dump($this->tokenPayload->id);die;
         if ($this->getRequest()->isPost()) {
             $notifications = $this->documentManager->getRepository(Notification::class)->findBy(array('user_id' => $this->tokenPayload->id));            
         }
@@ -39,5 +38,19 @@ class NotificationController extends CoreController {
         $this->documentManager->persist($notification);
 
         $this->docuementManager->flush();
+    }
+
+    public function sendAction()
+    {
+        $broadcast = Utils::BroadcastChannel(2,'notification',
+        [
+            'type' => 'info',
+            'title'=> 'Edit Information',
+            'message' => 'Your Information edited by '
+        ]);
+
+        var_dump($broadcast);
+        
+        die;
     }
 }

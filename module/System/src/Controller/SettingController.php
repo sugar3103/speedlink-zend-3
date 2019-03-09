@@ -66,7 +66,7 @@ class SettingController extends CoreController
             $dataSetting = $this->settingManager->getListSettingByCondition($sortField, $sortDirection,$filters);
 
             $fields = [
-                'name','name_en','meta_title_en','owner','meta_title','language','password','default_color','maintenance','allow_customizer'
+                'name','name_en','meta_title_en','owner','meta_title','language','password','default_color','maintenance','allow_customizer','country','city','district','ward'
             ];
 
             $results = $dataSetting['listSetting'];
