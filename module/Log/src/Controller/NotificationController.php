@@ -42,7 +42,7 @@ class NotificationController extends CoreController {
 
     public function sendAction()
     {
-        $broadcast = Utils::BroadcastChannel(1,'notification',
+        $broadcast = Utils::BroadcastChannel(2,'notification',
         [
             'type' => 'info',
             'title'=> 'Edit Information',
@@ -50,7 +50,7 @@ class NotificationController extends CoreController {
         ]);
 
         var_dump($broadcast);
-
+        
         die;
     }
 }

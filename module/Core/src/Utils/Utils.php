@@ -78,7 +78,7 @@ class Utils {
         return $dateLast;
     }
 
-    public static function BroadcastChannel($user_id,$type,$message)
+    public static function BroadcastChannel($user_id,$type,$data)
     {
         // [
         //     'id' => $user_id,
@@ -87,12 +87,14 @@ class Utils {
         // ]
         $param = [
             'channel' => 'private-'. $user_id,
-            'event' => 'client',
+            'event' => 'client-'. $type,
+            'data' => $data            
         ];
+        
         $socketio = new SocketIO('localhost',3000);
         $socketio->setQueryParams(['token' => rand(0,11)]);
 
-        $success = $socketio->emit('client event', $param);
+        $success = $socketio->emit('client event', (object) $param);
 
         if(!$success)
         {

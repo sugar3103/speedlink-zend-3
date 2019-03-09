@@ -10,20 +10,42 @@ class SocketHandle extends Component {
     constructor() {
         super();
         this.socket = socketIOClient(socketUrl);
+        this.state = {
+            channel: ''
+        }
     }
 
-    componentDidMount() {      
-        this.socket.emit('subscribe',{
-            'channel': 'private-user'
+    componentDidMount() {
+        this.setState({ channel: 'private-' + this.props.user })
+        //Register Channel By User Current    
+        this.socket.emit('subscribe', {
+            'channel': 'private-' + this.props.user
         });
 
-        this.socket.on('reconnecting', (number) => {
-            if(number === 10) { this.socket.disconnect() }
-        });  
+        // this.socket.on('reconnecting', (number) => {
+        //     if(number === 10) { this.socket.disconnect() }
+        // });  
         this.notifications();
         this.updateUser();
     }
+    componentWillUnmount() {
+        //Unregister Channel
+        this.socket.emit('unsubscribe', {
+            'channel': this.state.channel
+        });
+    }
 
+    eventFormater(event) {
+        return 'client-' + event;
+    }
+
+    listener(event, callback) {
+        this.socket.on(this.eventFormater(event), (channel, data) => {
+            if (this.state.channel === channel) {
+                callback(data);
+            }
+        })
+    }
     updateUser() {
         this.socket.on('verify-' + this.props.user, (reload) => {
             if (reload) {
@@ -31,16 +53,19 @@ class SocketHandle extends Component {
             }
         })
     }
-    
+
+
     notifications() {
-        this.socket.on("notification-"+ this.props.user, (notify) => {         
-            notify = JSON.parse(notify);
+
+        this.listener('notification', function (data) {
             createNotification({
-                type: notify.type,
-                message: notify.message,
-                title: notify.title
+                type: data.type,
+                message: data.message,
+                title: data.title
             });
-        })
+        });
+
+
     }
 
     render() {
