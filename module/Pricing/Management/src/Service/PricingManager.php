@@ -63,11 +63,19 @@ class PricingManager {
         }
         $pricing->setJoinApproval($approve_by);
 
-        $customer_id = $this->entityManager->getRepository(Customer::class)->find($data['approved_by']);
-        if ($approve_by == null) {
-            throw new \Exception('Not found Customer ID');
+        $saleman_id = $this->entityManager->getRepository(User::class)->find($data['saleman_id']);
+        if ($saleman_id == null) {
+            throw new \Exception('Not found Saleman ID');
         }
-        $pricing->setJoinCustomer($customer_id);
+        $pricing->setJoinSaleman($saleman_id);
+
+        if (!empty($data['customer_id'])) {
+            $customer_id = $this->entityManager->getRepository(Customer::class)->find($data['customer_id']);
+            if ($customer_id == null) {
+                throw new \Exception('Not found Customer ID');
+            }
+            $pricing->setJoinCustomer($customer_id);
+        }
 
         $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['carrier_id']);
         if ($carrier == null) {
@@ -199,7 +207,9 @@ class PricingManager {
             $pricing->setExpiredDate(new \DateTime($data['expired_date']));
             $pricing->setSalemanId($data['saleman_id']);
             $pricing->setIsPrivate($data['is_private']);
-            $pricing->setCustomerId($data['customer_id']);
+            if (!empty($data['customer_id'])) {
+                $pricing->setCustomerId($data['customer_id']);
+            }
             $pricing->setApprovalStatus($data['approval_status']);
             $pricing->setApprovedBy($data['approved_by']);
             $pricing->setStatus($data['status']);

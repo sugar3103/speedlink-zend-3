@@ -1,53 +1,99 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
-import EditTable from '../../../containers/Shared/table/EditableTable';
 import { injectIntl } from 'react-intl';
 import PricingVas from './PricingVas';
 // import PricingCod from './PricingCod';
+import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
+import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
+import PropTypes from 'prop-types';
+import { connect } from "react-redux";
+import { updatePricingDataItem } from '../../../redux/actions';
 
 class PricingData extends Component {
 
-    onSaveTransportation = (dataSent) => {
-        const { data, title } = this.props.pricing.pricing_data;
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: [],
+            enableSaveButton: false
+        }
+    }
 
-        Object.values(dataSent).forEach((value, index) => {
+    componentDidMount() {
+        const { pricing_data } = this.props.pricing;
+        let { data } = pricing_data;
+        data = Object.keys(data).map(item => {
+            return data[item];
+        });
+        this.setState({ data });
+    }
+
+    valueValidator = (value) => {
+        const { messages } = this.props.intl;
+        const nan = isNaN(value);
+        if (!value || nan) {
+          return messages['pricing.validate-value-numberic'];
+        }
+        return true;
+    }
+
+    onAfterSaveCell = () => {
+        this.setState({
+            data: this.state.data,
+            enableSaveButton: true
+        });
+    }
+
+    onSaveTransportation = () => {
+        const { messages } = this.props.intl;
+        const { id, pricing_data } = this.props.pricing;
+        const { data, title } = pricing_data;
+
+        Object.values(this.state.data).forEach((value, index) => {
             let id = Object.keys(data).filter((key, index2) => index2 === index);
             data[id] = value;
         });
 
-        const result = { title, data }
-        console.log(result);
-        
+        const dataSent = {
+            id: id,
+            status: 1,
+            pricing_data: { title, data }
+        }
+
+        this.props.updatePricingDataItem(dataSent, messages);
+
+        setTimeout(() => {
+            this.setState({
+                enableSaveButton: false
+            });
+        }, 500);
     }
 
     render() {
         const { messages } = this.props.intl;
-        const { pricing_data, shipment_type_code, shipment_type_name } = this.props.pricing;
-        const { data, title } = pricing_data;
-        let heads = Object.keys(title).map((item, index) => {
-            let head = {};
+        const { pricing_data, shipment_type_code, shipment_type_name, id } = this.props.pricing;
+        const { title } = pricing_data;
+        
+        let columns = Object.keys(title).map((item, index) => {
             if (index === 0) {
-                head = {
-                    key: title[item],
-                    name: item,
-                    editable: false,
-                }
+                return (
+                    <TableHeaderColumn dataField={title[item]} isKey key={index}>{item}</TableHeaderColumn>
+                )
             } else {
-                head = {
-                    key: title[item],
-                    name: item,
-                    editable: true,
-                }
+                return (
+                    <TableHeaderColumn dataField={title[item]} key={index} editable={ { validator: this.valueValidator } }>{item}</TableHeaderColumn>
+                )
             }
-            return head;
         });
 
-        let rows = Object.keys(data).map(item => {
-            return data[item];
-        });
+        const cellEdit = {
+            mode: 'click',
+            blurToSave: true,
+            afterSaveCell: this.onAfterSaveCell
+        };
 
         return (
-            <div className="pricing">
+            <Fragment>
                 <div className="mb-2">
                     <div className="mb-2 pricing-title">
                         <h4>{shipment_type_code} - {shipment_type_name}</h4>
@@ -57,23 +103,39 @@ class PricingData extends Component {
                 </div>
                 <fieldset className="scheduler-border">
                     <legend className="scheduler-border">{messages['pricing.transportation']}</legend>
-                    <EditTable
-                        heads={heads}
-                        rows={rows}
-                        onSaveTable={this.onSaveTransportation}
-                    />
+                    <BootstrapTable data={ this.state.data } cellEdit={ cellEdit }>
+                        {columns}
+                    </BootstrapTable>
+                    {this.state.enableSaveButton && 
+                        <Button 
+                            size="sm" 
+                            color="primary" 
+                            className="btn-grid"
+                            onClick={this.onSaveTransportation}
+                        >{messages['save']}</Button>
+                    }
                 </fieldset>
                 <fieldset className="scheduler-border">
                     <legend className="scheduler-border">{messages['pricing.value-services']}</legend>
-                    <PricingVas />
+                    <PricingVas pricing_data_id={id} />
                 </fieldset>
                 {/* <fieldset className="scheduler-border">
                     <legend className="scheduler-border">{messages['pricing.cod']}</legend>
                     <PricingCod />
                 </fieldset> */}
-            </div>
+            </Fragment>
         )
     }
 }
 
-export default injectIntl(PricingData);
+PricingData.propTypes = {
+    updatePricingDataItem: PropTypes.func.isRequired,
+  }
+
+const mapStateToProps = () => {
+    return {}
+}
+
+export default injectIntl(connect(mapStateToProps, {
+    updatePricingDataItem
+})(PricingData));

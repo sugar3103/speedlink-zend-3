@@ -9,8 +9,8 @@ import {
   SHIPMENT_TYPE_ADD_ITEM,
   SHIPMENT_TYPE_UPDATE_ITEM,
   SHIPMENT_TYPE_DELETE_ITEM ,
-  SHIPMENT_TYPE_CODE_GET_LIST
-  
+  SHIPMENT_TYPE_CODE_GET_LIST,
+  SHIPMENT_TYPE_CARRIER_GET_LIST
 } from "../../../../constants/actionTypes";
 
 import {
@@ -26,7 +26,10 @@ import {
   getShipmentTypeList,
   getShipmentTypeCodeList,
   getShipmentTypeCodeListSuccess,
-  getShipmentTypeCodeListError
+  getShipmentTypeCodeListError,
+
+  getCarrierShipmentListSuccess,
+  getCarrierShipmentListError
   
 } from "./actions";
 
@@ -288,6 +291,54 @@ function* deleteShipmentTypeItem({ payload }) {
   }
 }
 
+/* GET LIST CODE CONDITIONS */
+
+function getCodeByConditionApi(params) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}shipment_type/codeByCondition`,
+    headers: authHeader(),
+    data: JSON.stringify(params)
+  });
+}
+
+const getCodeByConditionListRequest = async (params) => {
+  return await getCodeByConditionApi(params).then(res => res.data).catch(err => err)
+};
+
+/* GET CARRIER SHIPMENT TYPE LIST */
+
+function* getCarrierShipmentListItems({ payload }) {
+  const { params, messages } = payload;
+  try {
+    const response = yield call(getCodeByConditionListRequest, params);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(getCarrierShipmentListSuccess(response.data));
+        break;
+
+      case EC_FAILURE:
+        yield put(getCarrierShipmentListError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning', 
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+      default:
+        break;
+    }
+    
+  } catch (error) {
+    yield put(getCarrierShipmentListError(error));
+  }
+}
+
 
 export function* watchGetList() {
   yield takeEvery(SHIPMENT_TYPE_GET_LIST, getShipmentTypeListItems);
@@ -309,7 +360,18 @@ export function* watchDeleteItem() {
   yield takeEvery(SHIPMENT_TYPE_DELETE_ITEM, deleteShipmentTypeItem);
 }
 
+export function* watchCarrierShipmentGetList() {
+  yield takeEvery(SHIPMENT_TYPE_CARRIER_GET_LIST, getCarrierShipmentListItems);
+}
+
 
 export default function* rootSaga() {
-  yield all([fork(watchGetList), fork(watchGetListCode), fork(watchAddItem), fork(watchUpdateItem), fork(watchDeleteItem)]);
+  yield all([
+    fork(watchGetList), 
+    fork(watchGetListCode), 
+    fork(watchAddItem), 
+    fork(watchUpdateItem), 
+    fork(watchDeleteItem),
+    fork(watchCarrierShipmentGetList),
+  ]);
 }

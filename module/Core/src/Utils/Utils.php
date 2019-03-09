@@ -70,6 +70,14 @@ class Utils {
         return $list;
     }
 
+    public static function formatDate($date) {
+        $datetime = new \DateTime($date, new \DateTimeZone('UTC'));
+        $laTime = new \DateTimeZone('Asia/Ho_Chi_Minh');
+        $datetime->setTimezone($laTime);
+        $dateLast = $datetime->format('Y-m-d');
+        return $dateLast;
+    }
+
     public static function Broadcast($user_id,$type,$message)
     {
         $socketio = new SocketIO('localhost',3000);

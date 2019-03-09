@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Button } from 'reactstrap';
-import { Field, reduxForm } from 'redux-form';
+import { Field } from 'redux-form';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import CustomField from '../../../containers/Shared/form/CustomField';
 import renderSelectField from '../../../containers/Shared/form/Select';
-import ReactDataGrid from "react-data-grid";
 import { uuidv4 } from '../../../util/uuidv4';
+import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
 class PricingVasItem extends Component {
   constructor(props) {
@@ -19,7 +19,10 @@ class PricingVasItem extends Component {
   }
 
   componentDidMount() {
-    this.props.change(`${this.props.index}_type`, this.state.type);
+    const { item } = this.props;
+    this.setState({
+      type: item.type
+    });
   }
   
 
@@ -63,53 +66,36 @@ class PricingVasItem extends Component {
     });
   }
 
-  onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
-    this.setState(state => {
-      const rows = state.rows.slice();
-      for (let i = fromRow; i <= toRow; i++) {
-        rows[i] = { ...rows[i], ...updated };
-      }
-      return { rows };
-    });
-  };
+  actionFormatter = (cell, row) => {
+    return (
+      <Button
+            size="sm"
+            color="danger"
+            onClick={(e) => this.onRemoveRowPrice(e, cell)}
+      ><span className="lnr lnr-circle-minus"></span></Button>
+    )
+  }
+
+  valueValidator = (value) => {
+    const { messages } = this.props.intl;
+    const nan = isNaN(value);
+    if (!value || nan) {
+      return messages['pricing.validate-value-numberic'];
+    }
+    return true;
+}
 
   render() {
     const { messages } = this.props.intl;
-    const columns = [
-      {
-        key: 'index',
-        headerRenderer: <Button size="sm" color="success" onClick={(e) => this.onAddRowPrice(e)}><span className="lnr lnr-plus-circle"></span></Button>,
-        width: 50,
-        formatter: ({ value }) => (
-          <Button
-            size="sm"
-            color="danger"
-            onClick={(e) => this.onRemoveRowPrice(e, value)}
-          ><span className="lnr lnr-circle-minus"></span></Button>
-        ),
-      },
-      {
-        key: 'from',
-        name: messages['pricing.from'],
-        width: 65,
-        editable: true,
-      },
-      {
-        key: 'to',
-        name: messages['pricing.to'],
-        width: 65,
-        editable: true,
-      },
-      {
-        key: 'price',
-        name: messages['pricing.price'],
-        width: 65,
-        editable: true,
-      }
-    ];
+    const { type, removed } = this.state;
+    const { index } = this.props.item;
 
-    const { rows, type, removed } = this.state;
-    const { index } = this.props;
+    const cellEdit = {
+      mode: 'click',
+      blurToSave: true,
+      afterSaveCell: this.onAfterSaveCell
+  };
+
 
     return removed ? null : (
       <div>
@@ -155,15 +141,12 @@ class PricingVasItem extends Component {
               />
             </div>
             <div className="price-vas" style={{display: type === 1 ? 'block' : 'none'}}>
-              <ReactDataGrid
-                columns={columns}
-                rowGetter={i => rows[i]}
-                rowsCount={rows.length}
-                onGridRowsUpdated={this.onGridRowsUpdated}
-                enableCellSelect={true}
-                headerRowHeight={50}
-                enableCellAutoFocus={false}
-              />
+              <BootstrapTable data={ this.state.rows } cellEdit={ cellEdit }>
+                <TableHeaderColumn dataField="index" dataFormat={ this.actionFormatter } isKey><Button size="sm" color="success" onClick={(e) => this.onAddRowPrice(e)}><span className="lnr lnr-plus-circle"></span></Button></TableHeaderColumn>
+                <TableHeaderColumn dataField="from">{messages['pricing.from']}</TableHeaderColumn>
+                <TableHeaderColumn dataField="to">{messages['pricing.to']}</TableHeaderColumn>
+                <TableHeaderColumn dataField="price" editable={ { validator: this.valueValidator } }>{messages['pricing.price']}</TableHeaderColumn>
+              </BootstrapTable>
             </div>
           </div>
           {type === 0 &&
@@ -189,6 +172,4 @@ const mapStateToProps = () => {
   return {}
 }
 
-export default reduxForm({
-  form: 'pricing_vas_action_form',
-})(injectIntl(connect(mapStateToProps, null)(PricingVasItem)));
+export default injectIntl(connect(mapStateToProps, null)(PricingVasItem));

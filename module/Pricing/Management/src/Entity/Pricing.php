@@ -72,14 +72,14 @@ class Pricing
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="effected_date", type="datetime", nullable=true)
+     * @ORM\Column(name="effected_date", type="date", nullable=true)
      */
     private $effected_date;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="expired_date", type="datetime", nullable=true)
+     * @ORM\Column(name="expired_date", type="date", nullable=true)
      */
     private $expired_date;
 
@@ -100,7 +100,7 @@ class Pricing
     /**
      * @var int
      *
-     * @ORM\Column(name="customer_id", type="integer", nullable=false, options={"comment"="required if is_private == 1"})
+     * @ORM\Column(name="customer_id", type="integer", nullable=true, options={"comment"="required if is_private == 1"})
      */
     private $customer_id;
 
@@ -114,7 +114,7 @@ class Pricing
     /**
      * @var int
      *
-     * @ORM\Column(name="approval_status", type="boolean", nullable=true, options={"comment"="0 == new, 1 == approved"})
+     * @ORM\Column(name="approval_status", type="boolean", nullable=true, options={"comment"="0 == new, 1 == approved, 2 == draft"})
      */
     private $approval_status;
 

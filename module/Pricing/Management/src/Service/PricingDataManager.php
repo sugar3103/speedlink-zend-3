@@ -50,17 +50,21 @@ class PricingDataManager {
         }
         $pricingData->setJoinUpdated($user_data);
 
-        $service = $this->entityManager->getRepository(Service::class)->find($data['service_id']);
-        if ($service == null) {
-            throw new \Exception('Not found Service Code');
+        if (!empty($data['service_id'])) {
+            $service = $this->entityManager->getRepository(Service::class)->find($data['service_id']);
+            if ($service == null) {
+                throw new \Exception('Not found Service Code');
+            }
+            $pricingData->setJoinService($service);
         }
-        $pricingData->setJoinService($service);
 
-        $shipment_type = $this->entityManager->getRepository(ShipmentType::class)->find($data['shipment_type_id']);
-        if ($shipment_type == null) {
-            throw new \Exception('Not found Shipment Type');
+        if (!empty($data['shipment_type_id'])) {
+            $shipment_type = $this->entityManager->getRepository(ShipmentType::class)->find($data['shipment_type_id']);
+            if ($shipment_type == null) {
+                throw new \Exception('Not found Shipment Type');
+            }
+            $pricingData->setJoinShipmentType($shipment_type);
         }
-        $pricingData->setJoinShipmentType($shipment_type);
     }
     public function getListPricingDataByCondition($start, $limit, $sortField = '', $sortDirection = 'asc', $filters = [])
     {
@@ -152,10 +156,7 @@ class PricingDataManager {
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
-            $pricingData->setServiceId($data['service_id']);
-            $pricingData->setPricingId($data['pricing_id']);
-            $pricingData->setShipmentTypeId($data['shipment_type_id']);
-            $pricingData->setPricingData($data['pricing_data']);
+            $pricingData->setPricingData(json_encode($data['pricing_data']));
             $pricingData->setStatus($data['status']);
             $pricingData->setUpdatedAt(new \DateTime());
             $pricingData->setUpdatedBy($user->id);
@@ -209,7 +210,7 @@ class PricingDataManager {
             return json_encode($result, false);
         }
 
-        $title['weight'] = 'Weight';
+        $title['Weight'] = 'Weight';
         foreach ($zoneCode as $zone) {
             $temp = array();
             if (in_array($zone->getCode(),$temp)) {
@@ -219,7 +220,7 @@ class PricingDataManager {
         }
         $data = array();
         foreach ($rangeWeight as $range) {
-            $data[$range->getId()]['weight'] = $range->getFrom() . ' - ' . $range->getTo();
+            $data[$range->getId()]['Weight'] = $range->getFrom() . ' - ' . $range->getTo();
             $temp = array();
             foreach ($zoneCode as $zone) {
                 if (in_array($zone->getCode(),$temp) ) {
