@@ -103,6 +103,8 @@ module.exports = {
     'pricing.type': 'Type',
     'pricing.value': 'Value',
     'pricing.minimun-value': 'Minimum Value',
+    'pricing.add-success': 'Added Success',
+    'pricing.update-data-success': 'Updated data Success',
 
     //validate
     'pricing.validate-saleman-empty': 'Saleman shouldn’t be empty',
@@ -112,6 +114,7 @@ module.exports = {
     'pricing.validate-origin-country-empty': 'Country shouldn’t be empty',
     'pricing.validate-origin-city-empty': 'City shouldn’t be empty',
     'pricing.validate-approved-by-empty': 'Approved by shouldn’t be empty',
+    'pricing.validate-value-numberic': 'Value must be a number!',
 
     //COD
     'pricing.cod' : 'Pricing Cod',

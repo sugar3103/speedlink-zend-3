@@ -3,11 +3,11 @@ const validate = (values) => {
   
     const errors = {};
 
-    if (!values.is_private) {
+    if (values.is_private  === undefined || values.is_private === null ) {
       errors.is_private = 'pri_man.validate-private-empty';
     }
     
-    if (!values.customer_id && values.is_private === 2 ) {
+    if (!values.customer_id && values.is_private === 1 ) {
       errors.customer_id = 'pri_man.validate-customer-empty';
     }
 

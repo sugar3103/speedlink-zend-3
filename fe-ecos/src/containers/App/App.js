@@ -15,12 +15,12 @@ class App extends Component {
     };
   }
 
-  componentDidMount() {
+  // componentDidMount() {
     // window.addEventListener('load', () => {
     //   this.setState({ loading: false });
     //   setTimeout(() => this.setState({ loaded: true }), 500);
     // });
-  }
+  // }
 
   render() {
     const { loaded, loading } = this.state;
