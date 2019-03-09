@@ -20,8 +20,20 @@ class PricingVasItem extends Component {
 
   componentDidMount() {
     const { item } = this.props;
+    let { spec } = item;
+    
+    if (spec.length > 0) {
+      spec = spec.map(item => {
+        return {
+          ...item,
+          index: uuidv4()
+        }
+      });
+    }
+    
     this.setState({
-      type: item.type
+      type: item.type,
+      rows: spec
     });
   }
   
@@ -33,7 +45,7 @@ class PricingVasItem extends Component {
       index: uuidv4(),
       from: 0,
       to: 0,
-      price: 0
+      value: 0
     })
     this.setState({ rows });
   }
@@ -60,7 +72,7 @@ class PricingVasItem extends Component {
           index: uuidv4(),
           from: 0,
           to: 0,
-          price: 0
+          value: 0
         }
       ],
     });
@@ -83,7 +95,12 @@ class PricingVasItem extends Component {
       return messages['pricing.validate-value-numberic'];
     }
     return true;
-}
+  }
+
+  onAfterSaveCell = () => {
+    const { index } = this.props.item;
+    this.props.onChangeSpec(index, this.state.rows);
+  }
 
   render() {
     const { messages } = this.props.intl;
@@ -96,13 +113,17 @@ class PricingVasItem extends Component {
       afterSaveCell: this.onAfterSaveCell
   };
 
-
     return removed ? null : (
       <div>
         <div className="group-input">
           <div>
             <Button size="sm" color="danger" onClick={(e) => this.onRemoveItem(e)}><span className="lnr lnr-circle-minus"></span></Button>
           </div>
+          <Field 
+            name={`${index}_spec`}
+            component="input"
+            type="hidden"
+          />
           <div className="form__form-group type-select">
             <div className="form__form-group-field">
               <Field
@@ -145,7 +166,7 @@ class PricingVasItem extends Component {
                 <TableHeaderColumn dataField="index" dataFormat={ this.actionFormatter } isKey><Button size="sm" color="success" onClick={(e) => this.onAddRowPrice(e)}><span className="lnr lnr-plus-circle"></span></Button></TableHeaderColumn>
                 <TableHeaderColumn dataField="from">{messages['pricing.from']}</TableHeaderColumn>
                 <TableHeaderColumn dataField="to">{messages['pricing.to']}</TableHeaderColumn>
-                <TableHeaderColumn dataField="price" editable={ { validator: this.valueValidator } }>{messages['pricing.price']}</TableHeaderColumn>
+                <TableHeaderColumn dataField="value" editable={ { validator: this.valueValidator } }>{messages['pricing.price']}</TableHeaderColumn>
               </BootstrapTable>
             </div>
           </div>

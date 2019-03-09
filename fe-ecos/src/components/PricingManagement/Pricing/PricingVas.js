@@ -31,6 +31,13 @@ const dataTest = [{
             "from": "0.00",
             "to": "5.00",
             "value": "2.00"
+        },
+        {
+            "id": 2,
+            "pricing_data_id": 1,
+            "from": "5.00",
+            "to": "10.00",
+            "value": "5.00"
         }
     ]
 }
@@ -58,6 +65,7 @@ class PricingVas extends Component {
                 this.props.change(`${item.index}_name`, item.name);
                 this.props.change(`${item.index}_formula`, item.formula);
                 this.props.change(`${item.index}_min`, item.min);
+                this.props.change(`${item.index}_spec`, JSON.stringify(item.spec));
             })
         });   
     }
@@ -84,23 +92,28 @@ class PricingVas extends Component {
         });
     }
 
+    onChangeSpec = (index, spec) => {
+        this.props.change(`${index}_spec`, spec);
+    }
+
     showItem = (data) => {
-        let result = data.map((item, index) => (<PriceVasItem item={item} key={index} />))
+        let result = data.map((item, index) => (<PriceVasItem item={item} key={index} onChangeSpec={this.onChangeSpec} />))
         return result;
     }
 
     render() {
         const { messages } = this.props.intl;
+        const { handleSubmit } = this.props;
 
         return (
-            <form className="form form_custom pricing-vas">
+            <form className="form form_custom pricing-vas" onSubmit={handleSubmit}>
                 <div className="group-action">
                     <Button size="sm" color="info"><span className="lnr lnr-question-circle"></span></Button>
                     <Button size="sm" color="success" onClick={(e) => this.onAddItem(e)}><span className="lnr lnr-plus-circle"></span></Button>
                     <div className="clearfix"></div>
                 </div>
                 {this.showItem(this.state.data)}
-                <Button size="sm" color="primary" className="btn-grid">{messages['save']}</Button>
+                <Button size="sm" color="primary" type="submit" className="btn-grid">{messages['save']}</Button>
             </form>
         );
     }

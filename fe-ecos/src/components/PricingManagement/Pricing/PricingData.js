@@ -69,6 +69,10 @@ class PricingData extends Component {
         }, 500);
     }
 
+    handleSubmit = values => {
+        console.log(values);
+    }
+
     render() {
         const { messages } = this.props.intl;
         const { pricing_data, shipment_type_code, shipment_type_name, id } = this.props.pricing;
@@ -117,7 +121,7 @@ class PricingData extends Component {
                 </fieldset>
                 <fieldset className="scheduler-border">
                     <legend className="scheduler-border">{messages['pricing.value-services']}</legend>
-                    <PricingVas pricing_data_id={id} />
+                    <PricingVas pricing_data_id={id} onSubmit={this.handleSubmit}/>
                 </fieldset>
                 {/* <fieldset className="scheduler-border">
                     <legend className="scheduler-border">{messages['pricing.cod']}</legend>
