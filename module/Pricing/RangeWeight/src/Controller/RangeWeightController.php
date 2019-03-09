@@ -128,7 +128,7 @@ class RangeWeightController extends CoreController {
         $form = new RangeWeightForm('update', $this->entityManager, $rangeweight, $user);
         $form->setData($data);
         if ($form->isValid()) {
-          $result = $this->rangeweightManager->updateRangeWeight($rangeweight, $data);                
+          $result = $this->rangeweightManager->updateRangeWeight($rangeweight, $data, $user);                
         // Check result
           $this->apiResponse['message'] = "MODIFIED_SUCCESS";
         } else {

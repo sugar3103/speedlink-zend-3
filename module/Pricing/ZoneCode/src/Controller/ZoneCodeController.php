@@ -109,7 +109,7 @@ class ZoneCodeController extends CoreController {
         //validate form
         if ($form->isValid()) {
           $data = $form->getData();
-          $result = $this->zonecodeManager->addZoneCode($data, $user);                
+          $this->zonecodeManager->addZoneCode($data, $user);                
           // Check result
           $this->apiResponse['message'] = "ADD_SUCCESS";
         } else {
@@ -144,7 +144,7 @@ class ZoneCodeController extends CoreController {
         $form = new ZoneCodeForm('update', $this->entityManager, $zonecode);
         $form->setData($data);
         if ($form->isValid()) {
-          $result = $this->zonecodeManager->updateZoneCode($zonecode, $data);                
+          $this->zonecodeManager->updateZoneCode($zonecode, $data, $user);                
         // Check result
           $this->apiResponse['message'] = "MODIFIED_SUCCESS";
         } else {
