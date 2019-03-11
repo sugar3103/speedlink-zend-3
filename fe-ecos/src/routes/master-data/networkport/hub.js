@@ -18,7 +18,6 @@ class Hub extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-
     if (this.state.loadPage) {
       this.setState({ loadPage: prevProps.loading })
     }

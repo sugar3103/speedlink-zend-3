@@ -10,6 +10,7 @@ import validate from './validateActionForm';
 import PropTypes from 'prop-types';
 import { MODAL_ADD, MODAL_VIEW, MODAL_EDIT } from '../../../constants/defaultValues';
 import Moment from 'react-moment';
+import Can from '../../../containers/Shared/Can';
 
 class ActionForm extends Component {
 
@@ -524,7 +525,9 @@ class ActionForm extends Component {
           {this.state.modalType === MODAL_VIEW &&
             <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
           }
+          <Can user={this.props.authUser.user} permission="rangeweight" action="edit" own={modalData && modalData.created_by}>
           <Button color={className} type="submit">{ modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
+          </Can>
         </ButtonToolbar>
       </form>
     );
@@ -543,7 +546,7 @@ ActionForm.propTypes = {
   getCustomerList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({rangeWeight, customer}) => {  
+const mapStateToProps = ({rangeWeight, customer, authUser}) => {  
   const { errors, modalData, modalType, CarrierCodeByCondition, ServiceCodeByCondition, ShipmentCodeByCondition } = rangeWeight;
   const customerCode = customer.items;
   return {
@@ -553,7 +556,8 @@ const mapStateToProps = ({rangeWeight, customer}) => {
     customerCode,
     CarrierCodeByCondition, 
     ServiceCodeByCondition, 
-    ShipmentCodeByCondition 
+    ShipmentCodeByCondition,
+    authUser
   };
 };
 

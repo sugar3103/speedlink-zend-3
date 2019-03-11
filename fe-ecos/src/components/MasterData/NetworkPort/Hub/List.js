@@ -112,7 +112,7 @@ class List extends Component {
     const { modalOpen } = this.props.hub;
     return (
       <Fragment>
-        <Can user={this.props.authUser.user} permission="hub" action="manage">
+        <Can user={this.props.authUser.user} permission="hub" action="edit">
         <Button
           color="success"
           onClick={(e) => this.toggleModal(e, 'add', null)}
@@ -121,7 +121,7 @@ class List extends Component {
         >{messages['hub.add-new']}</Button>
         </Can>
         <Action modalOpen={modalOpen} />
-        <Can user={this.props.authUser.user} permission="hub" action="manage">
+        <Can user={this.props.authUser.user} permission="hub" action="edit">
         {selected.length > 0 &&
             <Button
             color="danger"

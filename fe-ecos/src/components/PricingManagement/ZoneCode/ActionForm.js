@@ -17,6 +17,7 @@ import PropTypes from 'prop-types';
 import { MODAL_ADD, MODAL_VIEW, MODAL_EDIT } from '../../../constants/defaultValues';
 import Moment from 'react-moment';
 import { CITY_RESET_STATE, DISTRICT_RESET_STATE, WARD_RESET_STATE } from '../../../constants/actionTypes';
+import Can from '../../../containers/Shared/Can';
 
 class ActionForm extends Component {
 
@@ -795,7 +796,9 @@ class ActionForm extends Component {
           {this.state.modalType === MODAL_VIEW &&
             <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
           }
+          <Can user={this.props.authUser.user} permission="zonecode" action="edit" own={modalData && modalData.created_by}>
           <Button color={className} type="submit">{ modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
+          </Can>
         </ButtonToolbar>
       </form>
     );
@@ -822,7 +825,7 @@ ActionForm.propTypes = {
   getDestinationWardList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({zoneCode, customer, address}) => {  
+const mapStateToProps = ({zoneCode, customer, address, authUser}) => {  
   const { errors, modalData, modalType } = zoneCode;
   const { CarrierCodeZoneCodeByCondition, ServiceCodeZoneCodeByCondition, ShipmentCodeZoneCodeByCondition  } = zoneCode;
   const customerCode = customer.items;
@@ -847,7 +850,8 @@ const mapStateToProps = ({zoneCode, customer, address}) => {
     cities,
     districts,
     wards, 
-    destination_countrys, destination_citys, destination_districts, destination_wards
+    destination_countrys, destination_citys, destination_districts, destination_wards,
+    authUser
   };
 };
 

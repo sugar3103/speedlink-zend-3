@@ -71,7 +71,7 @@ function* getRangeWeightListItems({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(getRangeWeightListError(response.data));
+        yield put(getRangeWeightListError(response.message));
         break;
 
       case EC_FAILURE_AUTHENCATION:

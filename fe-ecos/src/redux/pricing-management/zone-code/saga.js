@@ -87,7 +87,7 @@ function* getZoneCodeListItems({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(getZoneCodeListError(response.data));
+        yield put(getZoneCodeListError(response.message));
         break;
 
       case EC_FAILURE_AUTHENCATION:
