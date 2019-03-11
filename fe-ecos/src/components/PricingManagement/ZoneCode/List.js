@@ -15,6 +15,7 @@ import ConfirmPicker from '../../../containers/Shared/picker/ConfirmPicker';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { MODAL_EDIT } from '../../../constants/defaultValues';
 import { CITY_RESET_STATE, DISTRICT_RESET_STATE, WARD_RESET_STATE } from '../../../constants/actionTypes';
+import Can from '../../../containers/Shared/Can';
 
 const ZoneCodeFormatter = ({ value }) => (
   value === 'Enabled' ? <span className="badge badge-success">Enabled</span> :
@@ -108,20 +109,24 @@ class List extends Component {
     const { modalOpen } = this.props.zoneCode;
     return (
       <Fragment>
+        <Can user={this.props.authUser.user} permission="zonecode" action="edit">
         <Button
           color="success"
           onClick={(e) => this.toggleModal(e, 'add', null)}
           className="master-data-btn"
           size="sm"
         >{messages['zone_code.add-new']}</Button>
+        </Can>
         <Action modalOpen={modalOpen} />
         {selected.length > 0 &&
+          <Can user={this.props.authUser.user} permission="zonecode" action="edit">
             <Button
             color="danger"
             onClick={(e) => this.onDelete(e, selected)}
             className="master-data-btn"
             size="sm"
           >{messages['zone_code.delete']}</Button>
+          </Can>
         }
       </Fragment>
     )
@@ -222,8 +227,12 @@ class List extends Component {
             Cell: ({ original }) => {
               return (
                 <Fragment>
+                   <Can user={this.props.authUser.user} permission="zonecode" action="edit" own={original.created_by}>
                   <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, MODAL_EDIT , original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
+                  </Can>
+                  <Can user={this.props.authUser.user} permission="zonecode" action="edit" own={original.created_by}>
                   <Button color="danger" size="sm" onClick={(e) => this.onDelete(e, [original.id])}><span className="lnr lnr-trash" /></Button>
+                  </Can>
                 </Fragment>
               );
             },

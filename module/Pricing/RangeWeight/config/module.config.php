@@ -8,13 +8,7 @@ use Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter;
 use Gedmo\SoftDeleteable\SoftDeleteableListener;
 use Gedmo\Timestampable\TimestampableListener;
 use Zend\Cache\Storage\Adapter\Filesystem;
-use Zend\Log\Formatter\Simple;
-use Zend\Log\Logger;
-use Zend\Log\LoggerAbstractServiceFactory;
-use Zend\Router\Http\Literal;
-use Zend\Router\Http\Segment;
 use Core\Route\StaticRoute;
-
 use Core\DBAL\Types\UTCDateTimeType;
 
 $router = [
@@ -157,11 +151,26 @@ $doctrine = [
         ]
     ]
 ];
+
+$access_filter =  [
+    'options' => [
+        'mode' => 'permissive'//restrictive or permissive
+    ],
+    'controllers' => [
+        Controller\RangeWeightController::class => [
+            ['actions' => '*', 'allow' => '+rangeweight.manage'],            
+            ['actions' => ['index'], 'allow' => '+rangeweight.view'],
+            ['actions' => ['edit'], 'allow' => '+rangeweight.edit']            
+        ]
+    ]    
+];
+
 return [
     'router' => $router,
     'controllers' => $controllers,
     'caches'    => $caches,
     'service_manager'   => $service_manager,
     'doctrine'          => $doctrine,
-    'view_manager' => $view_manager
+    'view_manager' => $view_manager,
+    'access_filter' => $access_filter
 ];
