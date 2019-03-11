@@ -84,7 +84,7 @@ function* getBranchListItems({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(getBranchListError(response.data));
+        yield put(getBranchListError(response.message));
         break;
 
       case EC_FAILURE_AUTHENCATION:

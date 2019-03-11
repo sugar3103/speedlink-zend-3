@@ -77,7 +77,7 @@ function* getHubListItems({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(getHubListError(response.data));
+        yield put(getHubListError(response.message));
         break;
 
       case EC_FAILURE_AUTHENCATION:

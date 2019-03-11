@@ -3,6 +3,7 @@ import React, { Component, Fragment } from 'react';
 import { Card, CardBody, Col, Button, Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Table from '../../../../containers/Shared/table/Table';
+import Can from '../../../../containers/Shared/Can';
 import Moment from 'react-moment';
 import { SELECTED_PAGE_SIZE } from '../../../../constants/defaultValues';
 import { injectIntl } from 'react-intl';
@@ -111,13 +112,16 @@ class List extends Component {
     const { modalOpen } = this.props.hub;
     return (
       <Fragment>
+        <Can user={this.props.authUser.user} permission="hub" action="manage">
         <Button
           color="success"
           onClick={(e) => this.toggleModal(e, 'add', null)}
           className="master-data-btn"
           size="sm"
         >{messages['hub.add-new']}</Button>
+        </Can>
         <Action modalOpen={modalOpen} />
+        <Can user={this.props.authUser.user} permission="hub" action="manage">
         {selected.length > 0 &&
             <Button
             color="danger"
@@ -126,6 +130,7 @@ class List extends Component {
             size="sm"
           >{messages['hub.delete']}</Button>
         }
+        </Can>
       </Fragment>
     )
   }
@@ -195,11 +200,12 @@ class List extends Component {
             Cell: ({ original }) => {
               return (
                 <Fragment>
-                  
+                   <Can user={this.props.authUser.user} permission="hub" action="edit" own={original.created_by}>
                   <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, MODAL_EDIT , original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
-                 
+                  </Can>
+                  <Can user={this.props.authUser.user} permission="hub" action="edit" own={original.created_by}>
                   <Button color="danger" size="sm" onClick={(e) => this.onDelete(e, [original.id])}><span className="lnr lnr-trash" /></Button>
-                
+                  </Can>
                 </Fragment>
               );
             },
