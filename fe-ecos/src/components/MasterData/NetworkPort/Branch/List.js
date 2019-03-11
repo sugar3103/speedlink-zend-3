@@ -12,6 +12,7 @@ import Search from './Search';
 import { confirmAlert } from 'react-confirm-alert';
 import ConfirmPicker from '../../../../containers/Shared/picker/ConfirmPicker';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import Can from '../../../../containers/Shared/Can';
 
 import {
   getBranchList,
@@ -109,20 +110,24 @@ class List extends Component {
     const { modalOpen } = this.props.branch;
     return (
       <Fragment>
+        <Can user={this.props.authUser.user} permission="branch" action="manage">
         <Button
           color="success"
           onClick={(e) => this.toggleModal(e, 'add', null)}
           className="master-data-btn"
           size="sm"
         >{messages['branch.add-new']}</Button>
+        </Can>
         <Action modalOpen={modalOpen} />
         {selected.length > 0 &&
+        <Can user={this.props.authUser.user} permission="branch" action="manage">
             <Button
             color="danger"
             onClick={(e) => this.onDelete(e, selected)}
             className="master-data-btn"
             size="sm"
           >{messages['branch.delete']}</Button>
+          </Can>
         }
       </Fragment>
     )
@@ -193,8 +198,12 @@ class List extends Component {
             Cell: ({ original }) => {
               return (
                 <Fragment>
+                  <Can user={this.props.authUser.user} permission="branch" action="edit" own={original.created_by}>
                   <Button color="info" size="sm" onClick={(e) => this.toggleModal(e, 'edit', original)}><span className="lnr lnr-pencil" /></Button> &nbsp;
+                  </Can>
+                  <Can user={this.props.authUser.user} permission="branch" action="edit" own={original.created_by}>
                   <Button color="danger" size="sm" onClick={(e) => this.onDelete(e, [original.id])}><span className="lnr lnr-trash" /></Button>
+                  </Can>
                 </Fragment>
               );
             },

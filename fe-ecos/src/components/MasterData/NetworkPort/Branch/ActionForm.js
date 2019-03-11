@@ -11,6 +11,7 @@ import validate from './validateActionForm';
 import PropTypes from 'prop-types';
 import { MODAL_ADD, MODAL_VIEW, MODAL_EDIT } from '../../../../constants/defaultValues';
 import Moment from 'react-moment';
+import Can from '../../../../containers/Shared/Can';
 
 class ActionForm extends PureComponent {
 
@@ -396,7 +397,9 @@ class ActionForm extends PureComponent {
           {this.state.modalType === MODAL_VIEW &&
             <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
           }
+           <Can user={this.props.authUser.user} permission="branch" action="edit" own={modalData && modalData.created_by}>
           <Button color={className} type="submit">{ modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
+          </Can>
         </ButtonToolbar>
       </form>
     );
@@ -420,7 +423,7 @@ ActionForm.propTypes = {
   getHubBranchList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ branch }) => {
+const mapStateToProps = ({ branch, authUser }) => {
   const { modalData, modalType, countries, cities, districts, wards } = branch;
   const { hubs } = branch ;
 
@@ -431,7 +434,8 @@ const mapStateToProps = ({ branch }) => {
     cities, 
     districts,  
     wards, 
-    hubs
+    hubs,
+    authUser
   }
 }
 

@@ -8,11 +8,6 @@ use Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter;
 use Gedmo\SoftDeleteable\SoftDeleteableListener;
 use Gedmo\Timestampable\TimestampableListener;
 use Zend\Cache\Storage\Adapter\Filesystem;
-use Zend\Log\Formatter\Simple;
-use Zend\Log\Logger;
-use Zend\Log\LoggerAbstractServiceFactory;
-use Zend\Router\Http\Literal;
-use Zend\Router\Http\Segment;
 use Core\Route\StaticRoute;
 
 
@@ -30,21 +25,6 @@ $router = [
                 ],
                 'defaults' => [
                     'controller' => Controller\BranchController::class,
-                    'action' => 'index',
-                    'isAuthorizationRequired' => true
-                ]
-            ]
-        ],
-        'branch_area' => [
-            'type' => StaticRoute::class,
-            'options' => [
-                'verb' => 'POST',
-                'route' => '/brancharea[/:action]',
-                'constraints' => [
-                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
-                ],
-                'defaults' => [
-                    'controller' => Controller\BranchAreaController::class,
                     'action' => 'index',
                     'isAuthorizationRequired' => true
                 ]
@@ -70,7 +50,6 @@ $router = [
 $controllers = [
     'factories' => [
         Controller\BranchController::class => Factory\BranchControllerFactory::class,
-        Controller\BranchAreaController::class => Factory\BranchAreaControllerFactory::class,
         Controller\HubController::class => Factory\HubControllerFactory::class
     ]
 ];
@@ -78,7 +57,6 @@ $controllers = [
 $service_manager = [
     'factories' => [  
         Service\BranchManager::class => Factory\BranchManagerFactory::class,
-        Service\BranchAreaManager::class => Factory\BranchAreaManagerFactory::class,         
         Service\HubManager::class => Factory\HubManagerFactory::class,        
     ],
 ];
@@ -192,11 +170,30 @@ $doctrine = [
         ]
     ]
 ];
+
+$access_filter =  [
+    'options' => [
+        'mode' => 'permissive'//restrictive or permissive
+    ],
+    'controllers' => [
+        Controller\BranchController::class => [
+            ['actions' => '*', 'allow' => '+branch.manage'],            
+            ['actions' => ['index'], 'allow' => '+branch.view'],
+            ['actions' => ['edit'], 'allow' => '+branch.edit']            
+        ],
+        Controller\HubController::class => [
+            ['actions' => '*', 'allow' => '+hub.manage'],            
+            ['actions' => ['index'], 'allow' => '+hub.view'],
+            ['actions' => ['edit'], 'allow' => '+hub.edit']            
+        ]
+    ]    
+];
 return [
     'router' => $router,
     'controllers' => $controllers,
     'caches'    => $caches,
     'service_manager'   => $service_manager,
     'doctrine'          => $doctrine,
-    'view_manager' => $view_manager
+    'view_manager' => $view_manager,
+    'access_filter' => $access_filter
 ];
