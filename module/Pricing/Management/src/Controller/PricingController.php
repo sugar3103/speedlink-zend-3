@@ -100,7 +100,6 @@ class PricingController extends CoreController
             try {
                 // add new pricing
                 $pricing = $this->pricingManager->addPricing($data, $user);
-                $this->pricingDataManager->addPricingData($pricing, $user);
                 $this->error_code = 1;
                 $this->apiResponse['data'] = $pricing->getId();
                 $this->apiResponse['message'] = "Success: You have added a pricing!";
