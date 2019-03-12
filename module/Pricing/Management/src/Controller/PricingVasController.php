@@ -69,7 +69,30 @@ class PricingVasController extends CoreController {
         return $this->createResponse();
     }
 
-    public function addAction()
+    public function updateVas()
+    {
+        $user = $this->tokenPayload;
+        $data = $this->getRequestData();
+        if (empty($data)) {
+            $this->error_code = -1;
+            $this->apiResponse['message'] = 'Missing data';
+            return $this->createResponse();
+        }
+
+        try {
+            // add new pricing
+            $this->pricingVasManager->updateVas($data, $user);
+            $this->error_code = 1;
+            $this->apiResponse['message'] = "Success: You have added a pricing!";
+        } catch (\Exception $e) {
+            $this->error_code = -1;
+            $this->apiResponse['message'] = "Fail: Please contact System Admin";
+        }
+
+        return $this->createResponse();
+    }
+
+    /*public function addAction()
     {
         $user = $this->tokenPayload;
         $data = $this->getRequestData();
@@ -147,6 +170,5 @@ class PricingVasController extends CoreController {
         }
 
         return $this->createResponse();
-    }
-
+    }*/
 }

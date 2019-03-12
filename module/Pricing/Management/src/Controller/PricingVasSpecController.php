@@ -40,7 +40,7 @@ class PricingVasSpecController extends CoreController {
       return $this->createResponse();
     }
 
-    public function addAction()
+    /*public function addAction()
     {
         $user = $this->tokenPayload;
         $data = $this->getRequestData();
@@ -118,5 +118,5 @@ class PricingVasSpecController extends CoreController {
         }
 
         return $this->createResponse();
-    }
+    }*/
 }

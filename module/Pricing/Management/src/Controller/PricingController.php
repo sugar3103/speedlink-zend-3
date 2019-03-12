@@ -99,7 +99,7 @@ class PricingController extends CoreController
         if ($form->isValid()) {
             try {
                 // add new pricing
-                $pricing = $this->pricingManager->addPricing($data, $user);3
+                $pricing = $this->pricingManager->addPricing($data, $user);
                 $this->error_code = 1;
                 $this->apiResponse['data'] = $pricing->getId();
                 $this->apiResponse['message'] = "Success: You have added a pricing!";

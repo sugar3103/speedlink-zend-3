@@ -3,6 +3,7 @@ namespace Management\Service;
 
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
+use Management\Entity\PricingVas;
 use Management\Entity\PricingVasSpec;
 use Doctrine\ORM\EntityManager;
 
@@ -39,35 +40,33 @@ class PricingVasSpecManager {
 
     /**
      * Add PricingVasSpec
-     * @param $data
+     * @param $vas PricingVas
+     * @param $spec
      * @param $user
-     * @return PricingVasSpec|bool
      * @throws \Exception
      */
-    public function addPricingVasSpec($data, $user)
+    public function addPricingVasSpec($vas, $spec, $user)
     {
-        // begin transaction
-        $this->entityManager->beginTransaction();
         try {
-            $pricingVasSpec = new PricingVasSpec();
-            $pricingVasSpec->setPricingDataId($data['price_data_id']);
-            $pricingVasSpec->setFrom($data['from']);
-            $pricingVasSpec->setTo($data['to']);
-            $pricingVasSpec->setValue($data['value']);
-            $pricingVasSpec->setCreatedAt(date('Y-m-d H:i:s'));
-            $pricingVasSpec->setCreatedBy($user->id);
-            $pricingVasSpec->setUpdatedAt(date('Y-m-d H:i:s'));
-            $pricingVasSpec->setUpdatedBy($user->id);
-
-            $this->entityManager->persist($pricingVasSpec);
-            $this->entityManager->flush();
-            $this->entityManager->commit();
-
-            return $pricingVasSpec;
+            $date = new \DateTime();
+            foreach ($spec as $row) {
+                $pricingVasSpec = new PricingVasSpec();
+                $pricingVasSpec->setPricingDataId($vas['price_data_id']);
+                $pricingVasSpec->setPricingVasId($vas->getId());
+                $pricingVasSpec->setFrom($row['from']);
+                $pricingVasSpec->setTo($row['to']);
+                $pricingVasSpec->setValue($row['value']);
+                $pricingVasSpec->setCreatedAt($date);
+                $pricingVasSpec->setCreatedBy($user->id);
+                $pricingVasSpec->setUpdatedAt($date);
+                $pricingVasSpec->setUpdatedBy($user->id);
+                $this->entityManager->persist($pricingVasSpec);
+                $this->entityManager->flush();
+            }
         }
         catch (ORMException $e) {
             $this->entityManager->rollback();
-            return FALSE;
+            throw new ORMException($e);
         }
     }
 
@@ -76,56 +75,43 @@ class PricingVasSpecManager {
      * @param PricingVasSpec $pricingVasSpec
      * @param $data
      * @param $user
-     * @return PricingVasSpec|bool
      * @throws \Exception
      */
-    public function updatePricingVasSpec($pricingVasSpec, $data, $user) {
-
-        // begin transaction
-        $this->entityManager->beginTransaction();
+    public function updatePricingVasSpec($pricingVasSpec, $data, $user)
+    {
         try {
             $pricingVasSpec->setPricingDataId($data['price_data_id']);
             $pricingVasSpec->setFrom($data['from']);
             $pricingVasSpec->setTo($data['to']);
             $pricingVasSpec->setValue($data['value']);
-            $pricingVasSpec->setUpdatedAt(date('Y-m-d H:i:s'));
+            $pricingVasSpec->setUpdatedAt(new \DateTime());
             $pricingVasSpec->setUpdatedBy($user->id);
 
             $this->entityManager->persist($pricingVasSpec);
             $this->entityManager->flush();
-            $this->entityManager->commit();
-
-            return $pricingVasSpec;
         }
         catch (ORMException $e) {
-            $this->entityManager->rollback();
-            return FALSE;
+            throw new ORMException($e);
         }
     }
 
     /**
      * Remove PricingVasSpec
      * @param PricingVasSpec $pricingVasSpec
-     * @return PricingVasSpec|bool
+     * @param $user
      * @throws \Exception
      */
-    public function deletePricingVasSpec($pricingVasSpec, $user) {
-        // begin transaction
-        $this->entityManager->beginTransaction();
+    public function deletePricingVasSpec($pricingVasSpec, $user)
+    {
         try {
             $pricingVasSpec->setIsDeleted(1);
-            $pricingVasSpec->setUpdatedAt(date('Y-m-d H:i:s'));
+            $pricingVasSpec->setUpdatedAt(new \DateTime());
             $pricingVasSpec->setUpdatedBy($user->id);
-
             $this->entityManager->persist($pricingVasSpec);
             $this->entityManager->flush();
-            $this->entityManager->commit();
-
-            return $pricingVasSpec;
         }
         catch (ORMException $e) {
-            $this->entityManager->rollback();
-            return FALSE;
+            throw new ORMException($e);
         }
     }
 
