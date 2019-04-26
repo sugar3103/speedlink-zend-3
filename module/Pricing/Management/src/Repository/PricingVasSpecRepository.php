@@ -22,7 +22,8 @@ class PricingVasSpecRepository extends EntityRepository
                 pvs.pricing_data_id,
                 pvs.from,
                 pvs.to,
-                pvs.value
+                pvs.value,
+                pvs.is_deleted
             ")->andWhere('pvs.is_deleted = 0')
               ->andWhere('pd.status = 1');
 

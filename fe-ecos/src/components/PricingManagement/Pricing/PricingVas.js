@@ -2,127 +2,80 @@ import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import PriceVasItem from './PriceVasItem';
-import { uuidv4 } from '../../../util/uuidv4';
-import { reduxForm } from 'redux-form';
+import PricingVasItem from './PricingVasItem';
+import { FieldArray, reduxForm } from 'redux-form';
+import { getPricingVas } from '../../../redux/actions';
+import PropTypes from 'prop-types';
 
-const dataTest = [{
-    "id": 1,
-    "pricing_data_id": 1,
-    "name": "Test",
-    "formula": "$1 * 10%",
-    "min": "50.00",
-    "type": 0,
-    "is_delete": 0,
-    "spec": []
-},
-{
-    "id": 2,
-    "pricing_data_id": 1,
-    "name": "Range",
-    "formula": "$1 + 10000",
-    "min": null,
-    "type": 1,
-    "is_delete": 0,
-    "spec": [
-        {
-            "id": 1,
-            "pricing_data_id": 1,
-            "from": "0.00",
-            "to": "5.00",
-            "value": "2.00"
-        },
-        {
-            "id": 2,
-            "pricing_data_id": 1,
-            "from": "5.00",
-            "to": "10.00",
-            "value": "5.00"
+const renderVasItems = ({ fields, meta: { submitFailed, error }, pricing_data_id }) => (
+    <ul>
+        <li className="group-action">
+            <Button size="sm" color="info"><span className="lnr lnr-question-circle"></span></Button>
+            <Button size="sm" color="success" onClick={() => fields.push({ id: 0, type: 0, pricing_data_id })}><span className="lnr lnr-plus-circle"></span></Button>
+            {submitFailed && error && <span>{error}</span>}
+            <div className="clearfix"></div>
+        </li>
+        {fields.map((vas, index) => {
+            if (!fields.get(index).is_deleted) {
+                return <PricingVasItem vas={vas} fields={fields} index={index} key={index} />
+            }
+            return null;
+        })
         }
-    ]
-}
-];
+    </ul>
+)
 
 class PricingVas extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: dataTest
-        }
-    }
-
-    componentDidMount() {
-        let data = dataTest.map(item => {
-            return {
-                ...item,
-                index: uuidv4()
+    componentWillMount() {
+        const { messages } = this.props.intl;
+        const params = {
+            offset: {
+                limit: 0
+            },
+            query: {
+                pricing_data_id: this.props.pricing_data_id
             }
-        });
-        this.setState({ data }, () => {
-            data.forEach(item => {
-                this.props.change(`${item.index}_type`, item.type);
-                this.props.change(`${item.index}_name`, item.name);
-                this.props.change(`${item.index}_formula`, item.formula);
-                this.props.change(`${item.index}_min`, item.min);
-                this.props.change(`${item.index}_spec`, JSON.stringify(item.spec));
-            })
-        });   
-    }
-
-
-    onAddItem = (e) => {
-        e.preventDefault();
-        let { data } = this.state;
-        data.push({
-            index: uuidv4(),
-            id: 0,
-            pricing_data_id: this.props.pricing_data_id,
-            name: "",
-            formula: "",
-            min: "",
-            type: 0,
-            is_delete: 0,
-            spec: []
-        });
-        this.setState({ data },() => {
-            data.forEach(item => {
-                this.props.change(`${item.index}_type`, item.type);
-            })
-        });
-    }
-
-    onChangeSpec = (index, spec) => {
-        this.props.change(`${index}_spec`, spec);
-    }
-
-    showItem = (data) => {
-        let result = data.map((item, index) => (<PriceVasItem item={item} key={index} onChangeSpec={this.onChangeSpec} />))
-        return result;
+        }
+        this.props.getPricingVas(params, messages);
     }
 
     render() {
         const { messages } = this.props.intl;
-        const { handleSubmit } = this.props;
+        const { handleSubmit, submitting, pricing_data_id } = this.props;
 
         return (
             <form className="form form_custom pricing-vas" onSubmit={handleSubmit}>
-                <div className="group-action">
-                    <Button size="sm" color="info"><span className="lnr lnr-question-circle"></span></Button>
-                    <Button size="sm" color="success" onClick={(e) => this.onAddItem(e)}><span className="lnr lnr-plus-circle"></span></Button>
-                    <div className="clearfix"></div>
+                <FieldArray name="vas" component={renderVasItems} pricing_data_id={pricing_data_id} />
+                <div className="text-right">
+                    <Button size="sm" color="primary" type="submit" disabled={submitting}>{messages['save']}</Button>
                 </div>
-                {this.showItem(this.state.data)}
-                <Button size="sm" color="primary" type="submit" className="btn-grid">{messages['save']}</Button>
             </form>
         );
     }
 }
 
-const mapStateToProps = () => {
-    return {}
+PricingVas.propTypes = {
+    getPricingVas: PropTypes.func.isRequired,
+    vas: PropTypes.array
 }
 
-export default reduxForm({
+let PricingVasForm = reduxForm({
     form: 'pricing_vas_action_form',
-  })(injectIntl(connect(mapStateToProps, null)(PricingVas)));
+    enableReinitialize: true
+})(PricingVas)
+
+const mapStateToProps = ({pricing}) => ({
+    initialValues: {
+        vas: pricing.vas
+    }
+});
+  
+const mapDispatchToProps = {
+    getPricingVas
+};
+
+PricingVasForm = connect(mapStateToProps, mapDispatchToProps)(PricingVasForm)
+
+export default injectIntl(PricingVasForm); 
+

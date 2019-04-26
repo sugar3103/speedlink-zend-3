@@ -11,7 +11,9 @@ import {
   PRICING_GET_LIST,
   PRICING_ADD_MASTER_DATA,
   PRICING_GET_DATA,
-  PRICING_UPDATE_DATA
+  PRICING_UPDATE_DATA,
+  PRICING_GET_VAS,
+  PRICING_UPDATE_VAS
 } from "../../../constants/actionTypes";
 
 import {
@@ -23,7 +25,9 @@ import {
   addPricingMasterDataItemSuccess,
   getPricingData,
   getPricingDataSuccess,
-  updatePricingDataItemSuccess
+  updatePricingDataItemSuccess,
+  getPricingVasSuccess,
+  updatePricingVasItemSuccess
 } from "./actions";
 
 import createNotification from '../../../util/notifications';
@@ -337,6 +341,99 @@ function* updatePricingDataItem({ payload }) {
   }
 }
 
+//get pricing vas
+function getPricingVasApi(params) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}pricing_vas`,
+    headers: authHeader(),
+    data: JSON.stringify(params)
+  });
+}
+
+const getPricingVasItemsRequest = async (params) => {
+  return await getPricingVasApi(params).then(res => res.data).catch(err => err)
+};
+
+function* getPricingVasItems({ payload }) {
+  const { params, messages } = payload;
+  try {
+    const response = yield call(getPricingVasItemsRequest, params);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(getPricingVasSuccess(response.data));
+        break;
+
+      case EC_FAILURE:
+        yield put(pricingError(response.message));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning', 
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+      default:
+        break;
+    }
+    
+  } catch (error) {
+    yield put(pricingError(error));
+  }
+}
+
+//update pricing vas
+function updatePricingVasApi(params) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}pricing_vas/updateVas`,
+    headers: authHeader(),
+    data: params
+  });
+}
+
+const updatePricingVasItemRequest = async params => {
+  return await updatePricingVasApi(params).then(res => res.data).catch(err => err)
+};
+
+function* updatePricingVasItem({ payload }) {
+  const { params, messages } = payload;
+  try {
+    const response = yield call(updatePricingVasItemRequest, params);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(updatePricingVasItemSuccess());
+        createNotification({
+          type: 'success', 
+          message: messages['pricing.update-data-success'], 
+          title: messages['notification.success']
+        });
+        break;
+
+      case EC_FAILURE:
+        yield put(pricingError(response.data));
+        break;
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('user');
+        yield call(history.push, '/login');
+        createNotification({
+          type: 'warning', 
+          message: messages['login.login-again'],
+          title: messages['notification.warning']
+        });
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(pricingError(error));
+  }
+}
+
 export function* watchCustomerPricingGetList() {
   yield takeEvery(PRICING_CUSTOMER_GET_LIST, getCustomerPricingListItems);
 }
@@ -358,6 +455,12 @@ export function* watchPricingGetData() {
 export function* watchPricingUpdateData() {
   yield takeEvery(PRICING_UPDATE_DATA, updatePricingDataItem);
 }
+export function* watchPricingGetVas() {
+  yield takeEvery(PRICING_GET_VAS, getPricingVasItems);
+}
+export function* watchPricingUpdateVas() {
+  yield takeEvery(PRICING_UPDATE_VAS, updatePricingVasItem);
+}
 
 export default function* rootSaga() {
   yield all([
@@ -368,5 +471,7 @@ export default function* rootSaga() {
     fork(watchPricingAddMasterData),
     fork(watchPricingGetData),
     fork(watchPricingUpdateData),
+    fork(watchPricingGetVas),
+    fork(watchPricingUpdateVas),
   ]);
 }

@@ -7,6 +7,7 @@ use Management\Entity\PricingVas;
 use Doctrine\ORM\EntityManager;
 use Management\Entity\PricingVasSpec;
 use mysql_xdevapi\Exception;
+use Management\Entity\PricingData;
 
 /**
  * @package Managerment\Service
@@ -28,14 +29,31 @@ class PricingVasManager {
     }
 
     /**
+     * Set objects to update and insert
+     * @param PricingVas $pricingVas
+     * @param $data
+     * @throws \Exception
+     */
+    private function getReferenced(&$pricingVas, $data)
+    {
+        if (!empty($data['pricing_data_id'])) {
+            $pricing_data = $this->entityManager->getRepository(PricingData::class)->find($data['pricing_data_id']);
+            if ($pricing_data == null) {
+                throw new \Exception('Not found Pricing Data');
+            }
+            $pricingVas->setJoinPricingData($pricing_data);
+        }
+    }
+
+    /**
      * Get list VAS
      * @param $filters
      * @return array
      */
-    public function getListVasByCondition($filters)
+    public function getListVasByCondition($start, $limit, $sortField = '', $sortDirection = 'asc', $filters = [])
     {
         $pricingVasList = [];
-        $ormVas = $this->entityManager->getRepository(PricingVas::class)->getListVasByCondition($filters);
+        $ormVas = $this->entityManager->getRepository(PricingVas::class)->getListVasByCondition($start, $limit, $sortField, $sortDirection, $filters);
         if($ormVas){
             $ormPaginator = new ORMPaginator($ormVas, true);
             $ormPaginator->setUseOutputWalkers(false);
@@ -70,14 +88,16 @@ class PricingVasManager {
 
                 if ($vasData->getType() == 1 && !empty($vas['spec'])) {
                     $spec = $vas['spec'];
-                    if (empty($spec['id'])) {
-                        $vasSpec->addPricingVasSpec($vasData, $spec, $user);
-                    } else if (!empty($spec['id']) && $spec['is_deleted'] == 1) {
-                        $specData = $this->entityManager->getRepository(PricingVasSpec::class)->find($spec['id']);
-                        $vasSpec->deletePricingVasSpec($specData, $user);
-                    } else {
-                        $specData = $this->entityManager->getRepository(PricingVasSpec::class)->find($spec['id']);
-                        $vasSpec->updatePricingVasSpec($specData, $spec, $user);
+                    foreach ($spec as $spec_item) {
+                        if (empty($spec_item['id'])) {
+                            $vasSpec->addPricingVasSpec($vasData, $spec_item, $user);
+                        } else if (!empty($spec_item['id']) && $spec_item['is_deleted'] == 1) {
+                            $specData = $this->entityManager->getRepository(PricingVasSpec::class)->find($spec_item['id']);
+                            $vasSpec->deletePricingVasSpec($specData, $user);
+                        } else {
+                            $specData = $this->entityManager->getRepository(PricingVasSpec::class)->find($spec_item['id']);
+                            $vasSpec->updatePricingVasSpec($specData, $spec_item, $user);
+                        }
                     }
                 }
                 $this->entityManager->clear();
@@ -107,12 +127,15 @@ class PricingVasManager {
             $pricingVas->setName($data['name']);
             $pricingVas->setFormula($data['formula']);
             $pricingVas->setMin($data['min']);
-            $pricingVas->setPricingDataId($data['price_data_id']);
+            $pricingVas->setPricingDataId($data['pricing_data_id']);
             $pricingVas->setType($data['type']);
             $pricingVas->setCreatedAt($date);
             $pricingVas->setCreatedBy($user->id);
             $pricingVas->setUpdatedAt($date);
             $pricingVas->setUpdatedBy($user->id);
+
+            $this->getReferenced($pricingVas, $data);
+
             $this->entityManager->persist($pricingVas);
             $this->entityManager->flush();
             return $pricingVas;

@@ -25,6 +25,9 @@ class Detail extends Component {
       const { messages } = this.props.intl;
       const { id } = this.props.match.params;
       const params = {
+        offset: {
+          limit: 0
+        },
         query: {
           pricing_id: id
         }

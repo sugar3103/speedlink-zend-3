@@ -22,6 +22,12 @@ import {
   PRICING_UPDATE_DATA,
   PRICING_UPDATE_DATA_SUCCESS,
 
+  PRICING_GET_VAS,
+  PRICING_GET_VAS_SUCCESS,
+
+  PRICING_UPDATE_VAS,
+  PRICING_UPDATE_VAS_SUCCESS,
+
 } from '../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -33,7 +39,8 @@ const INIT_STATE = {
   carriers: null,
   total: 0,
   paramSearch: null,
-  data: null
+  data: null,
+  vas: []
 };
 
 export default (state = INIT_STATE, action) => {
@@ -134,6 +141,32 @@ export default (state = INIT_STATE, action) => {
       };
 
 		case PRICING_UPDATE_DATA_SUCCESS:
+			return { 
+        ...state, 
+        loading: false, 
+        errors: null
+      };
+
+    case PRICING_GET_VAS:
+			return { 
+        ...state, 
+        loading: false 
+      };
+
+    case PRICING_GET_VAS_SUCCESS:
+			return { 
+        ...state, 
+        loading: false,
+        vas: action.payload
+      };
+
+    case PRICING_UPDATE_VAS:
+			return { 
+        ...state, 
+        loading: false 
+      };
+
+		case PRICING_UPDATE_VAS_SUCCESS:
 			return { 
         ...state, 
         loading: false, 

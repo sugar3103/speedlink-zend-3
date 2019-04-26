@@ -43,50 +43,50 @@ class PricingVasController extends CoreController {
 
     public function indexAction()
     {
-        $result = [
-            'data' => [
-                'list' => []
-            ]
-        ];
+        if ($this->getRequest()->isPost()) {
+            $result = [
+                'data' => []
+            ];
 
-        $fieldsMap = [];
-        $param = $this->getRequestData($fieldsMap);
-        $dataVas = $this->pricingVasManager->getListVasByCondition($param);
-        foreach ($dataVas as $key => $vas) {
-            if ($vas['type'] == 1) {
-                $param['pricing_vas_id'] = $vas['id'];
-                $dataVasSpec = $this->pricingVasSpecManager->getListVasSpecByCondition($param);
-                $dataVas[$key]['spec'] = !empty($dataVasSpec) ? $dataVasSpec : [];;
-            } else {
-                $dataVas[$key]['spec'] = [];
+            $fieldsMap = ["pricing_data_id"];
+            list($start, $limit, $sortField, $sortDirection, $filters) = $this->getRequestData($fieldsMap);
+            $dataVas = $this->pricingVasManager->getListVasByCondition($start, $limit, $sortField, $sortDirection, $filters);
+            foreach ($dataVas as $key => $vas) {
+                if ($vas['type'] == 1) {
+                    $param['pricing_vas_id'] = $vas['id'];
+                    $dataVasSpec = $this->pricingVasSpecManager->getListVasSpecByCondition($param);
+                    $dataVas[$key]['spec'] = !empty($dataVasSpec) ? $dataVasSpec : [];;
+                } else {
+                    $dataVas[$key]['spec'] = [];
+                }
             }
+            $result['error_code'] = 1;
+            $result['message'] = 'Success';
+            $result['data'] = !empty($dataVas) ? $dataVas : [];
+            $this->apiResponse = $result;
         }
-        $result['error_code'] = 1;
-        $result['message'] = 'Success';
-        $result['data']['list'] = !empty($dataVas) ? $dataVas : [];
-        $this->apiResponse = $result;
-
         return $this->createResponse();
     }
 
-    public function updateVas()
+    public function updateVasAction()
     {
-        $user = $this->tokenPayload;
-        $data = $this->getRequestData();
-        if (empty($data)) {
-            $this->error_code = -1;
-            $this->apiResponse['message'] = 'Missing data';
-            return $this->createResponse();
-        }
+        if ($this->getRequest()->isPost()) {
+            $user = $this->tokenPayload;
+            $data = $this->getRequestData();
+            if (empty($data)) {
+                $this->error_code = -1;
+                $this->apiResponse['message'] = 'Missing data';
+                return $this->createResponse();
+            }
 
-        try {
-            // add new pricing
-            $this->pricingVasManager->updateVas($data, $user);
-            $this->error_code = 1;
-            $this->apiResponse['message'] = "Success: You have added a pricing!";
-        } catch (\Exception $e) {
-            $this->error_code = -1;
-            $this->apiResponse['message'] = "Fail: Please contact System Admin";
+            try {
+                $this->pricingVasManager->updateVas($data, $user);
+                $this->error_code = 1;
+                $this->apiResponse['data'] = "Success: You have added a pricing!";
+            } catch (\Exception $e) {
+                $this->error_code = -1;
+                $this->apiResponse['message'] = "Fail: Please contact System Admin";
+            }
         }
 
         return $this->createResponse();

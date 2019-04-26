@@ -7,7 +7,7 @@ import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { updatePricingDataItem } from '../../../redux/actions';
+import { updatePricingDataItem, updatePricingVasItem } from '../../../redux/actions';
 
 class PricingData extends Component {
 
@@ -69,8 +69,10 @@ class PricingData extends Component {
         }, 500);
     }
 
-    handleSubmit = values => {
-        console.log(values);
+    onSaveVas = values => {
+        const { messages } = this.props.intl;
+        const data = values.vas;
+        this.props.updatePricingVasItem(data, messages);
     }
 
     render() {
@@ -111,17 +113,18 @@ class PricingData extends Component {
                         {columns}
                     </BootstrapTable>
                     {this.state.enableSaveButton && 
-                        <Button 
-                            size="sm" 
-                            color="primary" 
-                            className="btn-grid"
-                            onClick={this.onSaveTransportation}
-                        >{messages['save']}</Button>
+                        <div className="text-right">
+                            <Button 
+                                size="sm" 
+                                color="primary" 
+                                onClick={this.onSaveTransportation}
+                            >{messages['save']}</Button>
+                        </div>
                     }
                 </fieldset>
                 <fieldset className="scheduler-border">
                     <legend className="scheduler-border">{messages['pricing.value-services']}</legend>
-                    <PricingVas pricing_data_id={id} onSubmit={this.handleSubmit}/>
+                    <PricingVas pricing_data_id={id} onSubmit={this.onSaveVas}/>
                 </fieldset>
                 {/* <fieldset className="scheduler-border">
                     <legend className="scheduler-border">{messages['pricing.cod']}</legend>
@@ -134,12 +137,14 @@ class PricingData extends Component {
 
 PricingData.propTypes = {
     updatePricingDataItem: PropTypes.func.isRequired,
-  }
+    updatePricingVasItem: PropTypes.func.isRequired,
+}
 
 const mapStateToProps = () => {
     return {}
 }
 
 export default injectIntl(connect(mapStateToProps, {
-    updatePricingDataItem
+    updatePricingDataItem,
+    updatePricingVasItem
 })(PricingData));
