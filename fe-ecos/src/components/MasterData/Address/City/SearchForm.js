@@ -31,8 +31,7 @@ class SearchForm extends Component {
     }
     return result;
   }
-
-
+  
   onInputChange = value => {
     const params = {
       field: ['id', 'name'],
@@ -48,7 +47,8 @@ class SearchForm extends Component {
 
   render() {
     
-    const { handleSubmit, reset, countries } = this.props;
+    const { handleSubmit, reset, countries } = this.props;    
+    
     const { messages,locale } = this.props.intl;
     return (
       <form className="form" onSubmit={handleSubmit}>
@@ -127,10 +127,11 @@ SearchForm.propTypes = {
   getCountryList: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ address }) => {
+const mapStateToProps = ({ address, system }) => {
   const countries = address.country.items;
   return {
-    countries
+    countries,
+    system
   }
 }
 

@@ -16,6 +16,9 @@
 
   a {
     display: block;
+    @include themify($themes) {
+      background: themed('colorBackground');
+    }
   }
 
   &.sidebar--show {
@@ -302,13 +305,25 @@
       }
 
       .sidebar__submenu {
-        padding: 0 0 15px 0;
+        padding: 0 0 0 0;
         transition: 0s;
       }
 
       .sidebar__category-wrap {
 
         &:hover {
+          
+          a {
+            width: 240px;
+
+            @include themify($themes) {
+              background: themed('colorHover');
+            }
+
+            &:before {
+              opacity: 1;
+            }
+          }
 
           .sidebar__category {
             width: 240px;

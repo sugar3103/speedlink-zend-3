@@ -32,6 +32,12 @@ class CoreController extends ApiController
         if ($this->getRequest()->isPost()) {
             $payload = file_get_contents('php://input');
             $params = !empty(json_decode($payload, true)) ? json_decode($payload, true) : array();
+
+            if(empty($params)) {
+                $params = $this->getRequest()->getPost() ? (array) $this->getRequest()->getPost() : array();                
+                $params = $this->getRequest()->getFiles() ? array_merge($params, (array)$this->getRequest()->getFiles()) : $params;
+            }
+            
             if(!empty($fieldsMap)) {
                 //the current page number.
                 $start = isset( $params['offset']['start']) ? (int) $params['offset']['start'] : 1;
@@ -48,26 +54,6 @@ class CoreController extends ApiController
                 $filters = $this->getValueFiltersSearch($params,$fieldsMap);
                 
                 return array($start,$limit,$sortField,$sortDirection,$filters,$fields);    
-            } else {                
-                return $params;
-            }            
-        }        
-    }
-
-    public function getRequestDataSelect($fieldsMap = array())
-    {
-        if ($this->getRequest()->isPost()) {
-            $payload = file_get_contents('php://input');
-            $params = !empty(json_decode($payload, true)) ? json_decode($payload, true) : array();
-            if(!empty($fieldsMap)) {
-                
-                //get and set sortField,sortDirection
-                $sortField = isset($params['sort']) ? $params['sort'] : $fieldsMap[0];
-                $sortDirection = isset($params['order']) ? $params['order'] : 'ASC';
-
-                $filters = $this->getValueFiltersSearch($params,$fieldsMap);
-                
-                return array($sortField,$sortDirection,$filters);    
             } else {                
                 return $params;
             }            

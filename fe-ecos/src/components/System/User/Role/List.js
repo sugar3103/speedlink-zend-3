@@ -191,6 +191,7 @@ class List extends Component {
               locale === 'en-US' ? original.description_en : original.description
             )
           },
+          
           sortable: false,
         }, {
           Header: messages['status'],
@@ -214,7 +215,7 @@ class List extends Component {
         {
           Header: messages['action'],
           accessor: "",
-          width: 100,
+          width: 120,
           className: "text-center",
           Cell: ({ original }) => {
             return (

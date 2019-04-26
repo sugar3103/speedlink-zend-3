@@ -37,23 +37,24 @@ class PricingDataController extends CoreController {
 
     public function indexAction()
     {
-        $result = [
-            "total" => 0,
-            "data" => []
-        ];
+        if ($this->getRequest()->isPost()) {
+            $result = [
+                "total" => 0,
+                "data" => []
+            ];
 
-        $fieldsMap = ['pricing_id'];
-        list($start, $limit, $sortField, $sortDirection, $filters) = $this->getRequestData($fieldsMap);
-        $dataShipmentType = $this->pricingDataManager->getListPricingDataByCondition($start, $limit, $sortField, $sortDirection, $filters);
-        foreach ($dataShipmentType['listPricingData'] as $key => $obj) {
-            $dataShipmentType['listPricingData'][$key]['pricing_data'] = json_decode($obj['pricing_data']);
+            $fieldsMap = ['pricing_id', 'name'];
+            list($start, $limit, $sortField, $sortDirection, $filters) = $this->getRequestData($fieldsMap);
+            $dataShipmentType = $this->pricingDataManager->getListPricingDataByCondition($start, $limit, $sortField, $sortDirection, $filters);
+            foreach ($dataShipmentType['listPricingData'] as $key => $obj) {
+                $dataShipmentType['listPricingData'][$key]['pricing_data'] = json_decode($obj['pricing_data']);
+            }
+            $result['error_code'] = 1;
+            $result['message'] = 'Success';
+            $result["total"] = $dataShipmentType['totalPricingData'];
+            $result["data"] = !empty($dataShipmentType['listPricingData']) ? $dataShipmentType['listPricingData'] : [];
+            $this->apiResponse = $result;
         }
-        $result['error_code'] = 1;
-        $result['message'] = 'Success';
-        $result["total"] = $dataShipmentType['totalPricingData'];
-        $result["data"] = !empty($dataShipmentType['listPricingData']) ? $dataShipmentType['listPricingData'] : [];
-        $this->apiResponse = $result;
-
         return $this->createResponse();
     }
 

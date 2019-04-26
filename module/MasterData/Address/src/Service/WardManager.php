@@ -49,9 +49,9 @@ class WardManager  {
             $ward->setStatus($data['status']);
             $ward->setPostalCode($data['postal_code']);
             $ward->setDistrictId($data['district_id']);
-
-            $currentDate = date('Y-m-d H:i:s');
-            $ward->setCreatedAt($currentDate);
+           
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $ward->setCreatedAt($addTime->format('Y-m-d H:i:s'));
             $ward->setCreatedBy($user->id);
 
             $this->getReferenced($ward,$data);
@@ -94,10 +94,9 @@ class WardManager  {
             $ward->setStatus($data['status']);
             $ward->setDistrictId($data['district_id']);
             $ward->setPostalCode($data['postal_code']);
-            // $ward->setRefAsBy($data['ref_as_by']);
 
-            $currentDate = date('Y-m-d H:i:s');
-            $ward->setUpdatedAt($currentDate);
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $ward->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
             $ward->setUpdatedBy($user->id);
            
             $this->getReferenced($ward,$data);

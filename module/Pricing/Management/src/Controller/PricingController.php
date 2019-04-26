@@ -47,7 +47,7 @@ class PricingController extends CoreController
         if ($this->getRequest()->isPost()) {
             $result = ["total" => 0, "data" => []];
             $fieldsMap = [
-                'is_private', 'customer_id', 'saleman_id', 'status', 
+                'id', 'is_private', 'customer_id', 'saleman_id', 'status', 
                 'category_code', 'carrier_id', 'effected_date', 'expired_date', 
                 'origin_country_id', 'origin_city_id', 'origin_district_id', 'origin_ward_id', 
                 'approval_status', 'approved_by'
@@ -100,8 +100,8 @@ class PricingController extends CoreController
             try {
                 // add new pricing
                 $pricing = $this->pricingManager->addPricing($data, $user);
-                $this->pricingDataManager->addPricingData($pricing, $user);
                 $this->error_code = 1;
+                $this->apiResponse['data'] = $pricing->getId();
                 $this->apiResponse['message'] = "Success: You have added a pricing!";
             } catch (\Exception $e) {
                 $this->error_code = -1;

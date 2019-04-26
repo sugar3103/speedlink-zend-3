@@ -3,7 +3,11 @@ import { Button, ButtonToolbar, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { toggleZoneCodeModal, changeTypeZoneCodeModal,  getCarrierCodeZoneCodeByCondition, getServiceCodeZoneCodeByCondition, getShipmentTypeCodeZoneCodeByCondition, getCustomerList, 
-  getOriginCountryList, getOriginCityList, getOriginDistrictList, getOriginWardList,
+  removeState,
+  getCountryList,
+  getCityList,
+  getDistrictList,
+  getWardList,
   getDestinationCountryList, getDestinationCityList, getDestinationDistrictList, getDestinationWardList  } from '../../../redux/actions';
 import { Field, reduxForm } from 'redux-form';
 import CustomField from '../../../containers/Shared/form/CustomField';
@@ -12,6 +16,8 @@ import validate from './validateActionForm';
 import PropTypes from 'prop-types';
 import { MODAL_ADD, MODAL_VIEW, MODAL_EDIT } from '../../../constants/defaultValues';
 import Moment from 'react-moment';
+import { CITY_RESET_STATE, DISTRICT_RESET_STATE, WARD_RESET_STATE } from '../../../constants/actionTypes';
+import Can from '../../../containers/Shared/Can';
 
 class ActionForm extends Component {
 
@@ -74,7 +80,7 @@ class ActionForm extends Component {
           limit: 0
         }
       }
-      this.props.getOriginCountryList(paramsCountry, messages, 'editview');
+      this.props.getCountryList(paramsCountry, messages, 'editview');
     }
     if (data && data.origin_city_id) {
       let paramsCity = {
@@ -86,10 +92,10 @@ class ActionForm extends Component {
           country: data.origin_country_id
         }
       }
-      this.props.getOriginCityList(paramsCity, messages, 'editview');
+      this.props.getCityList(paramsCity, messages, 'editview');
     }
 
-    if (data && data.origin_district_id) {
+    if ( (data && data.origin_district_id) || (data && data.origin_city_id) ) {
       let paramsDistrict = {
         field: ['id', 'name'],
         offset: {
@@ -99,10 +105,10 @@ class ActionForm extends Component {
           city: data.origin_city_id
         }
       }
-      this.props.getOriginDistrictList(paramsDistrict, messages, 'editview');
+      this.props.getDistrictList(paramsDistrict, messages, 'editview');
     }
 
-    if (data && data.origin_ward_id) {
+    if ( (data && data.origin_ward_id) || (data && data.origin_district_id) ) {
       let paramsWard = {
         field: ['id', 'name'],
         offset: {
@@ -112,7 +118,7 @@ class ActionForm extends Component {
           district: data.origin_district_id
         }
       }
-      this.props.getOriginWardList(paramsWard, messages, 'editview');
+      this.props.getWardList(paramsWard, messages, 'editview');
     }
 
     if (data && data.destination_country_id) {
@@ -136,7 +142,7 @@ class ActionForm extends Component {
       this.props.getDestinationCityList(paramsCity, messages, 'editview');
     }
 
-    if (data && data.destination_district_id) {
+    if ( (data && data.destination_district_id) || (data && data.destination_city_id) ) {
       let paramsDistrict = {
         field: ['id', 'name'],
         offset: {
@@ -149,7 +155,7 @@ class ActionForm extends Component {
       this.props.getDestinationDistrictList(paramsDistrict, messages, 'editview');
     }
 
-    if (data && data.destination_ward_id) {
+    if ( (data && data.destination_ward_id) || (data && data.destination_district_id) ) {
       let paramsWard = {
         field: ['id', 'name'],
         offset: {
@@ -346,7 +352,14 @@ class ActionForm extends Component {
     this.props.change('origin_city',null);
     this.props.change('origin_district',null);
     this.props.change('origin_ward',null);
-    this.props.getOriginCityList(params, messages, 'onchange');
+    if(value) {
+      this.props.getCityList(params, messages, 'onchange');
+    }
+   else {
+    this.props.removeState(CITY_RESET_STATE);
+   }
+    this.props.removeState(DISTRICT_RESET_STATE);
+    this.props.removeState(WARD_RESET_STATE);
   }
 
   onChangeOriginCity = value => {
@@ -362,7 +375,12 @@ class ActionForm extends Component {
     }
     this.props.change('origin_district',null);
     this.props.change('origin_ward',null);
-    this.props.getOriginDistrictList(params, messages, 'onchange');
+    if(value) {
+      this.props.getDistrictList(params , messages, 'onchange');
+    }else {
+      this.props.removeState(DISTRICT_RESET_STATE);
+    }
+    this.props.removeState(WARD_RESET_STATE);
   }
 
   onChangeOriginDistrict = value => {
@@ -377,7 +395,11 @@ class ActionForm extends Component {
       }
     }
     this.props.change('origin_ward',null);
-    this.props.getOriginWardList(params, messages, 'onchange');
+    if(value) {
+      this.props.getWardList(params, messages, 'onchange'); 
+      } else {
+        this.props.removeState(WARD_RESET_STATE);
+      }
   }
 
   onChangeDestinationCountry = value => {
@@ -448,7 +470,9 @@ class ActionForm extends Component {
 
   render() {
     const { messages, locale } = this.props.intl;
-    const { handleSubmit, modalData, modalType,  CarrierCodeZoneCodeByCondition, ServiceCodeZoneCodeByCondition, ShipmentCodeZoneCodeByCondition, customerCode, origin_countrys, origin_citys, origin_districts, origin_wards, destination_countrys, destination_citys, destination_districts, destination_wards } = this.props;
+    const { handleSubmit, modalData, modalType,  CarrierCodeZoneCodeByCondition, ServiceCodeZoneCodeByCondition, ShipmentCodeZoneCodeByCondition, customerCode, 
+      countries, cities, districts, wards,
+      destination_countrys, destination_citys, destination_districts, destination_wards } = this.props;
     let className = 'success';
     let title = messages['zone_code.add-new'];
     const disabled = modalType === MODAL_VIEW ? true : false;
@@ -605,7 +629,7 @@ class ActionForm extends Component {
                   name="origin_country_id"
                   component={renderSelectField}
                   type="text"
-                  options={origin_countrys && this.showOptions(origin_countrys)}
+                  options={countries && this.showOptions(countries)}
                   onChange={this.onChangeOriginCountry}
                   disabled={disabled} 
                 />
@@ -620,7 +644,7 @@ class ActionForm extends Component {
                   name="origin_city_id"
                   component={renderSelectField}
                   type="text"
-                  options={origin_citys && this.showOptions(origin_citys)}
+                  options={cities && this.showOptions(cities)}
                   onChange={this.onChangeOriginCity}
                   disabled={disabled} 
                 />
@@ -635,7 +659,7 @@ class ActionForm extends Component {
                   name="origin_district_id"
                   component={renderSelectField}
                   type="text"
-                  options={origin_districts && this.showOptions(origin_districts)}
+                  options={districts && this.showOptions(districts)}
                   onChange={this.onChangeOriginDistrict}
                   disabled={disabled} 
                 />
@@ -650,7 +674,7 @@ class ActionForm extends Component {
                   name="origin_ward_id"
                   component={renderSelectField}
                   type="text"
-                  options={origin_wards && this.showOptions(origin_wards)}
+                  options={wards && this.showOptions(wards)}
                   onChange={this.onChangeOriginWard}
                   disabled={disabled} 
                 />
@@ -772,7 +796,9 @@ class ActionForm extends Component {
           {this.state.modalType === MODAL_VIEW &&
             <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
           }
+          <Can user={this.props.authUser.user} permission="zonecode" action="edit" own={modalData && modalData.created_by}>
           <Button color={className} type="submit">{ modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
+          </Can>
         </ButtonToolbar>
       </form>
     );
@@ -789,24 +815,25 @@ ActionForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   toggleZoneCodeModal: PropTypes.func.isRequired,
   getCustomerList: PropTypes.func.isRequired,
-  getOriginCountryList: PropTypes.func.isRequired,
-  getOriginCityList: PropTypes.func.isRequired,
-  getOriginDistrictList: PropTypes.func.isRequired,
-  getOriginWardList: PropTypes.func.isRequired,
+  getCountryList: PropTypes.func.isRequired,
+  getCityList: PropTypes.func.isRequired,
+  getDistrictList: PropTypes.func.isRequired,
+  getWardList: PropTypes.func.isRequired,
   getDestinationCountryList: PropTypes.func.isRequired,
   getDestinationCityList: PropTypes.func.isRequired,
   getDestinationDistrictList: PropTypes.func.isRequired,
   getDestinationWardList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({zoneCode, customer}) => {  
+const mapStateToProps = ({zoneCode, customer, address, authUser}) => {  
   const { errors, modalData, modalType } = zoneCode;
   const { CarrierCodeZoneCodeByCondition, ServiceCodeZoneCodeByCondition, ShipmentCodeZoneCodeByCondition  } = zoneCode;
   const customerCode = customer.items;
-  const origin_countrys = zoneCode.origin_country;
-  const origin_citys = zoneCode.origin_city;
-  const origin_districts = zoneCode.origin_district;
-  const origin_wards = zoneCode.origin_ward;
+ 
+  const countries = address.country.items;
+  const cities = address.city.items;
+  const districts = address.district.items;
+  const wards = address.ward.items;
   const destination_countrys = zoneCode.destination_country;
   const destination_citys = zoneCode.destination_city;
   const destination_districts = zoneCode.destination_district;
@@ -819,8 +846,12 @@ const mapStateToProps = ({zoneCode, customer}) => {
     ServiceCodeZoneCodeByCondition, 
     ShipmentCodeZoneCodeByCondition, 
     customerCode,
-    origin_countrys, origin_citys, origin_districts, origin_wards, 
-    destination_countrys, destination_citys, destination_districts, destination_wards
+    countries,
+    cities,
+    districts,
+    wards, 
+    destination_countrys, destination_citys, destination_districts, destination_wards,
+    authUser
   };
 };
 
@@ -833,7 +864,11 @@ export default reduxForm({
   getServiceCodeZoneCodeByCondition,
   getShipmentTypeCodeZoneCodeByCondition,
   getCustomerList,
-  getOriginCountryList, getOriginCityList, getOriginDistrictList, getOriginWardList,
   getDestinationCountryList, getDestinationCityList, getDestinationDistrictList, getDestinationWardList,
-  changeTypeZoneCodeModal
+  changeTypeZoneCodeModal,
+  getCountryList,
+  getCityList,
+  getDistrictList,
+  getWardList,
+  removeState
 })(ActionForm)));

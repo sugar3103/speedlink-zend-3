@@ -41,7 +41,7 @@ module.exports = {
     //validate
    
     'range_weight.validate-code-empty': 'Name shouldn’t be empty',
-    'range_weight.validate-code-minlength': 'Name must be 5 characters or more',
+    'range_weight.validate-code-minlength': 'Name must be 2 characters or more',
     'range_weight.validate-code-maxlength': 'Name must be 20 characters or less',
     'range_weight.validate-code-exists': 'Name already exists',
     'range_weight.validate-from-empty' : 'From Type shouldn’t be empty',
@@ -77,7 +77,7 @@ module.exports = {
     //validate
    
     'zone_code.validate-code-empty': 'Name shouldn’t be empty',
-    'zone_code.validate-code-minlength': 'Name must be 5 characters or more',
+    'zone_code.validate-code-minlength': 'Name must be 2 characters or more',
     'zone_code.validate-code-maxlength': 'Name must be 20 characters or less',
     'zone_code.validate-code-exists': 'Name already exists',
 
@@ -103,6 +103,8 @@ module.exports = {
     'pricing.type': 'Type',
     'pricing.value': 'Value',
     'pricing.minimun-value': 'Minimum Value',
+    'pricing.add-success': 'Added Success',
+    'pricing.update-data-success': 'Updated data Success',
 
     //validate
     'pricing.validate-saleman-empty': 'Saleman shouldn’t be empty',
@@ -112,6 +114,7 @@ module.exports = {
     'pricing.validate-origin-country-empty': 'Country shouldn’t be empty',
     'pricing.validate-origin-city-empty': 'City shouldn’t be empty',
     'pricing.validate-approved-by-empty': 'Approved by shouldn’t be empty',
+    'pricing.validate-value-numberic': 'Value must be a number!',
 
     //COD
     'pricing.cod' : 'Pricing Cod',

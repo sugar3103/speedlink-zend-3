@@ -32,6 +32,25 @@ import {
 } from "./actions";
 
 import createNotification from '../../../util/notifications';
+import { startSubmit, stopSubmit } from 'redux-form';
+
+function validateHub(errors) {
+  if (errors.name && errors.name.hubExists) {
+    return stopSubmit('hub_action_form', {
+      name: 'hub.validate-name-exists'
+    });
+  }
+  if (errors.name_en && errors.name_en.hubExists) {
+    return stopSubmit('hub_action_form', {
+      name_en: 'hub.validate-nameEn-exists'
+    });
+  }
+  if (errors.code && errors.code.hubExists) {
+    return stopSubmit('hub_action_form', {
+      code: 'hub.validate-code-exists'
+    });
+  }
+}
 
 //list hub
 
@@ -58,7 +77,7 @@ function* getHubListItems({ payload }) {
         break;
 
       case EC_FAILURE:
-        yield put(getHubListError(response.data));
+        yield put(getHubListError(response.message));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -96,6 +115,7 @@ const addHubItemRequest = async item => {
 
 function* addHubItem({ payload }) {
   const { item, messages } = payload;
+  yield put(startSubmit('hub_action_form'));
   try {
     const response = yield call(addHubItemRequest, item);
     switch (response.error_code) {
@@ -112,6 +132,7 @@ function* addHubItem({ payload }) {
 
       case EC_FAILURE:
         yield put(addHubItemError(response.data));
+        yield put(validateHub(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('user');
@@ -147,6 +168,7 @@ const updateHubItemRequest = async item => {
 
 function* updateHubItem({ payload }) {
   const { item, messages } = payload;
+  yield put(startSubmit('hub_action_form'));
   try {
     const response = yield call(updateHubItemRequest, item);
     switch (response.error_code) {
@@ -163,6 +185,7 @@ function* updateHubItem({ payload }) {
 
       case EC_FAILURE:
         yield put(updateHubItemError(response.data));
+        yield put(validateHub(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:

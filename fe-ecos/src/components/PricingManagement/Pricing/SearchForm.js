@@ -28,26 +28,6 @@ class SearchForm extends Component {
         }
     }
 
-    hanldeChangeType = value => {
-        const { messages } = this.props.intl;
-
-        this.props.change('customer_id', '');
-        if (value === 2) {
-            const paramsCustomer = {
-                type: "customer_id"
-            };
-            this.props.getCustomerPricingList(paramsCustomer, messages);
-            this.setState({
-                showCustomerField: true
-            });
-        } else {
-            this.setState({
-                showCustomerField: false
-            });
-        }
-    }
-
-    
     componentWillMount() {
         this.props.removeState(CITY_RESET_STATE);
         this.props.removeState(DISTRICT_RESET_STATE);
@@ -231,6 +211,25 @@ class SearchForm extends Component {
         this.props.getCarrierPricingList(params, messages);
     }
 
+    hanldeChangeType = value => {
+        const { messages } = this.props.intl;
+
+        this.props.change('customer_id', '');
+        if (value === 1) {
+            const paramsCustomer = {
+                type: "customer_id"
+            };
+            this.props.getCustomerPricingList(paramsCustomer, messages);
+            this.setState({
+                showCustomerField: true
+            });
+        } else {
+            this.setState({
+                showCustomerField: false
+            });
+        }
+    }
+
     render() {
         const { messages } = this.props.intl;
         const { handleSubmit, reset, countries, cities, districts, wards, customers, salemans, carriers, approvedBys } = this.props;
@@ -246,8 +245,8 @@ class SearchForm extends Component {
                                     component={renderSelectField}
                                     options={[
                                         { value: '', label: messages['all'] },
-                                        { value: 1, label: messages['pri_man.public'] },
-                                        { value: 2, label: messages['pri_man.customer'] }
+                                        { value: 0, label: messages['pri_man.public'] },
+                                        { value: 1, label: messages['pri_man.customer'] }
                                     ]}
                                     clearable={false}
                                     onChange={this.hanldeChangeType}
@@ -422,9 +421,9 @@ class SearchForm extends Component {
                                     component={renderSelectField}
                                     options={[
                                         { value: '', label: messages['all'] },
-                                        { value: 'approved', label: messages['pricing.approved'] },
-                                        { value: 'draft', label: messages['pricing.draft'] },
-                                        { value: 'new', label: messages['pricing.new'] },
+                                        { value: 0, label: messages['pricing.new'] },
+                                        { value: 1, label: messages['pricing.approved'] },
+                                        { value: 2, label: messages['pricing.draft'] },
                                     ]}
                                     clearable={false}
                                 />

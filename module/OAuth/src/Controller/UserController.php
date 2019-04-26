@@ -2,6 +2,7 @@
 namespace OAuth\Controller;
 
 use Core\Controller\CoreController;
+use Core\Utils\Utils;
 use Doctrine\ORM\EntityManager;
 use Zend\Cache\Storage\StorageInterface;
 use Zend\View\Model\ViewModel;
@@ -85,23 +86,32 @@ class UserController extends CoreController {
 
     public function editAction() {
         if ($this->getRequest()->isPost()) {
-            $data = $this->getRequestData();             
-            $user = $this->tokenPayload;
-            $_user = $this->entityManager->getRepository(User::class)->findOneById($data['id']);
-            if(isset($data['id']) && $_user) {                
+            $data = $this->getRequestData();                   
+            $user = $this->tokenPayload;            
+            if(isset($data['id'])) {                
+                $_user = $this->entityManager->getRepository(User::class)->findOneById($data['id']);
                 if($this->checkAllow($user,$data['id'])) {
                     //Create New Form User
                     $form = new UserForm('update', $this->entityManager, $_user);
                     $form->setData($data);
                     if ($form->isValid()) {
-                    $data = $form->getData(); 
-                                        
-                    $this->userManager->updateUser($_user, $data,$user);
-                    $this->error_code = 1;
-                    $this->apiResponse['message'] = "SUCCESS_MODIFIED";
+                        $data = $form->getData(); 
+                                            
+                        $this->userManager->updateUser($_user, $data,$user);
+                        $this->error_code = 1;
+                        $this->apiResponse['message'] = "SUCCESS_MODIFIED";
+                        
+                        //Send Notification For User if infortion edited by diff user
+                        // Utils::BroadcastChannel($_user->getId(), 'verify', true);
+                        Utils::BroadcastChannel($_user->getId(),'notification',
+                        [
+                            'type' => 'info',
+                            'title'=> 'Edit Information',
+                            'message' => 'Your Information edited by '. $user->username
+                        ]);
                     }  else {
-                    $this->error_code = 0;
-                    $this->apiResponse = $form->getMessages(); 
+                        $this->error_code = 0;
+                        $this->apiResponse = $form->getMessages(); 
                     }   
                 } else {
                     $this->error_code = 0;

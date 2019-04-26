@@ -33,14 +33,14 @@ legend.scheduler-border {
 .custom-ui-confirm {
     text-align: center;
     width: 100%;
-    padding: 0 50px;
+    padding: 15px 50px;
 
     .card__title {
         margin-bottom: 0px;
 
         .title-icon {
             color: $color-red;
-            font-size: 25px;
+            font-size: 40px;
         }
     }
 
@@ -54,7 +54,7 @@ legend.scheduler-border {
     margin-left: auto;
     .btn {
         margin-bottom: 10px;
-        margin-top: 10px;
+        margin-top: 25px;
     }
 }
 
@@ -275,7 +275,23 @@ form {
         &.icon-avatar {
             border: none;            
             font-size: 30px;
+            line-height: 1;
         }
+    }
+
+    .topbar__title {
+        display: flex;
+        left: 240px;
+        position: absolute;
+        font-weight: 300;
+        text-transform: capitalize;
+        font-size: 18px;
+        line-height: 2.5;
+        color: #fff;
+    }
+
+    .page-title {
+        display: none;
     }
 }
 
@@ -291,6 +307,10 @@ form {
 /* PRICING PAGE */
 
 .pricing {
+    .nav {
+        display: block;
+    }
+
     .pricing-title {
         h4 {
             float: left;
@@ -301,81 +321,48 @@ form {
         }
     }
 
-    .react-grid-Grid {
-        min-height: 100% !important;
-    }
+    .react-bs-table-bordered {
+        border: none;
 
-    .react-grid-Container{
-        width: auto !important;
-    }
-
-    .react-grid-Canvas {
-        width: auto !important;
-        overflow-y: hidden !important;
-    }
-    
-
-    .react-grid-HeaderRow {
-        width: 100% !important;
-    }
-
-    .react-grid-Canvas > div{
-        &:nth-child(2) {
-            width: auto !important;
+        .form-control {
+            height: 25px;
+            color: #343d45;
         }
-    }
-    .rdg-last--frozen {
-        box-shadow: none !important;
-    }
-
-    .btn-grid {
-        margin: 10px 0 0 0;
-        float: right;
     }
 
     .pricing-vas {
+        ul {
+            padding-left: 0;
+        }
+
         .group-action {
             .btn {
                 float: right;
                 padding: 4px 8px;
                 margin-right: 0;
                 margin-left: 15px;
+                margin-bottom: 0;
             }
         }
 
-        .group-input {
+        .vas-item {
+            display: flex;
+            
             .btn {
                 padding: 4px 8px;
             }
 
-            &>div {
-                width: auto;
-                float: left;
-                margin-right: 15px;
+            .group-input {
+                flex-grow: 1;
+                justify-content: space-between;
             }
 
-            .type-select {
-                width: 10% !important;
-            }
-
-            .input-value {
-                width: 30% !important;
-            }
-
-            .input-minimun-value {
-                float: right;
-                margin-right: 0;
-            }
-
-            .equal-span {
-                line-height: 32px;
-                span {
-                    font-size: 16px;
-                    @include themify($themes) {            
-                        color: themed('colorText');
-                    }
+            .table-price {
+                .btn {
+                    margin: 0;
                 }
             }
+
         }
 
         .price-vas {
@@ -398,3 +385,21 @@ form {
 }
 
 /* END PRICING PAGE */
+
+.modal-content {
+    .form__form-group {
+        margin-bottom: 10px;
+    }
+    .footer {
+        hr {
+            margin: 2px
+        }
+        span {
+            font-size: 13px;
+        }
+    }
+}
+
+.topbar__title {
+    display: none;
+}

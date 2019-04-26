@@ -225,40 +225,42 @@ class ActionForm extends PureComponent {
               </div>
             </Col>
           </Row>
-          {modalData &&
-            <Fragment>
-              <hr />
-              <Row>
-                <Col md={6}>
-                  <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name_created}</span>
-                  <br />
-                  <span><i className="label-info-data">{messages['created-at']}:</i>
-                    <Moment fromNow locale={locale}>{new Date(modalData.created_at)}</Moment>
-                  </span>
-                </Col>
-                {modalData.updated_at &&
+          <div className="footer">
+            {modalData &&
+              <Fragment>
+                <hr />
+                <Row>
                   <Col md={6}>
-                    <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.full_name_updated}</span>
+                    <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name_created}</span>
                     <br />
-                    <span><i className="label-info-data">{messages['updated-at']}:</i>
-                      <Moment fromNow locale={locale}>{new Date(modalData.updated_at)}</Moment>
-
+                    <span><i className="label-info-data">{messages['created-at']}:</i>
+                      <Moment fromNow locale={locale}>{new Date(modalData.created_at)}</Moment>
                     </span>
                   </Col>
-                }
-              </Row>
-            </Fragment>
-          }
+                  {modalData.updated_at &&
+                    <Col md={6}>
+                      <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.full_name_updated}</span>
+                      <br />
+                      <span><i className="label-info-data">{messages['updated-at']}:</i>
+                        <Moment fromNow locale={locale}>{new Date(modalData.updated_at)}</Moment>
+
+                      </span>
+                    </Col>
+                  }
+                </Row>
+              </Fragment>
+            }
+          </div>
         </div>
 
         <ButtonToolbar className="modal__footer">
           {
             this.state.modalType === MODAL_VIEW &&
-              <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
+            <Button outline onClick={this.changeTypeModal}>{messages['cancel']}</Button>
           }
-          <Can user={this.props.authUser.user} permission="role" action="edit" own={ modalData && modalData.created_by}>
+          <Can user={this.props.authUser.user} permission="role" action="edit" own={modalData && modalData.created_by}>
             <Button color={className} type="submit">{modalType === MODAL_VIEW ? messages['edit'] : messages['save']}</Button>
-          </Can>          
+          </Can>
         </ButtonToolbar>
 
       </form >

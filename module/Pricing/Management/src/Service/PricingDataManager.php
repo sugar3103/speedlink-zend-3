@@ -8,10 +8,8 @@ use Management\Entity\Pricing;
 use Management\Entity\PricingData;
 use Doctrine\ORM\EntityManager;
 use OAuth\Entity\User;
-use RangeWeight\Entity\RangeWeight;
 use ServiceShipment\Entity\Service;
 use ServiceShipment\Entity\ShipmentType;
-use ZoneCode\Entity\ZoneCode;
 
 /**
  * @package Management\Service
@@ -50,17 +48,21 @@ class PricingDataManager {
         }
         $pricingData->setJoinUpdated($user_data);
 
-        $service = $this->entityManager->getRepository(Service::class)->find($data['service_id']);
-        if ($service == null) {
-            throw new \Exception('Not found Service Code');
+        if (!empty($data['service_id'])) {
+            $service = $this->entityManager->getRepository(Service::class)->find($data['service_id']);
+            if ($service == null) {
+                throw new \Exception('Not found Service Code');
+            }
+            $pricingData->setJoinService($service);
         }
-        $pricingData->setJoinService($service);
 
-        $shipment_type = $this->entityManager->getRepository(ShipmentType::class)->find($data['shipment_type_id']);
-        if ($shipment_type == null) {
-            throw new \Exception('Not found Shipment Type');
+        if (!empty($data['shipment_type_id'])) {
+            $shipment_type = $this->entityManager->getRepository(ShipmentType::class)->find($data['shipment_type_id']);
+            if ($shipment_type == null) {
+                throw new \Exception('Not found Shipment Type');
+            }
+            $pricingData->setJoinShipmentType($shipment_type);
         }
-        $pricingData->setJoinShipmentType($shipment_type);
     }
     public function getListPricingDataByCondition($start, $limit, $sortField = '', $sortDirection = 'asc', $filters = [])
     {
@@ -87,58 +89,6 @@ class PricingDataManager {
     }
 
     /**
-     * Add PricingData
-     *
-     * @param Pricing $data
-     * @param $user
-     * @return PricingData|bool
-     * @throws \Exception
-     */
-    public function addPricingData($data, $user)
-    {
-        try {
-            // begin transaction
-            $this->entityManager->beginTransaction();
-            $date = new \DateTime();
-            $where = [
-                'category_code' => $data->getCategoryCode(),
-                'carrier_id' => $data->getCarrierId(),
-            ];
-            $shipment_type = $this->entityManager->getRepository(ShipmentType::class)->findBy($where, ['service_id'=>'ASC','id'=>'ASC']);
-            $where = [
-                'category' => $data->getCategoryCode(),
-                'carrier_id' => $data->getCarrierId(),
-            ];
-            foreach ($shipment_type as $shipment) {
-                $where['service_id'] = $shipment->getServiceId();
-                $where['shipment_type_id'] = $shipment->getId();
-                $pricingTable = $this->generatePricingDataTable($where);
-
-                $pricingData = new PricingData();
-                $pricingData->setServiceId($shipment->getServiceId());
-                $pricingData->setPricingId($data->getId());
-                $pricingData->setShipmentTypeId($shipment->getId());
-                $pricingData->setPricingData($pricingTable);
-                $pricingData->setStatus(1);
-                $pricingData->setCreatedAt($date);
-                $pricingData->setCreatedBy($user->id);
-                $pricingData->setUpdatedAt($date);
-                $pricingData->setUpdatedBy($user->id);
-                $this->getReferenced($pricingData, $where, $user, 'add');
-                $this->entityManager->persist($pricingData);
-                $this->entityManager->flush();
-            }
-
-            $this->entityManager->commit();
-            return true;
-        }
-        catch (ORMException $e) {
-            $this->entityManager->rollback();
-            return false;
-        }
-    }
-
-    /**
      * Update PricingData
      *
      * @param $pricingData PricingData
@@ -152,10 +102,7 @@ class PricingDataManager {
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
-            $pricingData->setServiceId($data['service_id']);
-            $pricingData->setPricingId($data['pricing_id']);
-            $pricingData->setShipmentTypeId($data['shipment_type_id']);
-            $pricingData->setPricingData($data['pricing_data']);
+            $pricingData->setPricingData(json_encode($data['pricing_data']));
             $pricingData->setStatus($data['status']);
             $pricingData->setUpdatedAt(new \DateTime());
             $pricingData->setUpdatedBy($user->id);
@@ -198,40 +145,6 @@ class PricingDataManager {
             $this->entityManager->rollback();
             return FALSE;
         }
-    }
-
-    public function generatePricingDataTable($where, $mode = 'new')
-    {
-        $rangeWeight = $this->entityManager->getRepository(RangeWeight::class)->findBy($where, ['from'=> 'ASC','to'=>'ASC']);
-        $zoneCode = $this->entityManager->getRepository(ZoneCode::class)->findBy($where, ['code' => 'ASC']);
-        $result = ['title' => [], 'data' => []];
-        if (count($rangeWeight) <= 0) {
-            return json_encode($result, false);
-        }
-
-        $title['weight'] = 'Weight';
-        foreach ($zoneCode as $zone) {
-            $temp = array();
-            if (in_array($zone->getCode(),$temp)) {
-                continue;
-            }
-            $title[$zone->getCode()] = $zone->getCode();
-        }
-        $data = array();
-        foreach ($rangeWeight as $range) {
-            $data[$range->getId()]['weight'] = $range->getFrom() . ' - ' . $range->getTo();
-            $temp = array();
-            foreach ($zoneCode as $zone) {
-                if (in_array($zone->getCode(),$temp) ) {
-                    continue;
-                }
-                $data[$range->getId()][$zone->getCode()] = 0;
-                $temp[] = $zone->getCode();
-            }
-        }
-
-        $result = ['title' => $title, 'data' => $data];
-        return json_encode($result, false);
     }
 
 }

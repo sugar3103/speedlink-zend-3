@@ -45,7 +45,8 @@ $themes: (
     colorBubble: rgba(68, 79, 97, 0.65),
     colorBubbleActive: rgba(92, 104, 156, 0.6),
     colorScrollbar: #606071,
-    colorFitness: #ffffff
+    colorFitness: #ffffff,
+    colorPanel: #434f5a
   )
 );
 
@@ -87,3 +88,6 @@ $color-gray: #787985;
 
 $color-info: #17a2b8;
 $color-info-hover: darken($color-info, 10%);
+
+$color-green: rgb(76, 225, 182);
+$color-light-gray: #4ce1b6;

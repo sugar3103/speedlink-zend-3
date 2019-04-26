@@ -5,6 +5,7 @@ import { List } from '../../../components/MasterData/ServiceShipment/ShipmnetTyp
 import { connect } from "react-redux";
 import { getShipmentTypeList } from '../../../redux/actions';
 import AccessDenied from '../../../containers/Layout/accessDenied';
+import PageTitle from '../../../containers/Shared/PageTitle';
 class ShipmentType extends Component {
   constructor(props) {
     super(props);
@@ -28,6 +29,7 @@ class ShipmentType extends Component {
     const { errors } = this.props.shipment_type;
     return (
       <Container className={'panel__body'}>
+      <PageTitle title={messages['shipment_type.list-title']} />
         <Row>
           <Col md={12}>
             <h3 className="page-title">{messages['cs.shipment_type']}</h3>

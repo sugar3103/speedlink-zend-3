@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { List } from '../../../components/MasterData/ServiceShipment/Service';
 import { getServiceList } from '../../../redux/actions';
 import AccessDenied from '../../../containers/Layout/accessDenied';
+import PageTitle from '../../../containers/Shared/PageTitle';
 class Service extends Component {
   constructor(props) {
     super(props);
@@ -28,9 +29,10 @@ class Service extends Component {
     const { errors } = this.props.service;
     return (
       <Container className={'panel__body'}>
+      <PageTitle title={messages['service.list-title']} />
         <Row>
           <Col md={12}>
-            <h3 className="page-title">{messages['cs.service']}</h3>
+            <h3 className="page-title">{messages['service.list-title']}</h3>
             {/* <h3 className="page-subhead subhead"/> */}
           </Col>
         </Row>

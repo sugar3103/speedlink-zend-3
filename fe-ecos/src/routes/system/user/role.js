@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { List } from '../../../components/System/User/Role';
 import { getRoleList } from '../../../redux/actions';
 import AccessDenied from '../../../containers/Layout/accessDenied';
+import PageTitle from '../../../containers/Shared/PageTitle';
 
 class Role extends Component {
   constructor(props) {
@@ -30,6 +31,7 @@ class Role extends Component {
     const { errors } = this.props.role;
     return (
       <Container>
+        <PageTitle title={messages['role.list']}/>
         <Row>
           <Col md={12}>
             <h3 className="page-title">{messages['role.list']}

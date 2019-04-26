@@ -131,6 +131,7 @@ class PricingRepository extends EntityRepository
     public function buildPricingQueryBuilder($sortField, $sortDirection, $filters)
     {
         $operatorsMap = [
+            'id' => [ 'alias' => 'pr.id', 'operator' => 'eq' ],
             'name' => [ 'alias' => 'pr.name', 'operator' => 'eq' ],
             'status' => [ 'alias' => 'pr.status', 'operator' => 'eq' ],
             'carrier_id' => [ 'alias' => 'pr.carrier_id', 'operator' => 'eq' ],
@@ -165,6 +166,11 @@ class PricingRepository extends EntityRepository
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
         } else {
             $queryBuilder->orderBy('pr.id', 'ASC');
+        }
+
+        if (isset($filters)) {
+            $filters['effected_date'] = !empty($filters['effected_date']) ? Utils::formatDate($filters['effected_date']) : '';
+            $filters['expired_date'] = !empty($filters['expired_date']) ? Utils::formatDate($filters['expired_date']) : '';
         }
 
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);

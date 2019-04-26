@@ -138,7 +138,7 @@ class List extends Component {
               if(this.props.authUser.user.id === original.id) {
                 return (
                   <Fragment>
-                    {original.username}<Badge color="danger" style={{margin: '0 0 0 12px'}}>It' You</Badge> 
+                    {original.username}<Badge color="danger" style={{margin: '0 0 0 12px'}}>{messages['user.you']}</Badge> 
                   </Fragment>
                 )
               } else {

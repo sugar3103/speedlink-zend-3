@@ -14,19 +14,6 @@ import {
   ZONE_CODE_DELETE_ITEM_ERROR,
   ZONE_CODE_CHANGE_TYPE_MODAL,
 
-  ORIGIN_COUNTRY_GET_LIST,
-  ORIGIN_COUNTRY_GET_LIST_SUCCESS,
-  ORIGIN_COUNTRY_GET_LIST_ERROR,
-  ORIGIN_CITY_GET_LIST,
-  ORIGIN_CITY_GET_LIST_SUCCESS,
-  ORIGIN_CITY_GET_LIST_ERROR,
-  ORIGIN_DISTRICT_GET_LIST,
-  ORIGIN_DISTRICT_GET_LIST_SUCCESS,
-  ORIGIN_DISTRICT_GET_LIST_ERROR,
-  ORIGIN_WARD_GET_LIST,
-  ORIGIN_WARD_GET_LIST_SUCCESS,
-  ORIGIN_WARD_GET_LIST_ERROR,
-
   DESTINATION_COUNTRY_GET_LIST,
   DESTINATION_COUNTRY_GET_LIST_SUCCESS,
   DESTINATION_COUNTRY_GET_LIST_ERROR,
@@ -61,10 +48,6 @@ const INIT_STATE = {
   modalData: null,
   modalType: null,
   paramSearch: null,
-  origin_country:null,
-  origin_city:null,
-  origin_district:null,
-  origin_ward:null,
   destination_country:null,
   destination_city:null,
   destination_district:null,
@@ -86,9 +69,6 @@ export default (state = INIT_STATE, action) => {
         modalOpen: !state.modalOpen,
         modalData: action.payload.data,
         modalType: action.payload.type,
-        origin_city:null,
-        origin_district:null,
-        origin_ward:null,
         destination_city:null,
         destination_district:null,
         destination_ward:null,
@@ -192,100 +172,6 @@ export default (state = INIT_STATE, action) => {
         ...state, 
         errors: action.payload 
       };
-
-  case ORIGIN_COUNTRY_GET_LIST:
-  params = action.payload.params;
-  return { 
-    ...state, 
-  };
-
-  case ORIGIN_COUNTRY_GET_LIST_SUCCESS:
-    const { origin_country } = action.payload;
-    return { 
-      ...state, 
-      origin_country
-    };
-
-  case ORIGIN_COUNTRY_GET_LIST_ERROR:
-    return { 
-      ...state, 
-      errors: action.payload 
-    };
-
-    case ORIGIN_CITY_GET_LIST:
-    params = action.payload.params;
-    return { 
-      ...state, 
-    };
-
-  case ORIGIN_CITY_GET_LIST_SUCCESS:
-    const { origin_city } = action.payload;
-    types = action.payload.types;
-    if(types ==='onchange')
-      return {
-        ...state, 
-        origin_city,
-        origin_district: null,
-        origin_ward: null
-      }
-    else
-    return { 
-      ...state, 
-      origin_city
-    };
-
-  case ORIGIN_CITY_GET_LIST_ERROR:
-    return { 
-      ...state, 
-      errors: action.payload 
-    };
-
-    case ORIGIN_DISTRICT_GET_LIST:
-    params = action.payload.params;
-    return { 
-      ...state, 
-    };
-
-  case ORIGIN_DISTRICT_GET_LIST_SUCCESS:
-    const { origin_district } = action.payload;
-    types = action.payload.types;
-    if(types ==='onchange')
-      return { 
-        ...state, 
-        origin_district,
-        origin_ward: null
-      };
-    else
-      return{
-        ...state, 
-        origin_district
-      };
-
-  case ORIGIN_DISTRICT_GET_LIST_ERROR:
-    return { 
-      ...state, 
-      errors: action.payload 
-    };
-
-    case ORIGIN_WARD_GET_LIST:
-    params = action.payload.params;
-    return { 
-      ...state, 
-    };
-
-  case ORIGIN_WARD_GET_LIST_SUCCESS:
-    const { origin_ward } = action.payload;
-    types = action.payload.types;
-    return { 
-      ...state, 
-      origin_ward
-    };
-
-  case ORIGIN_WARD_GET_LIST_ERROR:
-    return { 
-      ...state, 
-      errors: action.payload 
-    };
 
     case DESTINATION_COUNTRY_GET_LIST:
     params = action.payload.params;

@@ -6,63 +6,37 @@ import renderDatePickerField from '../../../containers/Shared/form/DatePicker';
 import { Button, Col, Row } from 'reactstrap';
 import { connect } from 'react-redux';
 import {
-    getCountryList
+    removeState,
+    getCustomerList,
+    getCarrierShipmentList,
+    getCountryList,
+    getCityList,
+    getDistrictList,
+    getWardList,
+    getUserList
 } from '../../../redux/actions';
 import CalendarBlankIcon from 'mdi-react/CalendarBlankIcon';
+import PropTypes from 'prop-types';
+import { CITY_RESET_STATE, DISTRICT_RESET_STATE, WARD_RESET_STATE } from '../../../constants/actionTypes';
 import validate from './validateActionForm';
 
 class ActionForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showCustomerField: false,
-            disableApprovedStatusField: false,
+            showCustomerField: false
         }
     }
-
-    hanldeChangeType = value => {
-        this.props.change('customer', '');
-        if (value === 2) {
-            this.setState({
-                showCustomerField: true
-            });
-        } else {
-            this.setState({
-                showCustomerField: false
-            });
-        }
+    
+    componentWillMount() {
+        this.props.removeState(CITY_RESET_STATE);
+        this.props.removeState(DISTRICT_RESET_STATE);
+        this.props.removeState(WARD_RESET_STATE);
     }
-
+    
     componentDidMount() {
-        //set approved status
-        if (this.props.type === 'add') {
-            this.props.change('approved_status', 'new');
-            this.setState({
-                disableApprovedStatusField: true
-            });
-        }
-
         const { messages } = this.props.intl;
-        //get customer
-        const paramCustomer = {
-            field: ['id', 'name'],
-            offset: {
-                limit: 0
-            }
-        }
-        this.props.getCustomerList(paramCustomer, messages);
-
-        //get salemon
-        const paramUser = {
-            field: ['id', 'username'],
-            offset: {
-                limit: 0
-            }
-        }
-        this.props.getSalemanList(paramUser, messages);
-
-        //get approved by
-        this.props.getApprovedByList(paramUser, messages);
+        this.props.change('approval_status', 0);
 
         const paramAddress = {
             field: ['id', 'name'],
@@ -70,18 +44,50 @@ class ActionForm extends Component {
                 limit: 0
             }
         }
-
         //get countries
-        this.props.getCountryPricingList(paramAddress, messages);
+        this.props.getCountryList(paramAddress, messages);
 
-        //get carrier
-        const paramCarrier = {
-            field: ['id', 'code'],
+        //get user
+        const paramUser = {
+            field: ['id', 'username'],
             offset: {
                 limit: 0
             }
         }
-        this.props.getCarrierCodeList(paramCarrier, messages);
+        this.props.getUserList(paramUser, messages);
+
+        //get carrier
+        const params = {
+            type: "carrier_id",
+            category_code: ''
+        };
+        this.props.getCarrierShipmentList(params, messages);
+    }
+
+    showOptionCustomer = (items) => {
+        let result = [];
+        if (items.length > 0) {
+            result = items.map(item => {
+                return {
+                    value: item.customer_id,
+                    label: item.customer_name
+                }
+            })
+        }
+        return result;
+    }
+
+    showOptionCarrier = (items) => {
+        let result = [];
+        if (items.length > 0) {
+            result = items.map(item => {
+                return {
+                    value: item.carrier_id,
+                    label: item.carrier_code
+                }
+            })
+        }
+        return result;
     }
 
     showOption = (items) => {
@@ -112,57 +118,107 @@ class ActionForm extends Component {
 
     onChangeCountry = value => {
         const { messages } = this.props.intl;
-        let params = {
-            field: ['id', 'name'],
-            offset: {
-                limit: 0
-            },
-            query: {
-                country: value ? value : 0
+        this.props.change('origin_city_id', null);
+        this.props.change('origin_district_id', null);
+        this.props.change('origin_ward_id', null);
+        if (value) {
+            let params = {
+                field: ['id', 'name'],
+                offset: {
+                    limit: 0
+                },
+                query: {
+                    country: value
+                }
             }
+            this.props.getCityList(params, messages);
+        } else {
+            this.props.removeState(CITY_RESET_STATE);
         }
-        this.props.change('city', null);
-        this.props.change('district', null);
-        this.props.change('ward', null);
-        this.props.getCityPricingList(params, messages);
+
+        this.props.removeState(DISTRICT_RESET_STATE);
+        this.props.removeState(WARD_RESET_STATE);
     }
 
     onChangeCity = value => {
         const { messages } = this.props.intl;
+        this.props.change('origin_district_id', null);
+        this.props.change('origin_ward_id', null);
 
-        let params = {
-            field: ['id', 'name'],
-            offset: {
-                limit: 0
-            },
-            query: {
-                city: value ? value : 0
+        if (value) {
+            let params = {
+                field: ['id', 'name'],
+                offset: {
+                    limit: 0
+                },
+                query: {
+                    city: value
+                }
             }
+            this.props.getDistrictList(params, messages);
+        } else {
+            this.props.removeState(DISTRICT_RESET_STATE);
         }
-        this.props.change('district', null);
-        this.props.change('ward', null);
-        this.props.getDistrictPricingList(params, messages);
+        
+        this.props.removeState(WARD_RESET_STATE);
     }
 
     onChangeDistrict = value => {
         const { messages } = this.props.intl;
+        this.props.change('origin_ward_id', null);
 
-        let params = {
-            field: ['id', 'name'],
-            offset: {
-                limit: 0
-            },
-            query: {
-                district: value ? value : 0
-            }
+        if(value) {
+            let params = {
+                field: ['id', 'name'],
+                offset: {
+                    limit: 0
+                },
+                query: {
+                    district: value 
+                }
+            }            
+            this.props.getWardList(params, messages);
+        } else {
+            this.props.removeState(WARD_RESET_STATE);
         }
-        this.props.change('ward', null);
-        this.props.getWardPricingList(params, messages);
     }
+
+    onChangeCategory = value => {
+        const { messages } = this.props.intl;
+        this.props.change('carrier_id', '');
+        const params = {
+            type: "carrier_id",
+            category_code: value
+        };
+        this.props.getCarrierShipmentList(params, messages);
+    }
+
+    hanldeChangeType = value => {
+        const { messages } = this.props.intl;
+
+        this.props.change('customer_id', '');
+        if (value === 1) {
+            let paramsCustomer = {
+                field: ['id', 'name'],
+                offset: {
+                    limit: 0
+                }
+            }      
+            this.props.getCustomerList(paramsCustomer, messages);
+            this.setState({
+                showCustomerField: true
+            });
+        } else {
+            this.setState({
+                showCustomerField: false
+            });
+        }
+    }
+
     render() {
         const { messages } = this.props.intl;
+        const { handleSubmit, countries, cities, districts, wards, customers, salemans, carriers, approvedBys } = this.props;
         
-        const { handleSubmit, countries } = this.props;
         return (
             <form className="form form_custom" onSubmit={handleSubmit}>
                 <Row>
@@ -170,12 +226,12 @@ class ActionForm extends Component {
                         <div className="form__form-group">
                             <span className="form__form-group-label">{messages['pri_man.filter-type']}</span>
                             <div className="form__form-group-field">
-                                <Field 
-                                    name="is_private" 
-                                    component={renderSelectField} 
+                                <Field
+                                    name="is_private"
+                                    component={renderSelectField}
                                     options={[
-                                        { value: 1, label: messages['pri_man.public'] },
-                                        { value: 2, label: messages['pri_man.customer'] }
+                                        { value: 0, label: messages['pri_man.public'] },
+                                        { value: 1, label: messages['pri_man.customer'] }
                                     ]}
                                     clearable={false}
                                     onChange={this.hanldeChangeType}
@@ -190,7 +246,7 @@ class ActionForm extends Component {
                                 <Field
                                     name="customer_id"
                                     component={renderSelectField}
-                                    options={[]}
+                                    options={customers && this.showOption(customers)}
                                     disabled={!this.state.showCustomerField}
                                 />
                             </div>
@@ -203,7 +259,7 @@ class ActionForm extends Component {
                                 <Field
                                     name="saleman_id"
                                     component={renderSelectField}
-                                    options={[]}
+                                    options={salemans && this.showOptionUser(salemans)}
                                 />
                             </div>
                         </div>
@@ -239,6 +295,7 @@ class ActionForm extends Component {
                                         { value: 'Domestic', label: messages['domestic'] }
                                     ]}
                                     clearable={false}
+                                    onChange={this.onChangeCategory}
                                 />
                             </div>
                         </div>
@@ -250,7 +307,7 @@ class ActionForm extends Component {
                                 <Field
                                     name="carrier_id"
                                     component={renderSelectField}
-                                    options={[]}
+                                    options={carriers && this.showOptionCarrier(carriers)}
                                 />
                             </div>
                         </div>
@@ -305,7 +362,7 @@ class ActionForm extends Component {
                                 <Field
                                     name="origin_city_id"
                                     component={renderSelectField}
-                                    options={[]}
+                                    options={cities && this.showOption(cities)}
                                     onChange={this.onChangeCity}
                                 />
                             </div>
@@ -318,7 +375,7 @@ class ActionForm extends Component {
                                 <Field
                                     name="origin_district_id"
                                     component={renderSelectField}
-                                    options={[]}
+                                    options={districts && this.showOption(districts)}
                                     onChange={this.onChangeDistrict}
                                 />
                             </div>
@@ -331,7 +388,7 @@ class ActionForm extends Component {
                                 <Field
                                     name="origin_ward_id"
                                     component={renderSelectField}
-                                    options={[]}
+                                    options={wards && this.showOption(wards)}
                                 />
                             </div>
                         </div>
@@ -343,15 +400,15 @@ class ActionForm extends Component {
                             <span className="form__form-group-label">{messages['pricing.approved-status']}</span>
                             <div className="form__form-group-field">
                                 <Field
-                                    name="approved_status"
+                                    name="approval_status"
                                     component={renderSelectField}
                                     options={[
-                                        { value: 'approved', label: messages['pricing.approved'] },
-                                        { value: 'draft', label: messages['pricing.draft'] },
-                                        { value: 'new', label: messages['pricing.new'] },
+                                        { value: 0, label: messages['pricing.new'] },
+                                        { value: 1, label: messages['pricing.approved'] },
+                                        { value: 2, label: messages['pricing.draft'] },
                                     ]}
                                     clearable={false}
-                                    disabled={this.state.disableApprovedStatusField}
+                                    disabled={true}
                                 />
                             </div>
                         </div>
@@ -363,7 +420,7 @@ class ActionForm extends Component {
                                 <Field
                                     name="approved_by"
                                     component={renderSelectField}
-                                    options={[]}
+                                    options={approvedBys && this.showOptionUser(approvedBys)}
                                 />
                             </div>
                         </div>
@@ -376,21 +433,58 @@ class ActionForm extends Component {
                         </Button>
                     </Col>
                 </Row>
-            </form>
-        );
+            </form>);
     }
 }
 
-const mapStateToProps = ({ address }) => {
+ActionForm.propTypes = {
+    handleSubmit: PropTypes.func.isRequired,
+    reset: PropTypes.func.isRequired,
+    getCustomerList: PropTypes.func.isRequired,
+    getCarrierShipmentList: PropTypes.func.isRequired,
+    getCountryList: PropTypes.func.isRequired,
+    getCityList: PropTypes.func.isRequired,
+    getDistrictList: PropTypes.func.isRequired,
+    getWardList: PropTypes.func.isRequired,
+    countries: PropTypes.array,
+    cities: PropTypes.array,
+    districts: PropTypes.array,
+    wards: PropTypes.array,
+    customers: PropTypes.array,
+    approvedBys: PropTypes.array,
+}
+
+const mapStateToProps = ({ address, users, customer, shipment_type }) => {
+    const { carriers } = shipment_type;
     const countries = address.country.items;
+    const cities = address.city.items;
+    const districts = address.district.items;
+    const wards = address.ward.items;
+    const approvedBys = users.user.items;
+    const customers = customer.items;
+    const salemans = users.user.items;
     return {
+        customers,
+        salemans,
+        carriers,
         countries,
+        cities,
+        districts,
+        wards,
+        approvedBys
     }
 }
 
 export default reduxForm({
-    form: 'pricing_action_form',
+    form: 'pricing_search_form',
     validate
 })(injectIntl(connect(mapStateToProps, {
-    getCountryList
+    removeState,
+    getCustomerList,
+    getCarrierShipmentList,
+    getCountryList,
+    getCityList,
+    getDistrictList,
+    getWardList,
+    getUserList
 })(ActionForm)));

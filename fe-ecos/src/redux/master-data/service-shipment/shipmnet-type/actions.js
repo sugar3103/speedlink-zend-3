@@ -1,21 +1,31 @@
 import {
   SHIPMENT_TYPE_TOGGLE_MODAL,
+  SHIPMENT_TYPE_CHANGE_TYPE_MODAL,
+
   SHIPMENT_TYPE_GET_LIST,
   SHIPMENT_TYPE_GET_LIST_SUCCESS,
   SHIPMENT_TYPE_GET_LIST_ERROR,
+
   SHIPMENT_TYPE_ADD_ITEM,
   SHIPMENT_TYPE_ADD_ITEM_SUCCESS,
   SHIPMENT_TYPE_ADD_ITEM_ERROR,
+
   SHIPMENT_TYPE_UPDATE_ITEM,
   SHIPMENT_TYPE_UPDATE_ITEM_SUCCESS,
   SHIPMENT_TYPE_UPDATE_ITEM_ERROR,
+
   SHIPMENT_TYPE_DELETE_ITEM,
   SHIPMENT_TYPE_DELETE_ITEM_SUCCESS,
   SHIPMENT_TYPE_DELETE_ITEM_ERROR,
+
   SHIPMENT_TYPE_CODE_GET_LIST,
   SHIPMENT_TYPE_CODE_GET_LIST_SUCCESS,
   SHIPMENT_TYPE_CODE_GET_LIST_ERROR,
-  SHIPMENT_TYPE_CHANGE_TYPE_MODAL
+
+  SHIPMENT_TYPE_CARRIER_GET_LIST,
+  SHIPMENT_TYPE_CARRIER_GET_LIST_SUCCESS,
+  SHIPMENT_TYPE_CARRIER_GET_LIST_ERROR
+
 } from '../../../../constants/actionTypes';
 
 export const toggleShipmentTypeModal = (type, data) => ({
@@ -99,6 +109,22 @@ export const changeTypeShipmentTypeModal = (type) => ({
   type: SHIPMENT_TYPE_CHANGE_TYPE_MODAL,
   payload: type
 })
+
+/* GET LIST CARRIER OF SHIPMENT TYPE */
+export const getCarrierShipmentList = (params, messages) => ({
+  type: SHIPMENT_TYPE_CARRIER_GET_LIST,
+  payload: { params, messages }
+});
+
+export const getCarrierShipmentListSuccess = (carriers) => ({
+  type: SHIPMENT_TYPE_CARRIER_GET_LIST_SUCCESS,
+  payload: carriers
+});
+
+export const getCarrierShipmentListError = (error) => ({
+  type: SHIPMENT_TYPE_CARRIER_GET_LIST_ERROR,
+  payload: error
+});
 
 
 

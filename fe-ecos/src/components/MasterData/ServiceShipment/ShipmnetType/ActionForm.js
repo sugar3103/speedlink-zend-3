@@ -168,7 +168,7 @@ class ActionForm extends Component {
               </div>
 
               <div className="form__form-group">
-                <span className="form__form-group-label">{messages['shipment_type.status']}</span>
+                <span className="form__form-group-label">{messages['status']}</span>
                 <div className="form__form-group-field">
                   <Field name="status" component={renderRadioButtonField} label={messages['active']} radioValue={1} defaultChecked disabled={disabled} />
                   <Field name="status" component={renderRadioButtonField} label={messages['inactive']} radioValue={0} disabled={disabled} />

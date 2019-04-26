@@ -5,6 +5,7 @@ import Page from '../../components/System/Setting';
 import { connect } from "react-redux";
 import { getSetting } from '../../redux/actions'
 import AccessDenied from '../../containers/Layout/accessDenied';
+import PageTitle from '../../containers/Shared/PageTitle';
 class Setting extends Component {
     constructor(props) {
         super(props);
@@ -28,6 +29,7 @@ class Setting extends Component {
         const { errors } = this.props.setting;
         return (
             <Container>
+                <PageTitle title={messages['setting']} />
                 <Row>
                     <Col md={12}>
                         <h3 className="page-title">{messages['setting']}</h3>

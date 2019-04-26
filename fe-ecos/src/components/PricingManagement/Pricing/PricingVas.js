@@ -2,58 +2,80 @@ import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import PriceVasItem from './PriceVasItem';
-import { uuidv4 } from '../../../util/uuidv4';
+import PricingVasItem from './PricingVasItem';
+import { FieldArray, reduxForm } from 'redux-form';
+import { getPricingVas } from '../../../redux/actions';
+import PropTypes from 'prop-types';
+
+const renderVasItems = ({ fields, meta: { submitFailed, error }, pricing_data_id }) => (
+    <ul>
+        <li className="group-action">
+            <Button size="sm" color="info"><span className="lnr lnr-question-circle"></span></Button>
+            <Button size="sm" color="success" onClick={() => fields.push({ id: 0, type: 0, pricing_data_id })}><span className="lnr lnr-plus-circle"></span></Button>
+            {submitFailed && error && <span>{error}</span>}
+            <div className="clearfix"></div>
+        </li>
+        {fields.map((vas, index) => {
+            if (!fields.get(index).is_deleted) {
+                return <PricingVasItem vas={vas} fields={fields} index={index} key={index} />
+            }
+            return null;
+        })
+        }
+    </ul>
+)
 
 class PricingVas extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            ids: []
+    componentWillMount() {
+        const { messages } = this.props.intl;
+        const params = {
+            offset: {
+                limit: 0
+            },
+            query: {
+                pricing_data_id: this.props.pricing_data_id
+            }
         }
-    }
-
-    componentDidMount() {
-        this.setState({
-            ids: [uuidv4()]
-        });
-    }
-
-
-    onAddItem = (e) => {
-        e.preventDefault();
-        let { ids } = this.state;
-        ids.push(uuidv4());
-        this.setState({
-            ids
-        });
-    }
-
-    showItem = (ids) => {
-        let result = ids.map((id, index) => (<PriceVasItem id={id} index={index + 1} key={index} />))
-        return result;
+        this.props.getPricingVas(params, messages);
     }
 
     render() {
         const { messages } = this.props.intl;
+        const { handleSubmit, submitting, pricing_data_id } = this.props;
 
         return (
-            <form className="form form_custom pricing-vas">
-                <div className="group-action">
-                    <Button size="sm" color="info"><span className="lnr lnr-question-circle"></span></Button>
-                    <Button size="sm" color="success" onClick={(e) => this.onAddItem(e)}><span className="lnr lnr-plus-circle"></span></Button>
-                    <div className="clearfix"></div>
+            <form className="form form_custom pricing-vas" onSubmit={handleSubmit}>
+                <FieldArray name="vas" component={renderVasItems} pricing_data_id={pricing_data_id} />
+                <div className="text-right">
+                    <Button size="sm" color="primary" type="submit" disabled={submitting}>{messages['save']}</Button>
                 </div>
-                {this.showItem(this.state.ids)}
-                <Button size="sm" color="primary" className="btn-grid">{messages['save']}</Button>
             </form>
         );
     }
 }
 
-const mapStateToProps = () => {
-    return {}
+PricingVas.propTypes = {
+    getPricingVas: PropTypes.func.isRequired,
+    vas: PropTypes.array
 }
 
-export default (injectIntl(connect(mapStateToProps, null)(PricingVas)));
+let PricingVasForm = reduxForm({
+    form: 'pricing_vas_action_form',
+    enableReinitialize: true
+})(PricingVas)
+
+const mapStateToProps = ({pricing}) => ({
+    initialValues: {
+        vas: pricing.vas
+    }
+});
+  
+const mapDispatchToProps = {
+    getPricingVas
+};
+
+PricingVasForm = connect(mapStateToProps, mapDispatchToProps)(PricingVasForm)
+
+export default injectIntl(PricingVasForm); 
+

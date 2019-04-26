@@ -4,6 +4,7 @@ namespace Core\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use Log\Factory\NotificationControllerFactory;
+use Core\Utils\SocketIO;
 
 class Utils {
 
@@ -69,8 +70,37 @@ class Utils {
         return $list;
     }
 
-    public static function createNotification($user_id,$type,$text)
+    public static function formatDate($date) {
+        $datetime = new \DateTime($date, new \DateTimeZone('UTC'));
+        $laTime = new \DateTimeZone('Asia/Ho_Chi_Minh');
+        $datetime->setTimezone($laTime);
+        $dateLast = $datetime->format('Y-m-d');
+        return $dateLast;
+    }
+
+    public static function BroadcastChannel($user_id,$type,$data)
     {
+        // [
+        //     'id' => $user_id,
+        //     'type' => $type,
+        //     'message' => is_array($message) ? json_encode($message) : $message
+        // ]
+        $param = [
+            'channel' => 'private-'. $user_id,
+            'event' => 'client-'. $type,
+            'data' => $data            
+        ];
         
+        $socketio = new SocketIO('localhost',3000);
+        $socketio->setQueryParams(['token' => rand(0,11)]);
+
+        $success = $socketio->emit('client event', (object) $param);
+
+        if(!$success)
+        {
+            return $socketio->getErrors();
+        } else {
+            return 'SUCCESS';
+        }
     }
 }

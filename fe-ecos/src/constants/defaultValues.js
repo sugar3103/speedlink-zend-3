@@ -5,7 +5,12 @@ export const localeOptions=[
     {id:'vi',name:'Vietnamese'},
 ];
 
-export const apiUrl = 'http://test.ecosv2-api.speedlink.vn/api/v1/';
+//api
+// export const apiUrl = 'http://localhost:8080/api/v1/';
+export const apiUrl = 'http://ecosv2-api.speedlink.local/api/v1/';
+export const socketUrl = 'localhost:3000';
+// export const apiUrl = 'http://test.ecosv2-api.speedlink.vn';
+
 
 //error code
 export const EC_SUCCESS = 1;

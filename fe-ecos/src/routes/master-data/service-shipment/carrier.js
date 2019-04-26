@@ -5,8 +5,10 @@ import { List } from '../../../components/MasterData/ServiceShipment/Carrier';
 import { connect } from "react-redux";
 import { getCarrierList } from '../../../redux/actions';
 import AccessDenied from '../../../containers/Layout/accessDenied';
+import PageTitle from '../../../containers/Shared/PageTitle';
+
 class Carrier extends Component {
-  
+
   constructor(props) {
     super(props);
     this.state = {
@@ -28,14 +30,15 @@ class Carrier extends Component {
     const { errors } = this.props.carrier;
     return (
       <Container className={'panel__body'}>
+        <PageTitle title={messages['carrier.list-title']} />
         <Row>
           <Col md={12}>
-            <h3 className="page-title">{messages['cs.carrier']}</h3>
+            <h3 className="page-title">{messages['carrier.list-title']}</h3>
             {/* <h3 className="page-subhead subhead"/> */}
           </Col>
         </Row>
         <Row>
-           {!this.state.loadPage ? (
+          {!this.state.loadPage ? (
             (errors && errors === 'ACCESS_DENIED') ? (<AccessDenied />) : (<List />)
           ) : ''}
         </Row>
@@ -43,7 +46,7 @@ class Carrier extends Component {
     )
   }
 }
-const mapStateToProps = ({ carrier }) => {  
+const mapStateToProps = ({ carrier }) => {
   return {
     carrier
   };
@@ -53,6 +56,6 @@ const mapStateToProps = ({ carrier }) => {
 export default injectIntl(connect(
   mapStateToProps,
   {
-    getCarrierList    
+    getCarrierList
   }
 )(Carrier));

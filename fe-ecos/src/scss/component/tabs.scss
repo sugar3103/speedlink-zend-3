@@ -121,14 +121,13 @@
 
     .nav-tabs {
       border-bottom: none;
-      width: 120px;
       height: 100%;
       flex-wrap: wrap;
 
       li {
         margin-top: 0;
-        width: 100%;
-
+        width: 120px;
+        
         .nav-link {
           padding: 10px 10px 10px 0;
           margin-right: 0;

@@ -17,7 +17,10 @@ use Management\Entity\PricingData;
 use Management\Entity\PricingVas;
 use Management\Entity\PricingVasSpec;
 use OAuth\Entity\User;
+use RangeWeight\Entity\RangeWeight;
 use ServiceShipment\Entity\Carrier;
+use ServiceShipment\Entity\ShipmentType;
+use ZoneCode\Entity\ZoneCode;
 
 /**
  * @package Management\Service
@@ -63,11 +66,19 @@ class PricingManager {
         }
         $pricing->setJoinApproval($approve_by);
 
-        $customer_id = $this->entityManager->getRepository(Customer::class)->find($data['approved_by']);
-        if ($approve_by == null) {
-            throw new \Exception('Not found Customer ID');
+        $saleman_id = $this->entityManager->getRepository(User::class)->find($data['saleman_id']);
+        if ($saleman_id == null) {
+            throw new \Exception('Not found Saleman ID');
         }
-        $pricing->setJoinCustomer($customer_id);
+        $pricing->setJoinSaleman($saleman_id);
+
+        if (!empty($data['customer_id'])) {
+            $customer_id = $this->entityManager->getRepository(Customer::class)->find($data['customer_id']);
+            if ($customer_id == null) {
+                throw new \Exception('Not found Customer ID');
+            }
+            $pricing->setJoinCustomer($customer_id);
+        }
 
         $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['carrier_id']);
         if ($carrier == null) {
@@ -199,7 +210,9 @@ class PricingManager {
             $pricing->setExpiredDate(new \DateTime($data['expired_date']));
             $pricing->setSalemanId($data['saleman_id']);
             $pricing->setIsPrivate($data['is_private']);
-            $pricing->setCustomerId($data['customer_id']);
+            if (!empty($data['customer_id'])) {
+                $pricing->setCustomerId($data['customer_id']);
+            }
             $pricing->setApprovalStatus($data['approval_status']);
             $pricing->setApprovedBy($data['approved_by']);
             $pricing->setStatus($data['status']);
@@ -211,6 +224,8 @@ class PricingManager {
 
             $this->entityManager->persist($pricing);
             $this->entityManager->flush();
+            $this->generatePricingData($pricing, $user);
+
             $this->entityManager->commit();
             return $pricing;
         }
@@ -326,5 +341,76 @@ class PricingManager {
             $this->entityManager->rollback();
             return FALSE;
         }
+    }
+
+    public function generatePricingData($data, $user)
+    {
+        try {
+            $date = new \DateTime();
+            $where = [
+                'category_code' => $data->getCategoryCode(),
+                'carrier_id' => $data->getCarrierId(),
+            ];
+            $shipment_type = $this->entityManager->getRepository(ShipmentType::class)->findBy($where, ['service_id'=>'ASC','id'=>'ASC']);
+            $where = [
+                'category' => $data->getCategoryCode(),
+                'carrier_id' => $data->getCarrierId(),
+            ];
+            foreach ($shipment_type as $shipment) {
+                $where['service_id'] = $shipment->getServiceId();
+                $where['shipment_type_id'] = $shipment->getId();
+                $pricingTable = $this->generatePricingDataTable($where);
+
+                $pricingData = new PricingData();
+                $pricingData->setServiceId($shipment->getServiceId());
+                $pricingData->setPricingId($data->getId());
+                $pricingData->setShipmentTypeId($shipment->getId());
+                $pricingData->setPricingData($pricingTable);
+                $pricingData->setStatus(1);
+                $pricingData->setCreatedAt($date);
+                $pricingData->setCreatedBy($user->id);
+                $pricingData->setUpdatedAt($date);
+                $pricingData->setUpdatedBy($user->id);
+                $this->getReferenced($pricingData, $where, $user, 'add');
+                $this->entityManager->persist($pricingData);
+                $this->entityManager->flush();
+            }
+        } catch (ORMException $e) {
+            throw new ORMException($e);
+        }
+    }
+
+    public function generatePricingDataTable($where, $mode = 'new')
+    {
+        $rangeWeight = $this->entityManager->getRepository(RangeWeight::class)->findBy($where, ['from'=> 'ASC','to'=>'ASC']);
+        $zoneCode = $this->entityManager->getRepository(ZoneCode::class)->findBy($where, ['code' => 'ASC']);
+        $result = ['title' => [], 'data' => []];
+        if (count($rangeWeight) <= 0) {
+            return json_encode($result, false);
+        }
+
+        $title['Weight'] = 'Weight';
+        foreach ($zoneCode as $zone) {
+            $temp = array();
+            if (in_array($zone->getCode(),$temp)) {
+                continue;
+            }
+            $title[$zone->getCode()] = $zone->getCode();
+        }
+        $data = array();
+        foreach ($rangeWeight as $range) {
+            $data[$range->getId()]['Weight'] = $range->getFrom() . ' - ' . $range->getTo();
+            $temp = array();
+            foreach ($zoneCode as $zone) {
+                if (in_array($zone->getCode(),$temp) ) {
+                    continue;
+                }
+                $data[$range->getId()][$zone->getCode()] = 0;
+                $temp[] = $zone->getCode();
+            }
+        }
+
+        $result = ['title' => $title, 'data' => $data];
+        return json_encode($result, false);
     }
 }

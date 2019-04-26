@@ -16,6 +16,18 @@ import {
   PRICING_ADD_MASTER_DATA,
   PRICING_ADD_MASTER_DATA_SUCCESS,
 
+  PRICING_GET_DATA,
+  PRICING_GET_DATA_SUCCESS,
+
+  PRICING_UPDATE_DATA,
+  PRICING_UPDATE_DATA_SUCCESS,
+  
+  PRICING_GET_VAS,
+  PRICING_GET_VAS_SUCCESS,
+
+  PRICING_UPDATE_VAS,
+  PRICING_UPDATE_VAS_SUCCESS,
+
 } from '../../../constants/actionTypes';
 
 export const pricingError = (error) => ({
@@ -75,4 +87,46 @@ export const addPricingMasterDataItem = (item, messages) => ({
 
 export const addPricingMasterDataItemSuccess = () => ({
   type: PRICING_ADD_MASTER_DATA_SUCCESS,
+});
+
+/* GET PRICING DATA */
+export const getPricingData = (params, messages) => ({
+  type: PRICING_GET_DATA,
+  payload: { params, messages }
+});
+
+export const getPricingDataSuccess = (item) => ({
+  type: PRICING_GET_DATA_SUCCESS,
+  payload: item
+});
+
+/* UPDATE PRICING DATA */
+export const updatePricingDataItem = (params, messages) => ({
+  type: PRICING_UPDATE_DATA,
+  payload: { params, messages }
+});
+
+export const updatePricingDataItemSuccess = () => ({
+  type: PRICING_UPDATE_DATA_SUCCESS,
+});
+
+/* GET PRICING VAS */
+export const getPricingVas = (params, messages) => ({
+  type: PRICING_GET_VAS,
+  payload: {params, messages}
+});
+
+export const getPricingVasSuccess = (vas) => ({
+  type: PRICING_GET_VAS_SUCCESS,
+  payload: vas
+});
+
+/* UPDATE PRICING VAS */
+export const updatePricingVasItem = (params, messages) => ({
+  type: PRICING_UPDATE_VAS,
+  payload: { params, messages }
+});
+
+export const updatePricingVasItemSuccess = () => ({
+  type: PRICING_UPDATE_VAS_SUCCESS,
 });

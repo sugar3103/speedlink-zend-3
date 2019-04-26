@@ -13,19 +13,24 @@ use Management\Entity\PricingVas;
  */
 class PricingVasRepository extends EntityRepository
 {
-    public function getListVasByCondition($filters)
+    public function getListVasByCondition($start, $limit, $sortField = 'pv.id', $sortDirection = 'asc', $filters = [])
     {
         try {
-            $queryBuilder = $this->buildVasQueryBuilder($filters);
+            $queryBuilder = $this->buildVasQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select("
                 pv.id,
                 pv.pricing_data_id,
                 pv.name,
                 pv.formula,
                 pv.min,
-                pv.type
+                pv.type,
+                pv.is_deleted
             ")->andWhere('pv.is_deleted = 0')
               ->andWhere('pd.status = 1');
+
+            if($limit) {
+                $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
+            }
 
             return $queryBuilder;
         } catch (QueryException $e) {
@@ -41,7 +46,7 @@ class PricingVasRepository extends EntityRepository
      * @return QueryBuilder
      * @throws QueryException
      */
-    public function buildVasQueryBuilder($filters)
+    public function buildVasQueryBuilder($sortField, $sortDirection, $filters)
     {
         $operatorsMap = [
             'pricing_data_id' => [
@@ -53,7 +58,12 @@ class PricingVasRepository extends EntityRepository
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(PricingVas::class, 'pv')
             ->innerJoin('pv.join_pricing_data', 'pd');
-        $queryBuilder->orderBy('pv.id', 'ASC');
+        
+        if ($sortField != NULL && $sortDirection != NULL) {
+            $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
+        } else {
+            $queryBuilder->orderBy('pv.id', 'ASC');
+        }
 
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
