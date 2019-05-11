@@ -8,11 +8,11 @@ import Pricing from './pricing';
 const PricingManagement = ({ match }) => (
   <Fragment>
       <Switch>
-          <Redirect exact from={`${match.url}/`} to={`${match.url}/pricing`} />
+          <Redirect exact from={`${match.url}`} to={`${match.url}/pricing`} />
           <Route path={`${match.url}/pricing`} component={Pricing} />
           <Route path={`${match.url}/range-weight`} component={RangeWeight} />     
           <Route path={`${match.url}/zone-code`} component={ZoneCode} />          
-          <Redirect to="/error" />
+          <Redirect to="/page-not-found" />
       </Switch>
   </Fragment>
 );

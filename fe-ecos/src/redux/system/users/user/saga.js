@@ -50,6 +50,7 @@ const getUserListRequest = async (params) => {
 };
 
 function* getUserListItems({ payload }) {
+  const { pathname } = history.location;
   try {
     const response = yield call(getUserListRequest, payload);
     switch (response.error_code) {
@@ -63,8 +64,7 @@ function* getUserListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        yield put(createNotification({type: 'warning', message: 'Please login to countinue'}));
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -97,21 +97,18 @@ const updateUserItemRequest = async item => {
 };
 
 function* updateUserItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('user_action_form'));
   try {
     const response = yield call(updateUserItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(updateUserItemSuccess());
-        yield put(getUserList(null, messages));
+        yield put(getUserList());
         yield put(getVerifyAuth());
         yield put(toggleUserModal());
-        createNotification({
-          type: 'success', 
-          message: messages['user.update-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'user.update-success' });
         break;
 
       case EC_FAILURE:
@@ -120,13 +117,8 @@ function* updateUserItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -160,18 +152,15 @@ const updateUserAvatarItemRequest = async item => {
 };
 
 function* updateUserAvatarItem({ payload }) {
-  const { item, messages } = payload;  
+  const { item } = payload;  
+  const { pathname } = history.location;
   try {
     const response = yield call(updateUserAvatarItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(updateUserItemSuccess());
         yield put(getVerifyAuth());
-        createNotification({
-          type: 'success', 
-          message: messages['user.update-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'user.update-success'});
         break;
 
       case EC_FAILURE:
@@ -180,13 +169,8 @@ function* updateUserAvatarItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;

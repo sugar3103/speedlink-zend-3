@@ -15,7 +15,7 @@ const User = ({ match }) => (
           <Route path={`${match.url}/permission`} component={Permission} />    
           <Route path={`${match.url}/:id/edit`} component={Edit} />
           <Route path={`${match.url}/profile`} component={Edit} />
-          <Redirect to="/error" />
+          <Redirect to="/page-not-found" />
       </Switch>
   </Fragment>
 );

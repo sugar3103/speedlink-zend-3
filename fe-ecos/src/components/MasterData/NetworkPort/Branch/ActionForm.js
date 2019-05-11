@@ -24,7 +24,6 @@ class ActionForm extends PureComponent {
 
   componentDidMount() {
     const data = this.props.modalData;
-    const { messages } = this.props.intl;
     if (data) {
       this.props.initialize(data);
     }
@@ -35,7 +34,7 @@ class ActionForm extends PureComponent {
           limit: 0
         }
       }
-      this.props.getCountryBranchList(paramsCountry, messages, 'editview');
+      this.props.getCountryBranchList(paramsCountry, 'editview');
     }
     if (data && data.city_id) {
       let paramsCity = {
@@ -47,7 +46,7 @@ class ActionForm extends PureComponent {
           country: data.country_id
         }
       }
-      this.props.getCityBranchList(paramsCity, messages, 'editview');
+      this.props.getCityBranchList(paramsCity, 'editview');
     }
 
     if (data && data.district_id) {
@@ -60,7 +59,7 @@ class ActionForm extends PureComponent {
           city: data.city_id
         }
       }
-      this.props.getDistrictBranchList(paramsDistrict, messages, 'editview');
+      this.props.getDistrictBranchList(paramsDistrict, 'editview');
     }
 
     if ( (data && data.ward_id) || (data && data.district_id) ) {
@@ -73,7 +72,7 @@ class ActionForm extends PureComponent {
           district: data.district_id
         }
       }
-      this.props.getWardBranchList(paramsWard, messages, 'editview');
+      this.props.getWardBranchList(paramsWard, 'editview');
     }
   }
 
@@ -86,7 +85,6 @@ class ActionForm extends PureComponent {
   }
 
   onChangeCountry = values => {
-    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name', 'name_en'],
       offset: {
@@ -99,11 +97,10 @@ class ActionForm extends PureComponent {
     this.props.change('cities',null);
     this.props.change('districts',null);
     this.props.change('wards',null);
-    this.props.getCityBranchList(params, messages, 'onchange');
+    this.props.getCityBranchList(params, 'onchange');
   }
 
   onChangeCity = values => {
-    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name', 'name_en'],
       offset: {
@@ -115,11 +112,10 @@ class ActionForm extends PureComponent {
     }
     this.props.change('districts',null);
      this.props.change('wards',null);
-    this.props.getDistrictBranchList(params, messages, 'onchange');
+    this.props.getDistrictBranchList(params, 'onchange');
   }
 
   onChangeDistrict = values => {
-    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name', 'name_en'],
       offset: {
@@ -130,7 +126,7 @@ class ActionForm extends PureComponent {
       }
     }
     this.props.change('wards',null);
-    this.props.getWardBranchList(params, messages, 'onchange');
+    this.props.getWardBranchList(params, 'onchange');
   }
 
   showOptions = (items) => {

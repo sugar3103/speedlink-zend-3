@@ -16,11 +16,11 @@ class MainApp extends Component {
         <Layout />
         <div className="container__wrap">
           <Switch>
-            <Route path={`${match.url}/dashboards`} component={Dashboards} />
-            <Route path={`${match.url}/master-data`} component={MasterData} />
-            <Route path={`${match.url}/pricing-management`} component={Pricing} />
-            <Route path={`${match.url}/system`} component={System} />
-            <Redirect to="/error" />
+            <Route path={`${match.url}dashboards`} component={Dashboards} />
+            <Route path={`${match.url}master-data`} component={MasterData} />
+            <Route path={`${match.url}pricing-management`} component={Pricing} />
+            <Route path={`${match.url}system`} component={System} />
+            <Redirect to="/page-not-found" />
           </Switch>
         </div>
       </Fragment>

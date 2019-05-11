@@ -11,7 +11,7 @@ const System = ({ match }) => (
           <Redirect exact from={`${match.url}/`} to={`${match.url}/user`} />
           <Route path={`${match.url}/setting`} component={Setting} />
           <Route path={`${match.url}/user`} component={User} />
-          <Redirect to="/error" />
+          <Redirect to="/page-not-found" />
       </Switch>
   </Fragment>
 );

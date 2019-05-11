@@ -57,7 +57,8 @@ const getStatusListRequest = async (params) => {
 };
 
 function* getStatusListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getStatusListRequest, params);
     switch (response.error_code) {
@@ -71,12 +72,7 @@ function* getStatusListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -103,20 +99,17 @@ const addStatusItemRequest = async item => {
 };
 
 function* addStatusItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('status_action_form'));
   try {
     const response = yield call(addStatusItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(addStatusItemSuccess());
-        yield put(getStatusList(null, messages));
+        yield put(getStatusList());
         yield put(toggleStatusModal());
-        createNotification({
-          type: 'success', 
-          message: messages['status.add-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'status.add-success' });
         break;
 
       case EC_FAILURE:
@@ -124,13 +117,8 @@ function* addStatusItem({ payload }) {
         yield put(validateStatus(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -156,20 +144,17 @@ const updateStatusItemRequest = async item => {
 };
 
 function* updateStatusItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('status_action_form'));
   try {
     const response = yield call(updateStatusItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(updateStatusItemSuccess());
-        yield put(getStatusList(null, messages));
+        yield put(getStatusList());
         yield put(toggleStatusModal());
-        createNotification({
-          type: 'success', 
-          message: messages['status.update-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'status.update-success' });
         break;
 
       case EC_FAILURE:
@@ -178,13 +163,8 @@ function* updateStatusItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -210,18 +190,15 @@ const deleteStatusItemRequest = async ids => {
 };
 
 function* deleteStatusItem({ payload }) {
-  const { ids, messages } = payload;
+  const { ids } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(deleteStatusItemRequest, ids);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(deleteStatusItemSuccess());
-        yield put(getStatusList(null, messages));
-        createNotification({
-          type: 'success', 
-          message: messages['status.delete-success'], 
-          title: messages['notification.success']
-        });
+        yield put(getStatusList());
+        createNotification({ type: 'success', message: 'status.delete-success'});
         break;
 
       case EC_FAILURE:
@@ -229,13 +206,8 @@ function* deleteStatusItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;

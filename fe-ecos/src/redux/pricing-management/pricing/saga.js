@@ -50,7 +50,8 @@ const getCodeByConditionListRequest = async (params) => {
 /* GET CUSTOMER PRICING LIST */
 
 function* getCustomerPricingListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getCodeByConditionListRequest, params);
     switch (response.error_code) {
@@ -64,12 +65,7 @@ function* getCustomerPricingListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -83,7 +79,8 @@ function* getCustomerPricingListItems({ payload }) {
 /* GET SALEMAN PRICING LIST */
 
 function* getSalemanPricingListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getCodeByConditionListRequest, params);
     switch (response.error_code) {
@@ -97,12 +94,7 @@ function* getSalemanPricingListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -116,7 +108,8 @@ function* getSalemanPricingListItems({ payload }) {
 /* GET CARRIER PRICING LIST */
 
 function* getCarrierPricingListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getCodeByConditionListRequest, params);
     switch (response.error_code) {
@@ -130,12 +123,7 @@ function* getCarrierPricingListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -162,7 +150,8 @@ const getPricingListRequest = async (params) => {
 };
 
 function* getPricingListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getPricingListRequest, params);
     switch (response.error_code) {
@@ -176,12 +165,7 @@ function* getPricingListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -208,23 +192,20 @@ const addPricingMasterDataItemRequest = async item => {
 };
 
 function* addPricingMasterDataItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(addPricingMasterDataItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(addPricingMasterDataItemSuccess());
-        createNotification({
-          type: 'success', 
-          message: messages['pricing.add-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'pricing.add-success' });
         const params = {
           query: {
             pricing_id: response.data
           }
         };
-        yield put(getPricingData(params, messages));
+        yield put(getPricingData(params));
         yield call(history.push, `/app/pricing-management/pricing/edit/${response.data}`);
         break;
 
@@ -232,13 +213,8 @@ function* addPricingMasterDataItem({ payload }) {
         yield put(pricingError(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -263,7 +239,8 @@ const getPricingDataItemsRequest = async (params) => {
 };
 
 function* getPricingDataItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getPricingDataItemsRequest, params);
     switch (response.error_code) {
@@ -277,12 +254,7 @@ function* getPricingDataItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -308,30 +280,22 @@ const updatePricingDataItemRequest = async params => {
 };
 
 function* updatePricingDataItem({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(updatePricingDataItemRequest, params);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(updatePricingDataItemSuccess());
-        createNotification({
-          type: 'success', 
-          message: messages['pricing.update-data-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success',  message: 'pricing.update-data-success' });
         break;
 
       case EC_FAILURE:
         yield put(pricingError(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -356,7 +320,8 @@ const getPricingVasItemsRequest = async (params) => {
 };
 
 function* getPricingVasItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getPricingVasItemsRequest, params);
     switch (response.error_code) {
@@ -370,12 +335,7 @@ function* getPricingVasItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -401,30 +361,22 @@ const updatePricingVasItemRequest = async params => {
 };
 
 function* updatePricingVasItem({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(updatePricingVasItemRequest, params);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(updatePricingVasItemSuccess());
-        createNotification({
-          type: 'success', 
-          message: messages['pricing.update-data-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'pricing.update-data-success' });
         break;
 
       case EC_FAILURE:
         yield put(pricingError(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;

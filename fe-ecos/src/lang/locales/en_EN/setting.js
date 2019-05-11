@@ -31,6 +31,7 @@ module.exports = {
     'allow_change_theme_color': 'Allow Change Theme',
     'light': 'Light',
     'dark': 'Dark',
+    'dark-blue': 'Dark Blue',
     'mail_engine': 'Mail Engine',
     'mail_parameter': 'Mail Parameters',
     'mail_smtp_hostname': 'SMTP Hostname',
@@ -46,5 +47,4 @@ module.exports = {
     'file_mime_allowed': 'Allowed File Mime Types',
     'file_ext_allowed': 'Allowed File Extensions',
     'setting.update-success': 'Update setting success',
-    'dark-blue': 'Dark Blue'
 }

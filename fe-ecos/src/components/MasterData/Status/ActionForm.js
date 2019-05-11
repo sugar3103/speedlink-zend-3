@@ -156,7 +156,7 @@ class ActionForm extends Component {
                 <hr />
                 <Row>
                   <Col md={6}>
-                    <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name_created ? modalData.full_name_created : modalData.created_by}</span>
+                    <span><i className="label-info-data">{messages['created-by']}:</i>{(modalData.full_name_created !== " ") ? modalData.full_name_created : modalData.created_by}</span>
                     <br />
                     <span><i className="label-info-data">{messages['created-at']}:</i>
                       <Moment fromNow locale={locale}>{new Date(modalData.created_at)}</Moment>

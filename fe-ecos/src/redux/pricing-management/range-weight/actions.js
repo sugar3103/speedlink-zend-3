@@ -51,9 +51,9 @@ import {
     payload: error
   });
   
-  export const addRangeWeightItem = (item, messages) => ({
+  export const addRangeWeightItem = (item) => ({
     type: RANGE_WEIGHT_ADD_ITEM,
-    payload: { item, messages }
+    payload: { item }
   });
   
   export const addRangeWeightItemSuccess = () => ({
@@ -65,9 +65,9 @@ import {
     payload: error
   });
   
-  export const updateRangeWeightItem = (item, messages) => ({
+  export const updateRangeWeightItem = (item) => ({
     type: RANGE_WEIGHT_UPDATE_ITEM,
-    payload: { item, messages }
+    payload: { item }
   });
   
   export const updateRangeWeightItemSuccess = () => ({
@@ -79,9 +79,9 @@ import {
     payload: error
   });
   
-  export const deleteRangeWeightItem = (ids, messages) => ({
+  export const deleteRangeWeightItem = (ids) => ({
     type: RANGE_WEIGHT_DELETE_ITEM,
-    payload: { ids, messages }
+    payload: { ids }
   });
   
   export const deleteRangeWeightItemSuccess = () => ({
@@ -93,9 +93,9 @@ import {
     payload: error
   });
 
-  export const getCarrierCodeByCondition = (params, messages, types) => ({
+  export const getCarrierCodeByCondition = (params, types) => ({
     type: CARRIER_GET_CODE_BY_CONDITION,
-    payload: { params, messages, types }
+    payload: { params, types }
   });
   
   export const getCarrierCodeByConditionSuccess = ( CarrierCodeByCondition) => ({
@@ -108,9 +108,9 @@ import {
     payload: error
   });
   
-  export const getServiceCodeByCondition = (params, messages, types) => ({
+  export const getServiceCodeByCondition = (params, types) => ({
     type: SERVICE_GET_CODE_BY_CONDITION,
-    payload: { params, messages, types }
+    payload: { params, types }
   });
   
   export const getServiceCodeByConditionSuccess = (ServiceCodeByCondition) => ({
@@ -123,9 +123,9 @@ import {
     payload: error
   });
   
-  export const getShipmentTypeCodeByCondition = (params, messages, types) => ({
+  export const getShipmentTypeCodeByCondition = (params, types) => ({
     type: SHIPMENT_TYPE_GET_CODE_BY_CONDITION,
-    payload: { params, messages, types }
+    payload: { params, types }
   });
   
   export const getShipmentTypeCodeByConditionSuccess = (ShipmentCodeByCondition) => ({

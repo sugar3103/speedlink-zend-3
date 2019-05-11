@@ -33,7 +33,8 @@ const getSettingRequest = async (params) => {
 };
 
 function* getSettingItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getSettingRequest, params);
     switch (response.error_code) {
@@ -47,12 +48,7 @@ function* getSettingItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -84,17 +80,14 @@ const updateSettingRequest = async (params) => {
 };
 
 function* updateSetting({ payload}) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(updateSettingRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
-        yield put(getSetting(null, messages));
-        createNotification({
-          type: 'success', 
-          message: messages['setting.update-success'], 
-          title: messages['notification.success']
-        });
+        yield put(getSetting());
+        createNotification({ type: 'success',  message: 'setting.update-success' });
         break;
 
       case EC_FAILURE:
@@ -102,13 +95,8 @@ function* updateSetting({ payload}) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;

@@ -30,18 +30,23 @@ class LogInForm extends PureComponent {
   
   showPassword = e => {
     e.preventDefault();
-    console.log(e);
-    
     this.setState({
       showPassword: !this.state.showPassword,
     });
   }
 
+  handleKeyDown = function (e, cb) {
+    if (e.key === 'Enter' && e.shiftKey === false) {
+      e.preventDefault();
+      cb();
+    }
+  };
+
   render() {
     const { handleSubmit, loading } = this.props;
     const { messages } = this.props.intl;
     return (
-      <form className="form" onSubmit={handleSubmit}>
+      <form className="form" onSubmit={handleSubmit} onKeyDown={(e) => { this.handleKeyDown(e, handleSubmit); }}>
         <div className="form__form-group">
           <span className="form__form-group-label">{messages['login.username']}</span>
           <div className="form__form-group-field">

@@ -31,34 +31,27 @@ const loginAsync = async (user) => {
 }
 
 function* login({ payload }) {
-  const { user } = payload;
+  const { user, from } = payload;
   try {
     const data = yield call(loginAsync, user);
     if (data.error_code === EC_SUCCESS) {
       localStorage.setItem('authUser', JSON.stringify(data.token));
       yield put(loginUserSuccess(data.token));
-      yield call(history.push, '/app/dashboards');
+      yield call(history.push, from ? from : '/');
 
     } else {
       const error = data.message;
       yield put(loginUserError(error))
-      createNotification({ type: 'warning', message: error.toString() })
+      createNotification({ type: 'error', message: 'login.login-false' });
     }
   } catch (error) {
     console.log('login error : ', error)
   }
 }
 
-const logoutAsync = async () => {
-  history.push('/login')
-}
-
-function* logout() {
-  try {
-    yield call(logoutAsync);
+function logout() {
+    history.push('/login');
     localStorage.removeItem('authUser');
-  } catch (error) {
-  }
 }
 
 export function* watchLoginUser() {

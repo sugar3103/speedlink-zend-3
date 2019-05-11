@@ -46,20 +46,18 @@ class SearchForm extends Component {
   }
 
   componentDidMount() {
-    const { messages } = this.props.intl;
     const params = {
         field: ['id', 'name'],
         offset: {
             limit: 0
         }
     }
-    this.props.getCustomerList(params, messages, 'onchange');
-    this.props.getCountryList(params, messages ,'onchange');
-    this.props.getDestinationCountryList(params, messages ,'onchange');
+    this.props.getCustomerList(params, 'onchange');
+    this.props.getCountryList(params ,'onchange');
+    this.props.getDestinationCountryList(params ,'onchange');
   }
 
   onChangeOriginCountry = value => {
-    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
@@ -73,7 +71,7 @@ class SearchForm extends Component {
     this.props.change('origin_district',null);
     this.props.change('origin_ward',null);
     if(value) {
-      this.props.getCityList(params, messages, 'onchange');
+      this.props.getCityList(params, 'onchange');
     }
    else {
     this.props.removeState(CITY_RESET_STATE);
@@ -83,7 +81,6 @@ class SearchForm extends Component {
   }
 
   onChangeOriginCity = value => {
-    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
@@ -96,7 +93,7 @@ class SearchForm extends Component {
     this.props.change('origin_district',null);
     this.props.change('origin_ward',null);
     if(value) {
-      this.props.getDistrictList(params , messages, 'onchange');
+      this.props.getDistrictList(params, 'onchange');
     }else {
       this.props.removeState(DISTRICT_RESET_STATE);
     }
@@ -104,7 +101,6 @@ class SearchForm extends Component {
   }
 
   onChangeOriginDistrict = value => {
-    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
@@ -116,14 +112,13 @@ class SearchForm extends Component {
     }
     this.props.change('origin_ward',null);
     if(value) {
-    this.props.getWardList(params, messages, 'onchange'); 
+    this.props.getWardList(params, 'onchange'); 
     } else {
       this.props.removeState(WARD_RESET_STATE);
     }
   }
 
   onChangeDestinationCountry = value => {
-    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
@@ -136,11 +131,10 @@ class SearchForm extends Component {
     this.props.change('destination_city',null);
     this.props.change('destination_district',null);
     this.props.change('destination_ward',null);
-    this.props.getDestinationCityList(params, messages, 'onchange');
+    this.props.getDestinationCityList(params, 'onchange');
   }
 
   onChangeDestinationCity = value => {
-    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
@@ -152,11 +146,10 @@ class SearchForm extends Component {
     }
     this.props.change('destination_district',null);
     this.props.change('destination_ward',null);
-    this.props.getDestinationDistrictList(params, messages, 'onchange');
+    this.props.getDestinationDistrictList(params, 'onchange');
   }
 
   onChangeDestinationDistrict = value => {
-    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name'],
       offset: {
@@ -167,11 +160,10 @@ class SearchForm extends Component {
       }
     }
     this.props.change('destination_ward',null);
-    this.props.getDestinationWardList(params, messages, 'onchange');
+    this.props.getDestinationWardList(params, 'onchange');
   }
 
   onChangeCategory = value => {
-    const { messages } = this.props.intl;
     this.props.change('carrier_id',null);
     this.props.change('service_id',null);
     this.props.change('shipment_type_id',null);
@@ -182,19 +174,18 @@ class SearchForm extends Component {
       type : "carrier_id",
       category_code : value
     }
-    this.props.getCarrierCodeZoneCodeByCondition(params, messages, 'onchange');
+    this.props.getCarrierCodeZoneCodeByCondition(params, 'onchange');
     
     params = { ...params,carrier_id: 0}
-    this.props.getServiceCodeZoneCodeByCondition(params, messages, 'onchange');
+    this.props.getServiceCodeZoneCodeByCondition(params, 'onchange');
     
     params = { ...params, service_id: [0] }
-    this.props.getShipmentTypeCodeZoneCodeByCondition(params, messages, 'onchange');
+    this.props.getShipmentTypeCodeZoneCodeByCondition(params, 'onchange');
   }
 
   onChangeCarrier = value => {
     this.props.change('service_id',null);
     this.props.change('shipment_type_id',null);
-    const { messages } = this.props.intl;
     this.setState({
       carrier_id: value
     });
@@ -203,26 +194,25 @@ class SearchForm extends Component {
       carrier_id : value,
       category_code : this.state.category_code
     }
-    this.props.getServiceCodeZoneCodeByCondition(params, messages, 'onchange');
+    this.props.getServiceCodeZoneCodeByCondition(params, 'onchange');
     params = {
       type : "carrier_id",
       category_code : value,
       carrier_id: 0,
       service_id: [0]
     }
-    this.props.getShipmentTypeCodeZoneCodeByCondition(params, messages, 'onchange');
+    this.props.getShipmentTypeCodeZoneCodeByCondition(params, 'onchange');
   }
 
   onChangeService = value => {
     this.props.change('shipment_type_id',null);
-    const { messages } = this.props.intl;
     let params = {
       type : "shipment_type_id",
       category_code : this.state.category_code,
       carrier_id : this.state.carrier_id,
       service_id : [ value ] 
     }
-    this.props.getShipmentTypeCodeZoneCodeByCondition(params, messages, 'onchange');
+    this.props.getShipmentTypeCodeZoneCodeByCondition(params, 'onchange');
   }
 
   showOptionCarrier = (items) => {

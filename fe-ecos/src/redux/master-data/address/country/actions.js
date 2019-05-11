@@ -20,9 +20,9 @@ export const toggleCountryModal = (type, data) => ({
   payload: { type, data }
 })
 
-export const getCountryList = (params, messages) => ({
+export const getCountryList = (params) => ({
   type: COUNTRY_GET_LIST,
-  payload: { params, messages }
+  payload: { params }
 });
 
 export const getCountryListSuccess = (items, total) => ({
@@ -35,9 +35,9 @@ export const getCountryListError = (error) => ({
   payload: error
 });
 
-export const addCountryItem = (item, messages) => ({
+export const addCountryItem = (item) => ({
   type: COUNTRY_ADD_ITEM,
-  payload: { item, messages }
+  payload: { item }
 });
 
 export const addCountryItemSuccess = () => ({
@@ -49,9 +49,9 @@ export const addCountryItemError = (error) => ({
   payload: error
 });
 
-export const updateCountryItem = (item, messages) => ({
+export const updateCountryItem = (item) => ({
   type: COUNTRY_UPDATE_ITEM,
-  payload: { item, messages }
+  payload: { item }
 });
 
 export const updateCountryItemSuccess = () => ({
@@ -63,9 +63,9 @@ export const updateCountryItemError = (error) => ({
   payload: error
 });
 
-export const deleteCountryItem = (id, messages) => ({
+export const deleteCountryItem = (id) => ({
   type: COUNTRY_DELETE_ITEM,
-  payload: { id, messages }
+  payload: { id }
 });
 
 export const deleteCountryItemSuccess = () => ({

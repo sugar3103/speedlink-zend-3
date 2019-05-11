@@ -5,6 +5,8 @@ import { Collapse } from 'reactstrap';
 import TopbarMenuLink from './TopbarMenuLink';
 import { logoutUser} from '../../../redux/actions';
 import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
+
 class TopbarProfile extends PureComponent {
   constructor() {
     super();
@@ -33,7 +35,7 @@ class TopbarProfile extends PureComponent {
             <i className="icon-avatar topbar__avatar-img" />
           {/* ) } */}
           <p className="topbar__avatar-name">
-            {(currentUser.fullname) ? currentUser.fullname : currentUser.username}</p>
+            {(currentUser.fullname !== " ") ? currentUser.fullname : currentUser.username}</p>
           <DownIcon className="topbar__icon" />
         </button>
         {this.state.collapse && <button className="topbar__back" onClick={this.toggle} />}
@@ -44,7 +46,7 @@ class TopbarProfile extends PureComponent {
             <TopbarMenuLink title="Tasks" icon="list" path="/default_pages/calendar" />
             <TopbarMenuLink title="Inbox" icon="inbox" path="/mail" />
             <div className="topbar__menu-divider" /> */}
-            <TopbarMenuLink title="Account Settings" icon="cog" path="/app/system/user/profile" />
+            <TopbarMenuLink title="Account Settings" icon="cog" path="/system/user/profile" />
             <TopbarMenuLink title="Lock Screen" icon="lock" path="/lock_screen" />
             {/* eslint-disable-next-line */}
             <a className="topbar__link" href="javascript:void(0)" onClick={this.hanldeLogOut}>
@@ -66,6 +68,6 @@ const mapStateToProps = ({ authUser }) => {
     authUser
   } 
 }
-export default connect(mapStateToProps, {
+export default injectIntl(connect(mapStateToProps, {
   logoutUser
-})(TopbarProfile);
+})(TopbarProfile));

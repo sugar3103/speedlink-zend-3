@@ -78,7 +78,8 @@ const getZoneCodeListRequest = async (params) => {
 };
 
 function* getZoneCodeListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getZoneCodeListRequest, params);
     switch (response.error_code) {
@@ -92,12 +93,7 @@ function* getZoneCodeListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -124,20 +120,17 @@ const addZoneCodeItemRequest = async item => {
 };
 
 function* addZoneCodeItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('zone_code_action_form'));
   try {
     const response = yield call(addZoneCodeItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(addZoneCodeItemSuccess());
-        yield put(getZoneCodeList(null, messages));
+        yield put(getZoneCodeList());
         yield put(toggleZoneCodeModal());
-        createNotification({
-          type: 'success', 
-          message: messages['zone_code.add-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'zone_code.add-success' });
         break;
 
       case EC_FAILURE:
@@ -145,13 +138,8 @@ function* addZoneCodeItem({ payload }) {
         yield put(validateZoneCode(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -177,20 +165,17 @@ const updateZoneCodeItemRequest = async item => {
 };
 
 function* updateZoneCodeItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('zone_code_action_form'));
   try {
     const response = yield call(updateZoneCodeItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(updateZoneCodeItemSuccess());
-        yield put(getZoneCodeList(null, messages));
+        yield put(getZoneCodeList());
         yield put(toggleZoneCodeModal());
-        createNotification({
-          type: 'success', 
-          message: messages['zone_code.update-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'zone_code.update-success' });
         break;
 
       case EC_FAILURE:
@@ -199,13 +184,8 @@ function* updateZoneCodeItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -231,18 +211,15 @@ const deleteZoneCodeItemRequest = async ids => {
 };
 
 function* deleteZoneCodeItem({ payload }) {
-  const { ids, messages } = payload;
+  const { ids } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(deleteZoneCodeItemRequest, ids);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(deleteZoneCodeItemSuccess());
-        yield put(getZoneCodeList(null, messages));
-        createNotification({
-          type: 'success', 
-          message: messages['zone_code.delete-success'], 
-          title: messages['notification.success']
-        });
+        yield put(getZoneCodeList());
+        createNotification({ type: 'success', message: 'zone_code.delete-success'});
         break;
 
       case EC_FAILURE:
@@ -250,13 +227,8 @@ function* deleteZoneCodeItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -283,7 +255,8 @@ const getDestinationCountryListRequest = async (params) => {
 };
 
 function* getDestinationCountryListItems({ payload }) {
-  const { params, messages, types } = payload;
+  const { params, types } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getDestinationCountryListRequest, params);
     switch (response.error_code) {
@@ -297,12 +270,7 @@ function* getDestinationCountryListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -329,7 +297,8 @@ const getDestinationCityListRequest = async (params) => {
 };
 
 function* getDestinationCityListItems({ payload }) {
-  const { params, messages, types } = payload;
+  const { params, types } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getDestinationCityListRequest, params);
     switch (response.error_code) {
@@ -343,12 +312,7 @@ function* getDestinationCityListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -375,7 +339,8 @@ const getDestinationDistrictListRequest = async (params) => {
 };
 
 function* getDestinationDistrictListItems({ payload }) {
-  const { params, messages, types } = payload;
+  const { params, types } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getDestinationDistrictListRequest, params);
     switch (response.error_code) {
@@ -389,12 +354,7 @@ function* getDestinationDistrictListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -421,7 +381,8 @@ const getDestinationWardListRequest = async (params) => {
 };
 
 function* getDestinationWardListItems({ payload }) {
-  const { params, messages, types } = payload;
+  const { params, types } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getDestinationWardListRequest, params);
     switch (response.error_code) {
@@ -435,12 +396,7 @@ function* getDestinationWardListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -466,7 +422,8 @@ const getShipmentTypeCodeByConditionRequest = async (params) => {
 };
 
 function* getShipmentTypeCodeZoneCodeByCondition({ payload }) {
-  const { params, messages, types } = payload;
+  const { params, types } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getShipmentTypeCodeByConditionRequest, params);
     switch (response.error_code) {
@@ -479,13 +436,8 @@ function* getShipmentTypeCodeZoneCodeByCondition({ payload }) {
         break;
       
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning',
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
 
       default:
@@ -498,7 +450,8 @@ function* getShipmentTypeCodeZoneCodeByCondition({ payload }) {
 }
 
 function* getCarrierCodeZoneCodeByCondition({ payload }) {
-  const { params, messages, types } = payload;
+  const { params, types } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getShipmentTypeCodeByConditionRequest, params);
     switch (response.error_code) {
@@ -511,13 +464,8 @@ function* getCarrierCodeZoneCodeByCondition({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning',
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
 
       default:
@@ -530,7 +478,8 @@ function* getCarrierCodeZoneCodeByCondition({ payload }) {
 }
 
 function* getServiceCodeZoneCodeByCondition({ payload }) {
-  const { params, messages, types } = payload;
+  const { params, types } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getShipmentTypeCodeByConditionRequest, params);
     switch (response.error_code) {
@@ -543,13 +492,8 @@ function* getServiceCodeZoneCodeByCondition({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning',
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
 
       default:

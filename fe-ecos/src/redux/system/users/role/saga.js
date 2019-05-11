@@ -39,6 +39,7 @@ const getRoleListRequest = async (params) => {
 };
 
 function* getRoleListItem ({ payload }) {
+  const { pathname } = history.location;
   try {
     const response = yield call(getRoleListRequest, payload);
     switch (response.error_code) {
@@ -51,9 +52,8 @@ function* getRoleListItem ({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('authRole');
-        yield call(history.push, '/login');
-        yield put(createNotification({type: 'warning', message: 'Please login to countinue'}));
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -83,19 +83,16 @@ const addRoleItemRequest = async item => {
 };
 
 function* addRoleItem ({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(addRoleItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(addRoleItemSuccess());
-        yield put(getRoleList(null, messages));
+        yield put(getRoleList());
         yield put(toggleRoleModal());
-        createNotification({
-          type: 'success', 
-          message: messages['role.add-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'role.add-success' });
         break;
 
       case EC_FAILURE:
@@ -103,13 +100,8 @@ function* addRoleItem ({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -138,19 +130,16 @@ const updateRoleItemRequest = async item => {
 };
 
 function* updateRoleItem ({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(updateRoleItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(updateRoleItemSuccess());
-        yield put(getRoleList(null, messages));
+        yield put(getRoleList());
         yield put(toggleRoleModal());
-        createNotification({
-          type: 'success', 
-          message: messages['role.update-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'role.update-success' });
         break;
 
       case EC_FAILURE:
@@ -158,13 +147,8 @@ function* updateRoleItem ({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;

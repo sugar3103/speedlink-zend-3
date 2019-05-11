@@ -4,11 +4,29 @@ import { connect } from 'react-redux';
 import LogInForm from '../../components/Auth/LoginForm';
 import { loginUser } from '../../redux/actions';
 import PropTypes from 'prop-types';
+import createNotification from '../../util/notifications';
 
 class LogIn extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      from: ''
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.location.state && this.props.location.state.from) {
+      this.setState({
+        from: this.props.location.state.from
+      });
+      createNotification({ type: 'warning', message: 'login.login-again' });
+    }
+  }
+  
+
   handleSubmit = values => {
-    this.props.loginUser(values);
+    this.props.loginUser(values, this.state.from);
   }
 
   render() {

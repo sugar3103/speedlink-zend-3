@@ -17,7 +17,7 @@ const MasterData = ({ match }) => (
           <Route path={`${match.url}/city`} component={City} />          
           <Route path={`${match.url}/district`} component={District} />          
           <Route path={`${match.url}/ward`} component={Ward} />          
-          <Redirect to="/error" />
+          <Redirect to="/page-not-found" />
       </Switch>
   </Fragment>
 );

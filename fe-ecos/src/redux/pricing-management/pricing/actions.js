@@ -36,9 +36,9 @@ export const pricingError = (error) => ({
 });
 
 /* GET LIST CUSTOMER */
-export const getCustomerPricingList = (params, messages) => ({
+export const getCustomerPricingList = (params) => ({
   type: PRICING_CUSTOMER_GET_LIST,
-  payload: { params, messages }
+  payload: { params }
 });
 
 export const getCustomerPricingListSuccess = (customers) => ({
@@ -47,9 +47,9 @@ export const getCustomerPricingListSuccess = (customers) => ({
 });
 
 /* GET LIST SALEMAN */
-export const getSalemanPricingList = (params, messages) => ({
+export const getSalemanPricingList = (params) => ({
   type: PRICING_SALEMAN_GET_LIST,
-  payload: { params, messages }
+  payload: { params }
 });
 
 export const getSalemanPricingListSuccess = (salemans) => ({
@@ -58,9 +58,9 @@ export const getSalemanPricingListSuccess = (salemans) => ({
 });
 
 /* GET LIST CARRIER */
-export const getCarrierPricingList = (params, messages) => ({
+export const getCarrierPricingList = (params) => ({
   type: PRICING_CARRIER_GET_LIST,
-  payload: { params, messages }
+  payload: { params }
 });
 
 export const getCarrierPricingListSuccess = (carriers) => ({
@@ -69,9 +69,9 @@ export const getCarrierPricingListSuccess = (carriers) => ({
 });
 
 /* GET LIST PRICING */
-export const getPricingList = (params, messages) => ({
+export const getPricingList = (params) => ({
   type: PRICING_GET_LIST,
-  payload: { params, messages }
+  payload: { params }
 });
 
 export const getPricingListSuccess = (items, total) => ({
@@ -80,9 +80,9 @@ export const getPricingListSuccess = (items, total) => ({
 });
 
 /* ADD PRICING */
-export const addPricingMasterDataItem = (item, messages) => ({
+export const addPricingMasterDataItem = (item) => ({
   type: PRICING_ADD_MASTER_DATA,
-  payload: { item, messages }
+  payload: { item }
 });
 
 export const addPricingMasterDataItemSuccess = () => ({
@@ -90,9 +90,9 @@ export const addPricingMasterDataItemSuccess = () => ({
 });
 
 /* GET PRICING DATA */
-export const getPricingData = (params, messages) => ({
+export const getPricingData = (params) => ({
   type: PRICING_GET_DATA,
-  payload: { params, messages }
+  payload: { params }
 });
 
 export const getPricingDataSuccess = (item) => ({
@@ -101,9 +101,9 @@ export const getPricingDataSuccess = (item) => ({
 });
 
 /* UPDATE PRICING DATA */
-export const updatePricingDataItem = (params, messages) => ({
+export const updatePricingDataItem = (params) => ({
   type: PRICING_UPDATE_DATA,
-  payload: { params, messages }
+  payload: { params }
 });
 
 export const updatePricingDataItemSuccess = () => ({
@@ -111,9 +111,9 @@ export const updatePricingDataItemSuccess = () => ({
 });
 
 /* GET PRICING VAS */
-export const getPricingVas = (params, messages) => ({
+export const getPricingVas = (params) => ({
   type: PRICING_GET_VAS,
-  payload: {params, messages}
+  payload: { params }
 });
 
 export const getPricingVasSuccess = (vas) => ({
@@ -122,9 +122,9 @@ export const getPricingVasSuccess = (vas) => ({
 });
 
 /* UPDATE PRICING VAS */
-export const updatePricingVasItem = (params, messages) => ({
+export const updatePricingVasItem = (params) => ({
   type: PRICING_UPDATE_VAS,
-  payload: { params, messages }
+  payload: { params }
 });
 
 export const updatePricingVasItemSuccess = () => ({

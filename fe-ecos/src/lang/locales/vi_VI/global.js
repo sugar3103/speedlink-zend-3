@@ -32,7 +32,6 @@ module.exports = {
     //theme
     'theme.title-setting': 'Tùy chỉnh giao diện',
     'theme.desc-setting': 'Thay đổi giao diện theo ý bạn muốn!',
-    'theme.dark-theme': 'Giao diện màu tối',
 
     //layout
     'layout.locale-vie': 'Tiếng Việt',

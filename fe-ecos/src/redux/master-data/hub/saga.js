@@ -68,7 +68,8 @@ const getHubListRequest = async (params) => {
 };
 
 function* getHubListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getHubListRequest, params);
     switch (response.error_code) {
@@ -82,12 +83,7 @@ function* getHubListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -114,20 +110,17 @@ const addHubItemRequest = async item => {
 };
 
 function* addHubItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('hub_action_form'));
   try {
     const response = yield call(addHubItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(addHubItemSuccess());
-        yield put(getHubList(null, messages));
+        yield put(getHubList());
         yield put(toggleHubModal());
-        createNotification({
-          type: 'success', 
-          message: messages['hub.add-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'hub.add-success' });
         break;
 
       case EC_FAILURE:
@@ -135,13 +128,8 @@ function* addHubItem({ payload }) {
         yield put(validateHub(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -167,20 +155,17 @@ const updateHubItemRequest = async item => {
 };
 
 function* updateHubItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('hub_action_form'));
   try {
     const response = yield call(updateHubItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(updateHubItemSuccess());
-        yield put(getHubList(null, messages));
+        yield put(getHubList());
         yield put(toggleHubModal());
-        createNotification({
-          type: 'success', 
-          message: messages['hub.update-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'hub.update-success' });
         break;
 
       case EC_FAILURE:
@@ -189,13 +174,8 @@ function* updateHubItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -221,18 +201,15 @@ const deleteHubItemRequest = async ids => {
 };
 
 function* deleteHubItem({ payload }) {
-  const { ids, messages } = payload;
+  const { ids } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(deleteHubItemRequest, ids);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(deleteHubItemSuccess());
-        yield put(getHubList(null, messages));
-        createNotification({
-          type: 'success', 
-          message: messages['hub.delete-success'], 
-          title: messages['notification.success']
-        });
+        yield put(getHubList());
+        createNotification({type: 'success', message: 'hub.delete-success' });
         break;
 
       case EC_FAILURE:
@@ -240,13 +217,8 @@ function* deleteHubItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -271,7 +243,8 @@ const getCountryHubListRequest = async (params) => {
 };
 
 function* getCountryHubListItems({ payload }) {
-  const { params, messages, types } = payload;
+  const { params, types } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getCountryHubListRequest, params);
     switch (response.error_code) {
@@ -285,12 +258,7 @@ function* getCountryHubListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -315,7 +283,8 @@ const getCityHubListRequest = async (params) => {
 };
 
 function* getCityHubListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getCityHubListRequest, params);
     switch (response.error_code) {
@@ -329,12 +298,7 @@ function* getCityHubListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;

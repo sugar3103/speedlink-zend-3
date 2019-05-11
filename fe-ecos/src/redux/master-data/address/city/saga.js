@@ -58,7 +58,8 @@ const getCityListRequest = async (params) => {
 };
 
 function* getCityListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getCityListRequest, params);
     switch (response.error_code) {
@@ -72,12 +73,7 @@ function* getCityListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -104,20 +100,17 @@ const addCityItemRequest = async item => {
 };
 
 function* addCityItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('city_action_form'));
   try {
     const response = yield call(addCityItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(addCityItemSuccess());
-        yield put(getCityList(null, messages));
+        yield put(getCityList());
         yield put(toggleCityModal());
-        createNotification({
-          type: 'success', 
-          message: messages['city.add-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({  type: 'success',  message: 'city.add-success' });
         break;
 
       case EC_FAILURE:
@@ -125,13 +118,8 @@ function* addCityItem({ payload }) {
         yield put(validateCity(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -157,20 +145,17 @@ const updateCityItemRequest = async item => {
 };
 
 function* updateCityItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('city_action_form'));
   try {
     const response = yield call(updateCityItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(updateCityItemSuccess());
-        yield put(getCityList(null, messages));
+        yield put(getCityList());
         yield put(toggleCityModal());
-        createNotification({
-          type: 'success', 
-          message: messages['city.update-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'city.update-success' });
         break;
 
       case EC_FAILURE:
@@ -179,13 +164,8 @@ function* updateCityItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -211,18 +191,15 @@ const deleteCityItemRequest = async id => {
 };
 
 function* deleteCityItem({ payload }) {
-  const { id, messages } = payload;
+  const { id } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(deleteCityItemRequest, id);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(deleteCityItemSuccess());
-        yield put(getCityList(null, messages));
-        createNotification({
-          type: 'success', 
-          message: messages['city.delete-success'], 
-          title: messages['notification.success']
-        });
+        yield put(getCityList());
+        createNotification({ type: 'success', message: 'city.delete-success' });
         break;
 
       case EC_FAILURE:
@@ -230,13 +207,8 @@ function* deleteCityItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;

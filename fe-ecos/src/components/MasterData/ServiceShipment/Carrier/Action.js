@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { injectIntl } from 'react-intl';
 import { Modal } from 'reactstrap';
 import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
@@ -9,13 +8,12 @@ import { MODAL_EDIT, MODAL_ADD, MODAL_VIEW } from '../../../../constants/default
 
 class Action extends Component {
   handleSubmit = values => {
-    const { messages } = this.props.intl;    
     switch (this.props.modalType) {
       case MODAL_ADD:
-        this.props.addCarrierItem(values, messages);
+        this.props.addCarrierItem(values);
         break;
       case MODAL_EDIT:
-        this.props.updateCarrierItem(values, messages);
+        this.props.updateCarrierItem(values);
         break;
       case MODAL_VIEW:
         this.props.changeTypeCarrierModal(MODAL_EDIT);
@@ -67,9 +65,9 @@ const mapStateToProps = ({ carrier }) => {
   return { modalType };
 };
 
-export default injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   addCarrierItem,
   updateCarrierItem,
   toggleCarrierModal,
   changeTypeCarrierModal
-})(Action));
+})(Action);
