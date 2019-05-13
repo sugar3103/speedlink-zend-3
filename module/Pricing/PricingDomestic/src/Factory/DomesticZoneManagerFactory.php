@@ -1,23 +1,27 @@
 <?php
-namespace Log\Factory;
+namespace PricingDomestic\Factory;
 
-use Log\Controller\NotificationController;
+use PricingDomestic\Entity\DomesticZone;
+use PricingDomestic\Service\DomesticZoneManager;
 use Interop\Container\ContainerInterface;
 use Zend\Config\Config;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
-class NotificationControllerFactory implements FactoryInterface {
+class DomesticZoneManagerFactory implements FactoryInterface {
+
     /**
-     * The method creates the service and returns its instance.
+     * The method creates the DomesticZoneManager service and returns its instance.
      * @param ContainerInterface $container
      * @param string $requestedName
      * @param array|null $options
+     * @return DomesticZoneManager|object
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
-        $documentManager = $container->get('doctrine.documentmanager.odm_default');
-        
-        return new NotificationController($entityManager,$documentManager);
+
+        return new DomesticZoneManager(
+            $entityManager
+        );
     }
 }

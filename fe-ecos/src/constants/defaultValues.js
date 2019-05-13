@@ -7,9 +7,9 @@ export const localeOptions=[
 
 //api
 // export const apiUrl = 'http://localhost:8080/api/v1/';
-export const apiUrl = 'http://ecosv2-api.speedlink.local/api/v1/';
+// export const apiUrl = 'http://ecosv2-api.speedlink.local/api/v1/';
 export const socketUrl = 'localhost:3000';
-// export const apiUrl = 'http://test.ecosv2-api.speedlink.vn';
+export const apiUrl = 'http://test.ecosv2-api.speedlink.vn/api/v1/';
 
 
 //error code
