@@ -2,7 +2,7 @@
 namespace PricingDomestic\Repository;
 
 use Core\Utils\Utils;
-use PricingDomestic\Entity\DomesticArea;
+use PricingDomestic\Entity\DomesticAreaCity;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
@@ -11,7 +11,7 @@ use Doctrine\ORM\QueryBuilder;
  * This is the custom repository class for User entity.
  * @package PricingDomestic\Repository
  */
-class DomesticAreaRepository extends EntityRepository
+class DomesticAreaCityRepository extends EntityRepository
 {
     /**
      * Get list user by condition
@@ -21,7 +21,7 @@ class DomesticAreaRepository extends EntityRepository
      * @param array $filters
      * @return array|QueryBuilder
      */
-    public function getListDomesticAreaByCondition(
+    public function getListDomesticAreaCityByCondition(
         $start = 1,
         $limit = 10,
         $sortField = 'da.id',
@@ -32,17 +32,15 @@ class DomesticAreaRepository extends EntityRepository
         try {
             $queryBuilder = $this->buildCustomerQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select("
-                da.id,
-                da.name,
-                da.name_en,
-                da.created_at,
-                da.updated_at,
+                dac.id,
+                dac.created_at,
+                dac.updated_at,
                 cr.username as created_by,
                 CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
                 CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated,
                 up.username as updated_by                
-            ")->andWhere("da.is_deleted = 0")
-            ->groupBy('da.id');
+            ")->andWhere("dac.is_deleted = 0")
+            ->groupBy('dac.id');
             
             if($limit) {
                 $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
@@ -63,20 +61,12 @@ class DomesticAreaRepository extends EntityRepository
      * @return QueryBuilder
      * @throws QueryException
      */
-    public function buildCustomerQueryBuilder($sortField = 'c.id', $sortDirection = 'asc', $filters)
+    public function buildCustomerQueryBuilder($sortField = 'dac.id', $sortDirection = 'asc', $filters)
     {
         $operatorsMap = [
             'id' => [
-                'alias' => 'da.id',
+                'alias' => 'dac.id',
                 'operator' => 'eq'
-            ],
-            'name' => [
-                'alias' => 'da.name',
-                'operator' => 'contains'
-            ],
-            'name_en' => [
-                'alias' => 'da.name_en',
-                'operator' => 'contains'
             ],
             
             'created_at' => [
@@ -86,14 +76,14 @@ class DomesticAreaRepository extends EntityRepository
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(DomesticArea::class, 'da')        
-        ->leftJoin('da.join_created', 'cr')
-        ->leftJoin('da.join_updated', 'up');
+        $queryBuilder->from(DomesticAreaCity::class, 'dac')        
+        ->leftJoin('dac.join_created', 'cr')
+        ->leftJoin('dac.join_updated', 'up');
             
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
         } else {
-            $queryBuilder->orderBy('da.id', 'DESC');
+            $queryBuilder->orderBy('dac.id', 'DESC');
         }
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }

@@ -31,6 +31,51 @@ $router = [
                     'isAuthorizationRequired' => true
                 ]               
             ]
+        ],
+        'area_city' => [
+            'type' => StaticRoute::class,
+            'options' => [
+                'verb' => 'POST',
+                'route' => '/pricing/domestic/area_city[/:action]',
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                ],
+                'defaults' => [
+                    'controller' => Controller\DomesticAreaCityController::class,
+                    'action' => 'index',
+                    'isAuthorizationRequired' => true
+                ]               
+            ]
+        ],
+        'zone' => [
+            'type' => StaticRoute::class,
+            'options' => [
+                'verb' => 'POST',
+                'route' => '/pricing/domestic/zone[/:action]',
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                ],
+                'defaults' => [
+                    'controller' => Controller\DomesticZoneController::class,
+                    'action' => 'index',
+                    'isAuthorizationRequired' => true
+                ]               
+            ]
+        ],
+        'range_weight' => [
+            'type' => StaticRoute::class,
+            'options' => [
+                'verb' => 'POST',
+                'route' => '/pricing/domestic/rangeweight[/:action]',
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                ],
+                'defaults' => [
+                    'controller' => Controller\DomesticRangeWeightController::class,
+                    'action' => 'index',
+                    'isAuthorizationRequired' => true
+                ]               
+            ]
         ]
     ]
 ];

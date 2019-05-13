@@ -2,6 +2,7 @@
 namespace PricingDomestic\Factory;
 
 use PricingDomestic\Controller\DomesticZoneController;
+use PricingDomestic\Service\DomesticZoneManager;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\ServiceManager\ServiceManager;
@@ -17,8 +18,9 @@ class DomesticZoneControllerFactory implements FactoryInterface {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
+        $domesticZoneManager = $container->get(DomesticZoneManager::class);
 
         // instantiate the controller and inject dependencies.
-        return new DomesticZoneController($entityManager);
+        return new DomesticZoneController($entityManager,$domesticZoneManager);
     }
 }

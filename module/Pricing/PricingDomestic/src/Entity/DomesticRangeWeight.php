@@ -1,14 +1,14 @@
 <?php
 
-namespace Entity;
+namespace PricingDomestic\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * DomesticRangeWeight
  *
- * @ORM\Table(name="domestic_range_weight")
- * @ORM\Entity
+ * @ORM\Table(name="domestic_range_weight", uniqueConstraints={@ORM\UniqueConstraint(name="unique_id", columns={"id"})})
+ * @ORM\Entity(repositoryClass="\PricingDomestic\Repository\DomesticRangeWeightRepository")
  */
 class DomesticRangeWeight
 {
@@ -45,9 +45,9 @@ class DomesticRangeWeight
     /**
      * @var string
      *
-     * @ORM\Column(name="category", type="string", length=10, nullable=false, options={"fixed"=true,"comment"="Inbound, Outbound, Domestic"})
+     * @ORM\Column(name="category_id", type="integer",  nullable=false)
      */
-    private $category;
+    private $category_id;
 
     /**
      * @var int
@@ -55,6 +55,13 @@ class DomesticRangeWeight
      * @ORM\Column(name="service_id", type="integer", nullable=false)
      */
     private $service_id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="zone_id", type="integer", nullable=false)
+     */
+    private $zone_id;
 
     /**
      * @var int
@@ -94,14 +101,14 @@ class DomesticRangeWeight
     /**
      * @var string
      *
-     * @ORM\Column(name="from", type="decimal", precision=10, scale=2, nullable=false)
+     * @ORM\Column(name="`from`", type="decimal", precision=10, scale=2, nullable=false)
      */
     private $from;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="to", type="decimal", precision=10, scale=2, nullable=false, options={"comment"="0 = Over"})
+     * @ORM\Column(name="`to`", type="decimal", precision=10, scale=2, nullable=false, options={"comment"="0 = Over"})
      */
     private $to;
 
@@ -226,19 +233,35 @@ class DomesticRangeWeight
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getCategory()
+    public function getZoneId()
     {
-        return $this->category;
+        return $this->zone_id;
     }
 
     /**
-     * @param string $category
+     * @param int $zone_id
      */
-    public function setCategory($category)
+    public function setZoneId($zone_id)
     {
-        $this->category = $category;
+        $this->zone_id = $zone_id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategoryId()
+    {
+        return $this->category_id;
+    }
+
+    /**
+     * @param string $category_id
+     */
+    public function setCategoryId($category_id)
+    {
+        $this->category_id = $category_id;
     }
 
     /**
@@ -497,5 +520,49 @@ class DomesticRangeWeight
         $this->is_deleted = $is_deleted;
     }
 
+     /**
+     *
+     * @ORM\OneToOne(targetEntity="\OAuth\Entity\User")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
+     */
+    private $join_created;
 
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\OAuth\Entity\User")
+     * @ORM\JoinColumn(name="updated_by", referencedColumnName="id", nullable=true)
+     */
+    private $join_updated;
+
+     /**
+     * @return mixed
+     */
+    public function getJoinCreated()
+    {
+        return $this->join_created;
+    }
+
+    /**
+     * @param mixed $join_created
+     */
+    public function setJoinCreated($join_created)
+    {
+        $this->join_created = $join_created;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinUpdated()
+    {
+        return $this->join_updated;
+    }
+
+    /**
+     * @param mixed $join_updated
+     */
+    public function setJoinUpdated($join_updated)
+    {
+        $this->join_updated = $join_updated;
+    }
 }
