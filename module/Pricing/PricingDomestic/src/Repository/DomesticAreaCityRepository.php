@@ -6,6 +6,7 @@ use PricingDomestic\Entity\DomesticAreaCity;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
+use Address\Entity\City;
 
 /**
  * This is the custom repository class for User entity.
@@ -13,6 +14,30 @@ use Doctrine\ORM\QueryBuilder;
  */
 class DomesticAreaCityRepository extends EntityRepository
 {
+    public function getCities()
+    {   
+        $entityManager = $this->getEntityManager();
+
+        $subQueryBuilder = $entityManager->createQueryBuilder();
+        $subQueryBuilder->select("dac.city_id");
+        $subQueryBuilder->from(DomesticAreaCity::class,"dac");
+        $subQueryBuilder->andWhere('dac.city_id = c.id');
+
+        try {
+            $queryBuilder = $entityManager->createQueryBuilder();
+            $queryBuilder->select(
+                ' c.id,
+                c.name,
+                c.name_en')
+            ->from(City::class, 'c')
+            ->andWhere($queryBuilder->expr()->not($queryBuilder->expr()->exists($subQueryBuilder->getDQL())))
+            ->orderBy('c.name', 'ASC');
+
+            return $queryBuilder;
+        } catch (QueryException $e) {
+            return [];
+        }    
+    }
     /**
      * Get list user by condition
      *

@@ -124,4 +124,15 @@ class DomesticAreaCityController extends CoreController {
     //     }
     //     return $this->createResponse();
     // }
+
+    public function cityAction(Type $var = null)
+    {
+        $cities = $this->domesticAreaCityManager->getCities();
+        $this->apiResponse =  array(
+            'data'      => $cities['listCity'],
+            'total'     => $cities['totalCity']
+        );  
+        
+        return $this->createResponse();
+    }
 }

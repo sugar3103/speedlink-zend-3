@@ -28,17 +28,13 @@ class DomesticAreaCity
      */
     private $domestic_area_id;
 
+
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var int
      *
-     * @ORM\OneToMany(targetEntity="Address\Entity\City")
-     * @ORM\JoinTable(name="city",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="city_id", referencedColumnName="id", nullable=true)
-     *   }     
-     * )
+     * @ORM\Column(name="city_id", type="integer", nullable=false)
      */
-    private $cities;
+    private $city_id;
 
     /**
      * @var int

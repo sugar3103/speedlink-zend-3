@@ -33,8 +33,7 @@ class DomesticAreaCityManager {
    
     /**
      * BranchManager constructor.
-     * @param $entityManager
-     * @param $branchManager
+     * @param $entityManager     
    
      */
     public function __construct($entityManager)
@@ -75,5 +74,30 @@ class DomesticAreaCityManager {
         ];
         
         return $dataAreaCity;
+    }
+
+    public function getCities()
+    {
+        $cities = [];
+        $totalCity = 0;
+
+        $ormCities = $this->entityManager->getRepository(DomesticAreaCity::class)->getCities([]);    
+        if($ormCities){
+            //set offset,limit
+            $ormPaginator = new ORMPaginator($ormCities, true);
+            $ormPaginator->setUseOutputWalkers(false);
+            $totalCity = $ormPaginator->count();
+            //get domestic area list
+            
+            $cities = $ormPaginator->getIterator()->getArrayCopy();                        
+            
+        }
+
+        $dataCity = [
+            'listCity' => $cities,
+            'totalCity' => $totalCity,
+        ];
+        
+        return $dataCity;
     }
 }

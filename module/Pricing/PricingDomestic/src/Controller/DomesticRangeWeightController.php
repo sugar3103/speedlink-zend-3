@@ -68,7 +68,7 @@ class DomesticRangeWeightController extends CoreController {
                 $data = $form->getData();
                 // add Domestic RangeWeight.
                 $this->domesticRangeWeightManager->addRangeWeight($data,$user);
-                $this->apiResponse['message'] = "ADD_SUCCESS_DOMESTIC_ZONE";
+                $this->apiResponse['message'] = "ADD_SUCCESS_DOMESTIC_RANGEWEIGHT";
             } else {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = "Error";
@@ -97,7 +97,7 @@ class DomesticRangeWeightController extends CoreController {
                         $data = $form->getData();
                         // update Domestic RangeWeight.
                         $this->domesticRangeWeightManager->updateRangeWeight($area, $data,$user);
-                        $this->apiResponse['message'] = "MODIFIED_SUCCESS_DOMESTIC_ZONE";
+                        $this->apiResponse['message'] = "MODIFIED_SUCCESS_DOMESTIC_RANGEWEIGHT";
                     } else {
                         $this->error_code = 0;
                         $this->apiResponse['data'] = $form->getMessages(); 
@@ -108,7 +108,7 @@ class DomesticRangeWeightController extends CoreController {
                 }
             } else {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = "DOMESTIC_ZONE_REQUEST_ID";
+                $this->apiResponse['message'] = "DOMESTIC_RANGEWEIGHT_REQUEST_ID";
             }
         }
 
@@ -133,14 +133,14 @@ class DomesticRangeWeightController extends CoreController {
                         }  
                     }
                     
-                    $this->apiResponse['message'] = "DELETE_SUCCESS_DOMESTIC_ZONE";
+                    $this->apiResponse['message'] = "DELETE_SUCCESS_DOMESTIC_RANGEWEIGHT";
                 } catch (\Throwable $th) {
                     $this->error_code = 0;
-                    $this->apiResponse['message'] = "DOMESTIC_ZONE_REQUEST_ID";
+                    $this->apiResponse['message'] = "DOMESTIC_RANGEWEIGHT_REQUEST_ID";
                 }
             } else {
                 $this->error_code = 0;
-                $this->apiResponse['message'] = "DOMESTIC_ZONE_REQUEST_ID";
+                $this->apiResponse['message'] = "DOMESTIC_RANGEWEIGHT_REQUEST_ID";
             }
         }
         return $this->createResponse();
