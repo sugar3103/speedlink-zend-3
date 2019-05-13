@@ -40,7 +40,7 @@ class DomesticAreaCityController extends CoreController {
 
             list($start,$limit,$sortField,$sortDirection,$filters, $fields) = $this->getRequestData($fieldsMap);          
             //get list User by condition
-            $dataArea = $this->domesticAreaCityManager->getListDomesticAreaByCityCondition($start, $limit, $sortField, $sortDirection,$filters); 
+            $dataArea = $this->domesticAreaCityManager->getListDomesticAreaCityByCondition($start, $limit, $sortField, $sortDirection,$filters); 
             
             $result = $this->filterByField($dataArea['listAreaCity'], $fields);     
             
@@ -54,95 +54,85 @@ class DomesticAreaCityController extends CoreController {
 
     public function addAction()
     {   
-        // check if Domestic Area  has submitted the form
-        if ($this->getRequest()->isPost()) {
-            $user = $this->tokenPayload;
-            
-            //Create New Form Domestic Area
-            $form = new AreaForm('create', $this->entityManager);
-
-            $form->setData($this->getRequestData());            
-            //validate form
-            if ($form->isValid()) {
-                // get filtered and validated data
-                $data = $form->getData();
-                // add Domestic Area.
-                $this->domesticAreaCityManager->addArea($data,$user);
-                $this->apiResponse['message'] = "ADD_SUCCESS_DOMESTIC_AREA";
-            } else {
-                $this->error_code = 0;
-                $this->apiResponse['message'] = "Error";
-                $this->apiResponse['data'] = $form->getMessages(); 
-            }            
-        }
-
+      
         return $this->createResponse();
     }
 
-    public function editAction() 
-    {
-        if ($this->getRequest()->isPost()) {
-            $user = $this->tokenPayload;
-            $data = $this->getRequestData();
-            if(isset($data['id'])) {
-                // Find existing Domestic Area in the database.
-                $area = $this->entityManager->getRepository(DomesticArea::class)->findOneBy(array('id' => $data['id']));    
-                if ($area) {
-                    //Create Form Area
-                    $form = new AreaForm('update', $this->entityManager, $area);
-                    $form->setData($data);
-                    //validate form
-                    if ($form->isValid()) {
-                        // get filtered and validated data
-                        $data = $form->getData();
-                        // update Domestic Area.
-                        $this->domesticAreaCityManager->updateArea($area, $data,$user);
-                        $this->apiResponse['message'] = "MODIFIED_SUCCESS_DOMESTIC_AREA";
-                    } else {
-                        $this->error_code = 0;
-                        $this->apiResponse['data'] = $form->getMessages(); 
-                    }      
-                } else {
-                    $this->error_code = 0;
-                    $this->apiResponse['message'] = "NOT_FOUND";
-                }
-            } else {
-                $this->error_code = 0;
-                $this->apiResponse['message'] = "DOMESTIC_AREA_REQUEST_ID";
-            }
-        }
+    // public function editAction() 
+    // {
+    //     if ($this->getRequest()->isPost()) {
+    //         $user = $this->tokenPayload;
+    //         $data = $this->getRequestData();
+    //         if(isset($data['id'])) {
+    //             // Find existing Domestic Area in the database.
+    //             $area = $this->entityManager->getRepository(DomesticArea::class)->findOneBy(array('id' => $data['id']));    
+    //             if ($area) {
+    //                 //Create Form Area
+    //                 $form = new AreaForm('update', $this->entityManager, $area);
+    //                 $form->setData($data);
+    //                 //validate form
+    //                 if ($form->isValid()) {
+    //                     // get filtered and validated data
+    //                     $data = $form->getData();
+    //                     // update Domestic Area.
+    //                     $this->domesticAreaCityManager->updateArea($area, $data,$user);
+    //                     $this->apiResponse['message'] = "MODIFIED_SUCCESS_DOMESTIC_AREA";
+    //                 } else {
+    //                     $this->error_code = 0;
+    //                     $this->apiResponse['data'] = $form->getMessages(); 
+    //                 }      
+    //             } else {
+    //                 $this->error_code = 0;
+    //                 $this->apiResponse['message'] = "NOT_FOUND";
+    //             }
+    //         } else {
+    //             $this->error_code = 0;
+    //             $this->apiResponse['message'] = "DOMESTIC_AREA_REQUEST_ID";
+    //         }
+    //     }
 
-        return $this->createResponse();
-    }
+    //     return $this->createResponse();
+    // }
 
-    public function deleteAction()
-    {
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequestData();
+    // public function deleteAction()
+    // {
+    //     if ($this->getRequest()->isPost()) {
+    //         $data = $this->getRequestData();
             
-            if(isset($data['ids']) && count($data['ids']) > 0) {
+    //         if(isset($data['ids']) && count($data['ids']) > 0) {
                
-                try { 
-                    foreach ($data['ids'] as $id) {
-                        $area = $this->entityManager->getRepository(DomesticArea::class)->findOneBy(array('id' => $id));    
-                        if ($area == null) {
-                            $this->error_code = 0;
-                            $this->apiResponse['message'] = "NOT_FOUND";                        
-                        } else {
-                            $this->domesticAreaCityManager->deleteArea($area);
-                        }  
-                    }
+    //             try { 
+    //                 foreach ($data['ids'] as $id) {
+    //                     $area = $this->entityManager->getRepository(DomesticArea::class)->findOneBy(array('id' => $id));    
+    //                     if ($area == null) {
+    //                         $this->error_code = 0;
+    //                         $this->apiResponse['message'] = "NOT_FOUND";                        
+    //                     } else {
+    //                         $this->domesticAreaCityManager->deleteArea($area);
+    //                     }  
+    //                 }
                     
-                    $this->apiResponse['message'] = "DELETE_SUCCESS_DOMESTIC_AREA";
-                } catch (\Throwable $th) {
-                    $this->error_code = 0;
-                    $this->apiResponse['message'] = "DOMESTIC_AREA_REQUEST_ID";
-                }
-            } else {
-                $this->error_code = 0;
-                $this->apiResponse['message'] = "DOMESTIC_AREA_REQUEST_ID";
-            }
-        }
+    //                 $this->apiResponse['message'] = "DELETE_SUCCESS_DOMESTIC_AREA";
+    //             } catch (\Throwable $th) {
+    //                 $this->error_code = 0;
+    //                 $this->apiResponse['message'] = "DOMESTIC_AREA_REQUEST_ID";
+    //             }
+    //         } else {
+    //             $this->error_code = 0;
+    //             $this->apiResponse['message'] = "DOMESTIC_AREA_REQUEST_ID";
+    //         }
+    //     }
+    //     return $this->createResponse();
+    // }
+
+    public function cityAction(Type $var = null)
+    {
+        $cities = $this->domesticAreaCityManager->getCities();
+        $this->apiResponse =  array(
+            'data'      => $cities['listCity'],
+            'total'     => $cities['totalCity']
+        );  
+        
         return $this->createResponse();
     }
 }

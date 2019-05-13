@@ -143,6 +143,9 @@ class DomesticAreaController extends CoreController {
                 $this->apiResponse['message'] = "DOMESTIC_AREA_REQUEST_ID";
             }
         }
+
         return $this->createResponse();
     }
+
+    
 }

@@ -67,7 +67,8 @@ class DomesticAreaManager {
              foreach ($areas as &$area) {
                 $area['created_at'] =  ($area['created_at']) ? Utils::checkDateFormat($area['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
                 $area['updated_at'] =  ($area['updated_at']) ? Utils::checkDateFormat($area['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
-
+                $area['full_name_created'] = trim($area['full_name_created']);
+                $area['full_name_updated'] = trim($area['full_name_updated']);
             }
         }
         //set data user

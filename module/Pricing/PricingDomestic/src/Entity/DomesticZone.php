@@ -1,14 +1,14 @@
 <?php
 
-namespace Entity;
+namespace PricingDomestic\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * DomesticZone
  *
- * @ORM\Table(name="domestic_zone")
- * @ORM\Entity
+ * @ORM\Table(name="domestic_zone", uniqueConstraints={@ORM\UniqueConstraint(name="unique_id", columns={"id"})})
+ * @ORM\Entity(repositoryClass="\PricingDomestic\Repository\DomesticZoneRepository")
  */
 class DomesticZone
 {
@@ -107,6 +107,41 @@ class DomesticZone
     {
         $this->is_deleted = $is_deleted;
     }
+
+    
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNameEn()
+    {
+        return $this->name_en;
+    }
+
+    /**
+     * @param string $name_en
+     */
+    public function setNameEn($name_en)
+    {
+        $this->name_en = $name_en;
+    }
+
+
     /**
      * @var int
      *
@@ -150,6 +185,64 @@ class DomesticZone
      * @ORM\Column(name="is_deleted", type="boolean", nullable=false)
      */
     private $is_deleted = '0';
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=100, nullable=false)
+     */
+    private $name;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name_en", type="string", length=100, nullable=false)
+     */
+    private $name_en;
 
+     /**
+     *
+     * @ORM\OneToOne(targetEntity="\OAuth\Entity\User")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
+     */
+    private $join_created;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\OAuth\Entity\User")
+     * @ORM\JoinColumn(name="updated_by", referencedColumnName="id", nullable=true)
+     */
+    private $join_updated;
+
+     /**
+     * @return mixed
+     */
+    public function getJoinCreated()
+    {
+        return $this->join_created;
+    }
+
+    /**
+     * @param mixed $join_created
+     */
+    public function setJoinCreated($join_created)
+    {
+        $this->join_created = $join_created;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinUpdated()
+    {
+        return $this->join_updated;
+    }
+
+    /**
+     * @param mixed $join_updated
+     */
+    public function setJoinUpdated($join_updated)
+    {
+        $this->join_updated = $join_updated;
+    }
 }

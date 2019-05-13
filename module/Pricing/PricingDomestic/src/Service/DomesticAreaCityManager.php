@@ -1,7 +1,7 @@
 <?php
 namespace PricingDomestic\Service;
 
-use PricingDomestic\Entity\Customer;
+use PricingDomestic\Entity\DomesticAreaCity;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use Zend\Crypt\Password\Bcrypt;
@@ -17,10 +17,8 @@ use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator;
 use Zend\Authentication\Result;
 use Core\Utils\Utils;
-use Address\Entity\Country;
 use Address\Entity\City;
-use Address\Entity\District;
-use Address\Entity\Ward;
+
 /**
  * This service is responsible for adding/editing users
  * and changing user password.
@@ -35,17 +33,71 @@ class DomesticAreaCityManager {
    
     /**
      * BranchManager constructor.
-     * @param $entityManager
-     * @param $branchManager
+     * @param $entityManager     
    
      */
-    public function __construct(
-        $entityManager
-    )
+    public function __construct($entityManager)
     {
         $this->entityManager = $entityManager;
     }   
 
-   
+    /**
+     * Get List Domestic Area By Condition
+     */
 
+    public function getListDomesticAreaCityByCondition($start, $limit, $sortField, $sortDirection,$filters)
+    {
+        $areaCities = [];
+        $totalAreaCity = 0;
+        //get orm Domestic Area
+        $ormAreaCity = $this->entityManager->getRepository(DomesticAreaCity::class)
+            ->getListDomesticAreaCityByCondition($start, $limit, $sortField, $sortDirection, $filters);
+        if($ormAreaCity){
+            //set offset,limit
+            $ormPaginator = new ORMPaginator($ormAreaCity, true);
+            $ormPaginator->setUseOutputWalkers(false);
+            $totalAreaCity = $ormPaginator->count();
+            //get domestic area list
+            
+            $areaCities = $ormPaginator->getIterator()->getArrayCopy();            
+            
+            foreach ($areas as &$areaCitiy) {
+                $areaCitiy['created_at'] =  ($areaCitiy['created_at']) ? Utils::checkDateFormat($areaCitiy['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $areaCitiy['updated_at'] =  ($areaCitiy['updated_at']) ? Utils::checkDateFormat($areaCitiy['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+
+            }
+        }
+        //set data user
+        $dataAreaCity = [
+            'listAreaCity' => $areaCities,
+            'totalAreaCity' => $totalAreaCity,
+        ];
+        
+        return $dataAreaCity;
+    }
+
+    public function getCities()
+    {
+        $cities = [];
+        $totalCity = 0;
+
+        $ormCities = $this->entityManager->getRepository(DomesticAreaCity::class)->getCities([]);    
+        if($ormCities){
+            //set offset,limit
+            $ormPaginator = new ORMPaginator($ormCities, true);
+            $ormPaginator->setUseOutputWalkers(false);
+            $totalCity = $ormPaginator->count();
+            //get domestic area list
+            
+            $cities = $ormPaginator->getIterator()->getArrayCopy();                        
+            
+        }
+
+        $dataCity = [
+            'listCity' => $cities,
+            'totalCity' => $totalCity,
+        ];
+        
+        return $dataCity;
+    }
 }
