@@ -58,7 +58,7 @@ class UserRepository extends EntityRepository {
                  u.is_active,
                  u.first_name,
                  u.last_name,
-                 CONCAT(COALESCE(u.first_name,''), ' ', COALESCE(u.last_name,'')) as full_name,
+                 CONCAT(COALESCE(u.first_name,''), ' ', COALESCE(u.last_name,'')) as fullname,
                  CONCAT(COALESCE(u.first_name,''), ' ', COALESCE(u.last_name,'')) as full_name_created,
                  CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated,
                  u.created_at,
@@ -68,7 +68,7 @@ class UserRepository extends EntityRepository {
             ->leftJoin(
                 'u.roles',
                 'r'
-            )->andWhere('u.id <> 0')->groupBy('u.id');
+            )->andWhere('u.deleted == 0')->groupBy('u.id');
 
             if($limit) {
                 $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
