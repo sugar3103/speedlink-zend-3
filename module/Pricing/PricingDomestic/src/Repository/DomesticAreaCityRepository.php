@@ -38,6 +38,33 @@ class DomesticAreaCityRepository extends EntityRepository
             return [];
         }    
     }
+
+    public function getAreaCity($area_id) {
+        try {
+            $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+            $queryBuilder->select('c.city_id')->from(DomesticAreaCity::class, 'c')
+            ->andWhere('c.domestic_area_id = '. $area_id)
+            ->andWhere('c.is_deleted = 0')
+            ->orderBy('c.city_id', 'ASC');
+
+            return $queryBuilder;
+        } catch (QueryException $e) {
+            return [];
+        }    
+    }
+    public function deleteAreaCity($area_id)
+    {
+        
+        $entityManager = $this->getEntityManager();
+        try{
+            $queryBuilder = $entityManager->createQueryBuilder();
+            $queryBuilder->update(DomesticAreaCity::class, 'dac')->set('dac.is_deleted', 1)
+                ->where('dac.domestic_area_id = :domestic_area_id')->setParameter("domestic_area_id", $area_id);            
+        } catch (QueryException $e) {
+            return [];
+        }   
+        return $queryBuilder->getQuery()->execute();
+    }
     /**
      * Get list user by condition
      *

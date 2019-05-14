@@ -2,6 +2,7 @@
 namespace PricingDomestic\Service;
 
 use PricingDomestic\Entity\DomesticArea;
+use PricingDomestic\Servivce\DomesticAreaCityManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use Zend\Crypt\Password\Bcrypt;
@@ -17,10 +18,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator;
 use Zend\Authentication\Result;
 use Core\Utils\Utils;
-use Address\Entity\Country;
-use Address\Entity\City;
-use Address\Entity\District;
-use Address\Entity\Ward;
+use OAuth\Entity\User;
 /**
  * This service is responsible for adding/editing users
  * and changing user password.
@@ -34,14 +32,19 @@ class DomesticAreaManager {
     private $entityManager;
    
     /**
+     * @var DomesticAreaCityManager
+     */
+    private $domesticAreaCityManager;
+    /**
      * BranchManager constructor.
      * @param $entityManager
      * @param $branchManager
    
      */
-    public function __construct($entityManager)
+    public function __construct($entityManager, $domesticAreaCityManager)
     {
         $this->entityManager = $entityManager;
+        $this->domesticAreaCityManager = $domesticAreaCityManager;
     }   
 
     /**
@@ -65,6 +68,7 @@ class DomesticAreaManager {
             $areas = $ormPaginator->getIterator()->getArrayCopy();
             
              foreach ($areas as &$area) {
+                $area['cities'] =  $this->domesticAreaCityManager->getAreaCity($area['id']);
                 $area['created_at'] =  ($area['created_at']) ? Utils::checkDateFormat($area['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
                 $area['updated_at'] =  ($area['updated_at']) ? Utils::checkDateFormat($area['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
                 $area['full_name_created'] = trim($area['full_name_created']);
@@ -93,13 +97,19 @@ class DomesticAreaManager {
             $domesticArea->setCreatedBy($user->id);
             
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
-            $domesticArea->setCreatedAt($addTime->format('Y-m-d H:i:s'));
+            $domesticArea->setCreatedAt($addTime->format('Y-m-d H:i:s'));            
+            $this->getReferenced($domesticArea,$user,'add');
             
-
             $this->entityManager->persist($domesticArea);
             $this->entityManager->flush();        
             
             $this->entityManager->commit();
+
+            if(isset($data['cities']) && count($data['cities']) > 0) {
+                foreach ($data['cities'] as $city ) {
+                    $this->domesticAreaCityManager->updateAreaCity($domesticArea->getId(), $city, $user);
+                }
+            }
 
             return $domesticArea;
 
@@ -122,12 +132,20 @@ class DomesticAreaManager {
             
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $domesticArea->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
-            
+            $this->getReferenced($domesticArea,$user,'update');
             // apply changes to database.
-            $this->entityManager->flush();
-            // $last_id = $rangeweight->getBranchId();
+            $this->entityManager->flush();            
             $this->entityManager->commit();
-           return $rangeweight;
+
+            $this->domesticAreaCityManager->deleteAreaCity($domesticArea->getId());
+
+            if(isset($data['cities']) && count($data['cities']) > 0) {                
+                foreach ($data['cities'] as $city ) {
+                    $this->domesticAreaCityManager->updateAreaCity($domesticArea->getId(), $city, $user);
+                }
+            }
+
+           return $domesticArea;
         }
         catch (ORMException $e) {
             $this->entityManager->rollback();
@@ -138,7 +156,7 @@ class DomesticAreaManager {
      /**
      * Delete Domestic Area
      */
-    public function deleteArea($domesticArea) {
+    public function deleteArea($domesticArea, $user) {
 
         $this->entityManager->beginTransaction();
         try {
@@ -152,11 +170,26 @@ class DomesticAreaManager {
             $this->entityManager->flush();
             // $last_id = $rangeweight->getBranchId();
             $this->entityManager->commit();
-           return $rangeweight;
+           
         }
         catch (ORMException $e) {
             $this->entityManager->rollback();
             return FALSE;
         }
+    }
+
+    private function getReferenced(&$domesticArea, $user, $mode = '')
+    {
+        $user_data = $this->entityManager->getRepository(User::class)->find($user->id);
+        if ($user_data == null) {
+            throw new \Exception('Not found User by ID');
+        }
+
+        if ($mode == 'add') {
+            $domesticArea->setJoinCreated($user_data);
+        }
+
+        $domesticArea->setJoinUpdated($user_data);
+
     }
 }

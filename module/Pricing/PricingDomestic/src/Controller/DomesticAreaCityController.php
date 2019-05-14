@@ -54,7 +54,36 @@ class DomesticAreaCityController extends CoreController {
 
     public function addAction()
     {   
-      
+        if ($this->getRequest()->isPost()) {
+            $user = $this->tokenPayload;
+            $data = $this->getRequestData();            
+             //Create New Form Domestic Area
+             $form = new AreaCityForm('create', $this->entityManager);
+
+             $form->setData($this->getRequestData());            
+             //validate form
+             if ($form->isValid()) {
+                // get filtered and validated data
+                $data = $form->getData();
+                
+                $this->domesticAreaCityManager->deleteAreaCity($data['area_id']);             
+                foreach ($data['cities'] as $id) {
+                    $this->domesticAreaCityManager->updateAreaCity($data['area_id'], $id, $user);
+                }
+                try { 
+                   
+                    
+                    $this->apiResponse['message'] = "ADD_SUCCESS_DOMESTIC_AREA_CITY";
+                } catch (\Throwable $th) {
+                    $this->error_code = 0;
+                    $this->apiResponse['message'] = "DOMESTIC_AREA_ERROR";
+                }                    
+            } else {
+                $this->error_code = 0;
+                $this->apiResponse['message'] = "Error";
+                $this->apiResponse['data'] = $form->getMessages(); 
+            }   
+        }
         return $this->createResponse();
     }
 
