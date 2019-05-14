@@ -14,7 +14,7 @@ use Address\Entity\City;
  */
 class DomesticAreaCityRepository extends EntityRepository
 {
-    public function getCities()
+    public function getCities($area_id)
     {   
         $entityManager = $this->getEntityManager();
 
@@ -22,7 +22,10 @@ class DomesticAreaCityRepository extends EntityRepository
         $subQueryBuilder->select("dac.city_id");
         $subQueryBuilder->from(DomesticAreaCity::class,"dac");
         $subQueryBuilder->andWhere('dac.city_id = c.id');
-
+        $subQueryBuilder->andWhere('dac.is_deleted = 0');
+        if($area_id) {
+            $subQueryBuilder->andWhere('dac.domestic_area_id != '. $area_id);
+        }
         try {
             $queryBuilder = $entityManager->createQueryBuilder();
             $queryBuilder->select(
@@ -30,9 +33,9 @@ class DomesticAreaCityRepository extends EntityRepository
                 c.name,
                 c.name_en')
             ->from(City::class, 'c')
+            ->andWhere('c.is_deleted = 0')
             ->andWhere($queryBuilder->expr()->not($queryBuilder->expr()->exists($subQueryBuilder->getDQL())))
-            ->orderBy('c.name', 'ASC');
-
+            ->orderBy('c.name', 'ASC');                
             return $queryBuilder;
         } catch (QueryException $e) {
             return [];

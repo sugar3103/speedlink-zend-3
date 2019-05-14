@@ -156,7 +156,12 @@ class DomesticAreaCityController extends CoreController {
 
     public function cityAction(Type $var = null)
     {
-        $cities = $this->domesticAreaCityManager->getCities();
+        $data = $this->getRequestData();
+        $area_id = 0;
+        if($data && $data['area_id']) {
+            $area_id= $data['area_id'];
+        }
+        $cities = $this->domesticAreaCityManager->getCities($area_id);
         $this->apiResponse =  array(
             'data'      => $cities['listCity'],
             'total'     => $cities['totalCity']
