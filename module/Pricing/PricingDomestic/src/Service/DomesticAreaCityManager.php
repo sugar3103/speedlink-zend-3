@@ -77,12 +77,12 @@ class DomesticAreaCityManager {
         return $dataAreaCity;
     }
 
-    public function getCities()
+    public function getCities($area_id)
     {
         $cities = [];
         $totalCity = 0;
-
-        $ormCities = $this->entityManager->getRepository(DomesticAreaCity::class)->getCities();    
+        
+        $ormCities = $this->entityManager->getRepository(DomesticAreaCity::class)->getCities($area_id);    
         if($ormCities){
             //set offset,limit
             $ormPaginator = new ORMPaginator($ormCities, true);
