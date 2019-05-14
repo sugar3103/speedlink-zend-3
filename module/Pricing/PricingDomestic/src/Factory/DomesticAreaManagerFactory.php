@@ -3,6 +3,7 @@ namespace PricingDomestic\Factory;
 
 use PricingDomestic\Entity\DomesticArea;
 use PricingDomestic\Service\DomesticAreaManager;
+use PricingDomestic\Service\DomesticAreaCityManager;
 use Interop\Container\ContainerInterface;
 use Zend\Config\Config;
 use Zend\ServiceManager\Factory\FactoryInterface;
@@ -20,7 +21,8 @@ class DomesticAreaManagerFactory implements FactoryInterface {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
 
         return new DomesticAreaManager(
-            $entityManager
+            $entityManager,
+            $container->get(DomesticAreaCityManager::class)
         );
     }
 }

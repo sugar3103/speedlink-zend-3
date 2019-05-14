@@ -174,4 +174,29 @@ class DomesticRangeWeightManager {
             return FALSE;
         }
     }
+
+     /**
+     * Delete Domestic Area
+     */
+    public function deleteArea($domesticRangeWeight, $user) {
+
+        $this->entityManager->beginTransaction();
+        try {
+            $domesticRangeWeight->setIsDeleted(1);
+            $domesticRangeWeight->setUpdatedBy($user->id);
+            
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $domesticRangeWeight->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+            
+            // apply changes to database.
+            $this->entityManager->flush();
+            // $last_id = $rangeweight->getBranchId();
+            $this->entityManager->commit();
+           
+        }
+        catch (ORMException $e) {
+            $this->entityManager->rollback();
+            return FALSE;
+        }
+    }
 }

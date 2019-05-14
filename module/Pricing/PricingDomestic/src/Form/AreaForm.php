@@ -123,5 +123,9 @@ class AreaForm extends Form {
             ] 
         ]);    
         
+        $inputFilter->add([
+            'name'  => 'cities',
+            'required'  => false,            
+        ]);
     }
 }

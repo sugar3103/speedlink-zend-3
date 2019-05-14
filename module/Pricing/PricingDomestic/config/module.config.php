@@ -43,7 +43,7 @@ $router = [
                 'defaults' => [
                     'controller' => Controller\DomesticAreaCityController::class,
                     'action' => 'index',
-                    'isAuthorizationRequired' => false
+                    'isAuthorizationRequired' => true
                 ]               
             ]
         ],

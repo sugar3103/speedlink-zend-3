@@ -116,7 +116,7 @@ class DomesticZoneManager {
             $this->entityManager->flush();
             // $last_id = $rangeweight->getBranchId();
             $this->entityManager->commit();
-           return $rangeweight;
+           return $domesticZone;
         }
         catch (ORMException $e) {
             $this->entityManager->rollback();
@@ -127,7 +127,7 @@ class DomesticZoneManager {
      /**
      * Delete Domestic Zone
      */
-    public function deleteZone($domesticZone) {
+    public function deleteZone($domesticZone, $user) {
 
         $this->entityManager->beginTransaction();
         try {
@@ -140,8 +140,7 @@ class DomesticZoneManager {
             // apply changes to database.
             $this->entityManager->flush();
             // $last_id = $rangeweight->getBranchId();
-            $this->entityManager->commit();
-           return $rangeweight;
+            $this->entityManager->commit();           
         }
         catch (ORMException $e) {
             $this->entityManager->rollback();

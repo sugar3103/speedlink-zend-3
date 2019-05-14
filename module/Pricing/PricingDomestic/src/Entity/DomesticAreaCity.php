@@ -73,23 +73,12 @@ class DomesticAreaCity
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_deleted", type="boolean", nullable=false)
+     * @ORM\Column(name="is_deleted", type="integer", nullable=false)
      */
-    private $is_deleted = '0';
+    private $is_deleted = 0;
     
 
-    /**
-     * @var \PricingDomestic\Entity\DomesticArea
-     *
-     * @ORM\OneToOne(targetEntity="PricingDomestic\Entity\DomesticArea", inversedBy="objects", fetch="EAGER")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="domestic_area_id)", referencedColumnName="id", unique=true, nullable=true)
-     * })
-     */
-    private $domestic_area;
-
     public function __construct() {
-        $this->cities = new ArrayCollection();
     }
     /**
      * @return int
@@ -124,19 +113,19 @@ class DomesticAreaCity
     }
 
     /**
-     * @return PricingDomestic\Entity\DomesticArea
+     * @return int
      */
-    public function getDomesticArea()
+    public function getCityId()
     {
-        return $this->domestic_area;
+        return $this->city_id;
     }
 
     /**
-     * @param PricingDomestic\Entity\DomesticArea $domestic_area
+     * @param int $city_id
      */
-    public function setDomesticArea($domestic_area)
+    public function setCityId($city_id)
     {
-        $this->domestic_area = $domestic_area;
+        $this->city_id = $city_id;
     }
    
     /**

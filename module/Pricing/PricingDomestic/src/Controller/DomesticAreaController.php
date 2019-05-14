@@ -129,7 +129,7 @@ class DomesticAreaController extends CoreController {
                             $this->error_code = 0;
                             $this->apiResponse['message'] = "NOT_FOUND";                        
                         } else {
-                            $this->domesticAreaManager->deleteArea($area);
+                            $this->domesticAreaManager->deleteArea($area, $user);
                         }  
                     }
                     
