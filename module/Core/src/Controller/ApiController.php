@@ -259,8 +259,7 @@ class ApiController extends AbstractRestfulController
     private function checkAuthenticity() {
         $config = $this->getEvent()->getParam('config', false);
         //Find User By Token
-        $user = $this->entityManager->getRepository(User::class)
-            ->find($this->tokenPayload->id);
+        $user = $this->entityManager->getRepository(User::class)->find($this->tokenPayload->id);
         if($user) {
             // Emtipy Token
             if($this->token != $user->getLastToken()) {
@@ -300,7 +299,7 @@ class ApiController extends AbstractRestfulController
     }
 
     private function accessFilter(MvcEvent $event) {
-         // get controller and action to which the HTTP request was dispatched.
+        // get controller and action to which the HTTP request was dispatched.
         $controller = $event->getTarget();
         $controllerName = $event->getRouteMatch()->getParam('controller', null);
         $actionName = $event->getRouteMatch()->getParam('action', null);

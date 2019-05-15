@@ -17,6 +17,21 @@ use Core\Route\StaticRoute;
 
 $router = [
     'routes' => [
+        'domestic' => [
+            'type' => StaticRoute::class,
+            'options' => [
+                'verb' => 'POST',
+                'route' => '/pricing/domestic[/:action]',
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                ],
+                'defaults' => [
+                    'controller' => Controller\DomesticPricingController::class,
+                    'action' => 'index',
+                    'isAuthorizationRequired' => true
+                ]               
+            ]         
+        ],
         'area' => [
             'type' => StaticRoute::class,
             'options' => [
@@ -82,6 +97,10 @@ $router = [
 
 $controllers = [
     'factories' => [
+        Controller\DomesticPricingController::class => Factory\DomesticPricingControllerFactory::class,
+        Controller\DomesticPricingDataController::class => Factory\DomesticPricingDataControllerFactory::class,
+        Controller\DomesticPricingVasController::class => Factory\DomesticPricingVasControllerFactory::class,
+
         Controller\DomesticAreaCityController::class => Factory\DomesticAreaCityControllerFactory::class,
         Controller\DomesticAreaController::class => Factory\DomesticAreaControllerFactory::class,
         Controller\DomesticRangeWeightController::class => Factory\DomesticRangeWeightControllerFactory::class,
@@ -91,6 +110,10 @@ $controllers = [
 
 $service_manager = [
     'factories' => [
+        Service\DomesticPricingManager::class => Factory\DomesticPricingManagerFactory::class,   
+        Service\DomesticPricingDataManager::class => Factory\DomesticPricingDataManagerFactory::class,   
+        Service\DomesticPricingVasManager::class => Factory\DomesticPricingVasManagerFactory::class,   
+
         Service\DomesticAreaManager::class => Factory\DomesticAreaManagerFactory::class,   
         Service\DomesticAreaCityManager::class => Factory\DomesticAreaCityManagerFactory::class,
         Service\DomesticRangeWeightManager::class => Factory\DomesticRangeWeightManagerFactory::class,

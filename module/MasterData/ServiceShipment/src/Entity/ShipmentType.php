@@ -62,12 +62,7 @@ class ShipmentType
      */
     private $carrier_id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="category_code", type="string", nullable=false, options={"comment"="Inbound, Outbound, Domestic"})
-     */
-    private $category_code;
+   
 
     /**
      * @var int
@@ -272,21 +267,7 @@ class ShipmentType
         $this->carrier_id = $carrier_id;
     }
 
-    /**
-     * @return int
-     */
-    public function getCategoryCode()
-    {
-        return $this->category_code;
-    }
-
-    /**
-     * @param int $category_code
-     */
-    public function setCategoryCode($category_code)
-    {
-        $this->category_code = $category_code;
-    }
+  
 
     /**
      * @return int

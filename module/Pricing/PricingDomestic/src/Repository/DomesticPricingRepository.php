@@ -2,7 +2,7 @@
 namespace PricingDomestic\Repository;
 
 use Core\Utils\Utils;
-use PricingDomestic\Entity\DomesticRangeWeight;
+use PricingDomestic\Entity\DomesticPricing;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
@@ -11,7 +11,7 @@ use Doctrine\ORM\QueryBuilder;
  * This is the custom repository class for User entity.
  * @package PricingDomestic\Repository
  */
-class DomesticRangeWeightRepository extends EntityRepository
+class DomesticPricingRepository extends EntityRepository
 {
     /**
      * Get list user by condition
@@ -21,10 +21,10 @@ class DomesticRangeWeightRepository extends EntityRepository
      * @param array $filters
      * @return array|QueryBuilder
      */
-    public function getListDomesticRangeWeightByCondition(
+    public function getListDomesticPricingByCondition(
         $start = 1,
         $limit = 10,
-        $sortField = 'da.id',
+        $sortField = 'dp.id',
         $sortDirection = 'asc',
         $filters = []
     )
@@ -32,38 +32,25 @@ class DomesticRangeWeightRepository extends EntityRepository
         try {
             $queryBuilder = $this->buildCustomerQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select("
-                drw.id,
-                drw.name,
-                drw.name_en,
+                dp.id,
+                dp.name,
+                dp.name_en,
                 c.id as category_id,
-                c.name as category,
-                c.name_en as category_en,
                 ca.id as carrier_id,
-                ca.name as carrier,
-                ca.name_en as carrier_en,
                 s.id as service_id,
-                s.name as service,
-                s.name_en as service_en,
-                z.id as zone_id,        
-                z.name as zone,             
-                z.name_en as zone_en,             
-                drw.calculate_unit,
-                drw.round_up,
-                drw.unit,
-                drw.is_ras,                
-                drw.from,
-                drw.to,
-                drw.status,
-                drw.description,
-                drw.description_en,
-                drw.created_at,
-                drw.updated_at,
+                sm.id as saleman_id,
+                ap.id as approval_by,
+                dp.approval_status,
+                dp.effected_date,
+                dp.expired_date,
+                dp.created_at,
+                dp.updated_at,
                 cr.username as created_by,
                 CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
                 CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated,
-                up.username as updated_by                
-            ")->andWhere("drw.is_deleted = 0")
-            ->groupBy('drw.id');
+                up.username as updpted_by                
+            ")->andWhere("dp.is_deleted = 0")
+            ->groupBy('dp.id');
             
             if($limit) {
                 $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
@@ -84,42 +71,42 @@ class DomesticRangeWeightRepository extends EntityRepository
      * @return QueryBuilder
      * @throws QueryException
      */
-    public function buildCustomerQueryBuilder($sortField = 'drw.id', $sortDirection = 'asc', $filters)
+    public function buildCustomerQueryBuilder($sortField = 'dp.id', $sortDirection = 'asc', $filters)
     {
         $operatorsMap = [
             'id' => [
-                'alias' => 'drw.id',
+                'alias' => 'dp.id',
                 'operator' => 'eq'
             ],
             'name' => [
-                'alias' => 'drw.name',
+                'alias' => 'dp.name',
                 'operator' => 'contains'
             ],
             'name_en' => [
-                'alias' => 'drw.name_en',
+                'alias' => 'dp.name_en',
                 'operator' => 'contains'
             ],
             
             'created_at' => [
-                'alias' => 'drw.created_at',
+                'alias' => 'dp.created_at',
                 'operator' => 'contains'
             ]
         ];
-
+        
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(DomesticRangeWeight::class, 'drw')      
-        ->leftJoin('drw.category', 'c')
-        ->leftJoin('drw.service', 's')
-        ->leftJoin('drw.carrier', 'ca')  
-        ->leftJoin('drw.shipmentType', 'st')  
-        ->leftJoin('drw.zone','z')
-        ->leftJoin('drw.join_created', 'cr')
-        ->leftJoin('drw.join_updated', 'up');
+        $queryBuilder->from(DomesticPricing::class, 'dp')        
+        ->leftJoin('dp.category', 'c')
+        ->leftJoin('dp.service', 's')
+        ->leftJoin('dp.carrier', 'ca')
+        ->leftJoin('dp.saleman', 'sm')
+        ->leftJoin('dp.approval_by', 'ap')
+        ->leftJoin('dp.created_by', 'cr')
+        ->leftJoin('dp.updated_by', 'up');
             
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
         } else {
-            $queryBuilder->orderBy('da.id', 'DESC');
+            $queryBuilder->orderBy('dp.id', 'DESC');
         }
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
