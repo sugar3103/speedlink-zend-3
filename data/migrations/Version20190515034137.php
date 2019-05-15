@@ -45,7 +45,7 @@ final class Version20190515034137 extends AbstractMigration
 
         $tables['domestic_pricing'] =  '(
             id                  INT(11) AUTO_INCREMENT PRIMARY KEY,
-            name                VARCHAR(100) NOT NULL,
+            name                VARCHAR(100) NOT NULL, 
             name_en             VARCHAR(100) NOT NULL,
             carrier_id          INT(11) NOT NULL,
             category_id         INT(11) NOT NULL,
@@ -58,7 +58,7 @@ final class Version20190515034137 extends AbstractMigration
             status              INT(1) DEFAULT 1 NOT NULL,
             is_deleted          INT(1) DEFAULT 0 NOT NULL,
             approval_status     INT(1) DEFAULT 0 NOT NULL,
-            approved_by         INT(11) NOT NULL,
+            approval_by         INT(11) NOT NULL,
             created_by          INT(11) NOT NULL,    
             created_at          TIMESTAMP DEFAULT current_timestamp() NOT NULL on update current_timestamp,
             updated_by          INT(11) NOT NULL,    
@@ -72,6 +72,7 @@ final class Version20190515034137 extends AbstractMigration
             constraint service_domestic_pricing_service_id_fk foreign key (service_id) references service (id) on update cascade on delete cascade,
             constraint saleman_domestic_pricing_saleman_id_fk foreign key (saleman_id) references user (id) on update cascade on delete cascade,
             constraint customer_domestic_pricing_customer_id_fk foreign key (customer_id) references user (id) on update cascade on delete cascade,
+            constraint approval_domestic_pricing_customer_id_fk foreign key (approval_by) references user (id) on update cascade on delete cascade,
             constraint created_domestic_pricing_created_by_fk foreign key (created_by) references user (id) on update cascade on delete cascade,
             constraint updated_domestic_pricing_updated_by_fk foreign key (updated_by) references user (id) on update cascade on delete cascade
         ) collate = utf8_unicode_ci;';

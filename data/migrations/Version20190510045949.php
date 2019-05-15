@@ -86,6 +86,7 @@ final class Version20190510045949 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('DROP TABLE domestic_area');
         $this->addSql('DROP TABLE domestic_area_city');
+        $this->addSql('DROP TABLE domestic_zone');
         $this->addSql('DROP TABLE domestic_range_weight');
     }
 }

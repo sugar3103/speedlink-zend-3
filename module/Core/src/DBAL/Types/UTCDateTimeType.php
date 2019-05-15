@@ -17,12 +17,14 @@ class UTCDateTimeType extends DateTimeType
       */
      public function convertToDatabaseValue($value, AbstractPlatform $platform)
      {
+         
         if ($value === null) {
             return null;
         }
         $formatString = $platform->getDateTimeFormatString();
-        if (is_string($value))
+        if (is_string($value)) {            
             $value = DateTime::createFromFormat('Y-m-d H:i:s', $value, new DateTimeZone('UTC'));
+        }        
         $value->setTimezone((self::$utc) ? self::$utc : (self::$utc = new DateTimeZone('UTC')));
         $formatted = $value->format($formatString);
         return $formatted;
