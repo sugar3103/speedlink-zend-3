@@ -36,9 +36,10 @@ class DomesticAreaController extends CoreController {
     {
         if ($this->getRequest()->isPost()) {
             // get the filters
-            $fieldsMap = [0 => 'id', 1 => 'name', 2 => 'name_en', 2 => 'created_at'];
+            $fieldsMap = [0 => 'id', 1 => 'name', 2 => 'name_en', 3 => 'created_at'];
 
             list($start,$limit,$sortField,$sortDirection,$filters, $fields) = $this->getRequestData($fieldsMap);          
+            
             //get list User by condition
             $dataArea = $this->domesticAreaManager->getListDomesticAreaByCondition($start, $limit, $sortField, $sortDirection,$filters); 
             
