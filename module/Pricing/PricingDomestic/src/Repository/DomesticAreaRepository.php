@@ -63,7 +63,7 @@ class DomesticAreaRepository extends EntityRepository
      * @return QueryBuilder
      * @throws QueryException
      */
-    public function buildCustomerQueryBuilder($sortField = 'c.id', $sortDirection = 'asc', $filters)
+    public function buildCustomerQueryBuilder($sortField = 'da.id', $sortDirection = 'asc', $filters)
     {
         $operatorsMap = [
             'id' => [
@@ -84,7 +84,7 @@ class DomesticAreaRepository extends EntityRepository
                 'operator' => 'contains'
             ]
         ];
-
+        
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(DomesticArea::class, 'da')        
         ->leftJoin('da.join_created', 'cr')
