@@ -117,7 +117,6 @@ class List extends Component {
         {
           Header: messages['name'],
           accessor: "name",
-          width: 150,
           Cell: ({ original }) => {
             return (
               locale === 'en-US' ? original.name_en : original.name

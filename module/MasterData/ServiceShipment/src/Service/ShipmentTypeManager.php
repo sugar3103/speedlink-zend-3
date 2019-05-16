@@ -131,11 +131,9 @@ class ShipmentTypeManager
             $shipmentType->setCode($data['code']);
             $shipmentType->setProductTypeCode($data['product_type_code']);
             $shipmentType->setVolumetricNumber($data['volumetric_number']);
-            //TODO: check timezone
-            $shipmentType->setCreatedAt(date('Y-m-d H:i:s'));
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $shipmentType->setCreatedAt($addTime->format('Y-m-d H:i:s'));
             $shipmentType->setCreatedBy($user->id);
-            $shipmentType->setUpdatedAt(date('Y-m-d H:i:s'));
-            $shipmentType->setUpdatedBy($user->id);
             $this->getReferenced($shipmentType, $data, $user, 'add');
 
             $shipmentType->setIsDeleted(0);
@@ -174,8 +172,8 @@ class ShipmentTypeManager
             $shipmentType->setCode($data['code']);
             $shipmentType->setProductTypeCode($data['product_type_code']);
             $shipmentType->setVolumetricNumber($data['volumetric_number']);
-            //TODO: check timezone
-            $shipmentType->setUpdatedAt(date('Y-m-d H:i:s'));
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $shipmentType->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
             $shipmentType->setUpdatedBy($user->id);
             $this->getReferenced($shipmentType, $data, $user);
             $shipmentType->setIsDeleted(0);
@@ -207,7 +205,8 @@ class ShipmentTypeManager
         try {
             $shipmentType->setIsDeleted(1);
             $shipmentType->setStatus(-1);
-            $shipmentType->setUpdatedAt(date('Y-m-d H:i:s'));
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $shipmentType->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
             $shipmentType->setUpdatedBy($user->id);
 
             $this->entityManager->persist($shipmentType);

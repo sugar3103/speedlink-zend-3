@@ -68,9 +68,8 @@ class ShipmentTypeRepository extends EntityRepository
                 smt.name,
                 smt.name_en
             ");
-            if($deleted) {
-                $queryBuilder->andWhere('smt.is_deleted = 0');
-            }
+            
+            $queryBuilder->andWhere('smt.is_deleted = 0');
             
             return $queryBuilder;
 

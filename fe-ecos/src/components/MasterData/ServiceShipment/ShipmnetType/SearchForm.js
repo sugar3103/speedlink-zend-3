@@ -123,22 +123,17 @@ class SearchForm extends Component {
           </div>
         </Col>
         <Col md={3}>
-          <div className="form__form-group">
-            <span className="form__form-group-label"></span>
-            <div className="form__form-group-field">
-              <div className="search-group-button">
-                <Button size="sm" outline onClick={(e) => {
-                  reset();
-                  setTimeout(() => {
-                    handleSubmit();
-                  }, 200);
-                }} >
-                  {messages['clear']}</Button>{' '}
-                <Button size="sm" color="primary" id="search" >
-                  {messages['search']}
-                </Button>
-              </div>
-            </div>
+          <div className="text-right search-group-button">
+            <Button size="sm" outline onClick={(e) => {
+              reset();
+              setTimeout(() => {
+                handleSubmit();
+              }, 200);
+            }} >
+              {messages['clear']}</Button>{' '}
+            <Button size="sm" color="primary" id="search">
+              {messages['search']}
+            </Button>
           </div>
         </Col>
       </form>

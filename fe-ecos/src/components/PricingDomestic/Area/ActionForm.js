@@ -175,7 +175,7 @@ ActionForm.propTypes = {
   modalData: PropTypes.object,
   modalType: PropTypes.string,
   authUser: PropTypes.object.isRequired,
-  cities: PropTypes.object,
+  cities: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,
   toggleAreaDomesticModal: PropTypes.func.isRequired,
   getCityAreaDomesticList: PropTypes.func.isRequired,

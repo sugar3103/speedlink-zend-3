@@ -32,11 +32,11 @@ module.exports = {
   
   //validate
   'country.validate-name-empty': 'Name shouldn’t be empty',
-  'country.validate-name-minlength': 'Name must be 5 characters or more',
+  'country.validate-name-minlength': 'Name must be 2 characters or more',
   'country.validate-name-maxlength': 'Name must be 60 characters or less',
   'country.validate-name-exists': 'Name already exists',
   'country.validate-nameEn-empty': 'English name shouldn’t be empty',
-  'country.validate-nameEn-minlength': 'English name must be 5 characters or more',
+  'country.validate-nameEn-minlength': 'English name must be 2 characters or more',
   'country.validate-nameEn-maxlength': 'English name must be 60 characters or less',
   'country.validate-nameEn-exists': 'English name already exists',
   'country.validate-isoCode-empty': 'ISO Code shouldn’t be empty',
@@ -56,11 +56,11 @@ module.exports = {
   
   //validate
   'city.validate-name-empty': 'Name shouldn’t be empty',
-  'city.validate-name-minlength': 'Name must be 5 characters or more',
+  'city.validate-name-minlength': 'Name must be 2 characters or more',
   'city.validate-name-maxlength': 'Name must be 60 characters or less',
   'city.validate-name-exists': 'Name already exists',
   'city.validate-nameEn-empty': 'English name shouldn’t be empty',
-  'city.validate-nameEn-minlength': 'English name must be 5 characters or more',
+  'city.validate-nameEn-minlength': 'English name must be 2 characters or more',
   'city.validate-nameEn-maxlength': 'English name must be 60 characters or less',
   'city.validate-nameEn-exists': 'English name already exists',
   'city.validate-zipcode-empty': 'Zip Code shouldn’t be empty',
@@ -79,11 +79,11 @@ module.exports = {
 
   //validate
   'district.validate-name-empty': 'Name shouldn’t be empty',
-  'district.validate-name-minlength': 'Name must be 5 characters or more',
+  'district.validate-name-minlength': 'Name must be 2 characters or more',
   'district.validate-name-maxlength': 'Name must be 60 characters or less',
   'district.validate-name-exists': 'Name already exists',
   'district.validate-nameEn-empty': 'English name shouldn’t be empty',
-  'district.validate-nameEn-minlength': 'English name must be 5 characters or more',
+  'district.validate-nameEn-minlength': 'English name must be 2 characters or more',
   'district.validate-nameEn-maxlength': 'English name must be 60 characters or less',
   'district.validate-nameEn-exists': 'English name already exists',
   'district.validate-city-empty': 'City shouldn’t be empty',
@@ -101,11 +101,11 @@ module.exports = {
   
   //validate
   'ward.validate-name-empty': 'Name shouldn’t be empty',
-  'ward.validate-name-minlength': 'Name must be 5 characters or more',
+  'ward.validate-name-minlength': 'Name must be 2 characters or more',
   'ward.validate-name-maxlength': 'Name must be 60 characters or less',
   'ward.validate-name-exists': 'Name already exists',
   'ward.validate-nameEn-empty': 'English name shouldn’t be empty',
-  'ward.validate-nameEn-minlength': 'English name must be 5 characters or more',
+  'ward.validate-nameEn-minlength': 'English name must be 2 characters or more',
   'ward.validate-nameEn-maxlength': 'English name must be 60 characters or less',
   'ward.validate-nameEn-exists': 'English name already exists',
   'ward.validate-postal-code-empty': 'Postal Code shouldn’t be empty',

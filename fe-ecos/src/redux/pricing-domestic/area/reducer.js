@@ -28,7 +28,7 @@ const INIT_STATE = {
   modalData: null,
   modalType: null,
   paramSearch: null,
-  cities: null
+  cities: []
 };
 
 export default (state = INIT_STATE, action) => {

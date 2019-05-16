@@ -32,9 +32,7 @@ class CarrierRepository extends EntityRepository
                 c.updated_at,
                 up.username as updated_by
             ");
-
-            if($deleted){ $queryBuilder->andWhere('c.is_deleted = 0'); }
-
+            $queryBuilder->andWhere('c.is_deleted = 0');
             if($limit) {
                 $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
             }

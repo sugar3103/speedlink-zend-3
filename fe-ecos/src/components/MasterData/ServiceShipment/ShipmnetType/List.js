@@ -180,7 +180,7 @@ class List extends Component {
 
           Cell: ({ original }) => {
             return (
-              original.status === 1 ? <Badge color="success">{messages['active']}</Badge> : original.status === -1 ? <Badge color="dark">{messages['deleted']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>
+              original.status === 1 ? <Badge color="success">{messages['active']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>
             )
           },
           className: "text-center",
