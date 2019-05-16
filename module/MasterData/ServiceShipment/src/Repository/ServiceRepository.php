@@ -33,7 +33,7 @@ class ServiceRepository extends EntityRepository
                 CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated
             ");
             
-            if($delete) { $queryBuilder->andWhere('s.is_deleted = 0'); }
+             $queryBuilder->andWhere('s.is_deleted = 0');
 
             if($limit) {
                 $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
