@@ -36,7 +36,22 @@ class DomesticRangeWeightController extends CoreController {
     {
         if ($this->getRequest()->isPost()) {
             // get the filters
-            $fieldsMap = [0 => 'id', 1 => 'name', 2 => 'name_en', 2 => 'created_at'];
+            $fieldsMap = [
+                0 => 'id', 
+                1 => 'name', 
+                2 => 'name_en', 
+                3 => 'category_id',
+                4 => 'carrier_id',
+                5 => 'service_id',
+                6 => 'shipment_type_id',
+                7 => 'status',
+                8 => 'calculate_unit',
+                9 => 'round_up',
+                10 => 'zone_id',
+                11 => 'is_ras',
+                12 => 'from',
+                13 => 'to'
+            ];
 
             list($start,$limit,$sortField,$sortDirection,$filters, $fields) = $this->getRequestData($fieldsMap);          
             //get list User by condition
@@ -119,17 +134,18 @@ class DomesticRangeWeightController extends CoreController {
     {
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequestData();
-            
+             
+            $user = $this->tokenPayload;
             if(isset($data['ids']) && count($data['ids']) > 0) {
                
                 try { 
                     foreach ($data['ids'] as $id) {
-                        $area = $this->entityManager->getRepository(DomesticRangeWeight::class)->findOneBy(array('id' => $id));    
-                        if ($area == null) {
+                        $rangeWeight = $this->entityManager->getRepository(DomesticRangeWeight::class)->findOneBy(array('id' => $id));    
+                        if ($rangeWeight == null) {
                             $this->error_code = 0;
                             $this->apiResponse['message'] = "NOT_FOUND";                        
                         } else {
-                            $this->domesticRangeWeightManager->deleteRangeWeight($area);
+                            $this->domesticRangeWeightManager->deleteRangeWeight($rangeWeight, $user);
                         }  
                     }
                     

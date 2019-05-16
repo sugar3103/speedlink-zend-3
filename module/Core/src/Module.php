@@ -30,7 +30,7 @@ class Module
         $headers->addHeaderLine('Access-Control-Allow-Headers: Authorization, Origin, X-Requested-With, Content-Type, Accept');        
         
         $sessionManager = $event->getApplication()->getServiceManager()->get('Zend\Session\SessionManager');        
-        // $this->forgetInvalidSession($sessionManager);            
+        $this->forgetInvalidSession($sessionManager);            
        
     }
 

@@ -7,9 +7,9 @@ export const localeOptions=[
 
 //api
 // export const apiUrl = 'http://localhost:8080/api/v1/';
-// export const apiUrl = 'http://ecosv2-api.speedlink.local/api/v1/';
+export const apiUrl = 'http://ecosv2-api.speedlink.local/api/v1/';
 export const socketUrl = 'localhost:3000';
-export const apiUrl = 'http://test.ecosv2-api.speedlink.vn/api/v1/';
+// export const apiUrl = 'http://test.ecosv2-api.speedlink.vn/api/v1/';
 
 
 //error code
@@ -30,3 +30,10 @@ export const PAGE_SIZE = [10, 20, 50, 100];
 export const MODAL_ADD = 'add';
 export const MODAL_EDIT = 'edit';
 export const MODAL_VIEW = 'view';
+
+//category pricing
+export const categoryPricing = {
+    1: 'Inbound',
+    2: 'Outbound',
+    3: 'Domestic'
+}

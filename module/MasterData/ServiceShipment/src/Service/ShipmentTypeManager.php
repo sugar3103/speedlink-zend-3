@@ -122,7 +122,7 @@ class ShipmentTypeManager
             $shipmentType->setDescriptionEn($data['description_en']);
             $shipmentType->setStatus($data['status']);
             $shipmentType->setCode($data['code']);
-            $shipmentType->setCategoryCode($data['category_code']);
+            $shipmentType->setCategoryCode($data['category_id']);
             $shipmentType->setProductTypeCode($data['product_type_code']);
             $shipmentType->setCarrierId($data['carrier_id']);
             $shipmentType->setServiceId($data['service_id']);
@@ -168,7 +168,7 @@ class ShipmentTypeManager
             $shipmentType->setDescriptionEn($data['description_en']);
             $shipmentType->setStatus($data['status']);
             $shipmentType->setCode($data['code']);
-            $shipmentType->setCategoryCode($data['category_code']);
+            $shipmentType->setCategoryCode($data['category_id']);
             $shipmentType->setProductTypeCode($data['product_type_code']);
             $shipmentType->setCarrierId($data['carrier_id']);
             $shipmentType->setServiceId($data['service_id']);

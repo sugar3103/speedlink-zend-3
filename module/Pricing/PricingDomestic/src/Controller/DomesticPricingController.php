@@ -36,7 +36,9 @@ class DomesticPricingController extends CoreController {
 
     public function indexAction()
     {
+        
         if ($this->getRequest()->isPost()) {
+            
             $fieldsMap = [
                 'id','name','name_en','carrer_id','is_private',
                 'category_id', 'service_id','effected_date',
@@ -126,7 +128,7 @@ class DomesticPricingController extends CoreController {
             $user = $this->tokenPayload;
             if(isset($data['ids']) && count($data['ids']) > 0) {
                 
-                // try { 
+                try { 
                     foreach ($data['ids'] as $id) {
                         $pricing = $this->entityManager->getRepository(DomesticPricing::class)->find($id);    
                         if ($pricing == null) {
@@ -138,10 +140,10 @@ class DomesticPricingController extends CoreController {
                     }
                     
                     $this->apiResponse['message'] = "DELETE_SUCCESS_DOMESTIC_PRICING";
-                // } catch (\Throwable $th) {
-                //     $this->error_code = 0;
-                //     $this->apiResponse['message'] = "DOMESTIC_PRICING_REQUEST_ID";
-                // }
+                } catch (\Throwable $th) {
+                    $this->error_code = 0;
+                    $this->apiResponse['message'] = "DOMESTIC_PRICING_REQUEST_ID";
+                }
             } else {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = "DOMESTIC_PRICING_REQUEST_ID";

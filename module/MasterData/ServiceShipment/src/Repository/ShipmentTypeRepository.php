@@ -24,7 +24,7 @@ class ShipmentTypeRepository extends EntityRepository
                 smt.description,
                 smt.description_en,
                 smt.code,
-                smt.category_code,
+                smt.category_id,
                 smt.product_type_code,
                 smt.volumetric_number,
                 smt.status,
@@ -141,8 +141,8 @@ class ShipmentTypeRepository extends EntityRepository
                 'alias' => 'smt.code',
                 'operator' => 'contains'
             ],
-            'category_code' => [
-                'alias' => 'smt.category_code',
+            'category_id' => [
+                'alias' => 'smt.category_id',
                 'operator' => 'eq'
             ],
             'carrier_id' => [
@@ -151,9 +151,9 @@ class ShipmentTypeRepository extends EntityRepository
             ],
             'service_id' => [
                 'alias' => 'smt.service_id',
-                'operator' => 'in'
+                'operator' => 'eq'
             ],
-            'shipment_type_id' => [
+            'id' => [
                 'alias' => 'smt.id',
                 'operator' => 'in'
             ],

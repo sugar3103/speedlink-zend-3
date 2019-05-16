@@ -70,6 +70,7 @@ class AuthController extends CoreController {
             $form = new LoginForm();
 
             $data = $this->getRequestData();  
+            
             $data['remember_me'] = $data['remember_me'] ? 1 : 0;          
             $form->setData($data);            
 

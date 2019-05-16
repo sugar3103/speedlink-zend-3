@@ -21,6 +21,10 @@ module.exports = {
   'menu.range_weight' : 'Range Weight',
   'menu.zone_code' : 'Zone Code',
   'menu.pricing' : 'Pricing',
+  'menu.pricing_domestic' : 'Pricing Domestic',
+  'menu.area_domestic' : 'Area',
+  'menu.zone_domestic' : 'Zone',
+  'menu.range_weight_domestic' : 'Range Weight',
   //Menu Setting
   'menu.setting': 'Setting',
   'menu.system': 'System',

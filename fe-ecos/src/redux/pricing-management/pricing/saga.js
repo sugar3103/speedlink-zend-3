@@ -206,7 +206,7 @@ function* addPricingMasterDataItem({ payload }) {
           }
         };
         yield put(getPricingData(params));
-        yield call(history.push, `/app/pricing-management/pricing/edit/${response.data}`);
+        yield call(history.push, `/pricing-management/pricing/edit/${response.data}`);
         break;
 
       case EC_FAILURE:
