@@ -171,15 +171,10 @@ class DomesticRangeWeightManager {
         try {
             $domesticRangeWeight->setName($data['name']);
             $domesticRangeWeight->setNameEn($data['name_en']);
-            $domesticRangeWeight->setCarrierId($data['carrier_id']);
-            $domesticRangeWeight->setCategoryId($data['category_id']);
-            $domesticRangeWeight->setServiceId($data['service_id']);
-            $domesticRangeWeight->setShipmentTypeId($data['shipment_type_id']);
             $domesticRangeWeight->setCalculateUnit($data['calculate_unit']);
             $domesticRangeWeight->setRoundUp($data['round_up']);
             $domesticRangeWeight->setUnit($data['unit']);
             $domesticRangeWeight->setIsRas($data['is_ras']);
-            $domesticRangeWeight->setZoneId($data['zone_id']);
             $domesticRangeWeight->setFrom($data['from']);
             $domesticRangeWeight->setTo($data['to']);
             $domesticRangeWeight->setStatus($data['status']);
@@ -190,7 +185,7 @@ class DomesticRangeWeightManager {
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $domesticRangeWeight->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
             
-            $this->getReferenced($domesticRangeWeight, $user,'update');
+            $this->getReferenced($domesticRangeWeight, $user,'update', $data);
             $this->entityManager->persist($domesticRangeWeight);
             $this->entityManager->flush();        
             
@@ -207,13 +202,13 @@ class DomesticRangeWeightManager {
      /**
      * Delete Domestic Area
      */
-    public function deleteArea($domesticRangeWeight, $user) {
+    public function deleteRangeWeight($domesticRangeWeight, $user) {
 
         $this->entityManager->beginTransaction();
         try {
             $domesticRangeWeight->setIsDeleted(1);
-            $domesticRangeWeight->setUpdatedBy($user->id);
-            
+
+            $domesticRangeWeight->setUpdatedBy($user->id);            
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $domesticRangeWeight->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
             

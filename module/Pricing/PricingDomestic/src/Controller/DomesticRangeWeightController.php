@@ -119,17 +119,17 @@ class DomesticRangeWeightController extends CoreController {
     {
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequestData();
-            
+             
             if(isset($data['ids']) && count($data['ids']) > 0) {
                
                 try { 
                     foreach ($data['ids'] as $id) {
-                        $area = $this->entityManager->getRepository(DomesticRangeWeight::class)->findOneBy(array('id' => $id));    
+                        $domesticRangeWeigh = $this->entityManager->getRepository(DomesticRangeWeight::class)->findOneBy(array('id' => $id));    
                         if ($area == null) {
                             $this->error_code = 0;
                             $this->apiResponse['message'] = "NOT_FOUND";                        
                         } else {
-                            $this->domesticRangeWeightManager->deleteRangeWeight($area);
+                            $this->domesticRangeWeightManager->deleteRangeWeight($domesticRangeWeigh, $this->tokenPayload);
                         }  
                     }
                     

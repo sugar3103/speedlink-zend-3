@@ -32,6 +32,21 @@ $router = [
                 ]               
             ]         
         ],
+        'domestic_data' => [
+            'type' => StaticRoute::class,
+            'options' => [
+                'verb' => 'POST',
+                'route' => '/pricing/domestic/data[/:action]',
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                ],
+                'defaults' => [
+                    'controller' => Controller\DomesticPricingDataController::class,
+                    'action' => 'index',
+                    'isAuthorizationRequired' => true
+                ]               
+            ] 
+        ],
         'area' => [
             'type' => StaticRoute::class,
             'options' => [
