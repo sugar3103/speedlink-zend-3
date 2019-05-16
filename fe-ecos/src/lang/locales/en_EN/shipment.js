@@ -55,6 +55,7 @@ module.exports = {
   'shipment_type.export': 'Export Shipment Type',
   'shipment_type.delete': 'Delete Shipment Type',
   'shipment_type.update': 'Update Shipment Type',
+  'shipment_type.view': 'View Shipment Type',
   'shipment_type.product_type': 'Product Type',
   'shipment_type.service': 'Service',
   'shipment_type.category': 'Category',
