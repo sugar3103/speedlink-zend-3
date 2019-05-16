@@ -2,7 +2,8 @@ import { NotificationManager } from 'react-notifications';
 import AppLocale from '../lang';
 
 export default function createNotification(noti) {
-  const currentAppLocale = AppLocale[localStorage.getItem('currentLanguage')]; 
+  const locale = localStorage.getItem('currentLanguage') ? localStorage.getItem('currentLanguage') : 'en';
+  const currentAppLocale = AppLocale[locale]; 
   const { messages } = currentAppLocale;
   const message = messages[noti.message];
   

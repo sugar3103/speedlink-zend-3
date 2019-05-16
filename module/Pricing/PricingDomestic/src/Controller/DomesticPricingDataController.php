@@ -8,6 +8,7 @@ use PricingDomestic\Service\DomesticPricingDataManager;
 use PricingDomestic\Entity\DomesticPricing;
 use PricingDomestic\Entity\DomesticPricingData;
 use PricingDomestic\Entity\DomesticZone;
+use PricingDomestic\Entity\DomesticRangeWeight;
 use ServiceShipment\Entity\ShipmentType;
 
 class DomesticPricingDataController extends CoreController {
@@ -62,14 +63,50 @@ class DomesticPricingDataController extends CoreController {
         //Get All Zone
         $zones = $this->entityManager->getRepository(DomesticZone::class)->findAll([]);
         foreach ($zones as $zone) {
+            $data[$zone->getId()]['name'] = $zone->getName();
+            $data[$zone->getId()]['name_en'] = $zone->getNameEn();
+            
             $shipmentTypes = $this->entityManager->getRepository(ShipmentType::class)->findAll([]);
             foreach ($shipmentTypes as $shipmentType) {
-                $data[$zone->getId()]['ras'][$shipmentType->getId()] = '';
-                $data[$zone->getId()]['not_ras'][$shipmentType->getId()] = '';
+                $data[$zone->getId()]['ras'][$shipmentType->getId()] = null;
+                $data[$zone->getId()]['not_ras'][$shipmentType->getId()] = null;
+                //Get Range Weight
+                $rangeWeights = $this->entityManager->getRepository(DomesticRangeWeight::class)->findBy([
+                    'service' => $pricing->getService()->getId(),
+                    'shipment_type' => $shipmentType->getId(),
+                    'zone'       => $zone->getId(),
+                    'is_deleted' => 0
+                ]);
+                
+                if($rangeWeights) {
+                    foreach ($rangeWeights as $rangeWeight) {
+                        $pricingData = $this->entityManager->getRepository(DomesticPricingData::class)->findOneBy([
+                            'domestic_pricing' => $pricing->getId(),
+                            'domestic_range_weight' => $rangeWeight->getId(),
+                            'is_deleted' => 0
+                        ]);
+
+                        if($pricingData) {
+                            if($rangeWeight->getIsRas()) {
+                                $data[$zone->getId()]['ras'][$shipmentType->getId()][] = ['name' => $rangeWeight->getName(), 'name_en' => $rangeWeight->getNameEn(), 'value' => $pricingData->getValue()];
+                            } else {
+                                $data[$zone->getId()]['not_ras'][$shipmentType->getId()][] = ['name' => $rangeWeight->getName(), 'name_en' => $rangeWeight->getNameEn(), 'value' => $pricingData->getValue()];
+                            }                            
+                        } else {
+                            if($rangeWeight->getIsRas()) {
+                                $data[$zone->getId()]['ras'][$shipmentType->getId()][] = [];
+                            } else {
+                                $data[$zone->getId()]['not_ras'][$shipmentType->getId()][] = [];
+                            }  
+                        }
+                    }
+                } 
+                
             }            
         }
 
-        //Get Range W ,
+      
+        
         var_dump($data);
         die;
     }

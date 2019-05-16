@@ -24,14 +24,16 @@ class ShipmentTypeRepository extends EntityRepository
                 smt.description,
                 smt.description_en,
                 smt.code,
-                smt.category_id,
+                c.id as category_id,
+                c.name as category,
+                c.name_en as category_en,
                 smt.product_type_code,
                 smt.volumetric_number,
                 smt.status,
-                smt.carrier_id,
-                c.name_en AS carrier_en,
-                c.name AS carrier,
-                smt.service_id,
+                ca.id as carrier_id,
+                ca.name_en AS carrier_en,
+                ca.name AS carrier,
+                s.id as service_id,
                 s.name_en AS service_en,
                 s.name AS service,
                 smt.created_at,
@@ -161,8 +163,9 @@ class ShipmentTypeRepository extends EntityRepository
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(ShipmentType::class, 'smt')
-            ->leftJoin('smt.join_carrier', 'c')
-            ->leftJoin('smt.join_service', 's')
+            ->leftJoin('smt.carrier', 'ca')
+            ->leftJoin('smt.category', 'c')
+            ->leftJoin('smt.service', 's')
             ->leftJoin('smt.join_created', 'cr')
             ->leftJoin('smt.join_updated', 'up');
 
