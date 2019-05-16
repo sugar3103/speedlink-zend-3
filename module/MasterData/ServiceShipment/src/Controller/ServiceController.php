@@ -35,13 +35,10 @@ class ServiceController extends CoreController
 
     public function indexAction()
     {
-      
         if ($this->getRequest()->isPost()) {
-
             $fieldsMap = ['code', 'name', 'name_en', 'status'];
             list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);            
-            
-            
+
             //get list User by condition
             $dataService = $this->serviceManager->getListServiceByCondition($start, $limit, $sortField, $sortDirection,$filters,$this->getDeleted());            
             
@@ -156,37 +153,6 @@ class ServiceController extends CoreController
                     }
                     
                     $this->apiResponse['message'] = "DELETE_SUCCESS_SERVICE";
-                } catch (\Throwable $th) {
-                    $this->error_code = 0;
-                    $this->apiResponse['message'] = "SERVICE_REQUEST_ID";
-                }
-            } else {
-                $this->error_code = 0;
-                $this->apiResponse['message'] = "SERVICE_REQUEST_ID";
-            }
-        }
-
-        return $this->createResponse();
-    }
-
-    public function removeAction()
-    {
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequestData();
-            
-            if(isset($data['ids']) && count($data['ids']) > 0) {
-                try {
-                    foreach ($data['ids'] as $id) {
-                        $service = $this->entityManager->getRepository(Service::class)->find($id);
-                        if ($service == null) {
-                            $this->error_code = 0;
-                            $this->apiResponse['message'] = "NOT_FOUND";                        
-                        } else {
-                            $this->serviceManager->removeService($service,$this->tokenPayload);
-                        }  
-                    }
-                    
-                    $this->apiResponse['message'] = "REMOVE_SUCCESS_SERVICE";
                 } catch (\Throwable $th) {
                     $this->error_code = 0;
                     $this->apiResponse['message'] = "SERVICE_REQUEST_ID";

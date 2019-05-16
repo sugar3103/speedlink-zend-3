@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * DomesticPricingData
  *
  * @ORM\Table(name="domestic_pricing_data", indexes={@ORM\Index(name="created_domestic_pricing_data_created_by_fk", columns={"created_by"}), @ORM\Index(name="domestic_pricing_domestic_pricing_data_pricing_id_fk", columns={"domestic_pricing_id"}), @ORM\Index(name="updated_domestic_pricing_data_updated_by_fk", columns={"updated_by"}), @ORM\Index(name="domestic_range_weight_domestic_pricing_data_range_weight_id_fk", columns={"domestic_range_weight_id"})})
- * @ORM\Entity(repositoryClass="\PricingDomestic\Repository\DomesticPricingDataRepository")
+ * @ORM\Entity
  */
 class DomesticPricingData
 {
@@ -50,9 +50,9 @@ class DomesticPricingData
     private $updated_at = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var \PricingDomestic\Entity\User
+     * @var \OAuth\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="PricingDomestic\Entity\User")
+     * @ORM\ManyToOne(targetEntity="OAuth\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * })
@@ -77,12 +77,12 @@ class DomesticPricingData
      *   @ORM\JoinColumn(name="domestic_range_weight_id", referencedColumnName="id", nullable=true)
      * })
      */
-    private $domesti_range_weight;
+    private $domestic_range_weight;
 
     /**
-     * @var \PricingDomestic\Entity\User
+     * @var \OAuth\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="PricingDomestic\Entity\User")
+     * @ORM\ManyToOne(targetEntity="OAuth\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="updated_by", referencedColumnName="id", nullable=true)
      * })
@@ -199,11 +199,11 @@ class DomesticPricingData
     /**
      * Set created_by.
      *
-     * @param \PricingDomestic\Entity\User|null $created_by
+     * @param \OAuth\Entity\User|null $created_by
      *
      * @return DomesticPricingData
      */
-    public function setCreatedBy(\PricingDomestic\Entity\User $created_by = null)
+    public function setCreatedBy(\OAuth\Entity\User $created_by = null)
     {
         $this->created_by = $created_by;
 
@@ -213,7 +213,7 @@ class DomesticPricingData
     /**
      * Get created_by.
      *
-     * @return \PricingDomestic\Entity\User|null
+     * @return \OAuth\Entity\User|null
      */
     public function getCreatedBy()
     {
@@ -245,37 +245,37 @@ class DomesticPricingData
     }
 
     /**
-     * Set domesti_range_weight.
+     * Set domestic_range_weight.
      *
-     * @param \PricingDomestic\Entity\DomesticRangeWeight|null $domesti_range_weight
+     * @param \PricingDomestic\Entity\DomesticRangeWeight|null $domestic_range_weight
      *
      * @return DomesticPricingData
      */
-    public function setDomesticRangeWeight(\PricingDomestic\Entity\DomesticRangeWeight $domesti_range_weight = null)
+    public function setDomesticRangeWeight(\PricingDomestic\Entity\DomesticRangeWeight $domestic_range_weight = null)
     {
-        $this->domesti_range_weight = $domesti_range_weight;
+        $this->domestic_range_weight = $domestic_range_weight;
 
         return $this;
     }
 
     /**
-     * Get domesti_range_weight.
+     * Get domestic_range_weight.
      *
      * @return \PricingDomestic\Entity\DomesticRangeWeight|null
      */
     public function getDomesticRangeWeight()
     {
-        return $this->domesti_range_weight;
+        return $this->domestic_range_weight;
     }
 
     /**
      * Set updated_by.
      *
-     * @param \PricingDomestic\Entity\User|null $updated_by
+     * @param \OAuth\Entity\User|null $updated_by
      *
      * @return DomesticPricingData
      */
-    public function setUpdatedBy(\PricingDomestic\Entity\User $updated_by = null)
+    public function setUpdatedBy(\OAuth\Entity\User $updated_by = null)
     {
         $this->updated_by = $updated_by;
 
@@ -285,7 +285,7 @@ class DomesticPricingData
     /**
      * Get updated_by.
      *
-     * @return \PricingDomestic\Entity\User|null
+     * @return \OAuth\Entity\User|null
      */
     public function getUpdatedBy()
     {

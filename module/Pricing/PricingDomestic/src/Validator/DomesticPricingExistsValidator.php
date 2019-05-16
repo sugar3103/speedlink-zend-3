@@ -61,9 +61,9 @@ class DomesticPricingExistsValidator extends AbstractValidator {
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
         if($this->options['language'] === NULL) {
-            $domesticPricing = $entityManager->getRepository(DomesticPricing::class)->findOneByName($value);
+            $domesticPricing = $entityManager->getRepository(DomesticPricing::class)->findOneBy(['name'=>$value, 'is_deleted' => 0]);
         } else if($this->options['language'] === 'en') {
-            $domesticPricing = $entityManager->getRepository(DomesticPricing::class)->findOneBy(array('name_en' => $value));       
+            $domesticPricing = $entityManager->getRepository(DomesticPricing::class)->findOneBy(array('name_en' => $value, 'is_deleted' => 0));       
         }
 
         //English

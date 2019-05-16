@@ -54,7 +54,7 @@ class DomesticRangeWeight
      *
      * @ORM\Column(name="is_ras", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $is_ras;
+    private $is_ras = 0;
 
     /**
      * @var string
@@ -171,7 +171,7 @@ class DomesticRangeWeight
      *   @ORM\JoinColumn(name="shipment_type_id", referencedColumnName="id", nullable=true)
      * })
      */
-    private $shipmentType;
+    private $shipment_type;
 
     /**
      * @var \PricingDomestic\Entity\DomesticZone
@@ -671,27 +671,27 @@ class DomesticRangeWeight
     }
 
     /**
-     * Set shipmentType.
+     * Set shipment_type.
      *
-     * @param \ServiceShipment\Entity\ShipmentType|null $shipmentType
+     * @param \ServiceShipment\Entity\ShipmentType|null $shipment_type
      *
      * @return DomesticRangeWeight
      */
-    public function setShipmentType(\ServiceShipment\Entity\ShipmentType $shipmentType = null)
+    public function setShipmentType(\ServiceShipment\Entity\ShipmentType $shipment_type = null)
     {
-        $this->shipmentType = $shipmentType;
+        $this->shipment_type = $shipment_type;
 
         return $this;
     }
 
     /**
-     * Get shipmentType.
+     * Get shipment_type.
      *
      * @return \ServiceShipment\Entity\ShipmentType|null
      */
     public function getShipmentType()
     {
-        return $this->shipmentType;
+        return $this->shipment_type;
     }
 
     /**

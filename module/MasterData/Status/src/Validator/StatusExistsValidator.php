@@ -63,9 +63,9 @@ class StatusExistsValidator extends AbstractValidator {
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
         if($this->options['language'] === NULL) {
-            $status = $entityManager->getRepository(Status::class)->findOneByName($value);
+            $status = $entityManager->getRepository(Status::class)->findOneBy(['name' => $value, 'is_deleted' => 0]);
         } else if($this->options['language'] === 'en') {
-            $status = $entityManager->getRepository(Status::class)->findOneBy(array('name_en' => $value));       
+            $status = $entityManager->getRepository(Status::class)->findOneBy(array('name_en' => $value, 'is_deleted' => 0));       
         }
 
         if ($this->options['status'] == null)

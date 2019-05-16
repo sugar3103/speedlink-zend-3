@@ -64,9 +64,9 @@ class ServiceNameExistsValidator extends AbstractValidator {
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
         if ($this->options['language'] === NULL) {
-            $service = $entityManager->getRepository(Service::class)->findOneByName($value);
+            $service = $entityManager->getRepository(Service::class)->findOneBy(['name' => $value, 'is_deleted' => 0]);
         } else if($this->options['language'] === 'en') {
-            $service = $entityManager->getRepository(Service::class)->findOneBy(array('name_en' => $value));
+            $service = $entityManager->getRepository(Service::class)->findOneBy(array('name_en' => $value, 'is_deleted' => 0));
         }
 
         if ($this->options['service'] == null) {

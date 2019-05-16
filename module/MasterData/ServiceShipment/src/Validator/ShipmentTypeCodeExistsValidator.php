@@ -61,7 +61,7 @@ class ShipmentTypeCodeExistsValidator extends AbstractValidator {
 
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
-        $shipmentType = $entityManager->getRepository(ShipmentType::class)->findOneBy(array('code' => $value));
+        $shipmentType = $entityManager->getRepository(ShipmentType::class)->findOneBy(array('code' => $value, 'is_deleted' => 0));
 
         if ($this->options['shipmentType'] == null) {
             $isValid = ($shipmentType == null);

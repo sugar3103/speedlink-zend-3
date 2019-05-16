@@ -158,22 +158,10 @@ class ShipmentTypeForm extends Form {
             'required'  => true,
             'filters' => [
                 [
-                    'name' => StringTrim::class
-                ]
-            ],
-            'validators' => [
-                [
-                    'name' => StringLength::class,
-                    'options' => [
-                        'validator' => [
-                            'name' => 'InArray',
-                            'options' => [
-                                'haystack' => ['Inbound', 'Outbound', 'Domestic']
-                            ]
-                        ]
-                    ]
+                    'name' => ToInt::class
                 ]
             ]
+            
         ]);
 
         $inputFilter->add([
@@ -216,15 +204,6 @@ class ShipmentTypeForm extends Form {
                 [
                     'name' => ToInt::class
                 ]
-            ],
-            'validators' => [
-                [
-                    'name' => CarrierIdExistsValidator::class,
-                    'options' => [
-                        'entityManager' => $this->entityManager,
-                        'shipmentType' => $this->shipmentType
-                    ]
-                ]
             ]
         ]);
 
@@ -234,15 +213,6 @@ class ShipmentTypeForm extends Form {
             'filters' => [
                 [
                     'name' => ToInt::class
-                ]
-            ],
-            'validators' => [
-                [
-                    'name' => ServiceIdExistsValidator::class,
-                    'options' => [
-                        'entityManager' => $this->entityManager,
-                        'shipmentType' => $this->shipmentType
-                    ]
                 ]
             ]
         ]);
