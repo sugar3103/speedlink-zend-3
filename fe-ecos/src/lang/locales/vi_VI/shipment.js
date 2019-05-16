@@ -73,6 +73,7 @@ module.exports = {
   'shipment_type.export': 'Xuất dữ liệu',
   'shipment_type.delete': 'Xóa',
   'shipment_type.update': 'Cập nhập',
+  'shipment_type.view': 'Xem',
   'shipment_type.name': 'Tên',
   'shipment_type.name-en': 'Tên tiếng anh',
   'shipment_type.desc': 'Mô tả',

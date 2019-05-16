@@ -143,15 +143,15 @@ class ShipmentTypeRepository extends EntityRepository
                 'operator' => 'contains'
             ],
             'category_id' => [
-                'alias' => 'smt.category_id',
+                'alias' => 'c.id',
                 'operator' => 'eq'
             ],
             'carrier_id' => [
-                'alias' => 'smt.carrier_id',
+                'alias' => 'ca.id',
                 'operator' => 'eq'
             ],
             'service_id' => [
-                'alias' => 'smt.service_id',
+                'alias' => 's.id',
                 'operator' => 'eq'
             ],
             'id' => [

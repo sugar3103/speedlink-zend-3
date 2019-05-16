@@ -53,12 +53,13 @@ class ActionForm extends Component {
   }
 
   showOption = (items) => {
+    const { locale } = this.props.intl;
     let result = [];
     if (items.length > 0) {
       result = items.map(item => {
         return {
           value: item.id,
-          label: item.code
+          label: locale === 'en-US' ? item.name_en : item.name
         }
       })
     }
