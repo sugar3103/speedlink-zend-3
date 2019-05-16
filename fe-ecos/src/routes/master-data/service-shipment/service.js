@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col, Container, Row } from 'reactstrap';
+import { Container, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import { List } from '../../../components/MasterData/ServiceShipment/Service';
@@ -29,13 +29,7 @@ class Service extends Component {
     const { errors } = this.props.service;
     return (
       <Container className={'panel__body'}>
-      <PageTitle title={messages['service.list-title']} />
-        <Row>
-          <Col md={12}>
-            <h3 className="page-title">{messages['service.list-title']}</h3>
-            {/* <h3 className="page-subhead subhead"/> */}
-          </Col>
-        </Row>
+        <PageTitle title={messages['service.list-title']} />
         <Row>
         {!this.state.loadPage ? (
             (errors && errors === 'ACCESS_DENIED') ? (<AccessDenied />) : (<List />)

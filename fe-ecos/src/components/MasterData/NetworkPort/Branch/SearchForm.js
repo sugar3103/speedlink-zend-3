@@ -10,19 +10,17 @@ import PropTypes from 'prop-types';
 class SearchForm extends Component {
 
   componentDidMount() {
-    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name', 'name_en'],
       offset: {
           limit: 0
       }
   }
-    this.props.getHubBranchList(params, messages);
-    this.props.getCountryBranchList(params, messages, 'onchange');
+    this.props.getHubBranchList(params);
+    this.props.getCountryBranchList(params, 'onchange');
   }
   
   onChangeCountry = value => {
-    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name', 'name_en'],
       offset: {
@@ -35,11 +33,10 @@ class SearchForm extends Component {
     
     this.props.change('districts',null);
     this.props.change('wards',null);
-    this.props.getCityBranchList(params, messages, 'onchange');
+    this.props.getCityBranchList(params, 'onchange');
   }
 
   onChangeCity = value => {
-    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name', 'name_en'],
       offset: {
@@ -51,11 +48,10 @@ class SearchForm extends Component {
     }
     this.props.change('districts',null);
     this.props.change('wards',null);
-    this.props.getDistrictBranchList(params, messages, 'onchange');
+    this.props.getDistrictBranchList(params, 'onchange');
   }
 
   onChangeDistrict = value => {
-    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name', 'name_en'],
       offset: {
@@ -66,7 +62,7 @@ class SearchForm extends Component {
       }
     }
     this.props.change('wards',null);
-    this.props.getWardBranchList(params, messages, 'onchange');
+    this.props.getWardBranchList(params, 'onchange');
   }
 
   showOptionsHub = (items) => {

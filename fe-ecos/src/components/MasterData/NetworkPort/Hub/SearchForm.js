@@ -9,14 +9,13 @@ import PropTypes from 'prop-types';
 
 class SearchForm extends Component {
   componentDidMount() {
-    const { messages } = this.props.intl;
     const params = {
       field: ['id', 'name', 'name_en'],
       offset: {
         limit: 10
       }
     }
-    this.props.getCountryHubList(params, messages, 'onchange');
+    this.props.getCountryHubList(params, 'onchange');
   }
 
   onChangeCountry = value => {

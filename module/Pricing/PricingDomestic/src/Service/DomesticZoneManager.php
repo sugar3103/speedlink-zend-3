@@ -9,6 +9,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator;
 use Zend\Authentication\Result;
 use Core\Utils\Utils;
+use OAuth\Entity\User;
 
 /**
  * This service is responsible for adding/editing users
@@ -83,6 +84,8 @@ class DomesticZoneManager {
             
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $domesticZone->setCreatedAt($addTime->format('Y-m-d H:i:s'));
+
+            $this->getReferenced($domesticZone, $user, 'add');
             
 
             $this->entityManager->persist($domesticZone);
@@ -146,5 +149,20 @@ class DomesticZoneManager {
             $this->entityManager->rollback();
             return FALSE;
         }
+    }
+
+    private function getReferenced(&$domesticZone, $user, $mode = '')
+    {
+        $user_data = $this->entityManager->getRepository(User::class)->find($user->id);
+        if ($user_data == null) {
+            throw new \Exception('Not found User by ID');
+        }
+
+        if ($mode == 'add') {
+            $domesticZone->setJoinCreated($user_data);
+        }
+
+        $domesticZone->setJoinUpdated($user_data);
+
     }
 }

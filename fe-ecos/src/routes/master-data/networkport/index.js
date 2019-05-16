@@ -10,7 +10,7 @@ const NetworkPort = ({ match }) => (
           <Redirect exact from={`${match.url}/`} to={`${match.url}/hub`} />
           <Route path={`${match.url}/hub`} component={Hub} />  
           <Route path={`${match.url}/branch`} component={Branch} />           
-          <Redirect to="/error" />
+          <Redirect to="/page-not-found" />
       </Switch>
   </Fragment>
 );

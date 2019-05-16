@@ -58,7 +58,8 @@ const getWardListRequest = async (params) => {
 };
 
 function* getWardListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getWardListRequest, params);
     switch (response.error_code) {
@@ -72,12 +73,7 @@ function* getWardListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -104,20 +100,17 @@ const addWardItemRequest = async item => {
 };
 
 function* addWardItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('ward_action_form'));
   try {
     const response = yield call(addWardItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(addWardItemSuccess());
-        yield put(getWardList(null, messages));
+        yield put(getWardList());
         yield put(toggleWardModal());
-        createNotification({
-          type: 'success', 
-          message: messages['ward.add-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'ward.add-success' });
         break;
 
       case EC_FAILURE:
@@ -125,13 +118,8 @@ function* addWardItem({ payload }) {
         yield put(validateWard(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -157,20 +145,17 @@ const updateWardItemRequest = async item => {
 };
 
 function* updateWardItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('ward_action_form'));
   try {
     const response = yield call(updateWardItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(updateWardItemSuccess());
-        yield put(getWardList(null, messages));
+        yield put(getWardList());
         yield put(toggleWardModal());
-        createNotification({
-          type: 'success', 
-          message: messages['ward.update-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'ward.update-success' });
         break;
 
       case EC_FAILURE:
@@ -179,13 +164,8 @@ function* updateWardItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -211,18 +191,15 @@ const deleteWardItemRequest = async id => {
 };
 
 function* deleteWardItem({ payload }) {
-  const { id, messages } = payload;
+  const { id } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(deleteWardItemRequest, id);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(deleteWardItemSuccess());
-        yield put(getWardList(null, messages));
-        createNotification({
-          type: 'success', 
-          message: messages['ward.delete-success'], 
-          title: messages['notification.success']
-        });
+        yield put(getWardList());
+        createNotification({ type: 'success',  message: 'ward.delete-success' });
         break;
 
       case EC_FAILURE:
@@ -230,13 +207,8 @@ function* deleteWardItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;

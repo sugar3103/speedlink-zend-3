@@ -53,9 +53,9 @@ export const getCarrierCodeListError = (error) => ({
   payload: error
 });
 
-export const addCarrierItem = (item, messages) => ({
+export const addCarrierItem = (item) => ({
   type: CARRIER_ADD_ITEM,
-  payload: { item, messages }
+  payload: { item }
 });
 
 export const addCarrierItemSuccess = () => ({
@@ -67,9 +67,9 @@ export const addCarrierItemError = (error) => ({
   payload: error
 });
 
-export const updateCarrierItem = (item, messages) => ({
+export const updateCarrierItem = (item) => ({
   type: CARRIER_UPDATE_ITEM,
-  payload: { item, messages }
+  payload: { item }
 });
 
 export const updateCarrierItemSuccess = () => ({
@@ -81,9 +81,9 @@ export const updateCarrierItemError = (error) => ({
   payload: error
 });
 
-export const deleteCarrierItem = (id, messages) => ({
+export const deleteCarrierItem = (id) => ({
   type: CARRIER_DELETE_ITEM,
-  payload: { id, messages }
+  payload: { id }
 });
 
 export const deleteCarrierItemSuccess = () => ({

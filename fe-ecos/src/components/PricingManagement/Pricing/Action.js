@@ -7,8 +7,7 @@ import { addPricingMasterDataItem } from '../../../redux/actions';
 class Action extends Component {
 
     handleSubmit = values => {
-        const { messages } = this.props.intl;
-        this.props.addPricingMasterDataItem(values, messages);
+        this.props.addPricingMasterDataItem(values);
     }
 
     render() {

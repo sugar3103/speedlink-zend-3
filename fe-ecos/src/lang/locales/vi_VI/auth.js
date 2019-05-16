@@ -11,4 +11,5 @@ module.exports = {
   'login.login-again': 'Vui lòng đăng nhập lại để tiếp tục',
   'login.username-error-empty': 'Tên đăng nhập không được bỏ trống',
   'login.password-error-empty': 'Mật khẩu không được bỏ trống',
+  'login.login-false': 'Tên đăng nhập hoặc mật khẩu không chính xác'
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col, Container, Row } from 'reactstrap';
+import { Container, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { List } from '../../../components/MasterData/ServiceShipment/Carrier';
 import { connect } from "react-redux";
@@ -31,12 +31,6 @@ class Carrier extends Component {
     return (
       <Container className={'panel__body'}>
         <PageTitle title={messages['carrier.list-title']} />
-        <Row>
-          <Col md={12}>
-            <h3 className="page-title">{messages['carrier.list-title']}</h3>
-            {/* <h3 className="page-subhead subhead"/> */}
-          </Col>
-        </Row>
         <Row>
           {!this.state.loadPage ? (
             (errors && errors === 'ACCESS_DENIED') ? (<AccessDenied />) : (<List />)

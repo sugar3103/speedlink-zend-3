@@ -13,8 +13,6 @@ import {
   getCustomerListError
 } from "./actions";
 
-import createNotification from '../../../util/notifications';
-
 //list customer
 
 function getListApi(params) {
@@ -31,7 +29,8 @@ const getCustomerListRequest = async (params) => {
 };
 
 function* getCustomerListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getCustomerListRequest, params);
     switch (response.error_code) {
@@ -45,12 +44,7 @@ function* getCustomerListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;

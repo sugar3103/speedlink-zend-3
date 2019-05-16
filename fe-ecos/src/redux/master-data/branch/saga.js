@@ -75,7 +75,8 @@ const getBranchListRequest = async (params) => {
 };
 
 function* getBranchListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getBranchListRequest, params);
     switch (response.error_code) {
@@ -89,12 +90,7 @@ function* getBranchListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -122,6 +118,7 @@ const addBranchItemRequest = async item => {
 
 function* addBranchItem({ payload }) {
   const { item, messages } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('branch_action_form'));
   try {
     const response = yield call(addBranchItemRequest, item);
@@ -130,11 +127,7 @@ function* addBranchItem({ payload }) {
         yield put(addBranchItemSuccess());
         yield put(getBranchList(null, messages));
         yield put(toggleBranchModal());
-        createNotification({
-          type: 'success', 
-          message: messages['branch.add-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'branch.add-success'});
         break;
 
       case EC_FAILURE:
@@ -142,13 +135,8 @@ function* addBranchItem({ payload }) {
         yield put(validateBranch(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -175,6 +163,7 @@ const updateBranchItemRequest = async item => {
 
 function* updateBranchItem({ payload }) {
   const { item, messages } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('branch_action_form'));
   try {
     const response = yield call(updateBranchItemRequest, item);
@@ -183,11 +172,7 @@ function* updateBranchItem({ payload }) {
         yield put(updateBranchItemSuccess());
         yield put(getBranchList(null, messages));
         yield put(toggleBranchModal());
-        createNotification({
-          type: 'success', 
-          message: messages['branch.update-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'branch.update-success' });
         break;
 
       case EC_FAILURE:
@@ -196,13 +181,8 @@ function* updateBranchItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -229,17 +209,14 @@ const deleteBranchItemRequest = async ids => {
 
 function* deleteBranchItem({ payload }) {
   const { ids, messages } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(deleteBranchItemRequest, ids);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(deleteBranchItemSuccess());
         yield put(getBranchList(null, messages));
-        createNotification({
-          type: 'success', 
-          message: messages['branch.delete-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'branch.delete-success' });
         break;
 
       case EC_FAILURE:
@@ -247,13 +224,8 @@ function* deleteBranchItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -280,7 +252,8 @@ const getCountryListRequest = async (params) => {
 };
 
 function* getCountryBranchListItems({ payload }) {
-  const { params, messages, types } = payload;
+  const { params, types } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getCountryListRequest, params);
     switch (response.error_code) {
@@ -294,12 +267,7 @@ function* getCountryBranchListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -326,7 +294,8 @@ const getCityListRequest = async (params) => {
 };
 
 function* getCityBranchListItems({ payload }) {
-  const { params, messages, types } = payload;
+  const { params, types } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getCityListRequest, params);
     switch (response.error_code) {
@@ -340,12 +309,7 @@ function* getCityBranchListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -372,7 +336,8 @@ const getDistrictListRequest = async (params) => {
 };
 
 function* getDistrictBranchListItems({ payload }) {
-  const { params, messages, types } = payload;
+  const { params, types } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getDistrictListRequest, params);
     switch (response.error_code) {
@@ -386,12 +351,7 @@ function* getDistrictBranchListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -418,7 +378,8 @@ const getWardListRequest = async (params) => {
 };
 
 function* getWardBranchListItems({ payload }) {
-  const { params, messages, types } = payload;
+  const { params, types } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getWardListRequest, params);
     switch (response.error_code) {
@@ -432,12 +393,7 @@ function* getWardBranchListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -464,7 +420,8 @@ const getHubListBranchRequest = async (params) => {
 };
 
 function* getHubListBranchItems({ payload }) {
-  const { params, messages, types } = payload;
+  const { params, types } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getHubListBranchRequest, params);
 
@@ -479,12 +436,7 @@ function* getHubListBranchItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;

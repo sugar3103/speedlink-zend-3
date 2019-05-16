@@ -23,7 +23,6 @@ class ActionForm extends Component {
   }
 
   componentDidMount() {
-    const { messages } = this.props.intl;
     const data = this.props.modalData;
     if (data) {
       this.props.initialize(data);
@@ -35,7 +34,7 @@ class ActionForm extends Component {
           limit: 0
         }
       }
-      this.props.getCountryHubList(paramsCountry, messages, 'editview');
+      this.props.getCountryHubList(paramsCountry, 'editview');
     }
     if (data && data.city_id) {
       let paramsCity = {
@@ -47,7 +46,7 @@ class ActionForm extends Component {
           country: data.country_id
         }
       }
-      this.props.getCityHubList(paramsCity, messages, 'editview');
+      this.props.getCityHubList(paramsCity, 'editview');
     }
   }
 
@@ -60,7 +59,6 @@ class ActionForm extends Component {
   }
 
   onChangeCountry = values => {
-    const { messages } = this.props.intl;
     let params = {
       field: ['id', 'name', 'name_en'],
       offset: {
@@ -70,7 +68,7 @@ class ActionForm extends Component {
         country: values ? values : 0
       }
     }
-    this.props.getCityHubList(params, messages, 'onchange');
+    this.props.getCityHubList(params, 'onchange');
   }
 
   showOptions = (items) => {

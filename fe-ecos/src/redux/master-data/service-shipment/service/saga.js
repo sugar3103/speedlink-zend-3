@@ -60,7 +60,8 @@ const getServiceListRequest = async (params) => {
 };
 
 function* getServiceListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getServiceListRequest, params);
     switch (response.error_code) {
@@ -74,12 +75,7 @@ function* getServiceListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning',
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
 
       default:
@@ -140,21 +136,18 @@ const addServiceItemRequest = async item => {
 };
 
 function* addServiceItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('service_action_form'));
   try {
     const response = yield call(addServiceItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(addServiceItemSuccess());
-        yield put(getServiceList(null, messages));
+        yield put(getServiceList());
         yield put(getServiceCodeList());
         yield put(toggleServiceModal());
-        createNotification({
-          type: 'success',
-          message: messages['service.add-success'],
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'service.add-success' });
         break;
 
       case EC_FAILURE:
@@ -163,13 +156,8 @@ function* addServiceItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning',
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
 
       default:
@@ -195,21 +183,18 @@ const updateServiceItemRequest = async item => {
 };
 
 function* updateServiceItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('service_action_form'));
   try {
     const response = yield call(updateServiceItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(updateServiceItemSuccess());
-        yield put(getServiceList(null, messages));
+        yield put(getServiceList());
         yield put(getServiceCodeList());
         yield put(toggleServiceModal());
-        createNotification({
-          type: 'success',
-          message: messages['service.update-success'],
-          title: messages['notification.success']
-        });
+        createNotification({  type: 'success', message: 'service.update-success' });
         break;
 
       case EC_FAILURE:
@@ -218,13 +203,8 @@ function* updateServiceItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning',
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
 
       default:
@@ -250,18 +230,15 @@ const deleteServiceItemRequest = async id => {
 };
 
 function* deleteServiceItem({ payload }) {
-  const { id, messages } = payload;
+  const { id } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(deleteServiceItemRequest, id);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(deleteServiceItemSuccess());
-        yield put(getServiceList(null, messages));
-        createNotification({
-          type: 'success',
-          message: messages['service.delete-success'],
-          title: messages['notification.success']
-        });
+        yield put(getServiceList());
+        createNotification({ type: 'success', message: 'service.delete-success' });
         break;
 
       case EC_FAILURE:
@@ -269,13 +246,8 @@ function* deleteServiceItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning',
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
 
       default:

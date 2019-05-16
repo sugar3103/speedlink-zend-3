@@ -44,6 +44,9 @@ class DomesticRangeWeightRepository extends EntityRepository
                 s.id as service_id,
                 s.name as service,
                 s.name_en as service_en,
+                st.id as shipment_type_id,
+                st.name as shipment_type,
+                st.name_en as shipment_type_en,
                 z.id as zone_id,        
                 z.name as zone,             
                 z.name_en as zone_en,             
@@ -99,10 +102,49 @@ class DomesticRangeWeightRepository extends EntityRepository
                 'alias' => 'drw.name_en',
                 'operator' => 'contains'
             ],
-            
-            'created_at' => [
-                'alias' => 'drw.created_at',
-                'operator' => 'contains'
+            'category_id' => [
+                'alias' => 'c.id',
+                'operator' => 'eq'
+            ],
+            'carrier_id' => [
+                'alias' => 'ca.id',
+                'operator' => 'eq'
+            ],
+            'service_id' => [
+                'alias' => 's.id',
+                'operator' => 'eq'
+            ],
+            'shipment_type_id' => [
+                'alias' => 'st.id',
+                'operator' => 'eq'
+            ],
+            'status' => [
+                'alias' => 'drw.status',
+                'operator' => 'eq'
+            ],
+            'calculate_unit' => [
+                'alias' => 'drw.calculate_unit',
+                'operator' => 'eq'
+            ],
+            'round_up' => [
+                'alias' => 'drw.round_up',
+                'operator' => 'eq'
+            ],
+            'zone_id' => [
+                'alias' => 'z.id',
+                'operator' => 'eq'
+            ],
+            'is_ras' => [
+                'alias' => 'drw.is_ras',
+                'operator' => 'eq'
+            ],
+            'from' => [
+                'alias' => 'drw.from',
+                'operator' => 'eq'
+            ],
+            'to' => [
+                'alias' => 'drw.to',
+                'operator' => 'eq'
             ]
         ];
 
@@ -119,7 +161,7 @@ class DomesticRangeWeightRepository extends EntityRepository
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
         } else {
-            $queryBuilder->orderBy('da.id', 'DESC');
+            $queryBuilder->orderBy('drw.id', 'DESC');
         }
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }

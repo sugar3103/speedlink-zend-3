@@ -38,7 +38,7 @@ class List extends Component {
     if (this.props.user.paramSearch) {
       Object.assign(params, { "query": this.props.user.paramSearch })
     };
-    this.props.getUserList(params, this.props.history);
+    this.props.getUserList(params);
 
     this.setState({
       currentPage: 1,

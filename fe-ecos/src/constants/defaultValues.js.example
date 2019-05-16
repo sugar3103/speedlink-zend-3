@@ -1,4 +1,4 @@
-export const defaultStartPath = '/app/dashboards'; 
+export const defaultStartPath = '/dashboards'; 
 export const defaultLocale='en';
 export const localeOptions=[
     {id:'en',name:'English'},

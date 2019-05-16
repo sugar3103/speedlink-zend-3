@@ -50,8 +50,8 @@ class List extends Component {
         return (
           <ConfirmPicker
             onClose={onClose}
-            onDelete={() => this.props.deletePermissionItem(ids, messages)}
-            messages ={messages}
+            onDelete={() => this.props.deletePermissionItem(ids)}
+            messages={messages}
           />
         )
       }
@@ -67,7 +67,7 @@ class List extends Component {
       }
     }
 
-    this.props.getPermissionList(params, this.props.history);
+    this.props.getPermissionList(params);
 
     this.setState({
       selectedPageSize: size

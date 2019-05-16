@@ -15,26 +15,32 @@ import MainWrapper from './MainWrapper';
 import Login from '../../routes/auth/login';
 import NotFound from '../../components/NotFound';
 
-const InitialPath = ({ component: Component, authUser, ...rest }) =>
+const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
-    render={props =>
-      authUser
+    render={props => (
+      localStorage.getItem('authUser')
         ? <Component {...props} />
-        : <Redirect
-          to={{
-            pathname: '/login',
-            state: { from: props.location }
-          }}
-        />}
-  />;
+        : <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+  )} />
+);
+
+const PublicRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={props => (
+      !localStorage.getItem('authUser')
+        ? <Component {...props} />
+        : <Redirect to="/" />
+  )} />
+);
 
 class Router extends Component {
   render() {
-    const { location, match, authUser, locale } = this.props;
+    const { location, match, locale } = this.props;
     
     const currentAppLocale = AppLocale[locale];
-    if (location.pathname === '/' || location.pathname === '/app' || location.pathname === '/app/') {
+    if (location.pathname === null || location.pathname === '/') {
       return (<Redirect to={defaultStartPath} />);
     }
     return (
@@ -47,14 +53,9 @@ class Router extends Component {
             <main>
             <NotificationContainer />
               <Switch>
-                <InitialPath
-                  path={`${match.url}app`}
-                  authUser={authUser}
-                  component={MainRoute}
-                />
-                <Route path={`/login`} component={Login} />
-                <Route path={`/error`} component={NotFound} />
-                <Redirect to="/error" />
+                <PublicRoute exact path={`/login`} component={Login} />
+                <Route exact path="/page-not-found" component={NotFound} />
+                <PrivateRoute path={`${match.url}`} component={MainRoute} />
               </Switch>
             </main>
           </MainWrapper>
@@ -64,9 +65,9 @@ class Router extends Component {
   }
 }
 
-const mapStateToProps = ({ settings, authUser }) => {  
+const mapStateToProps = ({ settings }) => {  
   const { locale } = settings;
-  return { authUser, locale };
+  return { locale };
 };
 
 export default withRouter(connect(mapStateToProps, {})(Router));

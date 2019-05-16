@@ -9,13 +9,12 @@ import { MODAL_EDIT, MODAL_ADD, MODAL_VIEW } from '../../../../constants/default
 
 class Action extends Component {
   handleSubmit = values => {
-    const { messages } = this.props.intl;    
     switch (this.props.modalType) {
       case MODAL_ADD:
-        this.props.addServiceItem(values, messages);
+        this.props.addServiceItem(values);
         break;
       case MODAL_EDIT:
-        this.props.updateServiceItem(values, messages);
+        this.props.updateServiceItem(values);
         break;
       case MODAL_VIEW:
         this.props.changeTypeServiceModal(MODAL_EDIT);

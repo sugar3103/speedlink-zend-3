@@ -12,7 +12,7 @@ const ServiceShipment = ({match}) => (
       <Route path={`${match.url}/carrier`} component={Carrier} />
       <Route path={`${match.url}/service`} component={Service} />
       <Route path={`${match.url}/shipment-type`} component={ShipmentType} />
-      <Redirect to="/error" />
+      <Redirect to="/page-not-found" />
     </Switch>
   </Fragment>
 );

@@ -8,7 +8,6 @@ import { getPricingList } from '../../../redux/actions';
 
 class Search extends Component {
   handleSubmit = values => {
-    const { messages } = this.props.intl;
     const params = {
       offset: {
         start: 1,
@@ -16,7 +15,7 @@ class Search extends Component {
       },
       query: values
     }
-    this.props.getPricingList(params, messages);
+    this.props.getPricingList(params);
     
   };
 

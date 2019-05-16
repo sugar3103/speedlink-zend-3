@@ -20,9 +20,9 @@ export const toggleDistrictModal = (type, data) => ({
   payload: { type, data }
 })
 
-export const getDistrictList = (params, messages) => ({
+export const getDistrictList = (params) => ({
   type: DISTRICT_GET_LIST,
-  payload: { params, messages }
+  payload: { params }
 });
 
 export const getDistrictListSuccess = (items, total) => ({
@@ -35,9 +35,9 @@ export const getDistrictListError = (error) => ({
   payload: error
 });
 
-export const addDistrictItem = (item, messages) => ({
+export const addDistrictItem = (item) => ({
   type: DISTRICT_ADD_ITEM,
-  payload: { item, messages }
+  payload: { item }
 });
 
 export const addDistrictItemSuccess = () => ({
@@ -49,9 +49,9 @@ export const addDistrictItemError = (error) => ({
   payload: error
 });
 
-export const updateDistrictItem = (item, messages) => ({
+export const updateDistrictItem = (item) => ({
   type: DISTRICT_UPDATE_ITEM,
-  payload: { item, messages }
+  payload: { item }
 });
 
 export const updateDistrictItemSuccess = () => ({
@@ -63,9 +63,9 @@ export const updateDistrictItemError = (error) => ({
   payload: error
 });
 
-export const deleteDistrictItem = (id, messages) => ({
+export const deleteDistrictItem = (id) => ({
   type: DISTRICT_DELETE_ITEM,
-  payload: { id, messages }
+  payload: { id }
 });
 
 export const deleteDistrictItemSuccess = () => ({

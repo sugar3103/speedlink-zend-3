@@ -25,7 +25,7 @@ class Topbar extends PureComponent {
                 changeMobileSidebarVisibility={changeMobileSidebarVisibility}
                 changeSidebarVisibility={changeSidebarVisibility}
               />
-              <Link className="topbar__logo" to="/app/dashboards" />
+              <Link className="topbar__logo" to="/dashboards" />
             
           </div>
           <span className="topbar__title">Page Title</span>

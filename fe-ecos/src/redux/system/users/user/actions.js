@@ -36,9 +36,9 @@ export const getUserListError = (error) => ({
   payload: error
 });
 
-export const addUserItem = (item,messages) => ({
+export const addUserItem = (item) => ({
   type: USER_ADD_ITEM,
-  payload: {item,messages}
+  payload: { item }
 });
 
 export const addUserItemSuccess = () => ({
@@ -50,9 +50,9 @@ export const addUserItemError = (error) => ({
   payload: error
 });
 
-export const updateUserItem = (item,messages) => ({
+export const updateUserItem = (item) => ({
   type: USER_UPDATE_ITEM,
-  payload: {item,messages}
+  payload: { item }
 });
 
 export const updateUserItemSuccess = () => ({
@@ -83,7 +83,7 @@ export const changeTypeUserModal = (type) => ({
   payload: type
 })
 
-export const uploadAvatarUser = (item, messages) => ({
+export const uploadAvatarUser = (item) => ({
   type: USER_UPLOAD_AVATAR,
-  payload: {item, messages}
+  payload: { item }
 })

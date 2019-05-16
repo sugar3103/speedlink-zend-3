@@ -170,6 +170,8 @@ class DomesticAreaManager {
             $this->entityManager->flush();
             // $last_id = $rangeweight->getBranchId();
             $this->entityManager->commit();
+
+            $this->domesticAreaCityManager->deleteAreaCity($domesticArea->getId());
            
         }
         catch (ORMException $e) {

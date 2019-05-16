@@ -32,19 +32,16 @@ class SearchForm extends Component {
   }
 
   componentDidMount() {
-    const { messages } = this.props.intl;
-        //get customer
-        const paramCustomer = {
-            field: ['id', 'name'],
-            offset: {
-                limit: 0
-            }
+    const paramCustomer = {
+        field: ['id', 'name'],
+        offset: {
+            limit: 0
         }
-    this.props.getCustomerList(paramCustomer, messages, 'onchange');
+    }
+    this.props.getCustomerList(paramCustomer, 'onchange');
   }
   
   onChangeCategory = value => {
-    const { messages } = this.props.intl;
     this.props.change('carrier_id',null);
     this.props.change('service_id',null);
     this.props.change('shipment_type_id',null);
@@ -56,17 +53,16 @@ class SearchForm extends Component {
       type : "carrier_id",
       category_code : value
     }
-    this.props.getCarrierCodeByCondition(params, messages, 'onchange' );
+    this.props.getCarrierCodeByCondition(params, 'onchange' );
     
     params = { ...params, carrier_id: 0 }
-    this.props.getServiceCodeByCondition(params, messages, 'onchange');
+    this.props.getServiceCodeByCondition(params, 'onchange');
 
     params = { ...params, service_id: [0] }
-    this.props.getShipmentTypeCodeByCondition(params, messages, 'onchange');
+    this.props.getShipmentTypeCodeByCondition(params, 'onchange');
   }
 
   onChangeCarrier = value => {
-    const { messages } = this.props.intl;
     this.props.change('service_id',null);
     this.props.change('shipment_type_id',null);
     this.setState({
@@ -77,14 +73,13 @@ class SearchForm extends Component {
       category_code : this.state.category_code,
       carrier_id : value
     }
-    this.props.getServiceCodeByCondition(params, messages, 'onchange');
+    this.props.getServiceCodeByCondition(params, 'onchange');
 
     params = { ...params, service_id: [0] }
-    this.props.getShipmentTypeCodeByCondition(params, messages, 'onchange');
+    this.props.getShipmentTypeCodeByCondition(params, 'onchange');
   }
 
   onChangeService = value => {
-    const { messages } = this.props.intl;
     this.props.change('shipment_type_id',null);
     let params = {
       type : "shipment_type_id",
@@ -92,7 +87,7 @@ class SearchForm extends Component {
       carrier_id : this.state.carrier_id,
       service_id : [ value ] 
     }
-    this.props.getShipmentTypeCodeByCondition(params, messages, 'onchange');
+    this.props.getShipmentTypeCodeByCondition(params, 'onchange');
   }
 
   showOptionCarrier = (items) => {
