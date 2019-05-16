@@ -22,7 +22,6 @@ class Detail extends Component {
   componentDidMount() {
     const { type } = this.props;
     if (type !== 'add') {
-      const { messages } = this.props.intl;
       const { id } = this.props.match.params;
       const params = {
         offset: {
@@ -32,7 +31,7 @@ class Detail extends Component {
           pricing_id: id
         }
       }
-      this.props.getPricingData(params, messages);
+      this.props.getPricingData(params);
     }
   }
 

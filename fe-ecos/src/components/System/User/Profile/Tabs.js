@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Card, Col, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
-import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import Activities from './Activities';
 import Setting from './Setting';
@@ -26,12 +25,11 @@ class Tabs extends PureComponent {
     }
   }
   handleSubmit = values => {
-    const { messages } = this.props.intl;
     if (!Array.isArray(values.roles)) {
       values.roles = values.roles.split(',');
     };
     
-    this.props.updateUserItem(values, messages);
+    this.props.updateUserItem(values);
   }
   render() {
     const { user } = this.props.authUser;
@@ -85,6 +83,6 @@ const mapStateToProps = ({ authUser}) => {
   return { authUser}
 }
 
-export default injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   updateUserItem
-})(Tabs));
+})(Tabs);

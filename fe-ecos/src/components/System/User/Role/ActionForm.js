@@ -182,7 +182,6 @@ class ActionForm extends PureComponent {
                       name="inherit_roles"
                       component={renderMultiSelectField}
                       options={role.items && this.showOptions(role.items)}
-                      messages={messages}
                       disabled={disabled}
                       placeholder={messages['please-select']}
                     />

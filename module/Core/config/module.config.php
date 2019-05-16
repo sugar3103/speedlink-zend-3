@@ -39,36 +39,36 @@ return [
         ],
     ],
 
-    'doctrine' => [
-        'driver' => [
-            __NAMESPACE__ . '_driver' => [
-                'class' => AnnotationDriver::class,
-                'cache' => 'array',
-                'paths' => [
-                    __DIR__ . '/../src/Entity'
-                ]
-            ],
+    // 'doctrine' => [
+    //     'driver' => [
+    //         __NAMESPACE__ . '_driver' => [
+    //             'class' => AnnotationDriver::class,
+    //             'cache' => 'array',
+    //             'paths' => [
+    //                 __DIR__ . '/../src/Entity'
+    //             ]
+    //         ],
 
-            'orm_default' => [
-                'drivers' => [
-                    __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
-                ]
-            ],            
+    //         'orm_default' => [
+    //             'drivers' => [
+    //                 __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
+    //             ]
+    //         ],            
            
-            'orm_report' => [
-                'drivers' => [
-                    __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
-                ]
-            ],
+    //         'orm_report' => [
+    //             'drivers' => [
+    //                 __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
+    //             ]
+    //         ],
 
-            'orm_read_only' => [
-                'drivers' => [
-                    __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
-                ]
-            ]
-        ],
+    //         'orm_read_only' => [
+    //             'drivers' => [
+    //                 __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
+    //             ]
+    //         ]
+    //     ],
         
-    ],
+    // ],
 
     'view_manager' => [
         'display_not_found_reason' => true,

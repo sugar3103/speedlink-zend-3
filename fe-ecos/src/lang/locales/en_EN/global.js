@@ -33,7 +33,6 @@ module.exports = {
     //theme
     'theme.title-setting': 'Theme Customizer',
     'theme.desc-setting': 'Change the theme as you like!',
-    'theme.dark-theme': 'Dark Theme',
 
     //layout
     'layout.locale-vie': 'Vietnamese',

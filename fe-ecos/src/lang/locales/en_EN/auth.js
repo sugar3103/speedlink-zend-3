@@ -11,8 +11,8 @@ module.exports = {
   'login.login-again': 'Please login again to countinue',
   'login.username-error-empty': 'Username field shouldn’t be empty',
   'login.password-error-empty': 'Password field shouldn’t be empty',
+  'login.login-false': 'Incorrect username or password',
 
-  
   //User
   'user.avatar': 'Avatar',
   'user.list': 'User',

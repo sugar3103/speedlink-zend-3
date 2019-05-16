@@ -41,7 +41,6 @@ class ActionForm extends Component {
 
   componentDidMount() {
     let data = this.props.modalData;
-    const { messages } = this.props.intl;
     const paramCustomer = {
       field: ['id', 'name'],
       offset: {
@@ -50,7 +49,7 @@ class ActionForm extends Component {
     }
     if (data) {
       this.props.initialize(data);
-      this.props.getCustomerList(paramCustomer, messages);
+      this.props.getCustomerList(paramCustomer);
       if(data.is_private === 2 && this.props.modalType !=='view')
       {
         this.setState({
@@ -78,7 +77,7 @@ class ActionForm extends Component {
         type : "carrier_id",
         category_code : data.category
       }
-      this.props.getCarrierCodeByCondition(paramsCarier, messages, 'editview');
+      this.props.getCarrierCodeByCondition(paramsCarier, 'editview');
     }
 
     if (data && data.service_id) {
@@ -87,7 +86,7 @@ class ActionForm extends Component {
         carrier_id : data.carrier_id,
         category_code :  data.category
       }
-      this.props.getServiceCodeByCondition(paramsCity, messages, 'editview');
+      this.props.getServiceCodeByCondition(paramsCity, 'editview');
     }
 
     if (data && data.shipment_type_id) {
@@ -97,7 +96,7 @@ class ActionForm extends Component {
         carrier_id :  data.carrier_id,
         service_id : [ data.service_id ]
       }
-      this.props.getShipmentTypeCodeByCondition(paramsShipmenttype, messages, 'editview');
+      this.props.getShipmentTypeCodeByCondition(paramsShipmenttype, 'editview');
     }
 
   }
@@ -148,7 +147,6 @@ class ActionForm extends Component {
    }
   
   onChangeCategory = value => {
-    const { messages } = this.props.intl;
     this.setState({
       category_code: value
     });
@@ -156,17 +154,16 @@ class ActionForm extends Component {
       type : "carrier_id",
       category_code : value
     }
-    this.props.getCarrierCodeByCondition(params, messages, 'onchange');
+    this.props.getCarrierCodeByCondition(params, 'onchange');
     
     params = { ...params, carrier_id: 0 }
-    this.props.getServiceCodeByCondition(params, messages, 'onchange');
+    this.props.getServiceCodeByCondition(params, 'onchange');
     
     params = { ...params, service_id: [0] }
-    this.props.getShipmentTypeCodeByCondition(params, messages, 'onchange');
+    this.props.getShipmentTypeCodeByCondition(params, 'onchange');
   }
 
   onChangeCarrier = value => {
-    const { messages } = this.props.intl;
     this.setState({
       carrier_id: value
     });
@@ -175,21 +172,20 @@ class ActionForm extends Component {
       carrier_id : value,
       category_code : this.state.category_code
     }
-    this.props.getServiceCodeByCondition(params, messages, 'onchange');
+    this.props.getServiceCodeByCondition(params, 'onchange');
     
     params = { ...params, service_id: [0] }
-    this.props.getShipmentTypeCodeByCondition(params, messages, 'onchange');
+    this.props.getShipmentTypeCodeByCondition(params, 'onchange');
   }
 
   onChangeService = value => {
-    const { messages } = this.props.intl;
     let params = {
       type : "shipment_type_id",
       category_code : this.state.category_code,
       carrier_id : this.state.carrier_id,
       service_id : [ value ] 
     }
-    this.props.getShipmentTypeCodeByCondition(params, messages, 'onchange');
+    this.props.getShipmentTypeCodeByCondition(params, 'onchange');
   }
 
   showOptionCarrier = (items) => {

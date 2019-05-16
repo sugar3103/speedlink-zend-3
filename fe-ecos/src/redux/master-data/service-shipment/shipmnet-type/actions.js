@@ -63,9 +63,9 @@ export const getShipmentTypeCodeListError = (error) => ({
   payload: error
 });
 
-export const addShipmentTypeItem = (item, messages) => ({
+export const addShipmentTypeItem = (item) => ({
   type: SHIPMENT_TYPE_ADD_ITEM,
-  payload: { item, messages }
+  payload: { item }
 });
 
 export const addShipmentTypeItemSuccess = () => ({
@@ -77,9 +77,9 @@ export const addShipmentTypeItemError = (error) => ({
   payload: error
 });
 
-export const updateShipmentTypeItem = (item, messages) => ({
+export const updateShipmentTypeItem = (item) => ({
   type: SHIPMENT_TYPE_UPDATE_ITEM,
-  payload: { item, messages }
+  payload: { item }
 });
 
 export const updateShipmentTypeItemSuccess = () => ({
@@ -91,9 +91,9 @@ export const updateShipmentTypeItemError = (error) => ({
   payload: error
 });
 
-export const deleteShipmentTypeItem = (id, messages) => ({
+export const deleteShipmentTypeItem = (id) => ({
   type: SHIPMENT_TYPE_DELETE_ITEM,
-  payload: { id, messages }
+  payload: { id }
 });
 
 export const deleteShipmentTypeItemSuccess = () => ({
@@ -111,9 +111,9 @@ export const changeTypeShipmentTypeModal = (type) => ({
 })
 
 /* GET LIST CARRIER OF SHIPMENT TYPE */
-export const getCarrierShipmentList = (params, messages) => ({
+export const getCarrierShipmentList = (params) => ({
   type: SHIPMENT_TYPE_CARRIER_GET_LIST,
-  payload: { params, messages }
+  payload: { params }
 });
 
 export const getCarrierShipmentListSuccess = (carriers) => ({

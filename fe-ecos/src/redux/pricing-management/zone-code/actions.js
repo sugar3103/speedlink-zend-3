@@ -48,9 +48,9 @@ export const changeTypeZoneCodeModal = (type) => ({
   payload: type
 })
 
-export const getZoneCodeList = (params, messages) => ({
+export const getZoneCodeList = (params) => ({
   type: ZONE_CODE_GET_LIST,
-  payload: { params, messages }
+  payload: { params }
 });
 
 export const getZoneCodeListSuccess = (items, total) => ({
@@ -63,9 +63,9 @@ export const getZoneCodeListError = (error) => ({
   payload: error
 });
 
-export const addZoneCodeItem = (item, messages) => ({
+export const addZoneCodeItem = (item) => ({
   type: ZONE_CODE_ADD_ITEM,
-  payload: { item, messages }
+  payload: { item }
 });
 
 export const addZoneCodeItemSuccess = () => ({
@@ -77,9 +77,9 @@ export const addZoneCodeItemError = (error) => ({
   payload: error
 });
 
-export const updateZoneCodeItem = (item, messages) => ({
+export const updateZoneCodeItem = (item) => ({
   type: ZONE_CODE_UPDATE_ITEM,
-  payload: { item, messages }
+  payload: { item }
 });
 
 export const updateZoneCodeItemSuccess = () => ({
@@ -91,9 +91,9 @@ export const updateZoneCodeItemError = (error) => ({
   payload: error
 });
 
-export const deleteZoneCodeItem = (ids, messages) => ({
+export const deleteZoneCodeItem = (ids) => ({
   type: ZONE_CODE_DELETE_ITEM,
-  payload: { ids, messages }
+  payload: { ids }
 });
 
 export const deleteZoneCodeItemSuccess = () => ({
@@ -105,9 +105,9 @@ export const deleteZoneCodeItemError = (error) => ({
   payload: error
 });
 
-export const getDestinationCountryList = (params, messages, types) => ({
+export const getDestinationCountryList = (params, types) => ({
   type: DESTINATION_COUNTRY_GET_LIST,
-  payload: { params, messages, types }
+  payload: { params, types }
 });
 
 export const getDestinationCountryListSuccess = (destination_country, types) => ({
@@ -120,9 +120,9 @@ export const getDestinationCountryListError = (error) => ({
   payload: error
 });
 
-export const getDestinationCityList = (params, messages, types) => ({
+export const getDestinationCityList = (params, types) => ({
   type: DESTINATION_CITY_GET_LIST,
-  payload: { params, messages, types }
+  payload: { params, types }
 });
 
 export const getDestinationCityListSuccess = (destination_city, types) => ({
@@ -135,9 +135,9 @@ export const getDestinationCityListError = (error) => ({
   payload: error
 });
 
-export const getDestinationDistrictList = (params, messages, types) => ({
+export const getDestinationDistrictList = (params, types) => ({
   type: DESTINATION_DISTRICT_GET_LIST,
-  payload: { params, messages, types }
+  payload: { params, types }
 });
 
 export const getDestinationDistrictListSuccess = (destination_district, types) => ({
@@ -150,9 +150,9 @@ export const getDestinationDistrictListError = (error) => ({
   payload: error
 });
 
-export const getDestinationWardList = (params, messages, types) => ({
+export const getDestinationWardList = (params, types) => ({
   type: DESTINATION_WARD_GET_LIST,
-  payload: { params, messages, types }
+  payload: { params, types }
 });
 
 export const getDestinationWardListSuccess = (destination_ward, types) => ({
@@ -165,9 +165,9 @@ export const getDestinationWardListError = (error) => ({
   payload: error
 });
 
-export const getCarrierCodeZoneCodeByCondition = (params, messages, types) => ({
+export const getCarrierCodeZoneCodeByCondition = (params, types) => ({
   type: CARRIER_GET_CODE_ZONE_CODE_BY_CONDITION,
-  payload: { params, messages, types }
+  payload: { params, types }
 });
 
 export const getCarrierCodeZoneCodeByConditionSuccess = ( CarrierCodeZoneCodeByCondition) => ({
@@ -180,9 +180,9 @@ export const getCarrierCodeZoneCodeByConditionError = (error) => ({
   payload: error
 });
 
-export const getServiceCodeZoneCodeByCondition = (params, messages, types) => ({
+export const getServiceCodeZoneCodeByCondition = (params, types) => ({
   type: SERVICE_GET_CODE_ZONE_CODE_BY_CONDITION,
-  payload: { params, messages, types }
+  payload: { params, types }
 });
 
 export const getServiceCodeZoneCodeByConditionSuccess = (ServiceCodeZoneCodeByCondition) => ({
@@ -195,9 +195,9 @@ export const getServiceCodeZoneCodeByConditionError = (error) => ({
   payload: error
 });
 
-export const getShipmentTypeCodeZoneCodeByCondition = (params, messages, types) => ({
+export const getShipmentTypeCodeZoneCodeByCondition = (params, types) => ({
   type: SHIPMENT_TYPE_GET_CODE_ZONE_CODE_BY_CONDITION,
-  payload: { params, messages, types }
+  payload: { params, types }
 });
 
 export const getShipmentTypeCodeZoneCodeByConditionSuccess = (ShipmentCodeZoneCodeByCondition) => ({

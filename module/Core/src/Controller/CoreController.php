@@ -37,6 +37,8 @@ class CoreController extends ApiController
                 $params = $this->getRequest()->getPost() ? (array) $this->getRequest()->getPost() : array();                
                 $params = $this->getRequest()->getFiles() ? array_merge($params, (array)$this->getRequest()->getFiles()) : $params;
             }
+
+            
             
             if(!empty($fieldsMap)) {
                 //the current page number.

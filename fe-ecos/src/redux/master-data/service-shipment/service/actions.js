@@ -53,9 +53,9 @@ export const getServiceCodeListError = (error) => ({
   payload: error
 });
 
-export const addServiceItem = (item, messages) => ({
+export const addServiceItem = (item) => ({
   type: SERVICE_ADD_ITEM,
-  payload: { item, messages }
+  payload: { item }
 });
 
 export const addServiceItemSuccess = () => ({
@@ -67,9 +67,9 @@ export const addServiceItemError = (error) => ({
   payload: error
 });
 
-export const updateServiceItem = (item, messages) => ({
+export const updateServiceItem = (item) => ({
   type: SERVICE_UPDATE_ITEM,
-  payload: { item, messages }
+  payload: { item }
 });
 
 export const updateServiceItemSuccess = () => ({
@@ -81,9 +81,9 @@ export const updateServiceItemError = (error) => ({
   payload: error
 });
 
-export const deleteServiceItem = (id, messages) => ({
+export const deleteServiceItem = (id) => ({
   type: SERVICE_DELETE_ITEM,
-  payload: { id, messages }
+  payload: { id }
 });
 
 export const deleteServiceItemSuccess = () => ({

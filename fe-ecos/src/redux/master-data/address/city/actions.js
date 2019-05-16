@@ -20,9 +20,9 @@ export const toggleCityModal = (type, data) => ({
   payload: { type, data }
 })
 
-export const getCityList = (params, messages) => ({
+export const getCityList = (params) => ({
   type: CITY_GET_LIST,
-  payload: { params, messages }
+  payload: { params }
 });
 
 export const getCityListSuccess = (items, total) => ({
@@ -35,9 +35,9 @@ export const getCityListError = (error) => ({
   payload: error
 });
 
-export const addCityItem = (item, messages) => ({
+export const addCityItem = (item) => ({
   type: CITY_ADD_ITEM,
-  payload: { item, messages }
+  payload: { item }
 });
 
 export const addCityItemSuccess = () => ({
@@ -49,9 +49,9 @@ export const addCityItemError = (error) => ({
   payload: error
 });
 
-export const updateCityItem = (item, messages) => ({
+export const updateCityItem = (item) => ({
   type: CITY_UPDATE_ITEM,
-  payload: { item, messages }
+  payload: { item }
 });
 
 export const updateCityItemSuccess = () => ({
@@ -63,9 +63,9 @@ export const updateCityItemError = (error) => ({
   payload: error
 });
 
-export const deleteCityItem = (id, messages) => ({
+export const deleteCityItem = (id) => ({
   type: CITY_DELETE_ITEM,
-  payload: { id, messages }
+  payload: { id }
 });
 
 export const deleteCityItemSuccess = () => ({

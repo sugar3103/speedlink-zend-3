@@ -49,8 +49,8 @@ class List extends Component {
         return (
           <ConfirmPicker
             onClose={onClose}
-            onDelete={() => this.props.deleteRoleItem(ids, messages)}
-            messages ={messages}
+            onDelete={() => this.props.deleteRoleItem(ids)}
+            messages={messages}
           />
         )
       }
@@ -69,7 +69,7 @@ class List extends Component {
     if (this.props.role.paramSearch) {
       Object.assign(params, { "query": this.props.role.paramSearch })
     };
-    this.props.getRoleList(params, this.props.history);
+    this.props.getRoleList(params);
 
     this.setState({
       selectedPageSize: size

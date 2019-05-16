@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Zend\Authentication\Adapter\Ldap;
 use Zend\Authentication\Result;
 use Zend\Crypt\Password\Bcrypt;
-use Core\Entity\Setting;
+use System\Entity\Setting;
 
 /**
  * Class AuthAdapter

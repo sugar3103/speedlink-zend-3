@@ -62,7 +62,8 @@ const getRangeWeightListRequest = async (params) => {
 };
 
 function* getRangeWeightListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getRangeWeightListRequest, params);
     switch (response.error_code) {
@@ -76,12 +77,7 @@ function* getRangeWeightListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -108,20 +104,17 @@ const addRangeWeightItemRequest = async item => {
 };
 
 function* addRangeWeightItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('range_weight_action_form'));
   try {
     const response = yield call(addRangeWeightItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(addRangeWeightItemSuccess());
-        yield put(getRangeWeightList(null, messages));
+        yield put(getRangeWeightList());
         yield put(toggleRangeWeightModal());
-        createNotification({
-          type: 'success', 
-          message: messages['range_weight.add-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'range_weight.add-success' });
         break;
 
       case EC_FAILURE:
@@ -129,13 +122,8 @@ function* addRangeWeightItem({ payload }) {
         yield put(validateRangeWeight(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -161,20 +149,17 @@ const updateRangeWeightItemRequest = async item => {
 };
 
 function* updateRangeWeightItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('range_weight_action_form'));
   try {
     const response = yield call(updateRangeWeightItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(updateRangeWeightItemSuccess());
-        yield put(getRangeWeightList(null, messages));
+        yield put(getRangeWeightList());
         yield put(toggleRangeWeightModal());
-        createNotification({
-          type: 'success', 
-          message: messages['range_weight.update-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'range_weight.update-success' });
         break;
 
       case EC_FAILURE:
@@ -183,13 +168,8 @@ function* updateRangeWeightItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -215,18 +195,15 @@ const deleteRangeWeightItemRequest = async ids => {
 };
 
 function* deleteRangeWeightItem({ payload }) {
-  const { ids, messages } = payload;
+  const { ids } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(deleteRangeWeightItemRequest, ids);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(deleteRangeWeightItemSuccess());
-        yield put(getRangeWeightList(null, messages));
-        createNotification({
-          type: 'success', 
-          message: messages['range_weight.delete-success'], 
-          title: messages['notification.success']
-        });
+        yield put(getRangeWeightList());
+        createNotification({ type: 'success', message: 'range_weight.delete-success'});
         break;
 
       case EC_FAILURE:
@@ -234,13 +211,8 @@ function* deleteRangeWeightItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -265,7 +237,8 @@ const getShipmentTypeCodeByConditionRequest = async (params) => {
 };
 
 function* getShipmentTypeCodeByCondition({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getShipmentTypeCodeByConditionRequest, params);
     switch (response.error_code) {
@@ -278,13 +251,8 @@ function* getShipmentTypeCodeByCondition({ payload }) {
         break;
       
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning',
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
 
       default:
@@ -297,7 +265,8 @@ function* getShipmentTypeCodeByCondition({ payload }) {
 }
 
 function* getCarrierCodeByCondition({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getShipmentTypeCodeByConditionRequest, params);
     switch (response.error_code) {
@@ -310,13 +279,8 @@ function* getCarrierCodeByCondition({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning',
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
 
       default:
@@ -329,7 +293,8 @@ function* getCarrierCodeByCondition({ payload }) {
 }
 
 function* getServiceCodeByCondition({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getShipmentTypeCodeByConditionRequest, params);
     switch (response.error_code) {
@@ -342,13 +307,8 @@ function* getServiceCodeByCondition({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning',
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
 
       default:

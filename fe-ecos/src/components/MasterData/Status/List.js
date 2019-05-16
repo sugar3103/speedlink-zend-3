@@ -42,8 +42,8 @@ class List extends Component {
         return (
           <ConfirmPicker
             onClose={onClose}
-            onDelete={() => this.props.deleteStatusItem(ids, messages)}
-            messages ={messages}
+            onDelete={() => this.props.deleteStatusItem(ids)}
+            messages={messages}
           />
         )
       }
@@ -51,7 +51,6 @@ class List extends Component {
   }
 
   onChangePageSize = (size) => {
-    const { messages } = this.props.intl;
     size = parseInt(size, 10);
     let params = {
       offset: {
@@ -63,7 +62,7 @@ class List extends Component {
     if (this.props.status.paramSearch) {
       Object.assign(params, { "query": this.props.status.paramSearch })
     };
-    this.props.getStatusList(params, messages);
+    this.props.getStatusList(params);
 
     this.setState({
       currentPage: 1,
@@ -72,7 +71,6 @@ class List extends Component {
   }
 
   onChangePage = (page) => {
-    const { messages } = this.props.intl;
     let params = {
       offset: {
         start: parseInt(page, 10),
@@ -83,7 +81,7 @@ class List extends Component {
     if (this.props.status.paramSearch) {
       Object.assign(params, { "query": this.props.status.paramSearch })
     };
-    this.props.getStatusList(params, messages);
+    this.props.getStatusList(params);
 
     this.setState({
       currentPage: page
@@ -162,7 +160,7 @@ class List extends Component {
           Header: messages['created-at'],
           accessor: "created_at",
           className: "text-center",
-          Cell: ({ original }) => { return (<Moment fromNow format="D/MM/YYYY" locale={locale}>{new Date(original.created_at)}</Moment>) },
+          Cell: ({ original }) => { return (<Moment fromNow format="DD/MM/YYYY" locale={locale}>{new Date(original.created_at)}</Moment>) },
           sortable: false,
         },
         {

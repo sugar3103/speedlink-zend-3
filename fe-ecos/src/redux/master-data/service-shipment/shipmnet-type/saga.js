@@ -65,7 +65,8 @@ const getShipmentTypeListRequest = async (params) => {
 };
 
 function* getShipmentTypeListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getShipmentTypeListRequest, params);
     switch (response.error_code) {
@@ -79,12 +80,7 @@ function* getShipmentTypeListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning',
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
 
       default:
@@ -145,21 +141,18 @@ const addShipmentTypeItemRequest = async item => {
 };
 
 function* addShipmentTypeItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('shipment_type_action_form'));
   try {
     const response = yield call(addShipmentTypeItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(addShipmentTypeItemSuccess());
-        yield put(getShipmentTypeList(null, messages));
+        yield put(getShipmentTypeList());
         yield put(getShipmentTypeCodeList());
         yield put(toggleShipmentTypeModal());
-        createNotification({
-          type: 'success',
-          message: messages['shipment_type.add-success'],
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'shipment_type.add-success' });
         break;
 
       case EC_FAILURE:
@@ -168,13 +161,8 @@ function* addShipmentTypeItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning',
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
 
       default:
@@ -200,21 +188,18 @@ const updateShipmentTypeItemRequest = async item => {
 };
 
 function* updateShipmentTypeItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('shipment_type_action_form'));
   try {
     const response = yield call(updateShipmentTypeItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(updateShipmentTypeItemSuccess());
-        yield put(getShipmentTypeList(null, messages));
+        yield put(getShipmentTypeList());
         yield put(getShipmentTypeCodeList());
         yield put(toggleShipmentTypeModal());
-        createNotification({
-          type: 'success',
-          message: messages['shipment_type.update-success'],
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'shipment_type.update-success' });
         break;
 
       case EC_FAILURE:
@@ -223,13 +208,8 @@ function* updateShipmentTypeItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning',
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
 
       default:
@@ -255,18 +235,15 @@ const deleteShipmentTypeItemRequest = async id => {
 };
 
 function* deleteShipmentTypeItem({ payload }) {
-  const { id, messages } = payload;
+  const { id } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(deleteShipmentTypeItemRequest, id);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(deleteShipmentTypeItemSuccess());
-        yield put(getShipmentTypeList(null, messages));
-        createNotification({
-          type: 'success',
-          message: messages['shipment_type.delete-success'],
-          title: messages['notification.success']
-        });
+        yield put(getShipmentTypeList());
+        createNotification({ type: 'success', message: 'shipment_type.delete-success' });
         break;
 
       case EC_FAILURE:
@@ -274,13 +251,8 @@ function* deleteShipmentTypeItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning',
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
 
       default:
@@ -309,7 +281,8 @@ const getCodeByConditionListRequest = async (params) => {
 /* GET CARRIER SHIPMENT TYPE LIST */
 
 function* getCarrierShipmentListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getCodeByConditionListRequest, params);
     switch (response.error_code) {
@@ -323,12 +296,7 @@ function* getCarrierShipmentListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;

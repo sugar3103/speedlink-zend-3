@@ -57,7 +57,8 @@ const getDistrictListRequest = async (params) => {
 };
 
 function* getDistrictListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getDistrictListRequest, params);
     switch (response.error_code) {
@@ -71,12 +72,7 @@ function* getDistrictListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -103,20 +99,17 @@ const addDistrictItemRequest = async item => {
 };
 
 function* addDistrictItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('district_action_form'));
   try {
     const response = yield call(addDistrictItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(addDistrictItemSuccess());
-        yield put(getDistrictList(null, messages));
+        yield put(getDistrictList());
         yield put(toggleDistrictModal());
-        createNotification({
-          type: 'success', 
-          message: messages['district.add-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'district.add-success' });
         break;
 
       case EC_FAILURE:
@@ -124,13 +117,8 @@ function* addDistrictItem({ payload }) {
         yield put(validateDistrict(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -156,20 +144,17 @@ const updateDistrictItemRequest = async item => {
 };
 
 function* updateDistrictItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('district_action_form'));
   try {
     const response = yield call(updateDistrictItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(updateDistrictItemSuccess());
-        yield put(getDistrictList(null, messages));
+        yield put(getDistrictList());
         yield put(toggleDistrictModal());
-        createNotification({
-          type: 'success', 
-          message: messages['district.update-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'district.update-success' });
         break;
 
       case EC_FAILURE:
@@ -178,13 +163,8 @@ function* updateDistrictItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -210,18 +190,15 @@ const deleteDistrictItemRequest = async id => {
 };
 
 function* deleteDistrictItem({ payload }) {
-  const { id, messages } = payload;
+  const { id } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(deleteDistrictItemRequest, id);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(deleteDistrictItemSuccess());
-        yield put(getDistrictList(null, messages));
-        createNotification({
-          type: 'success', 
-          message: messages['district.delete-success'], 
-          title: messages['notification.success']
-        });
+        yield put(getDistrictList());
+        createNotification({ type: 'success',  message: 'district.delete-success' });
         break;
 
       case EC_FAILURE:
@@ -229,13 +206,8 @@ function* deleteDistrictItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;

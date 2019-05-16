@@ -3,7 +3,6 @@ import { Modal } from 'reactstrap';
 import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
 import { addUserItem, updateUserItem, toggleUserModal,changeTypeUserModal } from '../../../redux/actions';
-import { injectIntl } from 'react-intl';
 import { MODAL_EDIT, MODAL_ADD, MODAL_VIEW } from '../../../constants/defaultValues';
 import PropTypes from 'prop-types';
 class Action extends Component {
@@ -12,15 +11,14 @@ class Action extends Component {
     if (!Array.isArray(values.roles) && values.roles) {
       values.roles = values.roles.split(',');
     } 
-    const { messages } = this.props.intl;
     const { modalType } = this.props;
 
     switch (modalType) {
       case MODAL_ADD:
-        this.props.addUserItem(values, messages);
+        this.props.addUserItem(values);
         break;
       case MODAL_EDIT:
-        this.props.updateUserItem(values, messages);
+        this.props.updateUserItem(values);
         break;
       case MODAL_VIEW:
         this.props.changeTypeUserModal(MODAL_EDIT);
@@ -76,9 +74,9 @@ const mapStateToProps = ({users}) => {
   }
 }
 
-export default injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   addUserItem,
   updateUserItem,
   toggleUserModal,
   changeTypeUserModal
-})(Action));
+})(Action);

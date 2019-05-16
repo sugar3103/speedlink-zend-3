@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { injectIntl } from 'react-intl';
 import { Modal } from 'reactstrap';
 import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
@@ -9,13 +8,12 @@ import { MODAL_EDIT, MODAL_ADD, MODAL_VIEW } from '../../../../constants/default
 class Action extends Component {
 
   handleSubmit = values => {
-    const { messages } = this.props.intl;    
     switch (this.props.modalType) {
       case MODAL_ADD:
-        this.props.addWardItem(values, messages);
+        this.props.addWardItem(values);
         break;
       case MODAL_EDIT:
-        this.props.updateWardItem(values, messages);
+        this.props.updateWardItem(values);
         break;
       case MODAL_VIEW:
         this.props.changeTypeWardModal(MODAL_EDIT);
@@ -72,9 +70,9 @@ const mapStateToProps = ({address}) => {
   }
 }
 
-export default injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   addWardItem,
   updateWardItem,
   toggleWardModal,
   changeTypeWardModal
-})(Action));
+})(Action);

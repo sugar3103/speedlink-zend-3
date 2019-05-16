@@ -4,9 +4,9 @@ import {
   CODE_GET_LIST_ERROR,
 } from '../../../../constants/actionTypes';
 
-export const getCodeList = (params, messages) => ({
+export const getCodeList = (params) => ({
   type: CODE_GET_LIST,
-  payload: { params, messages }
+  payload: { params }
 });
 
 export const getCodeListSuccess = (items, total) => ({

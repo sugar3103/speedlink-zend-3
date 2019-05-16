@@ -20,9 +20,9 @@ export const toggleWardModal = (type, data) => ({
   payload: { type, data }
 })
 
-export const getWardList = (params, messages) => ({
+export const getWardList = (params) => ({
   type: WARD_GET_LIST,
-  payload: { params, messages }
+  payload: { params }
 });
 
 export const getWardListSuccess = (items, total) => ({
@@ -35,9 +35,9 @@ export const getWardListError = (error) => ({
   payload: error
 });
 
-export const addWardItem = (item, messages) => ({
+export const addWardItem = (item) => ({
   type: WARD_ADD_ITEM,
-  payload: { item, messages }
+  payload: { item }
 });
 
 export const addWardItemSuccess = () => ({
@@ -49,9 +49,9 @@ export const addWardItemError = (error) => ({
   payload: error
 });
 
-export const updateWardItem = (item, messages) => ({
+export const updateWardItem = (item) => ({
   type: WARD_UPDATE_ITEM,
-  payload: { item, messages }
+  payload: { item }
 });
 
 export const updateWardItemSuccess = () => ({
@@ -63,9 +63,9 @@ export const updateWardItemError = (error) => ({
   payload: error
 });
 
-export const deleteWardItem = (id, messages) => ({
+export const deleteWardItem = (id) => ({
   type: WARD_DELETE_ITEM,
-  payload: { id, messages }
+  payload: { id }
 });
 
 export const deleteWardItemSuccess = () => ({

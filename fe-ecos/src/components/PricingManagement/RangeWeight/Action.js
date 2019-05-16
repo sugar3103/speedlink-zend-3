@@ -10,14 +10,13 @@ import { MODAL_EDIT, MODAL_ADD, MODAL_VIEW } from '../../../constants/defaultVal
 
 class Action extends Component {
   handleSubmit = values => {
-    const { messages } = this.props.intl;
     const { modalType } = this.props;
     switch (modalType) {
       case MODAL_ADD:
-        this.props.addRangeWeightItem(values, messages);
+        this.props.addRangeWeightItem(values);
         break;
       case MODAL_EDIT:
-        this.props.updateRangeWeightItem(values, messages);
+        this.props.updateRangeWeightItem(values);
         break;
       case MODAL_VIEW:
         this.props.changeTypeRangeWeightModal(MODAL_EDIT);

@@ -28,7 +28,6 @@ const renderVasItems = ({ fields, meta: { submitFailed, error }, pricing_data_id
 class PricingVas extends Component {
 
     componentWillMount() {
-        const { messages } = this.props.intl;
         const params = {
             offset: {
                 limit: 0
@@ -37,7 +36,7 @@ class PricingVas extends Component {
                 pricing_data_id: this.props.pricing_data_id
             }
         }
-        this.props.getPricingVas(params, messages);
+        this.props.getPricingVas(params);
     }
 
     render() {

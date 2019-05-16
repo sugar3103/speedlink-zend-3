@@ -11,7 +11,7 @@ const PricingManagement = ({ match }) => (
           <Route exact path={`${match.url}/add`} render={() => <PricingDetail type="add" />} />     
           <Route exact path={`${match.url}/edit/:id`} render={() => <PricingDetail type="edit" />} />     
           <Route exact path={`${match.url}/view/:id`} render={() => <PricingDetail type="view" />} />     
-          <Redirect to="/error" />
+          <Redirect to="/page-not-found" />
       </Switch>
   </Fragment>
 );

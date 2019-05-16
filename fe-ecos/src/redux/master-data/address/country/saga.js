@@ -42,7 +42,8 @@ const getCountryListRequest = async (params) => {
 };
 
 function* getCountryListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getCountryListRequest, params);
     switch (response.error_code) {
@@ -56,12 +57,7 @@ function* getCountryListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -88,32 +84,24 @@ const addCountryItemRequest = async item => {
 };
 
 function* addCountryItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(addCountryItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(addCountryItemSuccess());
-        yield put(getCountryList(null, messages));
+        yield put(getCountryList());
         yield put(toggleCountryModal());
-        createNotification({
-          type: 'success', 
-          message: messages['country.add-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'country.add-success' });
         break;
 
       case EC_FAILURE:
         yield put(addCountryItemError(response.message));
         break;
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -139,20 +127,16 @@ const updateCountryItemRequest = async item => {
 };
 
 function* updateCountryItem({ payload }) {
-  const { item, messages } = payload;
-  
+  const { item } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(updateCountryItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(updateCountryItemSuccess());
-        yield put(getCountryList(null, messages));
+        yield put(getCountryList());
         yield put(toggleCountryModal());
-        createNotification({
-          type: 'success', 
-          message: messages['country.update-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'country.update-success' });
         break;
 
       case EC_FAILURE:
@@ -160,13 +144,8 @@ function* updateCountryItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -192,18 +171,15 @@ const deleteCountryItemRequest = async id => {
 };
 
 function* deleteCountryItem({ payload }) {
-  const { id, messages } = payload;
+  const { id } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(deleteCountryItemRequest, id);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(deleteCountryItemSuccess());
-        yield put(getCountryList(null, messages));
-        createNotification({
-          type: 'success', 
-          message: messages['country.delete-success'], 
-          title: messages['notification.success']
-        });
+        yield put(getCountryList());
+        createNotification({ type: 'success',  message: 'country.delete-success' });
         break;
 
       case EC_FAILURE:
@@ -211,13 +187,8 @@ function* deleteCountryItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;

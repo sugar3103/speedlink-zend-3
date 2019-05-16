@@ -66,7 +66,8 @@ const getCarrierListRequest = async (params) => {
 };
 
 function* getCarrierListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(getCarrierListRequest, params);
     switch (response.error_code) {
@@ -80,12 +81,7 @@ function* getCarrierListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning',
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
 
       default:
@@ -146,21 +142,18 @@ const addCarrierItemRequest = async item => {
 };
 
 function* addCarrierItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('carrier_action_form'));
   try {
     const response = yield call(addCarrierItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(addCarrierItemSuccess());
-        yield put(getCarrierList(null, messages));
+        yield put(getCarrierList());
         yield put(getCarrierCodeList());
         yield put(toggleCarrierModal());
-        createNotification({
-          type: 'success',
-          message: messages['carrier.add-success'],
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'carrier.add-success' });
         break;
 
       case EC_FAILURE:
@@ -169,13 +162,8 @@ function* addCarrierItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning',
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
 
       default:
@@ -201,21 +189,18 @@ const updateCarrierItemRequest = async item => {
 };
 
 function* updateCarrierItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   yield put(startSubmit('carrier_action_form'));
   try {
     const response = yield call(updateCarrierItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(updateCarrierItemSuccess());
-        yield put(getCarrierList(null, messages));
+        yield put(getCarrierList());
         yield put(getCarrierCodeList());
         yield put(toggleCarrierModal());
-        createNotification({
-          type: 'success',
-          message: messages['carrier.update-success'],
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'carrier.update-success'});
         break;
 
       case EC_FAILURE:
@@ -224,13 +209,8 @@ function* updateCarrierItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning',
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
 
       default:
@@ -256,18 +236,15 @@ const deleteCarrierItemRequest = async id => {
 };
 
 function* deleteCarrierItem({ payload }) {
-  const { id, messages } = payload;
+  const { id } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(deleteCarrierItemRequest, id);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(deleteCarrierItemSuccess());
-        yield put(getCarrierList(null, messages));
-        createNotification({
-          type: 'success',
-          message: messages['carrier.delete-success'],
-          title: messages['notification.success']
-        });
+        yield put(getCarrierList());
+        createNotification({ type: 'success', message: 'carrier.delete-success'});
         break;
 
       case EC_FAILURE:
@@ -275,13 +252,8 @@ function* deleteCarrierItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning',
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
 
       default:

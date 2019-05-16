@@ -7,9 +7,9 @@ import {
     UPDATE_SETTING,
   } from '../../../constants/actionTypes';
   
-  export const getSetting = (params, messages) => ({
+  export const getSetting = (params) => ({
     type: GET_SETTING,
-    payload: { params, messages }
+    payload: { params }
   });
   
   export const getSettingSuccess = (items) => ({
@@ -22,9 +22,9 @@ import {
     payload: error
   });
 
-  export const updateSetting = (item, messages) => ({
+  export const updateSetting = (item) => ({
     type: UPDATE_SETTING,
-    payload: { item, messages }
+    payload: { item }
   });
   
   export const updateSettingSuccess = () => ({

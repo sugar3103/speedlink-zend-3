@@ -36,7 +36,7 @@ class List extends Component {
         return (
           <ConfirmPicker
             onClose={onClose}
-            onDelete={() => this.props.deleteServiceItem(ids, messages)}
+            onDelete={() => this.props.deleteServiceItem(ids)}
             messages={messages}
           />
         )
@@ -45,7 +45,6 @@ class List extends Component {
   }
 
   onChangePageSize = (size) => {
-    const { messages } = this.props.intl;
     size = parseInt(size, 10);
     let params = {
       offset: {
@@ -57,7 +56,7 @@ class List extends Component {
     if (this.props.service.paramSearch) {
       Object.assign(params, { "query": this.props.service.paramSearch})
     }
-    this.props.getServiceList(params, messages);
+    this.props.getServiceList(params);
 
     this.setState({
       currentPage: 1,
@@ -66,7 +65,6 @@ class List extends Component {
   };
 
   onChangePage = (page) => {
-    const { messages } = this.props.intl;
     let params = {
       offset: {
         start: parseInt(page, 10),
@@ -77,7 +75,7 @@ class List extends Component {
     if (this.props.service.paramSearch) {
       Object.assign(params, { "query": this.props.service.paramSearch })
     }
-    this.props.getServiceList(params, messages);
+    this.props.getServiceList(params);
 
     this.setState({
       currentPage: page
