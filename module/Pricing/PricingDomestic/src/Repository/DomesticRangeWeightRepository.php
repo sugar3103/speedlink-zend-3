@@ -153,7 +153,7 @@ class DomesticRangeWeightRepository extends EntityRepository
         ->leftJoin('drw.category', 'c')
         ->leftJoin('drw.service', 's')
         ->leftJoin('drw.carrier', 'ca')  
-        ->leftJoin('drw.shipmentType', 'st')  
+        ->leftJoin('drw.shipment_type', 'st')  
         ->leftJoin('drw.zone','z')
         ->leftJoin('drw.join_created', 'cr')
         ->leftJoin('drw.join_updated', 'up');
