@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col, Container, Row } from 'reactstrap';
+import { Container, Row } from 'reactstrap';
 import { List } from '../../../components/MasterData/Address/City';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
@@ -32,16 +32,6 @@ class City extends Component {
     return (
       <Container>
         <PageTitle title={messages['address.cites']} />
-        <Row>
-          <Col md={12}>
-            <h3 className="page-title">{messages['address.cites']}
-              {this.state.loadPage ? (<div className="lds-dual-ring" />) : ''}
-            </h3>
-            <h3 className="page-subhead subhead">Use this elements, if you want to show some hints or additional
-                  information
-          </h3>
-          </Col>
-        </Row>
         <Row>
           {!this.state.loadPage ? (
             (errors && errors === 'ACCESS_DENIED') ? (<AccessDenied />) : (<List />)

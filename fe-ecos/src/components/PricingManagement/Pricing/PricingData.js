@@ -45,7 +45,6 @@ class PricingData extends Component {
     }
 
     onSaveTransportation = () => {
-        const { messages } = this.props.intl;
         const { id, pricing_data } = this.props.pricing;
         const { data, title } = pricing_data;
 
@@ -60,7 +59,7 @@ class PricingData extends Component {
             pricing_data: { title, data }
         }
 
-        this.props.updatePricingDataItem(dataSent, messages);
+        this.props.updatePricingDataItem(dataSent);
 
         setTimeout(() => {
             this.setState({
@@ -70,9 +69,8 @@ class PricingData extends Component {
     }
 
     onSaveVas = values => {
-        const { messages } = this.props.intl;
         const data = values.vas;
-        this.props.updatePricingVasItem(data, messages);
+        this.props.updatePricingVasItem(data);
     }
 
     render() {

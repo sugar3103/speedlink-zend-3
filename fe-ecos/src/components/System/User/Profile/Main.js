@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { Col } from 'reactstrap';
-import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { getRoleList, uploadAvatarUser } from '../../../../redux/actions';
 // const Ava = `${process.env.PUBLIC_URL}/img/ava.png`;
@@ -42,7 +41,7 @@ class Main extends PureComponent {
     //   data.append(value, _value);
     // })
     
-    this.props.uploadAvatarUser(data, this.props.intl.messages);
+    this.props.uploadAvatarUser(data);
 
     var reader = new FileReader();
     reader.readAsText(event.target.files[0]);
@@ -79,10 +78,10 @@ const mapStateToProps = ({ authUser, users }) => {
   return { authUser, role }
 }
 
-export default injectIntl(connect(
+export default connect(
   mapStateToProps,
   {
     getRoleList,
     uploadAvatarUser
   }
-)(Main));
+)(Main);

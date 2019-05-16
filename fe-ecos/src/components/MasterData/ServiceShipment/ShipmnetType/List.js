@@ -37,7 +37,7 @@ class List extends Component {
         return (
           <ConfirmPicker
             onClose={onClose}
-            onDelete={() => this.props.deleteShipmentTypeItem(ids, messages)}
+            onDelete={() => this.props.deleteShipmentTypeItem(ids)}
             messages={messages}
           />
         )
@@ -47,7 +47,6 @@ class List extends Component {
 
 
   onChangePageSize = (size) => {
-    const { messages } = this.props.intl;
     size = parseInt(size, 10);
     let params = {
       offset: {
@@ -59,7 +58,7 @@ class List extends Component {
     if (this.props.shipment_type.paramSearch) {
       Object.assign(params, { "query": this.props.shipment_type.paramSearch })
     }
-    this.props.getShipmentTypeList(params, messages);
+    this.props.getShipmentTypeList(params);
 
     this.setState({
       currentPage: 1,
@@ -68,7 +67,6 @@ class List extends Component {
   };
 
   onChangePage = (page) => {
-    const { messages } = this.props.intl;
     let params = {
       offset: {
         start: parseInt(page, 10),
@@ -79,7 +77,7 @@ class List extends Component {
     if (this.props.shipment_type.paramSearch) {
       Object.assign(params, { "query": this.props.shipment_type.paramSearch })
     }
-    this.props.getShipmentTypeList(params, messages);
+    this.props.getShipmentTypeList(params);
 
     this.setState({
       currentPage: page

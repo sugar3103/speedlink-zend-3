@@ -7,9 +7,9 @@ import {
   VERITY_AUTH_SUCCESS,
 } from '../../constants/actionTypes';
 
-export const loginUser = (user) => ({
+export const loginUser = (user, from) => ({
   type: LOGIN_USER,
-  payload: { user }
+  payload: { user, from }
 });
 export const loginUserSuccess = (token) => ({
   type: LOGIN_USER_SUCCESS,

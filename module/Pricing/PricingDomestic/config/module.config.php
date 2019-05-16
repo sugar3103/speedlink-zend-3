@@ -96,7 +96,7 @@ $router = [
             'type' => StaticRoute::class,
             'options' => [
                 'verb' => 'POST',
-                'route' => '/pricing/domestic/rangeweight[/:action]',
+                'route' => '/pricing/domestic/range-weight[/:action]',
                 'constraints' => [
                     'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
                 ],

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col, Container, Row } from 'reactstrap';
+import { Container, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { List } from '../../../components/MasterData/ServiceShipment/ShipmnetType';
 import { connect } from "react-redux";
@@ -29,13 +29,7 @@ class ShipmentType extends Component {
     const { errors } = this.props.shipment_type;
     return (
       <Container className={'panel__body'}>
-      <PageTitle title={messages['shipment_type.list-title']} />
-        <Row>
-          <Col md={12}>
-            <h3 className="page-title">{messages['cs.shipment_type']}</h3>
-            {/* <h3 className="page-subhead subhead"> */}
-          </Col>
-        </Row>
+        <PageTitle title={messages['shipment_type.list-title']} />
         <Row>
         {!this.state.loadPage ? (
             (errors && errors === 'ACCESS_DENIED') ? (<AccessDenied />) : (<List />)

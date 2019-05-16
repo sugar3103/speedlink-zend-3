@@ -26,9 +26,9 @@ export const toggleHubModal = (type, data) => ({
   payload: { type, data }
 })
 
-export const getHubList = (params, messages) => ({
+export const getHubList = (params) => ({
   type: HUB_GET_LIST,
-  payload: { params, messages }
+  payload: { params }
 });
 
 export const getHubListSuccess = (items, total) => ({
@@ -41,9 +41,9 @@ export const getHubListError = (error) => ({
   payload: error
 });
 
-export const addHubItem = (item, messages) => ({
+export const addHubItem = (item) => ({
   type: HUB_ADD_ITEM,
-  payload: { item, messages }
+  payload: { item }
 });
 
 export const addHubItemSuccess = () => ({
@@ -55,9 +55,9 @@ export const addHubItemError = (error) => ({
   payload: error
 });
 
-export const updateHubItem = (item, messages) => ({
+export const updateHubItem = (item) => ({
   type: HUB_UPDATE_ITEM,
-  payload: { item, messages }
+  payload: { item }
 });
 
 export const updateHubItemSuccess = () => ({
@@ -69,9 +69,9 @@ export const updateHubItemError = (error) => ({
   payload: error
 });
 
-export const deleteHubItem = (ids, messages) => ({
+export const deleteHubItem = (ids) => ({
   type: HUB_DELETE_ITEM,
-  payload: { ids, messages }
+  payload: { ids }
 });
 
 export const deleteHubItemSuccess = () => ({
@@ -88,9 +88,9 @@ export const changeTypeHubModal = (type) => ({
   payload: type
 })
 
-export const getCountryHubList = (params, messages, types) => ({
+export const getCountryHubList = (params, types) => ({
   type: HUB_COUNTRY_GET_LIST,
-  payload: { params, messages, types }
+  payload: { params, types }
 });
 
 export const getCountryHubListSuccess = ( country_hub) => ({
@@ -103,9 +103,9 @@ export const getCountryHubListError = (error) => ({
   payload: error
 });
 
-export const getCityHubList = (params, messages, types) => ({
+export const getCityHubList = (params, types) => ({
   type: HUB_CITY_GET_LIST,
-  payload: { params, messages, types }
+  payload: { params, types }
 });
 
 export const getCityHubListSuccess = (city_hub) => ({

@@ -34,20 +34,13 @@ class MainWrapper extends PureComponent {
       localStorage.setItem('currentTheme', 'theme-' + color);
     }
   }
-  componentWillReceiveProps(nextProps) {    
-    const { system, locale } = nextProps;
-    if (system.items && Object.keys(system.items).length > 0) {
-      document.title = (locale === 'en') ? system.items.name_en : system.items.name;
-      document.title += (system.items.owner) ? ' - ' + system.items.owner : '';
-    }
-  }
 
   render() {
     const { theme } = this.props;
     this.addClassBody(theme.className)    
     return (
       <div className="wrapper">
-        { this.props.authUser.user && <SocketHandle user={this.props.authUser.user.id} /> }
+        {/* { this.props.authUser.user && <SocketHandle user={this.props.authUser.user.id} /> } */}
         {this.props.children}
       </div>
     );

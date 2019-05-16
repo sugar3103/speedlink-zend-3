@@ -2,7 +2,7 @@ module.exports = {
     //Global
     'cancel': 'Cancel',
     'save': 'Save',    
-    'edit': 'Edit',    
+    'edit': 'Edit',  
     'ok': 'OK',    
     'warning': 'Warning',
     'delete-confirm': 'Are you sure you want to delete?',
@@ -33,7 +33,6 @@ module.exports = {
     //theme
     'theme.title-setting': 'Theme Customizer',
     'theme.desc-setting': 'Change the theme as you like!',
-    'theme.dark-theme': 'Dark Theme',
 
     //layout
     'layout.locale-vie': 'Vietnamese',

@@ -38,8 +38,17 @@ class ShipmentTypeController extends CoreController
     {
         if ($this->getRequest()->isPost()) {
 
-            $fieldsMap = ['code', 'name', 'name_en', 'status'];
-            list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);            
+            $fieldsMap = [
+                0 => 'id',
+                1 => 'name',
+                2 => 'name_en',                
+                3 => 'status',
+                4 => 'carrier_id',
+                5 => 'service_id',
+                6 => 'category_id',
+            ];
+
+            list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);             
             
             
             //get list User by condition

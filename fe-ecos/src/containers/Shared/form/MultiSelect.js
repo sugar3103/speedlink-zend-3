@@ -41,7 +41,7 @@ class MultiSelectField extends PureComponent {
         clearable={false}
         className="form__form-group-select"
         closeOnSelect={false}
-        removeSelected={false}
+        removeSelected={true}
         placeholder={placeholder}
         disabled = {disabled}
       />

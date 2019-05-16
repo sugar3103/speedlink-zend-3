@@ -10,14 +10,13 @@ import { CITY_RESET_STATE, DISTRICT_RESET_STATE, WARD_RESET_STATE } from '../../
 
 class Action extends Component {
   handleSubmit = values => {
-    const { messages } = this.props.intl;
     const { modalType } = this.props;
     switch (modalType) {
       case MODAL_ADD:
-        this.props.addZoneCodeItem(values, messages);
+        this.props.addZoneCodeItem(values);
         break;
       case MODAL_EDIT:
-        this.props.updateZoneCodeItem(values, messages);
+        this.props.updateZoneCodeItem(values);
         break;
       case MODAL_VIEW:
         this.props.changeTypeZoneCodeModal(MODAL_EDIT);

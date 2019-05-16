@@ -36,7 +36,7 @@ class DomesticZoneController extends CoreController {
     {
         if ($this->getRequest()->isPost()) {
             // get the filters
-            $fieldsMap = [0 => 'id', 1 => 'name', 2 => 'name_en', 2 => 'created_at'];
+            $fieldsMap = [0 => 'id', 1 => 'name', 2 => 'name_en', 3 => 'created_at'];
 
             list($start,$limit,$sortField,$sortDirection,$filters, $fields) = $this->getRequestData($fieldsMap);          
             //get list User by condition
@@ -96,7 +96,7 @@ class DomesticZoneController extends CoreController {
                         // get filtered and validated data
                         $data = $form->getData();
                         // update Domestic Zone.
-                        $this->domesticZoneManager->updateZone($area, $data,$user);
+                        $this->domesticZoneManager->updateZone($area, $data, $user);
                         $this->apiResponse['message'] = "MODIFIED_SUCCESS_DOMESTIC_ZONE";
                     } else {
                         $this->error_code = 0;
@@ -119,17 +119,17 @@ class DomesticZoneController extends CoreController {
     {
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequestData();
-            
+            $user = $this->tokenPayload;
             if(isset($data['ids']) && count($data['ids']) > 0) {
                
                 try { 
                     foreach ($data['ids'] as $id) {
-                        $area = $this->entityManager->getRepository(DomesticZone::class)->findOneBy(array('id' => $id));    
-                        if ($area == null) {
+                        $zone = $this->entityManager->getRepository(DomesticZone::class)->findOneBy(array('id' => $id));    
+                        if ($zone == null) {
                             $this->error_code = 0;
                             $this->apiResponse['message'] = "NOT_FOUND";                        
                         } else {
-                            $this->domesticZoneManager->deleteZone($area);
+                            $this->domesticZoneManager->deleteZone($zone, $user);
                         }  
                     }
                     

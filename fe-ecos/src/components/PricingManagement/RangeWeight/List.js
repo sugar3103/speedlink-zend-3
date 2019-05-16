@@ -35,7 +35,6 @@ class List extends Component {
   }
 
   onChangePageSize = (size) => {
-    const { messages } = this.props.intl;
     size = parseInt(size, 10);
     let params = {
       offset: {
@@ -47,7 +46,7 @@ class List extends Component {
     if (this.props.rangeWeight.paramSearch) {
       Object.assign(params, { "query": this.props.rangeWeight.paramSearch})
     }
-    this.props.getRangeWeightList(params, messages);
+    this.props.getRangeWeightList(params);
 
     this.setState({
       currentPage: 1,
@@ -68,8 +67,8 @@ class List extends Component {
         return (
           <ConfirmPicker 
             onClose={onClose}
-            onDelete={() => this.props.deleteRangeWeightItem(ids, messages)}
-            messages ={messages}
+            onDelete={() => this.props.deleteRangeWeightItem(ids)}
+            messages={messages}
           />
         )
       }
@@ -77,7 +76,6 @@ class List extends Component {
   }
 
   onChangePage = (page) => {
-    const { messages } = this.props.intl;
     let params = {
       offset: {
         start: parseInt(page, 10),
@@ -88,7 +86,7 @@ class List extends Component {
     if (this.props.rangeWeight.paramSearch) {
       Object.assign(params, { "query": this.props.rangeWeight.paramSearch })
     }
-    this.props.getRangeWeightList(params, messages);
+    this.props.getRangeWeightList(params);
 
     this.setState({
       currentPage: page
@@ -96,8 +94,7 @@ class List extends Component {
   };
 
   componentDidMount() {
-    const { messages } = this.props.intl;
-    this.props.getRangeWeightList(null, messages);
+    this.props.getRangeWeightList();
   }
 
   renderHeader = (selected) => {

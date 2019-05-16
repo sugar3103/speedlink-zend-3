@@ -1,18 +1,23 @@
 import { NotificationManager } from 'react-notifications';
+import AppLocale from '../lang';
 
 export default function createNotification(noti) {
+  const currentAppLocale = AppLocale[localStorage.getItem('currentLanguage')]; 
+  const { messages } = currentAppLocale;
+  const message = messages[noti.message];
+  
   switch (noti.type) {
     case 'info':
-      NotificationManager.info(noti.message);
+      NotificationManager.info(message);
       break;
     case 'success':
-      NotificationManager.success(noti.message, noti.title);
+      NotificationManager.success(message, messages['notification.success']);
       break;
     case "warning":
-      NotificationManager.warning(noti.message, noti.title);
+      NotificationManager.warning(message, messages['notification.warning']);
       break;
     case 'error':
-      NotificationManager.error(noti.message, noti.title);
+      NotificationManager.error(message, messages['notification.error']);
       break;
     default:
       return;

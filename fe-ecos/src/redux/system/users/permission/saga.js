@@ -42,6 +42,7 @@ const getPermissionListRequest = async (params) => {
 };
 
 function* getPermissionListItems({ payload }) {
+  const { pathname } = history.location;
   try {
     const response = yield call(getPermissionListRequest, payload);
     switch (response.error_code) {
@@ -54,9 +55,8 @@ function* getPermissionListItems({ payload }) {
         break;
       
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('authPermission');
-        yield call(history.push, '/login');
-        yield put(createNotification({type: 'warning', message: 'Please login to countinue'}));
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -86,32 +86,24 @@ const addPermissionItemRequest = async item => {
 };
 
 function* addPermissionItem({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(addPermissionItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(addPermissionItemSuccess());
-        yield put(getPermissionList(null, messages));
+        yield put(getPermissionList());
         yield put(togglePermissionModal());
-        createNotification({
-          type: 'success', 
-          message: messages['permission.add-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success', message: 'permission.add-success' });
         break;
 
       case EC_FAILURE:
         yield put(addPermissionItemError(response.data));
         break;
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -139,19 +131,16 @@ const updatePermissionItemRequest = async item => {
 };
 
 function* updatePermissionItem ({ payload }) {
-  const { item, messages } = payload;
+  const { item } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(updatePermissionItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(updatePermissionItemSuccess());
-        yield put(getPermissionList(null, messages));
+        yield put(getPermissionList());
         yield put(togglePermissionModal());
-        createNotification({
-          type: 'success', 
-          message: messages['permission.update-success'], 
-          title: messages['notification.success']
-        });
+        createNotification({ type: 'success',  message: 'permission.update-success'});
         break;
 
       case EC_FAILURE:
@@ -159,13 +148,8 @@ function* updatePermissionItem ({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;
@@ -196,19 +180,15 @@ const deletePermissionItemRequest = async id => {
 };
 
 function* deletePermissionItem({ payload }) {
-  const { id, messages } = payload;
-  
+  const { id } = payload;
+  const { pathname } = history.location;
   try {
     const response = yield call(deletePermissionItemRequest, id);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(deletePermissionItemSuccess());
-        yield put(getPermissionList(null, messages));
-        createNotification({
-          type: 'success', 
-          message: messages['permission.delete-success'], 
-          title: messages['notification.success']
-        });
+        yield put(getPermissionList());
+        createNotification({ type: 'success',  message: 'permission.delete-success' });
         break;
 
       case EC_FAILURE:
@@ -216,13 +196,8 @@ function* deletePermissionItem({ payload }) {
         break;
 
       case EC_FAILURE_AUTHENCATION:
-        localStorage.removeItem('user');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;

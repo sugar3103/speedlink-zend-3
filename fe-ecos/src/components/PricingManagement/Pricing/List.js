@@ -34,8 +34,8 @@ class List extends Component {
         return (
           <ConfirmPicker 
             onClose={onClose}
-            onDelete={() => this.props.deletePricingItem(ids, messages)}
-            messages ={messages}
+            onDelete={() => this.props.deletePricingItem(ids)}
+            messages={messages}
           />
         )
       }
@@ -48,7 +48,6 @@ class List extends Component {
   }
 
   onChangePageSize = (size) => {
-    const { messages } = this.props.intl;
     size = parseInt(size, 10);
     let params = {
       offset: {
@@ -60,7 +59,7 @@ class List extends Component {
     if (this.props.pricing.paramSearch) {
       Object.assign(params, { "query": this.props.pricing.paramSearch })
     };
-    this.props.getPricingList(params, messages);
+    this.props.getPricingList(params);
 
     this.setState({
       currentPage: 1,
@@ -69,7 +68,6 @@ class List extends Component {
   }
 
   onChangePage = (page) => {
-    const { messages } = this.props.intl;
     let params = {
       offset: {
         start: parseInt(page, 10),
@@ -80,7 +78,7 @@ class List extends Component {
     if (this.props.pricing.paramSearch) {
       Object.assign(params, { "query": this.props.pricing.paramSearch })
     };
-    this.props.getPricingList(params, messages);
+    this.props.getPricingList(params);
 
     this.setState({
       currentPage: page
@@ -88,8 +86,7 @@ class List extends Component {
   };
 
   componentDidMount() {
-    const { messages } = this.props.intl;
-    this.props.getPricingList(null, messages);
+    this.props.getPricingList();
   }
 
   renderHeader = (selected) => {

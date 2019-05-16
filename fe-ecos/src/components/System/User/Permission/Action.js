@@ -4,20 +4,18 @@ import { connect } from 'react-redux';
 import ActionForm from './ActionForm';
 import { addPermissionItem, updatePermissionItem, togglePermissionModal,changeTypePermissionModal } from '../../../../redux/actions';
 import { MODAL_EDIT, MODAL_ADD, MODAL_VIEW } from '../../../../constants/defaultValues';
-import { injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 
 class Action extends Component {
 
   handleSubmit = values => {
-    const { messages } = this.props.intl;   
     const { modalType } = this.props;
     switch (modalType) {
       case MODAL_ADD:
-        this.props.addPermissionItem(values, messages);
+        this.props.addPermissionItem(values);
         break;
       case MODAL_EDIT:
-        this.props.updatePermissionItem(values, messages);
+        this.props.updatePermissionItem(values);
         break;
       case MODAL_VIEW:
         this.props.changeTypePermissionModal(MODAL_EDIT);
@@ -75,9 +73,9 @@ const mapStateToProps = ({ users }) => {
   }
 }
 
-export default injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   addPermissionItem,
   updatePermissionItem,
   togglePermissionModal,
   changeTypePermissionModal
-})(Action));
+})(Action);

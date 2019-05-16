@@ -13,8 +13,6 @@ import {
   getCodeListError,
 } from "./actions";
 
-import createNotification from '../../../../util/notifications';
-
 //list code
 
 function getListApi(params) {
@@ -31,7 +29,8 @@ const getCodeListRequest = async (params) => {
 };
 
 function* getCodeListItems({ payload }) {
-  const { params, messages } = payload;
+  const { params } = payload;
+  const { pathname } = history.location; 
   try {
     const response = yield call(getCodeListRequest, params);
     switch (response.error_code) {
@@ -45,12 +44,7 @@ function* getCodeListItems({ payload }) {
 
       case EC_FAILURE_AUTHENCATION:
         localStorage.removeItem('authUser');
-        yield call(history.push, '/login');
-        createNotification({
-          type: 'warning', 
-          message: messages['login.login-again'],
-          title: messages['notification.warning']
-        });
+        yield call(history.push, '/login', { from: pathname });
         break;
       default:
         break;

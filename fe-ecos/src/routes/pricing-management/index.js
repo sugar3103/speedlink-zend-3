@@ -5,15 +5,15 @@ import RangeWeight from './range-weight';
 import ZoneCode from './zone-code';
 import Pricing from './pricing';
 
-const PricingManagement = ({ match }) => (
+const PricingInternational = ({ match }) => (
   <Fragment>
       <Switch>
-          <Redirect exact from={`${match.url}/`} to={`${match.url}/pricing`} />
+          <Redirect exact from={`${match.url}`} to={`${match.url}/pricing`} />
           <Route path={`${match.url}/pricing`} component={Pricing} />
           <Route path={`${match.url}/range-weight`} component={RangeWeight} />     
           <Route path={`${match.url}/zone-code`} component={ZoneCode} />          
-          <Redirect to="/error" />
+          <Redirect to="/page-not-found" />
       </Switch>
   </Fragment>
 );
-export default PricingManagement;
+export default PricingInternational;

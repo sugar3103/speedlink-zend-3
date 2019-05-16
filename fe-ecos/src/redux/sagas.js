@@ -20,6 +20,12 @@ import roleSagas from './system/users/role/saga';
 import permissionSagas from './system/users/permission/saga';
 import settingSagas from './system/setting/saga';
 import systemSagas from './system/saga';
+import pricingDomesticArea from './pricing-domestic/area/saga';
+import pricingDomesticZone from './pricing-domestic/zone/saga';
+import pricingDomesticRangeWeight from './pricing-domestic/range-weight/saga';
+import pricingDomesticCarrier from './pricing-domestic/carrier/saga';
+import pricingDomesticService from './pricing-domestic/service/saga';
+import pricingDomesticShipmentType from './pricing-domestic/shipment-type/saga';
 
 export default function* rootSaga() {
   yield all([
@@ -43,6 +49,12 @@ export default function* rootSaga() {
     serviceSagas(),
     shipmentTypeSagas(),
     settingSagas(),
-    systemSagas()
+    systemSagas(),
+    pricingDomesticArea(),
+    pricingDomesticZone(),
+    pricingDomesticRangeWeight(),
+    pricingDomesticCarrier(),
+    pricingDomesticService(),
+    pricingDomesticShipmentType()
   ]);
 }

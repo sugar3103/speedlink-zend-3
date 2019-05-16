@@ -22,9 +22,9 @@ class SocketHandle extends Component {
             'channel': 'private-' + this.props.user
         });
 
-        // this.socket.on('reconnecting', (number) => {
-        //     if(number === 10) { this.socket.disconnect() }
-        // });  
+        this.socket.on('reconnecting', (number) => {
+            if(number === 1) { this.socket.disconnect() }
+        });  
         this.notifications();
         this.updateUser();
     }

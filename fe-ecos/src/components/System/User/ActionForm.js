@@ -158,7 +158,6 @@ class ActionForm extends PureComponent {
                     type="text"
                     placeholder={messages['user.firstname']}
                     disabled={disabled}
-                    messages={messages}
                   />
                 </div>
               </div>
@@ -173,7 +172,6 @@ class ActionForm extends PureComponent {
                     type="text"
                     placeholder={messages['user.lastname']}
                     disabled={disabled}
-                    messages={messages}
                   />
                 </div>
               </div>

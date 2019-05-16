@@ -200,7 +200,7 @@ class DomesticRangeWeightManager {
     }
 
      /**
-     * Delete Domestic Area
+     * Delete Domestic Range Weight
      */
     public function deleteRangeWeight($domesticRangeWeight, $user) {
 
