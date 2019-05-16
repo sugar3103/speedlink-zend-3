@@ -12,6 +12,7 @@ import renderSelectField from "../../../../containers/Shared/form/Select";
 import { MODAL_EDIT, MODAL_ADD, MODAL_VIEW } from '../../../../constants/defaultValues';
 import Moment from 'react-moment';
 import Can from '../../../../containers/Shared/Can';
+import { categoryPricing } from '../../../../constants/defaultValues';
 class ActionForm extends Component {
 
   constructor(props) {
@@ -38,6 +39,19 @@ class ActionForm extends Component {
     this.props.changeTypeShipmentTypeModal(MODAL_VIEW);
   }
 
+  showOptionsCategory = () => {
+    let result = [];
+    for (var key in categoryPricing) {
+      if (categoryPricing.hasOwnProperty(key)) {
+        result.push({
+          value: key,
+          label: categoryPricing[key]
+        });
+      }
+    }
+    return result;
+  }
+
   showOption = (items) => {
     let result = [];
     if (items.length > 0) {
@@ -60,15 +74,15 @@ class ActionForm extends Component {
     switch (modalType) {
       case MODAL_ADD:
         className = 'success';
-        title = messages['carrier.add-new'];
+        title = messages['shipment_type.add-new'];
         break;
       case MODAL_EDIT:
         className = 'primary';
-        title = messages['carrier.update'];
+        title = messages['shipment_type.update'];
         break;
       case MODAL_VIEW:
         className = 'info';
-        title = messages['carrier.view'];
+        title = messages['shipment_type.view'];
         break;
       default:
         break;
@@ -127,11 +141,11 @@ class ActionForm extends Component {
               <div className="form__form-group">
                 <span className="form__form-group-label">{messages['shipment_type.category_code']}</span>
                 <div className="form__form-group-field">
-                  <Field name="category_code" component={renderSelectField} type="text" disabled={disabled} options={[
-                    { value: "Inbound", label: messages['shipment_type.inbound'] },
-                    { value: "Outbound", label: messages['shipment_type.outbound'] },
-                    { value: "Domestic", label: messages['shipment_type.domestic'] },
-                  ]}
+                  <Field 
+                    name="category_id" 
+                    component={renderSelectField} 
+                    options={this.showOptionsCategory()}
+                    disabled={disabled}
                   />
                 </div>
               </div>
@@ -139,8 +153,8 @@ class ActionForm extends Component {
                 <span className="form__form-group-label">{messages['shipment_type.product_type_code']}</span>
                 <div className="form__form-group-field">
                   <Field name="product_type_code" component={renderSelectField} type="text" disabled={disabled} options={[
-                    { value: 0, label: messages['shipment_type.dox'] },
-                    { value: 1, label: messages['shipment_type.parcel'] }
+                    { value: 'Dox', label: messages['shipment_type.dox'] },
+                    { value: 'Parcel', label: messages['shipment_type.parcel'] }
                   ]}
                   />
                 </div>

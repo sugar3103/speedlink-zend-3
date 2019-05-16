@@ -54,7 +54,7 @@ class Action extends Component {
 }
 
 Action.propTypes = {
-  modalType: PropTypes.object,
+  modalType: PropTypes.string,
   addServiceItem: PropTypes.func.isRequired,
   updateServiceItem: PropTypes.func.isRequired,
   toggleServiceModal: PropTypes.func.isRequired,
