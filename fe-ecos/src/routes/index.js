@@ -4,7 +4,8 @@ import { Route, withRouter, Switch, Redirect } from 'react-router-dom';
 import Layout from '../containers/Layout';
 import Dashboards from './dashboards';
 import MasterData from './master-data';
-import Pricing from './pricing-management';
+import PricingDomestic from './pricing-domestic';
+import PricingInternational from './pricing-management';
 import System from './system';
 
 class MainApp extends Component {
@@ -18,7 +19,8 @@ class MainApp extends Component {
           <Switch>
             <Route path={`${match.url}dashboards`} component={Dashboards} />
             <Route path={`${match.url}master-data`} component={MasterData} />
-            <Route path={`${match.url}pricing-management`} component={Pricing} />
+            <Route path={`${match.url}pricing-domestic`} component={PricingDomestic} />
+            <Route path={`${match.url}pricing-management`} component={PricingInternational} />
             <Route path={`${match.url}system`} component={System} />
             <Redirect to="/page-not-found" />
           </Switch>

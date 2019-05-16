@@ -105,31 +105,57 @@ export default {
       ]
     },
     {
-      id: 'pricing_management',
-      title: 'menu.pricing_management',
-      route: '/pricing-management',
+      id: 'pricing_domestic',
+      title: 'menu.pricing_domestic',
+      route: '/pricing-domestic',
       icon: 'icon-pricing-table',
       childrens: [
         {
-          id: 'pricing',
-          title: 'menu.pricing',
-          route: '/pricing-management/pricing',
+          id: 'area_domestic',
+          title: 'menu.area_domestic',
+          route: '/pricing-domestic/area',
           icon: 'lnr lnr-map'
         },
         {
-          id: 'range_weight',
-          title: 'menu.range_weight',
-          route: '/pricing-management/range-weight',
+          id: 'zone_domestic',
+          title: 'menu.zone_domestic',
+          route: '/pricing-domestic/zone',
           icon: 'lnr lnr-license'
         },
         {
-          id: 'zone_code',
-          title: 'menu.zone_code',
-          route: '/pricing-management/zone-code',
+          id: 'range_weight_domestic',
+          title: 'menu.range_weight_domestic',
+          route: '/pricing-domestic/range-weight',
           icon: 'lnr lnr-map'
         }
       ]
     },
+    // {
+    //   id: 'pricing_management',
+    //   title: 'menu.pricing_management',
+    //   route: '/pricing-management',
+    //   icon: 'icon-pricing-table',
+    //   childrens: [
+    //     {
+    //       id: 'pricing',
+    //       title: 'menu.pricing',
+    //       route: '/pricing-management/pricing',
+    //       icon: 'lnr lnr-map'
+    //     },
+    //     {
+    //       id: 'range_weight',
+    //       title: 'menu.range_weight',
+    //       route: '/pricing-management/range-weight',
+    //       icon: 'lnr lnr-license'
+    //     },
+    //     {
+    //       id: 'zone_code',
+    //       title: 'menu.zone_code',
+    //       route: '/pricing-management/zone-code',
+    //       icon: 'lnr lnr-map'
+    //     }
+    //   ]
+    // },
     {
       id: 'system',
       title: 'menu.system',

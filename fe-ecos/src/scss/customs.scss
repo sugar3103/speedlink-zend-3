@@ -136,6 +136,9 @@ form {
     .label-info-data {
         margin-right: 15px;
     }
+    .form__form-group-select {
+        height: max-content !important;
+    }
 }
 .form_custom { 
     display: block;
@@ -288,10 +291,6 @@ form {
         font-size: 18px;
         line-height: 2.5;
         color: #fff;
-    }
-
-    .page-title {
-        display: none;
     }
 }
 

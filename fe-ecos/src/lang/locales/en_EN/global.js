@@ -2,7 +2,7 @@ module.exports = {
     //Global
     'cancel': 'Cancel',
     'save': 'Save',    
-    'edit': 'Edit',    
+    'edit': 'Edit',  
     'ok': 'OK',    
     'warning': 'Warning',
     'delete-confirm': 'Are you sure you want to delete?',

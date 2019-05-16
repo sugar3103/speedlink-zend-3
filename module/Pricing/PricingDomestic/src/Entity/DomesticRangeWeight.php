@@ -38,7 +38,7 @@ class DomesticRangeWeight
     /**
      * @var bool
      *
-     * @ORM\Column(name="calculate_unit", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="calculate_unit", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $calculate_unit;
 
@@ -80,7 +80,7 @@ class DomesticRangeWeight
     /**
      * @var bool
      *
-     * @ORM\Column(name="status", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="status", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $status;
 

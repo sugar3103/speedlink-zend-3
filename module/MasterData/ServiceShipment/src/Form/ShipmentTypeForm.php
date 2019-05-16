@@ -154,7 +154,7 @@ class ShipmentTypeForm extends Form {
         ]);
 
         $inputFilter->add([
-            'name'  => 'category_code',
+            'name'  => 'category_id',
             'required'  => true,
             'filters' => [
                 [

@@ -21,6 +21,10 @@ module.exports = {
   'menu.range_weight' : 'Range Weight',
   'menu.zone_code' : 'Zone Code',
   'menu.pricing' : 'Pricing',
+  'menu.pricing_domestic' : 'Bảng giá nội địa',
+  'menu.area_domestic' : 'Khu vực',
+  'menu.zone_domestic' : 'Vùng',
+  'menu.range_weight_domestic' : 'Range Weight',
   //Menu Setting
   'menu.setting': 'Cài đặt',
   'menu.user': 'Người dùng',
