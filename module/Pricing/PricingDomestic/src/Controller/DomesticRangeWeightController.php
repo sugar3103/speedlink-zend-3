@@ -134,6 +134,7 @@ class DomesticRangeWeightController extends CoreController {
     {
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequestData();
+             
             $user = $this->tokenPayload;
             if(isset($data['ids']) && count($data['ids']) > 0) {
                

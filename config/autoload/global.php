@@ -33,7 +33,7 @@ return [
             HttpUserAgent::class,
             RemoteAddr::class,
             Adapter::class => AdapterServiceFactory::class
-        ],
+        ]        
     ],
     
     'session_config' => [],
