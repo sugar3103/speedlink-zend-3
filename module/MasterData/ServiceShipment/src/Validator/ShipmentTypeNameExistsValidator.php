@@ -65,9 +65,9 @@ class ShipmentTypeNameExistsValidator extends AbstractValidator {
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
         if ($this->options['language'] === NULL) {
-            $shipmentType = $entityManager->getRepository(ShipmentType::class)->findOneByName($value);
+            $shipmentType = $entityManager->getRepository(ShipmentType::class)->findOneBy(['name' => $value, 'is_deleted' => 0]);
         } else if($this->options['language'] === 'en') {
-            $shipmentType = $entityManager->getRepository(ShipmentType::class)->findOneBy(array('name_en' => $value));
+            $shipmentType = $entityManager->getRepository(ShipmentType::class)->findOneBy(array('name_en' => $value, 'is_deleted' => 0));
         }
 
         if ($this->options['shipmentType'] == null) {

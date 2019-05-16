@@ -61,9 +61,9 @@ class DomesticZoneExistsValidator extends AbstractValidator {
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
         if($this->options['language'] === NULL) {
-            $domesticZone = $entityManager->getRepository(DomesticZone::class)->findOneByName($value);
+            $domesticZone = $entityManager->getRepository(DomesticZone::class)->findOneBy(['name' => $value, 'is_deleted' => 0]);
         } else if($this->options['language'] === 'en') {
-            $domesticZone = $entityManager->getRepository(DomesticZone::class)->findOneBy(array('name_en' => $value));       
+            $domesticZone = $entityManager->getRepository(DomesticZone::class)->findOneBy(array('name_en' => $value, 'is_deleted' => 0));       
         }
 
         //English

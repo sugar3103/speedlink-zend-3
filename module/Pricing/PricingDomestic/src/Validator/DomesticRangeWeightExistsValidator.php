@@ -61,9 +61,9 @@ class DomesticRangeWeightExistsValidator extends AbstractValidator {
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
         if($this->options['language'] === NULL) {
-            $domesticRangeWeight = $entityManager->getRepository(DomesticRangeWeight::class)->findOneByName($value);
+            $domesticRangeWeight = $entityManager->getRepository(DomesticRangeWeight::class)->findOneBy(['name' => $value, 'is_deleted' => 0]);
         } else if($this->options['language'] === 'en') {
-            $domesticRangeWeight = $entityManager->getRepository(DomesticRangeWeight::class)->findOneBy(array('name_en' => $value));       
+            $domesticRangeWeight = $entityManager->getRepository(DomesticRangeWeight::class)->findOneBy(array('name_en' => $value, 'is_deleted' => 0));       
         }
 
         //English

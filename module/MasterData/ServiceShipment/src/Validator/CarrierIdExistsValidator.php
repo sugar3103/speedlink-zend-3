@@ -61,7 +61,7 @@ class CarrierIdExistsValidator extends AbstractValidator {
 
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
-        $carrier = $entityManager->getRepository(Carrier::class)->find($value);
+        $carrier = $entityManager->getRepository(Carrier::class)->findOneBy(['id' => $value, 'is_deleted' => 0]);
 
         if ($this->options['shipmentType'] == null) {
             $isValid = $carrier;

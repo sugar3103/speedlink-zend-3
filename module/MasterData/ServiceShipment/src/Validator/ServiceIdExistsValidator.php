@@ -61,7 +61,7 @@ class ServiceIdExistsValidator extends AbstractValidator {
 
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
-        $service = $entityManager->getRepository(Service::class)->find($value);
+        $service = $entityManager->getRepository(Service::class)->findOneBy(['id'=>$value, 'is_deleted' => 0]);
 
         if ($this->options['shipmentType'] == null) {
             $isValid = $service;

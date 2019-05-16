@@ -61,9 +61,9 @@ class DomesticAreaExistsValidator extends AbstractValidator {
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
         if($this->options['language'] === NULL) {
-            $domesticArea = $entityManager->getRepository(DomesticArea::class)->findOneByName($value);
+            $domesticArea = $entityManager->getRepository(DomesticArea::class)->findOneBy(['name' => $value, 'is_deleted' => 0]);
         } else if($this->options['language'] === 'en') {
-            $domesticArea = $entityManager->getRepository(DomesticArea::class)->findOneBy(array('name_en' => $value));       
+            $domesticArea = $entityManager->getRepository(DomesticArea::class)->findOneBy(array('name_en' => $value, 'is_deleted' => 0));       
         }
 
         //English
