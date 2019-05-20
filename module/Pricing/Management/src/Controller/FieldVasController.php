@@ -36,19 +36,23 @@ class FieldVasController extends CoreController {
 
     public function indexAction()
     {
-        $result = [
-            "data" => []
-        ];
+       
+        if ($this->getRequest()->isPost()) {
+            // get the filters
+            $fieldsMap = [0 => 'id', 1 => 'name'];
 
-        $fieldsMap = ['name'];
-        list($start, $limit, $sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);
-        $dataShipmentType = $this->fieldVasManager->getListFieldVasByCondition($start, $limit, $sortField, $sortDirection, $filters);
-
-        $result['error_code'] = 1;
-        $result['message'] = 'Success';
-        $result["data"] = !empty($dataShipmentType['listFieldVas']) ? $dataShipmentType['listFieldVas'] : [];
-        $this->apiResponse = $result;
-
+            list($start,$limit,$sortField,$sortDirection,$filters, $fields) = $this->getRequestData($fieldsMap);          
+            
+            //get list User by condition
+            $dataFieldVas = $this->fieldVasManager->getListFieldVasByCondition($start, $limit, $sortField, $sortDirection,$filters); 
+            
+            $result = $this->filterByField($dataFieldVas['listFieldVas'], $fields);     
+            
+            $this->apiResponse =  array(
+                'data'      => $result,
+                'total'     => $dataFieldVas['totalFieldVas']
+            );                        
+        } 
         return $this->createResponse();
     }
 }

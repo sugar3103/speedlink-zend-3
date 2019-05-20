@@ -102,7 +102,7 @@ class ShipmentTypeController extends CoreController
                     $this->apiResponse['message'] = "ADDED_SUCCESS_SHIPMENT_TYPE";
                 } catch (\Exception $e) {
                     $this->error_code = -1;
-                    $this->apiResponse['message'] = "ERROR_SUCCESS_SHIPMENT_TYPE";
+                    $this->apiResponse['message'] = "ERROR_SHIPMENT_TYPE";
                 }
             } else {
                 $this->error_code = 0;

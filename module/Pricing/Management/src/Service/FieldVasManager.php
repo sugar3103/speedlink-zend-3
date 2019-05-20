@@ -27,6 +27,7 @@ class FieldVasManager {
     public function getListFieldVasByCondition($start, $limit, $sortField = '', $sortDirection = 'asc', $filters = [])
     {
         $fieldVas = [];
+        $totalfieldVas = 0;
 
         //get orm carrier
         $ormFieldVas = $this->entityManager->getRepository(FieldVas::class)->getListFieldVasByCondition($start, $limit, $sortField, $sortDirection, $filters);
@@ -35,10 +36,13 @@ class FieldVasManager {
             $ormPaginator = new ORMPaginator($ormFieldVas, true);
             $ormPaginator->setUseOutputWalkers(false);
             $fieldVas = $ormPaginator->getIterator()->getArrayCopy();
+            $ormPaginator->setUseOutputWalkers(false);
+            $totalfieldVas = $ormPaginator->count();
         }
 
         $dataFieldVas = [
             'listFieldVas' => $fieldVas,
+            'totalFieldVas' => $totalfieldVas
         ];
         return $dataFieldVas;
     }

@@ -203,7 +203,7 @@ class RangeWeightForm extends Form {
         
         $inputFilter->add([
             'name' => 'unit',
-            'required' => true,
+            'required' => false,
             'filters' => [
                 [
                     'name' => ToInt::class

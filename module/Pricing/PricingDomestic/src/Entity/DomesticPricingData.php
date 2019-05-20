@@ -24,7 +24,7 @@ class DomesticPricingData
     /**
      * @var string
      *
-     * @ORM\Column(name="value", type="decimal", precision=2, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="value", type="float", nullable=false, unique=false)
      */
     private $value;
 
@@ -33,7 +33,7 @@ class DomesticPricingData
      *
      * @ORM\Column(name="is_deleted", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $is_deleted;
+    private $is_deleted = 0;
 
     /**
      * @var \DateTime
@@ -221,27 +221,27 @@ class DomesticPricingData
     }
 
     /**
-     * Set domesticPricing.
+     * Set domestic_pricing.
      *
-     * @param \PricingDomestic\Entity\DomesticPricing|null $domesticPricing
+     * @param \PricingDomestic\Entity\DomesticPricing|null $domestic_pricing
      *
      * @return DomesticPricingData
      */
-    public function setDomesticPricing(\PricingDomestic\Entity\DomesticPricing $domesticPricing = null)
+    public function setDomesticPricing(\PricingDomestic\Entity\DomesticPricing $domestic_pricing = null)
     {
-        $this->domesticPricing = $domesticPricing;
+        $this->domestic_pricing = $domestic_pricing;
 
         return $this;
     }
 
     /**
-     * Get domesticPricing.
+     * Get domestic_pricing.
      *
      * @return \PricingDomestic\Entity\DomesticPricing|null
      */
     public function getDomesticPricing()
     {
-        return $this->domesticPricing;
+        return $this->domestic_pricing;
     }
 
     /**

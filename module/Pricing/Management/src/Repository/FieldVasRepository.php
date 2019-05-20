@@ -45,11 +45,15 @@ class FieldVasRepository extends EntityRepository
      */
     public function buildFieldVasQueryBuilder($sortField, $sortDirection, $filters)
     {
-        $operatorsMap = [
+        $operatorsMap = [            
+            'id' => [
+                'alias' => 'fv.id',
+                'operator' => 'contains'
+            ],
             'name' => [
                 'alias' => 'fv.name',
                 'operator' => 'contains'
-            ],
+            ]           
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
@@ -60,7 +64,7 @@ class FieldVasRepository extends EntityRepository
         } else {
             $queryBuilder->orderBy('fv.id', 'ASC');
         }
-
+        
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
 }
