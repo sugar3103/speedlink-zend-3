@@ -25,6 +25,7 @@ module.exports = {
   'menu.area_domestic' : 'Area',
   'menu.zone_domestic' : 'Zone',
   'menu.range_weight_domestic' : 'Range Weight',
+  'menu.pricing_index_domestic' : 'Pricing',
   //Menu Setting
   'menu.setting': 'Setting',
   'menu.system': 'System',

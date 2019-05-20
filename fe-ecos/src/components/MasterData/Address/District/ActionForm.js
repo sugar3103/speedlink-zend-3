@@ -299,12 +299,12 @@ const mapStateToProps = ({ address, authUser }) => {
   }
 }
 
-export default reduxForm({
-  form: 'district_action_form',
-  validate
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   toggleDistrictModal,
   getCityList,
   getCountryList,
   changeTypeDistrictModal
-})(ActionForm)));
+})(reduxForm({ 
+  form: 'district_action_form', 
+  validate
+})(injectIntl(ActionForm)));

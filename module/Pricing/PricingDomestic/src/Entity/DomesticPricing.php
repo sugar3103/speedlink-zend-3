@@ -29,13 +29,6 @@ class DomesticPricing
     private $name;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name_en", type="string", length=100, precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $name_en;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="effected_date", type="datetime", precision=0, scale=0, nullable=false, unique=false)
@@ -78,16 +71,6 @@ class DomesticPricing
     private $approval_status;
 
     /**
-     * @var \OAuth\Entity\User
-     *
-     * @ORM\ManyToOne(targetEntity="OAuth\Entity\User")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="approval_by", referencedColumnName="id", nullable=true)
-     * })
-     */
-    private $approval_by;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", precision=0, scale=0, nullable=false, options={"default"="CURRENT_TIMESTAMP"}, unique=false)
@@ -100,6 +83,16 @@ class DomesticPricing
      * @ORM\Column(name="updated_at", type="datetime", precision=0, scale=0, nullable=false, options={"default"="CURRENT_TIMESTAMP"}, unique=false)
      */
     private $updated_at = 'CURRENT_TIMESTAMP';
+
+    /**
+     * @var \OAuth\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="OAuth\Entity\User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="approval_by", referencedColumnName="id", nullable=true)
+     * })
+     */
+    private $approval_by;
 
     /**
      * @var \ServiceShipment\Entity\Carrier
@@ -132,9 +125,9 @@ class DomesticPricing
     private $created_by;
 
     /**
-     * @var \OAuth\Entity\User
+     * @var \Customer\Entity\Customer
      *
-     * @ORM\ManyToOne(targetEntity="OAuth\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Customer\Entity\Customer")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=true)
      * })
@@ -207,45 +200,21 @@ class DomesticPricing
     }
 
     /**
-     * Set name_en.
+     * Set effectedDate.
      *
-     * @param string $name_en
+     * @param \DateTime $effectedDate
      *
      * @return DomesticPricing
      */
-    public function setNameEn($name_en)
+    public function setEffectedDate($effectedDate)
     {
-        $this->name_en = $name_en;
+        $this->effected_date = $effectedDate;
 
         return $this;
     }
 
     /**
-     * Get name_en.
-     *
-     * @return string
-     */
-    public function getNameEn()
-    {
-        return $this->name_en;
-    }
-
-    /**
-     * Set effected_date.
-     *
-     * @param \DateTime $effected_date
-     *
-     * @return DomesticPricing
-     */
-    public function setEffectedDate($effected_date)
-    {
-        $this->effected_date = $effected_date;
-
-        return $this;
-    }
-
-    /**
-     * Get effected_date.
+     * Get effectedDate.
      *
      * @return \DateTime
      */
@@ -255,21 +224,21 @@ class DomesticPricing
     }
 
     /**
-     * Set expired_date.
+     * Set expiredDate.
      *
-     * @param \DateTime $expired_date
+     * @param \DateTime $expiredDate
      *
      * @return DomesticPricing
      */
-    public function setExpiredDate($expired_date)
+    public function setExpiredDate($expiredDate)
     {
-        $this->expired_date = $expired_date;
+        $this->expired_date = $expiredDate;
 
         return $this;
     }
 
     /**
-     * Get expired_date.
+     * Get expiredDate.
      *
      * @return \DateTime
      */
@@ -279,21 +248,21 @@ class DomesticPricing
     }
 
     /**
-     * Set is_private.
+     * Set isPrivate.
      *
-     * @param int $is_private
+     * @param int $isPrivate
      *
      * @return DomesticPricing
      */
-    public function setIsPrivate($is_private)
+    public function setIsPrivate($isPrivate)
     {
-        $this->is_private = $is_private;
+        $this->is_private = $isPrivate;
 
         return $this;
     }
 
     /**
-     * Get is_private.
+     * Get isPrivate.
      *
      * @return int
      */
@@ -327,21 +296,21 @@ class DomesticPricing
     }
 
     /**
-     * Set is_deleted.
+     * Set isDeleted.
      *
-     * @param int $is_deleted
+     * @param int $isDeleted
      *
      * @return DomesticPricing
      */
-    public function setIsDeleted($is_deleted)
+    public function setIsDeleted($isDeleted)
     {
-        $this->is_deleted = $is_deleted;
+        $this->is_deleted = $isDeleted;
 
         return $this;
     }
 
     /**
-     * Get is_deleted.
+     * Get isDeleted.
      *
      * @return int
      */
@@ -351,21 +320,21 @@ class DomesticPricing
     }
 
     /**
-     * Set approval_status.
+     * Set approvalStatus.
      *
-     * @param int $approval_status
+     * @param int $approvalStatus
      *
      * @return DomesticPricing
      */
-    public function setApprovalStatus($approval_status)
+    public function setApprovalStatus($approvalStatus)
     {
-        $this->approval_status = $approval_status;
+        $this->approval_status = $approvalStatus;
 
         return $this;
     }
 
     /**
-     * Get approval_status.
+     * Get approvalStatus.
      *
      * @return int
      */
@@ -373,47 +342,23 @@ class DomesticPricing
     {
         return $this->approval_status;
     }
-    
+
     /**
-     * Set approval_by.
+     * Set createdAt.
      *
-     * @param \OAuth\Entity\User|null $approval_by
+     * @param \DateTime $createdAt
      *
      * @return DomesticPricing
      */
-    public function setApprovalBy(\OAuth\Entity\User $approval_by = null)
+    public function setCreatedAt($createdAt)
     {
-        $this->approval_by = $approval_by;
+        $this->created_at = $createdAt;
 
         return $this;
     }
 
     /**
-     * Get approval_by.
-     *
-     * @return \OAuth\Entity\User
-     */
-    public function getApprovalBy()
-    {
-        return $this->approval_by;
-    }
-
-    /**
-     * Set created_at.
-     *
-     * @param \DateTime $created_at
-     *
-     * @return DomesticPricing
-     */
-    public function setCreatedAt($created_at)
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    /**
-     * Get created_at.
+     * Get createdAt.
      *
      * @return \DateTime
      */
@@ -423,27 +368,51 @@ class DomesticPricing
     }
 
     /**
-     * Set updated_at.
+     * Set updatedAt.
      *
-     * @param \DateTime $updated_at
+     * @param \DateTime $updatedAt
      *
      * @return DomesticPricing
      */
-    public function setUpdatedAt($updated_at)
+    public function setUpdatedAt($updatedAt)
     {
-        $this->updated_at = $updated_at;
+        $this->updated_at = $updatedAt;
 
         return $this;
     }
 
     /**
-     * Get updated_at.
+     * Get updatedAt.
      *
      * @return \DateTime
      */
     public function getUpdatedAt()
     {
         return $this->updated_at;
+    }
+
+    /**
+     * Set approvalBy.
+     *
+     * @param \OAuth\Entity\User|null $approvalBy
+     *
+     * @return DomesticPricing
+     */
+    public function setApprovalBy(\OAuth\Entity\User $approvalBy = null)
+    {
+        $this->approval_by = $approvalBy;
+
+        return $this;
+    }
+
+    /**
+     * Get approvalBy.
+     *
+     * @return \OAuth\Entity\User|null
+     */
+    public function getApprovalBy()
+    {
+        return $this->approval_by;
     }
 
     /**
@@ -495,21 +464,21 @@ class DomesticPricing
     }
 
     /**
-     * Set created_by.
+     * Set createdBy.
      *
-     * @param \OAuth\Entity\User|null $created_by
+     * @param \OAuth\Entity\User|null $createdBy
      *
      * @return DomesticPricing
      */
-    public function setCreatedBy(\OAuth\Entity\User $created_by = null)
+    public function setCreatedBy(\OAuth\Entity\User $createdBy = null)
     {
-        $this->created_by = $created_by;
+        $this->created_by = $createdBy;
 
         return $this;
     }
 
     /**
-     * Get created_by.
+     * Get createdBy.
      *
      * @return \OAuth\Entity\User|null
      */
@@ -521,11 +490,11 @@ class DomesticPricing
     /**
      * Set customer.
      *
-     * @param \OAuth\Entity\User|null $customer
+     * @param \Customer\Entity\Customer|null $customer
      *
      * @return DomesticPricing
      */
-    public function setCustomer(\OAuth\Entity\User $customer = null)
+    public function setCustomer(\Customer\Entity\Customer $customer = null)
     {
         $this->customer = $customer;
 
@@ -535,7 +504,7 @@ class DomesticPricing
     /**
      * Get customer.
      *
-     * @return \OAuth\Entity\User|null
+     * @return \Customer\Entity\Customer|null
      */
     public function getCustomer()
     {
@@ -591,21 +560,21 @@ class DomesticPricing
     }
 
     /**
-     * Set updated_by.
+     * Set updatedBy.
      *
-     * @param \OAuth\Entity\User|null $updated_by
+     * @param \OAuth\Entity\User|null $updatedBy
      *
      * @return DomesticPricing
      */
-    public function setUpdatedBy(\OAuth\Entity\User $updated_by = null)
+    public function setUpdatedBy(\OAuth\Entity\User $updatedBy = null)
     {
-        $this->updated_by = $updated_by;
+        $this->updated_by = $updatedBy;
 
         return $this;
     }
 
     /**
-     * Get updated_by.
+     * Get updatedBy.
      *
      * @return \OAuth\Entity\User|null
      */

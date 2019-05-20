@@ -170,9 +170,9 @@ const mapStateToProps = ({ service,authUser }) => {
   return { modalData,authUser,modalType };
 };
 
-export default reduxForm({
-  form: 'service_action_form',
-  validate
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   toggleServiceModal,changeTypeServiceModal
-})(ActionForm)));
+})(reduxForm({ 
+  form: 'service_action_form', 
+  validate
+})(injectIntl(ActionForm)));

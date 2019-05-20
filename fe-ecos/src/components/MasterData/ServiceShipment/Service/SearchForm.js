@@ -94,8 +94,8 @@ const mapStateToProps = ({ service }) => {
   return { serviceCode }
 }
 
-export default reduxForm({
-  form: 'service_search_form',
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   getServiceCodeList
-})(SearchForm)));
+})(reduxForm({ 
+  form: 'service_search_form'
+})(injectIntl(SearchForm)));

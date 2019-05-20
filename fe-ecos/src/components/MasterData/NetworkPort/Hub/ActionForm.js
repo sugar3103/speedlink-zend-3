@@ -316,12 +316,12 @@ const mapStateToProps = ({ hub, authUser }) => {
   }
 }
 
-export default reduxForm({
-  form: 'hub_action_form',
-  validate
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   toggleHubModal,
   getCountryHubList,
   getCityHubList,
   changeTypeHubModal
-})(ActionForm)));
+})(reduxForm({ 
+  form: 'hub_action_form', 
+  validate
+})(injectIntl(ActionForm)));

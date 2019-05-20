@@ -345,7 +345,7 @@ const mapStateToProps = (state, props) => {
   const selector = formValueSelector('range_weight_domestic_action_form');
   const carrier_id = selector(state, 'carrier_id');
   const service_id = selector(state, 'service_id');
-  let initialValues = rangeWeight.itemEditting;
+  const initialValues = rangeWeight.itemEditting;
   return {
     carrier,
     service,

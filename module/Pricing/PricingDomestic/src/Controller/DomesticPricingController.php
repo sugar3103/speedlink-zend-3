@@ -40,9 +40,9 @@ class DomesticPricingController extends CoreController {
         if ($this->getRequest()->isPost()) {
             
             $fieldsMap = [
-                'id','name','name_en','carrer_id','is_private',
+                'id','name','carrer_id','is_private',
                 'category_id', 'service_id','effected_date',
-                'expired_date','saleman_id','is_private',
+                'expired_date','saleman_id',
                 'customer_id','status','approval_status','approved_by'               
             ];
 
@@ -74,8 +74,9 @@ class DomesticPricingController extends CoreController {
                 // get filtered and validated data
                 $data = $form->getData();
                 // add Domestic Pricing.
-                $this->domesticPricingManager->addPricing($data,$user);
+                $pricing = $this->domesticPricingManager->addPricing($data,$user);
                 $this->apiResponse['message'] = "ADD_SUCCESS_DOMESTIC_PRICING";
+                $this->apiResponse['data'] = ['pricing_id' => $pricing->getId()];
             } else {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = "Error";
@@ -104,6 +105,7 @@ class DomesticPricingController extends CoreController {
                         // update Domestic Pricing.
                         $this->domesticPricingManager->updatePricing($pricing, $data,$user);
                         $this->apiResponse['message'] = "MODIFIED_SUCCESS_DOMESTIC_PRICING";
+                        $this->apiResponse['data'] = ['pricing_id' => $pricing->getId()];
                     } else {
                         $this->error_code = 0;
                         $this->apiResponse['data'] = $form->getMessages(); 

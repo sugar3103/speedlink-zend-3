@@ -435,10 +435,7 @@ const mapStateToProps = ({ branch, authUser }) => {
   }
 }
 
-export default reduxForm({
-  form: 'branch_action_form',
-  validate
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   toggleBranchModal,
   changeTypeBranchModal,
   getCityBranchList,
@@ -446,4 +443,7 @@ export default reduxForm({
   getCountryBranchList,
   getWardBranchList,
   getHubBranchList
-})(ActionForm)));
+})(reduxForm({ 
+  form: 'branch_action_form', 
+  validate
+})(injectIntl(ActionForm)));

@@ -173,10 +173,10 @@ const mapStateToProps = ({ pricingDomestic, authUser }) => {
   }
 }
 
-export default reduxForm({
-  form: 'zone_domestic_action_form',
-  validate
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   toggleZoneDomesticModal,
   changeTypeZoneDomesticModal
-})(ActionForm)));
+})(reduxForm({ 
+  form: 'zone_domestic_action_form', 
+  validate
+})(injectIntl(ActionForm)));

@@ -162,14 +162,9 @@ const mapStateToProps = ({ hub }) => {
   }
 }
 
-export default reduxForm({
-  form: 'hub_search_form',
-  initialValues: {
-    name: '',
-    name_en: '',
-    status: -1
-  }
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   getCityHubList,
-  getCountryHubList,
-})(SearchForm)));
+  getCountryHubList
+})(reduxForm({ 
+  form: 'hub_search_form'
+})(injectIntl(SearchForm)));

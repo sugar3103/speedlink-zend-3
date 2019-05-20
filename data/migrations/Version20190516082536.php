@@ -25,7 +25,7 @@ final class Version20190516082536 extends AbstractMigration
 
         $this->addSql('
             ALTER TABLE shipment_type 
-            ADD CONSTRAINT category_shipment_type_service_id_fk FOREIGN KEY (category_id) REFERENCES service (id) on update cascade on delete cascade
+            ADD CONSTRAINT category_shipment_type_category_id_fk FOREIGN KEY (category_id) REFERENCES category (id) on update cascade on delete cascade
         ');
     }
 

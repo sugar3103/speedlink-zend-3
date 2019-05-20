@@ -175,10 +175,10 @@ const mapStateToProps = ({ users, authUser }) => {
   }
 }
 
-export default reduxForm({
-  form: 'permission_action_form',
-  validate
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   togglePermissionModal,
   changeTypePermissionModal
-})(ActionForm)));
+})(reduxForm({ 
+  form: 'permission_action_form', 
+  validate
+})(injectIntl(ActionForm)));

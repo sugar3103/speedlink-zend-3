@@ -8,12 +8,18 @@ export * from './master-data/address/country/actions';
 export * from './master-data/address/city/actions';
 export * from './master-data/address/district/actions';
 export * from './master-data/address/ward/actions';
+
+export * from './pricing-domestic/pricing/actions';
 export * from './pricing-domestic/area/actions';
 export * from './pricing-domestic/range-weight/actions';
 export * from './pricing-domestic/zone/actions';
 export * from './pricing-domestic/carrier/actions';
 export * from './pricing-domestic/service/actions';
 export * from './pricing-domestic/shipment-type/actions';
+export * from './pricing-domestic/customer/actions';
+export * from './pricing-domestic/approved-by/actions';
+export * from './pricing-domestic/saleman/actions';
+
 export * from './pricing-management/range-weight/actions';
 export * from './pricing-management/zone-code/actions';
 export * from './pricing-management/customer/actions';

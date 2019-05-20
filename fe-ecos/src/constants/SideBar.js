@@ -111,6 +111,12 @@ export default {
       icon: 'icon-pricing-table',
       childrens: [
         {
+          id: 'pricing_index_domestic',
+          title: 'menu.pricing_index_domestic',
+          route: '/pricing-domestic/pricing',
+          icon: 'lnr lnr-map'
+        },
+        {
           id: 'area_domestic',
           title: 'menu.area_domestic',
           route: '/pricing-domestic/area',

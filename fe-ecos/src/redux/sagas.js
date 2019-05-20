@@ -20,12 +20,16 @@ import roleSagas from './system/users/role/saga';
 import permissionSagas from './system/users/permission/saga';
 import settingSagas from './system/setting/saga';
 import systemSagas from './system/saga';
+import pricingDomestic from './pricing-domestic/pricing/saga';
 import pricingDomesticArea from './pricing-domestic/area/saga';
 import pricingDomesticZone from './pricing-domestic/zone/saga';
 import pricingDomesticRangeWeight from './pricing-domestic/range-weight/saga';
 import pricingDomesticCarrier from './pricing-domestic/carrier/saga';
 import pricingDomesticService from './pricing-domestic/service/saga';
 import pricingDomesticShipmentType from './pricing-domestic/shipment-type/saga';
+import pricingDomesticCustomer from './pricing-domestic/customer/saga';
+import pricingDomesticApprovedBy from './pricing-domestic/approved-by/saga';
+import pricingDomesticSaleman from './pricing-domestic/saleman/saga';
 
 export default function* rootSaga() {
   yield all([
@@ -50,11 +54,15 @@ export default function* rootSaga() {
     shipmentTypeSagas(),
     settingSagas(),
     systemSagas(),
+    pricingDomestic(),
     pricingDomesticArea(),
     pricingDomesticZone(),
     pricingDomesticRangeWeight(),
     pricingDomesticCarrier(),
     pricingDomesticService(),
-    pricingDomesticShipmentType()
+    pricingDomesticShipmentType(),
+    pricingDomesticCustomer(),
+    pricingDomesticApprovedBy(),
+    pricingDomesticSaleman(),
   ]);
 }

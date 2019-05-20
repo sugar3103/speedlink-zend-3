@@ -312,11 +312,11 @@ const mapStateToProps = (state, props) => {
   }
 }
 
-export default reduxForm({
-  form: 'range_weight_domestic_search_form'
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   getCarrierDomesticList,
   getServiceDomesticList,
   getShipmentTypeDomesticList,
   getZoneDomesticList
-})(SearchForm)));
+})(reduxForm({ 
+  form: 'range_weight_domestic_search_form'
+})(injectIntl(SearchForm)));

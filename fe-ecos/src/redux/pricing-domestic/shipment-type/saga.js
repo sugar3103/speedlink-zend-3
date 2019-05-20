@@ -12,7 +12,7 @@ import {
 
 /* GET LIST SHIPMENT_TYPE DOMESTIC */
 
-function getListZoneDomesticApi(params) {
+function getListShipmentTypeDomesticApi(params) {
   return axios.request({
     method: 'post',
     url: `${apiUrl}shipment_type`,
@@ -21,15 +21,15 @@ function getListZoneDomesticApi(params) {
   });
 }
 
-const getZoneDomesticListRequest = async (params) => {
-  return await getListZoneDomesticApi(params).then(res => res.data).catch(err => err)
+const getShipmentTypeDomesticListRequest = async (params) => {
+  return await getListShipmentTypeDomesticApi(params).then(res => res.data).catch(err => err)
 };
 
-function* getZoneDomesticListItems({ payload }) {
+function* getShipmentTypeDomesticListItems({ payload }) {
   const { params } = payload;
   const { pathname } = history.location;
   try {
-    const response = yield call(getZoneDomesticListRequest, params);
+    const response = yield call(getShipmentTypeDomesticListRequest, params);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(getShipmentTypeDomesticListSuccess(response.data));
@@ -51,10 +51,10 @@ function* getZoneDomesticListItems({ payload }) {
   }
 }
 
-export function* watchZoneDomesticGetList() {
-  yield takeEvery(PRI_DOM_SHIPMENT_TYPE_GET_LIST, getZoneDomesticListItems);
+export function* watchShipmentTypeDomesticGetList() {
+  yield takeEvery(PRI_DOM_SHIPMENT_TYPE_GET_LIST, getShipmentTypeDomesticListItems);
 }
 
 export default function* rootSaga() {
-  yield all([ fork(watchZoneDomesticGetList) ]);
+  yield all([ fork(watchShipmentTypeDomesticGetList) ]);
 }

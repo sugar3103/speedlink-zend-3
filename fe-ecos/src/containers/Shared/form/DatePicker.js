@@ -23,6 +23,13 @@ class DatePickerField extends PureComponent {
     this.props.onChange(date);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.value) {
+      const date = new Date(nextProps.value);
+      this.setState({ startDate: date })
+    }
+  }
+
   render() {
     return (
       <div className="date-picker">

@@ -174,10 +174,11 @@ const mapStateToProps = ({ carrier, authUser }) => {
   };
 };
 
-export default reduxForm({
-  form: 'carrier_action_form',
-  validate
-})(injectIntl(connect(mapStateToProps, {
+
+export default connect(mapStateToProps, {
   toggleCarrierModal,
   changeTypeCarrierModal
-})(ActionForm)));
+})(reduxForm({ 
+  form: 'carrier_action_form', 
+  validate
+})(injectIntl(ActionForm)));

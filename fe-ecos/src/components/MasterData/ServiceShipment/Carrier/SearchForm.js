@@ -94,11 +94,8 @@ const mapStateToProps = ({ carrier }) => {
   return { carrierCode }
 }
 
-export default reduxForm({
-  form: 'carrier_search_form',
-  initialValues: {
-    carrier: -1
-  }
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   getCarrierCodeList
-})(SearchForm)));
+})(reduxForm({ 
+  form: 'carrier_search_form'
+})(injectIntl(SearchForm)));

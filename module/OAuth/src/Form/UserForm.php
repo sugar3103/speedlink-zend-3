@@ -69,7 +69,7 @@ class UserForm extends Form {
                 [
                     'name' => StringLength::class,
                     'options' => [
-                        'min' => 4,
+                        'min' => 2,
                         'max' => 50
                     ]
                 ],
@@ -177,7 +177,7 @@ class UserForm extends Form {
                     [
                         'name' => StringLength::class,
                         'options' => [
-                            'min' => 4,
+                            'min' => 2,
                             'max' => 50
                         ]
                     ]

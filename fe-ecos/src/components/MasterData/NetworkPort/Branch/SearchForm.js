@@ -257,17 +257,12 @@ const mapStateToProps = ({ branch }) => {
   }
 }
 
-export default reduxForm({
-  form: 'branch_search_form',
-  initialValues: {
-    name: '',
-    status: -1,
-
-  }
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   getHubBranchList,
   getCityBranchList,
   getCountryBranchList,
   getWardBranchList,
   getDistrictBranchList
-})(SearchForm)));
+})(reduxForm({ 
+  form: 'branch_search_form'
+})(injectIntl(SearchForm)));

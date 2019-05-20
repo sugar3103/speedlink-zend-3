@@ -159,16 +159,10 @@ const mapStateToProps = ({ shipment_type, carrier, service }) => {
   return { shipmentTypeCode, carrierCode, serviceCode }
 }
 
-export default reduxForm({
-  form: 'shipment_type_search_form',
-  initialValues: {
-    name: '',
-    status: -1,
-    category_code: -1,
-    product_type_code: -1,
-  }
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   getShipmentTypeCodeList,
   getCarrierCodeList,
   getServiceCodeList,
-})(SearchForm)));
+})(reduxForm({ 
+  form: 'shipment_type_search_form'
+})(injectIntl(SearchForm)));

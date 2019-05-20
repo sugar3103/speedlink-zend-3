@@ -250,12 +250,12 @@ const mapStateToProps = ({ shipment_type, carrier, service, authUser }) => {
   return { modalData, modalType, carrierCode, serviceCode, authUser };
 };
 
-export default reduxForm({
-  form: 'shipment_type_action_form',
-  validate
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   toggleShipmentTypeModal,
   getCarrierCodeList,
   getServiceCodeList,
   changeTypeShipmentTypeModal
-})(ActionForm)));
+})(reduxForm({ 
+  form: 'shipment_type_action_form', 
+  validate
+})(injectIntl(ActionForm)));

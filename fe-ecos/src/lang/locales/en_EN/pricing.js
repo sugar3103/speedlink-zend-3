@@ -44,6 +44,28 @@ module.exports = {
     'pri_dom.add-range-weight-title': 'Add Range Weight Domestic',
     'pri_dom.edit-range-weight-title': 'Edit Range Weight Domestic',
 
+    /* PRICING */
+    'pri_dom.pricing-title': 'Pricing Domestic',
+    'pri_dom.type': 'Type',
+    'pri_dom.public': 'Public',
+    'pri_dom.customer': 'Customer',
+    'pri_dom.saleman': 'Saleman',
+    'pri_dom.effected-date': 'Effected Date',
+    'pri_dom.expired-date': 'Expired Date',
+    'pri_dom.approved-status': 'Approved Status',
+    'pri_dom.approved': 'Approved',
+    'pri_dom.draft': 'Draft',
+    'pri_dom.new': 'New',
+    'pri_dom.approved-by': 'Approved By',
+    'pri_dom.add-new-pricing': 'Create New Pricing',
+    'pri_dom.update-pricing': 'Update Pricing',
+    'pri_dom.view-pricing': 'View Pricing',
+    'pri_dom.delete-pricing': 'Delete Pricing',
+    'pri_dom.master-data': 'Master Data',
+    'pri_dom.detail': 'Detail',
+    'pri_dom.vas': 'Vas',
+    'pri_dom.get-pricing-dom': 'Get Pricing Dom',
+
     //validate
     'pri_dom.validate-name-exists': 'Name already exists',
     'pri_dom.validate-nameEn-exists': 'English name already exists',
@@ -73,6 +95,12 @@ module.exports = {
     'pri_dom.validate-round-up-empty': 'Round Up shouldn’t be empty',
     'pri_dom.validate-round-up-not-is-number': 'Round Up must is number',
     'pri_dom.validate-round-up-not-negative': 'Round Up is not negative',
+    'pri_dom.validate-type-empty': 'Type shouldn’t be empty',
+    'pri_dom.validate-customer-empty': 'Customer shouldn’t be empty',
+    'pri_dom.validate-approval-by-empty': 'Approved by shouldn’t be empty',
+    'pri_dom.validate-effected-date-empty': 'Effected date shouldn’t be empty',
+    'pri_dom.validate-expired-date-empty': 'Expired date shouldn’t be empty',
+    'pri_dom.validate-expired-date-lesser': 'Expired date must be greater than Effected date',
 
     // //pricing management global
     // 'pri_man.filter-type': 'Filter Type',

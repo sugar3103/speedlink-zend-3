@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unused-state */
 import React, { Component, Fragment } from 'react';
-import { Card, CardBody, Col, Button } from 'reactstrap';
+import { Card, CardBody, Col, Button, Badge } from 'reactstrap';
 import { withRouter, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Table from '../../../containers/Shared/table/Table';
@@ -209,7 +209,7 @@ class List extends Component {
           width: 100,
           Cell: ({ original }) => {
             return (
-              original.status ? messages['pri_dom.active'] : messages['pri_dom.inactive']
+              original.status ? <Badge color="success">{messages['pri_dom.active']}</Badge> : <Badge color="dark">{messages['pri_dom.inactive']}</Badge>
             )
           },
           sortable: false,

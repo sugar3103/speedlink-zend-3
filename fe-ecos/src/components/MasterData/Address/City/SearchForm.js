@@ -135,8 +135,8 @@ const mapStateToProps = ({ address, system }) => {
   }
 }
 
-export default reduxForm({
-  form: 'city_search_form',
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   getCountryList
-})(SearchForm)));
+})(reduxForm({ 
+  form: 'city_search_form'
+})(injectIntl(SearchForm)));
