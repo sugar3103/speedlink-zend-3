@@ -65,6 +65,8 @@ module.exports = {
     'pri_dom.detail': 'Detail',
     'pri_dom.vas': 'Vas',
     'pri_dom.get-pricing-dom': 'Get Pricing Dom',
+    'pri_dom.is-ras': 'Noi Thanh',
+    'pri_dom.not-ras': 'Ngoai Thanh',
 
     //validate
     'pri_dom.validate-name-exists': 'Name already exists',

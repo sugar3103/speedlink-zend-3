@@ -6,6 +6,7 @@ import { injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import Action from './Action';
+import PricingTable from './PricingTable';
 
 class Detail extends Component {
 
@@ -52,16 +53,10 @@ class Detail extends Component {
                   </NavItem>
                 </Nav>
                 <TabContent activeTab={this.state.activeTab}>
-                  <TabPane tabId={1}>
-                    <Action type={type} />
-                  </TabPane>
+                  <TabPane tabId={1}><Action type={type} /></TabPane>
                   { type !== "add" && <Fragment>
-                    <TabPane tabId={2}>
-                      Detail
-                    </TabPane>
-                    <TabPane tabId={3}>
-                      Vas
-                    </TabPane>
+                    <TabPane tabId={2}><PricingTable /></TabPane>
+                    <TabPane tabId={3}>Vas</TabPane>
                   </Fragment> }
                 </TabContent>
               </div>

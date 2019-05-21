@@ -202,13 +202,13 @@ class List extends Component {
           Cell: ({ original }) => {
             return (
               <Fragment>
-                <Can user={this.props.authUser.user} permission="range_weight_domestic" action="edit" own={original.created_at}>
-                  <Link to={`/pricing-domestic/range-weight/edit/${original.id}`} className="btn btn-info btn-sm">
+                <Can user={this.props.authUser.user} permission="pricing_domestic" action="edit" own={original.created_at}>
+                  <Link to={`/pricing-domestic/pricing/edit/${original.id}`} className="btn btn-info btn-sm">
                     <span className="lnr lnr-pencil" />
                   </Link>
                 </Can>
                 &nbsp;
-                <Can user={this.props.authUser.user} permission="range_weight_domestic" action="delete" own={original.created_at}>
+                <Can user={this.props.authUser.user} permission="pricing_domestic" action="delete" own={original.created_at}>
                   <Button color="danger" size="sm" onClick={(e) => this.onDelete(e, [original.id])}><span className="lnr lnr-trash" /></Button>
                 </Can>
               </Fragment>

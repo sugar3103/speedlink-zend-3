@@ -403,3 +403,18 @@ form {
 .topbar__title {
     display: none;
 }
+
+/* PRICING DOMESTIC */
+.table-pri-dom {
+    th, td {
+        @include themify($themes) {
+            border: 1px solid themed('colorFitness');
+            color:  themed('colorText') !important;
+        }
+    }
+    .title-row {
+        vertical-align: middle;
+        text-align: center;
+    }
+}
+/* END PRICING DOMESTIC */

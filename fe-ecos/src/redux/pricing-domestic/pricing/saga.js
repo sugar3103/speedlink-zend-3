@@ -11,7 +11,8 @@ import {
   PRI_DOM_PRICING_ADD_ITEM,
   PRI_DOM_PRICING_REQUEST_UPDATE_ITEM,
   PRI_DOM_PRICING_UPDATE_ITEM,
-  PRI_DOM_PRICING_DELETE_ITEM
+  PRI_DOM_PRICING_DELETE_ITEM,
+  PRI_DOM_PRICING_GET_DATA
 } from "../../../constants/actionTypes";
 
 import {
@@ -22,7 +23,8 @@ import {
   updatePricingDomesticItemSuccess,
   deletePricingDomesticItemSuccess,
   getPricingDomesticList,
-  requestUpdatePricingDomesticItem
+  requestUpdatePricingDomesticItem,
+  getPricingDomesticDataSuccess
 } from "./actions";
 
 //validate
@@ -246,6 +248,48 @@ function* deletePricingDomesticItem({ payload }) {
   }
 }
 
+/* GET PRICING DATA */
+
+function getDataPricingDomesticApi(pricing_id) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}pricing/domestic/data`,
+    headers: authHeader(),
+    data: {  id: pricing_id }
+  });
+}
+
+const getPricingDomesticData = async (pricing_id) => {
+  return await getDataPricingDomesticApi(pricing_id).then(res => res.data).catch(err => err)
+};
+
+function* getDataPricingDomesticItems({ payload }) {
+  const { pricing_id } = payload;
+  const { pathname } = history.location;
+  try {
+    const response = yield call(getPricingDomesticData, pricing_id);
+    switch (response.error_code) {
+      
+      case EC_SUCCESS:
+        yield put(getPricingDomesticDataSuccess(response.data));
+        break;
+
+      case EC_FAILURE:
+        yield put(pricingDomesticError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(pricingDomesticError(error));
+  }
+}
+
 export function* watchPricingDomesticGetList() {
   yield takeEvery(PRI_DOM_PRICING_GET_LIST, getPricingDomesticListItems);
 }
@@ -266,6 +310,10 @@ export function* watchPricingDomestiDeleteItem() {
   yield takeEvery(PRI_DOM_PRICING_DELETE_ITEM, deletePricingDomesticItem);
 }
 
+export function* watchPricingDomestiGetData() {
+  yield takeEvery(PRI_DOM_PRICING_GET_DATA, getDataPricingDomesticItems);
+}
+
 export default function* rootSaga() {
   yield all([
     fork(watchPricingDomesticGetList),
@@ -273,5 +321,6 @@ export default function* rootSaga() {
     fork(watchRequestPricingDomesticUpdateItem),
     fork(watchPricingDomesticUpdateItem),
     fork(watchPricingDomestiDeleteItem),
+    fork(watchPricingDomestiGetData),
   ]);
 }

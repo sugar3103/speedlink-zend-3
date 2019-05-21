@@ -15,6 +15,10 @@ import {
 
   PRI_DOM_PRICING_DELETE_ITEM,
   PRI_DOM_PRICING_DELETE_ITEM_SUCCESS,
+  
+  PRI_DOM_PRICING_GET_DATA,
+  PRI_DOM_PRICING_GET_DATA_SUCCESS,
+
 } from '../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -24,6 +28,8 @@ const INIT_STATE = {
   itemEditting: {},
   total: 0,
   paramSearch: null,
+  data: {},
+  loadingData: true
 };
 
 export default (state = INIT_STATE, action) => {
@@ -100,6 +106,19 @@ export default (state = INIT_STATE, action) => {
 		case PRI_DOM_PRICING_DELETE_ITEM_SUCCESS:
 			return { 
         ...state, 
+      };
+
+    case PRI_DOM_PRICING_GET_DATA:
+      return {
+        ...state,
+        loadingData: true,
+      };
+
+    case PRI_DOM_PRICING_GET_DATA_SUCCESS:
+      return { 
+        ...state, 
+        loadingData: false, 
+        data: action.payload
       };
 
     default:

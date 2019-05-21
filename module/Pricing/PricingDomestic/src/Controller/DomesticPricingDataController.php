@@ -51,7 +51,15 @@ class DomesticPricingDataController extends CoreController {
             $data = $this->getRequestData();
             $pricing = $this->entityManager->getRepository(DomesticPricing::class)->find($data['id']);
             if($pricing) {
-                $this->createTablePricing($pricing);        
+                $data = [
+                    'id' => $pricing->getId(),
+                    'name' => $pricing->getName(),
+                    'service' => $pricing->getService()->getName(),
+                    'service_en' => $pricing->getService()->getNameEn(),
+                    'shipment_types' => $this->getShipmentTypeByService($pricing->getService()->getId()),
+                    'data' => $this->createTablePricing($pricing),                    
+                ];
+                $this->apiResponse['data'] = $data;       
             }
         }
 
@@ -61,12 +69,12 @@ class DomesticPricingDataController extends CoreController {
     private function createTablePricing($pricing) {
         $data = [];
         //Get All Zone
-        $zones = $this->entityManager->getRepository(DomesticZone::class)->findAll([]);
+        $zones = $this->entityManager->getRepository(DomesticZone::class)->findBy(['is_deleted' => 0]);
         foreach ($zones as $zone) {
             $data[$zone->getId()]['name'] = $zone->getName();
             $data[$zone->getId()]['name_en'] = $zone->getNameEn();
             
-            $shipmentTypes = $this->entityManager->getRepository(ShipmentType::class)->findAll([]);
+            $shipmentTypes = $this->entityManager->getRepository(ShipmentType::class)->findBy(['is_deleted' => 0, 'status' => 1]);
             foreach ($shipmentTypes as $shipmentType) {
                 $data[$zone->getId()]['ras'][$shipmentType->getId()] = null;
                 $data[$zone->getId()]['not_ras'][$shipmentType->getId()] = null;
@@ -105,9 +113,20 @@ class DomesticPricingDataController extends CoreController {
             }            
         }
 
-      
-        
-        var_dump($data);
-        die;
+        return $data;
+    }
+
+    private function getShipmentTypeByService($service_id) {
+        $data = [];
+        $shipmentTypes = $this->entityManager->getRepository(\ServiceShipment\Entity\ShipmentType::class)->findBy(['service' => $service_id, 'is_deleted' => 0,'status' => 1]);
+        foreach ($shipmentTypes as $shipmentType) {
+            $data[] = [
+                'id' => $shipmentType->getId(),
+                'name' => $shipmentType->getName(),
+                'name_en' => $shipmentType->getNameEn(),
+            ];
+        }
+
+        return $data;
     }
 }

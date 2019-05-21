@@ -15,6 +15,10 @@ import {
 
   PRI_DOM_PRICING_DELETE_ITEM,
   PRI_DOM_PRICING_DELETE_ITEM_SUCCESS,
+
+  PRI_DOM_PRICING_GET_DATA,
+  PRI_DOM_PRICING_GET_DATA_SUCCESS
+
 } from '../../../constants/actionTypes';
 
 export const pricingDomesticError = (error) => ({
@@ -67,4 +71,14 @@ export const deletePricingDomesticItem = (ids) => ({
 
 export const deletePricingDomesticItemSuccess = () => ({
   type: PRI_DOM_PRICING_DELETE_ITEM_SUCCESS,
+});
+
+export const getPricingDomesticData = (pricing_id) => ({
+  type: PRI_DOM_PRICING_GET_DATA,
+  payload: { pricing_id }
+});
+
+export const getPricingDomesticDataSuccess = (data) => ({
+  type: PRI_DOM_PRICING_GET_DATA_SUCCESS,
+  payload: data
 });
