@@ -17,7 +17,7 @@
     width: 100%;
     padding: 5px 10px;
     font-size: 12px;
-    height: 32px;
+    height: 25px;
     transition: border 0.3s;
     background: transparent;
 
@@ -163,11 +163,11 @@
 
   .form__form-group-select {
     width: 100%;
-    height: 32px;
+    height: 25px;
     font-size: 12px;
 
     .Select-control {
-      height: 32px;
+      height: 25px;
       border-radius: 0;
       transition: all 0.3s;
       background: transparent;
@@ -178,7 +178,7 @@
     }
 
     .Select-placeholder, .Select-input {
-      height: 30px;
+      height: 25px;
     }
 
     .Select-input {
@@ -410,8 +410,8 @@
 }
 
 .form__form-group-icon {
-  padding: 6px;
-  height: 32px;
+  padding: 0 6px;
+  height: 25px;
 
   @include themify($themes) {
     background: themed('colorFieldsBorder');
@@ -540,3 +540,13 @@
   }
 }
 
+.Select--single {
+  .Select-control {
+    .Select-value {
+      line-height: 25px;
+    }
+    &.Select-placeholder {
+      line-height: 25px;
+    }
+  }
+}
