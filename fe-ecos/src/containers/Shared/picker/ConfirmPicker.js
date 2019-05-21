@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { CardBody, ButtonToolbar, Button } from 'reactstrap';
+import { CardBody, Button } from 'reactstrap';
 
 class ConfirmPicker extends Component {
     render() {
@@ -12,7 +12,7 @@ class ConfirmPicker extends Component {
                         <h5 className="bold-text">{messages["warning"]}</h5>
                     </div>
                     <p>{messages["delete-confirm"]}</p>
-                    <ButtonToolbar>
+                    <div className="mt-3">
                         <Button outline size="sm" onClick={onClose}>{messages["cancel"]}</Button> &nbsp;
                         <Button 
                             color="danger" 
@@ -20,8 +20,8 @@ class ConfirmPicker extends Component {
                             onClick={() => { onDelete()
                                             onClose()
                                         }}
-                        >{messages["ok"]}</Button>
-                    </ButtonToolbar>
+                        >{messages["delete"]}</Button>
+                    </div>
                 </CardBody>
             </div>
         );

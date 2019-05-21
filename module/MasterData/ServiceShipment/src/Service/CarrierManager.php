@@ -64,6 +64,8 @@ class CarrierManager
             foreach ($carriers as &$carrier) {  
                 $carrier['created_at'] =  ($carrier['created_at']) ? Utils::checkDateFormat($carrier['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
                 $carrier['updated_at'] =  ($carrier['updated_at']) ? Utils::checkDateFormat($carrier['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $carrier['full_name_created'] = trim($carrier['full_name_created']);
+                $carrier['full_name_updated'] = trim($carrier['full_name_updated']);
             }
         }
 

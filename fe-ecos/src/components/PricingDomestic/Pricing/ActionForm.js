@@ -337,7 +337,7 @@ class ActionForm extends Component {
           </Col>
         </Row>
         <Row>
-          <Col md={12} className="text-right search-group-button">
+          <Col md={12} className="text-right">
             <Link to="/pricing-domestic/pricing" className="btn btn-outline-secondary btn-sm">
               {messages['cancel']}
             </Link>

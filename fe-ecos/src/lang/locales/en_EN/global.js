@@ -4,6 +4,7 @@ module.exports = {
     'save': 'Save',    
     'edit': 'Edit',  
     'ok': 'OK',    
+    'delete': 'Delete',    
     'warning': 'Warning',
     'delete-confirm': 'Are you sure you want to delete?',
     'description': 'Description',

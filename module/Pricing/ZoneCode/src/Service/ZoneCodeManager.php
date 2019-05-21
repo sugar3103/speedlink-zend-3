@@ -253,6 +253,8 @@ class ZoneCodeManager {
             //set created_at
                 $zonecode['created_at'] =  ($zonecode['created_at']) ?Utils::checkDateFormat($zonecode['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
                 $zonecode['updated_at'] =  ($zonecode['updated_at']) ? Utils::checkDateFormat($zonecode['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $zonecode['full_name_created'] = trim($zonecode['full_name_created']);
+                $zonecode['full_name_updated'] = trim($zonecode['full_name_updated']);
             }
         }
         //set data user

@@ -54,6 +54,8 @@ class DomesticPricingDataController extends CoreController {
                 $data = [
                     'id' => $pricing->getId(),
                     'name' => $pricing->getName(),
+                    'carrier_id' => $pricing->getCarrier()->getId(),
+                    'service_id' => $pricing->getService()->getId(),
                     'service' => $pricing->getService()->getName(),
                     'service_en' => $pricing->getService()->getNameEn(),
                     'shipment_types' => $this->getShipmentTypeByService($pricing->getService()->getId()),
@@ -96,9 +98,19 @@ class DomesticPricingDataController extends CoreController {
 
                         if($pricingData) {
                             if($rangeWeight->getIsRas()) {
-                                $data[$zone->getId()]['ras'][$shipmentType->getId()][] = ['name' => $rangeWeight->getName(), 'name_en' => $rangeWeight->getNameEn(), 'value' => $pricingData->getValue()];
+                                $data[$zone->getId()]['ras'][$shipmentType->getId()][] = [
+                                    'name' => $rangeWeight->getName(), 
+                                    'name_en' => $rangeWeight->getNameEn(), 
+                                    'to' => $rangeWeight->getTo(),
+                                    'value' => $pricingData->getValue()
+                                ];
                             } else {
-                                $data[$zone->getId()]['not_ras'][$shipmentType->getId()][] = ['name' => $rangeWeight->getName(), 'name_en' => $rangeWeight->getNameEn(), 'value' => $pricingData->getValue()];
+                                $data[$zone->getId()]['not_ras'][$shipmentType->getId()][] = [
+                                    'name' => $rangeWeight->getName(), 
+                                    'name_en' => $rangeWeight->getNameEn(),
+                                    'to' => $rangeWeight->getTo(), 
+                                    'value' => $pricingData->getValue()
+                                ];
                             }                            
                         } else {
                             if($rangeWeight->getIsRas()) {

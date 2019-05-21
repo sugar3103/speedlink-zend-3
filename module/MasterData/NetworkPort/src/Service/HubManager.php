@@ -174,6 +174,8 @@ class HubManager {
                 //set created_at
                 $hub['created_at'] =  ($hub['created_at']) ? Utils::checkDateFormat($hub['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
                 $hub['updated_at'] =  ($hub['updated_at']) ? Utils::checkDateFormat($hub['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $hub['full_name_created'] = trim($hub['full_name_created']);
+                $hub['full_name_updated'] = trim($hub['full_name_updated']);
             }
         }
 

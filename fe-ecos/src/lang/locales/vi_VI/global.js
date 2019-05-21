@@ -4,6 +4,7 @@ module.exports = {
     'save': 'Lưu',
     'edit': 'Chỉnh sửa',
     'ok': 'OK',
+    'delete': 'Xóa',
     'warning': 'Cảnh báo',
     'delete-confirm': 'Bạn có chắc chắn muốn xóa?',
     'description': 'Mô tả',

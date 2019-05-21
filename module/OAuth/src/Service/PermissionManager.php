@@ -223,6 +223,8 @@ class PermissionManager {
                 //set created_at to GMT +7
                 $permission['created_at'] =  ($permission['created_at']) ? Utils::checkDateFormat($permission['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
                 $permission['updated_at'] =  ($permission['updated_at']) ? Utils::checkDateFormat($permission['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $permission['full_name_created'] = trim($permission['full_name_created']);
+                $permission['full_name_updated'] = trim($permission['full_name_updated']);
             }
             
         }
