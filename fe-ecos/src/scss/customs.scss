@@ -404,17 +404,72 @@ form {
 }
 
 /* PRICING DOMESTIC */
-.table-pri-dom {
-    th, td {
-        @include themify($themes) {
-            border: 1px solid themed('colorFitness');
-            color:  themed('colorText') !important;
+.pri-dom {
+    .table {
+        th, td {
+            @include themify($themes) {
+                border: 1px solid themed('colorFitness');
+                color:  themed('colorText') !important;
+            }
+            vertical-align: middle;
+            text-align: center;
         }
-        vertical-align: middle;
-        text-align: center;
+        .cell-value {
+            cursor: pointer;
+        }
     }
-    .cell-value {
-        cursor: pointer;
+    .form-edit-range-weight-value {
+        .form__form-group-label {
+            margin: 5px 0 !important;
+        }
+    }
+    .loading {
+        @include themify($themes) {
+            fill: themed('colorFitness') !important;
+        }
+        margin: auto;
+    }
+    .pricing-vas {
+        ul {
+            padding-left: 0;
+        }
+
+        .group-action {
+            .btn {
+                float: right;
+                padding: 4px 8px;
+                margin-right: 0;
+                margin-left: 15px;
+                margin-bottom: 0;
+            }
+        }
+
+        .vas-item {
+            display: flex;
+            
+            .btn {
+                padding: 3px 7px;
+            }
+
+            .group-input {
+                flex-grow: 1;
+                justify-content: space-between;
+            }
+
+            .table-price {
+                .btn {
+                    margin: 0;
+                }
+            }
+
+        }
+
+        .price-vas {
+            .btn {
+                margin-bottom: 0;
+                padding: 2px 6px;
+            }
+        }
     }
 }
 /* END PRICING DOMESTIC */

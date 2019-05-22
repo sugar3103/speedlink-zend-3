@@ -33,7 +33,7 @@ class DomesticPricingData
      *
      * @ORM\Column(name="is_deleted", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $is_deleted;
+    private $is_deleted = 0;
 
     /**
      * @var \DateTime
@@ -229,7 +229,7 @@ class DomesticPricingData
      */
     public function setDomesticPricing(\PricingDomestic\Entity\DomesticPricing $domesticPricing = null)
     {
-        $this->domesticPricing = $domesticPricing;
+        $this->domestic_pricing = $domesticPricing;
 
         return $this;
     }
@@ -241,7 +241,7 @@ class DomesticPricingData
      */
     public function getDomesticPricing()
     {
-        return $this->domesticPricing;
+        return $this->domestic_pricing;
     }
 
     /**

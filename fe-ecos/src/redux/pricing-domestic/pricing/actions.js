@@ -17,7 +17,10 @@ import {
   PRI_DOM_PRICING_DELETE_ITEM_SUCCESS,
 
   PRI_DOM_PRICING_GET_DATA,
-  PRI_DOM_PRICING_GET_DATA_SUCCESS
+  PRI_DOM_PRICING_GET_DATA_SUCCESS,
+
+  PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE,
+  PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE_SUCCESS
 
 } from '../../../constants/actionTypes';
 
@@ -81,4 +84,13 @@ export const getPricingDomesticData = (pricing_id) => ({
 export const getPricingDomesticDataSuccess = (data) => ({
   type: PRI_DOM_PRICING_GET_DATA_SUCCESS,
   payload: data
+});
+
+export const addRangeWeightValue = (item, toggleModal) => ({
+  type: PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE,
+  payload: { item, toggleModal }
+});
+
+export const addRangeWeightValueSuccess = () => ({
+  type: PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE_SUCCESS
 });

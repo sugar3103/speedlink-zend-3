@@ -18,6 +18,9 @@ import {
   
   PRI_DOM_PRICING_GET_DATA,
   PRI_DOM_PRICING_GET_DATA_SUCCESS,
+  
+  PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE,
+  PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE_SUCCESS,
 
 } from '../../../constants/actionTypes';
 
@@ -119,6 +122,19 @@ export default (state = INIT_STATE, action) => {
         ...state, 
         loadingData: false, 
         data: action.payload
+      };
+
+    case PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE:
+			return { 
+        ...state, 
+        loading: false 
+      };
+
+		case PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE_SUCCESS:
+			return { 
+        ...state, 
+        loading: false, 
+        errors: null
       };
 
     default:

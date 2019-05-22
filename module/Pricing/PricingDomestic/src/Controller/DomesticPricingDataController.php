@@ -10,6 +10,7 @@ use PricingDomestic\Entity\DomesticPricingData;
 use PricingDomestic\Entity\DomesticZone;
 use PricingDomestic\Entity\DomesticRangeWeight;
 use ServiceShipment\Entity\ShipmentType;
+use PricingDomestic\Form\PricingDataForm;
 
 class DomesticPricingDataController extends CoreController {
 
@@ -52,10 +53,8 @@ class DomesticPricingDataController extends CoreController {
             $pricing = $this->entityManager->getRepository(DomesticPricing::class)->find($data['id']);
             if($pricing) {
                 $data = [
-                    'id' => $pricing->getId(),
+                    'pricing_id' => $pricing->getId(),
                     'name' => $pricing->getName(),
-                    'carrier_id' => $pricing->getCarrier()->getId(),
-                    'service_id' => $pricing->getService()->getId(),
                     'service' => $pricing->getService()->getName(),
                     'service_en' => $pricing->getService()->getNameEn(),
                     'shipment_types' => $this->getShipmentTypeByService($pricing->getService()->getId()),
@@ -65,6 +64,30 @@ class DomesticPricingDataController extends CoreController {
             }
         }
 
+        return $this->createResponse();
+    }
+
+    public function addAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            $user = $this->tokenPayload;            
+            //Create New Form Domestic Pricing
+            $form = new PricingDataForm('create', $this->entityManager);
+
+            $form->setData($this->getRequestData());            
+            //validate form
+            if ($form->isValid()) {
+                // get filtered and validated data
+                $data = $form->getData();
+                // add Domestic Pricing.
+                $this->domesticPricingDataManager->addPricingData($data,$user);
+                $this->apiResponse['message'] = "ADD_SUCCESS_DOMESTIC_DATA_PRICING";
+            } else {
+                $this->error_code = 0;
+                $this->apiResponse['message'] = "Error";
+                $this->apiResponse['data'] = $form->getMessages(); 
+            }      
+        }
         return $this->createResponse();
     }
 
@@ -96,32 +119,30 @@ class DomesticPricingDataController extends CoreController {
                             'is_deleted' => 0
                         ]);
 
+                        $valueData = [
+                            'id'    =>$rangeWeight->getId(),
+                            'name' => $rangeWeight->getName(), 
+                            'name_en' => $rangeWeight->getNameEn(), 
+                            'to' => $rangeWeight->getTo(),
+                        ];
+
                         if($pricingData) {
+                            $valueData['value'] = $pricingData->getValue();
                             if($rangeWeight->getIsRas()) {
-                                $data[$zone->getId()]['ras'][$shipmentType->getId()][] = [
-                                    'name' => $rangeWeight->getName(), 
-                                    'name_en' => $rangeWeight->getNameEn(), 
-                                    'to' => $rangeWeight->getTo(),
-                                    'value' => $pricingData->getValue()
-                                ];
+                                $data[$zone->getId()]['ras'][$shipmentType->getId()][] = $valueData;
                             } else {
-                                $data[$zone->getId()]['not_ras'][$shipmentType->getId()][] = [
-                                    'name' => $rangeWeight->getName(), 
-                                    'name_en' => $rangeWeight->getNameEn(),
-                                    'to' => $rangeWeight->getTo(), 
-                                    'value' => $pricingData->getValue()
-                                ];
+                                $data[$zone->getId()]['not_ras'][$shipmentType->getId()][] = $valueData;
                             }                            
                         } else {
+                            $valueData['value'] = '';
                             if($rangeWeight->getIsRas()) {
-                                $data[$zone->getId()]['ras'][$shipmentType->getId()][] = [];
+                                $data[$zone->getId()]['ras'][$shipmentType->getId()][] = $valueData;
                             } else {
-                                $data[$zone->getId()]['not_ras'][$shipmentType->getId()][] = [];
+                                $data[$zone->getId()]['not_ras'][$shipmentType->getId()][] = $valueData;
                             }  
                         }
                     }
                 } 
-                
             }            
         }
 

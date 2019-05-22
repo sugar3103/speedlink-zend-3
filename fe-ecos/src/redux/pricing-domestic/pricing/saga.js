@@ -12,7 +12,8 @@ import {
   PRI_DOM_PRICING_REQUEST_UPDATE_ITEM,
   PRI_DOM_PRICING_UPDATE_ITEM,
   PRI_DOM_PRICING_DELETE_ITEM,
-  PRI_DOM_PRICING_GET_DATA
+  PRI_DOM_PRICING_GET_DATA,
+  PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE
 } from "../../../constants/actionTypes";
 
 import {
@@ -24,7 +25,9 @@ import {
   deletePricingDomesticItemSuccess,
   getPricingDomesticList,
   requestUpdatePricingDomesticItem,
-  getPricingDomesticDataSuccess
+  getPricingDomesticDataSuccess,
+  addRangeWeightValueSuccess,
+  getPricingDomesticData
 } from "./actions";
 
 //validate
@@ -259,7 +262,7 @@ function getDataPricingDomesticApi(pricing_id) {
   });
 }
 
-const getPricingDomesticData = async (pricing_id) => {
+const getPricingDomesticDataRequest = async (pricing_id) => {
   return await getDataPricingDomesticApi(pricing_id).then(res => res.data).catch(err => err)
 };
 
@@ -267,11 +270,55 @@ function* getDataPricingDomesticItems({ payload }) {
   const { pricing_id } = payload;
   const { pathname } = history.location;
   try {
-    const response = yield call(getPricingDomesticData, pricing_id);
+    const response = yield call(getPricingDomesticDataRequest, pricing_id);
     switch (response.error_code) {
       
       case EC_SUCCESS:
         yield put(getPricingDomesticDataSuccess(response.data));
+        break;
+
+      case EC_FAILURE:
+        yield put(pricingDomesticError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(pricingDomesticError(error));
+  }
+}
+
+/* ADD RANGE WEIGHT VALUE */
+
+function addRangeWeightValueApi(item) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}pricing/domestic/data/add`,
+    headers: authHeader(),
+    data: item
+  });
+}
+
+const addRangeWeightValueRequest = async item => {
+  return await addRangeWeightValueApi(item).then(res => res.data).catch(err => err)
+};
+
+function* addRangeWeightValueItem({ payload }) {
+  const { item, toggleModal } = payload;
+  const { pathname } = history.location;
+  try {
+    const response = yield call(addRangeWeightValueRequest, item);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(addRangeWeightValueSuccess());
+        yield put(getPricingDomesticData({ id: item.id }));
+        yield call(toggleModal);
+        createNotification({ type: 'success', message: 'pri_dom.update-success' });
         break;
 
       case EC_FAILURE:
@@ -314,6 +361,10 @@ export function* watchPricingDomestiGetData() {
   yield takeEvery(PRI_DOM_PRICING_GET_DATA, getDataPricingDomesticItems);
 }
 
+export function* watchPricingDomestiAddRangeWeightValue() {
+  yield takeEvery(PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE, addRangeWeightValueItem);
+}
+
 export default function* rootSaga() {
   yield all([
     fork(watchPricingDomesticGetList),
@@ -322,5 +373,6 @@ export default function* rootSaga() {
     fork(watchPricingDomesticUpdateItem),
     fork(watchPricingDomestiDeleteItem),
     fork(watchPricingDomestiGetData),
+    fork(watchPricingDomestiAddRangeWeightValue),
   ]);
 }

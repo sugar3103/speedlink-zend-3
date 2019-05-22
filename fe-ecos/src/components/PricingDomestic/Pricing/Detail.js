@@ -31,7 +31,7 @@ class Detail extends Component {
     return (
       <Col md={12} lg={12}>
         <Card>
-          <CardBody className="pricing">
+          <CardBody className="pri-dom">
             <div className="tabs tabs--vertical tabs--vertical-colored">
               <div className="tabs__wrap">
                 <Nav tabs>

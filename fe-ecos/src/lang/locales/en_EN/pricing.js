@@ -67,6 +67,7 @@ module.exports = {
     'pri_dom.get-pricing-dom': 'Get Pricing Dom',
     'pri_dom.is-ras': 'Ngoai Thanh',
     'pri_dom.not-ras': 'Noi Thanh',
+    'pri_dom.edit-range-weight-value': 'Edit Range Weight Value',
 
     //validate
     'pri_dom.validate-name-exists': 'Name already exists',
@@ -103,6 +104,9 @@ module.exports = {
     'pri_dom.validate-effected-date-empty': 'Effected date shouldn’t be empty',
     'pri_dom.validate-expired-date-empty': 'Expired date shouldn’t be empty',
     'pri_dom.validate-expired-date-lesser': 'Expired date must be greater than Effected date',
+    'pri_dom.field-is-required': 'Field is required',
+    'pri_dom.field-is-number': 'Field must is number',
+    'pri_dom.field-not-negative': 'Field is not negative',
 
     // //pricing management global
     // 'pri_man.filter-type': 'Filter Type',
