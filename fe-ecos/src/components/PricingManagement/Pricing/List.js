@@ -44,7 +44,7 @@ class List extends Component {
 
   onEdit = (e, id) => {
     e.stopPropagation();
-    this.props.history.push('/app/master-data/address/country');
+    this.props.history.push(`/pricing-international/pricing/edit/${id}`);
   }
 
   onChangePageSize = (size) => {
@@ -95,7 +95,7 @@ class List extends Component {
       <Fragment>
         <Button
           color="success"
-          onClick={() => this.props.history.push('/app/pricing-management/pricing/add')}
+          onClick={() => this.props.history.push('/pricing-international/pricing/add')}
           className="master-data-btn"
           size="sm"
         >{messages['pricing.add-new']}</Button>
@@ -195,7 +195,7 @@ class List extends Component {
                 changePageSize: this.onChangePageSize
               }}
               data={items}
-              onRowClick={() => {this.props.history.push('/app/master-data/status')}}
+              onRowClick={(e) => e.stopPropagation()}
             />
           </CardBody>
         </Card>

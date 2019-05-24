@@ -213,7 +213,7 @@ class SearchForm extends Component {
               <span className="form__form-group-label">{messages['pri_dom.saleman']}</span>
               <div className="form__form-group-field">
                 <Field
-                  name="calculate_unit"
+                  name="saleman_id"
                   component={renderSelectField}
                   options={saleman.items && this.showOptionUser(saleman.items)}
                 />

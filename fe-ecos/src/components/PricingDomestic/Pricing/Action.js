@@ -38,6 +38,7 @@ class Action extends Component {
 }
 
 Action.propTypes = {
+  type: PropTypes.string.isRequired,
   addPricingDomesticItem: PropTypes.func.isRequired,
   updatePricingDomesticItem: PropTypes.func.isRequired
 }

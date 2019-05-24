@@ -93,7 +93,14 @@ class DomesticPricingRepository extends EntityRepository
                 'alias' => 'dp.name',
                 'operator' => 'contains'
             ],
-          
+            'customer_id' => [
+                'alias' => 'cu.id',
+                'operator' => 'eq'
+            ],
+            'saleman_id' => [
+                'alias' => 'sm.id',
+                'operator' => 'eq'
+            ],
             'category_id' => [
                 'alias' => 'c.id',
                 'operator' => 'eq'
@@ -112,6 +119,14 @@ class DomesticPricingRepository extends EntityRepository
             ],
             'is_private' => [
                 'alias' => 'dp.is_private',
+                'operator' => 'eq'
+            ],
+            'approval_status' => [
+                'alias' => 'dp.approval_status',
+                'operator' => 'eq'
+            ],
+            'approved_by' => [
+                'alias' => 'ap.id',
                 'operator' => 'eq'
             ],
             'created_at' => [

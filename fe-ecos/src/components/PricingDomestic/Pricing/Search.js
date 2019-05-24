@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 
 import { connect } from 'react-redux';
-import { getRangeWeightDomesticList } from '../../../redux/actions';
+import { getPricingDomesticList } from '../../../redux/actions';
 import SearchForm from './SearchForm';
 import  { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 
@@ -17,7 +17,7 @@ class Search extends Component {
       },
       query: values
     }
-    this.props.getRangeWeightDomesticList(params);
+    this.props.getPricingDomesticList(params);
   }
 
   render() {
@@ -34,9 +34,9 @@ class Search extends Component {
 }
 
 Search.propTypes = {
-  getRangeWeightDomesticList: PropTypes.func.isRequired
+  getPricingDomesticList: PropTypes.func.isRequired
 }
 
 export default injectIntl(connect(null, {
-  getRangeWeightDomesticList
+  getPricingDomesticList
 })(Search));

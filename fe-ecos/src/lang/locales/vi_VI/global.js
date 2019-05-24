@@ -20,6 +20,7 @@ module.exports = {
     'action': 'Hành động',
     'active': 'Kích hoạt',
     'inactive': 'Vô hiệu',
+    'deleted': 'Đã xóa',
     'all': 'Tất cả',
 
     'created-at': 'Ngày tạo',
@@ -42,4 +43,10 @@ module.exports = {
     'notification.success': 'Thành công',
     'notification.warning': 'Cảnh báo',
     'notification.error': 'Lỗi',
+
+    //category option
+    'inbound': 'Nhập khẩu',
+    'outbound': 'Xuất khẩu',
+    'domestic': 'Nội địa',
+    'ACCESS_DENIED': 'Từ chối truy cập'
 }

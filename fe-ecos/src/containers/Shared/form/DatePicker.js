@@ -6,6 +6,7 @@ import { injectIntl } from 'react-intl';
 class DatePickerField extends PureComponent {
   static propTypes = {
     onChange: PropTypes.func.isRequired,
+    disabled: PropTypes.bool,
   };
 
   constructor() {
@@ -38,6 +39,7 @@ class DatePickerField extends PureComponent {
           selected={this.state.startDate}
           onChange={this.handleChange}
           dateFormat="dd/MM/yyyy"
+          disabled={this.props.disabled} 
         />
       </div>
     );
@@ -45,12 +47,13 @@ class DatePickerField extends PureComponent {
 }
 
 const renderDatePickerField = props => {
-  const { input, meta } = props;
+  const { input, meta, disabled } = props;
   const { messages } = props.intl; 
   return (
     <div className="form__form-group-input-wrap">
       <DatePickerField
         {...input}
+        disabled={disabled} 
       />
       {meta.touched && meta.error && <span className="form__form-group-error">{messages[meta.error]}</span>}
     </div>
@@ -62,6 +65,7 @@ renderDatePickerField.propTypes = {
     onChange: PropTypes.func,
     name: PropTypes.string,
   }).isRequired,
+  disabled: PropTypes.bool,
 };
 
 export default injectIntl(renderDatePickerField);

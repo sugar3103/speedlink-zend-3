@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import Action from './Action';
 import PricingTable from './PricingTable';
+import PricingVas from './PricingVas';
 
 class Detail extends Component {
 
@@ -55,8 +56,8 @@ class Detail extends Component {
                 <TabContent activeTab={this.state.activeTab}>
                   <TabPane tabId={1}><Action type={type} /></TabPane>
                   { type !== "add" && <Fragment>
-                    <TabPane tabId={2}><PricingTable /></TabPane>
-                    <TabPane tabId={3}>Vas</TabPane>
+                    <TabPane tabId={2}><PricingTable type={type} /></TabPane>
+                    <TabPane tabId={3}><PricingVas type={type} /></TabPane>
                   </Fragment> }
                 </TabContent>
               </div>

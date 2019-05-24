@@ -13,7 +13,10 @@ import {
   PRI_DOM_PRICING_UPDATE_ITEM,
   PRI_DOM_PRICING_DELETE_ITEM,
   PRI_DOM_PRICING_GET_DATA,
-  PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE
+  PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE,
+  PRI_DOM_PRICING_GET_VAS,
+  PRI_DOM_PRICING_UPDATE_VAS,
+  PRI_DOM_PRICING_GET_FIELD_VAS,
 } from "../../../constants/actionTypes";
 
 import {
@@ -27,7 +30,10 @@ import {
   requestUpdatePricingDomesticItem,
   getPricingDomesticDataSuccess,
   addRangeWeightValueSuccess,
-  getPricingDomesticData
+  getPricingDomesticData,
+  getPricingDomesticVasSuccess,
+  updatePricingDomesticVasSuccess,
+  getPricingDomesticFieldVasSuccess
 } from "./actions";
 
 //validate
@@ -337,6 +343,130 @@ function* addRangeWeightValueItem({ payload }) {
   }
 }
 
+/* GET PRICING VAS */
+
+function getVasPricingDomesticApi(pricing_id) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}pricing/domestic/vas`,
+    headers: authHeader(),
+    data: {  id: pricing_id }
+  });
+}
+
+const getPricingDomesticVasRequest = async (pricing_id) => {
+  return await getVasPricingDomesticApi(pricing_id).then(res => res.data).catch(err => err)
+};
+
+function* getVasPricingDomesticItems({ payload }) {
+  const { pricing_id } = payload;
+  const { pathname } = history.location;
+  try {
+    const response = yield call(getPricingDomesticVasRequest, pricing_id);
+    switch (response.error_code) {
+      
+      case EC_SUCCESS:
+        yield put(getPricingDomesticVasSuccess(response.data));
+        break;
+
+      case EC_FAILURE:
+        yield put(pricingDomesticError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(pricingDomesticError(error));
+  }
+}
+
+/* UPDATE PRICING DOMESTIC VAS */
+
+function updatePricingDomesticVasApi(item) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}pricing/domestic/vas/add`,
+    headers: authHeader(),
+    data: item
+  });
+}
+
+const updatePricingDomesticVasRequest = async item => {
+  return await updatePricingDomesticVasApi(item).then(res => res.data).catch(err => err)
+};
+
+function* updatePricingDomesticVasItem({ payload }) {
+  const { item } = payload;
+  const { pathname } = history.location;
+  try {
+    const response = yield call(updatePricingDomesticVasRequest, item);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(updatePricingDomesticVasSuccess());
+        createNotification({ type: 'success', message: 'pri_dom.update-success' });
+        break;
+
+      case EC_FAILURE:
+        yield put(pricingDomesticError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(pricingDomesticError(error));
+  }
+}
+
+/* GET PRICING FIELD VAS */
+
+function getFieldVasPricingDomesticApi() {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}field_vas`,
+    headers: authHeader(),
+  });
+}
+
+const getPricingDomesticFieldVasRequest = async () => {
+  return await getFieldVasPricingDomesticApi().then(res => res.data).catch(err => err)
+};
+
+function* getFieldVasPricingDomesticItems({ payload }) {
+  const { pathname } = history.location;
+  try {
+    const response = yield call(getPricingDomesticFieldVasRequest);
+    switch (response.error_code) {
+      
+      case EC_SUCCESS:
+        yield put(getPricingDomesticFieldVasSuccess(response.data));
+        break;
+
+      case EC_FAILURE:
+        yield put(pricingDomesticError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(pricingDomesticError(error));
+  }
+}
+
 export function* watchPricingDomesticGetList() {
   yield takeEvery(PRI_DOM_PRICING_GET_LIST, getPricingDomesticListItems);
 }
@@ -365,6 +495,18 @@ export function* watchPricingDomestiAddRangeWeightValue() {
   yield takeEvery(PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE, addRangeWeightValueItem);
 }
 
+export function* watchPricingDomestiGetVas() {
+  yield takeEvery(PRI_DOM_PRICING_GET_VAS, getVasPricingDomesticItems);
+}
+
+export function* watchPricingDomesticUpdateVas() {
+  yield takeEvery(PRI_DOM_PRICING_UPDATE_VAS, updatePricingDomesticVasItem);
+}
+
+export function* watchPricingDomestiGetFieldVas() {
+  yield takeEvery(PRI_DOM_PRICING_GET_FIELD_VAS, getFieldVasPricingDomesticItems);
+}
+
 export default function* rootSaga() {
   yield all([
     fork(watchPricingDomesticGetList),
@@ -374,5 +516,8 @@ export default function* rootSaga() {
     fork(watchPricingDomestiDeleteItem),
     fork(watchPricingDomestiGetData),
     fork(watchPricingDomestiAddRangeWeightValue),
+    fork(watchPricingDomestiGetVas),
+    fork(watchPricingDomesticUpdateVas),
+    fork(watchPricingDomestiGetFieldVas),
   ]);
 }

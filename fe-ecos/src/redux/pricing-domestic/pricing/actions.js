@@ -20,7 +20,16 @@ import {
   PRI_DOM_PRICING_GET_DATA_SUCCESS,
 
   PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE,
-  PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE_SUCCESS
+  PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE_SUCCESS,
+
+  PRI_DOM_PRICING_GET_VAS,
+  PRI_DOM_PRICING_GET_VAS_SUCCESS,
+
+  PRI_DOM_PRICING_UPDATE_VAS,
+  PRI_DOM_PRICING_UPDATE_VAS_SUCCESS,
+
+  PRI_DOM_PRICING_GET_FIELD_VAS,
+  PRI_DOM_PRICING_GET_FIELD_VAS_SUCCESS,
 
 } from '../../../constants/actionTypes';
 
@@ -93,4 +102,32 @@ export const addRangeWeightValue = (item, toggleModal) => ({
 
 export const addRangeWeightValueSuccess = () => ({
   type: PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE_SUCCESS
+});
+
+export const getPricingDomesticVas = (pricing_id) => ({
+  type: PRI_DOM_PRICING_GET_VAS,
+  payload: { pricing_id }
+});
+
+export const getPricingDomesticVasSuccess = (data) => ({
+  type: PRI_DOM_PRICING_GET_VAS_SUCCESS,
+  payload: data
+});
+
+export const updatePricingDomesticVas = (item) => ({
+  type: PRI_DOM_PRICING_UPDATE_VAS,
+  payload: { item }
+});
+
+export const updatePricingDomesticVasSuccess = () => ({
+  type: PRI_DOM_PRICING_UPDATE_VAS_SUCCESS
+});
+
+export const getPricingDomesticFieldVas = () => ({
+  type: PRI_DOM_PRICING_GET_FIELD_VAS,
+});
+
+export const getPricingDomesticFieldVasSuccess = (data) => ({
+  type: PRI_DOM_PRICING_GET_FIELD_VAS_SUCCESS,
+  payload: data
 });

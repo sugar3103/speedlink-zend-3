@@ -5,6 +5,7 @@ use Core\Controller\CoreController;
 use Doctrine\ORM\EntityManager;
 use PricingDomestic\Service\DomesticPricingVasManager;
 use PricingDomestic\Entity\DomesticPricing;
+use PricingDomestic\Form\PricingVasForm;
 
 class DomesticPricingVasController extends CoreController {
 

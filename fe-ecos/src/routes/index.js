@@ -20,7 +20,7 @@ class MainApp extends Component {
             <Route path={`${match.url}dashboards`} component={Dashboards} />
             <Route path={`${match.url}master-data`} component={MasterData} />
             <Route path={`${match.url}pricing-domestic`} component={PricingDomestic} />
-            <Route path={`${match.url}pricing-management`} component={PricingInternational} />
+            <Route path={`${match.url}pricing-international`} component={PricingInternational} />
             <Route path={`${match.url}system`} component={System} />
             <Redirect to="/page-not-found" />
           </Switch>

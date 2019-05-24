@@ -8,6 +8,7 @@
 
 //components...
 @import 'component/btn';
+@import './component/autocomplete';
 @import './component/card';
 @import './component/check-box';
 @import './component/modal';
@@ -24,6 +25,7 @@
 @import './component/tabs';
 @import './component/toggle-btn'; 
 @import './component/pagination'; 
+@import './component/popover'; 
 @import './component/customizer';
 @import './component/panel.scss';
 @import './component/dashboard.scss';

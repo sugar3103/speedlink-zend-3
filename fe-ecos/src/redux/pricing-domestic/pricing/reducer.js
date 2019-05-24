@@ -22,6 +22,15 @@ import {
   PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE,
   PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE_SUCCESS,
 
+  PRI_DOM_PRICING_GET_VAS,
+  PRI_DOM_PRICING_GET_VAS_SUCCESS,
+
+  PRI_DOM_PRICING_UPDATE_VAS,
+  PRI_DOM_PRICING_UPDATE_VAS_SUCCESS,
+
+  PRI_DOM_PRICING_GET_FIELD_VAS,
+  PRI_DOM_PRICING_GET_FIELD_VAS_SUCCESS,
+
 } from '../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -32,7 +41,11 @@ const INIT_STATE = {
   total: 0,
   paramSearch: null,
   data: {},
-  loadingData: true
+  loadingData: true,
+  loadingVas: true,
+  vas: [],
+  loadingFieldVas: true,
+  fieldVas: []
 };
 
 export default (state = INIT_STATE, action) => {
@@ -135,6 +148,45 @@ export default (state = INIT_STATE, action) => {
         ...state, 
         loading: false, 
         errors: null
+      };
+
+    case PRI_DOM_PRICING_UPDATE_VAS:
+			return { 
+        ...state, 
+        loading: false 
+      };
+
+		case PRI_DOM_PRICING_UPDATE_VAS_SUCCESS:
+			return { 
+        ...state, 
+        loading: false, 
+        errors: null
+      };
+
+    case PRI_DOM_PRICING_GET_VAS:
+      return {
+        ...state,
+        loadingVas: true,
+      };
+
+    case PRI_DOM_PRICING_GET_VAS_SUCCESS:
+      return { 
+        ...state, 
+        loadingVas: false, 
+        vas: action.payload
+      };
+
+    case PRI_DOM_PRICING_GET_FIELD_VAS:
+      return {
+        ...state,
+        loadingFieldVas: true,
+      };
+
+    case PRI_DOM_PRICING_GET_FIELD_VAS_SUCCESS:
+      return { 
+        ...state, 
+        loadingFieldVas: false, 
+        fieldVas: action.payload
       };
 
     default:

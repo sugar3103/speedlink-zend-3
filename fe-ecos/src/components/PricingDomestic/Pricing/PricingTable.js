@@ -28,8 +28,10 @@ class PricingTable extends Component {
   }
 
   showModalEditCell = (params) => {
-    this.setState({ modalData: params })
-    this.toggleModal();
+    if (this.props.type === 'edit') {
+      this.setState({ modalData: params })
+      this.toggleModal();
+    }
   }
 
   showShipmentType = items => {
@@ -44,6 +46,7 @@ class PricingTable extends Component {
   }
 
   showTdTable = (pricing_id, items) => {
+    const { type } = this.props;
     let result = [];
     if (items) {
       result = Object.keys(items).map((key, index) => {
@@ -68,7 +71,11 @@ class PricingTable extends Component {
               return null;
             }
           });
-          return <td key={index} className="text-center cell-value" onClick={() => this.showModalEditCell(params)}>{valueCell}</td>
+          return <td 
+            key={index} 
+            className={`text-center ${type === 'edit' ? 'cell-value' : ''}`} 
+            onClick={() => this.showModalEditCell(params)}
+          >{valueCell}</td>
         } else {
           return <td key={index} className="text-center"></td>
         }
@@ -102,7 +109,7 @@ class PricingTable extends Component {
   }
 
   render() {
-    const { data, loadingData } = this.props;
+    const { data, loadingData, type } = this.props;
     const { locale } = this.props.intl;
     return (
       <Container>
@@ -127,13 +134,15 @@ class PricingTable extends Component {
               </Table>
             }
           </Col>
-          <Modal
-            isOpen={this.state.modalOpen}
-            toggle={this.toggleModal}
-            className={`modal-dialog--primary modal-dialog--header`}
-          >
-            <RangeWeightEdit toggleModal={this.toggleModal} data={this.state.modalData} />
-          </Modal>
+          {type === 'edit' &&
+            <Modal
+              isOpen={this.state.modalOpen}
+              toggle={this.toggleModal}
+              className={`modal-dialog--primary modal-dialog--header`}
+            >
+              <RangeWeightEdit toggleModal={this.toggleModal} data={this.state.modalData} />
+            </Modal>
+          }
         </Row>
       </Container>
     );
@@ -142,6 +151,7 @@ class PricingTable extends Component {
 
 PricingTable.propTypes = {
   getPricingDomesticData: PropTypes.func.isRequired,
+  type: PropTypes.string.isRequired,
 }
 
 const mapStateToProps = ({ pricingDomestic }) => {
