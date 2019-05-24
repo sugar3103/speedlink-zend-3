@@ -27,7 +27,7 @@ class List extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.props.getPricingDomesticList();
   }
 
@@ -84,6 +84,16 @@ class List extends Component {
       currentPage: page
     });
   };
+
+  onEditPricing = (e, id) => {
+    e.stopPropagation();
+    this.props.history.push(`/pricing-domestic/pricing/edit/${id}`);
+  }
+
+  onViewPricing = (e, type, pricing) => {
+    e.stopPropagation();
+    this.props.history.push(`/pricing-domestic/pricing/view/${pricing.id}`);
+  }
 
   renderHeader = (selected) => {
     const { messages } = this.props.intl;
@@ -203,9 +213,12 @@ class List extends Component {
             return (
               <Fragment>
                 <Can user={this.props.authUser.user} permission="pricing_domestic" action="edit" own={original.created_at}>
-                  <Link to={`/pricing-domestic/pricing/edit/${original.id}`} className="btn btn-info btn-sm">
-                    <span className="lnr lnr-pencil" />
-                  </Link>
+                  <Button
+                    color="info"
+                    onClick={(e) => this.onEditPricing(e, original.id)}
+                    className="master-data-btn"
+                    size="sm"
+                  ><span className="lnr lnr-pencil" /></Button>
                 </Can>
                 &nbsp;
                 <Can user={this.props.authUser.user} permission="pricing_domestic" action="delete" own={original.created_at}>
@@ -238,7 +251,7 @@ class List extends Component {
                 changePageSize: this.onChangePageSize
               }}
               data={items}
-              onRowClick={(e) => e.stopPropagation()}
+              onRowClick={this.onViewPricing}
             />
           </CardBody>
         </Card>

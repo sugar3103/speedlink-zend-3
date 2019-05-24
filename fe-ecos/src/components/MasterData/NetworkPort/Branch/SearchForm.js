@@ -211,8 +211,7 @@ class SearchForm extends Component {
             </div>
           </div>
         </Col>      
-
-        <div className="search-group-button">
+        <Col md={12} className="text-right">
           <Button
             size="sm"
             outline
@@ -228,7 +227,7 @@ class SearchForm extends Component {
             color="primary"
             id="search"
           >{messages['search']}</Button>
-        </div>
+        </Col>
       </form>
     );
   }

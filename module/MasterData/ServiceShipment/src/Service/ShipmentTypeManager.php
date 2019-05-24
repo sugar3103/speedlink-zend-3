@@ -86,6 +86,8 @@ class ShipmentTypeManager
                 //set created_at
                 $shipmentType['created_at'] =  ($shipmentType['created_at']) ? Utils::checkDateFormat($shipmentType['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
                 $shipmentType['updated_at'] =  ($shipmentType['updated_at']) ? Utils::checkDateFormat($shipmentType['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $shipmentType['full_name_created'] = trim($shipmentType['full_name_created']);
+                $shipmentType['full_name_updated'] = trim($shipmentType['full_name_updated']);
             }
         }
 

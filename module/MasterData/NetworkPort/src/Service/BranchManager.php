@@ -200,10 +200,12 @@ class BranchManager {
             //get user list
             $branches = $ormPaginator->getIterator()->getArrayCopy();
 
-             foreach ($branches as &$branche) {
+             foreach ($branches as &$branch) {
                 //set created_at
-                $branche['created_at'] =  ($branche['created_at']) ?Utils::checkDateFormat($branche['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
-                $branche['updated_at'] =  ($branche['updated_at']) ? Utils::checkDateFormat($branche['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $branch['created_at'] =  ($branch['created_at']) ?Utils::checkDateFormat($branch['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $branch['updated_at'] =  ($branch['updated_at']) ? Utils::checkDateFormat($branch['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $branch['full_name_created'] = trim($branch['full_name_created']);
+                $branch['full_name_updated'] = trim($branch['full_name_updated']);
             }
         }
 

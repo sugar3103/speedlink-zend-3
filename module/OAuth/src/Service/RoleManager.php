@@ -399,6 +399,8 @@ class RoleManager {
                  $role['inherit_roles'] = $this->getInheritRoles($role['id']);
                  $role['created_at'] =  ($role['created_at']) ? Utils::checkDateFormat($role['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
                  $role['updated_at'] =  ($role['updated_at']) ? Utils::checkDateFormat($role['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                 $role['full_name_created'] = trim($role['full_name_created']);
+                 $role['full_name_updated'] = trim($role['full_name_updated']);
             }
         }
 

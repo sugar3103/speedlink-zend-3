@@ -64,9 +64,9 @@ class DomesticPricingVasSpec
     private $updated_at = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var \PricingDomestic\Entity\User
+     * @var \OAuth\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="PricingDomestic\Entity\User")
+     * @ORM\ManyToOne(targetEntity="OAuth\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * })
@@ -94,9 +94,9 @@ class DomesticPricingVasSpec
     private $domestic_pricing_vas;
 
     /**
-     * @var \PricingDomestic\Entity\User
+     * @var \OAuth\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="PricingDomestic\Entity\User")
+     * @ORM\ManyToOne(targetEntity="OAuth\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="updated_by", referencedColumnName="id", nullable=true)
      * })
@@ -261,11 +261,11 @@ class DomesticPricingVasSpec
     /**
      * Set created_by.
      *
-     * @param \PricingDomestic\Entity\User|null $created_by
+     * @param \OAuth\Entity\User|null $created_by
      *
      * @return DomesticPricingVasSpec
      */
-    public function setCreatedBy(\PricingDomestic\Entity\User $created_by = null)
+    public function setCreatedBy(\OAuth\Entity\User $created_by = null)
     {
         $this->created_by = $created_by;
 
@@ -275,7 +275,7 @@ class DomesticPricingVasSpec
     /**
      * Get created_by.
      *
-     * @return \PricingDomestic\Entity\User|null
+     * @return \OAuth\Entity\User|null
      */
     public function getCreatedBy()
     {
@@ -333,11 +333,11 @@ class DomesticPricingVasSpec
     /**
      * Set updated_by.
      *
-     * @param \PricingDomestic\Entity\User|null $updated_by
+     * @param \OAuth\Entity\User|null $updated_by
      *
      * @return DomesticPricingVasSpec
      */
-    public function setUpdatedBy(\PricingDomestic\Entity\User $updated_by = null)
+    public function setUpdatedBy(\OAuth\Entity\User $updated_by = null)
     {
         $this->updated_by = $updated_by;
 
@@ -347,7 +347,7 @@ class DomesticPricingVasSpec
     /**
      * Get updated_by.
      *
-     * @return \PricingDomestic\Entity\User|null
+     * @return \OAuth\Entity\User|null
      */
     public function getUpdatedBy()
     {

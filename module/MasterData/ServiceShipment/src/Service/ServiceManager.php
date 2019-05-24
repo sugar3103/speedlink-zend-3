@@ -65,6 +65,8 @@ class ServiceManager
                 //set created_at
                 $service['created_at'] =  ($service['created_at']) ? Utils::checkDateFormat($service['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
                 $service['updated_at'] =  ($service['updated_at']) ? Utils::checkDateFormat($service['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $service['full_name_created'] = trim($service['full_name_created']);
+                $service['full_name_updated'] = trim($service['full_name_updated']);
             }
         }
 

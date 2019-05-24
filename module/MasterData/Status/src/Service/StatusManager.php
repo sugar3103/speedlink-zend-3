@@ -178,6 +178,8 @@ class StatusManager {
                 //set created_at
                 $status['created_at'] =  ($status['created_at']) ? Utils::checkDateFormat($status['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
                 $status['updated_at'] =  ($status['updated_at']) ? Utils::checkDateFormat($status['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $status['full_name_created'] = trim($status['full_name_created']);
+                $status['full_name_updated'] = trim($status['full_name_updated']);
             }           
         }
 

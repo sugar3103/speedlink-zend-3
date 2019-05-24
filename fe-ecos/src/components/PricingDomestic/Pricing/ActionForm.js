@@ -18,13 +18,15 @@ import renderSelectField from '../../../containers/Shared/form/Select';
 import renderDatePickerField from '../../../containers/Shared/form/DatePicker';
 import CalendarBlankIcon from 'mdi-react/CalendarBlankIcon';
 import validate from './validateActionForm';
+import ReactLoading from 'react-loading';
 
 class ActionForm extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      showField: false
+      showField: false,
+      disabledAction: true
     }
   }
 
@@ -152,10 +154,24 @@ class ActionForm extends Component {
     }
   }
 
+  componentDidMount() {
+    this.setState({
+      disabledAction: this.props.type === 'view' ? true : false
+    })
+  }
+  
+
   render() {
-    const { handleSubmit, pricing, customer, carrier, service, saleman, approvedBy, disableApprovalStatus } = this.props;
+    const { handleSubmit, pricing, 
+      customer, carrier, service, saleman, approvedBy, 
+      disableApprovalStatus,
+      loading
+    } = this.props;
     const { messages } = this.props.intl;
-    return (
+    const { disabledAction, showField } = this.state;
+    return loading ? (
+        <ReactLoading type="bubbles" className="loading" /> 
+      ) : (
       <form className="form form_custom" onSubmit={handleSubmit}>
         <Row>
           <Col md={6} lg={3} xl={3} xs={6}>
@@ -171,6 +187,7 @@ class ActionForm extends Component {
                   ]}
                   onChange={this.onChangeIsPrivate}
                   clearable={false}
+                  disabled={disabledAction}
                 />
               </div>
             </div>
@@ -183,7 +200,7 @@ class ActionForm extends Component {
                   name="get_pricing_dom"
                   component={renderSelectField}
                   options={pricing.items && this.showOptionCustomer(pricing.items)}
-                  disabled={!this.state.showField}
+                  disabled={!showField || disabledAction}
                   clearable={false}
                   onChange={this.onChangePricing}
                 />
@@ -198,7 +215,7 @@ class ActionForm extends Component {
                   name="customer_id"
                   component={renderSelectField}
                   options={customer.items && this.showOptionCustomer(customer.items)}
-                  disabled={!this.state.showField}
+                  disabled={!showField || disabledAction}
                   clearable={false}
                 />
               </div>
@@ -228,6 +245,7 @@ class ActionForm extends Component {
                   component={renderSelectField}
                   options={carrier.items && this.showOptions(carrier.items)}
                   clearable={false}
+                  disabled={disabledAction}
                 />
               </div>
             </div>
@@ -241,6 +259,7 @@ class ActionForm extends Component {
                   component={renderSelectField}
                   options={service.items && this.showOptions(service.items)}
                   clearable={false}
+                  disabled={disabledAction}
                 />
               </div>
             </div>
@@ -257,6 +276,7 @@ class ActionForm extends Component {
                     { value: 0, label: messages['pri_dom.inactive'] }
                   ]}
                   clearable={false}
+                  disabled={disabledAction}
                 />
               </div>
             </div>
@@ -283,6 +303,7 @@ class ActionForm extends Component {
                 <Field
                   name="effected_date"
                   component={renderDatePickerField}
+                  disabled={disabledAction}
                 />
                 <div className="form__form-group-icon">
                   <CalendarBlankIcon />
@@ -297,6 +318,7 @@ class ActionForm extends Component {
                 <Field
                   name="expired_date"
                   component={renderDatePickerField}
+                  disabled={disabledAction}
                 />
                 <div className="form__form-group-icon">
                   <CalendarBlankIcon />
@@ -316,7 +338,7 @@ class ActionForm extends Component {
                     { value: 1, label: messages['pri_dom.approved'] },
                     { value: 2, label: messages['pri_dom.draft'] },
                   ]}
-                  disabled={disableApprovalStatus}
+                  disabled={disableApprovalStatus || disabledAction}
                   clearable={false}
                 />
               </div>
@@ -331,21 +353,24 @@ class ActionForm extends Component {
                   component={renderSelectField}
                   options={approvedBy.items && this.showOptionUser(approvedBy.items)}
                   clearable={false}
+                  disabled={disabledAction}
                 />
               </div>
             </div>
           </Col>
         </Row>
-        <Row>
-          <Col md={12} className="text-right search-group-button">
-            <Link to="/pricing-domestic/pricing" className="btn btn-outline-secondary btn-sm">
-              {messages['cancel']}
-            </Link>
-            <Button size="sm" color="primary">
-              {messages['save']}
-            </Button>
-          </Col>
-        </Row>
+        {!disabledAction && 
+          <Row>
+            <Col md={12} className="text-right">
+              <Link to="/pricing-domestic/pricing" className="btn btn-outline-secondary btn-sm">
+                {messages['cancel']}
+              </Link>
+              <Button size="sm" color="primary">
+                {messages['save']}
+              </Button>
+            </Col>
+          </Row>
+        }
       </form>
     );
   }
@@ -360,13 +385,14 @@ ActionForm.propTypes = {
   getApprovedByDomesticList: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
+  type: PropTypes.string.isRequired,
 }
 
 const mapStateToProps = (state, props) => {
   const { pricingDomestic, authUser } = state;
   const currentUser = authUser.user;
   const { pricing, customer, carrier, service, saleman, approvedBy } = pricingDomestic;
-  const { itemEditting } = pricing;
+  const { itemEditting, loading } = pricing;
   let initialValues = {};
   if (props.type === 'add') {
     initialValues = { 
@@ -396,7 +422,8 @@ const mapStateToProps = (state, props) => {
     currentUser,
     initialValues,
     is_private,
-    disableApprovalStatus
+    disableApprovalStatus,
+    loading
   }
 }
 

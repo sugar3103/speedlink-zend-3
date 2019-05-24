@@ -185,6 +185,8 @@ class WardManager  {
                 $ward['city_id'] = $city->getId();                
                 $ward['created_at'] =  ($ward['created_at']) ? Utils::checkDateFormat($ward['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
                 $ward['updated_at'] =  ($ward['updated_at']) ? Utils::checkDateFormat($ward['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $ward['full_name_created'] = trim($ward['full_name_created']);
+                $ward['full_name_updated'] = trim($ward['full_name_updated']);
             }
            
         }

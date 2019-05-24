@@ -40,7 +40,7 @@ class DomesticPricingController extends CoreController {
         if ($this->getRequest()->isPost()) {
             
             $fieldsMap = [
-                'id','name','carrer_id','is_private',
+                'id','name','carrier_id','is_private',
                 'category_id', 'service_id','effected_date',
                 'expired_date','saleman_id',
                 'customer_id','status','approval_status','approved_by'               

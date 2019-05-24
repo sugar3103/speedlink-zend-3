@@ -47,6 +47,21 @@ $router = [
                 ]               
             ] 
         ],
+        'domestic_vas' => [
+            'type' => StaticRoute::class,
+            'options' => [
+                'verb' => 'POST',
+                'route' => '/pricing/domestic/vas[/:action]',
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                ],
+                'defaults' => [
+                    'controller' => Controller\DomesticPricingVasController::class,
+                    'action' => 'index',
+                    'isAuthorizationRequired' => true
+                ]               
+            ] 
+        ],
         'area' => [
             'type' => StaticRoute::class,
             'options' => [

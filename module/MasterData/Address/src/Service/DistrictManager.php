@@ -177,6 +177,8 @@ class DistrictManager  {
                 $district['country_id'] = $city->getCountryId();
                 $district['created_at'] =  ($district['created_at']) ? Utils::checkDateFormat($district['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
                 $district['updated_at'] =  ($district['updated_at']) ? Utils::checkDateFormat($district['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $district['full_name_created'] = trim($district['full_name_created']);
+                $district['full_name_updated'] = trim($district['full_name_updated']);
             }
            
         }

@@ -167,6 +167,8 @@ class CountryManager  {
                 //set created_at
                 $country['created_at'] =  ($country['created_at']) ? Utils::checkDateFormat($country['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
                 $country['updated_at'] =  ($country['updated_at']) ? Utils::checkDateFormat($country['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $country['full_name_created'] = trim($country['full_name_created']);
+                $country['full_name_updated'] = trim($country['full_name_updated']);
             }
            
         }

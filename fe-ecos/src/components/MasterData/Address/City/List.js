@@ -98,7 +98,7 @@ class List extends Component {
             onClick={(e) => this.toggleModal(e, 'add', null)}
             className="master-data-btn"
             size="sm"
-          >{messages['status.add-new']}</Button>
+          >{messages['city.add-new']}</Button>
         </Can>
         <Action modalOpen={modalOpen} />
         <Can user={this.props.authUser.user} permission="masterdata_city" action="delete">
@@ -108,7 +108,7 @@ class List extends Component {
               onClick={(e) => this.onDelete(e, selected)}
               className="master-data-btn"
               size="sm"
-            >{messages['status.delete']}</Button>
+            >{messages['delete']}</Button>
           }
         </Can>
       </Fragment>

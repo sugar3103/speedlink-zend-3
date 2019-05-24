@@ -17,7 +17,7 @@
     width: 100%;
     padding: 5px 10px;
     font-size: 12px;
-    height: 25px;
+    height: 27px;
     transition: border 0.3s;
     background: transparent;
 
@@ -316,7 +316,7 @@
 }
 
 .form__form-group {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   width: 100%;
   position: relative;
 }
@@ -349,8 +349,8 @@
 }
 
 .form__form-group-button {
-  padding: 6px;
-  height: 32px;
+  padding: 5px;
+  height: 27px;
   cursor: pointer;
   transition: all 0.3s;
 
@@ -410,8 +410,8 @@
 }
 
 .form__form-group-icon {
-  padding: 0 6px;
-  height: 25px;
+  padding: 4px;
+  height: 27px;
 
   @include themify($themes) {
     background: themed('colorFieldsBorder');
@@ -444,9 +444,10 @@
 .form__form-group-error {
   font-size: 12px;
   line-height: 13px;
-  color: #ad4444;
+  color: #f72828;
   display: block;
   margin-top: 5px;
+  font-style: italic;
 }
 
 .form__form-group-input-wrap--error-above {
@@ -521,7 +522,7 @@
 .form__form-group-price-discount {
   width: 100%;
   display: flex;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 
   & > div {
     margin-bottom: 0;
@@ -543,10 +544,10 @@
 .Select--single {
   .Select-control {
     .Select-value {
-      line-height: 25px;
+      line-height: 27px;
     }
-    &.Select-placeholder {
-      line-height: 25px;
+    .Select-placeholder {
+      line-height: 27px;
     }
   }
 }

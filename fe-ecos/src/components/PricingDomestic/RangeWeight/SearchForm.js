@@ -274,7 +274,7 @@ class SearchForm extends Component {
           </Col>
         </Row>
         <Row>
-          <Col md={12} className="text-right search-group-button">
+          <Col md={12} className="text-right">
             <Button size="sm" outline onClick={this.resetFilter}>
               {messages['clear']}</Button>
             <Button size="sm" color="primary" id="search" >
