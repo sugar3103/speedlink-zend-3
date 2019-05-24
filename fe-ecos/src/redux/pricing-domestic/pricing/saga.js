@@ -219,7 +219,7 @@ function* updatePricingDomesticItem({ payload }) {
 function deletePricingDomesticApi(ids) {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}pricing/domestic/range-weight/delete`,
+    url: `${apiUrl}pricing/domestic/delete`,
     headers: authHeader(),
     data: {  ids: ids }
   });
