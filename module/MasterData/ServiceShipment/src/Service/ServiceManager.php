@@ -65,6 +65,8 @@ class ServiceManager
                 //set created_at
                 $service['created_at'] =  ($service['created_at']) ? Utils::checkDateFormat($service['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
                 $service['updated_at'] =  ($service['updated_at']) ? Utils::checkDateFormat($service['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $service['full_name_created'] = trim($service['full_name_created']);
+                $service['full_name_updated'] = trim($service['full_name_updated']);
             }
         }
 
@@ -108,11 +110,9 @@ class ServiceManager
             $service->setDescriptionEn($data['description_en']);
             $service->setStatus($data['status']);
             $service->setCode($data['code']);
-            //TODO: check timezone
-            $service->setCreatedAt(date('Y-m-d H:i:s'));
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $service->setCreatedAt($addTime->format('Y-m-d H:i:s'));
             $service->setCreatedBy($user->id);
-            $service->setUpdatedAt(date('Y-m-d H:i:s'));
-            $service->setUpdatedBy($user->id);
             $service->setIsDeleted(0);
             $this->getReferenced($service, $data, $user, 'add');
 
@@ -149,8 +149,8 @@ class ServiceManager
             $service->setStatus($data['status']);
             $service->setCode($data['code']);
             $service->setIsDeleted(0);
-            //TODO: check timezone
-            $service->setUpdatedAt(date('Y-m-d H:i:s'));
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $service->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
             $service->setUpdatedBy($user->id);
             $this->getReferenced($service, $data, $user);
 
@@ -181,7 +181,8 @@ class ServiceManager
         try {
             $service->setIsDeleted(1);
             $service->setStatus(-1);
-            $service->setUpdatedAt(date('Y-m-d H:i:s'));
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $service->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
             $service->setUpdatedBy($user->id);
 
             $this->entityManager->persist($service);

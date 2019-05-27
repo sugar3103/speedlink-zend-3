@@ -122,8 +122,7 @@ class SearchForm extends Component {
             </div>
           </div>
         </Col>
-        <Col md={9}></Col>
-        <div className="search-group-button">
+        <Col md={9} className="text-right search-group-button">
           <Button 
             size="sm" 
             outline 
@@ -139,7 +138,7 @@ class SearchForm extends Component {
             color="primary"
             id="search" 
           >{ messages['search'] }</Button>
-        </div>
+        </Col>
       </form>
     );
   }
@@ -162,14 +161,9 @@ const mapStateToProps = ({ hub }) => {
   }
 }
 
-export default reduxForm({
-  form: 'hub_search_form',
-  initialValues: {
-    name: '',
-    name_en: '',
-    status: -1
-  }
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   getCityHubList,
-  getCountryHubList,
-})(SearchForm)));
+  getCountryHubList
+})(reduxForm({ 
+  form: 'hub_search_form'
+})(injectIntl(SearchForm)));

@@ -102,8 +102,15 @@ class SearchForm extends Component {
     this.props.change('category_id', 3);
   }
 
+  resetFilter = async () => {
+    const { handleSubmit, reset, change } = this.props
+    await reset();
+    change('category_id', 3);
+    handleSubmit();
+  }
+
   render() {
-    const { handleSubmit, reset, carrier, service, shipmentType, zone } = this.props;
+    const { handleSubmit, carrier, service, shipmentType, zone } = this.props;
     const { messages, locale } = this.props.intl;
     return (
       <form className="form form_custom" onSubmit={handleSubmit}>
@@ -267,13 +274,8 @@ class SearchForm extends Component {
           </Col>
         </Row>
         <Row>
-          <Col md={12} className="text-right search-group-button">
-            <Button size="sm" outline onClick={(e) => {
-              reset();
-              setTimeout(() => {
-                handleSubmit();
-              }, 200);
-            }} >
+          <Col md={12} className="text-right">
+            <Button size="sm" outline onClick={this.resetFilter}>
               {messages['clear']}</Button>
             <Button size="sm" color="primary" id="search" >
               {messages['search']}
@@ -310,11 +312,11 @@ const mapStateToProps = (state, props) => {
   }
 }
 
-export default reduxForm({
-  form: 'range_weight_domestic_search_form'
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   getCarrierDomesticList,
   getServiceDomesticList,
   getShipmentTypeDomesticList,
   getZoneDomesticList
-})(SearchForm)));
+})(reduxForm({ 
+  form: 'range_weight_domestic_search_form'
+})(injectIntl(SearchForm)));

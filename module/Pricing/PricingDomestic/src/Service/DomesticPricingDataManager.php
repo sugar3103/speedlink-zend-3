@@ -31,7 +31,8 @@ class DomesticPricingDataManager
 
     public function addPricingData($data, $user)
     {
-       if (is_array($data)) {
+        
+        if (is_array($data)) {
             foreach ($data['data'] as $value) {
                 $this->entityManager->beginTransaction();
                 try {
@@ -59,13 +60,12 @@ class DomesticPricingDataManager
 
                     // apply changes to database.
                     $this->entityManager->flush();
-                        $this->entityManager->commit();
+                    $this->entityManager->commit();
                 } catch (ORMException $e) {
                     $this->entityManager->rollback();
                     return false;
                 }
             }
         }
-
     }
 }

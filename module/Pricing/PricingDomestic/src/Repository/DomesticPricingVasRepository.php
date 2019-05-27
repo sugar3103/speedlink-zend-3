@@ -19,7 +19,7 @@ class DomesticPricingVasRepository extends EntityRepository
         try{
             $queryBuilder = $entityManager->createQueryBuilder();
             $queryBuilder->update(DomesticPricingVas::class, 'dpv')->set('dpv.is_deleted', 1)
-                ->where('dpv.domestic_pricing_id = :domestic_pricing_id')->setParameter("domestic_pricing_id", $pricing_id);            
+                ->where('dpv.domestic_pricing = :domestic_pricing_id')->setParameter("domestic_pricing_id", $pricing_id);            
         } catch (QueryException $e) {
             return [];
         }   

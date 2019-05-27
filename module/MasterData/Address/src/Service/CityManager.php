@@ -179,6 +179,8 @@ class CityManager  {
                 //set created_at
                 $city['created_at'] =  ($city['created_at']) ? Utils::checkDateFormat($city['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
                 $city['updated_at'] =  ($city['updated_at']) ? Utils::checkDateFormat($city['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $city['full_name_created'] = trim($city['full_name_created']);
+                $city['full_name_updated'] = trim($city['full_name_updated']);
             }
            
         }

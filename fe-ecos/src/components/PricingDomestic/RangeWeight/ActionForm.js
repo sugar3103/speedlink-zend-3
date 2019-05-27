@@ -16,6 +16,7 @@ import { categoryPricing } from '../../../constants/defaultValues';
 import renderSelectField from '../../../containers/Shared/form/Select';
 import CustomField from '../../../containers/Shared/form/CustomField';
 import validate from './validateActionForm';
+import ReactLoading from 'react-loading';
 
 class ActionForm extends Component {
 
@@ -125,9 +126,11 @@ class ActionForm extends Component {
   }
 
   render() {
-    const { handleSubmit, carrier, service, shipmentType, zone } = this.props;
+    const { handleSubmit, carrier, service, shipmentType, zone, rangeWeight: { loading } } = this.props;
     const { messages } = this.props.intl;
-    return (
+    return loading ? (
+      <ReactLoading type="bubbles" className="loading" /> 
+    ) : (
       <form className="form form_custom" onSubmit={handleSubmit}>
         <Row>
           <Col md={6} lg={3} xl={3} xs={6}>
@@ -316,7 +319,7 @@ class ActionForm extends Component {
           </Col>
         </Row>
         <Row>
-          <Col md={12} className="text-right search-group-button">
+          <Col md={12} className="text-right">
             <Link to="/pricing-domestic/range-weight" className="btn btn-outline-secondary btn-sm">
               {messages['cancel']}
             </Link>
@@ -345,7 +348,7 @@ const mapStateToProps = (state, props) => {
   const selector = formValueSelector('range_weight_domestic_action_form');
   const carrier_id = selector(state, 'carrier_id');
   const service_id = selector(state, 'service_id');
-  let initialValues = rangeWeight.itemEditting;
+  const initialValues = rangeWeight.itemEditting;
   return {
     carrier,
     service,
@@ -353,6 +356,7 @@ const mapStateToProps = (state, props) => {
     zone,
     carrier_id,
     service_id,
+    rangeWeight,
     initialValues,
   }
 }

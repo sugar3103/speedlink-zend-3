@@ -4,7 +4,7 @@
   left: 0;
   z-index: 99;
   height: 100vh;
-  width: 240px;
+  width: 220px;
   box-shadow: 0 1px 30px 1px rgba(0, 0, 0, 0.11);
   padding-top: 60px;
   transition: transform 0.3s, width 0.3s;
@@ -51,7 +51,7 @@
 }
 
 .sidebar__scroll {
-  width: 240px;
+  width: 220px;
 
   & > div {
     height: calc(100vh - 60px);
@@ -104,7 +104,7 @@
 
 .sidebar__link {
   height: 40px;
-  width: 240px;
+  width: 220px;
   transition: all 0.3s;
   position: relative;
   cursor: pointer;
@@ -153,16 +153,16 @@
 
 .sidebar__link-title {
   margin: 0;
-  font-size: 14px;
-  line-height: 16px;
+  font-size: 13px;
+  line-height: 13px;
   position: relative;
   display: flex;
 }
 
 .sidebar__link-icon {
   margin-right: 10px;
-  font-size: 20px;
-  line-height: 20px;
+  font-size: 18px;
+  line-height: 18px;
   @include themify($themes) {
     color: themed('colorFitness');
   }

@@ -12,7 +12,7 @@ import {
 
 /* GET LIST CARRIER DOMESTIC */
 
-function getListZoneDomesticApi(params) {
+function getListCarrierDomesticApi(params) {
   return axios.request({
     method: 'post',
     url: `${apiUrl}carrier`,
@@ -21,15 +21,15 @@ function getListZoneDomesticApi(params) {
   });
 }
 
-const getZoneDomesticListRequest = async (params) => {
-  return await getListZoneDomesticApi(params).then(res => res.data).catch(err => err)
+const getCarrierDomesticListRequest = async (params) => {
+  return await getListCarrierDomesticApi(params).then(res => res.data).catch(err => err)
 };
 
-function* getZoneDomesticListItems({ payload }) {
+function* getCarrierDomesticListItems({ payload }) {
   const { params } = payload;
   const { pathname } = history.location;
   try {
-    const response = yield call(getZoneDomesticListRequest, params);
+    const response = yield call(getCarrierDomesticListRequest, params);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(getCarrierDomesticListSuccess(response.data));
@@ -51,10 +51,10 @@ function* getZoneDomesticListItems({ payload }) {
   }
 }
 
-export function* watchZoneDomesticGetList() {
-  yield takeEvery(PRI_DOM_CARRIER_GET_LIST, getZoneDomesticListItems);
+export function* watchCarrierDomesticGetList() {
+  yield takeEvery(PRI_DOM_CARRIER_GET_LIST, getCarrierDomesticListItems);
 }
 
 export default function* rootSaga() {
-  yield all([ fork(watchZoneDomesticGetList) ]);
+  yield all([ fork(watchCarrierDomesticGetList) ]);
 }

@@ -63,7 +63,7 @@ class CityForm extends Form
                 [
                     'name' => StringLength::class,
                     'options' => [
-                        'min' => 4,
+                        'min' => 2,
                         'max' => 50
                     ]
                 ],
@@ -90,7 +90,7 @@ class CityForm extends Form
                 [
                     'name' => StringLength::class,
                     'options' => [
-                        'min' => 4,
+                        'min' => 2,
                         'max' => 50
                     ]
                 ],

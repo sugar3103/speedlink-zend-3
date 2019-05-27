@@ -70,7 +70,7 @@ class ZoneCodeForm extends Form {
                 [
                     'name' => StringLength::class,
                     'options' => [
-                        'min' => 4,
+                        'min' => 2,
                         'max' => 50
                     ]
                 ],

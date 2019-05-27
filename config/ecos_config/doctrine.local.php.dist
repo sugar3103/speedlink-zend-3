@@ -18,10 +18,10 @@ return [
             'orm_default' => [
                 'driverClass' => \Doctrine\DBAL\Driver\PDOMySql\Driver::class,
                 'params' => [
-                    'host' => 'localhost',
+                    'host' => '192.168.7.30',
                     'port' => '3306',
                     'user' => 'root',
-                    'password' => '',
+                    'password' => 'P@ssw0rd',
                     'dbname' => 'ecos_system',
                     'charset' => 'utf8',
                 ],

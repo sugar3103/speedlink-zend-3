@@ -12,6 +12,7 @@ import renderSelectField from "../../../../containers/Shared/form/Select";
 import { MODAL_EDIT, MODAL_ADD, MODAL_VIEW } from '../../../../constants/defaultValues';
 import Moment from 'react-moment';
 import Can from '../../../../containers/Shared/Can';
+import { categoryPricing } from '../../../../constants/defaultValues';
 class ActionForm extends Component {
 
   constructor(props) {
@@ -38,13 +39,27 @@ class ActionForm extends Component {
     this.props.changeTypeShipmentTypeModal(MODAL_VIEW);
   }
 
+  showOptionsCategory = () => {
+    let result = [];
+    for (var key in categoryPricing) {
+      if (categoryPricing.hasOwnProperty(key)) {
+        result.push({
+          value: key,
+          label: categoryPricing[key]
+        });
+      }
+    }
+    return result;
+  }
+
   showOption = (items) => {
+    const { locale } = this.props.intl;
     let result = [];
     if (items.length > 0) {
       result = items.map(item => {
         return {
           value: item.id,
-          label: item.code
+          label: locale === 'en-US' ? item.name_en : item.name
         }
       })
     }
@@ -60,15 +75,15 @@ class ActionForm extends Component {
     switch (modalType) {
       case MODAL_ADD:
         className = 'success';
-        title = messages['carrier.add-new'];
+        title = messages['shipment_type.add-new'];
         break;
       case MODAL_EDIT:
         className = 'primary';
-        title = messages['carrier.update'];
+        title = messages['shipment_type.update'];
         break;
       case MODAL_VIEW:
         className = 'info';
-        title = messages['carrier.view'];
+        title = messages['shipment_type.view'];
         break;
       default:
         break;
@@ -127,11 +142,11 @@ class ActionForm extends Component {
               <div className="form__form-group">
                 <span className="form__form-group-label">{messages['shipment_type.category_code']}</span>
                 <div className="form__form-group-field">
-                  <Field name="category_code" component={renderSelectField} type="text" disabled={disabled} options={[
-                    { value: "Inbound", label: messages['shipment_type.inbound'] },
-                    { value: "Outbound", label: messages['shipment_type.outbound'] },
-                    { value: "Domestic", label: messages['shipment_type.domestic'] },
-                  ]}
+                  <Field 
+                    name="category_id" 
+                    component={renderSelectField} 
+                    options={this.showOptionsCategory()}
+                    disabled={disabled}
                   />
                 </div>
               </div>
@@ -139,8 +154,8 @@ class ActionForm extends Component {
                 <span className="form__form-group-label">{messages['shipment_type.product_type_code']}</span>
                 <div className="form__form-group-field">
                   <Field name="product_type_code" component={renderSelectField} type="text" disabled={disabled} options={[
-                    { value: 0, label: messages['shipment_type.dox'] },
-                    { value: 1, label: messages['shipment_type.parcel'] }
+                    { value: 'Dox', label: messages['shipment_type.dox'] },
+                    { value: 'Parcel', label: messages['shipment_type.parcel'] }
                   ]}
                   />
                 </div>
@@ -190,7 +205,7 @@ class ActionForm extends Component {
                   </Col>
                   {modalData.updated_at &&
                     <Col md={6}>
-                      <span><i className="label-info-data">{messages['updated-by']}:</i>{(modalData.full_name_updated !== " ") ? modalData.full_name_updated : modalData.updated_by}</span>
+                      <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.full_name_updated ? modalData.full_name_updated : modalData.updated_by}</span>
                       <br />
                       <span><i className="label-info-data">{messages['updated-at']}:</i>
                         <Moment fromNow locale={locale}>{new Date(modalData.updated_at)}</Moment>
@@ -235,12 +250,12 @@ const mapStateToProps = ({ shipment_type, carrier, service, authUser }) => {
   return { modalData, modalType, carrierCode, serviceCode, authUser };
 };
 
-export default reduxForm({
-  form: 'shipment_type_action_form',
-  validate
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   toggleShipmentTypeModal,
   getCarrierCodeList,
   getServiceCodeList,
   changeTypeShipmentTypeModal
-})(ActionForm)));
+})(reduxForm({ 
+  form: 'shipment_type_action_form', 
+  validate
+})(injectIntl(ActionForm)));

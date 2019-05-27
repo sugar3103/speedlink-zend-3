@@ -54,7 +54,7 @@ class Action extends Component {
 }
 
 Action.propTypes = {
-  modalType: PropTypes.object,
+  modalType: PropTypes.string,
   addShipmentTypeItem: PropTypes.func.isRequired,
   updateShipmentTypeItem: PropTypes.func.isRequired,
   toggleShipmentTypeModal: PropTypes.func.isRequired,

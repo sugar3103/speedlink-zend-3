@@ -12,8 +12,7 @@
 
 fieldset.scheduler-border {
     border: 1px solid #d7d7d7 !important;
-    padding: 0 1.4em 1.4em 1.4em !important;
-    margin: 0 0 1.5em 0 !important;
+    padding: 0 1.4em 0.4em 1.4em !important;
     -webkit-box-shadow:  0px 0px 0px 0px #000;
     box-shadow:  0px 0px 0px 0px #000;
 }
@@ -25,6 +24,13 @@ legend.scheduler-border {
     width:auto;
     padding:0 10px;
     border-bottom:none;
+}
+
+.loading {
+    @include themify($themes) {
+        fill: themed('colorFitness') !important;
+    }
+    margin: auto;
 }
   
 .react-confirm-alert-overlay {
@@ -147,6 +153,7 @@ form {
 /* width */
 ::-webkit-scrollbar {
     width: 10px;
+    height: 10px;
   }
   
   /* Track */
@@ -214,14 +221,14 @@ form {
             border: none;
             background-color: rgba(250, 250, 250, 0.1);
             color: #fff;
-            font-size: 14px
+            font-size: 13px
         }
         
         textarea { 
             border: none;
             background-color: rgba(250, 250, 250, 0.1);
             color: #fff;
-            font-size: 14px
+            font-size: 13px
         }
         .form__form-group-select {
             input{ background-color: transparent}
@@ -402,3 +409,117 @@ form {
 .topbar__title {
     display: none;
 }
+
+/* PRICING DOMESTIC */
+
+.tooltip-field-vas {
+    top: 10% !important;
+    width: 250px !important;
+
+    .arrow {
+        top: 45px !important;
+    }
+
+    ul {
+        padding-left: 10px;
+        li {
+            list-style-type: none;
+            
+            b {
+                margin-right: 5px;
+                font-size: 13px;
+            }
+            label {
+                margin-left: 5px;
+                margin-bottom: 0;
+            }
+        }
+
+        &.list-field-vas {
+            b {
+                font-size: 11px;
+            }
+        }
+    }
+
+
+}
+
+.pri-dom {
+    .table {
+        th, td {
+            @include themify($themes) {
+                border: 1px solid themed('colorFitness');
+                color:  themed('colorText') !important;
+            }
+            vertical-align: middle;
+            text-align: center;
+        }
+        .cell-value {
+            cursor: pointer;
+        }
+    }
+    .form-edit-range-weight-value {
+        .form__form-group-label {
+            margin: 5px 0 !important;
+        }
+    }
+    .pricing-vas {
+        ul {
+            padding-left: 0;
+        }
+
+        .group-action {
+            .btn {
+                float: right;
+                padding: 4px 8px;
+                margin-right: 0;
+                margin-left: 15px;
+                margin-bottom: 0;
+            }
+        }
+
+        .vas-item {
+            display: flex;
+            
+            .btn {
+                padding: 3px 7px;
+            }
+
+            .group-input {
+                flex-grow: 1;
+                justify-content: space-between;
+            }
+
+            .table-price {
+                .btn {
+                    margin: 0;
+                }
+            }
+
+        }
+
+        .price-vas {
+            .btn {
+                margin-bottom: 0;
+                padding: 2px 6px;
+            }
+        }
+
+        .table-price {
+            th, td {
+                padding: 5px;
+            }
+        }
+
+        .react-bs-table-bordered {
+            border-radius: 0;
+    
+            .form-control {
+                height: 25px;
+                color: #343d45;
+            }
+        }
+    }
+}
+/* END PRICING DOMESTIC */

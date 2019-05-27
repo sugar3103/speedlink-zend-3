@@ -140,7 +140,7 @@ class List extends Component {
           accessor: "product_type_code",
           Cell: ({ original}) => {
             return(
-              original.product_type_code === "0" ?  messages['shipment_type.dox'] :  messages['shipment_type.parcel']
+              original.product_type_code === "Dox" ?  messages['shipment_type.dox'] :  messages['shipment_type.parcel']
             )
           },
           sortable: false,
@@ -148,12 +148,22 @@ class List extends Component {
         {
           Header: messages['shipment_type.service'],
           accessor: "service",
+          Cell: ({ original }) => {
+            return (
+              locale === 'en-US' ? original.service_en : original.service
+            )
+          },
           sortable: false,
         }, 
         {
           Header: messages['shipment_type.category'],
-          accessor: "category_code",
+          accessor: "category",
           className: "text-center",
+          Cell: ({ original }) => {
+            return (
+              locale === 'en-US' ? original.category_en : original.category
+            )
+          },
           sortable: false,
         },
         {
@@ -180,7 +190,7 @@ class List extends Component {
 
           Cell: ({ original }) => {
             return (
-              original.status === 1 ? <Badge color="success">{messages['active']}</Badge> : original.status === -1 ? <Badge color="dark">{messages['deleted']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>
+              original.status === 1 ? <Badge color="success">{messages['active']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>
             )
           },
           className: "text-center",

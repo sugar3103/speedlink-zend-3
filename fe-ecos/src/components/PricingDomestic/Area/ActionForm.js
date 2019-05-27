@@ -138,7 +138,7 @@ class ActionForm extends Component {
                 <hr />
                 <Row>
                   <Col md={6}>
-                    <span><i className="label-info-data">{messages['created-by']}:</i>{(modalData.full_name_created !== " ") ? modalData.full_name_created : modalData.created_by}</span>
+                    <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name_created ? modalData.full_name_created : modalData.created_by}</span>
                     <br />
                     <span><i className="label-info-data">{messages['created-at']}:</i>
                       <Moment fromNow locale={locale}>{new Date(modalData.created_at)}</Moment>
@@ -146,7 +146,7 @@ class ActionForm extends Component {
                   </Col>
                   {modalData.updated_at &&
                     <Col md={6}>
-                      <span><i className="label-info-data">{messages['updated-by']}:</i>{(modalData.full_name_updated !== " ") ? modalData.full_name_updated : modalData.updated_by}</span>
+                      <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.full_name_updated ? modalData.full_name_updated : modalData.updated_by}</span>
                       <br />
                       <span><i className="label-info-data">{messages['updated-at']}:</i>
                         <Moment fromNow locale={locale}>{new Date(modalData.updated_at)}</Moment>
@@ -175,7 +175,7 @@ ActionForm.propTypes = {
   modalData: PropTypes.object,
   modalType: PropTypes.string,
   authUser: PropTypes.object.isRequired,
-  cities: PropTypes.object,
+  cities: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,
   toggleAreaDomesticModal: PropTypes.func.isRequired,
   getCityAreaDomesticList: PropTypes.func.isRequired,
@@ -193,11 +193,11 @@ const mapStateToProps = ({ pricingDomestic, authUser }) => {
   }
 }
 
-export default reduxForm({
-  form: 'area_domestic_action_form',
-  validate
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   toggleAreaDomesticModal,
   getCityAreaDomesticList,
   changeTypeAreaDomesticModal
-})(ActionForm)));
+})(reduxForm({ 
+  form: 'area_domestic_action_form', 
+  validate
+})(injectIntl(ActionForm)));

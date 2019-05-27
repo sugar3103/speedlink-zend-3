@@ -47,7 +47,7 @@ class DomesticPricingVas
      *
      * @ORM\Column(name="min", type="float", nullable=false, unique=false)
      */
-    private $min;
+    private $min = 0;
 
     /**
      * @var int
@@ -61,7 +61,7 @@ class DomesticPricingVas
      *
      * @ORM\Column(name="is_deleted", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $is_deleted;
+    private $is_deleted = 0;
 
     /**
      * @var \DateTime

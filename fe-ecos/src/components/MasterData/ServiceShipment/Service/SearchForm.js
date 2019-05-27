@@ -64,18 +64,16 @@ class SearchForm extends Component {
           </div>
         </Col>
         <Col md={12} className="text-right">
-          <div className="search-group-button">
-            <Button size="sm" outline onClick={(e) => {
-              reset();
-              setTimeout(() => {
-                handleSubmit();
-              }, 200);
-            }} >
-              {messages['clear']}</Button>{' '}
-            <Button size="sm" color="primary" id="search" >
-              {messages['search']}
-            </Button>
-          </div>
+          <Button size="sm" outline onClick={(e) => {
+            reset();
+            setTimeout(() => {
+              handleSubmit();
+            }, 200);
+          }} >
+            {messages['clear']}</Button>{' '}
+          <Button size="sm" color="primary" id="search" >
+            {messages['search']}
+          </Button>
         </Col>
       </form>
     );
@@ -94,8 +92,8 @@ const mapStateToProps = ({ service }) => {
   return { serviceCode }
 }
 
-export default reduxForm({
-  form: 'service_search_form',
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   getServiceCodeList
-})(SearchForm)));
+})(reduxForm({ 
+  form: 'service_search_form'
+})(injectIntl(SearchForm)));

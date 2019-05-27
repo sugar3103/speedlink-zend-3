@@ -64,6 +64,8 @@ class CarrierManager
             foreach ($carriers as &$carrier) {  
                 $carrier['created_at'] =  ($carrier['created_at']) ? Utils::checkDateFormat($carrier['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
                 $carrier['updated_at'] =  ($carrier['updated_at']) ? Utils::checkDateFormat($carrier['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $carrier['full_name_created'] = trim($carrier['full_name_created']);
+                $carrier['full_name_updated'] = trim($carrier['full_name_updated']);
             }
         }
 
@@ -110,11 +112,11 @@ class CarrierManager
             $carrier->setDescriptionEn($data['description_en']);
             $carrier->setStatus($data['status']);
             $carrier->setCode($data['code']);
-            //TODO: check timezone
-            $carrier->setCreatedAt(date('Y-m-d H:i:s'));
+            
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $carrier->setCreatedAt($addTime->format('Y-m-d H:i:s'));
+            
             $carrier->setCreatedBy($user->id);
-            $carrier->setUpdatedAt(date('Y-m-d H:i:s'));
-            $carrier->setUpdatedBy($user->id);
             $carrier->setIsDeleted(0);
             $this->getReferenced($carrier, $data, $user, 'add');
 
@@ -150,7 +152,10 @@ class CarrierManager
             $carrier->setDescriptionEn($data['description_en']);
             $carrier->setStatus($data['status']);
             $carrier->setCode($data['code']);
-            $carrier->setUpdatedAt(date('Y-m-d H:i:s'));
+
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $carrier->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+
             $carrier->setIsDeleted(0);
             $carrier->setUpdatedBy($user->id);
             $this->getReferenced($carrier, $data, $user);
@@ -180,7 +185,8 @@ class CarrierManager
         try {
             $carrier->setIsDeleted(1);
             $carrier->setStatus(-1);
-            $carrier->setUpdatedAt(date('Y-m-d H:i:s'));
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $carrier->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
             $carrier->setUpdatedBy($user->id);
             $this->getReferenced($carrier, '', $user);            
 

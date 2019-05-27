@@ -89,24 +89,24 @@ class ShipmentTypeRepository extends EntityRepository
             $queryBuilder->andWhere('smt.status = 1');
             if ($sortField == 'carrier_id') {
                 $queryBuilder->select("
-                    smt.carrier_id,
-                    c.code AS carrier_code,
-                    c.name AS carrier_name,
-                    c.name_en AS carrier_name_en
+                    ca.id,
+                    ca.code AS carrier_code,
+                    ca.name AS carrier_name,
+                    ca.name_en AS carrier_name_en
                 ");
                 $queryBuilder->andWhere('c.is_deleted = 0');
                 $queryBuilder->andWhere('c.status = 1');
-                $queryBuilder->groupBy('smt.carrier_id');
+                $queryBuilder->groupBy('ca.id');
             } else if ($sortField == 'service_id') {
                 $queryBuilder->select("
-                    smt.service_id,
+                    s.id,
                     s.code AS service_code,
                     s.name AS service_name,
                     s.name_en AS service_name_en
                 ");
                 $queryBuilder->andWhere('s.is_deleted = 0');
                 $queryBuilder->andWhere('s.status = 1');
-                $queryBuilder->groupBy('smt.service_id');
+                $queryBuilder->groupBy('s.id');
             } else {
                 $queryBuilder->select("
                     smt.id AS shipment_type_id,
@@ -143,15 +143,15 @@ class ShipmentTypeRepository extends EntityRepository
                 'operator' => 'contains'
             ],
             'category_id' => [
-                'alias' => 'smt.category_id',
+                'alias' => 'c.id',
                 'operator' => 'eq'
             ],
             'carrier_id' => [
-                'alias' => 'smt.carrier_id',
+                'alias' => 'ca.id',
                 'operator' => 'eq'
             ],
             'service_id' => [
-                'alias' => 'smt.service_id',
+                'alias' => 's.id',
                 'operator' => 'eq'
             ],
             'id' => [

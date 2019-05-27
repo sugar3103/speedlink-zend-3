@@ -6,6 +6,7 @@ import { configureStore } from "./redux/store";
 import App from "./containers/App/App";
 import history from './util/history';
 
+
 const MainApp = () => (
   <Provider store={configureStore()}>
     <Router history={history}>

@@ -113,7 +113,9 @@ const mapStateToProps = ({ authUser }) => {
   }
 }
 
-export default reduxForm({
-  form: 'log_in_form',
+export default connect(mapStateToProps, {
+  getSystemInfo
+})(reduxForm({ 
+  form: 'log_in_form', 
   validate
-})(injectIntl(connect(mapStateToProps, { getSystemInfo })(LogInForm)));
+})(injectIntl(LogInForm)));

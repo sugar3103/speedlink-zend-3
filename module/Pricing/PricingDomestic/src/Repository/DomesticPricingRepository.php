@@ -34,12 +34,23 @@ class DomesticPricingRepository extends EntityRepository
             $queryBuilder->select("
                 dp.id,
                 dp.name,
-                dp.name_en,
                 c.id as category_id,
+                c.name as category,
+                c.name_en as category_en,
                 ca.id as carrier_id,
+                ca.name as carrier,
+                ca.name_en as carrier_en,
+                cu.id as customer_id,
+                cu.name as customer,                
                 s.id as service_id,
+                s.name as service,
+                s.name_en as service_en,
                 sm.id as saleman_id,
+                sm.username as saleman,
                 ap.id as approval_by,
+                ap.username as approval_by_name,
+                dp.is_private,
+                dp.status,
                 dp.approval_status,
                 dp.effected_date,
                 dp.expired_date,
@@ -82,11 +93,42 @@ class DomesticPricingRepository extends EntityRepository
                 'alias' => 'dp.name',
                 'operator' => 'contains'
             ],
-            'name_en' => [
-                'alias' => 'dp.name_en',
-                'operator' => 'contains'
+            'customer_id' => [
+                'alias' => 'cu.id',
+                'operator' => 'eq'
             ],
-            
+            'saleman_id' => [
+                'alias' => 'sm.id',
+                'operator' => 'eq'
+            ],
+            'category_id' => [
+                'alias' => 'c.id',
+                'operator' => 'eq'
+            ],
+            'carrier_id' => [
+                'alias' => 'ca.id',
+                'operator' => 'eq'
+            ],
+            'service_id' => [
+                'alias' => 's.id',
+                'operator' => 'eq'
+            ],
+            'status' => [
+                'alias' => 'dp.status',
+                'operator' => 'eq'
+            ],
+            'is_private' => [
+                'alias' => 'dp.is_private',
+                'operator' => 'eq'
+            ],
+            'approval_status' => [
+                'alias' => 'dp.approval_status',
+                'operator' => 'eq'
+            ],
+            'approved_by' => [
+                'alias' => 'ap.id',
+                'operator' => 'eq'
+            ],
             'created_at' => [
                 'alias' => 'dp.created_at',
                 'operator' => 'contains'
@@ -96,6 +138,7 @@ class DomesticPricingRepository extends EntityRepository
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(DomesticPricing::class, 'dp')        
         ->leftJoin('dp.category', 'c')
+        ->leftJoin('dp.customer','cu')
         ->leftJoin('dp.service', 's')
         ->leftJoin('dp.carrier', 'ca')
         ->leftJoin('dp.saleman', 'sm')
@@ -110,5 +153,4 @@ class DomesticPricingRepository extends EntityRepository
         }
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
-
 }

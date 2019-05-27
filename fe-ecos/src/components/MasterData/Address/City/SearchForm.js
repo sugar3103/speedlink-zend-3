@@ -98,7 +98,7 @@ class SearchForm extends Component {
             </div>
           </div>
         </Col>
-        <Col md={12} className="text-right search-group-button">
+        <Col md={12} className="text-right">
           <Button
             size="sm"
             outline
@@ -135,8 +135,8 @@ const mapStateToProps = ({ address, system }) => {
   }
 }
 
-export default reduxForm({
-  form: 'city_search_form',
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   getCountryList
-})(SearchForm)));
+})(reduxForm({ 
+  form: 'city_search_form'
+})(injectIntl(SearchForm)));

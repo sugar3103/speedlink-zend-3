@@ -193,8 +193,9 @@ const mapStateToProps = ({ users, authUser }) => {
   return { role, authUser }
 }
 
-
-export default reduxForm({
-  form: 'user_setting_action_form',
+export default connect(mapStateToProps, {
+  getRoleList
+})(reduxForm({ 
+  form: 'user_setting_action_form', 
   validate
-})(injectIntl(connect(mapStateToProps, { getRoleList })(Setting)));
+})(injectIntl(Setting)));

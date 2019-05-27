@@ -190,10 +190,10 @@ const mapStateToProps = ({ address }) => {
   }
 }
 
-export default reduxForm({
-  form: 'ward_search_form',
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   getDistrictList,
   getCountryList,
   getCityList
-})(SearchForm)));
+})(reduxForm({ 
+  form: 'ward_search_form'
+})(injectIntl(SearchForm)));

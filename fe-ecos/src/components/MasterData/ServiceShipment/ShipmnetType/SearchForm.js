@@ -123,22 +123,17 @@ class SearchForm extends Component {
           </div>
         </Col>
         <Col md={3}>
-          <div className="form__form-group">
-            <span className="form__form-group-label"></span>
-            <div className="form__form-group-field">
-              <div className="search-group-button">
-                <Button size="sm" outline onClick={(e) => {
-                  reset();
-                  setTimeout(() => {
-                    handleSubmit();
-                  }, 200);
-                }} >
-                  {messages['clear']}</Button>{' '}
-                <Button size="sm" color="primary" id="search" >
-                  {messages['search']}
-                </Button>
-              </div>
-            </div>
+          <div className="text-right search-group-button">
+            <Button size="sm" outline onClick={(e) => {
+              reset();
+              setTimeout(() => {
+                handleSubmit();
+              }, 200);
+            }} >
+              {messages['clear']}</Button>{' '}
+            <Button size="sm" color="primary" id="search">
+              {messages['search']}
+            </Button>
           </div>
         </Col>
       </form>
@@ -164,16 +159,10 @@ const mapStateToProps = ({ shipment_type, carrier, service }) => {
   return { shipmentTypeCode, carrierCode, serviceCode }
 }
 
-export default reduxForm({
-  form: 'shipment_type_search_form',
-  initialValues: {
-    name: '',
-    status: -1,
-    category_code: -1,
-    product_type_code: -1,
-  }
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   getShipmentTypeCodeList,
   getCarrierCodeList,
   getServiceCodeList,
-})(SearchForm)));
+})(reduxForm({ 
+  form: 'shipment_type_search_form'
+})(injectIntl(SearchForm)));

@@ -62,10 +62,9 @@ class DomesticAreaCityManager {
             
             $areaCities = $ormPaginator->getIterator()->getArrayCopy();            
             
-            foreach ($areas as &$areaCitiy) {
+            foreach ($areaCities as &$areaCitiy) {
                 $areaCitiy['created_at'] =  ($areaCitiy['created_at']) ? Utils::checkDateFormat($areaCitiy['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
                 $areaCitiy['updated_at'] =  ($areaCitiy['updated_at']) ? Utils::checkDateFormat($areaCitiy['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
-
             }
         }
         //set data user

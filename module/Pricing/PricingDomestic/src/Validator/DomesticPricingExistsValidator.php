@@ -4,7 +4,8 @@ namespace PricingDomestic\Validator;
 use Zend\Validator\AbstractValidator;
 use PricingDomestic\Entity\DomesticPricing;
 
-class DomesticPricingExistsValidator extends AbstractValidator {
+class DomesticPricingExistsValidator extends AbstractValidator
+{
 
     /**
      * Available validator options.
@@ -60,34 +61,27 @@ class DomesticPricingExistsValidator extends AbstractValidator {
         }
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
-        if($this->options['language'] === NULL) {
-            $domesticPricing = $entityManager->getRepository(DomesticPricing::class)->findOneBy(['name'=>$value, 'is_deleted' => 0]);
-        } else if($this->options['language'] === 'en') {
-            $domesticPricing = $entityManager->getRepository(DomesticPricing::class)->findOneBy(array('name_en' => $value, 'is_deleted' => 0));       
+        if ($this->options['language'] === NULL) {
+            $domesticPricing = $entityManager->getRepository(DomesticPricing::class)->findOneBy(['name' => $value, 'is_deleted' => 0]);
+        } else if ($this->options['language'] === 'en') {
+            $domesticPricing = $entityManager->getRepository(DomesticPricing::class)->findOneBy(array('name_en' => $value, 'is_deleted' => 0));
         }
 
         //English
         if ($this->options['domesticPricing'] == null)
             $isValid = ($domesticPricing == null);
         else {
-            if($this->options['language'] === 'en') {
-                if ($this->options['domesticPricing']->getNameEn() != $value && $domesticPricing != null)
-                    $isValid = false;
-                else
-                    $isValid = true;
-            } else {
-                if ($this->options['domesticPricing']->getName() != $value && $domesticPricing != null)
-                    $isValid = false;
-                else
-                    $isValid = true;
-            }
+            if ($this->options['domesticPricing']->getName() != $value && $domesticPricing != null)
+                $isValid = false;
+            else
+                $isValid = true;
         }
 
         // if there were an error, set error message.
         if (!$isValid) {
             $this->error(self::DOMESTIC_PRICING_EXISTS);
         }
-          
+
         // return validation result
         return $isValid;
     }

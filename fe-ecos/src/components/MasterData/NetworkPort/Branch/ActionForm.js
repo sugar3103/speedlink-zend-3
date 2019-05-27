@@ -377,7 +377,7 @@ class ActionForm extends PureComponent {
                 {modalData.updated_at && 
                   <Col md={6}>
                    <span><i className="label-info-data">{messages['updated-by']}:</i>
-                        {(modalData.full_name_updated !== " ") ? modalData.full_name_updated : modalData.updated_by}</span>
+                        {modalData.full_name_updated ? modalData.full_name_updated : modalData.updated_by}</span>
                         <br />
                         <span><i className="label-info-data">{messages['updated-at']}:</i>
                         <Moment fromNow locale={locale}>{new Date(modalData.updated_at)}</Moment>
@@ -435,10 +435,7 @@ const mapStateToProps = ({ branch, authUser }) => {
   }
 }
 
-export default reduxForm({
-  form: 'branch_action_form',
-  validate
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   toggleBranchModal,
   changeTypeBranchModal,
   getCityBranchList,
@@ -446,4 +443,7 @@ export default reduxForm({
   getCountryBranchList,
   getWardBranchList,
   getHubBranchList
-})(ActionForm)));
+})(reduxForm({ 
+  form: 'branch_action_form', 
+  validate
+})(injectIntl(ActionForm)));

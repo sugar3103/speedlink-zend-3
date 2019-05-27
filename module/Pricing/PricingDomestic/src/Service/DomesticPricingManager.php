@@ -20,6 +20,7 @@ use Zend\Paginator\Paginator;
 use Zend\Authentication\Result;
 use Core\Utils\Utils;
 use OAuth\Entity\User;
+use Customer\Entity\Customer;
 use ServiceShipment\Entity\Category;
 use ServiceShipment\Entity\Carrier;
 use ServiceShipment\Entity\Service;
@@ -101,11 +102,8 @@ class DomesticPricingManager {
         $this->entityManager->beginTransaction();
         try {
             $domesticPricing = new DomesticPricing();
-            $domesticPricing->setName($data['name']);
-            $domesticPricing->setNameEn($data['name_en']);            
-
-            $domesticPricing->setEffectedDate($data['effected_date']);
-            $domesticPricing->setExpiredDate($data['expired_date']);
+            $domesticPricing->setEffectedDate(date('Y-m-d H:i:s', strtotime($data['effected_date'])));
+            $domesticPricing->setExpiredDate(date('Y-m-d H:i:s', strtotime($data['expired_date'])));
             $domesticPricing->setIsPrivate($data['is_private']);
             $domesticPricing->setStatus($data['status']);
             $domesticPricing->setApprovalStatus($data['approval_status']);
@@ -117,17 +115,11 @@ class DomesticPricingManager {
             $this->getReferenced($domesticPricing,$user,'add', $data);
             
             $this->entityManager->persist($domesticPricing);
-            
+           
             $this->entityManager->flush();        
             
             $this->entityManager->commit();
-
-            if(isset($data['cities']) && count($data['cities']) > 0) {
-                foreach ($data['cities'] as $city ) {
-                    $this->domesticPricingManager->updatePricingCity($domesticPricing->getId(), $city, $user);
-                }
-            }
-
+            
             return $domesticPricing;
 
         } catch (ORMException $e) {
@@ -143,11 +135,9 @@ class DomesticPricingManager {
 
         $this->entityManager->beginTransaction();
         try {
-            $domesticPricing->setName($data['name']);
-            $domesticPricing->setNameEn($data['name_en']);
-
-            $domesticPricing->setEffectedDate($data['effected_date']);
-            $domesticPricing->setExpiredDate($data['expired_date']);
+          
+            $domesticPricing->setEffectedDate(date('Y-m-d H:i:s', strtotime($data['effected_date'])));
+            $domesticPricing->setExpiredDate(date('Y-m-d H:i:s', strtotime($data['expired_date'])));
             $domesticPricing->setIsPrivate($data['is_private']);
             $domesticPricing->setStatus($data['status']);
             $domesticPricing->setApprovalStatus($data['approval_status']);
@@ -184,6 +174,7 @@ class DomesticPricingManager {
             $this->entityManager->flush();
             // $last_id = $rangeweight->getBranchId();
             $this->entityManager->commit();
+            
            
         }
         catch (ORMException $e) {
@@ -203,11 +194,6 @@ class DomesticPricingManager {
             $domesticPricing->setCreatedBy($user_data);
         }
 
-        $customer = $this->entityManager->getRepository(User::class)->find($data['customer_id']);
-        if ($customer == null) {
-            throw new \Exception('Not found Customer by ID');
-        }
-        
         $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['carrier_id']);
         if ($carrier == null) {
             throw new \Exception('Not found Carrier by ID');
@@ -229,13 +215,50 @@ class DomesticPricingManager {
         if ($approval == null) {
             throw new \Exception('Not found Approval by ID');
         }
-        $domesticPricing->setCustomer($customer);
         $domesticPricing->setCarrier($carrier);
         $domesticPricing->setCategory($category);
         $domesticPricing->setService($service);
         $domesticPricing->setSaleman($saleman);
         $domesticPricing->setApprovalBy($approval);
         $domesticPricing->setUpdatedBy($user_data);
+        $domesticPricing->setCreatedBy($user_data);
+        
+        //Create Name Pricing
+        $name = $carrier->getNameEn() .'.'. $service->getNameEn();
+        if($data['is_private'] == 0) {
+            $name .= '.Public';
+        } 
+        
+        if($data['customer_id']) {
+            $customer = $this->entityManager->getRepository(Customer::class)->find($data['customer_id']);
+            if ($customer == null) {
+                throw new \Exception('Not found Customer by ID');
+            }
 
+            $domesticPricing->setCustomer($customer);
+            $name .= '.'. $customer->getName();
+        }
+
+        $name = str_replace(' ', '', $name);
+
+        $ormPricing = $this->entityManager->getRepository(DomesticPricing::class)->getListDomesticPricingByCondition(1,0,'name','asc',[
+            'name' => $name
+        ]);
+            
+        $indexPricing = 1;
+        if($ormPricing){
+            //set offset,limit
+            $ormPaginator = new ORMPaginator($ormPricing, true);
+            $ormPaginator->setUseOutputWalkers(false);
+                 
+            $pricings = $ormPaginator->getIterator()->getArrayCopy();
+            if($pricings) {
+                $pricing = explode('.',$pricings[count($pricings) - 1]['name']);
+                $indexPricing = (int)$pricing[count($pricing)-1] + 1;
+            }
+        }
+        
+        $domesticPricing->setName($name.'.'.$indexPricing);
+        
     }
 }

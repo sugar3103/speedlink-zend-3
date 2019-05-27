@@ -68,7 +68,7 @@ class UserRepository extends EntityRepository {
             ->leftJoin(
                 'u.roles',
                 'r'
-            )->andWhere('u.deleted == 0')->groupBy('u.id');
+            )->groupBy('u.id');
 
             if($limit) {
                 $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);

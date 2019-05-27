@@ -64,18 +64,16 @@ class SearchForm extends Component {
           </div>
         </Col>
         <Col md={12} className="text-right">
-          <div className="search-group-button">
-            <Button size="sm" outline onClick={(e) => {
-              reset();
-              setTimeout(() => {
-                handleSubmit();
-              }, 200);
-            }} >
-              {messages['clear']}</Button>{' '}
-            <Button size="sm" color="primary" id="search" >
-              {messages['search']}
-            </Button>
-          </div>
+          <Button size="sm" outline onClick={(e) => {
+            reset();
+            setTimeout(() => {
+              handleSubmit();
+            }, 200);
+          }} >
+            {messages['clear']}</Button>{' '}
+          <Button size="sm" color="primary" id="search" >
+            {messages['search']}
+          </Button>
         </Col>
       </form>
     );
@@ -94,11 +92,8 @@ const mapStateToProps = ({ carrier }) => {
   return { carrierCode }
 }
 
-export default reduxForm({
-  form: 'carrier_search_form',
-  initialValues: {
-    carrier: -1
-  }
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   getCarrierCodeList
-})(SearchForm)));
+})(reduxForm({ 
+  form: 'carrier_search_form'
+})(injectIntl(SearchForm)));

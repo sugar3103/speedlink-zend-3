@@ -448,6 +448,8 @@ class UserManager {
                 //set created_at
                 $user['created_at'] =  ($user['created_at']) ? Utils::checkDateFormat($user['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
                 $user['updated_at'] =  ($user['updated_at']) ? Utils::checkDateFormat($user['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                $user['full_name_created'] = trim($user['full_name_created']);
+                $user['full_name_updated'] = trim($user['full_name_updated']);
             }
             
         }

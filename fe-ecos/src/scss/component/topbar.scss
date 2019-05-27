@@ -2,7 +2,7 @@
   width: 100%;
   position: fixed;
   top: 0;
-  height: 45px;
+  height: 40px;
   z-index: 101;
   box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.05);
 
@@ -14,12 +14,12 @@
 .topbar__wrapper {
   position: relative;
   display: flex;
-  height: 45px;
+  height: 40px;
 }
 
 .topbar__button {
-  width: 60px;
-  height: 45px;
+  width: 55px;
+  height: 40px;
   display: flex;
   background: transparent;
   border: none;
@@ -461,8 +461,8 @@
 
   svg {
     margin: auto;
-    height: 18px;
-    width: 18px;
+    height: 16px;
+    width: 16px;
     fill: #b1c3c8;
   }
 

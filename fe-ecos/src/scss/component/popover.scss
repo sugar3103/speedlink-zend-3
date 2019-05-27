@@ -1,0 +1,30 @@
+.popover {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.07);
+  width: 220px;
+  z-index: 99;
+  border-radius: 0;
+  @include themify($themes) {
+    border: 1px solid themed('colorFitness');
+  }
+
+  .popover-header {
+    border: none;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 5px 10px;
+    line-height: normal;
+    @include themify($themes) {
+      background-color: themed('colorText');
+      color: themed('colorBackground');
+    }
+  }
+
+  .popover-body {
+    font-size: 11px;
+    padding: 10px 15px 10px 10px;
+    @include themify($themes) {
+      background-color: themed('colorBackground');
+      color: themed('colorText');
+    }
+  }
+}

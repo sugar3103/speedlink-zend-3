@@ -35,7 +35,6 @@ class PricingDataForm extends Form {
     {
         // Define form name.
         parent::__construct('domestic-pricing-data-form');
-        
         // Save parameters for internal use.
         $this->scenario = $scenario;
         $this->entityManager = $entityManager;
@@ -44,10 +43,11 @@ class PricingDataForm extends Form {
         $this->addInputFilter();
     }
 
-     /**
+    /**
      * This method creates input filter (used for form filtering/validation).
      */
-    private function addInputFilter() {
+    private function addInputFilter()
+    {
         // Create main input filter.
         $inputFilter = $this->getInputFilter();
         // Add input for "username" field.
@@ -61,9 +61,9 @@ class PricingDataForm extends Form {
             ]
         ]);
 
-       $inputFilter->add([
+        $inputFilter->add([
             'name' => 'data',
-            'required' => true           
-       ]);
+            'required' => true
+        ]);
     }
 }

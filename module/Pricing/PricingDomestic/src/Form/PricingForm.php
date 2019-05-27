@@ -52,7 +52,7 @@ class PricingForm extends Form {
         // Add input for "username" field.
         $inputFilter->add([
             'name' => 'name',
-            'required' => true,
+            'required' => false,
             'filters' => [
                 [
                     'name' => StringTrim::class
@@ -62,7 +62,7 @@ class PricingForm extends Form {
                 [
                     'name' => StringLength::class,
                     'options' => [
-                        'min' => 4,
+                        'min' => 2,
                         'max' => 50
                     ]
                 ],
@@ -76,33 +76,7 @@ class PricingForm extends Form {
             ]
         ]);
 
-        $inputFilter->add([
-            'name' => 'name_en',
-            'required' => true,
-            'filters' => [
-                [
-                    'name' => StringTrim::class
-                ]
-            ],
-            'validators' => [
-                [
-                    'name' => StringLength::class,
-                    'options' => [
-                        'min' => 4,
-                        'max' => 50
-                    ]
-                ],
-                [
-                    'name' => DomesticPricingExistsValidator::class,
-                    'options' => [
-                        'entityManager' => $this->entityManager,
-                        'domesticPricing' => $this->domesticPricing,
-                        'language' => 'en'
-                    ]
-                ]
-            ]
-        ]);
-        
+       
         $inputFilter->add([
             'name'  => 'is_private',
             'required'  => true,
@@ -115,7 +89,7 @@ class PricingForm extends Form {
 
         $inputFilter->add([
             'name'  => 'customer_id',
-            'required'  => true,
+            'required'  => false,
             'filters' => [
                 [
                     'name' => ToInt::class

@@ -111,6 +111,12 @@ export default {
       icon: 'icon-pricing-table',
       childrens: [
         {
+          id: 'pricing_index_domestic',
+          title: 'menu.pricing_index_domestic',
+          route: '/pricing-domestic/pricing',
+          icon: 'lnr lnr-map'
+        },
+        {
           id: 'area_domestic',
           title: 'menu.area_domestic',
           route: '/pricing-domestic/area',
@@ -133,25 +139,25 @@ export default {
     // {
     //   id: 'pricing_management',
     //   title: 'menu.pricing_management',
-    //   route: '/pricing-management',
+    //   route: '/pricing-international',
     //   icon: 'icon-pricing-table',
     //   childrens: [
     //     {
     //       id: 'pricing',
     //       title: 'menu.pricing',
-    //       route: '/pricing-management/pricing',
+    //       route: '/pricing-international/pricing',
     //       icon: 'lnr lnr-map'
     //     },
     //     {
     //       id: 'range_weight',
     //       title: 'menu.range_weight',
-    //       route: '/pricing-management/range-weight',
+    //       route: '/pricing-international/range-weight',
     //       icon: 'lnr lnr-license'
     //     },
     //     {
     //       id: 'zone_code',
     //       title: 'menu.zone_code',
-    //       route: '/pricing-management/zone-code',
+    //       route: '/pricing-international/zone-code',
     //       icon: 'lnr lnr-map'
     //     }
     //   ]
