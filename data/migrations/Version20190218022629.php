@@ -17,7 +17,7 @@ final class Version20190218022629 extends AbstractMigration
                 id                         INT(11) AUTO_INCREMENT PRIMARY KEY,
                 name                       VARCHAR(50) NOT NULL,
                 carrier_id                 INT(11) NOT NULL,
-                category_id              CHAR(10) NOT NULL  COMMENT 'Inbound, Outbound, Domestic',
+                category_id                INT(11) NOT NULL,
                 origin_country_id          INT(11) NOT NULL,
                 origin_city_id             INT(11) NULL COMMENT 'required if category == Domestic',
                 origin_district_id         INT(11) NULL,

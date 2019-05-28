@@ -38,7 +38,7 @@ final class Version20181228072455 extends AbstractMigration
                 description_en     TEXT NULL,
                 code               CHAR(50) NULL,
                 carrier_id         INT(11) NOT NULL,
-                category_id      CHAR(10) NOT NULL  COMMENT 'Inbound, Outbound, Domestic',
+                category_id                INT(11) NOT NULL,
                 service_id         INT(11) NOT NULL,
                 product_type_code  CHAR(10) NOT NULL  COMMENT 'Dox, Parcel',
                 volumetric_number  INT(11) NULL,
