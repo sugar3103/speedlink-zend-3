@@ -66,13 +66,13 @@ class RangeWeightForm extends Form {
                         'max' => 50
                     ]
                 ],
-                [
-                    'name' => DomesticRangeWeightExistsValidator::class,
-                    'options' => [
-                        'entityManager' => $this->entityManager,
-                        'domesticRangeWeight' => $this->domesticRangeWeight
-                    ]
-                ]
+                // [
+                //     'name' => DomesticRangeWeightExistsValidator::class,
+                //     'options' => [
+                //         'entityManager' => $this->entityManager,
+                //         'domesticRangeWeight' => $this->domesticRangeWeight
+                //     ]
+                // ]
             ]
         ]);
 
@@ -92,14 +92,14 @@ class RangeWeightForm extends Form {
                         'max' => 50
                     ]
                 ],
-                [
-                    'name' => DomesticRangeWeightExistsValidator::class,
-                    'options' => [
-                        'entityManager' => $this->entityManager,
-                        'domesticRangeWeight' => $this->domesticRangeWeight,
-                        'language' => 'en'
-                    ]
-                ]
+                // [
+                //     'name' => DomesticRangeWeightExistsValidator::class,
+                //     'options' => [
+                //         'entityManager' => $this->entityManager,
+                //         'domesticRangeWeight' => $this->domesticRangeWeight,
+                //         'language' => 'en'
+                //     ]
+                // ]
             ]
         ]);
 
