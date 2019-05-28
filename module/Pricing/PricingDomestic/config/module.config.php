@@ -262,5 +262,5 @@ return [
     'controllers' => $controllers,
     'service_manager' => $service_manager,
     'caches' => $caches,
-    'doctrine' => $doctrine
+    'doctrine' => $doctrine,
 ];

@@ -72,6 +72,13 @@ class Ward
      */
     private $status;
 
+     /**
+     * @var int|null
+     *
+     * @ORM\Column(name="ras", type="integer", nullable=true)
+     */
+    private $ras = 0;
+
     /**
      * @var bool
      *
@@ -265,6 +272,22 @@ class Ward
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+     /**
+     * @return int|null
+     */
+    public function getRas()
+    {
+        return $this->ras;
+    }
+
+    /**
+     * @param int|null $ras
+     */
+    public function setRas($ras)
+    {
+        $this->ras = $ras;
     }
 
     /**

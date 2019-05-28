@@ -44,6 +44,7 @@ class DistrictManager  {
             $district->setNameEn($data['name_en']);
             $district->setDescription($data['description']);
             $district->setDescriptionEn($data['description_en']);
+            $district->setRas($data['ras']);
             $district->setStatus($data['status']);            
             $district->setCityId($data['city_id']);
     
@@ -88,6 +89,7 @@ class DistrictManager  {
             $district->setNameEn($data['name_en']);
             $district->setDescription($data['description']);
             $district->setDescriptionEn($data['description_en']);
+            $district->setRas($data['ras']);
             $district->setStatus($data['status']);
             $district->setCityId($data['city_id']);
             

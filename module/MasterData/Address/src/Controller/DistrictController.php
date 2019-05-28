@@ -37,6 +37,7 @@ class DistrictController extends CoreController {
                 2 => 'city',
                 3 => 'status',              
                 4 => 'name_en',
+                5 => 'ras'
             ];
 
             list($start,$limit,$sortField,$sortDirection,$filters, $fields) = $this->getRequestData($fieldsMap);                        

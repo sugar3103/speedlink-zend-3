@@ -46,6 +46,7 @@ class WardManager  {
             $ward->setNameEn($data['name_en']);
             $ward->setDescription($data['description']);
             $ward->setDescriptionEn($data['description_en']);
+            $ward->setRas($data['ras']);
             $ward->setStatus($data['status']);
             $ward->setPostalCode($data['postal_code']);
             $ward->setDistrictId($data['district_id']);
@@ -92,6 +93,7 @@ class WardManager  {
             $ward->setDescription($data['description']);
             $ward->setDescriptionEn($data['description_en']);
             $ward->setStatus($data['status']);
+            $ward->setRas($data['ras']);
             $ward->setDistrictId($data['district_id']);
             $ward->setPostalCode($data['postal_code']);
 

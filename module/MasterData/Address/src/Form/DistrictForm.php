@@ -143,5 +143,15 @@ class DistrictForm extends Form
                 ]
             ] 
         ]);
+
+        $inputFilter->add([
+            'name'  => 'ras',
+            'required'  => true,
+            'filters' => [
+                [
+                    'name' => ToInt::class
+                ]
+            ] 
+        ]);
     }
 }

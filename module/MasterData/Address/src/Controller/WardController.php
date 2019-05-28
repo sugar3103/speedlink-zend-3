@@ -37,6 +37,7 @@ class WardController extends CoreController {
                 1 => 'district',
                 2 => 'status',
                 3 => 'name_en',
+                4 => 'ras'
             ];
 
             list($start,$limit,$sortField,$sortDirection,$filters,$fileds) = $this->getRequestData($fieldsMap);                        

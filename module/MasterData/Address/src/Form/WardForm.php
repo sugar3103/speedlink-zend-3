@@ -145,6 +145,16 @@ class WardForm extends Form
         ]);
 
         $inputFilter->add([
+            'name'  => 'ras',
+            'required'  => true,
+            'filters' => [
+                [
+                    'name' => ToInt::class
+                ]
+            ] 
+        ]);
+
+        $inputFilter->add([
             'name'  => 'postal_code',
             'required'  => true,
             'filters' => [

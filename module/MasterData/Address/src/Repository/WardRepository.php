@@ -40,6 +40,7 @@ class WardRepository extends EntityRepository {
                 w.description_en,
                 w.district_id,
                 w.postal_code,
+                w.ras,
                 w.status,
                 cr.username as created_by,
                 w.created_at,

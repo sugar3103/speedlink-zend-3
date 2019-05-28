@@ -37,6 +37,7 @@ class DistrictRepository extends EntityRepository {
                 d.name_en,
                 d.description,
                 d.description_en,
+                d.ras,
                 d.status,
                 d.city_id,
                 cr.username as created_by,
