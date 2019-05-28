@@ -36,7 +36,8 @@ class CountryController extends CoreController {
                 0 => 'name',                
                 1 => 'id',
                 2 => 'status',
-                3 => 'name_en'
+                3 => 'name_en',
+                4 => 'iso_code'
             ];
 
             list($start, $limit, $sortField, $sortDirection, $filters, $fields) = $this->getRequestData($fieldsMap);                        

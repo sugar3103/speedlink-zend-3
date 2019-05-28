@@ -19,7 +19,9 @@ class SearchForm extends Component {
 
   componentDidMount() {
     this.props.getCountryList({ field: ['id', 'name', 'name_en'], offset: { limit: 0 } });
-
+    if(this.props.initialValues.country) {
+      this.onChangeCountry(this.props.initialValues.country);
+    }
   }
 
   showOption = (items) => {
@@ -38,8 +40,9 @@ class SearchForm extends Component {
 
   onChangeCountry = value => {
     if (value === null) {
-      this.props.change('city_id','');
-      this.props.change('district_id','');
+      this.props.change('city','');
+      this.props.change('district','');
+      this.props.change('name','');
       this.setState({ district_disabled: true})
     } else {
       const params = {
@@ -134,6 +137,24 @@ class SearchForm extends Component {
         </Col>
         <Col md={4}>
           <div className="form__form-group">
+            <span className="form__form-group-label">{messages['pri_dom.ras']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="ras"
+                component={renderSelectField}
+                type="text"
+                placeholder={messages['pri_dom.ras']}
+                options={[
+                  { value: -1, label: messages['all'] },
+                  { value: 1, label: messages['yes'] },
+                  { value: 0, label: messages['no'] }
+                ]}
+              />
+            </div>
+          </div>
+        </Col>
+        <Col md={4}>
+          <div className="form__form-group">
             <span className="form__form-group-label">{messages['status']}</span>
             <div className="form__form-group-field">
               <Field
@@ -195,5 +216,10 @@ export default connect(mapStateToProps, {
   getCountryList,
   getCityList
 })(reduxForm({ 
-  form: 'ward_search_form'
+  form: 'ward_search_form',
+  initialValues: {
+    ras: -1,
+    status: 1,
+    country: 1
+  }
 })(injectIntl(SearchForm)));

@@ -5,6 +5,7 @@ use Address\Entity\Country;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Core\Utils\Utils;
+use OAuth\Entity\User;
 class CountryManager  {
     
     /**
@@ -25,7 +26,7 @@ class CountryManager  {
      * @throws \Exception
      */
     public function addCountry($data,$user) {
-
+        
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
@@ -42,7 +43,7 @@ class CountryManager  {
            
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $country->setCreatedAt($addTime->format('Y-m-d H:i:s'));
-            $country->setCreatedBy($user->id);
+            $country->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
   
             // add the entity to the entity manager.
             $this->entityManager->persist($country);
@@ -84,7 +85,7 @@ class CountryManager  {
             
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $country->setUpdatedAt($addTime->format('Y-m-d H:i:s'));           
-            $country->setUpdatedBy($user->id);
+            $country->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
            
             // add the entity to the entity manager.
             $this->entityManager->persist($country);
@@ -182,4 +183,5 @@ class CountryManager  {
         return $dataCountry;
     }
 
+    
 }

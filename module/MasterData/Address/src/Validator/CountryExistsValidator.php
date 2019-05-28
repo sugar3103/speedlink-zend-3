@@ -69,7 +69,7 @@ class CountryExistsValidator extends AbstractValidator {
 
        
         if ($this->options['country'] == null)
-            $isValid = ($status == null);
+            $isValid = ($country == null);
         else {
             if($this->options['language'] === 'en') {
                 if ($this->options['country']->getNameEn() != $value && $status != null)

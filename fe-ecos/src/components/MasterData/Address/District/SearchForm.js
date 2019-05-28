@@ -17,11 +17,22 @@ class SearchForm extends Component {
   }
 
   componentDidMount() {
-    const params = {
+    let params = {
       field: ['id', 'name','name_en'],
       offset: {
         limit: 0
       }
+    }
+    if(this.props.initialValues.country) {
+      params = {
+        ...params,
+        query: {
+          country: this.props.initialValues.country
+        }
+      }
+      this.setState({
+        city_disabled: false
+      })
     }
     this.props.getCityList(params);
     this.props.getCountryList({
@@ -29,7 +40,7 @@ class SearchForm extends Component {
     })
   }
 
-  showOptionCity = (items) => {
+  showOptions = (items) => {
     let result = [];
     if (items.length > 0) {
       result = items.map(item => {
@@ -75,10 +86,10 @@ class SearchForm extends Component {
             <span className="form__form-group-label">{messages['city.country']}</span>
             <div className="form__form-group-field">
               <Field
-                name="city"
+                name="country"
                 component={renderSelectField}
                 type="text"
-                options={countries && this.showOptionCity(countries)}
+                options={countries && this.showOptions(countries)}
                 onChange={this.onChangeCountry}
                 placeholder={messages['city.country']}
               />
@@ -93,7 +104,7 @@ class SearchForm extends Component {
                 name="city"
                 component={renderSelectField}
                 type="text"
-                options={cities && this.showOptionCity(cities)}                
+                options={cities && this.showOptions(cities)}                
                 placeholder={messages['district.city']}
                 disabled={this.state.city_disabled}
               />
@@ -109,6 +120,24 @@ class SearchForm extends Component {
                 component="input"
                 type="text"
                 placeholder={messages['name']}
+              />
+            </div>
+          </div>
+        </Col>
+        <Col md={4}>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['pri_dom.ras']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name="ras"
+                component={renderSelectField}
+                type="text"
+                placeholder={messages['pri_dom.ras']}
+                options={[
+                  { value: -1, label: messages['all'] },
+                  { value: 1, label: messages['yes'] },
+                  { value: 0, label: messages['no'] }
+                ]}
               />
             </div>
           </div>
@@ -173,5 +202,7 @@ export default connect(mapStateToProps, {
   getCityList,
   getCountryList
 })(reduxForm({ 
-  form: 'district_search_form'
+  form: 'district_search_form',
+  initialValues: {ras: -1, status: 1, country: 1},
+  enableReinitialize: true
 })(injectIntl(SearchForm)));

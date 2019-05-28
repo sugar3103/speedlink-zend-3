@@ -8,6 +8,7 @@ use Address\Entity\Country;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Core\Utils\Utils;
+use OAuth\Entity\User;
 
 class WardManager  {
     
@@ -53,7 +54,7 @@ class WardManager  {
            
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $ward->setCreatedAt($addTime->format('Y-m-d H:i:s'));
-            $ward->setCreatedBy($user->id);
+            $ward->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
 
             $this->getReferenced($ward,$data);
            
@@ -99,8 +100,7 @@ class WardManager  {
 
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $ward->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
-            $ward->setUpdatedBy($user->id);
-           
+            $ward->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
             $this->getReferenced($ward,$data);
 
             // apply changes to database.
@@ -179,9 +179,10 @@ class WardManager  {
             $wards = $ormPaginator->getIterator()->getArrayCopy();
             
             foreach ($wards as &$ward) {//loop
-                $district = $this->entityManager->getRepository(District::class)->findOneById($ward['district_id']);
-                $city = $this->entityManager->getRepository(City::class)->findOneById($district->getCityId());
-                $country = $this->entityManager->getRepository(Country::class)->findOneById($city->getCountryId());
+                
+                $district = $this->entityManager->getRepository(District::class)->find($ward['district_id']);
+                $city = $this->entityManager->getRepository(City::class)->find($district->getCityId());
+                $country = $this->entityManager->getRepository(Country::class)->find($city->getCountryId());
 
                 $ward['country_id'] = $country->getId();
                 $ward['city_id'] = $city->getId();                

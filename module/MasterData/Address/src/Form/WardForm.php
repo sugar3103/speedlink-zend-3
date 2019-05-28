@@ -156,7 +156,7 @@ class WardForm extends Form
 
         $inputFilter->add([
             'name'  => 'postal_code',
-            'required'  => true,
+            'required'  => false,
             'filters' => [
                 [
                     'name' => ToInt::class

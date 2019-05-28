@@ -50,7 +50,7 @@ class DistrictManager  {
     
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $district->setCreatedAt($addTime->format('Y-m-d H:i:s'));
-            $district->setCreatedBy($user->id);
+            $district->setCreatedBy($this->entityManager->getRepository(\OAuth\Entity\User::class)->find($user->id));
 
             $this->getReferenced($district,$data);
            
@@ -95,9 +95,10 @@ class DistrictManager  {
             
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $district->setUpdatedAt($addTime->format('Y-m-d H:i:s'));       
-            $district->setUpdatedBy($user->id);
+            $district->setUpdatedBy($this->entityManager->getRepository(\OAuth\Entity\User::class)->find($user->id));
            
             $this->getReferenced($district,$data);
+            $this->updateRasWard($district,$data['ras'],$user);
 
             // apply changes to database.
             $this->entityManager->flush();
@@ -191,6 +192,32 @@ class DistrictManager  {
             'totalDistrict' => $totalDistrict,
         ];
         return $dataDistrict;
+    }
+
+    private function updateRasWard(\Address\Entity\District $district, $ras, $user) {
+        $wards = $this->entityManager->getRepository(\Address\Entity\Ward::class)->findBy([
+            'district_id' => $district->getId()
+        ]);
+        if($wards) {
+            foreach ($wards as $ward) {
+                // begin transaction
+                $this->entityManager->beginTransaction();
+                try {
+                    $ward->setRas($ras);
+                    $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+                    $ward->setUpdatedAt($addTime->format('Y-m-d H:i:s'));       
+                    $ward->setUpdatedBy($this->entityManager->getRepository(\OAuth\Entity\User::class)->find($user->id));
+                   
+                    $this->entityManager->flush();
+                    $this->entityManager->commit();
+                } catch (ORMException $e) {
+
+                    $this->entityManager->rollback();
+                    return FALSE;
+                }
+            }
+            
+        }
     }
 
 }

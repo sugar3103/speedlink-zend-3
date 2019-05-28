@@ -48,7 +48,8 @@ function getListApi(params) {
     method: 'post',
     url: `${apiUrl}address/district`,
     headers: authHeader(),
-    data: JSON.stringify(params)
+    data: JSON.stringify(params),
+    dataType:'jsonp'
   });
 }
 
@@ -90,7 +91,8 @@ function addDistrictApi(item) {
     method: 'post',
     url: `${apiUrl}address/district/add`,
     headers: authHeader(),
-    data: item
+    data: item,
+    dataType:'jsonp'
   });
 }
 
@@ -135,7 +137,8 @@ function updateDistrictApi(item) {
     method: 'post',
     url: `${apiUrl}address/district/edit`,
     headers: authHeader(),
-    data: item
+    data: item,
+    dataType:'jsonp'
   });
 }
 

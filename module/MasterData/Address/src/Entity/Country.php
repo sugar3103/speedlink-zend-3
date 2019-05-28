@@ -70,9 +70,9 @@ class Country
     private $iso_code;
 
     /**
-     * @var int
      *
-     * @ORM\Column(name="created_by", type="integer", nullable=false)
+     * @ORM\OneToOne(targetEntity="\OAuth\Entity\User")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      */
     private $created_by;
 
@@ -84,9 +84,9 @@ class Country
     private $created_at;
 
     /**
-     * @var int|null
      *
-     * @ORM\Column(name="updated_by", type="integer", nullable=true)
+     * @ORM\OneToOne(targetEntity="\OAuth\Entity\User")
+     * @ORM\JoinColumn(name="updated_by", referencedColumnName="id", nullable=true)
      */
     private $updated_by;
 
@@ -104,19 +104,7 @@ class Country
      */
     private $ref_as_by;
 
-    /**
-     *
-     * @ORM\OneToOne(targetEntity="\OAuth\Entity\User")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     */
-    private $join_created;
-
-    /**
-     *
-     * @ORM\OneToOne(targetEntity="\OAuth\Entity\User")
-     * @ORM\JoinColumn(name="updated_by", referencedColumnName="id", nullable=true)
-     */
-    private $join_updated;
+    
     
 
     /**
@@ -248,19 +236,27 @@ class Country
     }
 
     /**
-     * @return int
+     * Set createdBy.
+     *
+     * @param \OAuth\Entity\User|null $createdBy
+     *
+     * @return \OAuth\Entity\User
+     */
+    public function setCreatedBy(\OAuth\Entity\User $createdBy = null)
+    {
+        $this->created_by = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get createdBy.
+     *
+     * @return \OAuth\Entity\User|null
      */
     public function getCreatedBy()
     {
         return $this->created_by;
-    }
-
-    /**
-     * @param int $created_by
-     */
-    public function setCreatedBy($created_by)
-    {
-        $this->created_by = $created_by;
     }
 
     /**
@@ -279,20 +275,28 @@ class Country
         $this->created_at = $created_at;
     }
 
+     /**
+     * Set updatedBy.
+     *
+     * @param \OAuth\Entity\User|null $updatedBy
+     *
+     * @return OAuth\Entity\User
+     */
+    public function setUpdatedBy(\OAuth\Entity\User $updatedBy = null)
+    {
+        $this->updated_by = $updatedBy;
+
+        return $this;
+    }
+
     /**
-     * @return int|null
+     * Get updatedBy.
+     *
+     * @return \OAuth\Entity\User|null
      */
     public function getUpdatedBy()
     {
         return $this->updated_by;
-    }
-
-    /**
-     * @param int|null $updated_by
-     */
-    public function setUpdatedBy($updated_by)
-    {
-        $this->updated_by = $updated_by;
     }
 
     /**
@@ -327,35 +331,4 @@ class Country
         $this->ref_as_by = $ref_as_by;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getJoinCreated()
-    {
-        return $this->join_created;
-    }
-
-    /**
-     * @param mixed $join_created
-     */
-    public function setJoinCreated($join_created)
-    {
-        $this->join_created = $join_created;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getJoinUpdated()
-    {
-        return $this->join_updated;
-    }
-
-    /**
-     * @param mixed $join_updated
-     */
-    public function setJoinUpdated($join_updated)
-    {
-        $this->join_updated = $join_updated;
-    }
 }

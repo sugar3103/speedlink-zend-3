@@ -96,8 +96,8 @@ class CountryRepository extends EntityRepository {
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(Country::class, 'ct')
-        ->leftJoin('ct.join_created', 'cr')
-        ->leftJoin('ct.join_updated', 'up');
+        ->leftJoin('ct.created_by', 'cr')
+        ->leftJoin('ct.updated_by', 'up');
 
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

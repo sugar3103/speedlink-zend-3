@@ -40,7 +40,7 @@ class ActionForm extends Component {
         city_disabled: false
       })
     }
-   
+
     this.props.getCountryList({
       field: ['id', 'name', 'name_en'],
       offset: {
@@ -105,24 +105,26 @@ class ActionForm extends Component {
     const { messages, locale } = this.props.intl;
     const { handleSubmit, modalType, modalData, cities, countries } = this.props;
     let className = 'success';
-    let title = messages['ditrist.add-new'];
+    let title = messages['district.add-new'];
+    
     const disabled = modalType === MODAL_VIEW ? true : false;
     switch (modalType) {
       case MODAL_ADD:
         className = 'success';
-        title = messages['ditrist.add-new'];
+        title = messages['district.add-new'];
         break;
       case MODAL_EDIT:
         className = 'primary';
-        title = messages['ditrist.update'];
+        title = messages['district.update'];
         break;
       case MODAL_VIEW:
         className = 'info';
-        title = messages['ditrist.view'];
+        title = messages['district.view'];
         break;
       default:
         break;
     }
+
 
     return (
       <form className="form" onSubmit={handleSubmit}>
@@ -209,6 +211,27 @@ class ActionForm extends Component {
                 </div>
               </div>
               <div className="form__form-group">
+                <span className="form__form-group-label">{messages['pri_dom.ras']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="ras"
+                    component={renderRadioButtonField}
+                    label={messages['yes']}
+                    radioValue={1}
+                    defaultChecked
+                    disabled={disabled}
+                  />
+                  <Field
+                    name="ras"
+                    component={renderRadioButtonField}
+                    label={messages['no']}
+                    radioValue={0}
+                    disabled={disabled}
+                  />
+                </div>
+              </div>
+
+              <div className="form__form-group">
                 <span className="form__form-group-label">{messages['city.country']}</span>
                 <div className="form__form-group-field">
                   <Field
@@ -238,29 +261,29 @@ class ActionForm extends Component {
             </Col>
           </Row>
           <div className="footer">
-          {modalData &&
-            <Fragment>
-              <hr />
-              <Row>
-                <Col md={6}>
-                  <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name_created ? modalData.full_name_created : modalData.created_by}</span>
-                  <br />
-                  <span><i className="label-info-data">{messages['created-at']}:</i>
-                    <Moment fromNow locale={locale}>{new Date(modalData.created_at)}</Moment>
-                  </span>
-                </Col>
-                {modalData.updated_at &&
+            {modalData &&
+              <Fragment>
+                <hr />
+                <Row>
                   <Col md={6}>
-                    <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.full_name_updated ? modalData.full_name_updated : modalData.updated_by}</span>
+                    <span><i className="label-info-data">{messages['created-by']}:</i>{modalData.full_name_created ? modalData.full_name_created : modalData.created_by}</span>
                     <br />
-                    <span><i className="label-info-data">{messages['updated-at']}:</i>
-                      <Moment fromNow locale={locale}>{new Date(modalData.updated_at)}</Moment>
+                    <span><i className="label-info-data">{messages['created-at']}:</i>
+                      <Moment fromNow locale={locale}>{new Date(modalData.created_at)}</Moment>
                     </span>
                   </Col>
-                }
-              </Row>
-            </Fragment>
-          }
+                  {modalData.updated_at &&
+                    <Col md={6}>
+                      <span><i className="label-info-data">{messages['updated-by']}:</i>{modalData.full_name_updated ? modalData.full_name_updated : modalData.updated_by}</span>
+                      <br />
+                      <span><i className="label-info-data">{messages['updated-at']}:</i>
+                        <Moment fromNow locale={locale}>{new Date(modalData.updated_at)}</Moment>
+                      </span>
+                    </Col>
+                  }
+                </Row>
+              </Fragment>
+            }
           </div>
         </div>
         <ButtonToolbar className="modal__footer">
@@ -304,7 +327,7 @@ export default connect(mapStateToProps, {
   getCityList,
   getCountryList,
   changeTypeDistrictModal
-})(reduxForm({ 
-  form: 'district_action_form', 
+})(reduxForm({
+  form: 'district_action_form',
   validate
 })(injectIntl(ActionForm)));

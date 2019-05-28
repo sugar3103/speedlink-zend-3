@@ -288,7 +288,26 @@ class ActionForm extends Component {
                   />
                 </div>
               </div>
-
+              <div className="form__form-group">
+                <span className="form__form-group-label">{messages['pri_dom.ras']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="ras"
+                    component={renderRadioButtonField}
+                    label={messages['yes']}
+                    radioValue={1}
+                    defaultChecked
+                    disabled={disabled}
+                  />
+                  <Field
+                    name="ras"
+                    component={renderRadioButtonField}
+                    label={messages['no']}
+                    radioValue={0}
+                    disabled={disabled}
+                  />
+                </div>
+              </div>
               <div className="form__form-group">
                 <span className="form__form-group-label">{messages['status']}</span>
                 <div className="form__form-group-field">

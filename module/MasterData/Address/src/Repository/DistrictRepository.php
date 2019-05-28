@@ -91,6 +91,10 @@ class DistrictRepository extends EntityRepository {
                 'alias' => 'd.created_at',
                 'operator' => 'contains'
             ],
+            'ras' => [
+                'alias' => 'd.ras',
+                'operator' => 'eq'
+            ],
             'status' => [
                 'alias' => 'd.status',
                 'operator' => 'eq'
@@ -100,8 +104,8 @@ class DistrictRepository extends EntityRepository {
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(District::class, 'd')
-        ->leftJoin('d.join_created', 'cr')
-        ->leftJoin('d.join_updated', 'up');
+        ->leftJoin('d.created_by', 'cr')
+        ->leftJoin('d.updated_by', 'up');
 
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

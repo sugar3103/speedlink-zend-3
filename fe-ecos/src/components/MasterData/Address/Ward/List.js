@@ -141,11 +141,12 @@ class List extends Component {
           sortable: false
         },
         {
-          Header: messages['description'],
-          accessor: "description",
+          Header: messages['pri_dom.ras'],
+          className: "text-center",
+          accessor: "ras",
           Cell: ({ original }) => {
             return (
-              locale === 'en-US' ? original.description_en : original.description
+              original.ras === 1 ? <Badge color="success">{messages['yes']}</Badge> : <Badge color="dark">{messages['no']}</Badge>
             )
           },
           sortable: false,

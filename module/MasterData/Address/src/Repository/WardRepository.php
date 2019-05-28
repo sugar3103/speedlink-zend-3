@@ -92,6 +92,10 @@ class WardRepository extends EntityRepository {
                 'alias' => 'w.created_at',
                 'operator' => 'contains'
             ],
+            'ras' => [
+                'alias' => 'w.ras',
+                'operator' => 'eq'
+            ],
             'status' => [
                 'alias' => 'w.status',
                 'operator' => 'eq'
@@ -101,8 +105,8 @@ class WardRepository extends EntityRepository {
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(Ward::class, 'w')
-        ->leftJoin('w.join_created', 'cr')
-        ->leftJoin('w.join_updated', 'up');
+        ->leftJoin('w.created_by', 'cr')
+        ->leftJoin('w.updated_by', 'up');
 
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
