@@ -31,7 +31,7 @@ module.exports = {
     'allow_change_theme_color': 'Cho phép thay đổi chủ đề',
     'light': 'Sáng',
     'dark': 'Tối',
-    'dark-blue': 'Mù Tối',
+    'dark-blue': 'Xanh đậm',
     'mail_engine': 'Mail Engine',
     'mail_parameter': 'Mail Parameters',
     'mail_smtp_hostname': 'SMTP Hostname',

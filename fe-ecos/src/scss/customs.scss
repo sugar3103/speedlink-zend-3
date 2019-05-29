@@ -449,7 +449,6 @@ form {
     ul {
         list-style: none;
     }
-
     .table {
         th, td {
             @include themify($themes) {
@@ -479,6 +478,7 @@ form {
         }
 
         .group-action {
+            margin-bottom: 5px;
             .btn {
                 float: right;
                 padding: 4px 8px;
@@ -548,8 +548,8 @@ form {
           
                 span {
                     @include themify($themes) {
-                        background: themed('colorText');
-                        color: themed('colorBackground');
+                        background: themed('colorFieldsBorder');
+                        color: themed('colorText');
                     }
                     padding: 1px 4px;
                     margin: 0 2px;
