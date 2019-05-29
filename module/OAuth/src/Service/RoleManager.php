@@ -264,6 +264,8 @@ class RoleManager {
             $role->setDescriptionEn($info['description']);
             $role->setCreatedAt(date('Y-m-d H:i:s'));
             $role->setCreatedBy(1);
+            $role->setJoinCreated($this->entityManager->getRepository(User::class)->find(1));
+            
             // assign parent role
             if ($info['parent'] != null) {
                 $parentRole = $this->entityManager->getRepository(Role::class)->findOneByName($info['parent']);
