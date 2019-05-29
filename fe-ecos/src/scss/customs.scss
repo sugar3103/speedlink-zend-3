@@ -458,6 +458,11 @@ form {
         .cell-value {
             cursor: pointer;
         }
+        .cell-not-value {
+            @include themify($themes) {
+                background:  themed('colorBackgroundBody');
+            }
+        }
     }
     .form-edit-range-weight-value {
         .form__form-group-label {
@@ -518,6 +523,61 @@ form {
             .form-control {
                 height: 25px;
                 color: #343d45;
+            }
+        }
+
+        .input-suggestion {
+            position: relative;
+            .formula {
+                line-height: 21px;
+                min-height: 27px !important;
+                padding: 2px 6px;
+                @include themify($themes) {
+                    border: 1px solid themed('colorFieldsBorder');
+                    color: themed('colorText');
+                }
+          
+                &:focus, &:active {
+                    outline: none;
+                    border-color: $color-accent;
+                }
+          
+                span {
+                    @include themify($themes) {
+                        background: themed('colorText');
+                        color: themed('colorBackground');
+                    }
+                    padding: 1px 4px;
+                    margin: 0 2px;
+                }
+            }
+            .suggestion-list {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+            
+                ul {
+                    position: relative;
+                    z-index: 1;
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+                    @include themify($themes) {
+                        background: themed('colorBackground');
+                        color: themed('colorText');
+                        border: 1px solid themed('colorFieldsBorder');
+                    }
+                    li {
+                        padding: 5px;
+                        cursor: pointer;
+                        &:focus, &:hover, &.active {
+                            @include themify($themes) {
+                                background: themed('colorHover');
+                            }
+                        }
+                    }
+                }
             }
         }
     }

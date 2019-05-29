@@ -4,22 +4,25 @@ import { Field, formValueSelector, change } from 'redux-form';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import CustomField from '../../../containers/Shared/form/CustomField';
-// import FormulaField from './FormulaField';
+import FormulaField from './FormulaField';
 import renderSelectField from '../../../containers/Shared/form/Select';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { uuidv4 } from '../../../util/uuidv4';
 import PropTypes from 'prop-types';
+import { formatCurrency, normalizeCurrency } from '../../../util/format-field';
 
 class PricingVasItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
       rows: [],
+      disabledField: false
     }
   }
 
   componentDidMount() {
-    let { spec } = this.props;
+
+    let { spec, type_action } = this.props;
     if (spec.length > 0) {
       spec = spec.map(item => {
         return {
@@ -28,7 +31,10 @@ class PricingVasItem extends Component {
         }
       });
     }
-    this.setState({ rows: spec })
+    this.setState({
+      rows: spec,
+      disabledField: type_action === 'edit' ? false : true
+    })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -106,6 +112,10 @@ class PricingVasItem extends Component {
     return true;
   }
 
+  formatPrice = (value) => {
+    return new Intl.NumberFormat().format(value);
+  }
+
   render() {
     const { messages } = this.props.intl;
     const cellEdit = {
@@ -114,7 +124,7 @@ class PricingVasItem extends Component {
       afterSaveCell: this.onAfterSaveCell
     };
     const { vas, index, type, spec, type_action } = this.props;
-    const { rows } = this.state;
+    const { rows, disabledField } = this.state;
 
     return (
       <li key={index} className="vas-item">
@@ -145,6 +155,7 @@ class PricingVasItem extends Component {
                 ]}
                 clearable={false}
                 placeholder={messages['pri_dom.type']}
+                disabled={disabledField}
               />
             </div>
           </div>
@@ -155,6 +166,7 @@ class PricingVasItem extends Component {
                 component={CustomField}
                 type="text"
                 placeholder={messages['name']}
+                disabled={disabledField}
               />
             </div>
           </div>
@@ -162,18 +174,31 @@ class PricingVasItem extends Component {
             <div className="form__form-group-field">
               <Field
                 name={`${vas}.formula`}
-                component={CustomField}
+                component={FormulaField}
                 placeholder={messages['pri_dom.formula']}
+                onChange={this.props.changeFormula}
+                disabled={disabledField}
               />
             </div>
             {type === 1 &&
               <BootstrapTable data={rows} cellEdit={cellEdit} containerClass="table-price">
-                { type_action === 'edit' && 
+                {type_action === 'edit' &&
                   <TableHeaderColumn dataField="index" dataFormat={this.actionFormatter} isKey><Button size="sm" color="success" onClick={(e) => this.onAddRowPrice(e)}><span className="lnr lnr-plus-circle"></span></Button></TableHeaderColumn>
                 }
-                <TableHeaderColumn isKey={type_action === 'edit' ? false : true} dataField="from" editable={{ validator: this.valueValidator }}>{messages['pri_dom.from']}</TableHeaderColumn>
-                <TableHeaderColumn dataField="to" editable={{ validator: this.valueValidator }}>{messages['pri_dom.to']}</TableHeaderColumn>
-                <TableHeaderColumn dataField="value" editable={{ validator: this.valueValidator }}>{messages['pri_dom.price']}</TableHeaderColumn>
+                <TableHeaderColumn
+                  isKey={type_action === 'edit' ? false : true}
+                  dataField="from"
+                  editable={type_action === 'edit' ? { validator: this.valueValidator } : false}
+                >{messages['pri_dom.from']}</TableHeaderColumn>
+                <TableHeaderColumn
+                  dataField="to"
+                  editable={type_action === 'edit' ? { validator: this.valueValidator } : false}
+                >{messages['pri_dom.to']}</TableHeaderColumn>
+                <TableHeaderColumn
+                  dataField="value"
+                  dataFormat={this.formatPrice}
+                  editable={type_action === 'edit' ? { validator: this.valueValidator } : false}
+                >{messages['pri_dom.price']}</TableHeaderColumn>
               </BootstrapTable>
             }
             {type === 1 && spec.length === 0 &&
@@ -188,6 +213,9 @@ class PricingVasItem extends Component {
                   component={CustomField}
                   type="text"
                   placeholder={messages['pri_dom.minimun-value']}
+                  disabled={disabledField}
+                  format={formatCurrency}
+                  normalize={normalizeCurrency}
                 />
               </div>
             </div>

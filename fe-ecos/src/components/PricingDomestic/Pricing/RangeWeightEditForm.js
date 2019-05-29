@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
 import CustomField from '../../../containers/Shared/form/CustomField';
+import { formatCurrency, normalizeCurrency } from '../../../util/format-field';
 
 const required = value => value ? undefined : 'pri_dom.field-is-required';
 const number = value => value && isNaN(Number(value)) ? 'pri_dom.field-is-number' : undefined;
@@ -24,6 +25,8 @@ class RangeWeightEditForm extends Component {
               name={`range_weight_${item.id}`}
               component={CustomField}
               validate={[required, number, nonNegative]}
+              format={formatCurrency}
+              normalize={normalizeCurrency}
             />
           </div>
         </div>
@@ -32,7 +35,7 @@ class RangeWeightEditForm extends Component {
     return result;
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const { data } = this.props;
     if (data && data.range_weight.length > 0) {
       let initialValue = { pricing_id: data.pricing_id };

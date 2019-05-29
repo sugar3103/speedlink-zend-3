@@ -77,7 +77,7 @@ class PricingTable extends Component {
             onClick={() => this.showModalEditCell(params)}
           >{valueCell}</td>
         } else {
-          return <td key={index} className="text-center"></td>
+          return <td key={index} className="text-center cell-not-value"></td>
         }
       });
     }
