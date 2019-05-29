@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * DomesticPricingVasSpec
  *
  * @ORM\Table(name="domestic_pricing_vas_spec", indexes={@ORM\Index(name="created_domestic_pricing_vas_spec_created_by_fk", columns={"created_by"}), @ORM\Index(name="domestic_pricing_domestic_pricing_vas_spec_pricing_id_fk", columns={"domestic_pricing_id"}), @ORM\Index(name="updated_domestic_pricing_vas_spec_updated_by_fk", columns={"updated_by"}), @ORM\Index(name="domestic_pricing_vas_domestic_pricing_vas_spec_pricing_vas_id_fk", columns={"domestic_pricing_vas_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="\PricingDomestic\Repository\DomesticPricingVasSpecRepository")
  */
 class DomesticPricingVasSpec
 {
