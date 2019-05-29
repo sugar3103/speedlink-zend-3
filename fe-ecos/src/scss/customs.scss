@@ -446,6 +446,10 @@ form {
 }
 
 .pri-dom {
+    ul {
+        list-style: none;
+    }
+
     .table {
         th, td {
             @include themify($themes) {
