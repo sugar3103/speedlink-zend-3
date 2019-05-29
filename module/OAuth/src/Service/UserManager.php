@@ -223,23 +223,13 @@ class UserManager
             $user->setIsAdmin(1);
             $user->setCreatedAt(date('Y-m-d H:i:s'));
 
-            // assign user Administrator role
-            $adminRole = $this->entityManager->getRepository(Role::class)
-                ->findOneByName('Administrator');
-
-            if ($adminRole == null) {
-                throw new \Exception("Administrator role doesn't exist");
-            }
-
-            $user->getRoles()->add($adminRole);
-
             $this->entityManager->persist($user);
             $this->entityManager->flush();
-
         }
 
         $this->permissionManager->createDefaultPermissionsIfNotExist();
         $this->roleManager->createDefaultRolesIfNotExist();
+
         // assign user Administrator role
         $adminRole = $this->entityManager->getRepository(Role::class)
             ->findOneByName('Administrator');
@@ -249,9 +239,9 @@ class UserManager
         }
 
         $user->getRoles()->add($adminRole);
-
         $this->entityManager->persist($user);
         $this->entityManager->flush();
+
     }
 
     /**
