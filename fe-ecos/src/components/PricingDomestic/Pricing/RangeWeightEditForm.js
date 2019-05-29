@@ -48,22 +48,26 @@ class RangeWeightEditForm extends Component {
       this.props.initialize(initialValue);
     }
   }
-  
 
+  toggleModal = (e) => {
+    e.preventDefault();
+    this.props.toggleModal();
+  }
+  
   render() {
-    const { handleSubmit, toggleModal, data } = this.props;
+    const { handleSubmit, data } = this.props;
     const { messages } = this.props.intl;
     return (
       <form className="form form--horizontal form-edit-range-weight-value" onSubmit={handleSubmit}>
         <div className="modal__header">
-          <button className="lnr lnr-cross modal__close-btn" onClick={toggleModal} />
+          <button className="lnr lnr-cross modal__close-btn" onClick={this.toggleModal} />
           <h4 className="bold-text  modal__title">{messages['pri_dom.edit-range-weight-value']}</h4>
         </div>
         <div className="modal__body">
           {this.showField(data)}
         </div>
         <ButtonToolbar className="modal__footer">
-          <Button outline onClick={toggleModal}>{messages['cancel']}</Button>
+          <Button outline onClick={this.toggleModal}>{messages['cancel']}</Button>
           <Button color="primary" type="submit">{messages['save']}</Button>
         </ButtonToolbar>
       </form>
