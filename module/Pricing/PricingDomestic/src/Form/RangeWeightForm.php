@@ -196,7 +196,7 @@ class RangeWeightForm extends Form {
             'required' => true,
             'filters' => [
                 [
-                    'name' => ToInt::class
+                    'name' => ToFloat::class
                 ]
             ]                
         ]);
@@ -206,7 +206,7 @@ class RangeWeightForm extends Form {
             'required' => false,
             'filters' => [
                 [
-                    'name' => ToInt::class
+                    'name' => ToFloat::class
                 ]
             ]                
         ]);
