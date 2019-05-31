@@ -64,9 +64,7 @@ final class Version20190515034137 extends AbstractMigration
             updated_by          INT(11) NOT NULL,    
             updated_at          TIMESTAMP DEFAULT current_timestamp() NOT NULL on update current_timestamp,
 
-            constraint unique_name unique (name),
-            constraint unique_name_en unique (name_en),
-
+            
             constraint carrier_domestic_pricing_carrier_id_fk foreign key (carrier_id) references carrier (id) on update cascade on delete cascade,
             constraint category_domestic_pricing_category_id_fk foreign key (category_id) references category (id) on update cascade on delete cascade,
             constraint service_domestic_pricing_service_id_fk foreign key (service_id) references service (id) on update cascade on delete cascade,
