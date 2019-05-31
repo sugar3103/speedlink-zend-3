@@ -43,6 +43,7 @@ module.exports = {
   'pri_dom.delete-range-weight': 'Delete Range Weight',
   'pri_dom.add-range-weight-title': 'Add Range Weight Domestic',
   'pri_dom.edit-range-weight-title': 'Edit Range Weight Domestic',
+  'pri_dom.view-range-weight-title': 'View Range Weight Domestic',
 
   /* PRICING */
   'pri_dom.pricing-title': 'Pricing Domestic',

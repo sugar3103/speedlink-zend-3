@@ -23,7 +23,8 @@ class ActionForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showUnitField: false
+      showUnitField: false,
+      disableField: true
     }
   }
 
@@ -125,9 +126,15 @@ class ActionForm extends Component {
     this.props.change('category_id', 3);
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({ disableField: nextProps.type_action === 'view' ? true : false })
+  }
+
   render() {
-    const { handleSubmit, carrier, service, shipmentType, zone, rangeWeight: { loading } } = this.props;
+    const { handleSubmit, carrier, service, calculate_unit, shipmentType, zone, rangeWeight: { loading } } = this.props;
     const { messages } = this.props.intl;
+    const { id } = this.props.match.params;
+    const { disableField } = this.state;
     return loading ? (
       <ReactLoading type="bubbles" className="loading" /> 
     ) : (
@@ -140,6 +147,7 @@ class ActionForm extends Component {
                 <Field
                   name='name'
                   component={CustomField}
+                  disabled={disableField}
                 />
               </div>
             </div>
@@ -151,6 +159,7 @@ class ActionForm extends Component {
                 <Field
                   name='name_en'
                   component={CustomField}
+                  disabled={disableField}
                 />
               </div>
             </div>
@@ -179,6 +188,8 @@ class ActionForm extends Component {
                     { value: 1, label: messages['pri_dom.active'] },
                     { value: 0, label: messages['pri_dom.inactive'] }
                   ]}
+                  clearable={false}
+                  disabled={disableField}
                 />
               </div>
             </div>
@@ -194,6 +205,8 @@ class ActionForm extends Component {
                   component={renderSelectField}
                   options={carrier.items && this.showOptions(carrier.items)}
                   onChange={this.onChangeCarrier}
+                  clearable={false}
+                  disabled={disableField}
                 />
               </div>
             </div>
@@ -207,6 +220,8 @@ class ActionForm extends Component {
                   component={renderSelectField}
                   options={service.items && this.showOptions(service.items)}
                   onChange={this.onChangeService}
+                  clearable={false}
+                  disabled={disableField}
                 />
               </div>
             </div>
@@ -220,6 +235,8 @@ class ActionForm extends Component {
                   component={renderSelectField}
                   options={shipmentType.items && this.showOptions(shipmentType.items)}
                   onChange={this.onChangeShipmentType}
+                  clearable={false}
+                  disabled={disableField}
                 />
               </div>
             </div>
@@ -232,6 +249,8 @@ class ActionForm extends Component {
                   name="zone_id"
                   component={renderSelectField}
                   options={zone.items && this.showOptions(zone.items)}
+                  clearable={false}
+                  disabled={disableField}
                 />
               </div>
             </div>
@@ -245,6 +264,7 @@ class ActionForm extends Component {
                 <Field
                   name="from"
                   component={CustomField}
+                  disabled={disableField}
                 />
               </div>
             </div>
@@ -256,6 +276,7 @@ class ActionForm extends Component {
                 <Field
                   name="to"
                   component={CustomField}
+                  disabled={disableField}
                 />
               </div>
             </div>
@@ -272,11 +293,13 @@ class ActionForm extends Component {
                     { value: 0, label: messages['pri_dom.no'] }
                   ]}
                   onChange={this.onChangeCalculateUnit}
+                  clearable={false}
+                  disabled={disableField}
                 />
               </div>
             </div>
           </Col>
-          {this.state.showUnitField &&
+          {(this.state.showUnitField || calculate_unit) &&
             <Col md={6} lg={3} xl={3} xs={6}>
               <div className="form__form-group">
                 <span className="form__form-group-label">{messages['pri_dom.unit']}</span>
@@ -284,6 +307,7 @@ class ActionForm extends Component {
                   <Field
                     name="unit"
                     component={CustomField}
+                    disabled={disableField}
                   />
                 </div>
               </div>
@@ -302,6 +326,8 @@ class ActionForm extends Component {
                     { value: 1, label: messages['pri_dom.on'] },
                     { value: 0, label: messages['pri_dom.off'] }
                   ]}
+                  clearable={false}
+                  disabled={disableField}
                 />
               </div>
             </div>
@@ -313,6 +339,7 @@ class ActionForm extends Component {
                 <Field
                   name="round_up"
                   component={CustomField}
+                  disabled={disableField}
                 />
               </div>
             </div>
@@ -323,9 +350,15 @@ class ActionForm extends Component {
             <Link to="/pricing-domestic/range-weight" className="btn btn-outline-secondary btn-sm">
               {messages['cancel']}
             </Link>
-            <Button size="sm" color="primary">
-              {messages['save']}
-            </Button>
+            { disableField ? 
+                <Link to={`/pricing-domestic/range-weight/edit/${id}`} className="btn btn-info btn-sm">
+                  {messages['edit']}
+                </Link>
+              :
+                <Button size="sm" color="primary">
+                {messages['save']}
+              </Button>
+            }
           </Col>
         </Row>
       </form>
@@ -348,6 +381,7 @@ const mapStateToProps = (state, props) => {
   const selector = formValueSelector('range_weight_domestic_action_form');
   const carrier_id = selector(state, 'carrier_id');
   const service_id = selector(state, 'service_id');
+  const calculate_unit = selector(state, 'calculate_unit');
   const initialValues = rangeWeight.itemEditting;
   return {
     carrier,
@@ -356,6 +390,7 @@ const mapStateToProps = (state, props) => {
     zone,
     carrier_id,
     service_id,
+    calculate_unit,
     rangeWeight,
     initialValues,
   }

@@ -43,6 +43,7 @@ module.exports = {
   'pri_dom.delete-range-weight': 'Xóa khoảng trọng lượng',
   'pri_dom.add-range-weight-title': 'Tạo mới khoảng trọng lượng',
   'pri_dom.edit-range-weight-title': 'Cập nhật khoảng trọng lượng',
+  'pri_dom.view-range-weight-title': 'Xem khoảng trọng lượng',
 
   /* PRICING */
   'pri_dom.pricing-title': 'Bảng giá nội địa',

@@ -21,22 +21,34 @@ class Action extends Component {
   }
 
   render() {
-    const { id } = this.props.match.params;
-    
     const { messages } = this.props.intl;
+    let title = messages['pri_dom.add-range-weight-title'];
+    switch (this.props.type) {
+      case 'add':
+        title = messages['pri_dom.add-range-weight-title'];
+        break;
+      case 'edit':
+        title = messages['pri_dom.edit-range-weight-title'];
+        break;
+      case 'view':
+        title = messages['pri_dom.view-range-weight-title'];
+        break;
+      default:
+        break;
+    }
     return (
       <Container>
-        <PageTitle title={id ? messages['pri_dom.edit-range-weight-title'] : messages['pri_dom.add-range-weight-title']} />
+        <PageTitle title={title} />
         <Row>
         <Col md={12}>
-          <h3 className="page-title">{id ? messages['pri_dom.edit-range-weight-title'] : messages['pri_dom.add-range-weight-title']}</h3>
+          <h3 className="page-title">{title}</h3>
         </Col>
       </Row>
         <Row>
           <Col md={12} lg={12}>
             <Card>
               <CardBody>
-                <ActionForm onSubmit={this.handleSubmit} />
+                <ActionForm onSubmit={this.handleSubmit} type_action={this.props.type} />
               </CardBody>
             </Card>
           </Col>
@@ -51,7 +63,7 @@ Action.propTypes = {
   updateRangeWeightDomesticItem: PropTypes.func.isRequired,
 }
 
-export default injectIntl(connect(null, {
+export default connect(null, {
   addRangeWeightDomesticItem,
   updateRangeWeightDomesticItem
-})(Action));
+})(injectIntl(Action));

@@ -85,6 +85,11 @@ class List extends Component {
     });
   };
 
+  viewRangeWeight = (e, type, rangeWeight) => {
+    e.stopPropagation();
+    this.props.history.push(`/pricing-domestic/range-weight/view/${rangeWeight.id}`);
+  }
+
   renderHeader = (selected) => {
     const { messages } = this.props.intl;
     return (
@@ -280,7 +285,7 @@ class List extends Component {
                 changePageSize: this.onChangePageSize
               }}
               data={items}
-              onRowClick={(e) => e.stopPropagation()}
+              onRowClick={this.viewRangeWeight}
             />
           </CardBody>
         </Card>

@@ -29,6 +29,15 @@ class ActionForm extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.modalType !== this.props.modalType) {
+      this.setState({
+        modalType: prevProps.modalType
+      });
+    }
+
+  }
+
   toggleModal = () => {
     this.props.toggleShipmentTypeModal();
     this.props.getCarrierCodeList();

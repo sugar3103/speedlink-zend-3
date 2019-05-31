@@ -19,8 +19,9 @@ const PricingDomestic = ({ match }) => (
           <Route path={`${match.url}/area`} component={Area} />
           <Route path={`${match.url}/zone`} component={Zone} />
           <Route exact path={`${match.url}/range-weight`} component={RangeWeight} />
-          <Route exact path={`${match.url}/range-weight/add`} component={ActionRangeWeight} />
-          <Route exact path={`${match.url}/range-weight/edit/:id`} component={ActionRangeWeight} />
+          <Route exact path={`${match.url}/range-weight/add`} render={() => <ActionRangeWeight type="add" />} />
+          <Route exact path={`${match.url}/range-weight/edit/:id`} render={() => <ActionRangeWeight type="edit" />} />
+          <Route exact path={`${match.url}/range-weight/view/:id`} render={() => <ActionRangeWeight type="view" />} />
           <Redirect to="/page-not-found" />
       </Switch>
   </Fragment>
