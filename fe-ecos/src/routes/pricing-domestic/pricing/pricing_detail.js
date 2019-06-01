@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Col, Container, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
-import PageTitle from '../../containers/Shared/PageTitle';
-import { Detail } from '../../components/PricingDomestic/Pricing';
-import { requestUpdatePricingDomesticItem } from '../../redux/actions';
+import PageTitle from '../../../containers/Shared/PageTitle';
+import { Detail } from '../../../components/PricingDomestic/Pricing';
+import { requestUpdatePricingDomesticItem } from '../../../redux/actions';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 

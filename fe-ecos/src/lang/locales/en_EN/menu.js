@@ -1,5 +1,8 @@
 module.exports = {
-    //menu
+  //menu
+  'menu.add': 'Add',
+  'menu.edit': 'Edit',
+  'menu.view': 'View',
   'menu.dashboard': 'Dashboard',
   'menu.master-data': 'Master Data',
   'menu.status': 'Status',
@@ -9,7 +12,7 @@ module.exports = {
   'menu.address_city': 'City',
   'menu.address_district': 'District',
   'menu.address_ward': 'Ward',
-  'menu.networkport': 'Network Port',
+  'menu.network_port': 'Network Port',
   'menu.branch': 'Branch',
   'menu.hub': 'Hub',
   'menu.customer_service': 'Service/Shipment Type',
@@ -17,7 +20,7 @@ module.exports = {
   'menu.cs_service': 'Service',
   'menu.cs_shipment_type': 'Shipment Type',
   'menu.brancharea' : 'Branch Area',
-  'menu.pricing_management': 'Pricing Management',
+  'menu.pricing_international': 'Pricing International',
   'menu.range_weight' : 'Range Weight',
   'menu.zone_code' : 'Zone Code',
   'menu.pricing' : 'Pricing',
@@ -32,5 +35,6 @@ module.exports = {
   'menu.user': 'Users',
   'menu.user.list': 'User',
   'menu.user.role': 'Roles',
-  'menu.user.permission': 'Permissions'
+  'menu.user.permission': 'Permissions',
+  'menu.user.profile': 'Profile',
 }

@@ -40,11 +40,6 @@ class Action extends Component {
       <Container>
         <PageTitle title={title} />
         <Row>
-        <Col md={12}>
-          <h3 className="page-title">{title}</h3>
-        </Col>
-      </Row>
-        <Row>
           <Col md={12} lg={12}>
             <Card>
               <CardBody>

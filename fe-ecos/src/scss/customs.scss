@@ -288,17 +288,6 @@ form {
             line-height: 1;
         }
     }
-
-    .topbar__title {
-        display: flex;
-        left: 240px;
-        position: absolute;
-        font-weight: 300;
-        text-transform: capitalize;
-        font-size: 16px;
-        line-height: 2.5;
-        color: #fff;
-    }
 }
 
 .topbar__avatar-img {
@@ -412,9 +401,19 @@ form {
     position: absolute;
     font-weight: 300;
     text-transform: capitalize;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 2.5;
     color: #fff;
+
+    a {
+        @include themify($themes) {            
+            color: themed('colorText');
+        }
+    }
+
+    .breadcrumbs__separator {
+        margin: 0 5px;
+    }
 }
 
 /* PRICING DOMESTIC */

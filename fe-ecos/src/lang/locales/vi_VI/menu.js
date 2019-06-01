@@ -1,5 +1,8 @@
 module.exports = {
   //menu
+  'menu.add': 'Thêm',
+  'menu.edit': 'Sửa',
+  'menu.view': 'Xem',
   'menu.dashboard': 'Bảng Điều Khiển',
   'menu.master-data': 'Dữ Liệu Chung',
   'menu.status': 'Trạng Thái',
@@ -13,11 +16,11 @@ module.exports = {
   'menu.cs_carrier': 'Vận Chuyển',
   'menu.cs_service': 'Dịch Vụ Vận Chuyển',
   'menu.cs_shipment_type': 'Loại Vận Chuyển',
-  'menu.networkport': 'Cổng Thông Tin',
+  'menu.network_port': 'Cổng Thông Tin',
   'menu.branch': 'Chi Nhánh',
   'menu.hub': 'Trung Tâm',
   'menu.brancharea': 'Chi Nhánh Khu Vực',
-  'menu.pricing_management': 'Bảng Giá Quốc Tế',
+  'menu.pricing_international': 'Bảng Giá Quốc Tế',
   'menu.range_weight' : 'Khoảng Trọng Lượng',
   'menu.zone_code' : 'Mã Vùng',
   'menu.pricing' : 'Bảng Giá',
@@ -32,5 +35,6 @@ module.exports = {
   'menu.system': 'Hệ Thống',
   'menu.user.list': 'Người Dùng',
   'menu.user.role': 'Vai Trò',
-  'menu.user.permission': 'Quyền'
+  'menu.user.permission': 'Quyền',
+  'menu.user.profile': 'Trang Cá Nhân',
 }
