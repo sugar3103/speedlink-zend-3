@@ -84,7 +84,7 @@ export default {
           },
           {
           id: 'networkport',
-          title: 'menu.networkport',
+          title: 'menu.network_port',
           route: '/master-data/networkport',
           icon: 'icon-product-grid',
           childrens: [
@@ -138,7 +138,7 @@ export default {
     },
     // {
     //   id: 'pricing_management',
-    //   title: 'menu.pricing_management',
+    //   title: 'menu.pricing_international',
     //   route: '/pricing-international',
     //   icon: 'icon-pricing-table',
     //   childrens: [
