@@ -135,6 +135,13 @@ class ActionForm extends Component {
     const { messages } = this.props.intl;
     const { id } = this.props.match.params;
     const { disableField } = this.state;
+    let show_calculate_unit = false;
+    if(calculate_unit === undefined || calculate_unit == 0) {
+      show_calculate_unit = false;
+    } else {
+      show_calculate_unit = true;
+    }
+    
     return loading ? (
       <ReactLoading type="bubbles" className="loading" /> 
     ) : (
@@ -299,7 +306,7 @@ class ActionForm extends Component {
               </div>
             </div>
           </Col>
-          {(this.state.showUnitField || calculate_unit) &&
+          {(this.state.showUnitField || show_calculate_unit) &&
             <Col md={6} lg={3} xl={3} xs={6}>
               <div className="form__form-group">
                 <span className="form__form-group-label">{messages['pri_dom.unit']}</span>
