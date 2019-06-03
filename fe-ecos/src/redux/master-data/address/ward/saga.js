@@ -49,7 +49,8 @@ function getListApi(params) {
     method: 'post',
     url: `${apiUrl}address/ward`,
     headers: authHeader(),
-    data: JSON.stringify(params)
+    data: JSON.stringify(params),
+    dataType: 'jsonp'
   });
 }
 
@@ -91,7 +92,8 @@ function addWardApi(item) {
     method: 'post',
     url: `${apiUrl}address/ward/add`,
     headers: authHeader(),
-    data: item
+    data: item,
+    dataType: 'jsonp'
   });
 }
 
@@ -136,7 +138,8 @@ function updateWardApi(item) {
     method: 'post',
     url: `${apiUrl}address/ward/edit`,
     headers: authHeader(),
-    data: item
+    data: item,
+    dataType: 'jsonp'
   });
 }
 
@@ -182,7 +185,8 @@ function deleteWardApi(id) {
     method: 'post',
     url: `${apiUrl}address/ward/delete`,
     headers: authHeader(),
-    data: {  ids: id }
+    data: {  ids: id },
+    dataType: 'jsonp'
   });
 }
 

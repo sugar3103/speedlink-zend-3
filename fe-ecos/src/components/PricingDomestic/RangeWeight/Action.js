@@ -6,12 +6,13 @@ import { Container, Row, Col, Card, CardBody } from 'reactstrap';
 import ActionForm from './ActionForm';
 import PageTitle from '../../../containers/Shared/PageTitle';
 import { addRangeWeightDomesticItem, updateRangeWeightDomesticItem } from '../../../redux/actions';
-
+import { withRouter } from 'react-router-dom';
 
 class Action extends Component {
 
   handleSubmit = values => {
     const { id } = this.props.match.params;
+    
     if (id) {
       values = { ...values, id: id };
       this.props.updateRangeWeightDomesticItem(values);
@@ -58,7 +59,7 @@ Action.propTypes = {
   updateRangeWeightDomesticItem: PropTypes.func.isRequired,
 }
 
-export default connect(null, {
+export default withRouter(connect(null, {
   addRangeWeightDomesticItem,
   updateRangeWeightDomesticItem
-})(injectIntl(Action));
+})(injectIntl(Action)));

@@ -2,15 +2,15 @@
 
 namespace Core\Controller;
 
-use Zend\Mvc\Controller\AbstractRestfulController;
-use OAuth\Entity\User;
-use Zend\View\Model\JsonModel;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\ORM\EntityManager;
 use Firebase\JWT\JWT;
-use Zend\EventManager\EventManagerInterface;
+use OAuth\Entity\User;
 use OAuth\Service\AuthManager;
+use Zend\EventManager\EventManagerInterface;
+use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\Mvc\MvcEvent;
+use Zend\View\Model\JsonModel;
 
 class ApiController extends AbstractRestfulController
 {
@@ -24,8 +24,8 @@ class ApiController extends AbstractRestfulController
      * @var DocumentManager
      */
 
-     private $documentManager;
-    
+    private $documentManager;
+
     /**
      * @var Integer $httpStatusCode Define Api Response code.
      */
@@ -34,16 +34,16 @@ class ApiController extends AbstractRestfulController
     /**
      * @var array $apiResponse Define response for api
      */
-    public $apiResponse= [];
-    
+    public $apiResponse = [];
+
     /**
      *
-     * @var type string 
+     * @var type string
      */
     public $token;
 
     /**
-     * 
+     *
      * @var type bool
      */
 
@@ -51,7 +51,7 @@ class ApiController extends AbstractRestfulController
 
     /**
      *
-     * @var type string 
+     * @var type string
      */
     public $error_code = 1;
 
@@ -61,8 +61,9 @@ class ApiController extends AbstractRestfulController
      */
     public $tokenPayload;
 
-    public function __construct($entityManager) {        
-        $this->entityManager = $entityManager;        
+    public function __construct($entityManager)
+    {
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -77,7 +78,7 @@ class ApiController extends AbstractRestfulController
      */
     public function setEventManager(EventManagerInterface $events)
     {
-        parent::setEventManager($events);        
+        parent::setEventManager($events);
         $events->attach('dispatch', array($this, 'checkAuthorization'), 100);
     }
 
@@ -88,52 +89,58 @@ class ApiController extends AbstractRestfulController
     /**
      * This Function call from eventmanager to check authntication and token validation
      * @param type $event
-     * 
+     *
      */
     public function checkAuthorization($event)
-    {   
-        $this->event = $event;        
+    {
+        $this->event = $event;
         $request = $event->getRequest();
         $response = $event->getResponse();
         $isAuthorizationRequired = $event->getRouteMatch()->getParam('isAuthorizationRequired');
         $config = $event->getApplication()->getServiceManager()->get('Config');
-        
+
         $event->setParam('config', $config);
 
-        if($request->isOptions()) {
+        if ($request->isOptions()) {
+            $response->getHeaders()->addHeaderLine('Content-Type', 'application/json');
+            $view = new JsonModel([]);
+            $response->setContent($view->serialize());
+
+            return $response;
+        }
+        if (!$isAuthorizationRequired) {
             return;
         }
-        if (!$isAuthorizationRequired) return;
 
-        if (isset($config['ApiRequest'])) { 
+        if (isset($config['ApiRequest'])) {
             $responseStatusKey = $config['ApiRequest']['responseFormat']['statusKey'];
 
             $jwtToken = $this->findJwtToken($request);
-            
-            if($request->isPost()) { 
+
+            if ($request->isPost()) {
                 if ($jwtToken) {
                     $this->token = $jwtToken;
                     $this->decodeJwtToken();
                     if (is_object($this->tokenPayload) && !$this->checkAuthenticity()) {
                         $response->setStatusCode(200);
                         $jsonModelArr = [
-                            $responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'],                             
+                            $responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'],
                             $config['ApiRequest']['responseFormat']['errorKey'] => -5,
                             $config['ApiRequest']['responseFormat']['dataKey'] => [],
-                            $config['ApiRequest']['responseFormat']['messageKey'] => 'Your API key is wrong'
+                            $config['ApiRequest']['responseFormat']['messageKey'] => 'Your API key is wrong',
                         ];
-                    } else { 
-                       if(!$this->accessFilter($event)) {
-                        $response->setStatusCode(200);
-                        $jsonModelArr = [
-                            $responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'],                             
-                            $config['ApiRequest']['responseFormat']['errorKey'] => 0,                            
-                            $config['ApiRequest']['responseFormat']['messageKey'] => 'ACCESS_DENIED'
-                        ];
-                       } else{
-                         return;
-                       }
-                        
+                    } else {
+                        if (!$this->accessFilter($event)) {
+                            $response->setStatusCode(200);
+                            $jsonModelArr = [
+                                $responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'],
+                                $config['ApiRequest']['responseFormat']['errorKey'] => 0,
+                                $config['ApiRequest']['responseFormat']['messageKey'] => 'ACCESS_DENIED',
+                            ];
+                        } else {
+                            return;
+                        }
+
                     }
                 } else {
                     $response->setStatusCode(200);
@@ -147,7 +154,7 @@ class ApiController extends AbstractRestfulController
                 $jsonModelArr = [
                     $responseStatusKey => $config['ApiRequest']['responseFormat']['statusNokText'],
                     $config['ApiRequest']['responseFormat']['errorKey'] => 405,
-                    $config['ApiRequest']['responseFormat']['messageKey'] => $config['ApiRequest']['responseFormat']['methodNotAllowedKey']
+                    $config['ApiRequest']['responseFormat']['messageKey'] => $config['ApiRequest']['responseFormat']['methodNotAllowedKey'],
                 ];
             }
         } else {
@@ -155,29 +162,29 @@ class ApiController extends AbstractRestfulController
             $jsonModelArr = ['status' => 'NOK', 'result' => ['error' => 'Require copy this file vender\multidots\zf3-rest-api\config\restapi.global.php and paste to root config\autoload\restapi.global.php']];
         }
 
-        $response->getHeaders()->addHeaderLine('Content-Type', 'application/json');        
+        $response->getHeaders()->addHeaderLine('Content-Type', 'application/json');
         $view = new JsonModel($jsonModelArr);
         $response->setContent($view->serialize());
-       
+
         return $response;
     }
 
     /**
-     * Check Request object have Authorization token or not 
+     * Check Request object have Authorization token or not
      * @param type $request
      * @return type String
      */
     public function findJwtToken($request)
-    {   
+    {
         $jwtToken = $request->getHeaders("Authorization") ? $request->getHeaders("Authorization")->getFieldValue() : '';
-        
+
         if ($jwtToken) {
             $jwtToken = trim(trim($jwtToken, "Bearer"), " ");
             return $jwtToken;
         }
 
         if ($request->isGet()) {
-            $jwtToken = $request->getQuery('token');            
+            $jwtToken = $request->getQuery('token');
         }
         if ($request->isPost()) {
             $jwtToken = $request->getPost('token');
@@ -224,8 +231,8 @@ class ApiController extends AbstractRestfulController
 
     /**
      * Create Response for api Assign require data for response and check is valid response or give error
-     * @return \Zend\View\Model\JsonModel 
-     * 
+     * @return \Zend\View\Model\JsonModel
+     *
      */
     public function createResponse()
     {
@@ -238,53 +245,55 @@ class ApiController extends AbstractRestfulController
             $response->setStatusCode($this->httpStatusCode);
         } else {
             $this->httpStatusCode = 500;
-            $response->setStatusCode($this->httpStatusCode);            
+            $response->setStatusCode($this->httpStatusCode);
             $defaultErrorText = $config['ApiRequest']['responseFormat']['defaultErrorText'];
             $sendResponse[$errorKey] = $defaultErrorText;
         }
         $statusKey = $config['ApiRequest']['responseFormat']['statusKey'];
         if ($this->httpStatusCode == 200) {
-            $sendResponse[$statusKey] = $config['ApiRequest']['responseFormat']['statusOkText'];            
+            $sendResponse[$statusKey] = $config['ApiRequest']['responseFormat']['statusOkText'];
         } else {
             $sendResponse[$statusKey] = $config['ApiRequest']['responseFormat']['statusNokText'];
         }
 
-        $sendResponse[$errorKey] = $this->error_code;        
+        $sendResponse[$errorKey] = $this->error_code;
         $sendResponse = array_merge($sendResponse, $this->apiResponse);
         $this->errorCode();
         $sendResponse['error'] = $this->error;
         return new JsonModel($sendResponse);
     }
 
-    private function checkAuthenticity() {
+    private function checkAuthenticity()
+    {
         $config = $this->getEvent()->getParam('config', false);
         //Find User By Token
         $user = $this->entityManager->getRepository(User::class)->find($this->tokenPayload->id);
-        if($user) {
+        if ($user) {
             // Emtipy Token
-            if($this->token != $user->getLastToken()) {
+            if ($this->token != $user->getLastToken()) {
                 return false;
             } else {
-                
+
                 //Token expired
                 $lastTokenAt = strtotime($user->getLastTokenCreatedAt()->format('Y-m-d H:i:s'));
                 $timeNow = strtotime(date('Y-m-d H:i:s'));
                 $differenceInSeconds = $timeNow - $lastTokenAt;
-                
-                if($differenceInSeconds > $config['ApiRequest']['jwtAuth']['expired']) {
+
+                if ($differenceInSeconds > $config['ApiRequest']['jwtAuth']['expired']) {
                     return false;
                 } else {
                     return true;
                 }
             }
-            
+
         } else {
             return false;
         }
-        
+
     }
 
-    private function errorCode() {
+    private function errorCode()
+    {
         switch ($this->error_code) {
             case 0:
                 $this->error = true;
@@ -298,26 +307,27 @@ class ApiController extends AbstractRestfulController
         }
     }
 
-    private function accessFilter(MvcEvent $event) {
+    private function accessFilter(MvcEvent $event)
+    {
         // get controller and action to which the HTTP request was dispatched.
         $controller = $event->getTarget();
         $controllerName = $event->getRouteMatch()->getParam('controller', null);
         $actionName = $event->getRouteMatch()->getParam('action', null);
-        
+
         // convert dash-style action name to camel-case.
         $actionName = str_replace('-', '', lcfirst(ucwords($actionName, '-')));
-        
+
         // get the instance of AuthManager service.
-        $authManager = $event->getApplication()->getServiceManager()->get(AuthManager::class);        
-        
-        $authManager->login($this->tokenPayload->username, $this->tokenPayload->password,$this->tokenPayload->remember_me);
-        
-        if($authManager->filterAccess($controllerName, $actionName)  == AuthManager::ACCESS_DENIED) {
+        $authManager = $event->getApplication()->getServiceManager()->get(AuthManager::class);
+
+        $authManager->login($this->tokenPayload->username, $this->tokenPayload->password, $this->tokenPayload->remember_me);
+
+        if ($authManager->filterAccess($controllerName, $actionName) == AuthManager::ACCESS_DENIED) {
             // redirect the user to the "Not Authorized" page.
             return false;
         } else {
             return true;
         }
-        
+
     }
 }
