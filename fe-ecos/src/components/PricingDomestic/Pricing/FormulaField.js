@@ -15,7 +15,7 @@ class FormulaField extends Component {
       suggesttionList: [],
       suggestion: false,
       textInput: '',
-      html: "&nbsp;"
+      html: ""
     };
   }
 
@@ -38,7 +38,7 @@ class FormulaField extends Component {
       if (suggesttionList && input && input.value) {
         let html = input.value;
         suggesttionList.forEach(item => {
-          html = html.split(item.id).join(`<span contenteditable="false">${item.name}</span>`);
+          html = html.split(item.id).join(`&nbsp;<span contenteditable="false">${item.name}</span>&nbsp;`);
         });
         this.setState({ html });
       }
@@ -48,7 +48,11 @@ class FormulaField extends Component {
   handleSelectOption = value => {
     let { html } = this.state;
     const formula = html.slice(0, html.indexOf('@'));
-    value = `${formula} <span contenteditable="false">${value.name}</span>&nbsp;`;
+    if (formula) {
+      value = `${formula}<span contenteditable="false">${value.name}</span>&nbsp;`;
+    } else {
+      value = `&nbsp;<span contenteditable="false">${value.name}</span>&nbsp;`;
+    }
     this.changeFormulaValue(value);
     this.setState({ suggestion: false, textInput: '', html: value });
     this.contentEditable.current.focus();
@@ -56,10 +60,10 @@ class FormulaField extends Component {
 
   changeFormulaValue = (value) => {
     const { suggesttionList } = this.state;
-    value = value.replace('&nbsp;', ' ');
     suggesttionList.forEach(item => {
       value = value.split(`<span contenteditable="false">${item.name}</span>`).join(item.id);
     });
+    value = value.split(`&nbsp;`).join('');
     this.props.input.onChange(value);
     
   }
@@ -88,7 +92,6 @@ class FormulaField extends Component {
 
   handleChangeFormula = e => {
     let { value } = e.target;
-    value = value.replace('&nbsp;', ' ');
     this.changeFormulaValue(value);
     this.setState({ html: value });
     const arr = value.split(' ');
@@ -115,6 +118,7 @@ class FormulaField extends Component {
           onChange={this.handleChangeFormula} 
           className="formula"
           onKeyDown={this.onKeyPressed}
+          placeholder={placeholder}
         />
         <input 
           {...input} 

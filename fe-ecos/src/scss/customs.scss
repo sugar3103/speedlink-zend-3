@@ -568,6 +568,17 @@ form {
                     padding: 1px 4px;
                     margin: 0 2px;
                 }
+
+                &:empty::before {
+                    content: attr(placeholder);
+                    @include themify($themes) {
+                        color: themed('colorTextAdditional');
+                    }
+                }
+                
+                &:empty:focus::before {
+                    content: "";
+                }
             }
             .suggestion-list {
                 position: absolute;
@@ -591,7 +602,7 @@ form {
                         cursor: pointer;
                         &:focus, &:hover, &.active {
                             @include themify($themes) {
-                                background: themed('colorHover');
+                                background: themed('colorBackgroundBody');
                             }
                         }
                     }
