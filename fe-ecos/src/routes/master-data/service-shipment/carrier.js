@@ -29,7 +29,7 @@ class Carrier extends Component {
     const { messages } = this.props.intl;
     const { errors } = this.props.carrier;
     return (
-      <Container className={'panel__body'}>
+      <Container>
         <PageTitle title={messages['carrier.list-title']} />
         <Row>
           {!this.state.loadPage ? (

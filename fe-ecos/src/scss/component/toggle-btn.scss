@@ -26,7 +26,7 @@
   border: none;
 
   @include themify($themes) {
-    background-color: themed('colorBorder');
+    background-color: themed('colorIcon');
   }
 
   &::after {

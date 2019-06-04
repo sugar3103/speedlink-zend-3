@@ -144,7 +144,7 @@
             outline: none;
 
             @include themify($themes) {
-              background-color: themed('colorHover');
+              background-color: themed('colorBackgroundBody');
             }
           }
         }
@@ -175,16 +175,20 @@
         li {
 
           .nav-link {
-            border-right-color: #eeeeee;
+            @include themify($themes) {
+              border-right-color: themed('colorText');
+            }
             padding-left: 10px;
             text-align: center;
           }
 
           .nav-link.active, .nav-link.active:focus,
           .nav-link.active:hover {
-            background-color: #eeeeee;
-            border-right-color: #eeeeee;
-            color: #646777;
+            @include themify($themes) {
+              background-color: themed('colorText');
+              border-right-color: themed('colorText');
+              color: themed('colorBackground');
+            }
           }
         }
       }

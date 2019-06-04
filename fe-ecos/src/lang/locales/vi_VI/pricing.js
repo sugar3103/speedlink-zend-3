@@ -106,7 +106,7 @@ module.exports = {
   'pri_dom.validate-calculate-unit-empty': 'Đơn vị tính không được bỏ trống',
   'pri_dom.validate-unit-empty': 'Đơn vị không được bỏ trống',
   'pri_dom.validate-unit-not-is-number': 'Đơn vị phải là số',
-  'pri_dom.validate-unit-not-negative': 'Đơn vị không được âm',
+  'pri_dom.validate-unit-must-be-greater-than-0': 'Đơn vị phải lớn hơn 0',
   'pri_dom.validate-ras-empty': 'Vùng sâu/vùng xa không được bỏ trống',
   'pri_dom.validate-round-up-empty': 'Làm tròn không được bỏ trống',
   'pri_dom.validate-round-up-not-is-number': 'Làm tròn phải là số',
