@@ -32,6 +32,19 @@ $router = [
                 ]               
             ]         
         ],
+        // Pricing support ecos v1 calculate pricing
+        'domestic_pricing_old' => [
+            'type' => StaticRoute::class,
+            'options' => [
+                'verb' => 'POST',
+                'route' => '/pricing/domestic/getPricingOld',
+                'defaults' => [
+                    'controller' => Controller\DomesticPricingController::class,
+                    'action' => 'getPricingOld',
+                    'isAuthorizationRequired' => false
+                ]
+            ]
+        ],
         
         'domestic_data' => [
             'type' => StaticRoute::class,
