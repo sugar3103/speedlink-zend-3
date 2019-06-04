@@ -166,4 +166,63 @@ class DomesticRangeWeightRepository extends EntityRepository
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
     }
 
+    public function getRangeWeightOver($where) {
+        try {
+            $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+            $queryBuilder->select('
+                rw.id,
+                rw.calculate_unit,
+                rw.unit,
+                rw.round_up,
+                rw.from,
+                rw.to
+            ')
+            ->from(DomesticRangeWeight::class, 'rw')
+            ->where('rw.is_deleted = 0')
+            ->andWhere('rw.status = 1')
+            ->andWhere('rw.from < :weight')
+            ->andWhere('rw.to = 0')
+            ->andWhere('rw.carrier = :carrier_id')
+            ->andWhere('rw.category = :category_id')
+            ->andWhere('rw.service = :service_id')
+            ->andWhere('rw.zone = :zone_id')
+            ->andWhere('rw.shipment_type = :shipment_type_id')
+            ->andWhere('rw.is_ras = :is_ras')
+            ->setParameters($where);
+
+            return $queryBuilder->getQuery()->execute();
+        } catch (QueryException $e) {
+            return [];
+        }
+    }
+
+    public function getRangeWeightNormal($where) {
+        try {
+            $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+            $queryBuilder->select('
+                rw.id,
+                rw.calculate_unit,
+                rw.unit,
+                rw.round_up,
+                rw.from,
+                rw.to
+            ')
+            ->from(DomesticRangeWeight::class, 'rw')
+            ->where('rw.is_deleted = 0')
+            ->andWhere('rw.status = 1')
+            ->andWhere('rw.from <= :weight')
+            ->andWhere('rw.to > :weight')
+            ->andWhere('rw.carrier = :carrier_id')
+            ->andWhere('rw.category = :category_id')
+            ->andWhere('rw.service = :service_id')
+            ->andWhere('rw.zone = :zone_id')
+            ->andWhere('rw.shipment_type = :shipment_type_id')
+            ->andWhere('rw.is_ras = :is_ras')
+            ->setParameters($where);
+
+            return $queryBuilder->getQuery()->execute();
+        } catch (QueryException $e) {
+            return [];
+        }
+    }
 }

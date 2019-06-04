@@ -6,6 +6,7 @@ use PricingDomestic\Entity\DomesticPricing;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
+use PricingDomestic\Entity\DomesticPricingData;
 
 /**
  * This is the custom repository class for User entity.
@@ -152,5 +153,33 @@ class DomesticPricingRepository extends EntityRepository
             $queryBuilder->orderBy('dp.id', 'DESC');
         }
         return Utils::setCriteriaByFilters($filters, $operatorsMap, $queryBuilder);
+    }
+
+    public function getPriceId($where) {
+        try {
+            $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+            $queryBuilder->select('dp.id')
+                ->from(DomesticPricing::class, 'dp')
+                ->where('dp.is_deleted = 0')
+                ->andWhere('dp.status = 1')
+                ->andWhere('dp.approval_status = 1')
+                ->andWhere('dp.effected_date <= :today')
+                ->andWhere('dp.expired_date >= :today')
+                ->andWhere('dp.carrier = :carrier_id')
+                ->andWhere('dp.category = :category_id')
+                ->andWhere('dp.service = :service_id');
+            if (!empty($dataList['customer_id'])) {
+                $queryBuilder->andWhere('dp.is_private = 1')
+                    ->andWhere('dp.customer = :customer_id');
+            } else {
+                $queryBuilder->andWhere('dp.is_private = 0');
+            }
+            $queryBuilder->orderBy('dp.name', 'desc')
+                ->setParameters($where);
+
+            return $queryBuilder->getQuery()->execute();
+        } catch (QueryException $e) {
+            return [];
+        }
     }
 }
