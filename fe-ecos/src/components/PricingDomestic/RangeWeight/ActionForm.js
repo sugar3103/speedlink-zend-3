@@ -127,20 +127,17 @@ class ActionForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ disableField: nextProps.type_action === 'view' ? true : false })
+    this.setState({ 
+      disableField: nextProps.type_action === 'view' ? true : false,
+      showUnitField: nextProps.calculate_unit ? true : false
+    })
   }
 
   render() {
-    const { handleSubmit, carrier, service, calculate_unit, shipmentType, zone, rangeWeight: { loading } } = this.props;
+    const { handleSubmit, carrier, service, shipmentType, zone, rangeWeight: { loading }, type_action } = this.props;
     const { messages } = this.props.intl;
     const { id } = this.props.match.params;
     const { disableField } = this.state;
-    let show_calculate_unit = false;
-    if(calculate_unit === undefined || calculate_unit == 0) {
-      show_calculate_unit = false;
-    } else {
-      show_calculate_unit = true;
-    }
     
     return loading ? (
       <ReactLoading type="bubbles" className="loading" /> 
@@ -306,7 +303,7 @@ class ActionForm extends Component {
               </div>
             </div>
           </Col>
-          {(this.state.showUnitField || show_calculate_unit) &&
+          {this.state.showUnitField &&
             <Col md={6} lg={3} xl={3} xs={6}>
               <div className="form__form-group">
                 <span className="form__form-group-label">{messages['pri_dom.unit']}</span>
@@ -354,7 +351,7 @@ class ActionForm extends Component {
         </Row>
         <Row>
           <Col md={12} className="text-right">
-            <Link to="/pricing-domestic/range-weight" className="btn btn-outline-secondary btn-sm">
+            <Link to={type_action === 'view' ? '/pricing-domestic/range-weight' : `/pricing-domestic/range-weight/view/${id}`} className="btn btn-outline-secondary btn-sm">
               {messages['cancel']}
             </Link>
             { disableField ? 

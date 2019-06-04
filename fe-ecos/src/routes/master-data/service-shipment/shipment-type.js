@@ -28,7 +28,7 @@ class ShipmentType extends Component {
     const { messages } = this.props.intl;
     const { errors } = this.props.shipment_type;
     return (
-      <Container className={'panel__body'}>
+      <Container>
         <PageTitle title={messages['shipment_type.list-title']} />
         <Row>
         {!this.state.loadPage ? (

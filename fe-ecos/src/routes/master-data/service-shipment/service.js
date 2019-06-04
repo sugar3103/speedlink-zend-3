@@ -28,7 +28,7 @@ class Service extends Component {
     const { messages } = this.props.intl;
     const { errors } = this.props.service;
     return (
-      <Container className={'panel__body'}>
+      <Container>
         <PageTitle title={messages['service.list-title']} />
         <Row>
         {!this.state.loadPage ? (

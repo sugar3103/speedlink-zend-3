@@ -10,7 +10,9 @@
     color: #646777;
   }
   .radio-btn__radio-custom {
-    border: 1px solid #d7d7d7;
+    @include themify($themes) {
+      border: 1px solid themed('colorFieldsBorder');
+    }
   }
 
 }
