@@ -1,22 +1,24 @@
 import React, { Fragment } from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Switch, Redirect } from 'react-router-dom';
+import { injectIntl } from 'react-intl';
+import CrumbRoute from '../../crumb-route';
 
 import Lists from './list';
 import Role from './role';
 import Permission from './permission';
 import Edit from './edit';
 
-const User = ({ match }) => (
+const User = ({ match, intl: { messages } }) => (
   <Fragment>
       <Switch>
           <Redirect exact from={`${match.url}/`} to={`${match.url}/list`} />
-          <Route path={`${match.url}/list`} component={Lists} />          
-          <Route path={`${match.url}/role`} component={Role} />          
-          <Route path={`${match.url}/permission`} component={Permission} />    
-          <Route path={`${match.url}/:id/edit`} component={Edit} />
-          <Route path={`${match.url}/profile`} component={Edit} />
+          <CrumbRoute title={messages['menu.user.list']} path={`${match.url}/list`} component={ Lists } />
+          <CrumbRoute title={messages['menu.user.role']} path={`${match.url}/role`} component={ Role } />
+          <CrumbRoute title={messages['menu.user.permission']} path={`${match.url}/permission`} component={ Permission } />
+          <CrumbRoute title={messages['menu.edit']} path={`${match.url}/:id/edit`} component={ Edit } />
+          <CrumbRoute title={messages['menu.user.profile']} path={`${match.url}/profile`} component={ Edit } />
           <Redirect to="/page-not-found" />
       </Switch>
   </Fragment>
 );
-export default User;
+export default injectIntl(User);

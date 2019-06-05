@@ -1,11 +1,21 @@
 <?php
 namespace PricingDomestic\Controller;
 
+use Address\Entity\City;
+use Address\Entity\District;
+use Address\Entity\Ward;
 use Core\Controller\CoreController;
 use Doctrine\ORM\EntityManager;
+use Management\Entity\FieldVas;
+use PricingDomestic\Entity\DomesticAreaCity;
+use PricingDomestic\Entity\DomesticPricingData;
+use PricingDomestic\Entity\DomesticPricingVas;
+use PricingDomestic\Entity\DomesticPricingVasSpec;
+use PricingDomestic\Entity\DomesticRangeWeight;
 use PricingDomestic\Service\DomesticPricingManager;
 use PricingDomestic\Form\PricingForm;
 use PricingDomestic\Entity\DomesticPricing;
+use ServiceShipment\Entity\ShipmentType;
 
 class DomesticPricingController extends CoreController {
 
@@ -26,6 +36,18 @@ class DomesticPricingController extends CoreController {
          * @param $entityManager
          * @param $domesticPricingManager
          */
+
+    const NOI_TINH = 5;
+    const NOI_MIEN = 6;
+    const LIEN_MIEN = 8;
+    const LIEN_MIEN_DB = 7;
+
+    /*
+     * 15 => Đà Nẵng
+     * 24 => Hà Nội
+     * 29 => Hồ Chí Minh
+     */
+    const CITY_DB = [15, 24, 29];
 
     public function __construct($entityManager, $domesticPricingManager) {
         parent::__construct($entityManager);
@@ -153,5 +175,235 @@ class DomesticPricingController extends CoreController {
         }
 
         return $this->createResponse();
+    }
+
+    public function getPricingOldAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequestData();
+            $data['shipmentType'] = 35;
+            /*$paramList = [
+                'pickupCity',   'pickupDistrict',   'pickupWard',   'rasPickup',
+                'deliveryCity', 'deliveryDistrict', 'deliveryWard', 'rasDelivery',
+                'shipmentType', 'weight'
+            ];
+            $result = self::checkParamPost($data, $paramList);
+            if ($result === false) {
+                return;
+            }*/
+            $result = self::calculatePricing($data);
+            $this->apiResponse['data'] = $result;
+        }
+        return $this->createResponse();;
+    }
+
+    public function getPricingNewAction()
+    {
+        //$weight = ($dataList['width'] * $dataList['height'] * $dataList['length']) / $shipmentType->getVolumetricNumber();
+    }
+
+    public function calculatePricing($dataList)
+    {
+        // Init
+        $where = ['is_deleted' => 0, 'status' => 1];
+
+        // Get Shipment Info
+        $whereMerge = array_merge($where, ['id' => $dataList['shipmentType']]);
+        $shipmentType = $this->entityManager->getRepository(ShipmentType::class)->findOneBy($whereMerge);
+        $carrierI = $shipmentType->getCarrier()->getId();
+        $serviceId = $shipmentType->getService()->getId();
+        $categoryId = $shipmentType->getCategory()->getId();
+
+        // Get pickup City, District, Ward
+        $whereMerge = array_merge($where, ['name' => $dataList['pickupCity']]);
+        $pickupCity = $this->entityManager->getRepository(City::class)->findOneBy($whereMerge);
+        $whereMerge = array_merge($where, ['name' => $dataList['pickupDistrict'], 'city_id' => $pickupCity->getId()]);
+        $pickupDistrict = $this->entityManager->getRepository(District::class)->findOneBy($whereMerge);
+        $pickupRas = $pickupDistrict->getRas();
+        if (!empty($dataList['pickupWard'])) {
+            $whereMerge = array_merge($where, ['name' => $dataList['pickupWard'], 'district_id' => $pickupDistrict->getId()]);
+            $pickupWard = $this->entityManager->getRepository(Ward::class)->findOneBy($whereMerge);
+            $pickupRas = $pickupWard->getRas();
+        }
+
+        // Get delivery City, District, Ward
+        $whereMerge = array_merge($where, ['name' => $dataList['deliveryCity']]);
+        $deliveryCity = $this->entityManager->getRepository(City::class)->findOneBy($whereMerge);
+        $whereMerge = array_merge($where, ['name' => $dataList['deliveryDistrict'], 'city_id' => $deliveryCity->getId()]);
+        $deliveryDistrict = $this->entityManager->getRepository(District::class)->findOneBy($whereMerge);
+        $deliveryRas = $deliveryDistrict->getRas();
+        if (!empty($dataList['deliveryWard'])) {
+            $whereMerge = array_merge($where, ['name' => $dataList['deliveryWard'], 'district_id' => $deliveryDistrict->getId()]);
+            $deliveryWard = $this->entityManager->getRepository(Ward::class)->findOneBy($whereMerge);
+            $deliveryRas = $deliveryWard->getRas();
+        }
+
+        // Check Area Type shipment
+        if ($pickupCity->getId() === $deliveryCity->getId()) {
+            $areaType = self::NOI_TINH;
+        } elseif (in_array($pickupCity->getId(), self::CITY_DB) && in_array($deliveryCity->getId(), self::CITY_DB)) {
+            $areaType = self::LIEN_MIEN_DB;
+        } else {
+            $pickupArea = $this->entityManager->getRepository(DomesticAreaCity::class)->findOneBy(['is_deleted' => 0, 'city_id' => $pickupCity->getId()]);
+            $deliveryArea = $this->entityManager->getRepository(DomesticAreaCity::class)->findOneBy(['is_deleted' => 0, 'city_id' => $deliveryCity->getId()]);
+            if ($pickupArea->getId() === $deliveryArea->getId()) {
+                $areaType = self::NOI_MIEN;
+            } else {
+                $areaType = self::LIEN_MIEN;
+            }
+        }
+
+        // Get Price
+        $wherePrice = [
+            'carrier_id' => $carrierI,
+            'category_id' => $categoryId,
+            'service_id' => $serviceId,
+            'today' => date('Y-m-d H:i:s'),
+        ];
+        if (!empty($dataList['customer_id'])) {
+            $wherePrice['customer_id'] = $dataList['customer_id'];
+        }
+        $pricing = $this->entityManager->getRepository(DomesticPricing::class)->getPriceId($wherePrice);
+
+        // Get Range Weight info
+        $whereRange = [
+            'weight' => $dataList['weight'],
+            'carrier_id' => $carrierI,
+            'category_id' => $categoryId,
+            'service_id' => $serviceId,
+            'zone_id' => $areaType,
+            'shipment_type_id' => $shipmentType->getId(),
+            'is_ras' => $deliveryRas
+        ];
+        $wherePriceDetail = [
+            'is_deleted' => 0,
+            'domestic_pricing' => $pricing[0]['id']
+        ];
+
+        // Price Over
+        $priceOver = $this->entityManager->getRepository(DomesticRangeWeight::class)->getRangeWeightOver($whereRange);
+        if (!empty($priceOver)) {
+            if (count($priceOver) != 1)
+                return ['error' => true, 'msg' => 'Price over have more than 2 record'];
+            $whereRange['weight'] = $priceOver[0]['from'] - 0.01;
+
+            $wherePriceDetail['domestic_range_weight'] = $priceOver[0]['id'];
+            $priceDataOver = $this->entityManager->getRepository(DomesticPricingData::class)->findOneBy($wherePriceDetail);
+            $over = [
+                'where' => $wherePriceDetail,
+                'data' => $priceDataOver->getValue(),
+            ];
+        }
+
+        // Price Normal
+        $priceNormal = $this->entityManager->getRepository(DomesticRangeWeight::class)->getRangeWeightNormal($whereRange);
+        if (count($priceNormal) != 1)
+            return ['error' => true, 'msg' => 'Price normal have more than 2 record'];
+        if (count($priceNormal) <= 0 && count($priceOver) <= 0)
+            return ['error' => true, 'msg' => "Range weight not found"];
+
+        $wherePriceDetail['domestic_range_weight'] = $priceNormal[0]['id'];
+        $priceDataNormal = $this->entityManager->getRepository(DomesticPricingData::class)->findOneBy($wherePriceDetail);
+        $normal = [
+            'where' => $wherePriceDetail,
+            'data' => $priceDataNormal->getValue(),
+        ];
+        // Calculate Price
+        // Case Over
+        $feeOver = 0;
+        if (!empty($priceDataOver)) {
+            $weightOver = $dataList['weight'] - $priceOver[0]['from'];
+            $dataList['weight'] = $priceOver[0]['from'];
+            if ($priceOver[0]['calculate_unit'] === 1 && $priceOver[0]['unit'] > 0) {
+                $feeOver = ($weightOver / $priceOver[0]['unit']) * $priceDataOver->getValue();
+            } else {
+                $feeOver = $priceDataOver->getValue();
+            }
+        }
+
+        // Case Normal
+        if ($priceNormal[0]['calculate_unit'] === 1) {
+            $feeNormal = $feeOver = ($dataList['weight'] / $priceNormal[0]['unit']) * $priceDataNormal->getValue();
+        } else {
+            $feeNormal = $priceDataNormal->getValue();
+        }
+
+        // Pick RAS
+        if ($pickupRas === 1) {
+            $feePickUp = 15000;
+        } else {
+            $feePickUp = 0;
+        }
+
+        // VAS Price
+        $feeVas = 0;
+        if (!empty($dataList['vas'])) {
+            $vasData = $this->entityManager->getRepository(DomesticPricingVas::class)->findOneBy([
+                'is_deleted' => 0,
+                'name' => $dataList['vas']
+            ]);
+            $arrayFields = explode(" ", str_replace('  ', ' ', trim($vasData->getFormula())));
+            foreach ($arrayFields as $key=>$field) {
+                if (strpos($field, '$') !== false) {
+                    $fieldVas = $this->entityManager->getRepository(FieldVas::class)->findOneBy([
+                        'is_deleted' => 0,
+                        'id' => str_replace('$', '', $field)
+                    ]);
+                    $value = $dataList['listValue'][$fieldVas->getFunctionName()];
+                    $arrayFields[$key] = $value;
+                }
+            }
+            $stringField = implode('', $arrayFields);
+            $formula = 'return ' . $stringField . ';';
+            $feeVas = eval($formula);
+
+            if ($vasData->getType() === 1) {
+                $vasResult = $feeVas;
+                $vasSpec = $this->entityManager->getRepository(DomesticPricingVasSpec::class)->findBy([
+                    'is_deleted' => 0,
+                    'domestic_pricing' => $pricing[0]['id'],
+                    'domestic_pricing_vas' => $vasData->getId()
+                ]);
+                foreach ($vasSpec as $vas) {
+                    if ($vas->getTo() > 0) {
+                        if ($vas->getFrom() <= $vasResult && $vasResult < $vas->getTo()) {
+                            $feeVas = $vas->getValue();
+                        }
+                    } else {
+                        if ($vas->getFrom() <= $vasResult && $vasResult < $vas->getTo()) {
+                            $feeVas = $vas->getValue();
+                        }
+                    }
+                }
+            } else {
+                if ($feeVas < $vasData->getMin()) {
+                    $feeVas = $vasData->getMin();
+                }
+            }
+        }
+
+        $feeService = $feePickUp + $feeOver + $feeNormal + $feeVas;
+        $total = $feeService * 1.1;
+
+        return [
+            'total' => $total,
+            'fee_vas' => $feeVas,
+            'fee_over' => $feeOver,
+            'fee_normal' => $feeNormal,
+            'fee_pickup_ras' => $feePickUp,
+        ];
+    }
+
+    private function checkParamPost($dataPost,$fieldRequire)
+    {
+        $flag = true;
+        $field = [];
+        foreach ($fieldRequire as $obj) {
+            if (!(array_key_exists($obj, $dataPost))) {
+                $flag = false;
+                $field[] = $obj;
+            }
+        }
+        return ['status' => $flag, 'field' => $field ];
     }
 }

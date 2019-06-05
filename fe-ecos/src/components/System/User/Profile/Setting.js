@@ -168,7 +168,9 @@ class Setting extends PureComponent {
                     component={CustomField}
                     type={this.state.showPassword ? 'text' : 'password'}
                     placeholder={messages['user.confirm_password']}
-                    autocomplete='off' 
+                    autocomplete='off'
+                    autoCorrect = 'off'
+                    spellCheck = 'off'
                   />
                 </div>
                 <button

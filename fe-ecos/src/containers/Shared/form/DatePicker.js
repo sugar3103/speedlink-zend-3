@@ -24,6 +24,13 @@ class DatePickerField extends PureComponent {
     this.props.onChange(date);
   }
 
+  componentDidMount() {
+    if (this.props.value) {
+      const date = new Date(this.props.value);
+      this.setState({ startDate: date })
+    }
+  }
+  
   componentWillReceiveProps(nextProps) {
     if (nextProps.value) {
       const date = new Date(nextProps.value);

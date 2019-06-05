@@ -17,7 +17,8 @@ function getListShipmentTypeDomesticApi(params) {
     method: 'post',
     url: `${apiUrl}shipment_type`,
     headers: authHeader(),
-    data: JSON.stringify(params)
+    data: JSON.stringify(params),
+    dataType: 'jsonp'
   });
 }
 

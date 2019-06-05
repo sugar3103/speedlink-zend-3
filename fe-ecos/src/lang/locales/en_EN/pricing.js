@@ -106,7 +106,7 @@ module.exports = {
   'pri_dom.validate-calculate-unit-empty': 'Calculate Unit shouldn’t be empty',
   'pri_dom.validate-unit-empty': 'Unit shouldn’t be empty',
   'pri_dom.validate-unit-not-is-number': 'Unit must is number',
-  'pri_dom.validate-unit-not-negative': 'Unit is not negative',
+  'pri_dom.validate-unit-must-be-greater-than-0': 'Unit must be greater than 0',
   'pri_dom.validate-ras-empty': 'Ras shouldn’t be empty',
   'pri_dom.validate-round-up-empty': 'Round Up shouldn’t be empty',
   'pri_dom.validate-round-up-not-is-number': 'Round Up must is number',

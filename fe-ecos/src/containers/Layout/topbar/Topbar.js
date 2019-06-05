@@ -7,6 +7,7 @@ import TopbarLanguage from './TopbarLanguage';
 // import TopbarMail from './TopbarMail';
 import TopbarNotification from './TopbarNotification';
 import TopbarSearch from './TopbarSearch';
+import { Breadcrumbs } from 'react-breadcrumbs';
 
 class Topbar extends PureComponent {
   static propTypes = {
@@ -28,7 +29,7 @@ class Topbar extends PureComponent {
               <Link className="topbar__logo" to="/dashboards" />
             
           </div>
-          <span className="topbar__title">Page Title</span>
+          <Breadcrumbs className="topbar__title" />
           <div className="topbar__right">
 
             <TopbarSearch />

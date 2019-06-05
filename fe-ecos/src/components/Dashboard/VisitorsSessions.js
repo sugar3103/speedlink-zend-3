@@ -37,7 +37,7 @@ renderLegend.propTypes = {
 class VisitorsSessions extends PureComponent {
     render() {
         return (
-            <Panel lg={6} xl={4} md={12} title={'dashboard_default.visitors_sessions'} subhead="What browsers are most popular">
+            <Panel lg={6} xl={4} md={12} title={'Visitors Sessions'} subhead="What browsers are most popular">
                 <div className="dashboard__visitors-chart">
                     <p className="dashboard__visitors-chart-title">Total visitors <span>on 23.08.2017</span></p>
                     <p className="dashboard__visitors-chart-number">12,384</p>

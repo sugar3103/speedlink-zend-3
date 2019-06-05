@@ -1,7 +1,14 @@
 export function formatCurrency(input) {
-    if (!input) return '';
-    const convertedInput = new Intl.NumberFormat().format(input);
-    return convertedInput;
+    if (input) {
+        if (isNaN(input)) {
+            return input;
+        } else {
+            const convertedInput = new Intl.NumberFormat().format(input);
+            return convertedInput;
+        }
+    } else {
+        return '';
+    }
 }
 
 export function normalizeCurrency(val) {

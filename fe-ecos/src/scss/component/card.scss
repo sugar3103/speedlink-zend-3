@@ -13,7 +13,6 @@
 .card-body {
   padding: 10px;
   height: 100%;
-  border-radius: 5px;
 
   @include themify($themes) {
     background-color: themed('colorBackground');
@@ -43,13 +42,6 @@
 
   h5 {
     font-size: 13px;
-  }
-}
-
-.squared-corner-theme {
-
-  .card-body {
-    border-radius: 0;
   }
 }
 
