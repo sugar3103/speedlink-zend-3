@@ -1,29 +1,26 @@
-.theme-dark {
-    legend.scheduler-border {
-        color: #DDDDDD;
+fieldset {
+    &.scheduler-border {
+        padding: 0 1.4em 0.4em 1.4em !important;
+        -webkit-box-shadow:  0px 0px 0px 0px #000;
+        box-shadow:  0px 0px 0px 0px #000;
+        @include themify($themes) {
+            border: 1px solid themed('colorFieldsBorder');
+        }
     }
-}
 
-.theme-light {
-    legend.scheduler-border {
-        color: #646777;
+    legend {
+        &.scheduler-border {
+            font-size: 1.2em !important;
+            font-weight: bold !important;
+            text-align: left !important;
+            width:auto;
+            padding:0 10px;
+            border-bottom:none;
+            @include themify($themes) {
+                color: themed('colorFitness');
+            }
+        }
     }
-}
-
-fieldset.scheduler-border {
-    border: 1px solid #d7d7d7 !important;
-    padding: 0 1.4em 0.4em 1.4em !important;
-    -webkit-box-shadow:  0px 0px 0px 0px #000;
-    box-shadow:  0px 0px 0px 0px #000;
-}
-  
-legend.scheduler-border {
-    font-size: 1.2em !important;
-    font-weight: bold !important;
-    text-align: left !important;
-    width:auto;
-    padding:0 10px;
-    border-bottom:none;
 }
 
 .loading {
@@ -217,18 +214,14 @@ form {
         border: none
     }
     .form{
-         input { 
+         input, textarea { 
             border: none;
             background-color: rgba(250, 250, 250, 0.1);
             color: #fff;
-            font-size: 13px
-        }
-        
-        textarea { 
-            border: none;
-            background-color: rgba(250, 250, 250, 0.1);
-            color: #fff;
-            font-size: 13px
+            font-size: 13px;
+            &:disabled {
+                background-color: rgba(250, 250, 250, 0.1);
+            }
         }
         .form__form-group-select {
             input{ background-color: transparent}
@@ -317,8 +310,6 @@ form {
     }
 
     .react-bs-table-bordered {
-        border: none;
-
         .form-control {
             height: 25px;
             color: #343d45;
@@ -412,7 +403,16 @@ form {
     }
 
     .breadcrumbs__separator {
+        @include themify($themes) {            
+            color: themed('colorText');
+        }
         margin: 0 5px;
+    }
+
+    @media screen and (max-width: 576px) {
+        left: 45px;
+        font-size: 13px;
+        line-height: 3;
     }
 }
 
@@ -424,6 +424,11 @@ form {
 
     .arrow {
         top: 45px !important;
+        &::before {
+            @include themify($themes) {            
+                border-left-color: themed('colorFitness');
+            }
+        }
     }
 
     ul {
@@ -524,12 +529,15 @@ form {
         .table-price {
             th, td {
                 padding: 5px;
+                border-bottom-width: 0px;
             }
         }
 
         .react-bs-table-bordered {
-            border-radius: 0;
-    
+            @include themify($themes) {
+                border: 1px solid themed('colorFieldsBorder');
+                border-radius: 0;
+            }
             .form-control {
                 height: 25px;
                 color: #343d45;
@@ -560,6 +568,23 @@ form {
                     padding: 1px 4px;
                     margin: 0 2px;
                 }
+
+                &:empty::before {
+                    content: attr(placeholder);
+                    @include themify($themes) {
+                        color: themed('colorTextAdditional');
+                    }
+                }
+                
+                &:empty:focus::before {
+                    content: "";
+                }
+
+                &[disabled] {
+                    @include themify($themes) {
+                        background: themed('colorBackgroundBody');
+                    }
+                }
             }
             .suggestion-list {
                 position: absolute;
@@ -583,7 +608,7 @@ form {
                         cursor: pointer;
                         &:focus, &:hover, &.active {
                             @include themify($themes) {
-                                background: themed('colorHover');
+                                background: themed('colorBackgroundBody');
                             }
                         }
                     }

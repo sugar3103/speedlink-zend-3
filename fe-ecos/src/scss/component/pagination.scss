@@ -1,7 +1,3 @@
-.pagination {
-
-}
-
 .pagination__link {
   background: transparent;
   border: none;
@@ -71,7 +67,9 @@
 .pagination__link-icon {
   width: 13px;
   height: 13px;
-  fill: $color-additional;
+  @include themify($themes) {
+    fill: themed('colorHover');
+  }
 }
 
 .pagination__wrap {

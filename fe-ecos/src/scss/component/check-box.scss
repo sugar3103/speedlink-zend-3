@@ -159,10 +159,9 @@
   position: absolute;
   width: 18px;
   height: 18px;
-  border-radius: 3px;
 
   @include themify($themes) {
-    border: 1px solid #d7d7d7;
+    border: 1px solid themed('colorFieldsBorder');
   }
 
   svg {

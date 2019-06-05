@@ -223,7 +223,7 @@
       overflow: hidden;
 
       @include themify($themes) {
-        border: 1px solid themed('colorBorder');
+        border: 1px solid themed('colorBackgroundBody');
         background: themed('colorBackground');
       }
     }
@@ -249,7 +249,7 @@
 
       &.is-focused {
         @include themify($themes) {
-          background: themed('colorHover');
+          background: themed('colorBackgroundBody');
         }
       }
     }
@@ -260,6 +260,12 @@
         border-color: $color-accent;
         box-shadow: none;
         background: transparent;
+      }
+    }
+
+    &.is-disabled {
+      @include themify($themes) {
+        background: themed('colorBackgroundBody');
       }
     }
 
@@ -360,7 +366,9 @@
   }
 
   svg {
-    fill: $color-additional;
+    @include themify($themes) {
+      fill: themed('colorIcon');
+    }
     width: 18px;
     height: 18px;
     transition: all 0.3s;
@@ -419,7 +427,9 @@
   }
 
   svg {
-    fill: $color-additional;
+    @include themify($themes) {
+      fill: themed('colorIcon');
+    }
     width: 18px;
     height: 18px;
     transition: all 0.3s;

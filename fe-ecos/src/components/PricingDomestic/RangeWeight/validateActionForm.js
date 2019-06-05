@@ -62,8 +62,8 @@ const validate = (values) => {
       errors.unit = 'pri_dom.validate-unit-empty';
     } else if (isNaN(values.unit)) {
       errors.unit = 'pri_dom.validate-unit-not-is-number';
-    } else if (parseFloat(values.unit) < 0) {
-      errors.unit = 'pri_dom.validate-unit-not-negative';
+    } else if (parseFloat(values.unit) <= 0) {
+      errors.unit = 'pri_dom.validate-unit-must-be-greater-than-0';
     }
 
     if (values.is_ras === undefined || values.is_ras === null ) {
