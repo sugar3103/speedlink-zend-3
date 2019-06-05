@@ -37,7 +37,7 @@ module.exports = {
   'pri_dom.ras': 'Vùng sâu/vùng xa',
   'pri_dom.from': 'Từ (>)',
   'pri_dom.to': 'Đến (=<)',
-  'pri_dom.unit': 'Đơn vị (kg)',
+  'pri_dom.unit': 'Đơn vị (Kg)',
   'pri_dom.add-new-range-weight': 'Tạo mới khoảng trọng lượng',
   'pri_dom.update-range-weight': 'Cập nhật khoảng trọng lượng',
   'pri_dom.delete-range-weight': 'Xóa khoảng trọng lượng',
