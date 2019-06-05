@@ -181,7 +181,34 @@ class DomesticPricingController extends CoreController {
     {
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequestData();
-            $data['shipmentType'] = 35;
+
+            // Check shipment id V2
+            $shipmentType = $data['shipmentType'];
+            switch ($shipmentType) {
+                case 'd0ee2e12-87da-536c-0014-5cf5fa5fe86e': // 4Hrs1
+                case '9b4247a7-bb65-dbd5-5322-5ce9e8b6b0bd': // 4Hrs2
+                    $data['shipmentType'] = 35;
+                    break;
+                case '70e9c16a-a37b-6619-47c4-5cf5fae8524e': // SDay1
+                case '8a46755c-6aae-31e4-18bc-5ce9e34c1e56': // SDay2
+                    $data['shipmentType'] = 36;
+                    break;
+                case '8d80fd7b-0430-cb11-8e5f-5ce9e8aff4a9': // Expr1
+                case '8dde0ffb-3587-6056-fb3e-5cf5fb98c335': // Expr2
+                    $data['shipmentType'] = 37;
+                    break;
+                case '88110327-4529-d804-bf6c-5ce9e81c0c66': // Stan1
+                case '5695b752-5849-8193-86d8-5cf5fb64eaeb': // Stan2
+                    $data['shipmentType'] = 38;
+                    break;
+                case '14046694-8fe2-547b-9983-5ce9e872df65': // Econ1
+                case 'be621fa0-cd57-7bc4-0e60-5cf5fb03e541': // Econ2
+                    $data['shipmentType'] = 39;
+                    break;
+                default:
+                    $data['shipmentType'] = 0;
+                    break;
+            }
             /*$paramList = [
                 'pickupCity',   'pickupDistrict',   'pickupWard',   'rasPickup',
                 'deliveryCity', 'deliveryDistrict', 'deliveryWard', 'rasDelivery',
@@ -208,6 +235,8 @@ class DomesticPricingController extends CoreController {
         $where = ['is_deleted' => 0, 'status' => 1];
 
         // Get Shipment Info
+        if ($dataList['shipmentType'] === 0)
+            return ['error' => true, 'msg' => 'Shipment Type is wrong'];
         $whereMerge = array_merge($where, ['id' => $dataList['shipmentType']]);
         $shipmentType = $this->entityManager->getRepository(ShipmentType::class)->findOneBy($whereMerge);
         $carrierI = $shipmentType->getCarrier()->getId();
