@@ -37,7 +37,7 @@ module.exports = {
   'pri_dom.ras': 'RAS',
   'pri_dom.from': 'From (>)',
   'pri_dom.to': 'To (=<)',
-  'pri_dom.unit': 'Unit (kg)',
+  'pri_dom.unit': 'Unit (Kg)',
   'pri_dom.add-new-range-weight': 'Create New Range Weight',
   'pri_dom.update-range-weight': 'Update Range Weight',
   'pri_dom.delete-range-weight': 'Delete Range Weight',
