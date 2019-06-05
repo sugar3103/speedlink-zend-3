@@ -46,7 +46,7 @@ class PricingTable extends Component {
   }
 
   showTdTable = (pricing_id, items) => {
-    const { type } = this.props;
+    const { type, intl: { locale } } = this.props;
     let result = [];
     if (items) {
       result = Object.keys(items).map((key, index) => {
@@ -60,9 +60,9 @@ class PricingTable extends Component {
               if (parseFloat(item.value) > 0) {
                 const currency = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.value);
                 if (parseFloat(item.to) > 0) {
-                  return <p key={index2}><b>{currency} / {item.name}</b></p>;
+                  return <p key={index2}><b>{currency} / {locale === 'en-US' ? item.name_en : item.name}</b></p>;
                 } else {
-                  return <p key={index2}><i>+{currency} / {item.name}</i></p>
+                  return <p key={index2}><i>+{currency} / {locale === 'en-US' ? item.name_en : item.name}</i></p>
                 }
               } else {
                 return null;
