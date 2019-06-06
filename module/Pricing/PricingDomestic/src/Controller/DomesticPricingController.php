@@ -293,6 +293,8 @@ class DomesticPricingController extends CoreController {
             $wherePrice['customer_id'] = $dataList['customer_id'];
         }
         $pricing = $this->entityManager->getRepository(DomesticPricing::class)->getPriceId($wherePrice);
+        if (empty($pricing))
+            return ['error' => true, 'msg' => 'Pricing not found'];
 
         // Get Range Weight info
         $whereRange = [
