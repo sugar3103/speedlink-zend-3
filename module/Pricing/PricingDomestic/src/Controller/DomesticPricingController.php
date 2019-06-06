@@ -275,13 +275,13 @@ class DomesticPricingController extends CoreController {
         } else {
             $pickupArea = $this->entityManager->getRepository(DomesticAreaCity::class)->findOneBy(['is_deleted' => 0, 'city_id' => $pickupCity->getId()]);
             $deliveryArea = $this->entityManager->getRepository(DomesticAreaCity::class)->findOneBy(['is_deleted' => 0, 'city_id' => $deliveryCity->getId()]);
-            if ($pickupArea->getId() === $deliveryArea->getId()) {
+            if ($pickupArea->getDomesticAreaId() === $deliveryArea->getDomesticAreaId()) {
                 $areaType = self::NOI_MIEN;
             } else {
                 $areaType = self::LIEN_MIEN;
             }
         }
-
+        
         // Get Price
         $wherePrice = [
             'carrier_id' => $carrierI,
@@ -293,6 +293,8 @@ class DomesticPricingController extends CoreController {
             $wherePrice['customer_id'] = $dataList['customer_id'];
         }
         $pricing = $this->entityManager->getRepository(DomesticPricing::class)->getPriceId($wherePrice);
+        if (empty($pricing))
+            return ['error' => true, 'msg' => 'Pricing not found'];
 
         // Get Range Weight info
         $whereRange = [
