@@ -318,10 +318,6 @@ class DomesticPricingController extends CoreController {
 
             $wherePriceDetail['domestic_range_weight'] = $priceOver[0]['id'];
             $priceDataOver = $this->entityManager->getRepository(DomesticPricingData::class)->findOneBy($wherePriceDetail);
-            $over = [
-                'where' => $wherePriceDetail,
-                'data' => $priceDataOver->getValue(),
-            ];
         }
 
         // Price Normal
@@ -333,10 +329,6 @@ class DomesticPricingController extends CoreController {
 
         $wherePriceDetail['domestic_range_weight'] = $priceNormal[0]['id'];
         $priceDataNormal = $this->entityManager->getRepository(DomesticPricingData::class)->findOneBy($wherePriceDetail);
-        $normal = [
-            'where' => $wherePriceDetail,
-            'data' => $priceDataNormal->getValue(),
-        ];
         // Calculate Price
         // Case Over
         $feeOver = 0;
