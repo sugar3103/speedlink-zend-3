@@ -211,6 +211,35 @@ class DomesticPricingController extends CoreController {
         return $this->createResponse();;
     }
 
+    public function getMultiPricingOldAction() {
+        if ($this->getRequest()->isPost()) {
+            $params = $this->getRequestData();
+            $data = array();
+            if (count($params) > 0) {
+                for($i = 0; $i < count($params); $i++) {
+                    // Check shipment id V2
+                    $shipmentType = [
+                        'd0ee2e12-87da-536c-0014-5cf5fa5fe86e' => 35, // 4Hrs1
+                        '9b4247a7-bb65-dbd5-5322-5ce9e8b6b0bd' => 35, // 4Hrs2
+                        '70e9c16a-a37b-6619-47c4-5cf5fae8524e' => 36, // SDay1
+                        '8a46755c-6aae-31e4-18bc-5ce9e34c1e56' => 36, // SDay2
+                        '8d80fd7b-0430-cb11-8e5f-5ce9e8aff4a9' => 37, // Expr1
+                        '8dde0ffb-3587-6056-fb3e-5cf5fb98c335' => 37, // Expr2
+                        '88110327-4529-d804-bf6c-5ce9e81c0c66' => 38, // Stan1
+                        '5695b752-5849-8193-86d8-5cf5fb64eaeb' => 38, // Stan2
+                        '14046694-8fe2-547b-9983-5ce9e872df65' => 39, // Econ1
+                        'be621fa0-cd57-7bc4-0e60-5cf5fb03e541' => 39, // Econ2
+                    ];
+                    $params[$i]['shipmentType'] = $shipmentType[$params[$i]['shipmentType']];
+                    $result = self::calculatePricing($params[$i]);
+                    $data[] = array_merge($params[$i], $result);
+                }
+            }
+            $this->apiResponse['data'] = $data;
+        }
+        return $this->createResponse();
+    }
+
     public function getPricingNewAction()
     {
         //$weight = ($dataList['width'] * $dataList['height'] * $dataList['length']) / $shipmentType->getVolumetricNumber();
