@@ -37,17 +37,17 @@ class DomesticPricingController extends CoreController {
          * @param $domesticPricingManager
          */
 
-    const NOI_TINH = 5;
-    const NOI_MIEN = 6;
-    const LIEN_MIEN = 8;
-    const LIEN_MIEN_DB = 7;
+    protected $noi_tinh = 5;
+    protected $noi_mien = 6;
+    protected $lien_mien = 8;
+    protected $lien_mien_db = 7;
 
     /*
      * 15 => Đà Nẵng
      * 24 => Hà Nội
      * 29 => Hồ Chí Minh
      */
-    const CITY_DB = [15, 24, 29];
+    protected $city_db = [15, 24, 29];
 
     public function __construct($entityManager, $domesticPricingManager) {
         parent::__construct($entityManager);
@@ -183,43 +183,30 @@ class DomesticPricingController extends CoreController {
             $data = $this->getRequestData();
 
             // Check shipment id V2
-            $shipmentType = $data['shipmentType'];
-            switch ($shipmentType) {
-                case 'd0ee2e12-87da-536c-0014-5cf5fa5fe86e': // 4Hrs1
-                case '9b4247a7-bb65-dbd5-5322-5ce9e8b6b0bd': // 4Hrs2
-                    $data['shipmentType'] = 35;
-                    break;
-                case '70e9c16a-a37b-6619-47c4-5cf5fae8524e': // SDay1
-                case '8a46755c-6aae-31e4-18bc-5ce9e34c1e56': // SDay2
-                    $data['shipmentType'] = 36;
-                    break;
-                case '8d80fd7b-0430-cb11-8e5f-5ce9e8aff4a9': // Expr1
-                case '8dde0ffb-3587-6056-fb3e-5cf5fb98c335': // Expr2
-                    $data['shipmentType'] = 37;
-                    break;
-                case '88110327-4529-d804-bf6c-5ce9e81c0c66': // Stan1
-                case '5695b752-5849-8193-86d8-5cf5fb64eaeb': // Stan2
-                    $data['shipmentType'] = 38;
-                    break;
-                case '14046694-8fe2-547b-9983-5ce9e872df65': // Econ1
-                case 'be621fa0-cd57-7bc4-0e60-5cf5fb03e541': // Econ2
-                    $data['shipmentType'] = 39;
-                    break;
-                default:
-                    $data['shipmentType'] = 0;
-                    break;
-            }
+            $shipmentType = [
+                'd0ee2e12-87da-536c-0014-5cf5fa5fe86e' => 35, // 4Hrs1
+                '9b4247a7-bb65-dbd5-5322-5ce9e8b6b0bd' => 35, // 4Hrs2
+                '70e9c16a-a37b-6619-47c4-5cf5fae8524e' => 36, // SDay1
+                '8a46755c-6aae-31e4-18bc-5ce9e34c1e56' => 36, // SDay2
+                '8d80fd7b-0430-cb11-8e5f-5ce9e8aff4a9' => 37, // Expr1
+                '8dde0ffb-3587-6056-fb3e-5cf5fb98c335' => 37, // Expr2
+                '88110327-4529-d804-bf6c-5ce9e81c0c66' => 38, // Stan1
+                '5695b752-5849-8193-86d8-5cf5fb64eaeb' => 38, // Stan2
+                '14046694-8fe2-547b-9983-5ce9e872df65' => 39, // Econ1
+                'be621fa0-cd57-7bc4-0e60-5cf5fb03e541' => 39, // Econ2
+            ];
+            $data['shipmentType'] = $shipmentType[$data['shipmentType']];
             /*$paramList = [
                 'pickupCity',   'pickupDistrict',   'pickupWard',   'rasPickup',
                 'deliveryCity', 'deliveryDistrict', 'deliveryWard', 'rasDelivery',
-                'shipmentType', 'weight'
+                'shipmentType', 'weight',           'pickupDate'
             ];
-            $result = self::checkParamPost($data, $paramList);
+            $result = $this->checkParamPost($data, $paramList);
             if ($result === false) {
                 return;
             }*/
-            $result = self::calculatePricing($data);
-            $this->apiResponse['data'] = $result;
+            $result = $this->calculatePricing($data);
+            $this->apiResponse = $result;
         }
         return $this->createResponse();;
     }
@@ -235,10 +222,10 @@ class DomesticPricingController extends CoreController {
         $where = ['is_deleted' => 0, 'status' => 1];
 
         // Get Shipment Info
-        if ($dataList['shipmentType'] === 0)
-            return ['error' => true, 'msg' => 'Shipment Type is wrong'];
         $whereMerge = array_merge($where, ['id' => $dataList['shipmentType']]);
         $shipmentType = $this->entityManager->getRepository(ShipmentType::class)->findOneBy($whereMerge);
+        if (empty($shipmentType))
+            return ['error' => true, 'message' => 'Shipment Type is wrong'];
         $carrierI = $shipmentType->getCarrier()->getId();
         $serviceId = $shipmentType->getService()->getId();
         $categoryId = $shipmentType->getCategory()->getId();
@@ -269,30 +256,32 @@ class DomesticPricingController extends CoreController {
 
         // Check Area Type shipment
         if ($pickupCity->getId() === $deliveryCity->getId()) {
-            $areaType = self::NOI_TINH;
-        } elseif (in_array($pickupCity->getId(), self::CITY_DB) && in_array($deliveryCity->getId(), self::CITY_DB)) {
-            $areaType = self::LIEN_MIEN_DB;
+            $areaType = $this->noi_tinh;
+        } elseif (in_array($pickupCity->getId(), $this->city_db) && in_array($deliveryCity->getId(), $this->city_db)) {
+            $areaType = $this->lien_mien_db;
         } else {
             $pickupArea = $this->entityManager->getRepository(DomesticAreaCity::class)->findOneBy(['is_deleted' => 0, 'city_id' => $pickupCity->getId()]);
             $deliveryArea = $this->entityManager->getRepository(DomesticAreaCity::class)->findOneBy(['is_deleted' => 0, 'city_id' => $deliveryCity->getId()]);
-            if ($pickupArea->getId() === $deliveryArea->getId()) {
-                $areaType = self::NOI_MIEN;
+            if ($pickupArea->getDomesticAreaId() === $deliveryArea->getDomesticAreaId()) {
+                $areaType = $this->noi_mien;
             } else {
-                $areaType = self::LIEN_MIEN;
+                $areaType = $this->lien_mien;
             }
         }
-
+        
         // Get Price
         $wherePrice = [
             'carrier_id' => $carrierI,
             'category_id' => $categoryId,
             'service_id' => $serviceId,
-            'today' => date('Y-m-d H:i:s'),
+            'today' => !empty($dataList['pickupDate']) ? $dataList['pickupDate'] : date('Y-m-d H:i:s'),
         ];
         if (!empty($dataList['customer_id'])) {
             $wherePrice['customer_id'] = $dataList['customer_id'];
         }
         $pricing = $this->entityManager->getRepository(DomesticPricing::class)->getPriceId($wherePrice);
+        if (empty($pricing))
+            return ['error' => true, 'message' => 'Pricing not found'];
 
         // Get Range Weight info
         $whereRange = [
@@ -313,30 +302,22 @@ class DomesticPricingController extends CoreController {
         $priceOver = $this->entityManager->getRepository(DomesticRangeWeight::class)->getRangeWeightOver($whereRange);
         if (!empty($priceOver)) {
             if (count($priceOver) != 1)
-                return ['error' => true, 'msg' => 'Price over have more than 2 record'];
-            $whereRange['weight'] = $priceOver[0]['from'] - 0.01;
+                return ['error' => true, 'message' => 'Price over have more than 2 record'];
+            $whereRange['weight'] = $priceOver[0]['from'];
 
             $wherePriceDetail['domestic_range_weight'] = $priceOver[0]['id'];
             $priceDataOver = $this->entityManager->getRepository(DomesticPricingData::class)->findOneBy($wherePriceDetail);
-            $over = [
-                'where' => $wherePriceDetail,
-                'data' => $priceDataOver->getValue(),
-            ];
         }
 
         // Price Normal
         $priceNormal = $this->entityManager->getRepository(DomesticRangeWeight::class)->getRangeWeightNormal($whereRange);
         if (count($priceNormal) != 1)
-            return ['error' => true, 'msg' => 'Price normal have more than 2 record'];
+            return ['error' => true, 'message' => 'Price normal have more than 2 record'];
         if (count($priceNormal) <= 0 && count($priceOver) <= 0)
-            return ['error' => true, 'msg' => "Range weight not found"];
+            return ['error' => true, 'message' => "Range weight not found"];
 
         $wherePriceDetail['domestic_range_weight'] = $priceNormal[0]['id'];
         $priceDataNormal = $this->entityManager->getRepository(DomesticPricingData::class)->findOneBy($wherePriceDetail);
-        $normal = [
-            'where' => $wherePriceDetail,
-            'data' => $priceDataNormal->getValue(),
-        ];
         // Calculate Price
         // Case Over
         $feeOver = 0;
