@@ -37,7 +37,7 @@ $router = [
             'type' => StaticRoute::class,
             'options' => [
                 'verb' => 'POST',
-                'route' => '/pricing/domestic[/:action]',
+                'route' => '/pricing/calculatev1[/:action]',
                 'constraints' => [
                     'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
                 ],
