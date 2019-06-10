@@ -196,7 +196,7 @@ class DomesticPricingController extends CoreController {
             $data['shipmentType'] = $shipmentType[$data['shipmentType']];
 
             $result = $this->calculatePricingFromV1($data);
-            $this->apiResponse = $result;
+            $this->apiResponse['data'] = $result;
         }
         return $this->createResponse();;
     }
@@ -243,8 +243,11 @@ class DomesticPricingController extends CoreController {
         // Get Shipment Info
         $whereMerge = array_merge($where, ['id' => $dataList['shipmentType']]);
         $shipmentType = $this->entityManager->getRepository(ShipmentType::class)->findOneBy($whereMerge);
-        if (empty($shipmentType))
-            return ['error' => true, 'message' => 'Shipment Type is wrong'];
+        if (empty($shipmentType)) {
+            $this->error_code = 0;
+            $this->apiResponse['message'] = "Shipment Type not found";
+            return [];
+        }
         $carrierI = $shipmentType->getCarrier()->getId();
         $serviceId = $shipmentType->getService()->getId();
         $categoryId = $shipmentType->getCategory()->getId();
@@ -281,8 +284,11 @@ class DomesticPricingController extends CoreController {
             $wherePrice['customer_id'] = $dataList['customer_id'];
         }
         $pricing = $this->entityManager->getRepository(DomesticPricing::class)->getPriceId($wherePrice);
-        if (empty($pricing))
-            return ['error' => true, 'message' => 'Pricing not found'];
+        if (empty($pricing)) {
+            $this->error_code = 0;
+            $this->apiResponse['message'] = "Pricing not found";
+            return [];
+        }
 
         // Get Range Weight info
         $whereRange = [
@@ -302,8 +308,11 @@ class DomesticPricingController extends CoreController {
         // Price Over
         $priceOver = $this->entityManager->getRepository(DomesticRangeWeight::class)->getRangeWeightOver($whereRange);
         if (!empty($priceOver)) {
-            if (count($priceOver) != 1)
-                return ['error' => true, 'message' => 'Price over have more than 2 record'];
+            if (count($priceOver) != 1) {
+                $this->error_code = 0;
+                $this->apiResponse['message'] = "Pricing incorrect";
+                return [];
+            }
             $whereRange['weight'] = $priceOver[0]['from'];
 
             $wherePriceDetail['domestic_range_weight'] = $priceOver[0]['id'];
@@ -312,10 +321,16 @@ class DomesticPricingController extends CoreController {
 
         // Price Normal
         $priceNormal = $this->entityManager->getRepository(DomesticRangeWeight::class)->getRangeWeightNormal($whereRange);
-        if (count($priceNormal) != 1)
-            return ['error' => true, 'message' => 'Price normal have more than 2 record'];
-        if (count($priceNormal) <= 0 && count($priceOver) <= 0)
-            return ['error' => true, 'message' => "Range weight not found"];
+        if (count($priceNormal) != 1) {
+            $this->error_code = 0;
+            $this->apiResponse['message'] = "Pricing incorrect";
+            return [];
+        }
+        if (count($priceNormal) <= 0 && count($priceOver) <= 0) {
+            $this->error_code = 0;
+            $this->apiResponse['message'] = "Range Weight incorrect";
+            return [];
+        }
 
         $wherePriceDetail['domestic_range_weight'] = $priceNormal[0]['id'];
         $priceDataNormal = $this->entityManager->getRepository(DomesticPricingData::class)->findOneBy($wherePriceDetail);
@@ -396,9 +411,11 @@ class DomesticPricingController extends CoreController {
         $feeService = $feePickUp + $feeOver + $feeNormal;
         $total = ($feeService + $feeVas) * 1.1;
 
+        $this->error_code = 1;
+        $this->apiResponse['message'] = "";
         return [
             'total' => $total,
-            'fee_service' => $feeVas,
+            'fee_service' => $feeService,
             'fee_vas' => $feeVas,
             'fee_over' => $feeOver,
             'fee_normal' => $feeNormal,
