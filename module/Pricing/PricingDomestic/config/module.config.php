@@ -37,7 +37,10 @@ $router = [
             'type' => StaticRoute::class,
             'options' => [
                 'verb' => 'POST',
-                'route' => '/pricing/domestic/getPricingOld',
+                'route' => '/pricing/calculatev1[/:action]',
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                ],
                 'defaults' => [
                     'controller' => Controller\DomesticPricingController::class,
                     'action' => 'getPricingOld',
