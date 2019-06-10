@@ -2,8 +2,6 @@
 namespace PricingDomestic\Controller;
 
 use Address\Entity\City;
-use Address\Entity\District;
-use Address\Entity\Ward;
 use Core\Controller\CoreController;
 use Doctrine\ORM\EntityManager;
 use Management\Entity\FieldVas;
@@ -196,16 +194,8 @@ class DomesticPricingController extends CoreController {
                 'be621fa0-cd57-7bc4-0e60-5cf5fb03e541' => 39, // Econ2
             ];
             $data['shipmentType'] = $shipmentType[$data['shipmentType']];
-            /*$paramList = [
-                'pickupCity',   'pickupDistrict',   'pickupWard',   'rasPickup',
-                'deliveryCity', 'deliveryDistrict', 'deliveryWard', 'rasDelivery',
-                'shipmentType', 'weight',           'pickupDate'
-            ];
-            $result = $this->checkParamPost($data, $paramList);
-            if ($result === false) {
-                return;
-            }*/
-            $result = $this->calculatePricing($data);
+
+            $result = $this->calculatePricingFromV1($data);
             $this->apiResponse = $result;
         }
         return $this->createResponse();;
@@ -231,7 +221,7 @@ class DomesticPricingController extends CoreController {
                         'be621fa0-cd57-7bc4-0e60-5cf5fb03e541' => 39, // Econ2
                     ];
                     $params[$i]['shipmentType'] = $shipmentType[$params[$i]['shipmentType']];
-                    $result = self::calculatePricing($params[$i]);
+                    $result = $this->calculatePricingFromV1($params[$i]);
                     $data[] = array_merge($params[$i], $result);
                 }
             }
@@ -245,7 +235,7 @@ class DomesticPricingController extends CoreController {
         //$weight = ($dataList['width'] * $dataList['height'] * $dataList['length']) / $shipmentType->getVolumetricNumber();
     }
 
-    public function calculatePricing($dataList)
+    public function calculatePricingFromV1($dataList)
     {
         // Init
         $where = ['is_deleted' => 0, 'status' => 1];
@@ -259,29 +249,11 @@ class DomesticPricingController extends CoreController {
         $serviceId = $shipmentType->getService()->getId();
         $categoryId = $shipmentType->getCategory()->getId();
 
-        // Get pickup City, District, Ward
+        // Get City
         $whereMerge = array_merge($where, ['name' => $dataList['pickupCity']]);
         $pickupCity = $this->entityManager->getRepository(City::class)->findOneBy($whereMerge);
-        $whereMerge = array_merge($where, ['name' => $dataList['pickupDistrict'], 'city_id' => $pickupCity->getId()]);
-        $pickupDistrict = $this->entityManager->getRepository(District::class)->findOneBy($whereMerge);
-        $pickupRas = $pickupDistrict->getRas();
-        if (!empty($dataList['pickupWard'])) {
-            $whereMerge = array_merge($where, ['name' => $dataList['pickupWard'], 'district_id' => $pickupDistrict->getId()]);
-            $pickupWard = $this->entityManager->getRepository(Ward::class)->findOneBy($whereMerge);
-            $pickupRas = $pickupWard->getRas();
-        }
-
-        // Get delivery City, District, Ward
         $whereMerge = array_merge($where, ['name' => $dataList['deliveryCity']]);
         $deliveryCity = $this->entityManager->getRepository(City::class)->findOneBy($whereMerge);
-        $whereMerge = array_merge($where, ['name' => $dataList['deliveryDistrict'], 'city_id' => $deliveryCity->getId()]);
-        $deliveryDistrict = $this->entityManager->getRepository(District::class)->findOneBy($whereMerge);
-        $deliveryRas = $deliveryDistrict->getRas();
-        if (!empty($dataList['deliveryWard'])) {
-            $whereMerge = array_merge($where, ['name' => $dataList['deliveryWard'], 'district_id' => $deliveryDistrict->getId()]);
-            $deliveryWard = $this->entityManager->getRepository(Ward::class)->findOneBy($whereMerge);
-            $deliveryRas = $deliveryWard->getRas();
-        }
 
         // Check Area Type shipment
         if ($pickupCity->getId() === $deliveryCity->getId()) {
@@ -320,7 +292,7 @@ class DomesticPricingController extends CoreController {
             'service_id' => $serviceId,
             'zone_id' => $areaType,
             'shipment_type_id' => $shipmentType->getId(),
-            'is_ras' => $deliveryRas
+            'is_ras' => $dataList['deliveryRas']
         ];
         $wherePriceDetail = [
             'is_deleted' => 0,
@@ -368,7 +340,7 @@ class DomesticPricingController extends CoreController {
         }
 
         // Pick RAS
-        if ($pickupRas === 1) {
+        if ($dataList['pickupRas'] == 1) {
             $feePickUp = 15000;
         } else {
             $feePickUp = 0;
@@ -421,28 +393,16 @@ class DomesticPricingController extends CoreController {
             }
         }
 
-        $feeService = $feePickUp + $feeOver + $feeNormal + $feeVas;
-        $total = $feeService * 1.1;
+        $feeService = $feePickUp + $feeOver + $feeNormal;
+        $total = ($feeService + $feeVas) * 1.1;
 
         return [
             'total' => $total,
+            'fee_service' => $feeVas,
             'fee_vas' => $feeVas,
             'fee_over' => $feeOver,
             'fee_normal' => $feeNormal,
             'fee_pickup_ras' => $feePickUp,
         ];
-    }
-
-    private function checkParamPost($dataPost,$fieldRequire)
-    {
-        $flag = true;
-        $field = [];
-        foreach ($fieldRequire as $obj) {
-            if (!(array_key_exists($obj, $dataPost))) {
-                $flag = false;
-                $field[] = $obj;
-            }
-        }
-        return ['status' => $flag, 'field' => $field ];
     }
 }
