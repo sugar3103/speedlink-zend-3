@@ -2,8 +2,6 @@
 namespace PricingDomestic\Controller;
 
 use Address\Entity\City;
-use Address\Entity\District;
-use Address\Entity\Ward;
 use Core\Controller\CoreController;
 use Doctrine\ORM\EntityManager;
 use Management\Entity\FieldVas;
@@ -196,19 +194,40 @@ class DomesticPricingController extends CoreController {
                 'be621fa0-cd57-7bc4-0e60-5cf5fb03e541' => 39, // Econ2
             ];
             $data['shipmentType'] = $shipmentType[$data['shipmentType']];
-            /*$paramList = [
-                'pickupCity',   'pickupDistrict',   'pickupWard',   'rasPickup',
-                'deliveryCity', 'deliveryDistrict', 'deliveryWard', 'rasDelivery',
-                'shipmentType', 'weight',           'pickupDate'
-            ];
-            $result = $this->checkParamPost($data, $paramList);
-            if ($result === false) {
-                return;
-            }*/
-            $result = $this->calculatePricing($data);
-            $this->apiResponse = $result;
+
+            $result = $this->calculatePricingFromV1($data);
+            $this->apiResponse['data'] = $result;
         }
         return $this->createResponse();;
+    }
+
+    public function getMultiPricingOldAction() {
+        if ($this->getRequest()->isPost()) {
+            $params = $this->getRequestData();
+            $data = array();
+            if (count($params) > 0) {
+                for($i = 0; $i < count($params); $i++) {
+                    // Check shipment id V2
+                    $shipmentType = [
+                        'd0ee2e12-87da-536c-0014-5cf5fa5fe86e' => 35, // 4Hrs1
+                        '9b4247a7-bb65-dbd5-5322-5ce9e8b6b0bd' => 35, // 4Hrs2
+                        '70e9c16a-a37b-6619-47c4-5cf5fae8524e' => 36, // SDay1
+                        '8a46755c-6aae-31e4-18bc-5ce9e34c1e56' => 36, // SDay2
+                        '8d80fd7b-0430-cb11-8e5f-5ce9e8aff4a9' => 37, // Expr1
+                        '8dde0ffb-3587-6056-fb3e-5cf5fb98c335' => 37, // Expr2
+                        '88110327-4529-d804-bf6c-5ce9e81c0c66' => 38, // Stan1
+                        '5695b752-5849-8193-86d8-5cf5fb64eaeb' => 38, // Stan2
+                        '14046694-8fe2-547b-9983-5ce9e872df65' => 39, // Econ1
+                        'be621fa0-cd57-7bc4-0e60-5cf5fb03e541' => 39, // Econ2
+                    ];
+                    $params[$i]['shipmentType'] = $shipmentType[$params[$i]['shipmentType']];
+                    $result = $this->calculatePricingFromV1($params[$i]);
+                    $data[] = array_merge($params[$i], $result);
+                }
+            }
+            $this->apiResponse['data'] = $data;
+        }
+        return $this->createResponse();
     }
 
     public function getPricingNewAction()
@@ -216,7 +235,7 @@ class DomesticPricingController extends CoreController {
         //$weight = ($dataList['width'] * $dataList['height'] * $dataList['length']) / $shipmentType->getVolumetricNumber();
     }
 
-    public function calculatePricing($dataList)
+    private function calculatePricingFromV1($dataList)
     {
         // Init
         $where = ['is_deleted' => 0, 'status' => 1];
@@ -230,29 +249,11 @@ class DomesticPricingController extends CoreController {
         $serviceId = $shipmentType->getService()->getId();
         $categoryId = $shipmentType->getCategory()->getId();
 
-        // Get pickup City, District, Ward
+        // Get City
         $whereMerge = array_merge($where, ['name' => $dataList['pickupCity']]);
         $pickupCity = $this->entityManager->getRepository(City::class)->findOneBy($whereMerge);
-        $whereMerge = array_merge($where, ['name' => $dataList['pickupDistrict'], 'city_id' => $pickupCity->getId()]);
-        $pickupDistrict = $this->entityManager->getRepository(District::class)->findOneBy($whereMerge);
-        $pickupRas = $pickupDistrict->getRas();
-        if (!empty($dataList['pickupWard'])) {
-            $whereMerge = array_merge($where, ['name' => $dataList['pickupWard'], 'district_id' => $pickupDistrict->getId()]);
-            $pickupWard = $this->entityManager->getRepository(Ward::class)->findOneBy($whereMerge);
-            $pickupRas = $pickupWard->getRas();
-        }
-
-        // Get delivery City, District, Ward
         $whereMerge = array_merge($where, ['name' => $dataList['deliveryCity']]);
         $deliveryCity = $this->entityManager->getRepository(City::class)->findOneBy($whereMerge);
-        $whereMerge = array_merge($where, ['name' => $dataList['deliveryDistrict'], 'city_id' => $deliveryCity->getId()]);
-        $deliveryDistrict = $this->entityManager->getRepository(District::class)->findOneBy($whereMerge);
-        $deliveryRas = $deliveryDistrict->getRas();
-        if (!empty($dataList['deliveryWard'])) {
-            $whereMerge = array_merge($where, ['name' => $dataList['deliveryWard'], 'district_id' => $deliveryDistrict->getId()]);
-            $deliveryWard = $this->entityManager->getRepository(Ward::class)->findOneBy($whereMerge);
-            $deliveryRas = $deliveryWard->getRas();
-        }
 
         // Check Area Type shipment
         if ($pickupCity->getId() === $deliveryCity->getId()) {
@@ -291,7 +292,7 @@ class DomesticPricingController extends CoreController {
             'service_id' => $serviceId,
             'zone_id' => $areaType,
             'shipment_type_id' => $shipmentType->getId(),
-            'is_ras' => $deliveryRas
+            'is_ras' => $dataList['deliveryRas']
         ];
         $wherePriceDetail = [
             'is_deleted' => 0,
@@ -302,7 +303,7 @@ class DomesticPricingController extends CoreController {
         $priceOver = $this->entityManager->getRepository(DomesticRangeWeight::class)->getRangeWeightOver($whereRange);
         if (!empty($priceOver)) {
             if (count($priceOver) != 1)
-                return ['error' => true, 'message' => 'Price over have more than 2 record'];
+                return ['error' => true, 'message' => 'Price incorrect'];
             $whereRange['weight'] = $priceOver[0]['from'];
 
             $wherePriceDetail['domestic_range_weight'] = $priceOver[0]['id'];
@@ -312,7 +313,7 @@ class DomesticPricingController extends CoreController {
         // Price Normal
         $priceNormal = $this->entityManager->getRepository(DomesticRangeWeight::class)->getRangeWeightNormal($whereRange);
         if (count($priceNormal) != 1)
-            return ['error' => true, 'message' => 'Price normal have more than 2 record'];
+            return ['error' => true, 'message' => 'Price incorrect'];
         if (count($priceNormal) <= 0 && count($priceOver) <= 0)
             return ['error' => true, 'message' => "Range weight not found"];
 
@@ -339,7 +340,7 @@ class DomesticPricingController extends CoreController {
         }
 
         // Pick RAS
-        if ($pickupRas === 1) {
+        if ($dataList['pickupRas'] == 1) {
             $feePickUp = 15000;
         } else {
             $feePickUp = 0;
@@ -392,28 +393,16 @@ class DomesticPricingController extends CoreController {
             }
         }
 
-        $feeService = $feePickUp + $feeOver + $feeNormal + $feeVas;
-        $total = $feeService * 1.1;
+        $feeService = $feePickUp + $feeOver + $feeNormal;
+        $total = ($feeService + $feeVas) * 1.1;
 
         return [
             'total' => $total,
+            'fee_service' => $feeService,
             'fee_vas' => $feeVas,
             'fee_over' => $feeOver,
             'fee_normal' => $feeNormal,
             'fee_pickup_ras' => $feePickUp,
         ];
-    }
-
-    private function checkParamPost($dataPost,$fieldRequire)
-    {
-        $flag = true;
-        $field = [];
-        foreach ($fieldRequire as $obj) {
-            if (!(array_key_exists($obj, $dataPost))) {
-                $flag = false;
-                $field[] = $obj;
-            }
-        }
-        return ['status' => $flag, 'field' => $field ];
     }
 }
