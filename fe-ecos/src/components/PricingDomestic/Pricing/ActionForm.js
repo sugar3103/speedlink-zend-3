@@ -164,7 +164,7 @@ class ActionForm extends Component {
   render() {
     const { handleSubmit, pricing, 
       customer, carrier, service, saleman, approvedBy, 
-      disableApprovalStatus,
+      disableApprovalStatus, disableApprovalBy,
       loading
     } = this.props;
     const { messages } = this.props.intl;
@@ -353,7 +353,7 @@ class ActionForm extends Component {
                   component={renderSelectField}
                   options={approvedBy.items && this.showOptionUser(approvedBy.items)}
                   clearable={false}
-                  disabled={disabledAction}
+                  disabled={disabledAction || disableApprovalBy}
                 />
               </div>
             </div>
@@ -405,8 +405,12 @@ const mapStateToProps = (state, props) => {
   }
 
   let disableApprovalStatus = true;
+  let disableApprovalBy = false;
   if (currentUser && itemEditting && currentUser.id === itemEditting.approval_by) {
     disableApprovalStatus = false;
+  }
+  if (itemEditting && itemEditting.approval_status === 1) {
+    disableApprovalBy = true;
   }
 
   const selector = formValueSelector('pricing_domestic_action_form');
@@ -423,6 +427,7 @@ const mapStateToProps = (state, props) => {
     initialValues,
     is_private,
     disableApprovalStatus,
+    disableApprovalBy,
     loading
   }
 }
