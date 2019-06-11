@@ -193,7 +193,7 @@ class DomesticPricingController extends CoreController {
                 '14046694-8fe2-547b-9983-5ce9e872df65' => 39, // Econ1
                 'be621fa0-cd57-7bc4-0e60-5cf5fb03e541' => 39, // Econ2
             ];
-            $data['shipmentType'] = $shipmentType[$data['shipmentType']];
+            $data['shipmentType'] = isset($shipmentType[$data['shipmentType']]) ? $shipmentType[$data['shipmentType']] : 0;
 
             $result = $this->calculatePricingFromV1($data);
             $this->apiResponse['data'] = $result;
@@ -220,7 +220,7 @@ class DomesticPricingController extends CoreController {
                         '14046694-8fe2-547b-9983-5ce9e872df65' => 39, // Econ1
                         'be621fa0-cd57-7bc4-0e60-5cf5fb03e541' => 39, // Econ2
                     ];
-                    $params[$i]['shipmentType'] = $shipmentType[$params[$i]['shipmentType']];
+                    $params[$i]['shipmentType'] = isset($shipmentType[$params[$i]['shipmentType']]) ? $shipmentType[$params[$i]['shipmentType']] : 0;
                     $result = $this->calculatePricingFromV1($params[$i]);
                     $data[] = array_merge($params[$i], $result);
                 }
