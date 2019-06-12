@@ -232,7 +232,6 @@ class DomesticPricingController extends CoreController {
                         $result = ['error' => true, 'message' => 'Shipment Type is wrong'];
                     }
 
-                    $params[$i]['shipmentType'] = $shipmentType[$params[$i]['shipmentType']];
                     $result = $this->calculatePricingFromV1($params[$i]);
                     $data[] = array_merge($params[$i], $result);
                 }
