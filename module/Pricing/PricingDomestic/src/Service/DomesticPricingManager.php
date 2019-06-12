@@ -1,28 +1,17 @@
 <?php
 namespace PricingDomestic\Service;
 
+use Core\Utils\Utils;
+use Customer\Entity\Customer;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
+use OAuth\Entity\User;
 use PricingDomestic\Entity\DomesticPricing;
 use PricingDomestic\Servivce\DomesticPricingDataManager;
 use PricingDomestic\Servivce\DomesticPricingVasManager;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\ORMException;
-use Zend\Crypt\Password\Bcrypt;
-use Zend\Math\Rand;
-use Zend\View\Renderer\PhpRenderer;
-use Zend\Mime\Message as MimeMessage;
-use Zend\Mime\Part as MimePart;
-use Zend\Mail\Message;
-use Zend\Mail\Transport\Smtp as SmtpTransport;
-use Zend\Mail\Transport\SmtpOptions;
-use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
-use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-use Zend\Paginator\Paginator;
-use Zend\Authentication\Result;
-use Core\Utils\Utils;
-use OAuth\Entity\User;
-use Customer\Entity\Customer;
-use ServiceShipment\Entity\Category;
 use ServiceShipment\Entity\Carrier;
+use ServiceShipment\Entity\Category;
 use ServiceShipment\Entity\Service;
 
 /**
@@ -30,13 +19,14 @@ use ServiceShipment\Entity\Service;
  * and changing user password.
  * @package PricingDomestic\Service
  */
-class DomesticPricingManager {
+class DomesticPricingManager
+{
 
     /**
      * @var EntityManager
      */
     private $entityManager;
-   
+
     /**
      * @var DomesticPricingCityManager
      */
@@ -47,57 +37,57 @@ class DomesticPricingManager {
      * @param $domesticPricingDataManager
      * @param $domesticPricingVasManager
      */
-    public function __construct($entityManager, $domesticPricingDataManager,$domesticPricingVasManager)
+    public function __construct($entityManager, $domesticPricingDataManager, $domesticPricingVasManager)
     {
         $this->entityManager = $entityManager;
         $this->domesticPricingDataManager = $domesticPricingDataManager;
         $this->domesticPricingVasManager = $domesticPricingVasManager;
-    }   
+    }
 
     /**
      * Get List Domestic Pricing By Condition
      */
 
-    public function getListDomesticPricingByCondition($start, $limit, $sortField, $sortDirection,$filters)
+    public function getListDomesticPricingByCondition($start, $limit, $sortField, $sortDirection, $filters)
     {
         $pricings = [];
         $totalPricing = 0;
         //get orm Domestic Pricing
         $ormPricing = $this->entityManager->getRepository(DomesticPricing::class)
             ->getListDomesticPricingByCondition($start, $limit, $sortField, $sortDirection, $filters);
-        if($ormPricing){
+        if ($ormPricing) {
             //set offset,limit
             $ormPaginator = new ORMPaginator($ormPricing, true);
             $ormPaginator->setUseOutputWalkers(false);
             $totalPricing = $ormPaginator->count();
             //get domestic pricing list
-            
-            $pricings = $ormPaginator->getIterator()->getArrayCopy();
-            
-             foreach ($pricings as &$pricing) {
-                $pricing['effected_date'] =  ($pricing['effected_date']) ? Utils::checkDateFormat($pricing['effected_date'],'D M d Y H:i:s \G\M\T+0700') : '';
-                $pricing['expired_date'] =  ($pricing['expired_date']) ? Utils::checkDateFormat($pricing['expired_date'],'D M d Y H:i:s \G\M\T+0700') : '';
 
-                $pricing['created_at'] =  ($pricing['created_at']) ? Utils::checkDateFormat($pricing['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
-                $pricing['updated_at'] =  ($pricing['updated_at']) ? Utils::checkDateFormat($pricing['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+            $pricings = $ormPaginator->getIterator()->getArrayCopy();
+
+            foreach ($pricings as &$pricing) {
+                $pricing['effected_date'] = ($pricing['effected_date']) ? Utils::checkDateFormat($pricing['effected_date'], 'D M d Y H:i:s \G\M\T+0700') : '';
+                $pricing['expired_date'] = ($pricing['expired_date']) ? Utils::checkDateFormat($pricing['expired_date'], 'D M d Y H:i:s \G\M\T+0700') : '';
+
+                $pricing['created_at'] = ($pricing['created_at']) ? Utils::checkDateFormat($pricing['created_at'], 'D M d Y H:i:s \G\M\T+0700') : '';
+                $pricing['updated_at'] = ($pricing['updated_at']) ? Utils::checkDateFormat($pricing['updated_at'], 'D M d Y H:i:s \G\M\T+0700') : '';
                 $pricing['full_name_created'] = trim($pricing['full_name_created']);
                 $pricing['full_name_updated'] = trim($pricing['full_name_updated']);
             }
         }
-        
+
         //set data user
         $dataPricing = [
             'listPricing' => $pricings,
             'totalPricing' => $totalPricing,
         ];
-        
+
         return $dataPricing;
     }
 
     /**
      * Add Domestic Pricing
      */
-    public function addPricing($data,$user)
+    public function addPricing($data, $user)
     {
         $this->entityManager->beginTransaction();
         try {
@@ -109,77 +99,76 @@ class DomesticPricingManager {
             $domesticPricing->setApprovalStatus($data['approval_status']);
 
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
-            
-            $domesticPricing->setCreatedAt($addTime->format('Y-m-d H:i:s'));            
-            $domesticPricing->setUpdatedAt($addTime->format('Y-m-d H:i:s'));            
-            $this->getReferenced($domesticPricing,$user,'add', $data);
-            
+
+            $domesticPricing->setCreatedAt($addTime->format('Y-m-d H:i:s'));
+            $domesticPricing->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+            $this->getReferenced($domesticPricing, $user, 'add', $data);
+
             $this->entityManager->persist($domesticPricing);
-           
-            $this->entityManager->flush();        
-            
+
+            $this->entityManager->flush();
+
             $this->entityManager->commit();
-            
+
             return $domesticPricing;
 
         } catch (ORMException $e) {
             $this->entityManager->rollback();
-            return FALSE;
+            return false;
         }
     }
 
     /**
      * Update Domestic Pricing
      */
-    public function updatePricing($domesticPricing, $data,$user) {
+    public function updatePricing($domesticPricing, $data, $user)
+    {
 
         $this->entityManager->beginTransaction();
         try {
-          
+
             $domesticPricing->setEffectedDate(date('Y-m-d H:i:s', strtotime($data['effected_date'])));
             $domesticPricing->setExpiredDate(date('Y-m-d H:i:s', strtotime($data['expired_date'])));
             $domesticPricing->setIsPrivate($data['is_private']);
             $domesticPricing->setStatus($data['status']);
             $domesticPricing->setApprovalStatus($data['approval_status']);
-            
+
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $domesticPricing->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
-            $this->getReferenced($domesticPricing,$user,'update', $data);
+            $this->getReferenced($domesticPricing, $user, 'update', $data);
 
             // apply changes to database.
-            $this->entityManager->flush();            
+            $this->entityManager->flush();
             $this->entityManager->commit();
 
-           return $domesticPricing;
-        }
-        catch (ORMException $e) {
+            return $domesticPricing;
+        } catch (ORMException $e) {
             $this->entityManager->rollback();
-            return FALSE;
+            return false;
         }
     }
 
-     /**
+    /**
      * Delete Domestic Pricing
      */
-    public function deletePricing($domesticPricing, $user) {
+    public function deletePricing($domesticPricing, $user)
+    {
 
         $this->entityManager->beginTransaction();
         try {
             $domesticPricing->setIsDeleted(1);
-            $domesticPricing->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));            
+            $domesticPricing->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $domesticPricing->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
-            
+
             // apply changes to database.
             $this->entityManager->flush();
             // $last_id = $rangeweight->getBranchId();
             $this->entityManager->commit();
-            
-           
-        }
-        catch (ORMException $e) {
+
+        } catch (ORMException $e) {
             $this->entityManager->rollback();
-            return FALSE;
+            return false;
         }
     }
 
@@ -198,7 +187,7 @@ class DomesticPricingManager {
         if ($carrier == null) {
             throw new \Exception('Not found Carrier by ID');
         }
-        
+
         $category = $this->entityManager->getRepository(Category::class)->find($data['category_id']);
         if ($category == null) {
             throw new \Exception('Not found Category by ID');
@@ -222,43 +211,43 @@ class DomesticPricingManager {
         $domesticPricing->setApprovalBy($approval);
         $domesticPricing->setUpdatedBy($user_data);
         $domesticPricing->setCreatedBy($user_data);
-        
+
         //Create Name Pricing
-        $name = $carrier->getNameEn() .'.'. $service->getNameEn();
-        if($data['is_private'] == 0) {
+        $name = $carrier->getNameEn() . '.' . $service->getNameEn();
+        if ($data['is_private'] == 0) {
             $name .= '.Public';
-        } 
-        
-        if($data['customer_id']) {
+        }
+
+        if ($data['customer_id']) {
             $customer = $this->entityManager->getRepository(Customer::class)->find($data['customer_id']);
             if ($customer == null) {
                 throw new \Exception('Not found Customer by ID');
             }
 
             $domesticPricing->setCustomer($customer);
-            $name .= '.'. $customer->getName();
+            $name .= '.' . $customer->getName();
         }
+        if ($mode == 'add') {
+            $name = str_replace(' ', '', $name);
 
-        $name = str_replace(' ', '', $name);
+            $ormPricing = $this->entityManager->getRepository(DomesticPricing::class)->getListDomesticPricingByCondition(1, 0, 'name', 'asc', [
+                'name' => $name,
+            ]);
 
-        $ormPricing = $this->entityManager->getRepository(DomesticPricing::class)->getListDomesticPricingByCondition(1,0,'name','asc',[
-            'name' => $name
-        ]);
-            
-        $indexPricing = 1;
-        if($ormPricing){
-            //set offset,limit
-            $ormPaginator = new ORMPaginator($ormPricing, true);
-            $ormPaginator->setUseOutputWalkers(false);
-                 
-            $pricings = $ormPaginator->getIterator()->getArrayCopy();
-            if($pricings) {
-                $pricing = explode('.',$pricings[count($pricings) - 1]['name']);
-                $indexPricing = (int)$pricing[count($pricing)-1] + 1;
+            $indexPricing = 1;
+            if ($ormPricing) {
+                //set offset,limit
+                $ormPaginator = new ORMPaginator($ormPricing, true);
+                $ormPaginator->setUseOutputWalkers(false);
+
+                $pricings = $ormPaginator->getIterator()->getArrayCopy();
+                if ($pricings) {
+                    $pricing = explode('.', $pricings[count($pricings) - 1]['name']);
+                    $indexPricing = (int) $pricing[count($pricing) - 1] + 1;
+                }
             }
+
+            $domesticPricing->setName($name . '.' . $indexPricing);
         }
-        
-        $domesticPricing->setName($name.'.'.$indexPricing);
-        
     }
 }
