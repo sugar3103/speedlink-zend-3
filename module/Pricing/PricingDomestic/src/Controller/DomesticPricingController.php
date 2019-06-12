@@ -22,13 +22,13 @@ class DomesticPricingController extends CoreController {
          * @var EntityManager
         */
         protected $entityManager;
-    
+
         /**
          * Customer Manager.
          * @var DomesticPricingManager
          */
         protected $domesticPricingManager;
-    
+
         /**
          * CustomerController constructor.
          * @param $entityManager
@@ -56,26 +56,26 @@ class DomesticPricingController extends CoreController {
 
     public function indexAction()
     {
-        
+
         if ($this->getRequest()->isPost()) {
-            
+
             $fieldsMap = [
                 'id','name','carrier_id','is_private',
                 'category_id', 'service_id','effected_date',
                 'expired_date','saleman_id',
-                'customer_id','status','approval_status','approved_by'               
+                'customer_id','status','approval_status','approved_by'
             ];
 
-            list($start,$limit,$sortField,$sortDirection,$filters, $fields) = $this->getRequestData($fieldsMap);          
+            list($start,$limit,$sortField,$sortDirection,$filters, $fields) = $this->getRequestData($fieldsMap);
 
             //get list User by condition
-            $dataPricings = $this->domesticPricingManager->getListDomesticPricingByCondition($start, $limit, $sortField, $sortDirection,$filters); 
-            $result = $this->filterByField($dataPricings['listPricing'], $fields);     
-            
+            $dataPricings = $this->domesticPricingManager->getListDomesticPricingByCondition($start, $limit, $sortField, $sortDirection,$filters);
+            $result = $this->filterByField($dataPricings['listPricing'], $fields);
+
             $this->apiResponse =  array(
                 'data'      => $result,
                 'total'     => $dataPricings['totalPricing']
-            );                        
+            );
         }
         return $this->createResponse();
     }
@@ -84,11 +84,11 @@ class DomesticPricingController extends CoreController {
     {
         if ($this->getRequest()->isPost()) {
             $user = $this->tokenPayload;
-            
+
             //Create New Form Domestic Pricing
             $form = new PricingForm('create', $this->entityManager);
 
-            $form->setData($this->getRequestData());            
+            $form->setData($this->getRequestData());
             //validate form
             if ($form->isValid()) {
                 // get filtered and validated data
@@ -100,20 +100,20 @@ class DomesticPricingController extends CoreController {
             } else {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = "Error";
-                $this->apiResponse['data'] = $form->getMessages(); 
-            }      
+                $this->apiResponse['data'] = $form->getMessages();
+            }
         }
         return $this->createResponse();
     }
 
-    public function editAction() 
+    public function editAction()
     {
         if ($this->getRequest()->isPost()) {
             $user = $this->tokenPayload;
             $data = $this->getRequestData();
             if(isset($data['id'])) {
                 // Find existing Domestic Pricing in the database.
-                $pricing = $this->entityManager->getRepository(DomesticPricing::class)->find($data['id']);    
+                $pricing = $this->entityManager->getRepository(DomesticPricing::class)->find($data['id']);
                 if ($pricing) {
                     //Create Form Pricing
                     $form = new PricingForm('update', $this->entityManager, $pricing);
@@ -128,8 +128,8 @@ class DomesticPricingController extends CoreController {
                         $this->apiResponse['data'] = ['pricing_id' => $pricing->getId()];
                     } else {
                         $this->error_code = 0;
-                        $this->apiResponse['data'] = $form->getMessages(); 
-                    }      
+                        $this->apiResponse['data'] = $form->getMessages();
+                    }
                 } else {
                     $this->error_code = 0;
                     $this->apiResponse['message'] = "NOT_FOUND";
@@ -149,18 +149,18 @@ class DomesticPricingController extends CoreController {
             $data = $this->getRequestData();
             $user = $this->tokenPayload;
             if(isset($data['ids']) && count($data['ids']) > 0) {
-                
-                try { 
+
+                try {
                     foreach ($data['ids'] as $id) {
-                        $pricing = $this->entityManager->getRepository(DomesticPricing::class)->find($id);    
+                        $pricing = $this->entityManager->getRepository(DomesticPricing::class)->find($id);
                         if ($pricing == null) {
                             $this->error_code = 0;
-                            $this->apiResponse['message'] = "NOT_FOUND";                        
+                            $this->apiResponse['message'] = "NOT_FOUND";
                         } else {
                             $this->domesticPricingManager->deletePricing($pricing, $user);
-                        }  
+                        }
                     }
-                    
+
                     $this->apiResponse['message'] = "DELETE_SUCCESS_DOMESTIC_PRICING";
                 } catch (\Throwable $th) {
                     $this->error_code = 0;
@@ -193,7 +193,12 @@ class DomesticPricingController extends CoreController {
                 '14046694-8fe2-547b-9983-5ce9e872df65' => 39, // Econ1
                 'be621fa0-cd57-7bc4-0e60-5cf5fb03e541' => 39, // Econ2
             ];
-            $data['shipmentType'] = isset($shipmentType[$data['shipmentType']]) ? $shipmentType[$data['shipmentType']] : 0;
+
+            if (array_key_exists($data['shipmentType'], $shipmentType)) {
+                $data['shipmentType'] = $shipmentType[$data['shipmentType']];
+            } else {
+                $result = ['error' => true, 'message' => 'Shipment Type is wrong'];
+            }
 
             $result = $this->calculatePricingFromV1($data);
             $this->apiResponse['data'] = $result;
@@ -220,7 +225,14 @@ class DomesticPricingController extends CoreController {
                         '14046694-8fe2-547b-9983-5ce9e872df65' => 39, // Econ1
                         'be621fa0-cd57-7bc4-0e60-5cf5fb03e541' => 39, // Econ2
                     ];
-                    $params[$i]['shipmentType'] = isset($shipmentType[$params[$i]['shipmentType']]) ? $shipmentType[$params[$i]['shipmentType']] : 0;
+
+                    if (array_key_exists($params[$i]['shipmentType'], $shipmentType)) {
+                        $params[$i]['shipmentType'] = $shipmentType[$params[$i]['shipmentType']];
+                    } else {
+                        $result = ['error' => true, 'message' => 'Shipment Type is wrong'];
+                    }
+
+                    $params[$i]['shipmentType'] = $shipmentType[$params[$i]['shipmentType']];
                     $result = $this->calculatePricingFromV1($params[$i]);
                     $data[] = array_merge($params[$i], $result);
                 }
@@ -269,7 +281,7 @@ class DomesticPricingController extends CoreController {
                 $areaType = $this->lien_mien;
             }
         }
-        
+
         // Get Price
         $wherePrice = [
             'carrier_id' => $carrierI,
