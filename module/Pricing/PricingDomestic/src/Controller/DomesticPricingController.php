@@ -196,11 +196,11 @@ class DomesticPricingController extends CoreController {
 
             if (array_key_exists($data['shipmentType'], $shipmentType)) {
                 $data['shipmentType'] = $shipmentType[$data['shipmentType']];
+                $result = $this->calculatePricingFromV1($data);
             } else {
                 $result = ['error' => true, 'message' => 'Shipment Type is wrong'];
             }
 
-            $result = $this->calculatePricingFromV1($data);
             $this->apiResponse['data'] = $result;
         }
         return $this->createResponse();;
@@ -228,11 +228,11 @@ class DomesticPricingController extends CoreController {
 
                     if (array_key_exists($params[$i]['shipmentType'], $shipmentType)) {
                         $params[$i]['shipmentType'] = $shipmentType[$params[$i]['shipmentType']];
+                        $result = $this->calculatePricingFromV1($params[$i]);
                     } else {
                         $result = ['error' => true, 'message' => 'Shipment Type is wrong'];
                     }
 
-                    $result = $this->calculatePricingFromV1($params[$i]);
                     $data[] = array_merge($params[$i], $result);
                 }
             }
@@ -330,6 +330,9 @@ class DomesticPricingController extends CoreController {
 
         $wherePriceDetail['domestic_range_weight'] = $priceNormal[0]['id'];
         $priceDataNormal = $this->entityManager->getRepository(DomesticPricingData::class)->findOneBy($wherePriceDetail);
+        if (empty($priceDataNormal))
+            return ['error' => true, 'message' => 'Pricing data not found'];
+
         // Calculate Price
         // Case Over
         $feeOver = 0;
