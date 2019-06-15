@@ -47,6 +47,32 @@ class DomesticPricingController extends CoreController {
      */
     protected $city_db = [15, 24, 29];
 
+    // Check shipment id V2
+    protected $shipmentType = [
+        // Non Dox
+        'd0ee2e12-87da-536c-0014-5cf5fa5fe86e' => 35, // 4Hrs1
+        '9b4247a7-bb65-dbd5-5322-5ce9e8b6b0bd' => 35, // 4Hrs2
+        '70e9c16a-a37b-6619-47c4-5cf5fae8524e' => 36, // SDay1
+        '8a46755c-6aae-31e4-18bc-5ce9e34c1e56' => 36, // SDay2
+        '8d80fd7b-0430-cb11-8e5f-5ce9e8aff4a9' => 37, // Expr1
+        '8dde0ffb-3587-6056-fb3e-5cf5fb98c335' => 37, // Expr2
+        '88110327-4529-d804-bf6c-5ce9e81c0c66' => 38, // Stan1
+        '5695b752-5849-8193-86d8-5cf5fb64eaeb' => 38, // Stan2
+        '14046694-8fe2-547b-9983-5ce9e872df65' => 39, // Econ1
+        'be621fa0-cd57-7bc4-0e60-5cf5fb03e541' => 39, // Econ2
+        // Dox
+        '2f1e5bcf-b95b-cc97-8d5c-5d02015173ab' => 35, // 4H1
+        '1de8a746-64bc-58e4-4f42-5d02014ca4d8' => 35, // 4H2
+        '1db8e6f6-609e-80d4-f03f-5d02022fba5e' => 36, // NH1
+        'b185f87b-f35f-51f1-89d2-5d020282c2af' => 36, // NH2
+        'eaa559bb-4953-5f6b-1c94-5d0201febfa0' => 37, // TC1
+        '15c4126c-85f1-151b-66ea-5d0201a2d2c7' => 37, // TC2
+        '587dafbf-4c7d-9930-a22e-5d0201eeb0b5' => 38, // TK1
+        'e28dc049-3dff-7fba-e006-5d020105d1dd' => 38, // TK2
+        '55d4b595-9171-9bc9-73b5-5d020107f360' => 39, // TN1
+        '512e2203-caa3-2b4a-49f8-5d0201dab178' => 39, // TN2
+    ];
+
     public function __construct($entityManager, $domesticPricingManager) {
         parent::__construct($entityManager);
 
@@ -180,22 +206,8 @@ class DomesticPricingController extends CoreController {
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequestData();
 
-            // Check shipment id V2
-            $shipmentType = [
-                'd0ee2e12-87da-536c-0014-5cf5fa5fe86e' => 35, // 4Hrs1
-                '9b4247a7-bb65-dbd5-5322-5ce9e8b6b0bd' => 35, // 4Hrs2
-                '70e9c16a-a37b-6619-47c4-5cf5fae8524e' => 36, // SDay1
-                '8a46755c-6aae-31e4-18bc-5ce9e34c1e56' => 36, // SDay2
-                '8d80fd7b-0430-cb11-8e5f-5ce9e8aff4a9' => 37, // Expr1
-                '8dde0ffb-3587-6056-fb3e-5cf5fb98c335' => 37, // Expr2
-                '88110327-4529-d804-bf6c-5ce9e81c0c66' => 38, // Stan1
-                '5695b752-5849-8193-86d8-5cf5fb64eaeb' => 38, // Stan2
-                '14046694-8fe2-547b-9983-5ce9e872df65' => 39, // Econ1
-                'be621fa0-cd57-7bc4-0e60-5cf5fb03e541' => 39, // Econ2
-            ];
-
-            if (array_key_exists($data['shipmentType'], $shipmentType)) {
-                $data['shipmentType'] = $shipmentType[$data['shipmentType']];
+            if (array_key_exists($data['shipmentType'], $this->shipmentType)) {
+                $data['shipmentType'] = $this->shipmentType[$data['shipmentType']];
                 $result = $this->calculatePricingFromV1($data);
             } else {
                 $result = ['error' => true, 'message' => 'Shipment Type is wrong'];
@@ -212,22 +224,9 @@ class DomesticPricingController extends CoreController {
             $data = array();
             if (count($params) > 0) {
                 for($i = 0; $i < count($params); $i++) {
-                    // Check shipment id V2
-                    $shipmentType = [
-                        'd0ee2e12-87da-536c-0014-5cf5fa5fe86e' => 35, // 4Hrs1
-                        '9b4247a7-bb65-dbd5-5322-5ce9e8b6b0bd' => 35, // 4Hrs2
-                        '70e9c16a-a37b-6619-47c4-5cf5fae8524e' => 36, // SDay1
-                        '8a46755c-6aae-31e4-18bc-5ce9e34c1e56' => 36, // SDay2
-                        '8d80fd7b-0430-cb11-8e5f-5ce9e8aff4a9' => 37, // Expr1
-                        '8dde0ffb-3587-6056-fb3e-5cf5fb98c335' => 37, // Expr2
-                        '88110327-4529-d804-bf6c-5ce9e81c0c66' => 38, // Stan1
-                        '5695b752-5849-8193-86d8-5cf5fb64eaeb' => 38, // Stan2
-                        '14046694-8fe2-547b-9983-5ce9e872df65' => 39, // Econ1
-                        'be621fa0-cd57-7bc4-0e60-5cf5fb03e541' => 39, // Econ2
-                    ];
 
-                    if (array_key_exists($params[$i]['shipmentType'], $shipmentType)) {
-                        $params[$i]['shipmentType'] = $shipmentType[$params[$i]['shipmentType']];
+                    if (array_key_exists($params[$i]['shipmentType'], $this->shipmentType)) {
+                        $params[$i]['shipmentType'] = $this->shipmentType[$params[$i]['shipmentType']];
                         $result = $this->calculatePricingFromV1($params[$i]);
                     } else {
                         $result = ['error' => true, 'message' => 'Shipment Type is wrong'];
@@ -340,6 +339,15 @@ class DomesticPricingController extends CoreController {
             $weightOver = $dataList['weight'] - $priceOver[0]['from'];
             $dataList['weight'] = $priceOver[0]['from'];
             if ($priceOver[0]['calculate_unit'] === 1 && $priceOver[0]['unit'] > 0) {
+                if ($priceOver[0]['round_up'] > 0 && $weightOver <= $priceNormal[0]['to']) {
+                    $whole = floor($weightOver);
+                    $fraction = $weightOver - $whole;
+                    if ($fraction < $priceOver[0]['round_up']) {
+                        $weightOver = $whole + $priceOver[0]['round_up'];
+                    } else {
+                        $weightOver = $whole + 1;
+                    }
+                }
                 $feeOver = ($weightOver / $priceOver[0]['unit']) * $priceDataOver->getValue();
             } else {
                 $feeOver = $priceDataOver->getValue();
@@ -348,6 +356,15 @@ class DomesticPricingController extends CoreController {
 
         // Case Normal
         if ($priceNormal[0]['calculate_unit'] === 1) {
+            if ($priceNormal[0]['round_up'] > 0 && $dataList['weight'] <= $priceNormal[0]['to']) {
+                $whole = floor($dataList['weight']);
+                $fraction = $dataList['weight'] - $whole;
+                if ($fraction < $priceOver[0]['round_up']) {
+                    $dataList['weight'] = $whole + $priceOver[0]['round_up'];
+                } else {
+                    $dataList['weight'] = $whole + 1;
+                }
+            }
             $feeNormal = $feeOver = ($dataList['weight'] / $priceNormal[0]['unit']) * $priceDataNormal->getValue();
         } else {
             $feeNormal = $priceDataNormal->getValue();
