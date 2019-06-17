@@ -338,11 +338,11 @@ class DomesticPricingController extends CoreController {
         if (!empty($priceDataOver)) {
             $weightOver = $dataList['weight'] - $priceOver[0]['from'];
             $dataList['weight'] = $priceOver[0]['from'];
-            if ($priceOver[0]['calculate_unit'] === 1 && $priceOver[0]['unit'] > 0) {
-                if ($priceOver[0]['round_up'] > 0 && $weightOver <= $priceNormal[0]['to']) {
+            if ($priceOver[0]['calculate_unit'] === 1) {
+                if ($priceOver[0]['round_up'] > 0) {
                     $whole = floor($weightOver);
                     $fraction = $weightOver - $whole;
-                    if ($fraction < $priceOver[0]['round_up']) {
+                    if ($fraction <= $priceOver[0]['round_up']) {
                         $weightOver = $whole + $priceOver[0]['round_up'];
                     } else {
                         $weightOver = $whole + 1;
@@ -356,10 +356,10 @@ class DomesticPricingController extends CoreController {
 
         // Case Normal
         if ($priceNormal[0]['calculate_unit'] === 1) {
-            if ($priceNormal[0]['round_up'] > 0 && $dataList['weight'] <= $priceNormal[0]['to']) {
+            if ($priceNormal[0]['round_up'] > 0) {
                 $whole = floor($dataList['weight']);
                 $fraction = $dataList['weight'] - $whole;
-                if ($fraction < $priceOver[0]['round_up']) {
+                if ($fraction <= $priceOver[0]['round_up']) {
                     $dataList['weight'] = $whole + $priceOver[0]['round_up'];
                 } else {
                     $dataList['weight'] = $whole + 1;
