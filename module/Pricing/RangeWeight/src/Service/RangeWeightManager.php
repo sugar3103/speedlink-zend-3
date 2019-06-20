@@ -11,6 +11,7 @@ use RangeWeight\Entity\RangeWeight;
 use ServiceShipment\Entity\Carrier;
 use ServiceShipment\Entity\Service;
 use ServiceShipment\Entity\ShipmentType;
+use ServiceShipment\Entity\Category;
 
 /**
  * This service is responsible for adding/editing users
@@ -146,6 +147,15 @@ class RangeWeightManager
             }
 
             $rangeweight->setCustomer($customer);
+        }
+
+        if($data['category_id']) {
+            $category = $this->entityManager->getRepository(Category::class)->findOneBy(['id' => $data['customer_id'], 'is_deleted' => 0]);
+            if ($category == null) {
+                throw new \Exception('Not found Category by ID');
+            }
+
+            $rangeweight->setJoinCategory($category);
         }
 
         $user_data = $this->entityManager->getRepository(User::class)->find($user->id);
