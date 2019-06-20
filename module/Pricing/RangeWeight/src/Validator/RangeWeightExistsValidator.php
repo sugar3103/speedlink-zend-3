@@ -60,34 +60,29 @@ class RangeWeightExistsValidator extends AbstractValidator {
         }
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
-        // if($this->options['language'] === NULL) {
-        //     $rangeweight = $entityManager->getRepository(RangeWeight::class)->findOneByName($value);
-        // } else if($this->options['language'] === 'en') {
-        //     $rangeweight = $entityManager->getRepository(RangeWeight::class)->findOneBy(array('name_en' => $value));       
-        // }
+        if($this->options['language'] === NULL) {
+            $rangeweight = $entityManager->getRepository(RangeWeight::class)->findOneByName($value);
+        } else if($this->options['language'] === 'en') {
+            $rangeweight = $entityManager->getRepository(RangeWeight::class)->findOneBy(array('name_en' => $value));       
+        }
 
-        $rangeweight = $entityManager->getRepository(RangeWeight::class)->findOneBy(array('code' => $value));  
-
+       
         //English
         if ($this->options['rangeweight'] == null)
             $isValid = ($rangeweight == null);
         else {
-            if ($this->options['rangeweight']->getCode() != $value && $rangeweight != null)
+           
+            if($this->options['language'] === 'en') {
+                if ($this->options['rangeweight']->getNameEn() != $value && $rangeweight != null)
                     $isValid = false;
                 else
                     $isValid = true;
-
-            // if($this->options['language'] === 'en') {
-            //     if ($this->options['rangeweight']->getNameEn() != $value && $rangeweight != null)
-            //         $isValid = false;
-            //     else
-            //         $isValid = true;
-            // } else {
-            //     if ($this->options['rangeweight']->getName() != $value && $rangeweight != null)
-            //         $isValid = false;
-            //     else
-            //         $isValid = true;
-            // }
+            } else {
+                if ($this->options['rangeweight']->getName() != $value && $rangeweight != null)
+                    $isValid = false;
+                else
+                    $isValid = true;
+            }
         }
 
         // if there were an error, set error message.

@@ -61,7 +61,7 @@ class RangeWeightForm extends Form {
         $inputFilter = $this->getInputFilter();
         // Add input for "username" field.
         $inputFilter->add([
-            'name' => 'code',
+            'name' => 'name',
             'required' => true,
             'filters' => [
                 [
@@ -80,14 +80,41 @@ class RangeWeightForm extends Form {
                     'name' => RangeWeightExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'rangeweight' => $this->rangeweight
+                        'zone' => $this->rangeweight
                     ]
                 ]
             ]
         ]);
- 
+
         $inputFilter->add([
-            'name' => 'category',
+            'name' => 'name_en',
+            'required' => true,
+            'filters' => [
+                [
+                    'name' => StringTrim::class
+                ]
+            ],
+            'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'min' => 2,
+                        'max' => 50
+                    ]
+                ],
+                [
+                    'name' => RangeWeightExistsValidator::class,
+                    'options' => [
+                        'entityManager' => $this->entityManager,
+                        'zone' => $this->rangeweight,
+                        'language' => 'en'
+                    ]
+                ]
+            ]
+        ]);
+        
+        $inputFilter->add([
+            'name' => 'category_id',
             'required'  => true,
             'filters' => [
                 [
@@ -95,6 +122,7 @@ class RangeWeightForm extends Form {
                 ]
             ]           
         ]);
+
         $inputFilter->add([
             'name' => 'carrier_id',
             'required'  => true,
