@@ -3,7 +3,7 @@ namespace ZoneCode\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
- /**
+/**
  * ZoneCode
  *
  * @ORM\Table(name="zone_code", uniqueConstraints={@ORM\UniqueConstraint(name="unique_code", columns={"code"})})
@@ -20,14 +20,14 @@ class ZoneCode
      */
     private $id;
 
-     /**
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
-     /**
+    /**
      * @var string
      *
      * @ORM\Column(name="name_en", type="string", length=255, nullable=false)
@@ -309,18 +309,25 @@ class ZoneCode
     private $customer;
 
     /**
-     * 
+     *
      * @ORM\OneToOne(targetEntity="OAuth\Entity\User")
      * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      */
     protected $user_create;
 
     /**
-     * 
+     *
      * @ORM\OneToOne(targetEntity="OAuth\Entity\User")
      * @ORM\JoinColumn(name="updated_by", referencedColumnName="id", nullable=true)
      */
     protected $user_update;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="ServiceShipment\Entity\Category")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=true)
+     */
+    protected $join_category;
 
     /**
      * @return int
@@ -338,7 +345,6 @@ class ZoneCode
         $this->id = $id;
     }
 
-   
     /**
      * @return string
      */
@@ -746,7 +752,7 @@ class ZoneCode
         return $this->carrier;
     }
 
-     /**
+    /**
      * Set service.
      *
      * @param \ServiceShipment\Entity\Service|null $service
@@ -838,7 +844,7 @@ class ZoneCode
         return $this->destination_country;
     }
 
-     /**
+    /**
      * Set origin_city.
      *
      * @param \Address\Entity\City|null $origin_city
@@ -930,7 +936,7 @@ class ZoneCode
         return $this->destination_district;
     }
 
-     /**
+    /**
      * Set origin_ward.
      *
      * @param \Address\Entity\Ward|null $origin_ward
@@ -1047,4 +1053,24 @@ class ZoneCode
         return $this->user_update;
     }
 
+    /**
+     * Set Category
+     *
+     * @param \ServiceShipment\Entity\Category|null
+     */
+
+    public function setJoinCategory(\ServiceShipment\Entity\Category $join_category)
+    {
+        $this->join_category = $join_category;
+    }
+
+    /**
+     * Get Category
+     * @return \ServiceShipment\Entity\Category
+     */
+
+    public function getJoinCategory()
+    {
+        return $this->join_category;
+    }
 }

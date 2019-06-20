@@ -56,10 +56,15 @@ class ZoneCodeRepository extends EntityRepository
                 z.destination_district_id,
                 z.destination_ward_id,
 
-                c.code AS carrier_code,
-                s.code AS service_code,
-                st.code AS shipmenttype_code,
+                c.name AS carrier_name,
+                c.name_en AS carrier_name_en,
+                s.name AS service_name,
+                s.name_en AS service_name_en,
+                st.name AS shipment_type_name,
+                st.name_en AS shipment_type_name_en,
+                
                 cu.name AS customer_name,
+
                 oc.name AS origin_country_name,
                 oc.name_en AS origin_country_name_en,
                 dc.name AS destination_country_name,
@@ -76,6 +81,8 @@ class ZoneCodeRepository extends EntityRepository
                 ow.name_en AS origin_ward_name_en,
                 dw.name AS destination_ward_name,
                 dw.name_en AS destination_ward_name_en,
+                jc.name AS category_name,
+                jc.name_en AS category_name_en,
                 uc.username AS created_by,
                 ud.username AS updated_by,
                 CONCAT(COALESCE(uc.first_name,''), ' ', COALESCE(uc.last_name,'')) as full_name_created,
@@ -190,7 +197,8 @@ class ZoneCodeRepository extends EntityRepository
         ->leftJoin('z.origin_ward', 'ow')
         ->leftJoin('z.destination_ward', 'dw')
         ->leftJoin('z.user_create', 'uc')
-        ->leftJoin('z.user_update', 'ud');
+        ->leftJoin('z.user_update', 'ud')
+        ->leftJoin('z.join_category','jc');
             
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
