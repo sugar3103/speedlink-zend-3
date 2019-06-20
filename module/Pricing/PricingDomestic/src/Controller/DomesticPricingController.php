@@ -74,7 +74,8 @@ class DomesticPricingController extends CoreController {
     ];
 
     protected $customerId = [
-        '7fd8ca33-79f5-bb42-af80-5d084da574af' => 12
+        '7fd8ca33-79f5-bb42-af80-5d084da574af' => 12,
+        '2b29a565-8bf0-9ba2-2f43-58353d35278c' => 18
     ];
 
     public function __construct($entityManager, $domesticPricingManager) {
@@ -214,9 +215,6 @@ class DomesticPricingController extends CoreController {
             }
             if (array_key_exists($data['shipmentType'], $this->shipmentType)) {
                 $data['shipmentType'] = $this->shipmentType[$data['shipmentType']];
-                if (array_key_exists($data['customerId'], $this->customerId)) {
-                    $data['customerId'] = $this->customerId[$data['customerId']];
-                }
                 $result = $this->calculatePricingFromV1($data);
             } else {
                 $result = ['error' => true, 'message' => 'Shipment Type is wrong'];

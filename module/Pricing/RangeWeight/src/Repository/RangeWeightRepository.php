@@ -33,8 +33,7 @@ class RangeWeightRepository extends EntityRepository
             $queryBuilder = $this->buildRangeWeightQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select("
                 r.id,
-                r.code,
-                r.category,
+                r.category_id,
                 r.calculate_unit,
                 r.unit,
                 r.round_up,
@@ -91,16 +90,12 @@ class RangeWeightRepository extends EntityRepository
                 'alias' => 'r.is_private',
                 'operator' => 'eq'
             ],
-            'code' => [
-                'alias' => 'r.code',
-                'operator' => 'contains'
-            ],
             'carrier_id' => [
                 'alias' => 'r.carrier_id',
                 'operator' => 'eq'
             ],
-            'category' => [
-                'alias' => 'r.category',
+            'category_id' => [
+                'alias' => 'r.category_id',
                 'operator' => 'contains'
             ],
             'service_id' => [
