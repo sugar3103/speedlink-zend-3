@@ -20,12 +20,19 @@ class RangeWeight
      */
     private $id;
 
-    /**
+     /**
      * @var string
      *
-     * @ORM\Column(name="`code`", type="string", length=20, nullable=false)
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    private $code;
+    private $name;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="name_en", type="string", length=255, nullable=false)
+     */
+    private $name_en;
 
     /**
      * @var int
@@ -37,9 +44,9 @@ class RangeWeight
     /**
      * @var string
      *
-     * @ORM\Column(name="category", type="string", length=10, nullable=false, options={"fixed"=true,"comment"="Inbound, Outbound, Domestic"})
+     * @ORM\Column(name="category_id", type="string", length=10, nullable=false, options={"fixed"=true,"comment"="Inbound, Outbound, Domestic"})
      */
-    private $category;
+    private $category_id;
 
     /**
      * @var int
@@ -215,6 +222,12 @@ class RangeWeight
     protected $user_update;
 
     /**
+     * @ORM\OneToOne(targetEntity="ServiceShipment\Entity\Category")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=true)
+     */
+    protected $join_category;
+
+    /**
      * @return int
      */
     public function getId()
@@ -233,18 +246,35 @@ class RangeWeight
     /**
      * @return string
      */
-    public function getCode()
+    public function getNameEn()
     {
-        return $this->code;
+        return $this->name_en;
     }
 
     /**
      * @param string $code
      */
-    public function setCode($code)
+    public function setNameEn($name_en)
     {
-        $this->code = $code;
+        $this->name_en = $name_en;
     }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $code
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
 
     /**
      * @return int
@@ -265,17 +295,17 @@ class RangeWeight
     /**
      * @return string
      */
-    public function getCategory()
+    public function getCategoryId()
     {
-        return $this->category;
+        return $this->category_id;
     }
 
     /**
-     * @param string $category
+     * @param string $category_id
      */
-    public function setCategory($category)
+    public function setCategoryId($category_id)
     {
-        $this->category = $category;
+        $this->category_id = $category_id;
     }
 
     /**
@@ -690,4 +720,25 @@ class RangeWeight
         return $this->user_update;
     }
 
+    /**
+     * Set Category
+     * 
+     * @param \SerivceShipment\Entity\Category|null
+     */
+
+    public function setJoinCategory(\ServiceShipment\Entity\Category $join_category)
+    {
+        $this->join_category = $join_category;
+    }
+
+    /**
+     * Get Category
+     * 
+     * @return \ServiceShipment\Entity\Category|null
+     */
+
+    public function getJoinCategory()
+    {
+        return $this->join_category;
+    }
 }
