@@ -39,18 +39,19 @@ class RangeWeightController extends CoreController {
             $fieldsMap = [
               0 => 'id',
               1 => 'is_private',
-              2 => 'code',
-              3 => 'carrier_id',
-              4 => 'category',
-              5 => 'service_id',
-              6 => 'shipment_type_id',
-              7 => 'status',
-              8 => 'from',
-              9 => 'to',
-              10 => 'calculate_unit',
-              11 => 'round_up',
-              12 => 'created_at',
-              13 => 'customer'
+              2 => 'name',
+              3 => 'name_en',
+              4 => 'carrier_id',
+              5 => 'category_id',
+              6 => 'service_id',
+              7 => 'shipment_type_id',
+              8 => 'status',
+              9 => 'from',
+              10 => 'to',
+              11 => 'calculate_unit',
+              12 => 'round_up',
+              13 => 'created_at',
+              14 => 'customer_id'
             ];
 
             list($start,$limit,$sortField,$sortDirection,$filters) = $this->getRequestData($fieldsMap);          
@@ -80,7 +81,7 @@ class RangeWeightController extends CoreController {
       $user = $this->tokenPayload;
       $data = $this->getRequestData();
 
-      $check_exits = $this->entityManager->getRepository(RangeWeight::class)->findOneBy(array('carrier_id' => $data['carrier_id'], 'category' => $data['category'], 'service_id' => $data['service_id'], 'shipment_type_id' => $data['shipment_type_id'], 'code' => $data['code'], 'from' => $data['from'], 'to' => $data['to']));    
+      $check_exits = $this->entityManager->getRepository(RangeWeight::class)->findOneBy(array('carrier_id' => $data['carrier_id'], 'category_id' => $data['category_id'], 'service_id' => $data['service_id'], 'shipment_type_id' => $data['shipment_type_id'],'from' => $data['from'], 'to' => $data['to']));    
         if($check_exits)
         {
           $this->error_code = 0;
@@ -112,7 +113,7 @@ class RangeWeightController extends CoreController {
       $data = $this->getRequestData();
       $user = $this->tokenPayload;
       if(isset($data['id'])) {
-      $check_exits = $this->entityManager->getRepository(RangeWeight::class)->findOneBy(array('carrier_id' => $data['carrier_id'], 'category' => $data['category'], 'service_id' => $data['service_id'], 'shipment_type_id' => $data['shipment_type_id'], 'code' => $data['code'], 'from' => $data['from'], 'to' => $data['to']));    
+      $check_exits = $this->entityManager->getRepository(RangeWeight::class)->findOneBy(array('carrier_id' => $data['carrier_id'], 'category_id' => $data['category_id'], 'service_id' => $data['service_id'], 'shipment_type_id' => $data['shipment_type_id'], 'from' => $data['from'], 'to' => $data['to']));    
       if($check_exits)
       {
         $rangeweight_id = $check_exits->getId();
