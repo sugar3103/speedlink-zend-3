@@ -132,7 +132,7 @@ class List extends Component {
         {
           Header: messages['pri_dom.type'],
           accessor: "is_private",
-          width: 110,
+          width: 100,
           Cell: ({ original }) => {
             return (
               original.is_private ? messages['pri_dom.customer'] : messages['pri_dom.public']
@@ -143,7 +143,7 @@ class List extends Component {
         {
           Header: messages['pri_dom.carrier'],
           accessor: "carrier",
-          width: 120,
+          width: 100,
           Cell: ({ original }) => {
             return (
               locale === 'en-US' ? original.carrier_en : original.carrier
@@ -154,7 +154,7 @@ class List extends Component {
         {
           Header: messages['pri_dom.category'],
           accessor: "category",
-          width: 120,
+          width: 100,
           Cell: ({ original }) => {
             return (
               locale === 'en-US' ? original.category_en : original.category
@@ -165,7 +165,7 @@ class List extends Component {
         {
           Header: messages['pri_dom.service'],
           accessor: "service",
-          width: 120,
+          width: 100,
           Cell: ({ original }) => {
             return (
               locale === 'en-US' ? original.service_en : original.service
@@ -187,7 +187,7 @@ class List extends Component {
         {
           Header: messages['pri_dom.approved-status'],
           accessor: "zone",
-          width: 150,
+          width: 120,
           Cell: ({ original }) => {
             let status = messages['pri_dom.new'];
             switch (original.approval_status) {

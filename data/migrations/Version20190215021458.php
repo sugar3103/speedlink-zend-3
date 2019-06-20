@@ -30,7 +30,7 @@ final class Version20190215021458 extends AbstractMigration
                 destination_district_id    INT(11) NULL,
                 destination_ward_id        INT(11) NULL,
                 is_private                 TINYINT(1) NOT NULL,
-                customer_id                INT(11) NOT NULL COMMENT 'required if is_private == 1',
+                customer_id                INT(11) NULL COMMENT 'required if is_private == 1',
                 status                     TINYINT(1) NOT NULL DEFAULT 0,
                 description                TEXT NULL,
                 description_en             TEXT NULL,

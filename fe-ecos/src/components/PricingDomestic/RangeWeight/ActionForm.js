@@ -351,7 +351,7 @@ class ActionForm extends Component {
         </Row>
         <Row>
           <Col md={12} className="text-right">
-            <Link to={type_action === 'view' ? '/pricing-domestic/range-weight' : `/pricing-domestic/range-weight/view/${id}`} className="btn btn-outline-secondary btn-sm">
+            <Link to={type_action === 'edit' ? `/pricing-domestic/range-weight/view/${id}` : '/pricing-domestic/range-weight'} className="btn btn-outline-secondary btn-sm">
               {messages['cancel']}
             </Link>
             { disableField ? 

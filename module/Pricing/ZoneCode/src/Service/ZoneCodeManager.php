@@ -15,7 +15,7 @@ use ServiceShipment\Entity\Carrier;
 use ServiceShipment\Entity\Service;
 use ServiceShipment\Entity\ShipmentType;
 use ZoneCode\Entity\ZoneCode;
-use SerivceShipment\Entity\Category;
+use ServiceShipment\Entity\Category;
 
 /**
  * This service is responsible for adding/editing users

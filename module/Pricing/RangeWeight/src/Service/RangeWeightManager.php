@@ -150,7 +150,7 @@ class RangeWeightManager
         }
 
         if($data['category_id']) {
-            $category = $this->entityManager->getRepository(Category::class)->findOneBy(['id' => $data['customer_id'], 'is_deleted' => 0]);
+            $category = $this->entityManager->getRepository(Category::class)->findOneBy(['id' => $data['category_id'], 'is_deleted' => 0]);
             if ($category == null) {
                 throw new \Exception('Not found Category by ID');
             }

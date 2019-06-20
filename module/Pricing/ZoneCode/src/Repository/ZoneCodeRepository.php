@@ -119,7 +119,14 @@ class ZoneCodeRepository extends EntityRepository
                 'alias' => 'z.is_private',
                 'operator' => 'eq'
             ],
-            
+            'name' => [
+                'alias' => 'z.name',
+                'operator' => 'contains'
+            ],
+            'name_en' => [
+                'alias' => 'z.name_en',
+                'operator' => 'contains'
+            ],
             'carrier_id' => [
                 'alias' => 'z.carrier_id',
                 'operator' => 'eq'
@@ -136,7 +143,7 @@ class ZoneCodeRepository extends EntityRepository
                 'alias' => 'z.shipment_type_id',
                 'operator' => 'eq'
             ],
-            'customer' => [
+            'customer_id' => [
                 'alias' => 'z.customer_id',
                 'operator' => 'eq'
             ],
@@ -144,35 +151,35 @@ class ZoneCodeRepository extends EntityRepository
                 'alias' => 'z.status',
                 'operator' => 'eq'
             ],
-            'origin_country' => [
+            'origin_country_id' => [
                 'alias' => 'z.origin_country_id',
                 'operator' => 'eq'
             ],
-            'origin_city' => [
+            'origin_city_id' => [
                 'alias' => 'z.origin_city_id',
                 'operator' => 'eq'
             ],
-            'origin_district' => [
+            'origin_district_id' => [
                 'alias' => 'z.origin_district_id',
                 'operator' => 'eq'
             ],
-            'origin_ward' => [
+            'origin_ward_id' => [
                 'alias' => 'z.origin_ward_id',
                 'operator' => 'eq'
             ],
-            'destination_country' => [
+            'destination_country_id' => [
                 'alias' => 'z.destination_country_id',
                 'operator' => 'eq'
             ],
-            'destination_city' => [
+            'destination_city_id' => [
                 'alias' => 'z.destination_city_id',
                 'operator' => 'eq'
             ],
-            'destination_district' => [
+            'destination_district_id' => [
                 'alias' => 'z.destination_district_id',
                 'operator' => 'eq'
             ],
-            'destination_ward' => [
+            'destination_ward_id' => [
                 'alias' => 'z.destination_ward_id',
                 'operator' => 'eq'
             ],
