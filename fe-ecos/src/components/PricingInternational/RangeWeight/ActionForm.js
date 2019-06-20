@@ -74,9 +74,24 @@ class ActionForm extends Component {
     this.setState({ disableCustomerField: value ? false : true });
   }
 
+  onChangeCategory = value => {
+    let paramsST = {
+      field: ['id', 'name', 'name_en', 'category_id', 'carrier_id', 'service_id'],
+      offset: { limit: 0 },
+      query: { category_id: value }
+    }
+    if (this.props.service_id) {
+      paramsST.query = { ...paramsST.query, service_id: this.props.service_id };
+    }
+    if (this.props.carrier_id) {
+      paramsST.query = { ...paramsST.query, carrier_id: this.props.carrier_id };
+    }
+    this.props.getShipmentTypeInternationalList(paramsST);
+  }
+
   onChangeCarrier = value => {
     let paramsST = {
-      field: ['id', 'name', 'name_en', 'carrier_id', 'service_id'],
+      field: ['id', 'name', 'name_en', 'category_id', 'carrier_id', 'service_id'],
       offset: { limit: 0 },
       query: { category_id: this.props.category_id, carrier_id: value }
     }
@@ -88,7 +103,7 @@ class ActionForm extends Component {
 
   onChangeService = value => {
     let paramsST = {
-      field: ['id', 'name', 'name_en', 'carrier_id', 'service_id'],
+      field: ['id', 'name', 'name_en', 'category_id', 'carrier_id', 'service_id'],
       offset: { limit: 0 },
       query: { category_id: this.props.category_id, service_id: value }
     }
@@ -103,6 +118,7 @@ class ActionForm extends Component {
     if (listST.length > 0) {
       const ST = listST.find(item => item.id === value);
       if (ST) {
+        this.props.change('category_id', ST.category_id);
         this.props.change('carrier_id', ST.carrier_id);
         this.props.change('service_id', ST.service_id);
       }
@@ -125,11 +141,10 @@ class ActionForm extends Component {
     this.props.getServiceInternationalList(params);
 
     const paramsST = {
-      field: ['id', 'name', 'name_en', 'carrier_id', 'service_id'],
+      field: ['id', 'name', 'name_en', 'category_id', 'carrier_id', 'service_id'],
       offset: {
         limit: 0
       },
-      query: { category_id: 3 }
     }
     this.props.getShipmentTypeInternationalList(paramsST);
 
@@ -251,6 +266,7 @@ class ActionForm extends Component {
                     name="category_id"
                     component={renderSelectField}
                     options={this.showOptionsCategory()}
+                    onChange={this.onChangeCategory}
                     clearable={false}
                     disabled={disableField}
                   />

@@ -12,7 +12,6 @@ class Action extends Component {
 
   handleSubmit = values => {
     const { id } = this.props.match.params;
-    
     if (id) {
       values = { ...values, id: id };
       this.props.updateRangeWeightInternationalItem(values);
