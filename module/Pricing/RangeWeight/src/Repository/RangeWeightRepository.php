@@ -49,9 +49,19 @@ class RangeWeightRepository extends EntityRepository
                 r.service_id,
                 r.shipment_type_id,
                 r.customer_id,
-                c.code AS carrier_code,
-                s.code AS service_code,
-                st.code AS shipmenttype_code,
+
+                jc.name as category_name,
+                jc.name_en as category_name_en,
+                
+                c.name AS carrier_name,
+                c.name_en AS carrier_name_en,
+
+                s.name AS service_name,
+                s.name_en AS service_name_en,
+
+                st.code AS shipment_type_name,
+                st.code AS shipment_type_name_en,
+                
                 cu.name AS customer_name,
                 uc.username AS created_by,
                 ud.username AS updated_by,
@@ -95,7 +105,7 @@ class RangeWeightRepository extends EntityRepository
                 'operator' => 'eq'
             ],
             'category_id' => [
-                'alias' => 'r.category_id',
+                'alias' => 'jc.category_id',
                 'operator' => 'contains'
             ],
             'service_id' => [
@@ -143,7 +153,8 @@ class RangeWeightRepository extends EntityRepository
         ->leftJoin('r.shipmenttype', 'st')
         ->leftJoin('r.customer', 'cu')
         ->leftJoin('r.user_create', 'uc')
-        ->leftJoin('r.user_update', 'ud');
+        ->leftJoin('r.user_update', 'ud')
+        ->leftJoin('r.join_category', 'jc');
         
             
         if ($sortField != NULL && $sortDirection != NULL) {

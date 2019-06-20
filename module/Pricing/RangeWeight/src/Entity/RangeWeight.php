@@ -222,6 +222,12 @@ class RangeWeight
     protected $user_update;
 
     /**
+     * @ORM\OneToOne(targetEntity="ServiceShipment\Entity\Category")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=true)
+     */
+    protected $join_category;
+
+    /**
      * @return int
      */
     public function getId()
@@ -714,4 +720,25 @@ class RangeWeight
         return $this->user_update;
     }
 
+    /**
+     * Set Category
+     * 
+     * @param \SerivceShipment\Entity\Category|null
+     */
+
+    public function setJoinCategory(\ServiceShipment\Entity\Category $join_category)
+    {
+        $this->join_category = $join_category;
+    }
+
+    /**
+     * Get Category
+     * 
+     * @return \ServiceShipment\Entity\Category|null
+     */
+
+    public function getJoinCategory()
+    {
+        return $this->join_category;
+    }
 }
