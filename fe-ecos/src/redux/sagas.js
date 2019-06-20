@@ -8,10 +8,7 @@ import countrySagas from './master-data/address/country/saga';
 import citySagas from './master-data/address/city/saga';
 import districtSagas from './master-data/address/district/saga';
 import wardSagas from './master-data/address/ward/saga';
-import rangeweightSagas from './pricing-international/range-weight/saga';
-import zonecodeSagas from './pricing-international/zone-code/saga';
 import customerSagas from './pricing-international/customer/saga';
-import pricingSagas from './pricing-international/pricing/saga';
 import carrierSagas from './master-data/service-shipment/carrier/saga';
 import serviceSagas from './master-data/service-shipment/service/saga';
 import shipmentTypeSagas from './master-data/service-shipment/shipmnet-type/saga';
@@ -20,6 +17,7 @@ import roleSagas from './system/users/role/saga';
 import permissionSagas from './system/users/permission/saga';
 import settingSagas from './system/setting/saga';
 import systemSagas from './system/saga';
+
 import pricingDomestic from './pricing-domestic/pricing/saga';
 import pricingDomesticArea from './pricing-domestic/area/saga';
 import pricingDomesticZone from './pricing-domestic/zone/saga';
@@ -57,10 +55,7 @@ export default function* rootSaga() {
     userSagas(),
     roleSagas(),
     permissionSagas(),
-    rangeweightSagas(),
-    zonecodeSagas(),
     customerSagas(),
-    pricingSagas(),
     carrierSagas(),
     serviceSagas(),
     shipmentTypeSagas(),
