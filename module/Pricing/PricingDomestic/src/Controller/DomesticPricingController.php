@@ -73,6 +73,10 @@ class DomesticPricingController extends CoreController {
         '512e2203-caa3-2b4a-49f8-5d0201dab178' => 39, // TN2
     ];
 
+    protected $customerId = [
+        '7fd8ca33-79f5-bb42-af80-5d084da574af' => 12
+    ];
+
     public function __construct($entityManager, $domesticPricingManager) {
         parent::__construct($entityManager);
 
@@ -205,9 +209,14 @@ class DomesticPricingController extends CoreController {
     {
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequestData();
-
+            if (isset($data['customerId']) && array_key_exists($data['customerId'], $this->customerId)) {
+                $data['customerId'] = $this->customerId[$data['customerId']];
+            }
             if (array_key_exists($data['shipmentType'], $this->shipmentType)) {
                 $data['shipmentType'] = $this->shipmentType[$data['shipmentType']];
+                if (array_key_exists($data['customerId'], $this->customerId)) {
+                    $data['customerId'] = $this->customerId[$data['customerId']];
+                }
                 $result = $this->calculatePricingFromV1($data);
             } else {
                 $result = ['error' => true, 'message' => 'Shipment Type is wrong'];
@@ -224,7 +233,9 @@ class DomesticPricingController extends CoreController {
             $data = array();
             if (count($params) > 0) {
                 for($i = 0; $i < count($params); $i++) {
-
+                    if (isset($params[$i]['customerId']) && array_key_exists($params[$i]['customerId'], $this->customerId)) {
+                        $params[$i]['customerId'] = $this->customerId[$params[$i]['customerId']];
+                    }
                     if (array_key_exists($params[$i]['shipmentType'], $this->shipmentType)) {
                         $params[$i]['shipmentType'] = $this->shipmentType[$params[$i]['shipmentType']];
                         $result = $this->calculatePricingFromV1($params[$i]);
@@ -287,8 +298,8 @@ class DomesticPricingController extends CoreController {
             'service_id' => $serviceId,
             'today' => !empty($dataList['pickupDate']) ? $dataList['pickupDate'] : date('Y-m-d H:i:s'),
         ];
-        if (!empty($dataList['customer_id'])) {
-            $wherePrice['customer_id'] = $dataList['customer_id'];
+        if (!empty($dataList['customerId'])) {
+            $wherePrice['customer_id'] = $dataList['customerId'];
         }
         $pricing = $this->entityManager->getRepository(DomesticPricing::class)->getPriceId($wherePrice);
         if (empty($pricing))

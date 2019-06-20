@@ -33,8 +33,9 @@ class ZoneCodeRepository extends EntityRepository
             $queryBuilder = $this->buildZoneCodeQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select("
                 z.id,
-                z.code,
-                z.category,
+                z.name,
+                z.name_en,
+                z.category_id,
                 z.is_private,
                 z.customer_id,
                 z.status,
@@ -111,16 +112,13 @@ class ZoneCodeRepository extends EntityRepository
                 'alias' => 'z.is_private',
                 'operator' => 'eq'
             ],
-            'code' => [
-                'alias' => 'z.code',
-                'operator' => 'contains'
-            ],
+            
             'carrier_id' => [
                 'alias' => 'z.carrier_id',
                 'operator' => 'eq'
             ],
-            'category' => [
-                'alias' => 'z.category',
+            'category_id' => [
+                'alias' => 'z.category_id',
                 'operator' => 'contains'
             ],
             'service_id' => [

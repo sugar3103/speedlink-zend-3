@@ -3,6 +3,7 @@ namespace ZoneCode\Form;
 
 use ZoneCode\Entity\ZoneCode;
 use ZoneCode\Validator\ZoneCodeExistsValidator;
+use ZoneCode\Validator\ZoneExistsValidator;
 use Doctrine\ORM\EntityManager;
 use Zend\Filter\StringTrim;
 use Zend\Filter\ToInt;
@@ -20,7 +21,6 @@ use Zend\Validator\InArray;
 use Zend\Validator\StringLength;
 
 class ZoneCodeForm extends Form {
-    
     /**
      * Scenario ('create' or 'update')
      * @var string
@@ -58,8 +58,34 @@ class ZoneCodeForm extends Form {
         // Create main input filter.
         $inputFilter = $this->getInputFilter();
         // Add input for "username" field.
+        // $inputFilter->add([
+        //     'name' => 'code',
+        //     'required' => true,
+        //     'filters' => [
+        //         [
+        //             'name' => StringTrim::class
+        //         ]
+        //     ],
+        //     'validators' => [
+        //         [
+        //             'name' => StringLength::class,
+        //             'options' => [
+        //                 'min' => 2,
+        //                 'max' => 50
+        //             ]
+        //         ],
+        //         [
+        //             'name' => ZoneCodeExistsValidator::class,
+        //             'options' => [
+        //                 'entityManager' => $this->entityManager,
+        //                 'zonecode' => $this->zonecode
+        //             ]
+        //         ]
+        //     ]
+        // ]);
+
         $inputFilter->add([
-            'name' => 'code',
+            'name' => 'name',
             'required' => true,
             'filters' => [
                 [
@@ -75,21 +101,47 @@ class ZoneCodeForm extends Form {
                     ]
                 ],
                 [
-                    'name' => ZoneCodeExistsValidator::class,
+                    'name' => ZoneExistsValidator::class,
                     'options' => [
                         'entityManager' => $this->entityManager,
-                        'zonecode' => $this->zonecode
+                        'zone' => $this->zonecode
                     ]
                 ]
             ]
         ]);
 
         $inputFilter->add([
-            'name' => 'category',
+            'name' => 'name_en',
+            'required' => true,
+            'filters' => [
+                [
+                    'name' => StringTrim::class
+                ]
+            ],
+            'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'min' => 2,
+                        'max' => 50
+                    ]
+                ],
+                [
+                    'name' => ZoneExistsValidator::class,
+                    'options' => [
+                        'entityManager' => $this->entityManager,
+                        'zone' => $this->zonecode,
+                        'language' => 'en'
+                    ]
+                ]
+            ]
+        ]);
+        $inputFilter->add([
+            'name' => 'category_id',
             'required'  => true,
             'filters' => [
                 [
-                  'name' => StringTrim::class
+                  'name' => ToInt::class
                 ]
             ]           
         ]);
