@@ -230,13 +230,12 @@ class SearchForm extends Component {
                 <Row>
                     <Col md={6} lg={3} xl={3} xs={6}>
                         <div className="form__form-group">
-                            <span className="form__form-group-label">{messages['pri_int.filter-type']}</span>
+                            <span className="form__form-group-label">{messages['pri_int.type']}</span>
                             <div className="form__form-group-field">
                                 <Field
                                     name="is_private"
                                     component={renderSelectField}
                                     options={[
-                                        { value: '', label: messages['all'] },
                                         { value: 0, label: messages['pri_int.public'] },
                                         { value: 1, label: messages['pri_int.customer'] }
                                     ]}
@@ -353,7 +352,7 @@ class SearchForm extends Component {
                 <Row>
                     <Col md={6} lg={3} xl={3} xs={6}>
                         <div className="form__form-group">
-                            <span className="form__form-group-label">{messages['pri_int.country_origin']}</span>
+                            <span className="form__form-group-label">{messages['pri_int.origin-country']}</span>
                             <div className="form__form-group-field">
                                 <Field
                                     name="origin_country_id"
@@ -366,7 +365,7 @@ class SearchForm extends Component {
                     </Col>
                     <Col md={3} lg={3} xl={3} xs={6}>
                         <div className="form__form-group">
-                            <span className="form__form-group-label">{messages['pri_int.city_origin']}</span>
+                            <span className="form__form-group-label">{messages['pri_int.origin-city']}</span>
                             <div className="form__form-group-field">
                                 <Field
                                     name="origin_city_id"
@@ -379,7 +378,7 @@ class SearchForm extends Component {
                     </Col>
                     <Col md={3} lg={3} xl={3} xs={6}>
                         <div className="form__form-group">
-                            <span className="form__form-group-label">{messages['pri_int.district_origin']}</span>
+                            <span className="form__form-group-label">{messages['pri_int.origin-district']}</span>
                             <div className="form__form-group-field">
                                 <Field
                                     name="origin_district_id"
@@ -392,7 +391,7 @@ class SearchForm extends Component {
                     </Col>
                     <Col md={3} lg={3} xl={3} xs={6}>
                         <div className="form__form-group">
-                            <span className="form__form-group-label">{messages['pri_int.ward_origin']}</span>
+                            <span className="form__form-group-label">{messages['pri_int.origin-ward']}</span>
                             <div className="form__form-group-field">
                                 <Field
                                     name="origin_ward_id"
@@ -472,22 +471,15 @@ SearchForm.propTypes = {
     approvedBys: PropTypes.array,
 }
 
-const mapStateToProps = ({ address, pricing, users }) => {
-    const { customers, salemans, carriers } = pricing;
-    const countries = address.country.items;
-    const cities = address.city.items;
-    const districts = address.district.items;
-    const wards = address.ward.items;
-    const approvedBys = users.user.items;
+const mapStateToProps = ({ pricingInternational }) => {
+    const { customer, country, city, district, ward, carrier } = pricingInternational;
     return {
-        customers,
-        salemans,
-        carriers,
-        countries,
-        cities,
-        districts,
-        wards,
-        approvedBys
+        customer,
+        carrier,
+        country,
+        city,
+        district,
+        ward,
     }
 }
 

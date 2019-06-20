@@ -188,6 +188,7 @@ class ActionForm extends Component {
                     ]}
                     onChange={this.onChangeIsPrivate}
                     clearable={false}
+                    disabled={disableField}
                   />
                 </div>
               </div>
