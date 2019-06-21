@@ -98,7 +98,7 @@ class List extends Component {
           onClick={() => this.props.history.push('/pricing-international/pricing/add')}
           className="master-data-btn"
           size="sm"
-        >{messages['pri_int.add-new']}</Button>
+        >{messages['pri_int.add-new-pricing']}</Button>
         {selected.length > 0 &&
             <Button
             color="danger"
@@ -209,7 +209,8 @@ List.propTypes = {
   getPricingList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ pricing }) => {
+const mapStateToProps = ({ pricingInternational }) => {
+  const { pricing } = pricingInternational;
   return {
     pricing
   };

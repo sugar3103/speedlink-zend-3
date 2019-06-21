@@ -122,10 +122,10 @@ Detail.propTypes = {
   getPricingData: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({pricing}) => {
-  const { data } = pricing;
+const mapStateToProps = ({ pricingInternational }) => {
+  const { pricing } = pricingInternational;
   return {
-    data
+    pricing
   }
 }
 

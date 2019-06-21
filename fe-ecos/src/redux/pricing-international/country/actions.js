@@ -7,6 +7,9 @@ import {
   PRI_INT_DESTINATION_COUNTRY_GET_LIST,
   PRI_INT_DESTINATION_COUNTRY_GET_LIST_SUCCESS,
 
+  PRI_INT_PRICING_COUNTRY_GET_LIST,
+  PRI_INT_PRICING_COUNTRY_GET_LIST_SUCCESS,
+
 } from '../../../constants/actionTypes';
 
 export const countryInternationalError = (error) => ({
@@ -32,4 +35,14 @@ export const getDestinationCountryInternationalList = (params) => ({
 export const getDestinationCountryInternationalListSuccess = (items) => ({
   type: PRI_INT_DESTINATION_COUNTRY_GET_LIST_SUCCESS,
   payload: { destination: items }
+});
+
+export const getPricingCountryInternationalList = (params) => ({
+  type: PRI_INT_PRICING_COUNTRY_GET_LIST,
+  payload: { params }
+});
+
+export const getPricingCountryInternationalListSuccess = (items) => ({
+  type: PRI_INT_PRICING_COUNTRY_GET_LIST_SUCCESS,
+  payload: { pricing: items }
 });

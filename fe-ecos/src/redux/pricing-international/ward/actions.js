@@ -7,6 +7,9 @@ import {
   PRI_INT_DESTINATION_WARD_GET_LIST,
   PRI_INT_DESTINATION_WARD_GET_LIST_SUCCESS,
 
+  PRI_INT_PRICING_WARD_GET_LIST,
+  PRI_INT_PRICING_WARD_GET_LIST_SUCCESS,
+
 } from '../../../constants/actionTypes';
 
 export const wardInternationalError = (error) => ({
@@ -32,4 +35,14 @@ export const getDestinationWardInternationalList = (params) => ({
 export const getDestinationWardInternationalListSuccess = (items) => ({
   type: PRI_INT_DESTINATION_WARD_GET_LIST_SUCCESS,
   payload: { destination: items }
+});
+
+export const getPricingWardInternationalList = (params) => ({
+  type: PRI_INT_PRICING_WARD_GET_LIST,
+  payload: { params }
+});
+
+export const getPricingWardInternationalListSuccess = (items) => ({
+  type: PRI_INT_PRICING_WARD_GET_LIST_SUCCESS,
+  payload: { pricing: items }
 });

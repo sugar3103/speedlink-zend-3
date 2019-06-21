@@ -7,16 +7,16 @@ import PageTitle from '../../../containers/Shared/PageTitle';
 class PricingDetail extends Component {
   render() {
     const { messages } = this.props.intl;
-    let title = messages['pricing.add-new'];
+    let title = messages['pri_int.add-new-pricing'];
     switch (this.props.type) {
       case 'add':
-        title = messages['pricing.add-new'];
+        title = messages['pri_int.add-new-pricing'];
         break;
       case 'edit':
-        title = messages['pricing.edit'];
+        title = messages['pri_int.update-pricing'];
         break;
       case 'view':
-        title = messages['pricing.view'];
+        title = messages['pri_int.view-pricing'];
         break;
       default:
         break;

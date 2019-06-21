@@ -9,6 +9,9 @@ import customer from './customer/reducer';
 import service from './service/reducer';
 import shipmentType from './shipment-type/reducer';
 import zone from './zone/reducer';
+import pricing from './pricing/reducer';
+import approvedBy from './approved-by/reducer';
+import saleman from './saleman/reducer';
 const reducers = combineReducers({
     country,
     city,
@@ -19,7 +22,10 @@ const reducers = combineReducers({
     carrier,
     service,
     shipmentType,
-    zone
+    zone,
+    pricing,
+    approvedBy,
+    saleman
 });
 
 export default reducers;
