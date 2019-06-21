@@ -3,6 +3,7 @@ namespace PricingDomestic\Controller;
 
 use Address\Entity\City;
 use Core\Controller\CoreController;
+use Customer\Entity\Customer;
 use Doctrine\ORM\EntityManager;
 use Management\Entity\FieldVas;
 use PricingDomestic\Entity\DomesticAreaCity;
@@ -215,6 +216,8 @@ class DomesticPricingController extends CoreController {
             $data = $this->getRequestData();
             if (isset($data['customerId']) && array_key_exists($data['customerId'], $this->customerId)) {
                 $data['customerId'] = $this->customerId[$data['customerId']];
+            } else {
+                $data['customerId'] = '';
             }
             if (array_key_exists($data['shipmentType'], $this->shipmentType)) {
                 $data['shipmentType'] = $this->shipmentType[$data['shipmentType']];
@@ -239,6 +242,8 @@ class DomesticPricingController extends CoreController {
                 for($i = 0; $i < count($params); $i++) {
                     if (isset($params[$i]['customerId']) && array_key_exists($params[$i]['customerId'], $this->customerId)) {
                         $params[$i]['customerId'] = $this->customerId[$params[$i]['customerId']];
+                    } else {
+                        $params[$i]['customerId'] = '';
                     }
                     if (array_key_exists($params[$i]['shipmentType'], $this->shipmentType)) {
                         $params[$i]['shipmentType'] = $this->shipmentType[$params[$i]['shipmentType']];
@@ -324,7 +329,13 @@ class DomesticPricingController extends CoreController {
             'today' => !empty($dataList['pickupDate']) ? $dataList['pickupDate'] : date('Y-m-d H:i:s'),
         ];
         if (!empty($dataList['customerId'])) {
-            $wherePrice['customer_id'] = $dataList['customerId'];
+            $customer = $this->entityManager->getRepository(Customer::class)->findOneBy([
+                'id' => $dataList['customerId'],
+                'is_deleted' => 0
+            ]);
+            if (!empty($customer)) {
+                $wherePrice['customer_id'] = $dataList['customerId'];
+            }
         }
         $pricing = $this->entityManager->getRepository(DomesticPricing::class)->getPriceId($wherePrice);
         if (empty($pricing))
