@@ -37,9 +37,9 @@ class Pricing
     /**
      * @var string
      *
-     * @ORM\Column(name="category_code", type="string", length=10, nullable=false, options={"fixed"=true,"comment"="Inbound, Outbound, Domestic"})
+     * @ORM\Column(name="category_id", type="integer", nullable=false)
      */
-    private $category_code;
+    private $category_id;
 
     /**
      * @var int
@@ -281,17 +281,17 @@ class Pricing
     /**
      * @return string
      */
-    public function getCategoryCode()
+    public function getCategoryId()
     {
-        return $this->category_code;
+        return $this->category_id;
     }
 
     /**
-     * @param string $category_code
+     * @param string $category_id
      */
-    public function setCategoryCode($category_code)
+    public function setCategoryId($category_id)
     {
-        $this->category_code = $category_code;
+        $this->category_id = $category_id;
     }
 
     /**

@@ -5,7 +5,7 @@ import { Card, CardBody, Col, Nav, NavItem, NavLink, TabContent, TabPane } from 
 import classnames from 'classnames';
 import { injectIntl } from 'react-intl';
 import PricingData from './PricingData';
-import { getPricingData } from '../../../redux/actions';
+import { getPricingInternationalData } from '../../../redux/actions';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 
@@ -31,7 +31,7 @@ class Detail extends Component {
           pricing_id: id
         }
       }
-      this.props.getPricingData(params);
+      this.props.getPricingInternationalData(params);
     }
   }
 
@@ -118,17 +118,17 @@ class Detail extends Component {
 
 Detail.propTypes = {
   type: PropTypes.string.isRequired,
-  data: PropTypes.array,
-  getPricingData: PropTypes.func.isRequired,
+  data: PropTypes.object,
+  getPricingInternationalData: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = ({ pricingInternational }) => {
-  const { pricing } = pricingInternational;
+  const { pricing: data } = pricingInternational;
   return {
-    pricing
+    data
   }
 }
 
 export default withRouter(injectIntl(connect(mapStateToProps, {
-  getPricingData
+  getPricingInternationalData
 })(Detail)));

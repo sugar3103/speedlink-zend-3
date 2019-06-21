@@ -7,14 +7,6 @@ import { Button, Col, Row } from 'reactstrap';
 import { connect } from 'react-redux';
 import {
     removeState,
-    getCustomerPricingList,
-    getSalemanPricingList,
-    getCarrierPricingList,
-    getCountryList,
-    getCityList,
-    getDistrictList,
-    getWardList,
-    getUserList
 } from '../../../redux/actions';
 import CalendarBlankIcon from 'mdi-react/CalendarBlankIcon';
 import PropTypes from 'prop-types';
@@ -34,194 +26,6 @@ class SearchForm extends Component {
         this.props.removeState(WARD_RESET_STATE);
     }
     
-    componentDidMount() {
-        const paramAddress = {
-            field: ['id', 'name'],
-            offset: {
-                limit: 0
-            }
-        }
-        //get countries
-        this.props.getCountryList(paramAddress);
-
-        //get saleman
-        const paramSaleman = {
-            type: "saleman_id"
-        };
-        this.props.getSalemanPricingList(paramSaleman);
-
-        //get approved by
-        const paramUser = {
-            field: ['id', 'username'],
-            offset: {
-                limit: 0
-            }
-        }
-        this.props.getUserList(paramUser);
-
-        //get carrier
-        const params = {
-            type: "carrier_id",
-            category_code: ''
-        };
-        this.props.getCarrierPricingList(params);
-    }
-
-    showOptionCustomer = (items) => {
-        let result = [];
-        if (items.length > 0) {
-            result = items.map(item => {
-                return {
-                    value: item.customer_id,
-                    label: item.customer_name
-                }
-            })
-        }
-        return result;
-    }
-
-    showOptionCarrier = (items) => {
-        let result = [];
-        if (items.length > 0) {
-            result = items.map(item => {
-                return {
-                    value: item.carrier_id,
-                    label: item.carrier_code
-                }
-            })
-        }
-        return result;
-    }
-
-    showOption = (items) => {
-        let result = [];
-        if (items.length > 0) {
-            result = items.map(item => {
-                return {
-                    value: item.id,
-                    label: item.name
-                }
-            })
-        }
-        return result;
-    }
-
-    showOptionSaleman = (items) => {
-        let result = [];
-        if (items.length > 0) {
-            result = items.map(item => {
-                return {
-                    value: item.saleman_id,
-                    label: item.username
-                }
-            })
-        }
-        return result;
-    }
-
-    showOptionUser = (items) => {
-        let result = [];
-        if (items.length > 0) {
-            result = items.map(item => {
-                return {
-                    value: item.id,
-                    label: item.username
-                }
-            })
-        }
-        return result;
-    }
-
-    onChangeCountry = value => {
-        this.props.change('origin_city_id', null);
-        this.props.change('origin_district_id', null);
-        this.props.change('origin_ward_id', null);
-        if (value) {
-            let params = {
-                field: ['id', 'name'],
-                offset: {
-                    limit: 0
-                },
-                query: {
-                    country: value
-                }
-            }
-            this.props.getCityList(params);
-        } else {
-            this.props.removeState(CITY_RESET_STATE);
-        }
-
-        this.props.removeState(DISTRICT_RESET_STATE);
-        this.props.removeState(WARD_RESET_STATE);
-    }
-
-    onChangeCity = value => {
-        this.props.change('origin_district_id', null);
-        this.props.change('origin_ward_id', null);
-
-        if (value) {
-            let params = {
-                field: ['id', 'name'],
-                offset: {
-                    limit: 0
-                },
-                query: {
-                    city: value
-                }
-            }
-            this.props.getDistrictList(params);
-        } else {
-            this.props.removeState(DISTRICT_RESET_STATE);
-        }
-        
-        this.props.removeState(WARD_RESET_STATE);
-    }
-
-    onChangeDistrict = value => {
-        this.props.change('origin_ward_id', null);
-
-        if(value) {
-            let params = {
-                field: ['id', 'name'],
-                offset: {
-                    limit: 0
-                },
-                query: {
-                    district: value 
-                }
-            }            
-            this.props.getWardList(params);
-        } else {
-            this.props.removeState(WARD_RESET_STATE);
-        }
-    }
-
-    onChangeCategory = value => {
-        this.props.change('carrier_id', '');
-        const params = {
-            type: "carrier_id",
-            category_code: value
-        };
-        this.props.getCarrierPricingList(params);
-    }
-
-    hanldeChangeType = value => {
-        this.props.change('customer_id', '');
-        if (value === 1) {
-            const paramsCustomer = {
-                type: "customer_id"
-            };
-            this.props.getCustomerPricingList(paramsCustomer);
-            this.setState({
-                showCustomerField: true
-            });
-        } else {
-            this.setState({
-                showCustomerField: false
-            });
-        }
-    }
-
     render() {
         const { messages } = this.props.intl;
         const { handleSubmit, reset, countries, cities, districts, wards, customers, salemans, carriers, approvedBys } = this.props;
@@ -456,13 +260,6 @@ class SearchForm extends Component {
 SearchForm.propTypes = {
     handleSubmit: PropTypes.func.isRequired,
     reset: PropTypes.func.isRequired,
-    getCustomerPricingList: PropTypes.func.isRequired,
-    getSalemanPricingList: PropTypes.func.isRequired,
-    getCarrierPricingList: PropTypes.func.isRequired,
-    getCountryList: PropTypes.func.isRequired,
-    getCityList: PropTypes.func.isRequired,
-    getDistrictList: PropTypes.func.isRequired,
-    getWardList: PropTypes.func.isRequired,
     countries: PropTypes.array,
     cities: PropTypes.array,
     districts: PropTypes.array,
@@ -487,12 +284,4 @@ export default reduxForm({
     form: 'pricing_search_form'
 })(injectIntl(connect(mapStateToProps, {
     removeState,
-    getCustomerPricingList,
-    getSalemanPricingList,
-    getCarrierPricingList,
-    getCountryList,
-    getCityList,
-    getDistrictList,
-    getWardList,
-    getUserList
 })(SearchForm)));

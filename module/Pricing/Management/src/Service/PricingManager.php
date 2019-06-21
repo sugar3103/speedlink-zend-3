@@ -18,6 +18,7 @@ use Management\Entity\PricingVas;
 use Management\Entity\PricingVasSpec;
 use OAuth\Entity\User;
 use RangeWeight\Entity\RangeWeight;
+use ServiceShipment\Entity\Category;
 use ServiceShipment\Entity\Carrier;
 use ServiceShipment\Entity\ShipmentType;
 use ZoneCode\Entity\ZoneCode;
@@ -60,12 +61,13 @@ class PricingManager {
         }
         $pricing->setJoinUpdated($user_data);
 
-        $approve_by = $this->entityManager->getRepository(User::class)->find($data['approved_by']);
-        if ($approve_by == null) {
+        $approved_by = $this->entityManager->getRepository(User::class)->find($data['approved_by']);
+        if ($approved_by == null) {
             throw new \Exception('Not found Approve person ID');
         }
-        $pricing->setJoinApproval($approve_by);
-
+        
+        $pricing->setJoinApproval($approved_by);
+        
         $saleman_id = $this->entityManager->getRepository(User::class)->find($data['saleman_id']);
         if ($saleman_id == null) {
             throw new \Exception('Not found Saleman ID');
@@ -180,14 +182,15 @@ class PricingManager {
      */
     public function addPricing($data, $user)
     {
-        try {
+        // try {
             // begin transaction
             $this->entityManager->beginTransaction();
             $date = new \DateTime();
 
+            $category = $this->entityManager->getRepository(Category::class)->find($data['category_id']);
             $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['carrier_id']);
             $country = $this->entityManager->getRepository(Country::class)->find($data['origin_country_id']);
-            $title = $carrier->getCode().'.'.$data['category_code'].'.'.$country->getIsoCode();
+            $title = $carrier->getCode().'.'.$category->getNameEn().'.'.$country->getIsoCode();
             if (!empty($data['origin_city_id'])) {
                 $city = $this->entityManager->getRepository(City::class)->find($data['origin_city_id']);
                 $title .= '-'.$city->getNameEn();
@@ -195,11 +198,12 @@ class PricingManager {
             $title .= '.'.date('y-M-d');
             $pricing_count = $this->entityManager->getRepository(Pricing::class)->findBy(['name'=>$title]);
             $title .= '.'.(count($pricing_count)+1);
+            $title = str_replace(' ', '', $title);
 
             $pricing = new Pricing();
             $pricing->setName($title);
             $pricing->setCarrierId($data['carrier_id']);
-            $pricing->setCategoryCode($data['category_code']);
+            $pricing->setCategoryId($data['category_id']);
             $pricing->setOriginCountryId($data['origin_country_id']);
             $pricing->setOriginCityId($data['origin_city_id']);
             $district_id = empty($data['origin_district_id'])? null : $data['origin_district_id'];
@@ -228,11 +232,11 @@ class PricingManager {
 
             $this->entityManager->commit();
             return $pricing;
-        }
-        catch (ORMException $e) {
-            $this->entityManager->rollback();
-            return FALSE;
-        }
+        // }
+        // catch (ORMException $e) {
+        //     $this->entityManager->rollback();
+        //     return FALSE;
+        // }
     }
 
     /**
@@ -348,21 +352,21 @@ class PricingManager {
         try {
             $date = new \DateTime();
             $where = [
-                'category_code' => $data->getCategoryCode(),
-                'carrier_id' => $data->getCarrierId(),
+                'category' => $data->getCategoryId(),
+                'carrier' => $data->getCarrierId(),
             ];
-            $shipment_type = $this->entityManager->getRepository(ShipmentType::class)->findBy($where, ['service_id'=>'ASC','id'=>'ASC']);
+            $shipment_type = $this->entityManager->getRepository(ShipmentType::class)->findBy($where, ['service'=>'ASC','id'=>'ASC']);
             $where = [
-                'category' => $data->getCategoryCode(),
+                'category_id' => $data->getCategoryId(),
                 'carrier_id' => $data->getCarrierId(),
             ];
             foreach ($shipment_type as $shipment) {
-                $where['service_id'] = $shipment->getServiceId();
+                $where['service_id'] = $shipment->getService();
                 $where['shipment_type_id'] = $shipment->getId();
                 $pricingTable = $this->generatePricingDataTable($where);
 
                 $pricingData = new PricingData();
-                $pricingData->setServiceId($shipment->getServiceId());
+                $pricingData->setServiceId($shipment->getService());
                 $pricingData->setPricingId($data->getId());
                 $pricingData->setShipmentTypeId($shipment->getId());
                 $pricingData->setPricingData($pricingTable);
@@ -383,7 +387,7 @@ class PricingManager {
     public function generatePricingDataTable($where, $mode = 'new')
     {
         $rangeWeight = $this->entityManager->getRepository(RangeWeight::class)->findBy($where, ['from'=> 'ASC','to'=>'ASC']);
-        $zoneCode = $this->entityManager->getRepository(ZoneCode::class)->findBy($where, ['code' => 'ASC']);
+        $zoneCode = $this->entityManager->getRepository(ZoneCode::class)->findBy($where, ['name_en' => 'ASC']);
         $result = ['title' => [], 'data' => []];
         if (count($rangeWeight) <= 0) {
             return json_encode($result, false);
@@ -392,21 +396,21 @@ class PricingManager {
         $title['Weight'] = 'Weight';
         foreach ($zoneCode as $zone) {
             $temp = array();
-            if (in_array($zone->getCode(),$temp)) {
+            if (in_array($zone->getNameEn(),$temp)) {
                 continue;
             }
-            $title[$zone->getCode()] = $zone->getCode();
+            $title[$zone->getNameEn()] = $zone->getNameEn();
         }
         $data = array();
         foreach ($rangeWeight as $range) {
             $data[$range->getId()]['Weight'] = $range->getFrom() . ' - ' . $range->getTo();
             $temp = array();
             foreach ($zoneCode as $zone) {
-                if (in_array($zone->getCode(),$temp) ) {
+                if (in_array($zone->getNameEn(),$temp) ) {
                     continue;
                 }
-                $data[$range->getId()][$zone->getCode()] = 0;
-                $temp[] = $zone->getCode();
+                $data[$range->getId()][$zone->getNameEn()] = 0;
+                $temp[] = $zone->getNameEn();
             }
         }
 

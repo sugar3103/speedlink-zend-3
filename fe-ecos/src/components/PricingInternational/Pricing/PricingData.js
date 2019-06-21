@@ -2,12 +2,11 @@ import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import PricingVas from './PricingVas';
-// import PricingCod from './PricingCod';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { updatePricingDataItem, updatePricingVasItem } from '../../../redux/actions';
+import { updatePricingInternationalItem, updatePricingInternationalVas } from '../../../redux/actions';
 
 class PricingData extends Component {
 
@@ -59,7 +58,7 @@ class PricingData extends Component {
             pricing_data: { title, data }
         }
 
-        this.props.updatePricingDataItem(dataSent);
+        this.props.updatePricingInternationalItem(dataSent);
 
         setTimeout(() => {
             this.setState({
@@ -70,7 +69,7 @@ class PricingData extends Component {
 
     onSaveVas = values => {
         const data = values.vas;
-        this.props.updatePricingVasItem(data);
+        this.props.updatePricingInternationalVas(data);
     }
 
     render() {
@@ -124,18 +123,14 @@ class PricingData extends Component {
                     <legend className="scheduler-border">{messages['pri_int.value-services']}</legend>
                     <PricingVas pricing_data_id={id} onSubmit={this.onSaveVas}/>
                 </fieldset>
-                {/* <fieldset className="scheduler-border">
-                    <legend className="scheduler-border">{messages['pricing.cod']}</legend>
-                    <PricingCod />
-                </fieldset> */}
             </Fragment>
         )
     }
 }
 
 PricingData.propTypes = {
-    updatePricingDataItem: PropTypes.func.isRequired,
-    updatePricingVasItem: PropTypes.func.isRequired,
+    updatePricingInternationalItem: PropTypes.func.isRequired,
+    updatePricingInternationalVas: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = () => {
@@ -143,6 +138,6 @@ const mapStateToProps = () => {
 }
 
 export default injectIntl(connect(mapStateToProps, {
-    updatePricingDataItem,
-    updatePricingVasItem
+    updatePricingInternationalItem,
+    updatePricingInternationalVas
 })(PricingData));

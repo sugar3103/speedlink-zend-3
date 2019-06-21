@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unused-state */
 import React, { Component, Fragment } from 'react';
 import { Card, CardBody, Col, Button, Badge } from 'reactstrap';
 import { withRouter, Link } from 'react-router-dom';

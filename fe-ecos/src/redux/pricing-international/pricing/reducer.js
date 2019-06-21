@@ -1,105 +1,68 @@
 import {
-  PRICING_ERROR,
+  PRI_INT_PRICING_ERROR,
 
-  PRICING_CUSTOMER_GET_LIST,
-  PRICING_CUSTOMER_GET_LIST_SUCCESS,
- 
-  PRICING_SALEMAN_GET_LIST,
-  PRICING_SALEMAN_GET_LIST_SUCCESS,
+  PRI_INT_PRICING_GET_LIST,
+  PRI_INT_PRICING_GET_LIST_SUCCESS,
 
-  PRICING_CARRIER_GET_LIST,
-  PRICING_CARRIER_GET_LIST_SUCCESS,
+  PRI_INT_PRICING_ADD_ITEM,
+  PRI_INT_PRICING_ADD_ITEM_SUCCESS,
 
-  PRICING_GET_LIST,
-  PRICING_GET_LIST_SUCCESS,
+  PRI_INT_PRICING_REQUEST_UPDATE_ITEM,
+  PRI_INT_PRICING_REQUEST_UPDATE_ITEM_SUCCESS,
+
+  PRI_INT_PRICING_UPDATE_ITEM,
+  PRI_INT_PRICING_UPDATE_ITEM_SUCCESS,
+
+  PRI_INT_PRICING_DELETE_ITEM,
+  PRI_INT_PRICING_DELETE_ITEM_SUCCESS,
   
-  PRICING_ADD_MASTER_DATA,
-  PRICING_ADD_MASTER_DATA_SUCCESS,
+  PRI_INT_PRICING_GET_DATA,
+  PRI_INT_PRICING_GET_DATA_SUCCESS,
 
-  PRICING_GET_DATA,
-  PRICING_GET_DATA_SUCCESS,
+  PRI_INT_PRICING_GET_VAS,
+  PRI_INT_PRICING_GET_VAS_SUCCESS,
 
-  PRICING_UPDATE_DATA,
-  PRICING_UPDATE_DATA_SUCCESS,
+  PRI_INT_PRICING_UPDATE_VAS,
+  PRI_INT_PRICING_UPDATE_VAS_SUCCESS,
 
-  PRICING_GET_VAS,
-  PRICING_GET_VAS_SUCCESS,
-
-  PRICING_UPDATE_VAS,
-  PRICING_UPDATE_VAS_SUCCESS,
+  PRI_INT_PRICING_GET_FIELD_VAS,
+  PRI_INT_PRICING_GET_FIELD_VAS_SUCCESS,
 
 } from '../../../constants/actionTypes';
 
 const INIT_STATE = {
   errors: null,
   loading: true,
-  items: null,
-  customers: null,
-  salemans: null,
-  carriers: null,
+  items: [],
+  itemEditting: {},
   total: 0,
   paramSearch: null,
-  data: null,
-  vas: []
+  data: {},
+  loadingData: true,
+  loadingVas: true,
+  vas: [],
+  loadingFieldVas: true,
+  fieldVas: []
 };
 
 export default (state = INIT_STATE, action) => {
   switch (action.type) {
-    case PRICING_ERROR:
-			return { 
-        ...state, 
-        loading: false, 
-        errors: action.payload 
-    };
-
-    case PRICING_CUSTOMER_GET_LIST:
-      return { 
-        ...state, 
+    case PRI_INT_PRICING_ERROR:
+      return {
+        ...state,
         loading: false,
+        errors: action.payload
       };
 
-    case PRICING_CUSTOMER_GET_LIST_SUCCESS:
-      return { 
-        ...state, 
-        loading: false, 
-        customers: action.payload
-      };
-
-    case PRICING_SALEMAN_GET_LIST:
-      return { 
-        ...state, 
-        loading: false,
-      };
-
-    case PRICING_SALEMAN_GET_LIST_SUCCESS:
-      return { 
-        ...state, 
-        loading: false, 
-        salemans: action.payload
-      };
-
-    case PRICING_CARRIER_GET_LIST:
-      return { 
-        ...state, 
-        loading: false,
-      };
-
-    case PRICING_CARRIER_GET_LIST_SUCCESS:
-      return { 
-        ...state, 
-        loading: false, 
-        carriers: action.payload
-      };
-
-    case PRICING_GET_LIST:
+    case PRI_INT_PRICING_GET_LIST:
       const { params } = action.payload;
-      return { 
-        ...state, 
+      return {
+        ...state,
         loading: true,
         paramSearch: (params && params.query) ? params.query : null
       };
 
-    case PRICING_GET_LIST_SUCCESS:
+    case PRI_INT_PRICING_GET_LIST_SUCCESS:
       const { items, total } = action.payload;
       return { 
         ...state, 
@@ -108,69 +71,106 @@ export default (state = INIT_STATE, action) => {
         total
       };
 
-    case PRICING_ADD_MASTER_DATA:
+    case PRI_INT_PRICING_REQUEST_UPDATE_ITEM:
+      return { 
+        ...state, 
+        loading: true 
+      };
+
+    case PRI_INT_PRICING_REQUEST_UPDATE_ITEM_SUCCESS:
+      return { 
+        ...state, 
+        loading: false,
+        itemEditting: action.payload 
+      };
+
+    case PRI_INT_PRICING_ADD_ITEM:
 			return { 
         ...state, 
         loading: false 
       };
 
-		case PRICING_ADD_MASTER_DATA_SUCCESS:
+		case PRI_INT_PRICING_ADD_ITEM_SUCCESS:
 			return { 
         ...state, 
         loading: false, 
         errors: null
       };
 
-    case PRICING_GET_DATA:
+    case PRI_INT_PRICING_UPDATE_ITEM:
 			return { 
         ...state, 
         loading: false 
       };
 
-    case PRICING_GET_DATA_SUCCESS:
+		case PRI_INT_PRICING_UPDATE_ITEM_SUCCESS:
 			return { 
         ...state, 
-        loading: false,
+        loading: false, 
+        errors: null
+      };
+      
+    case PRI_INT_PRICING_DELETE_ITEM:
+			return { 
+        ...state, 
+        loading: false 
+      };
+
+		case PRI_INT_PRICING_DELETE_ITEM_SUCCESS:
+			return { 
+        ...state, 
+      };
+
+    case PRI_INT_PRICING_GET_DATA:
+      return {
+        ...state,
+        loadingData: true,
+      };
+
+    case PRI_INT_PRICING_GET_DATA_SUCCESS:
+      return { 
+        ...state, 
+        loadingData: false, 
         data: action.payload
       };
 
-    case PRICING_UPDATE_DATA:
+    case PRI_INT_PRICING_UPDATE_VAS:
 			return { 
         ...state, 
         loading: false 
       };
 
-		case PRICING_UPDATE_DATA_SUCCESS:
+		case PRI_INT_PRICING_UPDATE_VAS_SUCCESS:
 			return { 
         ...state, 
         loading: false, 
         errors: null
       };
 
-    case PRICING_GET_VAS:
-			return { 
-        ...state, 
-        loading: false 
+    case PRI_INT_PRICING_GET_VAS:
+      return {
+        ...state,
+        loadingVas: true,
       };
 
-    case PRICING_GET_VAS_SUCCESS:
-			return { 
+    case PRI_INT_PRICING_GET_VAS_SUCCESS:
+      return { 
         ...state, 
-        loading: false,
+        loadingVas: false, 
         vas: action.payload
       };
 
-    case PRICING_UPDATE_VAS:
-			return { 
-        ...state, 
-        loading: false 
+    case PRI_INT_PRICING_GET_FIELD_VAS:
+      return {
+        ...state,
+        loadingFieldVas: true,
       };
 
-		case PRICING_UPDATE_VAS_SUCCESS:
-			return { 
+    case PRI_INT_PRICING_GET_FIELD_VAS_SUCCESS:
+      return { 
         ...state, 
-        loading: false, 
-        errors: null
+        loadingFieldVas: false, 
+        fieldVas: action.payload
       };
 
     default:

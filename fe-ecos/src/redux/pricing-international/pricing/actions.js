@@ -1,132 +1,121 @@
 import {
-  PRICING_ERROR,
+  PRI_INT_PRICING_ERROR,
 
-  PRICING_SALEMAN_GET_LIST,
-  PRICING_SALEMAN_GET_LIST_SUCCESS,
+  PRI_INT_PRICING_GET_LIST,
+  PRI_INT_PRICING_GET_LIST_SUCCESS,
 
-  PRICING_CUSTOMER_GET_LIST,
-  PRICING_CUSTOMER_GET_LIST_SUCCESS,
+  PRI_INT_PRICING_ADD_ITEM,
+  PRI_INT_PRICING_ADD_ITEM_SUCCESS,
 
-  PRICING_CARRIER_GET_LIST,
-  PRICING_CARRIER_GET_LIST_SUCCESS,
+  PRI_INT_PRICING_REQUEST_UPDATE_ITEM,
+  PRI_INT_PRICING_REQUEST_UPDATE_ITEM_SUCCESS,
 
-  PRICING_GET_LIST,
-  PRICING_GET_LIST_SUCCESS,
+  PRI_INT_PRICING_UPDATE_ITEM,
+  PRI_INT_PRICING_UPDATE_ITEM_SUCCESS,
 
-  PRICING_ADD_MASTER_DATA,
-  PRICING_ADD_MASTER_DATA_SUCCESS,
+  PRI_INT_PRICING_DELETE_ITEM,
+  PRI_INT_PRICING_DELETE_ITEM_SUCCESS,
 
-  PRICING_GET_DATA,
-  PRICING_GET_DATA_SUCCESS,
+  PRI_INT_PRICING_GET_DATA,
+  PRI_INT_PRICING_GET_DATA_SUCCESS,
 
-  PRICING_UPDATE_DATA,
-  PRICING_UPDATE_DATA_SUCCESS,
-  
-  PRICING_GET_VAS,
-  PRICING_GET_VAS_SUCCESS,
+  PRI_INT_PRICING_GET_VAS,
+  PRI_INT_PRICING_GET_VAS_SUCCESS,
 
-  PRICING_UPDATE_VAS,
-  PRICING_UPDATE_VAS_SUCCESS,
+  PRI_INT_PRICING_UPDATE_VAS,
+  PRI_INT_PRICING_UPDATE_VAS_SUCCESS,
+
+  PRI_INT_PRICING_GET_FIELD_VAS,
+  PRI_INT_PRICING_GET_FIELD_VAS_SUCCESS,
 
 } from '../../../constants/actionTypes';
 
-export const pricingError = (error) => ({
-  type: PRICING_ERROR,
+export const pricingInternationalError = (error) => ({
+  type: PRI_INT_PRICING_ERROR,
   payload: error
 });
 
-/* GET LIST CUSTOMER */
-export const getCustomerPricingList = (params) => ({
-  type: PRICING_CUSTOMER_GET_LIST,
+export const getPricingInternationalList = (params) => ({
+  type: PRI_INT_PRICING_GET_LIST,
   payload: { params }
 });
 
-export const getCustomerPricingListSuccess = (customers) => ({
-  type: PRICING_CUSTOMER_GET_LIST_SUCCESS,
-  payload: customers
-});
-
-/* GET LIST SALEMAN */
-export const getSalemanPricingList = (params) => ({
-  type: PRICING_SALEMAN_GET_LIST,
-  payload: { params }
-});
-
-export const getSalemanPricingListSuccess = (salemans) => ({
-  type: PRICING_SALEMAN_GET_LIST_SUCCESS,
-  payload: salemans
-});
-
-/* GET LIST CARRIER */
-export const getCarrierPricingList = (params) => ({
-  type: PRICING_CARRIER_GET_LIST,
-  payload: { params }
-});
-
-export const getCarrierPricingListSuccess = (carriers) => ({
-  type: PRICING_CARRIER_GET_LIST_SUCCESS,
-  payload: carriers
-});
-
-/* GET LIST PRICING */
-export const getPricingList = (params) => ({
-  type: PRICING_GET_LIST,
-  payload: { params }
-});
-
-export const getPricingListSuccess = (items, total) => ({
-  type: PRICING_GET_LIST_SUCCESS,
+export const getPricingInternationalListSuccess = (items, total) => ({
+  type: PRI_INT_PRICING_GET_LIST_SUCCESS,
   payload: { items, total }
 });
 
-/* ADD PRICING */
-export const addPricingMasterDataItem = (item) => ({
-  type: PRICING_ADD_MASTER_DATA,
+export const addPricingInternationalItem = (item) => ({
+  type: PRI_INT_PRICING_ADD_ITEM,
   payload: { item }
 });
 
-export const addPricingMasterDataItemSuccess = () => ({
-  type: PRICING_ADD_MASTER_DATA_SUCCESS,
+export const addPricingInternationalItemSuccess = () => ({
+  type: PRI_INT_PRICING_ADD_ITEM_SUCCESS
 });
 
-/* GET PRICING DATA */
-export const getPricingData = (params) => ({
-  type: PRICING_GET_DATA,
-  payload: { params }
+export const requestUpdatePricingInternationalItem = (param) => ({
+  type: PRI_INT_PRICING_REQUEST_UPDATE_ITEM,
+  payload: { param }
 });
 
-export const getPricingDataSuccess = (item) => ({
-  type: PRICING_GET_DATA_SUCCESS,
-  payload: item
+export const requestUpdatePricingInternationalItemSuccess = (data) => ({
+  type: PRI_INT_PRICING_REQUEST_UPDATE_ITEM_SUCCESS,
+  payload: data
+})
+
+export const updatePricingInternationalItem = (item) => ({
+  type: PRI_INT_PRICING_UPDATE_ITEM,
+  payload: { item }
 });
 
-/* UPDATE PRICING DATA */
-export const updatePricingDataItem = (params) => ({
-  type: PRICING_UPDATE_DATA,
-  payload: { params }
+export const updatePricingInternationalItemSuccess = () => ({
+  type: PRI_INT_PRICING_UPDATE_ITEM_SUCCESS
 });
 
-export const updatePricingDataItemSuccess = () => ({
-  type: PRICING_UPDATE_DATA_SUCCESS,
+export const deletePricingInternationalItem = (ids) => ({
+  type: PRI_INT_PRICING_DELETE_ITEM,
+  payload: { ids }
 });
 
-/* GET PRICING VAS */
-export const getPricingVas = (params) => ({
-  type: PRICING_GET_VAS,
-  payload: { params }
+export const deletePricingInternationalItemSuccess = () => ({
+  type: PRI_INT_PRICING_DELETE_ITEM_SUCCESS,
 });
 
-export const getPricingVasSuccess = (vas) => ({
-  type: PRICING_GET_VAS_SUCCESS,
-  payload: vas
+export const getPricingInternationalData = (pricing_id) => ({
+  type: PRI_INT_PRICING_GET_DATA,
+  payload: { pricing_id }
 });
 
-/* UPDATE PRICING VAS */
-export const updatePricingVasItem = (params) => ({
-  type: PRICING_UPDATE_VAS,
-  payload: { params }
+export const getPricingInternationalDataSuccess = (data) => ({
+  type: PRI_INT_PRICING_GET_DATA_SUCCESS,
+  payload: data
 });
 
-export const updatePricingVasItemSuccess = () => ({
-  type: PRICING_UPDATE_VAS_SUCCESS,
+export const getPricingInternationalVas = (pricing_id) => ({
+  type: PRI_INT_PRICING_GET_VAS,
+  payload: { pricing_id }
+});
+
+export const getPricingInternationalVasSuccess = (data) => ({
+  type: PRI_INT_PRICING_GET_VAS_SUCCESS,
+  payload: data
+});
+
+export const updatePricingInternationalVas = (item) => ({
+  type: PRI_INT_PRICING_UPDATE_VAS,
+  payload: { item }
+});
+
+export const updatePricingInternationalVasSuccess = () => ({
+  type: PRI_INT_PRICING_UPDATE_VAS_SUCCESS
+});
+
+export const getPricingInternationalFieldVas = () => ({
+  type: PRI_INT_PRICING_GET_FIELD_VAS,
+});
+
+export const getPricingInternationalFieldVasSuccess = (data) => ({
+  type: PRI_INT_PRICING_GET_FIELD_VAS_SUCCESS,
+  payload: data
 });

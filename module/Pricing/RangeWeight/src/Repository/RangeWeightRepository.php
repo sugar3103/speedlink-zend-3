@@ -115,7 +115,7 @@ class RangeWeightRepository extends EntityRepository
                 'operator' => 'eq'
             ],
             'category_id' => [
-                'alias' => 'jc.category_id',
+                'alias' => 'r.category_id',
                 'operator' => 'contains'
             ],
             'service_id' => [

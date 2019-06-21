@@ -12,8 +12,8 @@ import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 import {
-  getPricingList,
-  // deletePricingItem
+  getPricingInternationalList,
+  deletePricingInternationalItem
 } from "../../../redux/actions";
 import ConfirmPicker from '../../../containers/Shared/picker/ConfirmPicker';
 
@@ -26,25 +26,24 @@ class List extends Component {
     };
   }
 
+  componentWillMount() {
+    this.props.getPricingInternationalList();
+  }
+
   onDelete = (e, ids) => {
     e.stopPropagation();
     const { messages } = this.props.intl;
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
-          <ConfirmPicker 
+          <ConfirmPicker
             onClose={onClose}
-            onDelete={() => this.props.deletePricingItem(ids)}
+            onDelete={() => this.props.deletePricingInternationalItem(ids)}
             messages={messages}
           />
         )
       }
     })
-  }
-
-  onEdit = (e, id) => {
-    e.stopPropagation();
-    this.props.history.push(`/pricing-international/pricing/edit/${id}`);
   }
 
   onChangePageSize = (size) => {
@@ -56,10 +55,10 @@ class List extends Component {
       }
     }
 
-    if (this.props.pricing.paramSearch) {
-      Object.assign(params, { "query": this.props.pricing.paramSearch })
+    if (this.props.rangeWeight.paramSearch) {
+      Object.assign(params, { "query": this.props.rangeWeight.paramSearch })
     };
-    this.props.getPricingList(params);
+    this.props.getPricingInternationalList(params);
 
     this.setState({
       currentPage: 1,
@@ -75,18 +74,24 @@ class List extends Component {
       }
     }
 
-    if (this.props.pricing.paramSearch) {
-      Object.assign(params, { "query": this.props.pricing.paramSearch })
+    if (this.props.rangeWeight.paramSearch) {
+      Object.assign(params, { "query": this.props.rangeWeight.paramSearch })
     };
-    this.props.getPricingList(params);
+    this.props.getPricingInternationalList(params);
 
     this.setState({
       currentPage: page
     });
   };
 
-  componentDidMount() {
-    this.props.getPricingList();
+  onEditPricing = (e, id) => {
+    e.stopPropagation();
+    this.props.history.push(`/pricing-international/pricing/edit/${id}`);
+  }
+
+  onViewPricing = (e, type, pricing) => {
+    e.stopPropagation();
+    this.props.history.push(`/pricing-international/pricing/view/${pricing.id}`);
   }
 
   renderHeader = (selected) => {
@@ -206,7 +211,8 @@ class List extends Component {
 
 List.propTypes = {
   pricing: PropTypes.object.isRequired,
-  getPricingList: PropTypes.func.isRequired,
+  getPricingInternationalList: PropTypes.func.isRequired,
+  deletePricingInternationalItem: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = ({ pricingInternational }) => {
@@ -219,7 +225,7 @@ const mapStateToProps = ({ pricingInternational }) => {
 export default withRouter(injectIntl(connect(
   mapStateToProps,
   {
-    getPricingList,
-    // deletePricingItem
+    getPricingInternationalList,
+    deletePricingInternationalItem
   }
 )(List)));

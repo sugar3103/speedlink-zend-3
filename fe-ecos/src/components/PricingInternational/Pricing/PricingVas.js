@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import PricingVasItem from './PricingVasItem';
 import { FieldArray, reduxForm } from 'redux-form';
-import { getPricingVas } from '../../../redux/actions';
+// import { getPricingVas } from '../../../redux/actions';
 import PropTypes from 'prop-types';
 
 const renderVasItems = ({ fields, meta: { submitFailed, error }, pricing_data_id }) => (
@@ -27,17 +27,17 @@ const renderVasItems = ({ fields, meta: { submitFailed, error }, pricing_data_id
 
 class PricingVas extends Component {
 
-    componentWillMount() {
-        const params = {
-            offset: {
-                limit: 0
-            },
-            query: {
-                pricing_data_id: this.props.pricing_data_id
-            }
-        }
-        this.props.getPricingVas(params);
-    }
+    // componentWillMount() {
+    //     const params = {
+    //         offset: {
+    //             limit: 0
+    //         },
+    //         query: {
+    //             pricing_data_id: this.props.pricing_data_id
+    //         }
+    //     }
+    //     this.props.getPricingVas(params);
+    // }
 
     render() {
         const { messages } = this.props.intl;
@@ -55,7 +55,7 @@ class PricingVas extends Component {
 }
 
 PricingVas.propTypes = {
-    getPricingVas: PropTypes.func.isRequired,
+    // getPricingVas: PropTypes.func.isRequired,
     vas: PropTypes.array
 }
 
@@ -71,7 +71,7 @@ const mapStateToProps = ({pricing}) => ({
 });
   
 const mapDispatchToProps = {
-    getPricingVas
+    // getPricingVas
 };
 
 PricingVasForm = connect(mapStateToProps, mapDispatchToProps)(PricingVasForm)
