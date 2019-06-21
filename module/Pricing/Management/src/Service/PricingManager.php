@@ -7,10 +7,10 @@ use Address\Entity\District;
 use Address\Entity\Ward;
 use Core\Utils\Utils;
 use Customer\Entity\Customer;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Management\Entity\Pricing;
-use Doctrine\ORM\EntityManager;
 use Management\Entity\PricingCod;
 use Management\Entity\PricingCodMin;
 use Management\Entity\PricingData;
@@ -18,21 +18,23 @@ use Management\Entity\PricingVas;
 use Management\Entity\PricingVasSpec;
 use OAuth\Entity\User;
 use RangeWeight\Entity\RangeWeight;
-use ServiceShipment\Entity\Category;
 use ServiceShipment\Entity\Carrier;
+use ServiceShipment\Entity\Category;
 use ServiceShipment\Entity\ShipmentType;
+use ServiceShipment\Entity\Service;
 use ZoneCode\Entity\ZoneCode;
 
 /**
  * @package Management\Service
  */
-class PricingManager {
+class PricingManager
+{
 
     /**
      * @var EntityManager
      */
     private $entityManager;
-   
+
     /**
      * BranchManager constructor.
      * @param $entityManager
@@ -61,18 +63,22 @@ class PricingManager {
         }
         $pricing->setJoinUpdated($user_data);
 
-        $approved_by = $this->entityManager->getRepository(User::class)->find($data['approved_by']);
-        if ($approved_by == null) {
-            throw new \Exception('Not found Approve person ID');
+        if (isset($data['approved_by'])) {
+            $approved_by = $this->entityManager->getRepository(User::class)->find($data['approved_by']);
+            if ($approved_by == null) {
+                throw new \Exception('Not found Approve person ID');
+            }
+
+            $pricing->setJoinApproval($approved_by);
         }
-        
-        $pricing->setJoinApproval($approved_by);
-        
-        $saleman_id = $this->entityManager->getRepository(User::class)->find($data['saleman_id']);
-        if ($saleman_id == null) {
-            throw new \Exception('Not found Saleman ID');
+
+        if (isset($data['saleman_id'])) {
+            $saleman_id = $this->entityManager->getRepository(User::class)->find($data['saleman_id']);
+            if ($saleman_id == null) {
+                throw new \Exception('Not found Saleman ID');
+            }
+            $pricing->setJoinSaleman($saleman_id);
         }
-        $pricing->setJoinSaleman($saleman_id);
 
         if (!empty($data['customer_id'])) {
             $customer_id = $this->entityManager->getRepository(Customer::class)->find($data['customer_id']);
@@ -81,18 +87,23 @@ class PricingManager {
             }
             $pricing->setJoinCustomer($customer_id);
         }
-
-        $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['carrier_id']);
-        if ($carrier == null) {
-            throw new \Exception('Not found Carrier Code');
+        if (isset($data['carrier_id'])) {
+            $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['carrier_id']);
+        
+            if ($carrier == null) {
+                throw new \Exception('Not found Carrier Code');
+            }
+        
+            $pricing->setJoinCarrier($carrier);
         }
-        $pricing->setJoinCarrier($carrier);
 
-        $origin_country = $this->entityManager->getRepository(Country::class)->find($data['origin_country_id']);
-        if ($origin_country == null) {
-            throw new \Exception('Not found Origin Country');
+        if (isset($data['origin_country_id'])) {
+            $origin_country = $this->entityManager->getRepository(Country::class)->find($data['origin_country_id']);
+            if ($origin_country == null) {
+                throw new \Exception('Not found Origin Country');
+            }
+            $pricing->setJoinOriginCountry($origin_country);
         }
-        $pricing->setJoinOriginCountry($origin_country);
 
         if (!empty($data['origin_city_id'])) {
             $origin_city = $this->entityManager->getRepository(City::class)->find($data['origin_city_id']);
@@ -117,6 +128,22 @@ class PricingManager {
             }
             $pricing->setJoinOriginWard($origin_ward);
         }
+
+        if(isset($data['service_id'])) {
+            $service = $this->entityManager->getRepository(Service::class)->find($data['service_id']);
+            if ($service == null) {
+                throw new \Exception('Not found Origin Ward');
+            }
+            $pricing->setJoinService($service);
+        }
+
+        if(isset($data['shipment_type_id'])) {
+            $shipment_type = $this->entityManager->getRepository(ShipmentType::class)->find($data['shipment_type_id']);
+            if ($shipment_type == null) {
+                throw new \Exception('Not found Origin Ward');
+            }
+            $pricing->setJoinShipmentType($service);
+        }
     }
 
     /**
@@ -136,7 +163,7 @@ class PricingManager {
         //get orm carrier
         $ormPricing = $this->entityManager->getRepository(Pricing::class)->getListPricingByCondition($start, $limit, $sortField, $sortDirection, $filters);
 
-        if($ormPricing){
+        if ($ormPricing) {
             $ormPaginator = new ORMPaginator($ormPricing, true);
             $ormPaginator->setUseOutputWalkers(false);
 
@@ -165,7 +192,7 @@ class PricingManager {
     {
         $pricing = [];
         $ormPricing = $this->entityManager->getRepository(Pricing::class)->getListCodeByCondition($field, $params);
-        if($ormPricing){
+        if ($ormPricing) {
             $ormPaginator = new ORMPaginator($ormPricing, true);
             $ormPaginator->setUseOutputWalkers(false);
             $pricing = $ormPaginator->getIterator()->getArrayCopy();
@@ -182,7 +209,7 @@ class PricingManager {
      */
     public function addPricing($data, $user)
     {
-        // try {
+        try {
             // begin transaction
             $this->entityManager->beginTransaction();
             $date = new \DateTime();
@@ -190,14 +217,14 @@ class PricingManager {
             $category = $this->entityManager->getRepository(Category::class)->find($data['category_id']);
             $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['carrier_id']);
             $country = $this->entityManager->getRepository(Country::class)->find($data['origin_country_id']);
-            $title = $carrier->getCode().'.'.$category->getNameEn().'.'.$country->getIsoCode();
+            $title = $carrier->getCode() . '.' . $category->getNameEn() . '.' . $country->getIsoCode();
             if (!empty($data['origin_city_id'])) {
                 $city = $this->entityManager->getRepository(City::class)->find($data['origin_city_id']);
-                $title .= '-'.$city->getNameEn();
+                $title .= '-' . $city->getNameEn();
             }
-            $title .= '.'.date('y-M-d');
-            $pricing_count = $this->entityManager->getRepository(Pricing::class)->findBy(['name'=>$title]);
-            $title .= '.'.(count($pricing_count)+1);
+            $title .= '.' . date('y-M-d');
+            $pricing_count = $this->entityManager->getRepository(Pricing::class)->findBy(['name' => $title]);
+            $title .= '.' . (count($pricing_count) + 1);
             $title = str_replace(' ', '', $title);
 
             $pricing = new Pricing();
@@ -206,9 +233,9 @@ class PricingManager {
             $pricing->setCategoryId($data['category_id']);
             $pricing->setOriginCountryId($data['origin_country_id']);
             $pricing->setOriginCityId($data['origin_city_id']);
-            $district_id = empty($data['origin_district_id'])? null : $data['origin_district_id'];
+            $district_id = empty($data['origin_district_id']) ? null : $data['origin_district_id'];
             $pricing->setOriginDistrictId($district_id);
-            $ward_id = empty($data['origin_ward_id'])? null : $data['origin_ward_id'];
+            $ward_id = empty($data['origin_ward_id']) ? null : $data['origin_ward_id'];
             $pricing->setOriginWardId($ward_id);
             $pricing->setEffectedDate(new \DateTime($data['effected_date']));
             $pricing->setExpiredDate(new \DateTime($data['expired_date']));
@@ -232,11 +259,10 @@ class PricingManager {
 
             $this->entityManager->commit();
             return $pricing;
-        // }
-        // catch (ORMException $e) {
-        //     $this->entityManager->rollback();
-        //     return FALSE;
-        // }
+        } catch (ORMException $e) {
+            $this->entityManager->rollback();
+            return false;
+        }
     }
 
     /**
@@ -252,11 +278,11 @@ class PricingManager {
         try {
             // begin transaction
             $this->entityManager->beginTransaction();
-            $district_id = empty($data['origin_district_id'])? null : $data['origin_district_id'];
-            $ward_id = empty($data['origin_ward_id'])? null : $data['origin_ward_id'];
+            $district_id = empty($data['origin_district_id']) ? null : $data['origin_district_id'];
+            $ward_id = empty($data['origin_ward_id']) ? null : $data['origin_ward_id'];
 
             if ($pricing->getCarrierId() != $data['carrier_id']
-                || $pricing->getCategoryCode()!= $data['category_code']
+                || $pricing->getCategoryCode() != $data['category_code']
                 || $pricing->getOriginCountryId() != $data['origin_country_id']
                 || $pricing->getOriginCityId() != $data['origin_city_id']
                 || $pricing->getOriginDistrictId() != $district_id
@@ -314,10 +340,9 @@ class PricingManager {
             $this->entityManager->flush();
             $this->entityManager->commit();
             return $pricing;
-        }
-        catch (ORMException $e) {
+        } catch (ORMException $e) {
             $this->entityManager->rollback();
-            return FALSE;
+            return false;
         }
     }
 
@@ -327,7 +352,8 @@ class PricingManager {
      * @return Pricing|bool
      * @throws \Exception
      */
-    public function deletePricing($pricing, $user) {
+    public function deletePricing($pricing, $user)
+    {
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
@@ -340,10 +366,9 @@ class PricingManager {
             $this->entityManager->commit();
 
             return $pricing;
-        }
-        catch (ORMException $e) {
+        } catch (ORMException $e) {
             $this->entityManager->rollback();
-            return FALSE;
+            return false;
         }
     }
 
@@ -355,14 +380,16 @@ class PricingManager {
                 'category' => $data->getCategoryId(),
                 'carrier' => $data->getCarrierId(),
             ];
-            $shipment_type = $this->entityManager->getRepository(ShipmentType::class)->findBy($where, ['service'=>'ASC','id'=>'ASC']);
+            $shipment_type = $this->entityManager->getRepository(ShipmentType::class)->findBy($where, ['service' => 'ASC', 'id' => 'ASC']);
             $where = [
                 'category_id' => $data->getCategoryId(),
                 'carrier_id' => $data->getCarrierId(),
             ];
+
             foreach ($shipment_type as $shipment) {
                 $where['service_id'] = $shipment->getService();
                 $where['shipment_type_id'] = $shipment->getId();
+                
                 $pricingTable = $this->generatePricingDataTable($where);
 
                 $pricingData = new PricingData();
@@ -375,7 +402,10 @@ class PricingManager {
                 $pricingData->setCreatedBy($user->id);
                 $pricingData->setUpdatedAt($date);
                 $pricingData->setUpdatedBy($user->id);
-                $this->getReferenced($pricingData, $where, $user, 'add');
+                
+                unset($where['carrier_id']);
+                $this->getReferenced($pricingData, $where, $user, 'add');                
+                
                 $this->entityManager->persist($pricingData);
                 $this->entityManager->flush();
             }
@@ -386,7 +416,7 @@ class PricingManager {
 
     public function generatePricingDataTable($where, $mode = 'new')
     {
-        $rangeWeight = $this->entityManager->getRepository(RangeWeight::class)->findBy($where, ['from'=> 'ASC','to'=>'ASC']);
+        $rangeWeight = $this->entityManager->getRepository(RangeWeight::class)->findBy($where, ['from' => 'ASC', 'to' => 'ASC']);
         $zoneCode = $this->entityManager->getRepository(ZoneCode::class)->findBy($where, ['name_en' => 'ASC']);
         $result = ['title' => [], 'data' => []];
         if (count($rangeWeight) <= 0) {
@@ -396,7 +426,7 @@ class PricingManager {
         $title['Weight'] = 'Weight';
         foreach ($zoneCode as $zone) {
             $temp = array();
-            if (in_array($zone->getNameEn(),$temp)) {
+            if (in_array($zone->getNameEn(), $temp)) {
                 continue;
             }
             $title[$zone->getNameEn()] = $zone->getNameEn();
@@ -406,7 +436,7 @@ class PricingManager {
             $data[$range->getId()]['Weight'] = $range->getFrom() . ' - ' . $range->getTo();
             $temp = array();
             foreach ($zoneCode as $zone) {
-                if (in_array($zone->getNameEn(),$temp) ) {
+                if (in_array($zone->getNameEn(), $temp)) {
                     continue;
                 }
                 $data[$range->getId()][$zone->getNameEn()] = 0;

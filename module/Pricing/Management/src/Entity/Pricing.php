@@ -689,7 +689,7 @@ class Pricing
     /**
      * @param mixed $join_approval
      */
-    public function setJoinApproval($join_approval)
+    public function setJoinApproval(\OAuth\Entity\User $join_approval)
     {
         $this->join_approval = $join_approval;
     }

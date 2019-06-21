@@ -97,17 +97,16 @@ class PricingController extends CoreController
 
         //validate form
         if ($form->isValid()) {
-            // try {
+            try {
                 // add new pricing
-                $pricing = $this->pricingManager->addPricing($data, $user);
-                var_dump($pricing); die;
+                $pricing = $this->pricingManager->addPricing($data, $user);                
                 $this->error_code = 1;
                 $this->apiResponse['data'] = $pricing->getId();
                 $this->apiResponse['message'] = "Success: You have added a pricing!";
-            // } catch (\Exception $e) {
-            //     $this->error_code = -1;
-            //     $this->apiResponse['message'] = "Fail: Please contact System Admin";
-            // }
+            } catch (\Exception $e) {
+                $this->error_code = -1;
+                $this->apiResponse['message'] = "Fail: Please contact System Admin";
+            }
         } else {
             $this->error_code = -1;
             $this->apiResponse = $form->getMessages();
