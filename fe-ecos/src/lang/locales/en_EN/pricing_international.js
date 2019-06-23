@@ -75,7 +75,7 @@ module.exports = {
   'pri_int.not-ras': 'Provincial',
   'pri_int.edit-range-weight-value': 'Edit Range Weight Value',
   'pri_int.normal': 'Normal',
-  'pri_int.special': 'Special',
+  'pri_int.range': 'Range',
   'pri_int.minimun-value': 'Minimum Value',
   'pri_int.price': 'Price',
   'pri_int.formula': 'Formula',
@@ -86,6 +86,7 @@ module.exports = {
   'pri_int.subtraction': 'Subtraction',
   'pri_int.multiplication': 'Multiplication',
   'pri_int.division': 'Division',
+  'pri_int.transportation': 'Transportation',
 
   //validate
   'pri_int.validate-name-exists': 'Name already exists',

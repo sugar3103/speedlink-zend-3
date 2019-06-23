@@ -35,6 +35,12 @@ class Detail extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps && nextProps.data) {
+      this.setState({ data: nextProps.data })
+    }
+  }
+
   toggle = (tab) => {
     if (this.state.activeTab !== tab) {
       this.setState({
@@ -44,6 +50,7 @@ class Detail extends Component {
   };
 
   showTabItem = (data) => {
+    const { locale } = this.props.intl;
     let result = null;
     if (data.length > 0) {
       result = data.map((item, index) => {
@@ -55,7 +62,7 @@ class Detail extends Component {
                 this.toggle(index + 2);
               }}
             >
-              {item.service_name}
+              {locale === 'en-US' ? item.service_name_en : item.service_name}
             </NavLink>
           </NavItem>
         )
@@ -80,7 +87,8 @@ class Detail extends Component {
 
   render() {
     const { messages } = this.props.intl;
-    const { type, data } = this.props;
+    const { type } = this.props;
+    const { data } = this.state;
     return (
       <Col md={12} lg={12}>
         <Card>
@@ -118,12 +126,13 @@ class Detail extends Component {
 
 Detail.propTypes = {
   type: PropTypes.string.isRequired,
-  data: PropTypes.object,
+  data: PropTypes.array,
   getPricingInternationalData: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = ({ pricingInternational }) => {
-  const { pricing: data } = pricingInternational;
+  const { pricing: { data } } = pricingInternational;
+  
   return {
     data
   }

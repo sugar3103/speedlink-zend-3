@@ -58,7 +58,35 @@ class ActionForm extends Component {
         this.setState({
             disableField: nextProps.type === 'view' ? true : false,
             disableCustomerField: nextProps.is_private ? false : true
-        })
+        });
+        if (nextProps.origin_country_id && nextProps.origin_country_id !== this.props.origin_country_id) {
+            let params = {
+                field: ['id', 'name', 'name_en'],
+                offset: {
+                    limit: 0
+                },
+                query: {
+                    country: nextProps.origin_country_id
+                }
+            };
+            this.props.getPricingCityInternationalList(params);
+
+            if (nextProps.origin_city_id && nextProps.origin_city_id !== this.props.origin_city_id) {
+                params.query = {
+                    ...params.query,
+                    city: nextProps.origin_city_id
+                };
+                this.props.getPricingDistrictInternationalList(params);
+
+                if (nextProps.origin_district_id && nextProps.origin_district_id !== this.props.origin_district_id) {
+                    params.query = {
+                        ...params.query,
+                        district: nextProps.origin_district_id
+                    };
+                    this.props.getPricingWardInternationalList(params);
+                }
+            }
+        }
     }
 
     componentDidMount() {
@@ -68,15 +96,15 @@ class ActionForm extends Component {
     showOptionsCategory = () => {
         let result = [];
         for (var key in categoryPricing) {
-          if (categoryPricing.hasOwnProperty(key)) {
-            result.push({
-              value: key,
-              label: categoryPricing[key]
-            });
-          }
+            if (categoryPricing.hasOwnProperty(key)) {
+                result.push({
+                    value: key,
+                    label: categoryPricing[key]
+                });
+            }
         }
         return result;
-      }
+    }
 
     showOptionCustomer = (items) => {
         let result = [];
@@ -122,63 +150,63 @@ class ActionForm extends Component {
         this.props.change('origin_district_id', null);
         this.props.change('origin_ward_id', null);
         if (value) {
-          let params = {
-            field: ['id', 'name', 'name_en'],
-            offset: {
-              limit: 0
-            },
-            query: {
-              country: value
+            let params = {
+                field: ['id', 'name', 'name_en'],
+                offset: {
+                    limit: 0
+                },
+                query: {
+                    country: value
+                }
             }
-          }
-          this.props.getPricingCityInternationalList(params);
+            this.props.getPricingCityInternationalList(params);
         } else {
-          this.props.removeState(PRI_INT_PRICING_CITY_RESET_STATE);
+            this.props.removeState(PRI_INT_PRICING_CITY_RESET_STATE);
         }
-    
+
         this.props.removeState(PRI_INT_PRICING_DISTRICT_RESET_STATE);
         this.props.removeState(PRI_INT_PRICING_WARD_RESET_STATE);
-      }
-    
-      onChangePricingCity = value => {
+    }
+
+    onChangePricingCity = value => {
         this.props.change('origin_district_id', null);
         this.props.change('origin_ward_id', null);
-    
+
         if (value) {
-          let params = {
-            field: ['id', 'name', 'name_en'],
-            offset: {
-              limit: 0
-            },
-            query: {
-              city: value
+            let params = {
+                field: ['id', 'name', 'name_en'],
+                offset: {
+                    limit: 0
+                },
+                query: {
+                    city: value
+                }
             }
-          }
-          this.props.getPricingDistrictInternationalList(params);
+            this.props.getPricingDistrictInternationalList(params);
         } else {
-          this.props.removeState(PRI_INT_PRICING_DISTRICT_RESET_STATE);
+            this.props.removeState(PRI_INT_PRICING_DISTRICT_RESET_STATE);
         }
-    
+
         this.props.removeState(PRI_INT_PRICING_WARD_RESET_STATE);
-      }
-    
-      onChangePricingDistrict = value => {
+    }
+
+    onChangePricingDistrict = value => {
         this.props.change('origin_ward_id', null);
         if (value) {
-          let params = {
-            field: ['id', 'name', 'name_en'],
-            offset: {
-              limit: 0
-            },
-            query: {
-              district: value
+            let params = {
+                field: ['id', 'name', 'name_en'],
+                offset: {
+                    limit: 0
+                },
+                query: {
+                    district: value
+                }
             }
-          }
-          this.props.getPricingWardInternationalList(params);
+            this.props.getPricingWardInternationalList(params);
         } else {
-          this.props.removeState(PRI_INT_PRICING_WARD_RESET_STATE);
+            this.props.removeState(PRI_INT_PRICING_WARD_RESET_STATE);
         }
-      }
+    }
 
     onChangeIsPrivate = value => {
         this.props.change('customer_id', '');
@@ -448,7 +476,11 @@ const mapStateToProps = (state, props) => {
             approval_status: 0
         };
     } else {
-        initialValues = itemEditting
+        initialValues = {
+            ...itemEditting,
+            is_private: itemEditting.is_private ? 1 : 0,
+            status: itemEditting.status ? 1 : 0,
+        };
     }
 
     let disableApprovalStatus = true;
@@ -462,6 +494,10 @@ const mapStateToProps = (state, props) => {
 
     const selector = formValueSelector('pricing_international_action_form');
     const is_private = selector(state, 'is_private');
+    const origin_country_id = selector(state, 'origin_country_id');
+    const origin_city_id = selector(state, 'origin_city_id');
+    const origin_district_id = selector(state, 'origin_district_id');
+    const origin_ward_id = selector(state, 'origin_ward_id');
 
     return {
         pricing,
@@ -471,6 +507,7 @@ const mapStateToProps = (state, props) => {
         saleman,
         approvedBy,
         country, city, district, ward,
+        origin_country_id, origin_city_id, origin_district_id, origin_ward_id,
         currentUser,
         initialValues,
         is_private,

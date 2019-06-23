@@ -19,6 +19,9 @@ import {
   PRI_INT_PRICING_GET_DATA,
   PRI_INT_PRICING_GET_DATA_SUCCESS,
 
+  PRI_INT_PRICING_UPDATE_DATA,
+  PRI_INT_PRICING_UPDATE_DATA_SUCCESS,
+
   PRI_INT_PRICING_GET_VAS,
   PRI_INT_PRICING_GET_VAS_SUCCESS,
 
@@ -82,9 +85,9 @@ export const deletePricingInternationalItemSuccess = () => ({
   type: PRI_INT_PRICING_DELETE_ITEM_SUCCESS,
 });
 
-export const getPricingInternationalData = (pricing_id) => ({
+export const getPricingInternationalData = (params) => ({
   type: PRI_INT_PRICING_GET_DATA,
-  payload: { pricing_id }
+  payload: { params }
 });
 
 export const getPricingInternationalDataSuccess = (data) => ({
@@ -92,9 +95,18 @@ export const getPricingInternationalDataSuccess = (data) => ({
   payload: data
 });
 
-export const getPricingInternationalVas = (pricing_id) => ({
+export const updatePricingInternationalData = (item) => ({
+  type: PRI_INT_PRICING_UPDATE_DATA,
+  payload: { item }
+});
+
+export const updatePricingInternationalDataSuccess = () => ({
+  type: PRI_INT_PRICING_UPDATE_DATA_SUCCESS
+});
+
+export const getPricingInternationalVas = (params) => ({
   type: PRI_INT_PRICING_GET_VAS,
-  payload: { pricing_id }
+  payload: { params }
 });
 
 export const getPricingInternationalVasSuccess = (data) => ({

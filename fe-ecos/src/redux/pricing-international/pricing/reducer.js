@@ -19,6 +19,9 @@ import {
   PRI_INT_PRICING_GET_DATA,
   PRI_INT_PRICING_GET_DATA_SUCCESS,
 
+  PRI_INT_PRICING_UPDATE_DATA,
+  PRI_INT_PRICING_UPDATE_DATA_SUCCESS,
+
   PRI_INT_PRICING_GET_VAS,
   PRI_INT_PRICING_GET_VAS_SUCCESS,
 
@@ -37,7 +40,7 @@ const INIT_STATE = {
   itemEditting: {},
   total: 0,
   paramSearch: null,
-  data: {},
+  data: [],
   loadingData: true,
   loadingVas: true,
   vas: [],
@@ -132,6 +135,19 @@ export default (state = INIT_STATE, action) => {
         ...state, 
         loadingData: false, 
         data: action.payload
+      };
+
+    case PRI_INT_PRICING_UPDATE_DATA:
+			return { 
+        ...state, 
+        loading: false 
+      };
+
+		case PRI_INT_PRICING_UPDATE_DATA_SUCCESS:
+			return { 
+        ...state, 
+        loading: false, 
+        errors: null
       };
 
     case PRI_INT_PRICING_UPDATE_VAS:

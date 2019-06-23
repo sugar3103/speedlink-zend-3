@@ -13,6 +13,7 @@ import {
   PRI_INT_PRICING_UPDATE_ITEM,
   PRI_INT_PRICING_DELETE_ITEM,
   PRI_INT_PRICING_GET_DATA,
+  PRI_INT_PRICING_UPDATE_DATA,
   PRI_INT_PRICING_GET_VAS,
   PRI_INT_PRICING_UPDATE_VAS,
   PRI_INT_PRICING_GET_FIELD_VAS,
@@ -28,6 +29,7 @@ import {
   getPricingInternationalList,
   requestUpdatePricingInternationalItem,
   getPricingInternationalDataSuccess,
+  updatePricingInternationalDataSuccess,
   getPricingInternationalVasSuccess,
   updatePricingInternationalVasSuccess,
   getPricingInternationalFieldVasSuccess
@@ -112,7 +114,7 @@ function* addPricingInternationalItem({ payload }) {
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(addPricingInternationalItemSuccess());
-        yield call(history.push, `/pricing-international/pricing/edit/${response.data.pricing_id}`);
+        yield call(history.push, `/pricing-international/pricing/edit/${response.data}`);
         createNotification({ type: 'success', message: 'pri_int.add-success' });
         break;
 
@@ -256,24 +258,24 @@ function* deletePricingInternationalItem({ payload }) {
 
 /* GET PRICING DATA */
 
-function getDataPricingInternationalApi(pricing_id) {
+function getDataPricingInternationalApi(params) {
   return axios.request({
     method: 'post',
     url: `${apiUrl}pricing_data`,
     headers: authHeader(),
-    data: {  id: pricing_id }
+    data: JSON.stringify(params)
   });
 }
 
-const getPricingInternationalDataRequest = async (pricing_id) => {
-  return await getDataPricingInternationalApi(pricing_id).then(res => res.data).catch(err => err)
+const getPricingInternationalDataRequest = async (params) => {
+  return await getDataPricingInternationalApi(params).then(res => res.data).catch(err => err)
 };
 
 function* getDataPricingInternationalItems({ payload }) {
-  const { pricing_id } = payload;
+  const { params } = payload;
   const { pathname } = history.location;
   try {
-    const response = yield call(getPricingInternationalDataRequest, pricing_id);
+    const response = yield call(getPricingInternationalDataRequest, params);
     switch (response.error_code) {
       
       case EC_SUCCESS:
@@ -296,26 +298,66 @@ function* getDataPricingInternationalItems({ payload }) {
   }
 }
 
-/* GET PRICING VAS */
-
-function getVasPricingInternationalApi(pricing_id) {
+/* UPDATE PRICING INTERNATIONAL DATA */
+function updatePricingInternationalDataApi(item) {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}pricing/vas`,
+    url: `${apiUrl}pricing_data/edit`,
     headers: authHeader(),
-    data: {  id: pricing_id }
+    data: item
   });
 }
 
-const getPricingInternationalVasRequest = async (pricing_id) => {
-  return await getVasPricingInternationalApi(pricing_id).then(res => res.data).catch(err => err)
+const updatePricingInternationalDataItemRequest = async item => {
+  return await updatePricingInternationalDataApi(item).then(res => res.data).catch(err => err)
+};
+
+function* updatePricingInternationalDataItem({ payload }) {
+  const { item } = payload;
+  const { pathname } = history.location;
+  try {
+    const response = yield call(updatePricingInternationalDataItemRequest, item);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(updatePricingInternationalDataSuccess());
+        createNotification({ type: 'success',  message: 'pri_int.update-success' });
+        break;
+
+      case EC_FAILURE:
+        yield put(pricingInternationalError(response.data));
+        break;
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(pricingInternationalError(error));
+  }
+}
+
+/* GET PRICING VAS */
+
+function getVasPricingInternationalApi(params) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}pricing_vas`,
+    headers: authHeader(),
+    data: JSON.stringify(params)
+  });
+}
+
+const getPricingInternationalVasRequest = async (params) => {
+  return await getVasPricingInternationalApi(params).then(res => res.data).catch(err => err)
 };
 
 function* getVasPricingInternationalItems({ payload }) {
-  const { pricing_id } = payload;
+  const { params } = payload;
   const { pathname } = history.location;
   try {
-    const response = yield call(getPricingInternationalVasRequest, pricing_id);
+    const response = yield call(getPricingInternationalVasRequest, params);
     switch (response.error_code) {
       
       case EC_SUCCESS:
@@ -343,7 +385,7 @@ function* getVasPricingInternationalItems({ payload }) {
 function updatePricingInternationalVasApi(item) {
   return axios.request({
     method: 'post',
-    url: `${apiUrl}pricing/vas/add`,
+    url: `${apiUrl}pricing_vas/updateVas`,
     headers: authHeader(),
     data: item
   });
@@ -436,15 +478,19 @@ export function* watchPricingInternationalUpdateItem() {
   yield takeEvery(PRI_INT_PRICING_UPDATE_ITEM, updatePricingInternationalItem);
 }
 
-export function* watchPricingIntenationalDeleteItem() {
+export function* watchPricingInternationalDeleteItem() {
   yield takeEvery(PRI_INT_PRICING_DELETE_ITEM, deletePricingInternationalItem);
 }
 
-export function* watchPricingIntenationalGetData() {
+export function* watchPricingInternationalGetData() {
   yield takeEvery(PRI_INT_PRICING_GET_DATA, getDataPricingInternationalItems);
 }
 
-export function* watchPricingIntenationalGetVas() {
+export function* watchPricingInternationalUpdateData() {
+  yield takeEvery(PRI_INT_PRICING_UPDATE_DATA, updatePricingInternationalDataItem);
+}
+
+export function* watchPricingInternationalGetVas() {
   yield takeEvery(PRI_INT_PRICING_GET_VAS, getVasPricingInternationalItems);
 }
 
@@ -452,7 +498,7 @@ export function* watchPricingInternationalUpdateVas() {
   yield takeEvery(PRI_INT_PRICING_UPDATE_VAS, updatePricingInternationalVasItem);
 }
 
-export function* watchPricingIntenationalGetFieldVas() {
+export function* watchPricingInternationalGetFieldVas() {
   yield takeEvery(PRI_INT_PRICING_GET_FIELD_VAS, getFieldVasPricingInternationalItems);
 }
 
@@ -462,10 +508,11 @@ export default function* rootSaga() {
     fork(watchPricingInternationalAddItem),
     fork(watchRequestPricingInternationalUpdateItem),
     fork(watchPricingInternationalUpdateItem),
-    fork(watchPricingIntenationalDeleteItem),
-    fork(watchPricingIntenationalGetData),
-    fork(watchPricingIntenationalGetVas),
+    fork(watchPricingInternationalDeleteItem),
+    fork(watchPricingInternationalGetData),
+    fork(watchPricingInternationalUpdateData),
+    fork(watchPricingInternationalGetVas),
     fork(watchPricingInternationalUpdateVas),
-    fork(watchPricingIntenationalGetFieldVas),
+    fork(watchPricingInternationalGetFieldVas),
   ]);
 }

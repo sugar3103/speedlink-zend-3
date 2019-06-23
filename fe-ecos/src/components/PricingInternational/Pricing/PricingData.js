@@ -2,11 +2,11 @@ import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import PricingVas from './PricingVas';
-import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { updatePricingInternationalItem, updatePricingInternationalVas } from '../../../redux/actions';
+import { updatePricingInternationalData, updatePricingInternationalVas } from '../../../redux/actions';
 
 class PricingData extends Component {
 
@@ -31,7 +31,7 @@ class PricingData extends Component {
         const { messages } = this.props.intl;
         const nan = isNaN(value);
         if (!value || nan) {
-          return messages['pri_int.validate-value-numberic'];
+            return messages['pri_int.validate-value-numberic'];
         }
         return true;
     }
@@ -58,7 +58,7 @@ class PricingData extends Component {
             pricing_data: { title, data }
         }
 
-        this.props.updatePricingInternationalItem(dataSent);
+        this.props.updatePricingInternationalData(dataSent);
 
         setTimeout(() => {
             this.setState({
@@ -72,19 +72,22 @@ class PricingData extends Component {
         this.props.updatePricingInternationalVas(data);
     }
 
+    formatPrice = (value) => {
+        return new Intl.NumberFormat().format(value);
+    }
+
     render() {
         const { messages } = this.props.intl;
-        const { pricing_data, shipment_type_code, shipment_type_name, id } = this.props.pricing;
-        const { title } = pricing_data;
-        
+        const { pricing_data: { title }, shipment_type_code, shipment_type_name, id } = this.props.pricing;
+
         let columns = Object.keys(title).map((item, index) => {
             if (index === 0) {
                 return (
-                    <TableHeaderColumn dataField={title[item]} isKey key={index}>{item}</TableHeaderColumn>
+                    <TableHeaderColumn className="text-center" columnClassName="text-center" dataField={title[item]} isKey key={index}>{item}</TableHeaderColumn>
                 )
             } else {
                 return (
-                    <TableHeaderColumn dataField={title[item]} key={index} editable={ { validator: this.valueValidator } }>{item}</TableHeaderColumn>
+                    <TableHeaderColumn className="text-center" columnClassName="text-center" dataField={title[item]} key={index} dataFormat={this.formatPrice} editable={{ validator: this.valueValidator }}>{item}</TableHeaderColumn>
                 )
             }
         });
@@ -104,24 +107,25 @@ class PricingData extends Component {
                         <div className="clearfix"></div>
                     </div>
                 </div>
-                <fieldset className="scheduler-border">
+                <fieldset className="scheduler-border mb-2">
                     <legend className="scheduler-border">{messages['pri_int.transportation']}</legend>
-                    <BootstrapTable data={ this.state.data } cellEdit={ cellEdit }>
+                    <BootstrapTable data={this.state.data} cellEdit={cellEdit}>
                         {columns}
                     </BootstrapTable>
-                    {this.state.enableSaveButton && 
-                        <div className="text-right">
-                            <Button 
-                                size="sm" 
-                                color="primary" 
+                    {this.state.enableSaveButton &&
+                        <div className="text-right mt-2">
+                            <Button
+                                className="mb-1"
+                                size="sm"
+                                color="primary"
                                 onClick={this.onSaveTransportation}
                             >{messages['save']}</Button>
                         </div>
                     }
                 </fieldset>
                 <fieldset className="scheduler-border">
-                    <legend className="scheduler-border">{messages['pri_int.value-services']}</legend>
-                    <PricingVas pricing_data_id={id} onSubmit={this.onSaveVas}/>
+                    <legend className="scheduler-border">{messages['pri_int.vas']}</legend>
+                    <PricingVas pricing_data_id={id} onSubmit={this.onSaveVas} />
                 </fieldset>
             </Fragment>
         )
@@ -129,7 +133,7 @@ class PricingData extends Component {
 }
 
 PricingData.propTypes = {
-    updatePricingInternationalItem: PropTypes.func.isRequired,
+    updatePricingInternationalData: PropTypes.func.isRequired,
     updatePricingInternationalVas: PropTypes.func.isRequired,
 }
 
@@ -138,6 +142,6 @@ const mapStateToProps = () => {
 }
 
 export default injectIntl(connect(mapStateToProps, {
-    updatePricingInternationalItem,
+    updatePricingInternationalData,
     updatePricingInternationalVas
 })(PricingData));

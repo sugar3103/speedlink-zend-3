@@ -89,11 +89,11 @@ class PricingManager
         }
         if (isset($data['carrier_id'])) {
             $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['carrier_id']);
-        
+
             if ($carrier == null) {
                 throw new \Exception('Not found Carrier Code');
             }
-        
+
             $pricing->setJoinCarrier($carrier);
         }
 
@@ -129,7 +129,7 @@ class PricingManager
             $pricing->setJoinOriginWard($origin_ward);
         }
 
-        if(isset($data['service_id'])) {
+        if (isset($data['service_id'])) {
             $service = $this->entityManager->getRepository(Service::class)->find($data['service_id']);
             if ($service == null) {
                 throw new \Exception('Not found Origin Ward');
@@ -137,12 +137,12 @@ class PricingManager
             $pricing->setJoinService($service);
         }
 
-        if(isset($data['shipment_type_id'])) {
+        if (isset($data['shipment_type_id'])) {
             $shipment_type = $this->entityManager->getRepository(ShipmentType::class)->find($data['shipment_type_id']);
             if ($shipment_type == null) {
                 throw new \Exception('Not found Origin Ward');
             }
-            $pricing->setJoinShipmentType($service);
+            $pricing->setJoinShipmentType($shipment_type);
         }
     }
 
@@ -172,7 +172,7 @@ class PricingManager
             $pricingList = $ormPaginator->getIterator()->getArrayCopy();
 
             foreach ($pricingList as $key => $pricing) {
-                $date_format = 'd/m/Y H:i:s';
+                $date_format = 'D M d Y H:i:s \G\M\T+0700';
                 $pricingList[$key]['created_at'] = Utils::checkDateFormat($pricing['created_at'], $date_format);
                 $pricingList[$key]['updated_at'] = Utils::checkDateFormat($pricing['updated_at'], $date_format);
                 $pricingList[$key]['effected_date'] = Utils::checkDateFormat($pricing['effected_date'], $date_format);
@@ -210,55 +210,59 @@ class PricingManager
     public function addPricing($data, $user)
     {
         try {
-            // begin transaction
-            $this->entityManager->beginTransaction();
-            $date = new \DateTime();
+        // begin transaction
+        $this->entityManager->beginTransaction();
+        $date = new \DateTime();
 
-            $category = $this->entityManager->getRepository(Category::class)->find($data['category_id']);
-            $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['carrier_id']);
-            $country = $this->entityManager->getRepository(Country::class)->find($data['origin_country_id']);
-            $title = $carrier->getCode() . '.' . $category->getNameEn() . '.' . $country->getIsoCode();
-            if (!empty($data['origin_city_id'])) {
-                $city = $this->entityManager->getRepository(City::class)->find($data['origin_city_id']);
-                $title .= '-' . $city->getNameEn();
-            }
-            $title .= '.' . date('y-M-d');
-            $pricing_count = $this->entityManager->getRepository(Pricing::class)->findBy(['name' => $title]);
-            $title .= '.' . (count($pricing_count) + 1);
-            $title = str_replace(' ', '', $title);
+        $category = $this->entityManager->getRepository(Category::class)->find($data['category_id']);
+        $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['carrier_id']);
+        $country = $this->entityManager->getRepository(Country::class)->find($data['origin_country_id']);
+        $title = $carrier->getCode() . '.' . $category->getNameEn() . '.' . $country->getIsoCode();
+        if (!empty($data['origin_city_id'])) {
+            $city = $this->entityManager->getRepository(City::class)->find($data['origin_city_id']);
+            $title .= '-' . $city->getNameEn();
+        }
+        $title = str_replace(' ', '', $title);
+        $pricing = $this->entityManager->getRepository(Pricing::class)->createQueryBuilder('p')
+            ->select('count(p.id)')
+            ->where('p.name LIKE :name')
+            ->setParameter('name', $title . '%')
+            ->getQuery()
+            ->getSingleScalarResult();
+        $title .= '.' . ($pricing + 1);
 
-            $pricing = new Pricing();
-            $pricing->setName($title);
-            $pricing->setCarrierId($data['carrier_id']);
-            $pricing->setCategoryId($data['category_id']);
-            $pricing->setOriginCountryId($data['origin_country_id']);
-            $pricing->setOriginCityId($data['origin_city_id']);
-            $district_id = empty($data['origin_district_id']) ? null : $data['origin_district_id'];
-            $pricing->setOriginDistrictId($district_id);
-            $ward_id = empty($data['origin_ward_id']) ? null : $data['origin_ward_id'];
-            $pricing->setOriginWardId($ward_id);
-            $pricing->setEffectedDate(new \DateTime($data['effected_date']));
-            $pricing->setExpiredDate(new \DateTime($data['expired_date']));
-            $pricing->setSalemanId($data['saleman_id']);
-            $pricing->setIsPrivate($data['is_private']);
-            if (!empty($data['customer_id'])) {
-                $pricing->setCustomerId($data['customer_id']);
-            }
-            $pricing->setApprovalStatus($data['approval_status']);
-            $pricing->setApprovedBy($data['approved_by']);
-            $pricing->setStatus($data['status']);
-            $pricing->setCreatedAt($date);
-            $pricing->setCreatedBy($user->id);
-            $pricing->setUpdatedAt($date);
-            $pricing->setUpdatedBy($user->id);
-            $this->getReferenced($pricing, $data, $user, 'add');
+        $pricing = new Pricing();
+        $pricing->setName($title);
+        $pricing->setCarrierId($data['carrier_id']);
+        $pricing->setCategoryId($data['category_id']);
+        $pricing->setOriginCountryId($data['origin_country_id']);
+        $pricing->setOriginCityId($data['origin_city_id']);
+        $district_id = empty($data['origin_district_id']) ? null : $data['origin_district_id'];
+        $pricing->setOriginDistrictId($district_id);
+        $ward_id = empty($data['origin_ward_id']) ? null : $data['origin_ward_id'];
+        $pricing->setOriginWardId($ward_id);
+        $pricing->setEffectedDate(new \DateTime($data['effected_date']));
+        $pricing->setExpiredDate(new \DateTime($data['expired_date']));
+        $pricing->setSalemanId($data['saleman_id']);
+        $pricing->setIsPrivate($data['is_private']);
+        if (!empty($data['customer_id'])) {
+            $pricing->setCustomerId($data['customer_id']);
+        }
+        $pricing->setApprovalStatus($data['approval_status']);
+        $pricing->setApprovedBy($data['approved_by']);
+        $pricing->setStatus($data['status']);
+        $pricing->setCreatedAt($date);
+        $pricing->setCreatedBy($user->id);
+        $pricing->setUpdatedAt($date);
+        $pricing->setUpdatedBy($user->id);
+        $this->getReferenced($pricing, $data, $user, 'add');
 
-            $this->entityManager->persist($pricing);
-            $this->entityManager->flush();
-            $this->generatePricingData($pricing, $user);
+        $this->entityManager->persist($pricing);
+        $this->entityManager->flush();
+        $this->generatePricingData($pricing, $user);
 
-            $this->entityManager->commit();
-            return $pricing;
+        $this->entityManager->commit();
+        return $pricing;
         } catch (ORMException $e) {
             $this->entityManager->rollback();
             return false;
@@ -281,12 +285,14 @@ class PricingManager
             $district_id = empty($data['origin_district_id']) ? null : $data['origin_district_id'];
             $ward_id = empty($data['origin_ward_id']) ? null : $data['origin_ward_id'];
 
-            if ($pricing->getCarrierId() != $data['carrier_id']
-                || $pricing->getCategoryCode() != $data['category_code']
+            if (
+                $pricing->getCarrierId() != $data['carrier_id']
+                || $pricing->getCategoryId() != $data['category_id']
                 || $pricing->getOriginCountryId() != $data['origin_country_id']
                 || $pricing->getOriginCityId() != $data['origin_city_id']
                 || $pricing->getOriginDistrictId() != $district_id
-                || $pricing->getOriginWardId() != $ward_id) {
+                || $pricing->getOriginWardId() != $ward_id
+            ) {
 
                 $where = ['pricing_id' => $pricing->getId()];
                 $pricing_data = $this->entityManager->getRepository(PricingData::class)->findBy($where);
@@ -320,7 +326,7 @@ class PricingManager
 
             $pricing->setName($data['name']);
             $pricing->setCarrierId($data['carrier_id']);
-            $pricing->setCategoryCode($data['category_code']);
+            $pricing->setCategoryId($data['category_id']);
             $pricing->setOriginCountryId($data['origin_country_id']);
             $pricing->setOriginCityId($data['origin_city_id']);
             $pricing->setOriginDistrictId($district_id);
@@ -389,7 +395,7 @@ class PricingManager
             foreach ($shipment_type as $shipment) {
                 $where['service_id'] = $shipment->getService();
                 $where['shipment_type_id'] = $shipment->getId();
-                
+
                 $pricingTable = $this->generatePricingDataTable($where);
 
                 $pricingData = new PricingData();
@@ -402,10 +408,10 @@ class PricingManager
                 $pricingData->setCreatedBy($user->id);
                 $pricingData->setUpdatedAt($date);
                 $pricingData->setUpdatedBy($user->id);
-                
+
                 unset($where['carrier_id']);
-                $this->getReferenced($pricingData, $where, $user, 'add');                
-                
+                $this->getReferenced($pricingData, $where, $user, 'add');
+
                 $this->entityManager->persist($pricingData);
                 $this->entityManager->flush();
             }

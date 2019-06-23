@@ -6,6 +6,7 @@ import { injectIntl } from 'react-intl';
 import CustomField from '../../../containers/Shared/form/CustomField';
 import renderSelectField from '../../../containers/Shared/form/Select';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import FormulaField from './FormulaField';
 import { uuidv4 } from '../../../util/uuidv4';
 
 class PricingVasItem extends Component {
@@ -15,6 +16,21 @@ class PricingVasItem extends Component {
             rows: []
         }
     }
+
+    componentDidMount() {
+        let { spec } = this.props;
+        if (spec.length > 0) {
+          spec = spec.map(item => {
+            return {
+              ...item,
+              index: uuidv4()
+            }
+          });
+        }
+        this.setState({
+          rows: spec,
+        })
+      }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps && nextProps.spec) {
@@ -148,9 +164,8 @@ class PricingVasItem extends Component {
                         <div className="form__form-group-field">
                             <Field
                                 name={`${vas}.formula`}
-                                component={CustomField}
-                                type="text"
-                                placeholder={messages['pri_int.value']}
+                                component={FormulaField}
+                                placeholder={messages['pri_int.formula']}
                             />
                         </div>
                         {type === 1 &&
@@ -181,7 +196,7 @@ class PricingVasItem extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-    const selector = formValueSelector('pricing_vas_action_form');
+    const selector = formValueSelector('pricing_international_vas_action_form');
     const type = selector(state, `${props.vas}.type`);
     const spec = selector(state, `${props.vas}.spec`);
 
@@ -194,13 +209,13 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch, props) => ({
     changeFormValue: value => {
         if (value === 1) {
-            return dispatch(change("pricing_vas_action_form", `vas[${props.index}].min`, null))
+            return dispatch(change("pricing_international_vas_action_form", `vas[${props.index}].min`, null))
         } else {
-            return dispatch(change("pricing_vas_action_form", `vas[${props.index}].spec`, []))
+            return dispatch(change("pricing_international_vas_action_form", `vas[${props.index}].spec`, []))
         }
     },
-    changeSpec: value => dispatch(change('pricing_vas_action_form', `vas[${props.index}].spec`, value)),
-    removeFieldVas: () => dispatch(change("pricing_vas_action_form", `vas[${props.index}].is_deleted`, true))
+    changeSpec: value => dispatch(change('pricing_international_vas_action_form', `vas[${props.index}].spec`, value)),
+    removeFieldVas: () => dispatch(change("pricing_international_vas_action_form", `vas[${props.index}].is_deleted`, true))
 });
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(PricingVasItem));
