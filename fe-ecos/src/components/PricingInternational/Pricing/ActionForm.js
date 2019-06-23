@@ -1,66 +1,109 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, formValueSelector } from 'redux-form';
 import renderSelectField from '../../../containers/Shared/form/Select';
 import renderDatePickerField from '../../../containers/Shared/form/DatePicker';
 import { Button, Col, Row } from 'reactstrap';
 import { connect } from 'react-redux';
 import {
     removeState,
-    getCustomerList,
-    getCarrierShipmentList,
-    getCountryList,
-    getCityList,
-    getDistrictList,
-    getWardList,
-    getUserList
+    getCustomerInternationalList,
+    getCarrierInternationalList,
+    getSalemanInternationalList,
+    getApprovedByInternationalList,
+    getPricingCountryInternationalList,
+    getPricingCityInternationalList,
+    getPricingDistrictInternationalList,
+    getPricingWardInternationalList,
 } from '../../../redux/actions';
 import CalendarBlankIcon from 'mdi-react/CalendarBlankIcon';
 import PropTypes from 'prop-types';
-import { CITY_RESET_STATE, DISTRICT_RESET_STATE, WARD_RESET_STATE } from '../../../constants/actionTypes';
+import { PRI_INT_PRICING_CITY_RESET_STATE, PRI_INT_PRICING_DISTRICT_RESET_STATE, PRI_INT_PRICING_WARD_RESET_STATE } from '../../../constants/actionTypes';
 import validate from './validateActionForm';
+import { categoryPricing } from '../../../constants/defaultValues';
 
 class ActionForm extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
-            showCustomerField: false
+            disableField: true,
+            disableCustomerField: true
         }
     }
-    
-    componentWillMount() {
-        this.props.removeState(CITY_RESET_STATE);
-        this.props.removeState(DISTRICT_RESET_STATE);
-        this.props.removeState(WARD_RESET_STATE);
-    }
-    
-    componentDidMount() {
-        this.props.change('approval_status', 0);
 
-        const paramAddress = {
-            field: ['id', 'name'],
+    componentWillMount() {
+        const params = {
+            field: ['id', 'name', 'name_en'],
             offset: {
                 limit: 0
             }
-        }
-        //get countries
-        this.props.getCountryList(paramAddress);
+        };
+        this.props.getCustomerInternationalList(params);
+        this.props.getCarrierInternationalList(params);
+        this.props.getPricingCountryInternationalList(params);
 
-        //get user
-        const paramUser = {
+        const paramsUser = {
             field: ['id', 'username'],
             offset: {
                 limit: 0
             }
-        }
-        this.props.getUserList(paramUser);
-
-        //get carrier
-        const params = {
-            type: "carrier_id",
-            category_code: ''
         };
-        this.props.getCarrierShipmentList(params);
+        this.props.getSalemanInternationalList(paramsUser);
+        this.props.getApprovedByInternationalList(paramsUser);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            disableField: nextProps.type === 'view' ? true : false,
+            disableCustomerField: nextProps.is_private ? false : true
+        });
+        if (nextProps.origin_country_id && nextProps.origin_country_id !== this.props.origin_country_id) {
+            let params = {
+                field: ['id', 'name', 'name_en'],
+                offset: {
+                    limit: 0
+                },
+                query: {
+                    country: nextProps.origin_country_id
+                }
+            };
+            this.props.getPricingCityInternationalList(params);
+
+            if (nextProps.origin_city_id && nextProps.origin_city_id !== this.props.origin_city_id) {
+                params.query = {
+                    ...params.query,
+                    city: nextProps.origin_city_id
+                };
+                this.props.getPricingDistrictInternationalList(params);
+
+                if (nextProps.origin_district_id && nextProps.origin_district_id !== this.props.origin_district_id) {
+                    params.query = {
+                        ...params.query,
+                        district: nextProps.origin_district_id
+                    };
+                    this.props.getPricingWardInternationalList(params);
+                }
+            }
+        }
+    }
+
+    componentDidMount() {
+        this.props.change('approval_status', 0);
+    }
+
+    showOptionsCategory = () => {
+        let result = [];
+        for (var key in categoryPricing) {
+            if (categoryPricing.hasOwnProperty(key)) {
+                result.push({
+                    value: key,
+                    label: categoryPricing[key]
+                });
+            }
+        }
+        return result;
     }
 
     showOptionCustomer = (items) => {
@@ -68,21 +111,8 @@ class ActionForm extends Component {
         if (items.length > 0) {
             result = items.map(item => {
                 return {
-                    value: item.customer_id,
-                    label: item.customer_name
-                }
-            })
-        }
-        return result;
-    }
-
-    showOptionCarrier = (items) => {
-        let result = [];
-        if (items.length > 0) {
-            result = items.map(item => {
-                return {
-                    value: item.carrier_id,
-                    label: item.carrier_code
+                    value: item.id,
+                    label: item.name
                 }
             })
         }
@@ -115,13 +145,13 @@ class ActionForm extends Component {
         return result;
     }
 
-    onChangeCountry = value => {
+    onChangePricingCountry = value => {
         this.props.change('origin_city_id', null);
         this.props.change('origin_district_id', null);
         this.props.change('origin_ward_id', null);
         if (value) {
             let params = {
-                field: ['id', 'name'],
+                field: ['id', 'name', 'name_en'],
                 offset: {
                     limit: 0
                 },
@@ -129,22 +159,22 @@ class ActionForm extends Component {
                     country: value
                 }
             }
-            this.props.getCityList(params);
+            this.props.getPricingCityInternationalList(params);
         } else {
-            this.props.removeState(CITY_RESET_STATE);
+            this.props.removeState(PRI_INT_PRICING_CITY_RESET_STATE);
         }
 
-        this.props.removeState(DISTRICT_RESET_STATE);
-        this.props.removeState(WARD_RESET_STATE);
+        this.props.removeState(PRI_INT_PRICING_DISTRICT_RESET_STATE);
+        this.props.removeState(PRI_INT_PRICING_WARD_RESET_STATE);
     }
 
-    onChangeCity = value => {
+    onChangePricingCity = value => {
         this.props.change('origin_district_id', null);
         this.props.change('origin_ward_id', null);
 
         if (value) {
             let params = {
-                field: ['id', 'name'],
+                field: ['id', 'name', 'name_en'],
                 offset: {
                     limit: 0
                 },
@@ -152,72 +182,47 @@ class ActionForm extends Component {
                     city: value
                 }
             }
-            this.props.getDistrictList(params);
+            this.props.getPricingDistrictInternationalList(params);
         } else {
-            this.props.removeState(DISTRICT_RESET_STATE);
+            this.props.removeState(PRI_INT_PRICING_DISTRICT_RESET_STATE);
         }
-        
-        this.props.removeState(WARD_RESET_STATE);
+
+        this.props.removeState(PRI_INT_PRICING_WARD_RESET_STATE);
     }
 
-    onChangeDistrict = value => {
+    onChangePricingDistrict = value => {
         this.props.change('origin_ward_id', null);
-
-        if(value) {
+        if (value) {
             let params = {
-                field: ['id', 'name'],
+                field: ['id', 'name', 'name_en'],
                 offset: {
                     limit: 0
                 },
                 query: {
-                    district: value 
+                    district: value
                 }
-            }            
-            this.props.getWardList(params);
+            }
+            this.props.getPricingWardInternationalList(params);
         } else {
-            this.props.removeState(WARD_RESET_STATE);
+            this.props.removeState(PRI_INT_PRICING_WARD_RESET_STATE);
         }
     }
 
-    onChangeCategory = value => {
-        this.props.change('carrier_id', '');
-        const params = {
-            type: "carrier_id",
-            category_code: value
-        };
-        this.props.getCarrierShipmentList(params);
-    }
-
-    hanldeChangeType = value => {
+    onChangeIsPrivate = value => {
         this.props.change('customer_id', '');
-        if (value === 1) {
-            let paramsCustomer = {
-                field: ['id', 'name'],
-                offset: {
-                    limit: 0
-                }
-            }      
-            this.props.getCustomerList(paramsCustomer);
-            this.setState({
-                showCustomerField: true
-            });
-        } else {
-            this.setState({
-                showCustomerField: false
-            });
-        }
+        this.setState({ disableCustomerField: value ? false : true });
     }
 
     render() {
         const { messages } = this.props.intl;
-        const { handleSubmit, countries, cities, districts, wards, customers, salemans, carriers, approvedBys } = this.props;
-        
+        const { handleSubmit, customer, saleman, carrier, country, city, district, ward, approvedBy } = this.props;
+        const { disableField, disableCustomerField } = this.state;
         return (
             <form className="form form_custom" onSubmit={handleSubmit}>
                 <Row>
                     <Col md={6} lg={3} xl={3} xs={6}>
                         <div className="form__form-group">
-                            <span className="form__form-group-label">{messages['pri_int.filter-type']}</span>
+                            <span className="form__form-group-label">{messages['pri_int.type']}</span>
                             <div className="form__form-group-field">
                                 <Field
                                     name="is_private"
@@ -227,7 +232,8 @@ class ActionForm extends Component {
                                         { value: 1, label: messages['pri_int.customer'] }
                                     ]}
                                     clearable={false}
-                                    onChange={this.hanldeChangeType}
+                                    onChange={this.onChangeIsPrivate}
+                                    disabled={disableField}
                                 />
                             </div>
                         </div>
@@ -239,8 +245,9 @@ class ActionForm extends Component {
                                 <Field
                                     name="customer_id"
                                     component={renderSelectField}
-                                    options={customers && this.showOption(customers)}
-                                    disabled={!this.state.showCustomerField}
+                                    options={customer.items && this.showOption(customer.items)}
+                                    clearable={false}
+                                    disabled={disableCustomerField || disableField}
                                 />
                             </div>
                         </div>
@@ -252,7 +259,9 @@ class ActionForm extends Component {
                                 <Field
                                     name="saleman_id"
                                     component={renderSelectField}
-                                    options={salemans && this.showOptionUser(salemans)}
+                                    options={saleman.items && this.showOptionUser(saleman.items)}
+                                    clearable={false}
+                                    disabled
                                 />
                             </div>
                         </div>
@@ -280,15 +289,10 @@ class ActionForm extends Component {
                             <span className="form__form-group-label">{messages['pri_int.category']}</span>
                             <div className="form__form-group-field">
                                 <Field
-                                    name="category_code"
+                                    name="category_id"
                                     component={renderSelectField}
-                                    options={[
-                                        { value: 'Inbound', label: messages['inbound'] },
-                                        { value: 'Outbound', label: messages['outbound'] },
-                                        { value: 'Domestic', label: messages['domestic'] }
-                                    ]}
+                                    options={this.showOptionsCategory()}
                                     clearable={false}
-                                    onChange={this.onChangeCategory}
                                 />
                             </div>
                         </div>
@@ -300,7 +304,9 @@ class ActionForm extends Component {
                                 <Field
                                     name="carrier_id"
                                     component={renderSelectField}
-                                    options={carriers && this.showOptionCarrier(carriers)}
+                                    options={carrier.items && this.showOption(carrier.items)}
+                                    clearable={false}
+                                    disabled={disableField}
                                 />
                             </div>
                         </div>
@@ -337,51 +343,59 @@ class ActionForm extends Component {
                 <Row>
                     <Col md={6} lg={3} xl={3} xs={6}>
                         <div className="form__form-group">
-                            <span className="form__form-group-label">{messages['pri_int.country_origin']}</span>
+                            <span className="form__form-group-label">{messages['pri_int.origin-country']}</span>
                             <div className="form__form-group-field">
                                 <Field
                                     name="origin_country_id"
                                     component={renderSelectField}
-                                    options={countries && this.showOption(countries)}
-                                    onChange={this.onChangeCountry}
+                                    options={country.pricing && this.showOption(country.pricing)}
+                                    onChange={this.onChangePricingCountry}
+                                    clearable={false}
+                                    disabled={disableField}
                                 />
                             </div>
                         </div>
                     </Col>
-                    <Col md={3} lg={3} xl={3} xs={6}>
+                    <Col md={6} lg={3} xl={3} xs={6}>
                         <div className="form__form-group">
-                            <span className="form__form-group-label">{messages['pri_int.city_origin']}</span>
+                            <span className="form__form-group-label">{messages['pri_int.origin-city']}</span>
                             <div className="form__form-group-field">
                                 <Field
                                     name="origin_city_id"
                                     component={renderSelectField}
-                                    options={cities && this.showOption(cities)}
-                                    onChange={this.onChangeCity}
+                                    options={city.pricing && this.showOption(city.pricing)}
+                                    onChange={this.onChangePricingCity}
+                                    clearable={false}
+                                    disabled={disableField}
                                 />
                             </div>
                         </div>
                     </Col>
-                    <Col md={3} lg={3} xl={3} xs={6}>
+                    <Col md={6} lg={3} xl={3} xs={6}>
                         <div className="form__form-group">
-                            <span className="form__form-group-label">{messages['pri_int.district_origin']}</span>
+                            <span className="form__form-group-label">{messages['pri_int.origin-district']}</span>
                             <div className="form__form-group-field">
                                 <Field
                                     name="origin_district_id"
                                     component={renderSelectField}
-                                    options={districts && this.showOption(districts)}
-                                    onChange={this.onChangeDistrict}
+                                    options={district.pricing && this.showOption(district.pricing)}
+                                    onChange={this.onChangePricingDistrict}
+                                    clearable={false}
+                                    disabled={disableField}
                                 />
                             </div>
                         </div>
                     </Col>
-                    <Col md={3} lg={3} xl={3} xs={6}>
+                    <Col md={6} lg={3} xl={3} xs={6}>
                         <div className="form__form-group">
-                            <span className="form__form-group-label">{messages['pri_int.ward_origin']}</span>
+                            <span className="form__form-group-label">{messages['pri_int.origin-ward']}</span>
                             <div className="form__form-group-field">
                                 <Field
                                     name="origin_ward_id"
                                     component={renderSelectField}
-                                    options={wards && this.showOption(wards)}
+                                    options={ward.pricing && this.showOption(ward.pricing)}
+                                    clearable={false}
+                                    disabled={disableField}
                                 />
                             </div>
                         </div>
@@ -413,7 +427,9 @@ class ActionForm extends Component {
                                 <Field
                                     name="approved_by"
                                     component={renderSelectField}
-                                    options={approvedBys && this.showOptionUser(approvedBys)}
+                                    options={approvedBy.items && this.showOptionUser(approvedBy.items)}
+                                    clearable={false}
+                                    disabled={disableField}
                                 />
                             </div>
                         </div>
@@ -421,6 +437,9 @@ class ActionForm extends Component {
                 </Row>
                 <Row>
                     <Col md={12} className="text-right search-group-button">
+                        <Link to="/pricing-international/pricing" className="btn btn-outline-secondary btn-sm">
+                            {messages['cancel']}
+                        </Link>
                         <Button size="sm" color="primary" id="search" >
                             {messages['save']}
                         </Button>
@@ -431,53 +450,86 @@ class ActionForm extends Component {
 }
 
 ActionForm.propTypes = {
+    removeState: PropTypes.func.isRequired,
+    getCustomerInternationalList: PropTypes.func.isRequired,
+    getCarrierInternationalList: PropTypes.func.isRequired,
+    getSalemanInternationalList: PropTypes.func.isRequired,
+    getApprovedByInternationalList: PropTypes.func.isRequired,
+    getPricingCountryInternationalList: PropTypes.func.isRequired,
+    getPricingCityInternationalList: PropTypes.func.isRequired,
+    getPricingDistrictInternationalList: PropTypes.func.isRequired,
+    getPricingWardInternationalList: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     reset: PropTypes.func.isRequired,
-    getCustomerList: PropTypes.func.isRequired,
-    getCarrierShipmentList: PropTypes.func.isRequired,
-    getCountryList: PropTypes.func.isRequired,
-    getCityList: PropTypes.func.isRequired,
-    getDistrictList: PropTypes.func.isRequired,
-    getWardList: PropTypes.func.isRequired,
-    countries: PropTypes.array,
-    cities: PropTypes.array,
-    districts: PropTypes.array,
-    wards: PropTypes.array,
-    customers: PropTypes.array,
-    approvedBys: PropTypes.array,
+    type: PropTypes.string.isRequired,
 }
 
-const mapStateToProps = ({ address, users, customer, shipment_type }) => {
-    const { carriers } = shipment_type;
-    const countries = address.country.items;
-    const cities = address.city.items;
-    const districts = address.district.items;
-    const wards = address.ward.items;
-    const approvedBys = users.user.items;
-    const customers = customer.items;
-    const salemans = users.user.items;
+const mapStateToProps = (state, props) => {
+    const { pricingInternational, authUser } = state;
+    const currentUser = authUser.user;
+    const { pricing, customer, carrier, service, saleman, approvedBy, country, city, district, ward } = pricingInternational;
+    const { itemEditting, loading } = pricing;
+    let initialValues = {};
+    if (props.type === 'add') {
+        initialValues = {
+            saleman_id: currentUser ? currentUser.id : null,
+            approval_status: 0
+        };
+    } else {
+        initialValues = {
+            ...itemEditting,
+            is_private: itemEditting.is_private ? 1 : 0,
+            status: itemEditting.status ? 1 : 0,
+        };
+    }
+
+    let disableApprovalStatus = true;
+    let disableApprovalBy = false;
+    if (currentUser && itemEditting && currentUser.id === itemEditting.approval_by) {
+        disableApprovalStatus = false;
+    }
+    if (itemEditting && itemEditting.approval_status === 1) {
+        disableApprovalBy = true;
+    }
+
+    const selector = formValueSelector('pricing_international_action_form');
+    const is_private = selector(state, 'is_private');
+    const origin_country_id = selector(state, 'origin_country_id');
+    const origin_city_id = selector(state, 'origin_city_id');
+    const origin_district_id = selector(state, 'origin_district_id');
+    const origin_ward_id = selector(state, 'origin_ward_id');
+
     return {
-        customers,
-        salemans,
-        carriers,
-        countries,
-        cities,
-        districts,
-        wards,
-        approvedBys
+        pricing,
+        customer,
+        carrier,
+        service,
+        saleman,
+        approvedBy,
+        country, city, district, ward,
+        origin_country_id, origin_city_id, origin_district_id, origin_ward_id,
+        currentUser,
+        initialValues,
+        is_private,
+        disableApprovalStatus,
+        disableApprovalBy,
+        loading
     }
 }
 
-export default reduxForm({
-    form: 'pricing_search_form',
-    validate
-})(injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
     removeState,
-    getCustomerList,
-    getCarrierShipmentList,
-    getCountryList,
-    getCityList,
-    getDistrictList,
-    getWardList,
-    getUserList
-})(ActionForm)));
+    getCustomerInternationalList,
+    getCarrierInternationalList,
+    getSalemanInternationalList,
+    getApprovedByInternationalList,
+    getPricingCountryInternationalList,
+    getPricingCityInternationalList,
+    getPricingDistrictInternationalList,
+    getPricingWardInternationalList,
+})(reduxForm({
+    form: 'pricing_international_action_form',
+    enableReinitialize: true,
+    keepDirtyOnReinitialize: true,
+    validate
+})(injectIntl(ActionForm)));

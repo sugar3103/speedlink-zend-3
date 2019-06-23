@@ -29,7 +29,7 @@ export * from './pricing-domestic/customer/actions';
 export * from './pricing-domestic/approved-by/actions';
 export * from './pricing-domestic/saleman/actions';
 
-// export * from './pricing-international/pricing/actions';
+export * from './pricing-international/pricing/actions';
 export * from './pricing-international/country/actions';
 export * from './pricing-international/city/actions';
 export * from './pricing-international/district/actions';
@@ -40,6 +40,8 @@ export * from './pricing-international/service/actions';
 export * from './pricing-international/shipment-type/actions';
 export * from './pricing-international/customer/actions';
 export * from './pricing-international/zone/actions';
+export * from './pricing-international/approved-by/actions';
+export * from './pricing-international/saleman/actions';
 
 
 export const removeState = type => ({

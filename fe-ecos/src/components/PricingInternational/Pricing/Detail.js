@@ -5,7 +5,7 @@ import { Card, CardBody, Col, Nav, NavItem, NavLink, TabContent, TabPane } from 
 import classnames from 'classnames';
 import { injectIntl } from 'react-intl';
 import PricingData from './PricingData';
-import { getPricingData } from '../../../redux/actions';
+import { getPricingInternationalData } from '../../../redux/actions';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 
@@ -31,7 +31,13 @@ class Detail extends Component {
           pricing_id: id
         }
       }
-      this.props.getPricingData(params);
+      this.props.getPricingInternationalData(params);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps && nextProps.data) {
+      this.setState({ data: nextProps.data })
     }
   }
 
@@ -44,6 +50,7 @@ class Detail extends Component {
   };
 
   showTabItem = (data) => {
+    const { locale } = this.props.intl;
     let result = null;
     if (data.length > 0) {
       result = data.map((item, index) => {
@@ -55,7 +62,7 @@ class Detail extends Component {
                 this.toggle(index + 2);
               }}
             >
-              {item.service_name}
+              {locale === 'en-US' ? item.service_name_en : item.service_name}
             </NavLink>
           </NavItem>
         )
@@ -80,7 +87,8 @@ class Detail extends Component {
 
   render() {
     const { messages } = this.props.intl;
-    const { type, data } = this.props;
+    const { type } = this.props;
+    const { data } = this.state;
     return (
       <Col md={12} lg={12}>
         <Card>
@@ -119,16 +127,17 @@ class Detail extends Component {
 Detail.propTypes = {
   type: PropTypes.string.isRequired,
   data: PropTypes.array,
-  getPricingData: PropTypes.func.isRequired,
+  getPricingInternationalData: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({pricing}) => {
-  const { data } = pricing;
+const mapStateToProps = ({ pricingInternational }) => {
+  const { pricing: { data } } = pricingInternational;
+  
   return {
     data
   }
 }
 
 export default withRouter(injectIntl(connect(mapStateToProps, {
-  getPricingData
+  getPricingInternationalData
 })(Detail)));

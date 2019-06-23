@@ -8,7 +8,6 @@ import countrySagas from './master-data/address/country/saga';
 import citySagas from './master-data/address/city/saga';
 import districtSagas from './master-data/address/district/saga';
 import wardSagas from './master-data/address/ward/saga';
-import customerSagas from './pricing-international/customer/saga';
 import carrierSagas from './master-data/service-shipment/carrier/saga';
 import serviceSagas from './master-data/service-shipment/service/saga';
 import shipmentTypeSagas from './master-data/service-shipment/shipmnet-type/saga';
@@ -29,7 +28,7 @@ import pricingDomesticCustomer from './pricing-domestic/customer/saga';
 import pricingDomesticApprovedBy from './pricing-domestic/approved-by/saga';
 import pricingDomesticSaleman from './pricing-domestic/saleman/saga';
 
-// import pricingInternational from './pricing-international/pricing/saga';
+import pricingInternational from './pricing-international/pricing/saga';
 import pricingInternationalZone from './pricing-international/zone/saga';
 import pricingInternationalRangeWeight from './pricing-international/range-weight/saga';
 import pricingInternationalCarrier from './pricing-international/carrier/saga';
@@ -40,6 +39,8 @@ import pricingInternationalCountry from './pricing-international/country/saga';
 import pricingInternationalCity from './pricing-international/city/saga';
 import pricingInternationalDistrict from './pricing-international/district/saga';
 import pricingInternationalWard from './pricing-international/ward/saga';
+import pricingInternationalApprovedBy from './pricing-international/approved-by/saga';
+import pricingInternationalSaleman from './pricing-international/saleman/saga';
 
 export default function* rootSaga() {
   yield all([
@@ -55,7 +56,6 @@ export default function* rootSaga() {
     userSagas(),
     roleSagas(),
     permissionSagas(),
-    customerSagas(),
     carrierSagas(),
     serviceSagas(),
     shipmentTypeSagas(),
@@ -73,7 +73,7 @@ export default function* rootSaga() {
     pricingDomesticApprovedBy(),
     pricingDomesticSaleman(),
 
-    // pricingInternational(),
+    pricingInternational(),
     pricingInternationalZone(),
     pricingInternationalRangeWeight(),
     pricingInternationalCarrier(),
@@ -84,5 +84,7 @@ export default function* rootSaga() {
     pricingInternationalCity(),
     pricingInternationalDistrict(),
     pricingInternationalWard(),
+    pricingInternationalApprovedBy(),
+    pricingInternationalSaleman(),
   ]);
 }

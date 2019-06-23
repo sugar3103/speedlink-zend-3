@@ -75,7 +75,7 @@ module.exports = {
     'pri_int.not-ras': 'Nội Thành',
     'pri_int.edit-range-weight-value': 'Cập nhật giá trị khoảng trọng lượng',
     'pri_int.normal': 'Mặc đinh',
-    'pri_int.special': 'Đặc biệt',
+    'pri_int.range': 'Đặc biệt',
     'pri_int.minimun-value': 'Giá trị nhỏ nhất',
     'pri_int.price': 'Giá',
     'pri_int.formula': 'Công thức tính',
@@ -86,6 +86,7 @@ module.exports = {
     'pri_int.subtraction': 'Trừ',
     'pri_int.multiplication': 'Nhân',
     'pri_int.division': 'Chia',
+    'pri_int.transportation': 'Bảng giá',
 
     //validate
     'pri_int.validate-name-exists': 'Tên đã tồn tại',
