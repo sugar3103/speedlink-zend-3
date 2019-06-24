@@ -77,6 +77,7 @@ class PricingData extends Component {
     }
 
     render() {
+        const { type_action } = this.props;
         const { messages } = this.props.intl;
         const { pricing_data: { title }, shipment_type_code, shipment_type_name, id } = this.props.pricing;
 
@@ -109,7 +110,7 @@ class PricingData extends Component {
                 </div>
                 <fieldset className="scheduler-border mb-2">
                     <legend className="scheduler-border">{messages['pri_int.transportation']}</legend>
-                    <BootstrapTable data={this.state.data} cellEdit={cellEdit}>
+                    <BootstrapTable data={this.state.data} cellEdit={type_action === 'edit' ? cellEdit : {}}>
                         {columns}
                     </BootstrapTable>
                     {this.state.enableSaveButton &&
@@ -125,7 +126,7 @@ class PricingData extends Component {
                 </fieldset>
                 <fieldset className="scheduler-border">
                     <legend className="scheduler-border">{messages['pri_int.vas']}</legend>
-                    <PricingVas pricing_data_id={id} onSubmit={this.onSaveVas} />
+                    <PricingVas pricing_data_id={id} onSubmit={this.onSaveVas} type_action={type_action} />
                 </fieldset>
             </Fragment>
         )

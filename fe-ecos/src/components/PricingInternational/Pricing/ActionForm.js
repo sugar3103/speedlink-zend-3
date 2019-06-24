@@ -277,6 +277,7 @@ class ActionForm extends Component {
                                         { value: 1, label: messages['active'] },
                                         { value: 0, label: messages['inactive'] }
                                     ]}
+                                    disabled={disableField}
                                     clearable={false}
                                 />
                             </div>
@@ -292,6 +293,7 @@ class ActionForm extends Component {
                                     name="category_id"
                                     component={renderSelectField}
                                     options={this.showOptionsCategory()}
+                                    disabled={disableField}
                                     clearable={false}
                                 />
                             </div>
@@ -318,6 +320,7 @@ class ActionForm extends Component {
                                 <Field
                                     name="effected_date"
                                     component={renderDatePickerField}
+                                    disabled={disableField}
                                 />
                                 <div className="form__form-group-icon">
                                     <CalendarBlankIcon />
@@ -332,6 +335,7 @@ class ActionForm extends Component {
                                 <Field
                                     name="expired_date"
                                     component={renderDatePickerField}
+                                    disabled={disableField}
                                 />
                                 <div className="form__form-group-icon">
                                     <CalendarBlankIcon />
@@ -435,16 +439,18 @@ class ActionForm extends Component {
                         </div>
                     </Col>
                 </Row>
-                <Row>
-                    <Col md={12} className="text-right search-group-button">
-                        <Link to="/pricing-international/pricing" className="btn btn-outline-secondary btn-sm">
-                            {messages['cancel']}
-                        </Link>
-                        <Button size="sm" color="primary" id="search" >
-                            {messages['save']}
-                        </Button>
-                    </Col>
-                </Row>
+                {!disableField && 
+                    <Row>
+                        <Col md={12} className="text-right">
+                            <Link to="/pricing-international/pricing" className="btn btn-outline-secondary btn-sm">
+                                {messages['cancel']}
+                            </Link>
+                            <Button size="sm" color="primary" id="search" >
+                                {messages['save']}
+                            </Button>
+                        </Col>
+                    </Row>
+                }
             </form>);
     }
 }

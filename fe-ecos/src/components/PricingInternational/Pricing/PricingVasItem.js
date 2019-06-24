@@ -8,29 +8,32 @@ import renderSelectField from '../../../containers/Shared/form/Select';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import FormulaField from './FormulaField';
 import { uuidv4 } from '../../../util/uuidv4';
+import { formatCurrency, normalizeCurrency } from '../../../util/format-field';
 
 class PricingVasItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rows: []
+            rows: [],
+            disabledField: false
         }
     }
 
     componentDidMount() {
-        let { spec } = this.props;
+        let { spec, type_action } = this.props;
         if (spec.length > 0) {
-          spec = spec.map(item => {
-            return {
-              ...item,
-              index: uuidv4()
-            }
-          });
+            spec = spec.map(item => {
+                return {
+                    ...item,
+                    index: uuidv4()
+                }
+            });
         }
         this.setState({
-          rows: spec,
+            rows: spec,
+            disabledField: type_action === 'edit' ? false : true
         })
-      }
+    }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps && nextProps.spec) {
@@ -104,6 +107,10 @@ class PricingVasItem extends Component {
         }
     }
 
+    formatPrice = (value) => {
+        return new Intl.NumberFormat().format(value);
+    }
+
     valueValidator = (value) => {
         const { messages } = this.props.intl;
         const nan = isNaN(value);
@@ -120,16 +127,18 @@ class PricingVasItem extends Component {
             blurToSave: true,
             afterSaveCell: this.onAfterSaveCell
         };
-        const { vas, index, type } = this.props;
+        const { vas, index, spec, type, type_action } = this.props;
 
-        const { rows } = this.state;
+        const { rows, disabledField } = this.state;
         const data = rows.filter(row => row.is_deleted !== true);
 
         return (
             <li key={index} className="vas-item">
-                <div className="mr-2">
-                    <Button size="sm" color="danger" onClick={() => this.removeField(index)}><span className="lnr lnr-circle-minus"></span></Button>
-                </div>
+                {type_action === 'edit' &&
+                    <div className="mr-2">
+                        <Button size="sm" color="danger" onClick={() => this.removeField(index)}><span className="lnr lnr-circle-minus"></span></Button>
+                    </div>
+                }
                 <Field
                     name={`${vas}.pricing_data_id`}
                     component="input"
@@ -147,6 +156,7 @@ class PricingVasItem extends Component {
                                 ]}
                                 clearable={false}
                                 placeholder={messages['pri_int.type']}
+                                disabled={disabledField}
                             />
                         </div>
                     </div>
@@ -157,6 +167,7 @@ class PricingVasItem extends Component {
                                 component={CustomField}
                                 type="text"
                                 placeholder={messages['name']}
+                                disabled={disabledField}
                             />
                         </div>
                     </div>
@@ -166,15 +177,32 @@ class PricingVasItem extends Component {
                                 name={`${vas}.formula`}
                                 component={FormulaField}
                                 placeholder={messages['pri_int.formula']}
+                                disabled={disabledField}
                             />
                         </div>
                         {type === 1 &&
                             <BootstrapTable data={data} cellEdit={cellEdit} containerClass="table-price">
-                                <TableHeaderColumn dataField="index" dataFormat={this.actionFormatter} isKey><Button size="sm" color="success" onClick={(e) => this.onAddRowPrice(e)}><span className="lnr lnr-plus-circle"></span></Button></TableHeaderColumn>
-                                <TableHeaderColumn dataField="from">{messages['pri_int.from']}</TableHeaderColumn>
-                                <TableHeaderColumn dataField="to">{messages['pri_int.to']}</TableHeaderColumn>
-                                <TableHeaderColumn dataField="value" editable={{ validator: this.valueValidator }}>{messages['pri_int.price']}</TableHeaderColumn>
+                                {type_action === 'edit' &&
+                                    <TableHeaderColumn dataField="index" dataFormat={this.actionFormatter} isKey><Button size="sm" color="success" onClick={(e) => this.onAddRowPrice(e)}><span className="lnr lnr-plus-circle"></span></Button></TableHeaderColumn>
+                                }
+                                <TableHeaderColumn
+                                    isKey={type_action === 'edit' ? false : true}
+                                    dataField="from"
+                                    editable={type_action === 'edit' ? { validator: this.valueValidator } : false}
+                                >{messages['pri_int.from']}</TableHeaderColumn>
+                                <TableHeaderColumn
+                                    dataField="to"
+                                    editable={type_action === 'edit' ? { validator: this.valueValidator } : false}
+                                >{messages['pri_int.to']}</TableHeaderColumn>
+                                <TableHeaderColumn
+                                    dataField="value"
+                                    dataFormat={this.formatPrice}
+                                    editable={type_action === 'edit' ? { validator: this.valueValidator } : false}
+                                >{messages['pri_int.price']}</TableHeaderColumn>
                             </BootstrapTable>
+                        }
+                        {type === 1 && spec.length === 0 &&
+                            <span className="form__form-group-error">{messages['pri_dom.validate-vas-spec-required']}</span>
                         }
                     </div>
                     {type !== 1 &&
@@ -185,6 +213,9 @@ class PricingVasItem extends Component {
                                     component={CustomField}
                                     type="text"
                                     placeholder={messages['pri_int.minimun-value']}
+                                    disabled={disabledField}
+                                    format={formatCurrency}
+                                    normalize={normalizeCurrency}
                                 />
                             </div>
                         </div>

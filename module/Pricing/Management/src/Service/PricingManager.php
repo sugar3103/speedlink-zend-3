@@ -96,6 +96,13 @@ class PricingManager
 
             $pricing->setJoinCarrier($carrier);
         }
+        if (isset($data['category_id'])) {
+            $category = $this->entityManager->getRepository(Category::class)->find($data['category_id']);
+            if ($category == null) {
+                throw new \Exception('Not found Category by ID');
+            }
+            $pricing->setJoinCategory($category);
+        }
 
         if (isset($data['origin_country_id'])) {
             $origin_country = $this->entityManager->getRepository(Country::class)->find($data['origin_country_id']);
@@ -210,26 +217,26 @@ class PricingManager
     public function addPricing($data, $user)
     {
         try {
-        // begin transaction
-        $this->entityManager->beginTransaction();
-        $date = new \DateTime();
+            // begin transaction
+            $this->entityManager->beginTransaction();
+            $date = new \DateTime();
 
-        $category = $this->entityManager->getRepository(Category::class)->find($data['category_id']);
-        $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['carrier_id']);
-        $country = $this->entityManager->getRepository(Country::class)->find($data['origin_country_id']);
-        $title = $carrier->getCode() . '.' . $category->getNameEn() . '.' . $country->getIsoCode();
-        if (!empty($data['origin_city_id'])) {
-            $city = $this->entityManager->getRepository(City::class)->find($data['origin_city_id']);
-            $title .= '-' . $city->getNameEn();
-        }
-        $title = str_replace(' ', '', $title);
-        $pricing = $this->entityManager->getRepository(Pricing::class)->createQueryBuilder('p')
-            ->select('count(p.id)')
-            ->where('p.name LIKE :name')
-            ->setParameter('name', $title . '%')
-            ->getQuery()
-            ->getSingleScalarResult();
-        $title .= '.' . ($pricing + 1);
+            $category = $this->entityManager->getRepository(Category::class)->find($data['category_id']);
+            $carrier = $this->entityManager->getRepository(Carrier::class)->find($data['carrier_id']);
+            $country = $this->entityManager->getRepository(Country::class)->find($data['origin_country_id']);
+            $title = $carrier->getCode() . '.' . $category->getNameEn() . '.' . $country->getIsoCode();
+            if (!empty($data['origin_city_id'])) {
+                $city = $this->entityManager->getRepository(City::class)->find($data['origin_city_id']);
+                $title .= '-' . $city->getNameEn();
+            }
+            $title = str_replace(' ', '', $title);
+            $pricing = $this->entityManager->getRepository(Pricing::class)->createQueryBuilder('p')
+                ->select('count(p.id)')
+                ->where('p.name LIKE :name')
+                ->setParameter('name', $title . '%')
+                ->getQuery()
+                ->getSingleScalarResult();
+            $title .= '.' . ($pricing + 1);
 
         $pricing = new Pricing();
         $pricing->setName($title);
@@ -248,21 +255,20 @@ class PricingManager
         if (!empty($data['customer_id'])) {
             $pricing->setCustomerId($data['customer_id']);
         }
-        $pricing->setApprovalStatus($data['approval_status']);
-        $pricing->setApprovedBy($data['approved_by']);
-        $pricing->setStatus($data['status']);
-        $pricing->setCreatedAt($date);
-        $pricing->setCreatedBy($user->id);
-        $pricing->setUpdatedAt($date);
-        $pricing->setUpdatedBy($user->id);
-        $this->getReferenced($pricing, $data, $user, 'add');
+            $pricing->setApprovalStatus($data['approval_status']);
+            $pricing->setStatus($data['status']);
+            $pricing->setCreatedAt($date);
+            $pricing->setCreatedBy($user->id);
+            $pricing->setUpdatedAt($date);
+            $pricing->setUpdatedBy($user->id);
+            $this->getReferenced($pricing, $data, $user, 'add');
 
-        $this->entityManager->persist($pricing);
-        $this->entityManager->flush();
-        $this->generatePricingData($pricing, $user);
+            $this->entityManager->persist($pricing);
+            $this->entityManager->flush();
+            $this->generatePricingData($pricing, $user);
 
-        $this->entityManager->commit();
-        return $pricing;
+            $this->entityManager->commit();
+            return $pricing;
         } catch (ORMException $e) {
             $this->entityManager->rollback();
             return false;
@@ -410,6 +416,7 @@ class PricingManager
                 $pricingData->setUpdatedBy($user->id);
 
                 unset($where['carrier_id']);
+                unset($where['category_id']);
                 $this->getReferenced($pricingData, $where, $user, 'add');
 
                 $this->entityManager->persist($pricingData);

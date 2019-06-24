@@ -109,6 +109,7 @@ function* addRangeWeightInternationalItem({ payload }) {
 
       case EC_FAILURE:
         yield put(rangeWeightInternationalError(response.data));
+        createNotification({ type: 'error', message: 'pri_int.range-weight-exists' });
         yield put(validateRangeWeightInternational(response.data));
         break;
 
@@ -187,6 +188,7 @@ function* updateRangeWeightInternationalItem({ payload }) {
 
       case EC_FAILURE:
         yield put(rangeWeightInternationalError(response.data));
+        createNotification({ type: 'error', message: 'pri_int.range-weight-exists' });
         yield put(validateRangeWeightInternational(response.data));
         break;
 

@@ -29,6 +29,7 @@ module.exports = {
     'pri_int.add-zone-title': 'Thêm vùng quốc tế',
     'pri_int.edit-zone-title': 'Cập nhật vùng quốc tế',
     'pri_int.view-zone-title': 'Xem vùng quốc tế',
+    'pri_int.zone-exists': 'Vùng đã tồn tại',
 
     /* RANGE WEIGHT INTERNATIONAL */
     'pri_int.range-weight-title': 'Khoảng trọng lượng quốc tế',
@@ -49,6 +50,7 @@ module.exports = {
     'pri_int.add-range-weight-title': 'Tạo mới khoảng trọng lượng',
     'pri_int.edit-range-weight-title': 'Cập nhật khoảng trọng lượng',
     'pri_int.view-range-weight-title': 'Xem khoảng trọng lượng',
+    'pri_int.range-weight-exists': 'Khoảng trọng lượng đã tồn tại',
 
     /* PRICING */
     'pri_int.pricing-title': 'Bảng giá nội địa',

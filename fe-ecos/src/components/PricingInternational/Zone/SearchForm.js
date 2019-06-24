@@ -186,7 +186,6 @@ class SearchForm extends Component {
 
   onChangeOriginDistrict = value => {
     this.props.change('origin_ward_id', null);
-    console.log(value);
     if (value) {
       let params = {
         field: ['id', 'name', 'name_en'],

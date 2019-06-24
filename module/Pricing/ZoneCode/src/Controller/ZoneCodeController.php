@@ -97,7 +97,14 @@ class ZoneCodeController extends CoreController
                 }
             }
 
-            $check_exits = $this->entityManager->getRepository(ZoneCode::class)->findOneBy(array('carrier_id' => $data['carrier_id'], 'category_id' => $data['category_id'], 'service_id' => $data['service_id'], 'shipment_type_id' => $data['shipment_type_id'] ));
+            $check_exits = $this->entityManager->getRepository(ZoneCode::class)->findOneBy(array(
+                'carrier_id' => $data['carrier_id'], 
+                'category_id' => $data['category_id'], 
+                'service_id' => $data['service_id'], 
+                'shipment_type_id' => $data['shipment_type_id'],
+                'is_deleted' => 0
+            ));
+
             if ($check_exits) {
                 $this->error_code = 0;
                 $this->apiResponse['data'] = "Already have this Zone Code!";
@@ -127,7 +134,13 @@ class ZoneCodeController extends CoreController
             $data = $this->getRequestData();
             $user = $this->tokenPayload;
             if (isset($data['id'])) {
-                $check_exits = $this->entityManager->getRepository(ZoneCode::class)->findOneBy(array('carrier_id' => $data['carrier_id'], 'category_id' => $data['category_id'], 'service_id' => $data['service_id'], 'shipment_type_id' => $data['shipment_type_id']));
+                $check_exits = $this->entityManager->getRepository(ZoneCode::class)->findOneBy(array(
+                    'carrier_id' => $data['carrier_id'], 
+                    'category_id' => $data['category_id'], 
+                    'service_id' => $data['service_id'], 
+                    'shipment_type_id' => $data['shipment_type_id'],
+                    'is_deleted' => 0
+                ));
                 if ($check_exits) {
                     $zonecode_id = $check_exits->getId();
                     if ($zonecode_id != $data['id']) {

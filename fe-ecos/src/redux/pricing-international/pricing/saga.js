@@ -27,7 +27,7 @@ import {
   updatePricingInternationalItemSuccess,
   deletePricingInternationalItemSuccess,
   getPricingInternationalList,
-  requestUpdatePricingInternationalItem,
+  getPricingInternationalData,
   getPricingInternationalDataSuccess,
   updatePricingInternationalDataSuccess,
   getPricingInternationalVasSuccess,
@@ -114,6 +114,15 @@ function* addPricingInternationalItem({ payload }) {
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(addPricingInternationalItemSuccess());
+        const params = {
+          offset: {
+            limit: 0
+          },
+          query: {
+            pricing_id: response.data
+          }
+        }
+        yield put(getPricingInternationalData(params));
         yield call(history.push, `/pricing-international/pricing/edit/${response.data}`);
         createNotification({ type: 'success', message: 'pri_int.add-success' });
         break;
@@ -192,8 +201,16 @@ function* updatePricingInternationalItem({ payload }) {
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(updatePricingInternationalItemSuccess());
-        yield put(requestUpdatePricingInternationalItem({ query: { id: response.data.pricing_id } }));
         createNotification({ type: 'success', message: 'pri_int.update-success' });
+        const params = {
+          offset: {
+            limit: 0
+          },
+          query: {
+            pricing_id: response.data
+          }
+        }
+        yield put(getPricingInternationalData(params));
         break;
 
       case EC_FAILURE:

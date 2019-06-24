@@ -137,8 +137,6 @@ export function* wathcUpdateItem() {
 //update user
 
 function updateUserAvatarApi(item) {
-  console.log(item);
-  
   return axios.request({
     method: 'post',
     url: `${apiUrl}user/edit`,
