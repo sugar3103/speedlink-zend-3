@@ -164,7 +164,7 @@ class RangeWeightForm extends Form {
                     
         $inputFilter->add([
             'name' => 'unit',
-            'required'  => true,
+            'required'  => false,
             'filters' => [
                 [
                   'name' => ToFloat::class

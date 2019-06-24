@@ -128,7 +128,6 @@ class PricingVasItem extends Component {
             afterSaveCell: this.onAfterSaveCell
         };
         const { vas, index, spec, type, type_action } = this.props;
-
         const { rows, disabledField } = this.state;
         const data = rows.filter(row => row.is_deleted !== true);
 

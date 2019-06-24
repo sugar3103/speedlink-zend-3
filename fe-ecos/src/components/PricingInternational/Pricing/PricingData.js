@@ -80,7 +80,6 @@ class PricingData extends Component {
         const { type_action } = this.props;
         const { messages } = this.props.intl;
         const { pricing_data: { title }, shipment_type_code, shipment_type_name, id } = this.props.pricing;
-
         let columns = Object.keys(title).map((item, index) => {
             if (index === 0) {
                 return (
@@ -110,9 +109,11 @@ class PricingData extends Component {
                 </div>
                 <fieldset className="scheduler-border mb-2">
                     <legend className="scheduler-border">{messages['pri_int.transportation']}</legend>
-                    <BootstrapTable data={this.state.data} cellEdit={type_action === 'edit' ? cellEdit : {}}>
-                        {columns}
-                    </BootstrapTable>
+                    { !Array.isArray(title) && 
+                        <BootstrapTable data={this.state.data} cellEdit={type_action === 'edit' ? cellEdit : {}}>
+                            {columns}
+                        </BootstrapTable>
+                    }
                     {this.state.enableSaveButton &&
                         <div className="text-right mt-2">
                             <Button
