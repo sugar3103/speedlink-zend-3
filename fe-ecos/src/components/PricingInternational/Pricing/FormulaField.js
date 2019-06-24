@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import ContentEditable from 'react-contenteditable';
-import { getPricingInternationalFieldVas } from '../../../redux/actions';
 
 class FormulaField extends Component {
 
@@ -17,10 +16,6 @@ class FormulaField extends Component {
       textInput: '',
       html: ""
     };
-  }
-
-  componentWillMount() {
-    this.props.getPricingInternationalFieldVas();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -151,7 +146,6 @@ FormulaField.propTypes = {
       touched: PropTypes.bool,
       error: PropTypes.string,
   }),
-  getPricingInternationalFieldVas: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
 };
   
@@ -168,6 +162,4 @@ const mapStateToProps = ({ pricingInternational }) => {
   }
 }
 
-export default connect(mapStateToProps, {
-  getPricingInternationalFieldVas
-})(injectIntl(FormulaField));
+export default connect(mapStateToProps)(injectIntl(FormulaField));
