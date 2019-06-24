@@ -161,6 +161,16 @@ class Pricing
     private $is_deleted = '0';
 
     /**
+     * @var \ServiceShipment\Entity\Category
+     *
+     * @ORM\ManyToOne(targetEntity="ServiceShipment\Entity\Category")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=true)
+     * })
+     */
+    private $join_category;
+
+    /**
      *
      * @ORM\OneToOne(targetEntity="\ServiceShipment\Entity\Carrier")
      * @ORM\JoinColumn(name="carrier_id", referencedColumnName="id", nullable=true)
@@ -564,6 +574,22 @@ class Pricing
     public function setIsDeleted($is_deleted)
     {
         $this->is_deleted = $is_deleted;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinCategory()
+    {
+        return $this->join_category;
+    }
+
+    /**
+     * @param mixed $join_category
+     */
+    public function setJoinCategory($join_category)
+    {
+        $this->join_category = $join_category;
     }
 
     /**

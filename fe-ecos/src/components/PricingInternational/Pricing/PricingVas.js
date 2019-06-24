@@ -7,26 +7,28 @@ import { FieldArray, reduxForm } from 'redux-form';
 import { getPricingInternationalVas, getPricingInternationalFieldVas } from '../../../redux/actions';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
+import validate from './validateVasForm';
 
-const renderVasItems = ({ fields, messages, meta: { submitFailed, error }, pricing_data_id, toggleTooltip }) => (
+const renderVasItems = ({ fields, messages, meta: { submitFailed, error }, pricing_data_id, toggleTooltip, type_action }) => (
     <Fragment>
         <ul>
             <li className="group-action mb-2">
                 <Button size="sm" color="info" id="PopoverLeft" onClick={toggleTooltip}><span className="lnr lnr-question-circle"></span></Button>
-
-                <Button size="sm" color="success" onClick={() => fields.push({ id: 0, type: 0, pricing_data_id, spec: [] })}><span className="lnr lnr-plus-circle"></span></Button>
+                {type_action === 'edit' &&
+                    <Button size="sm" color="success" onClick={() => fields.push({ id: 0, type: 0, pricing_data_id, spec: [] })}><span className="lnr lnr-plus-circle"></span></Button>
+                }
                 {submitFailed && error && <span>{error}</span>}
                 <div className="clearfix"></div>
             </li>
             {fields.map((vas, index) => {
                 if (!fields.get(index).is_deleted) {
-                    return <PricingVasItem vas={vas} fields={fields} index={index} key={index} />
+                    return <PricingVasItem vas={vas} fields={fields} index={index} key={index} type_action={type_action} />
                 }
                 return null;
             })
             }
         </ul>
-        {fields.length > 0 &&
+        {fields.length > 0 && type_action === 'edit' &&
             <div className="text-right">
                 <Button size="sm" color="primary" type="submit">{messages['save']}</Button>
             </div>
@@ -61,7 +63,7 @@ class PricingVas extends Component {
     }
 
     render() {
-        const { handleSubmit, pricing_data_id, intl: { messages, locale }, fieldVas, loadingFieldVas, loadingVas } = this.props;
+        const { handleSubmit, pricing_data_id, intl: { messages, locale }, fieldVas, loadingFieldVas, loadingVas, type_action } = this.props;
 
         return loadingVas ? (
             <ReactLoading type="bubbles" className="loading" />
@@ -73,6 +75,7 @@ class PricingVas extends Component {
                         component={renderVasItems}
                         pricing_data_id={pricing_data_id}
                         toggleTooltip={this.toggleTooltip}
+                        type_action={type_action}
                     />
                     <Popover
                         placement="left"
@@ -137,7 +140,8 @@ PricingVas.propTypes = {
 
 let PricingVasForm = reduxForm({
     form: 'pricing_international_vas_action_form',
-    enableReinitialize: true
+    enableReinitialize: true,
+    validate
 })(PricingVas)
 
 const mapStateToProps = ({ pricingInternational }) => {

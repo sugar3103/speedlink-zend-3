@@ -135,18 +135,25 @@ class PricingController extends CoreController
         if ($form->isValid()) {
             try {
                 // add new pricing
+                $category_id = $pricing->getCategoryId();
+                $carrier_id = $pricing->getCarrierId();
+                $origin_country_id = $pricing->getOriginCountryId();
+                $origin_city_id = $pricing->getOriginCityId();
+                $origin_district_id = $pricing->getOriginDistrictId();
+                $origin_ward_id = $pricing->getOriginWardId();
                 $pricing = $this->pricingManager->updatePricing($pricing, $data, $user);
                 $district_id = empty($data['origin_district_id'])? null : $data['origin_district_id'];
                 $ward_id = empty($data['origin_ward_id'])? null : $data['origin_ward_id'];
-                if ($pricing->getCarrierId() != $data['carrier_id']
-                 || $pricing->getCategoryId()!= $data['category_id']
-                 || $pricing->getOriginCountryId() != $data['origin_country_id']
-                 || $pricing->getOriginCityId() != $data['origin_city_id']
-                 || $pricing->getOriginDistrictId() != $district_id
-                 || $pricing->getOriginWardId() != $ward_id) {
-                    $this->pricingDataManager->addPricingData($pricing, $user);
+                if ($carrier_id != $data['carrier_id']
+                 || $category_id != $data['category_id']
+                 || $origin_country_id != $data['origin_country_id']
+                 || $origin_city_id != $data['origin_city_id']
+                 || $origin_district_id != $district_id
+                 || $origin_ward_id != $ward_id) {
+                    $this->pricingManager->generatePricingData($pricing, $user);
                 }
                 $this->error_code = 1;
+                $this->apiResponse['data'] = $pricing->getId();
                 $this->apiResponse['message'] = "Success: You have edited a pricing!";
             } catch (\Exception $e) {
                 $this->error_code = -1;

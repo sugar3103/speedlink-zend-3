@@ -24,7 +24,9 @@ class PricingRepository extends EntityRepository
                 cr.code AS carrier_code,
                 cr.name AS carrier_name,
                 cr.name_en AS carrier_name_en,
-                pr.category_id,
+                c.id as category_id,
+                c.name as category,
+                c.name_en as category_en,
                 pr.origin_country_id,
                 ocr.name AS origin_country_name,
                 ocr.name_en AS origin_country_name_en,
@@ -58,7 +60,7 @@ class PricingRepository extends EntityRepository
                 up.username as updated_by
             ")->andWhere('pr.is_deleted = 0');
 
-            if($limit) {
+            if ($limit) {
                 $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
             }
 
@@ -93,7 +95,7 @@ class PricingRepository extends EntityRepository
                 // $queryBuilder->andWhere('sl.is_deleted = 0');
                 // $queryBuilder->andWhere('sl.status = 1');
                 $queryBuilder->groupBy('pr.saleman_id');
-            } else if ($sortField == 'approved_by'){
+            } else if ($sortField == 'approved_by') {
                 $queryBuilder->select("
                     pr.approved_by,
                     app.username,
@@ -113,7 +115,6 @@ class PricingRepository extends EntityRepository
                 $queryBuilder->groupBy('pr.customer_id');
             }
             return $queryBuilder;
-
         } catch (QueryException $e) {
             return [];
         }
@@ -131,26 +132,27 @@ class PricingRepository extends EntityRepository
     public function buildPricingQueryBuilder($sortField, $sortDirection, $filters)
     {
         $operatorsMap = [
-            'id' => [ 'alias' => 'pr.id', 'operator' => 'eq' ],
-            'name' => [ 'alias' => 'pr.name', 'operator' => 'eq' ],
-            'status' => [ 'alias' => 'pr.status', 'operator' => 'eq' ],
-            'carrier_id' => [ 'alias' => 'pr.carrier_id', 'operator' => 'eq' ],
-            'category_id' => [ 'alias' => 'pr.category_id', 'operator' => 'eq' ],
-            'customer_id' => [ 'alias' => 'pr.customer_id', 'operator' => 'in' ],
-            'approved_by' => [ 'alias' => 'pr.approved_by', 'operator' => 'eq' ],
-            'approval_status' => [ 'alias' => 'pr.approval_status', 'operator' => 'eq' ],
-            'is_private' => [ 'alias' => 'pr.is_private', 'operator' => 'eq' ],
-            'effected_date' => [ 'alias' => 'pr.effected_date', 'operator' => 'eq' ],
-            'expired_date' => [ 'alias' => 'pr.expired_date', 'operator' => 'eq' ],
-            'saleman_id' => [ 'alias' => 'pr.saleman_id', 'operator' => 'eq' ],
-            'origin_country_id' => [ 'alias' => 'pr.origin_country_id', 'operator' => 'eq' ],
-            'origin_city_id' => [ 'alias' => 'pr.origin_city_id', 'operator' => 'eq' ],
-            'origin_district_id' => [ 'alias' => 'pr.origin_district_id', 'operator' => 'eq' ],
-            'origin_ward_id' => [ 'alias' => 'pr.origin_ward_id', 'operator' => 'eq' ],
+            'id' => ['alias' => 'pr.id', 'operator' => 'eq'],
+            'name' => ['alias' => 'pr.name', 'operator' => 'eq'],
+            'status' => ['alias' => 'pr.status', 'operator' => 'eq'],
+            'carrier_id' => ['alias' => 'pr.carrier_id', 'operator' => 'eq'],
+            'category_id' => ['alias' => 'pr.category_id', 'operator' => 'eq'],
+            'customer_id' => ['alias' => 'pr.customer_id', 'operator' => 'in'],
+            'approved_by' => ['alias' => 'pr.approved_by', 'operator' => 'eq'],
+            'approval_status' => ['alias' => 'pr.approval_status', 'operator' => 'eq'],
+            'is_private' => ['alias' => 'pr.is_private', 'operator' => 'eq'],
+            'effected_date' => ['alias' => 'pr.effected_date', 'operator' => 'eq'],
+            'expired_date' => ['alias' => 'pr.expired_date', 'operator' => 'eq'],
+            'saleman_id' => ['alias' => 'pr.saleman_id', 'operator' => 'eq'],
+            'origin_country_id' => ['alias' => 'pr.origin_country_id', 'operator' => 'eq'],
+            'origin_city_id' => ['alias' => 'pr.origin_city_id', 'operator' => 'eq'],
+            'origin_district_id' => ['alias' => 'pr.origin_district_id', 'operator' => 'eq'],
+            'origin_ward_id' => ['alias' => 'pr.origin_ward_id', 'operator' => 'eq'],
         ];
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(Pricing::class, 'pr')
+            ->leftJoin('pr.join_category', 'c')
             ->leftJoin('pr.join_carrier', 'cr')
             ->leftJoin('pr.join_origin_country', 'ocr')
             ->leftJoin('pr.join_origin_city', 'ocy')

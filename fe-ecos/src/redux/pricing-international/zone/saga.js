@@ -109,6 +109,7 @@ function* addZoneInternationalItem({ payload }) {
 
       case EC_FAILURE:
         yield put(zoneInternationalError(response.data));
+        createNotification({ type: 'error', message: 'pri_int.zone-exists' });
         yield put(validateZoneInternational(response.data));
         break;
 
@@ -187,6 +188,7 @@ function* updateZoneInternationalItem({ payload }) {
 
       case EC_FAILURE:
         yield put(zoneInternationalError(response.data));
+        createNotification({ type: 'error', message: 'pri_int.zone-exists' });
         yield put(validateZoneInternational(response.data));
         break;
 

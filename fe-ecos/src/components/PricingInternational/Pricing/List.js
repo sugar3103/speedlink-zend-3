@@ -120,7 +120,7 @@ class List extends Component {
 
   render() {
     const { items, loading, total } = this.props.pricing;
-    const { messages } = this.props.intl;
+    const { messages, locale } = this.props.intl;
     const columnTable = {
       checkbox: true,
       columns: [
@@ -145,6 +145,11 @@ class List extends Component {
           Header: messages['pri_int.category'],
           accessor: "category_code",
           width: 110,
+          Cell: ({ original }) => {
+            return (
+              locale === 'en-US' ? original.category_en : original.category
+            )
+          },
           sortable: false,
         },
         {

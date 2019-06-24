@@ -72,12 +72,13 @@ class Detail extends Component {
   }
 
   showTabContent = (data) => {
+    const { type } = this.props;
     let result = null;
     if (data.length > 0) {
       result = data.map((item, index) => {
         return (
           <TabPane tabId={index + 2} key={index}>
-            <PricingData pricing={item} />
+            <PricingData pricing={item} type_action={type} />
           </TabPane>
         )
       })

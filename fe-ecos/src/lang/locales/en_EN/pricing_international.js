@@ -29,6 +29,7 @@ module.exports = {
   'pri_int.add-zone-title': 'Add Zone International',
   'pri_int.edit-zone-title': 'Edit Zone International',
   'pri_int.view-zone-title': 'View Zone International',
+  'pri_int.zone-exists': 'Zone already exists',
 
   /* RANGE WEIGHT INTERNATIONAL */
   'pri_int.range-weight-title': 'Range Weight International',
@@ -49,6 +50,7 @@ module.exports = {
   'pri_int.add-range-weight-title': 'Add Range Weight International',
   'pri_int.edit-range-weight-title': 'Edit Range Weight International',
   'pri_int.view-range-weight-title': 'View Range Weight International',
+  'pri_int.range-weight-exists': 'Range Weight already exists',
 
   /* PRICING */
   'pri_int.pricing-title': 'Pricing International',
