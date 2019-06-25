@@ -31,6 +31,20 @@ class DomesticPricingData
     /**
      * @var int
      *
+     * @ORM\Column(name="`type`", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $type = 0;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type_value", type="float", nullable=false, unique=false)
+     */
+    private $type_value;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="is_deleted", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $is_deleted = 0;
@@ -290,5 +304,23 @@ class DomesticPricingData
     public function getUpdatedBy()
     {
         return $this->updated_by;
+    }
+
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+    
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function setTypeValue($type_value) {
+        $this->type_value = $type_value;
+    }
+    
+    public function getTypeValue($type_value) {
+        return $this->type_value;
     }
 }

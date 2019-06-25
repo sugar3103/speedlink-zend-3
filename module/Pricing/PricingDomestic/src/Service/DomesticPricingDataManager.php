@@ -48,6 +48,8 @@ class DomesticPricingDataManager
                         $pricingData->setDomesticPricing($this->entityManager->getRepository(DomesticPricing::class)->find($data['id']));
                         $pricingData->setDomesticRangeWeight($this->entityManager->getRepository(DomesticRangeWeight::class)->find($value['range_weight']));
                         $pricingData->setValue($value['value']);
+                        $pricingData->setType($value['type']);
+                        $pricingData->setTypeVaule($value['type_value']);
                         $pricingData->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
                         $pricingData->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
 
