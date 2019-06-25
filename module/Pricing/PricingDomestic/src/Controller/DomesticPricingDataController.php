@@ -128,6 +128,8 @@ class DomesticPricingDataController extends CoreController {
 
                         if($pricingData) {
                             $valueData['value'] = $pricingData->getValue();
+                            $valueData['type']  = $pricing->getType();
+                            $valueData['type_value']  = $pricing->getTypeValue();
                             if($rangeWeight->getIsRas()) {
                                 $data[$zone->getId()]['ras'][$shipmentType->getId()][] = $valueData;
                             } else {
@@ -135,6 +137,8 @@ class DomesticPricingDataController extends CoreController {
                             }                            
                         } else {
                             $valueData['value'] = '';
+                            $valueData['type'] = 0;
+                            $valueData['type_value'] = 0;
                             if($rangeWeight->getIsRas()) {
                                 $data[$zone->getId()]['ras'][$shipmentType->getId()][] = $valueData;
                             } else {
