@@ -44,7 +44,7 @@ class RangeWeight
     /**
      * @var string
      *
-     * @ORM\Column(name="category_id", type="string", length=10, nullable=false, options={"fixed"=true,"comment"="Inbound, Outbound, Domestic"})
+     * @ORM\Column(name="category_id", type="integer", nullable=false)
      */
     private $category_id;
 
