@@ -5,6 +5,7 @@ import { Button, Row, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
+  getCustomerDomesticList,
   getCarrierDomesticList,
   getServiceDomesticList,
   getShipmentTypeDomesticList,
@@ -14,6 +15,13 @@ import { categoryPricing } from '../../../constants/defaultValues';
 import renderSelectField from '../../../containers/Shared/form/Select';
 
 class SearchForm extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      showCustomerField: false
+    }
+  }
 
   showOptionsCategory = () => {
     let result = [];
@@ -46,7 +54,7 @@ class SearchForm extends Component {
     let paramsST = {
       field: ['id', 'name', 'name_en', 'carrier_id', 'service_id'],
       offset: { limit: 0 },
-      query: { category_id: 3, carrier_id: value}
+      query: { category_id: 3, carrier_id: value }
     }
     if (this.props.service_id) {
       paramsST.query = { ...paramsST.query, service_id: this.props.service_id };
@@ -58,7 +66,7 @@ class SearchForm extends Component {
     let paramsST = {
       field: ['id', 'name', 'name_en', 'carrier_id', 'service_id'],
       offset: { limit: 0 },
-      query: { category_id: 3, service_id: value}
+      query: { category_id: 3, service_id: value }
     }
     if (this.props.carrier_id) {
       paramsST.query = { ...paramsST.query, carrier_id: this.props.carrier_id };
@@ -87,19 +95,21 @@ class SearchForm extends Component {
     this.props.getCarrierDomesticList(params);
     this.props.getServiceDomesticList(params);
     this.props.getZoneDomesticList(params);
-
+    this.props.getCustomerDomesticList(params);
+    
     const paramsST = {
       field: ['id', 'name', 'name_en', 'carrier_id', 'service_id'],
       offset: {
         limit: 0
       },
-      query: { category_id: 3}
+      query: { category_id: 3 }
     }
     this.props.getShipmentTypeDomesticList(paramsST);
   }
 
   componentDidMount() {
     this.props.change('category_id', 3);
+    
   }
 
   resetFilter = async () => {
@@ -109,8 +119,30 @@ class SearchForm extends Component {
     handleSubmit();
   }
 
+  onChangeIsPrivate = value => {
+    this.props.change('customer_id', '');
+    if (value) {
+      this.setState({ showCustomerField: true });
+    } else {
+      this.setState({ showCustomerField: false });
+    }
+  }
+
+  showOptionCustomer = (items) => {
+    let result = [];
+    if (items.length > 0) {
+      result = items.map(item => {
+        return {
+          value: item.id,
+          label: item.name
+        }
+      })
+    }
+    return result;
+  }
+
   render() {
-    const { handleSubmit, carrier, service, shipmentType, zone } = this.props;
+    const { handleSubmit, carrier,customer, service, shipmentType, zone } = this.props;
     const { messages, locale } = this.props.intl;
     return (
       <form className="form form_custom" onSubmit={handleSubmit}>
@@ -122,6 +154,35 @@ class SearchForm extends Component {
                 <Field
                   name={locale === 'en-US' ? 'name_en' : 'name'}
                   component="input"
+                />
+              </div>
+            </div>
+          </Col>
+          <Col md={6} lg={3} xl={3} xs={6}>
+            <div className="form__form-group">
+              <span className="form__form-group-label">{messages['pri_dom.type']}</span>
+              <div className="form__form-group-field">
+                <Field
+                  name="is_private"
+                  component={renderSelectField}
+                  options={[
+                    { value: 0, label: messages['pri_dom.public'] },
+                    { value: 1, label: messages['pri_dom.customer'] }
+                  ]}
+                  onChange={this.onChangeIsPrivate}
+                />
+              </div>
+            </div>
+          </Col>
+          <Col md={6} lg={3} xl={3} xs={6}>
+            <div className="form__form-group">
+              <span className="form__form-group-label">{messages['pri_dom.customer']}</span>
+              <div className="form__form-group-field">
+                <Field
+                  name="customer_id"
+                  component={renderSelectField}
+                  options={customer.items && this.showOptionCustomer(customer.items)}
+                  disabled={!this.state.showCustomerField}
                 />
               </div>
             </div>
@@ -165,8 +226,6 @@ class SearchForm extends Component {
               </div>
             </div>
           </Col>
-        </Row>
-        <Row>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
               <span className="form__form-group-label">{messages['pri_dom.shipment-type']}</span>
@@ -188,8 +247,8 @@ class SearchForm extends Component {
                   name="status"
                   component={renderSelectField}
                   options={[
-                    {value: 1, label: messages['pri_dom.active']},
-                    {value: 0, label: messages['pri_dom.inactive']}
+                    { value: 1, label: messages['pri_dom.active'] },
+                    { value: 0, label: messages['pri_dom.inactive'] }
                   ]}
                 />
               </div>
@@ -203,8 +262,8 @@ class SearchForm extends Component {
                   name="calculate_unit"
                   component={renderSelectField}
                   options={[
-                    {value: 1, label: messages['pri_dom.yes']},
-                    {value: 0, label: messages['pri_dom.no']}
+                    { value: 1, label: messages['pri_dom.yes'] },
+                    { value: 0, label: messages['pri_dom.no'] }
                   ]}
                 />
               </div>
@@ -221,8 +280,6 @@ class SearchForm extends Component {
               </div>
             </div>
           </Col>
-        </Row>
-        <Row>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
               <span className="form__form-group-label">{messages['pri_dom.zone']}</span>
@@ -243,8 +300,8 @@ class SearchForm extends Component {
                   name="is_ras"
                   component={renderSelectField}
                   options={[
-                    {value: 1, label: messages['pri_dom.on']},
-                    {value: 0, label: messages['pri_dom.off']}
+                    { value: 1, label: messages['pri_dom.on'] },
+                    { value: 0, label: messages['pri_dom.off'] }
                   ]}
                 />
               </div>
@@ -288,6 +345,7 @@ class SearchForm extends Component {
 }
 
 SearchForm.propTypes = {
+  getCustomerDomesticList: PropTypes.func.isRequired,
   getCarrierDomesticList: PropTypes.func.isRequired,
   getServiceDomesticList: PropTypes.func.isRequired,
   getShipmentTypeDomesticList: PropTypes.func.isRequired,
@@ -298,25 +356,27 @@ SearchForm.propTypes = {
 
 const mapStateToProps = (state, props) => {
   const { pricingDomestic } = state;
-  const { carrier, service, shipmentType, zone } = pricingDomestic;
+  const { customer, carrier, service, shipmentType, zone } = pricingDomestic;
   const selector = formValueSelector('range_weight_domestic_search_form');
   const carrier_id = selector(state, 'carrier_id');
   const service_id = selector(state, 'service_id');
   return {
+    customer,
     carrier,
     service,
     shipmentType,
     zone,
-    carrier_id, 
+    carrier_id,
     service_id
   }
 }
 
 export default connect(mapStateToProps, {
+  getCustomerDomesticList,
   getCarrierDomesticList,
   getServiceDomesticList,
   getShipmentTypeDomesticList,
   getZoneDomesticList
-})(reduxForm({ 
+})(reduxForm({
   form: 'range_weight_domestic_search_form'
 })(injectIntl(SearchForm)));

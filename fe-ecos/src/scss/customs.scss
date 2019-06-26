@@ -542,6 +542,19 @@ form {
 
 }
 
+.form-edit-range-weight-value {
+    .form__form-group {
+        margin-bottom: 0 !important;
+        .form__form-group-label {
+            margin: 5px 0 !important;
+            width: 80px !important;
+        }
+        .form__form-group-field {
+            width: calc(100% - 80px) !important;
+        }
+    }
+}
+
 .pri-dom {
     ul {
         list-style: none;
@@ -562,11 +575,6 @@ form {
             @include themify($themes) {
                 background:  themed('colorBackgroundBody');
             }
-        }
-    }
-    .form-edit-range-weight-value {
-        .form__form-group-label {
-            margin: 5px 0 !important;
         }
     }
     .pricing-vas {

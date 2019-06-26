@@ -81,6 +81,9 @@ module.exports = {
   'pri_dom.subtraction': 'Subtraction',
   'pri_dom.multiplication': 'Multiplication',
   'pri_dom.division': 'Division',
+  'pri_dom.fixed': 'Fixed',
+  'pri_dom.percentage': 'Percentage',
+  'pri_dom.return-value': 'Return Value',
 
   //validate
   'pri_dom.validate-name-exists': 'Name already exists',

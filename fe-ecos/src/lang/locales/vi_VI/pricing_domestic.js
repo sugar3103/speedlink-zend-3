@@ -81,6 +81,9 @@ module.exports = {
   'pri_dom.subtraction': 'Trừ',
   'pri_dom.multiplication': 'Nhân',
   'pri_dom.division': 'Chia',
+  'pri_dom.fixed': 'Tiền mặt',
+  'pri_dom.percentage': 'Phần trăm',
+  'pri_dom.return-value': 'Giá trị trả về',
 
   //validate
   'pri_dom.validate-name-exists': 'Tên đã tồn tại',

@@ -75,13 +75,6 @@ class RangeWeightForm extends Form {
                         'min' => 2,
                         'max' => 50
                     ]
-                ],
-                [
-                    'name' => RangeWeightExistsValidator::class,
-                    'options' => [
-                        'entityManager' => $this->entityManager,
-                        'rangeweight' => $this->rangeweight
-                    ]
                 ]
             ]
         ]);
@@ -100,14 +93,6 @@ class RangeWeightForm extends Form {
                     'options' => [
                         'min' => 2,
                         'max' => 50
-                    ]
-                ],
-                [
-                    'name' => RangeWeightExistsValidator::class,
-                    'options' => [
-                        'entityManager' => $this->entityManager,
-                        'rangeweight' => $this->rangeweight,
-                        'language' => 'en'
                     ]
                 ]
             ]

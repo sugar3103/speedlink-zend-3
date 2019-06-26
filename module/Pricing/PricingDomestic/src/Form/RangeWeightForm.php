@@ -102,6 +102,25 @@ class RangeWeightForm extends Form {
                 // ]
             ]
         ]);
+        
+        $inputFilter->add([
+            'name' => 'is_private',
+            'required' => true,
+            'filters' => [
+                [
+                    'name' => ToInt::class
+                ]
+            ]                
+        ]);
+        $inputFilter->add([
+            'name' => 'customer_id',
+            'required' => false,
+            'filters' => [
+                [
+                    'name' => ToInt::class
+                ]
+            ]                
+        ]);
 
         // Add input for "description" field.
         $inputFilter->add([

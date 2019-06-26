@@ -103,7 +103,7 @@ class PricingData extends Component {
                 <div className="mb-2">
                     <div className="mb-2 pricing-title">
                         <h4>{shipment_type_code} - {shipment_type_name}</h4>
-                        <Button size="sm" color="info">{messages['inactive']}</Button>
+                        {/* <Button size="sm" color="info">{messages['inactive']}</Button> */}
                         <div className="clearfix"></div>
                     </div>
                 </div>
