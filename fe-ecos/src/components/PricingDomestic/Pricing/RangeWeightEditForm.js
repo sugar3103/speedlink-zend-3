@@ -7,10 +7,7 @@ import PropTypes from 'prop-types';
 import CustomField from '../../../containers/Shared/form/CustomField';
 import renderSelectField from '../../../containers/Shared/form/Select';
 import { formatCurrency, normalizeCurrency } from '../../../util/format-field';
-
-const required = value => (value === undefined || value === null) ? 'pri_dom.field-is-required' : undefined;
-const number = value => value && isNaN(Number(value)) ? 'pri_dom.field-is-number' : undefined;
-const nonNegative = value => value && value < 0 ? `pri_dom.field-not-negative` : undefined;
+import validate from './validateEditRangeWeightForm';
 
 const renderRangeWeight = ({ fields, meta: { error }, intl: { locale, messages } }) => (
   <Fragment>
@@ -23,7 +20,6 @@ const renderRangeWeight = ({ fields, meta: { error }, intl: { locale, messages }
               <Field
                 name={`${item}.value`}
                 component={CustomField}
-                validate={[required, number, nonNegative]}
                 format={formatCurrency}
                 normalize={normalizeCurrency}
               />
@@ -41,7 +37,7 @@ const renderRangeWeight = ({ fields, meta: { error }, intl: { locale, messages }
                   { value: 0, label: messages['pri_dom.fixed'] },
                   { value: 1, label: messages['pri_dom.percentage'] }
                 ]}
-                validate={[required]}
+                clearable={false}
               />
             </div>
           </div>
@@ -53,9 +49,6 @@ const renderRangeWeight = ({ fields, meta: { error }, intl: { locale, messages }
               <Field
                 name={`${item}.type_value`}
                 component={CustomField}
-                validate={[required, number, nonNegative]}
-                format={formatCurrency}
-                normalize={normalizeCurrency}
               />
             </div>
           </div>
@@ -114,4 +107,5 @@ const mapStateToProps = ({ authUser }) => {
 export default connect(mapStateToProps, {
 })(reduxForm({
   form: 'pricing_domestic_range_weight_edit_form',
+  validate
 })(injectIntl(RangeWeightEditForm)));

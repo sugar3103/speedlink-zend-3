@@ -123,6 +123,7 @@ module.exports = {
   'pri_dom.field-is-required': 'Field is required',
   'pri_dom.field-is-number': 'Field must is number',
   'pri_dom.field-not-negative': 'Field is not negative',
+  'pri_dom.field-must-not-be-larger-than-100': 'Field must not be larger than 100',
   'pri_dom.validate-value-numberic': 'Value must be a number',
   'pri_dom.validate-vas-name-required': 'Name is required',
   'pri_dom.validate-vas-formula-required': 'Formula is required',

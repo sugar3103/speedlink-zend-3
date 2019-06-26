@@ -123,6 +123,7 @@ module.exports = {
   'pri_dom.field-is-required': 'Trường này là bắt buộc',
   'pri_dom.field-is-number': 'Trường này phải là số',
   'pri_dom.field-not-negative': 'Trường này không được âm',
+  'pri_dom.field-must-not-be-larger-than-100': 'Trường này không được lớn hơn 100',
   'pri_dom.validate-value-numberic': 'Giá trị phải là số',
   'pri_dom.validate-vas-name-required': 'Tên không được bỏ trống',
   'pri_dom.validate-vas-formula-required': 'Công thức không được bỏ trống',
