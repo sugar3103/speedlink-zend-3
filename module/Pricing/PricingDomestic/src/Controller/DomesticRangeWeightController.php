@@ -50,7 +50,9 @@ class DomesticRangeWeightController extends CoreController {
                 10 => 'zone_id',
                 11 => 'is_ras',
                 12 => 'from',
-                13 => 'to'
+                13 => 'to',
+                14 => 'is_private',
+                15 => 'customer_id'
             ];
 
             list($start,$limit,$sortField,$sortDirection,$filters, $fields) = $this->getRequestData($fieldsMap);          
