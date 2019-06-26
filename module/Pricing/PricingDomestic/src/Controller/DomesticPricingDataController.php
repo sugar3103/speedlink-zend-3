@@ -99,7 +99,7 @@ class DomesticPricingDataController extends CoreController {
             $data[$zone->getId()]['name'] = $zone->getName();
             $data[$zone->getId()]['name_en'] = $zone->getNameEn();
             
-            $shipmentTypes = $this->entityManager->getRepository(ShipmentType::class)->findBy(['is_deleted' => 0, 'status' => 1]);
+            $shipmentTypes = $this->entityManager->getRepository(ShipmentType::class)->findBy(['is_deleted' => 0, 'status' => 1, 'category' => 3]);
             foreach ($shipmentTypes as $shipmentType) {
                 $data[$zone->getId()]['ras'][$shipmentType->getId()] = null;
                 $data[$zone->getId()]['not_ras'][$shipmentType->getId()] = null;
@@ -128,8 +128,8 @@ class DomesticPricingDataController extends CoreController {
 
                         if($pricingData) {
                             $valueData['value'] = $pricingData->getValue();
-                            $valueData['type']  = $pricing->getType();
-                            $valueData['type_value']  = $pricing->getTypeValue();
+                            $valueData['type']  = $pricingData->getType();
+                            $valueData['type_value']  = $pricingData->getTypeValue();
                             if($rangeWeight->getIsRas()) {
                                 $data[$zone->getId()]['ras'][$shipmentType->getId()][] = $valueData;
                             } else {
@@ -155,7 +155,12 @@ class DomesticPricingDataController extends CoreController {
 
     private function getShipmentTypeByService($service_id) {
         $data = [];
-        $shipmentTypes = $this->entityManager->getRepository(\ServiceShipment\Entity\ShipmentType::class)->findBy(['service' => $service_id, 'is_deleted' => 0,'status' => 1]);
+        $shipmentTypes = $this->entityManager->getRepository(\ServiceShipment\Entity\ShipmentType::class)->findBy([
+            'service' => $service_id, 
+            'is_deleted' => 0,
+            'status' => 1,
+            'category' => 3
+            ]);
         foreach ($shipmentTypes as $shipmentType) {
             $data[] = [
                 'id' => $shipmentType->getId(),

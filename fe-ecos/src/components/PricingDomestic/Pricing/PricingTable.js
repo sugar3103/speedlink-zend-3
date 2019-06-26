@@ -52,11 +52,11 @@ class PricingTable extends Component {
       result = Object.keys(items).map((key, index) => {
         const value = items[key];
         if (value && value.length > 0) {
-          let params = { pricing_id, range_weight: [] };
+          let params = { id: pricing_id, data: [] };
           const valueCell = value.map((item, index2) => {
             item = { ...item };
             if (Object.entries(item).length > 0) {
-              params.range_weight.push(item);
+              params.data.push(item);
               if (parseFloat(item.value) > 0) {
                 const currency = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.value);
                 if (parseFloat(item.to) > 0) {
@@ -138,7 +138,7 @@ class PricingTable extends Component {
             <Modal
               isOpen={this.state.modalOpen}
               toggle={this.toggleModal}
-              className={`modal-dialog--primary modal-dialog--header`}
+              className={`modal-dialog--primary modal-dialog--header modal-lg`}
             >
               <RangeWeightEdit toggleModal={this.toggleModal} data={this.state.modalData} />
             </Modal>

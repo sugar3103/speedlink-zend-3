@@ -320,7 +320,7 @@ class DomesticPricingData
         $this->type_value = $type_value;
     }
     
-    public function getTypeValue($type_value) {
+    public function getTypeValue() {
         return $this->type_value;
     }
 }

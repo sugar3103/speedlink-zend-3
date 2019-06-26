@@ -36,9 +36,11 @@ class DomesticPricingDataManager
             foreach ($data['data'] as $value) {
                 $this->entityManager->beginTransaction();
                 try {
-                    $pricingData = $this->entityManager->getRepository(DomesticPricingData::class)->findOneBy(['domestic_pricing' => $data['id'],'domestic_range_weight' => $value['range_weight'], 'is_deleted' => 0]);
+                    $pricingData = $this->entityManager->getRepository(DomesticPricingData::class)->findOneBy(['domestic_pricing' => $data['id'],'domestic_range_weight' => $value['id'], 'is_deleted' => 0]);
                     if ($pricingData) {
                         $pricingData->setValue($value['value']);
+                        $pricingData->setType($value['type']);
+                        $pricingData->setTypeValue($value['type_value']);
                         $pricingData->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
 
                         $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
@@ -49,7 +51,7 @@ class DomesticPricingDataManager
                         $pricingData->setDomesticRangeWeight($this->entityManager->getRepository(DomesticRangeWeight::class)->find($value['range_weight']));
                         $pricingData->setValue($value['value']);
                         $pricingData->setType($value['type']);
-                        $pricingData->setTypeVaule($value['type_value']);
+                        $pricingData->setTypeValue($value['type_value']);
                         $pricingData->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
                         $pricingData->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
 
