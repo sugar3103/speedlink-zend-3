@@ -61,9 +61,9 @@ class RangeWeightExistsValidator extends AbstractValidator {
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
         if($this->options['language'] === NULL) {
-            $rangeweight = $entityManager->getRepository(RangeWeight::class)->findOneByName($value);
+            $rangeweight = $entityManager->getRepository(RangeWeight::class)->findOneBy(array('name' => $value, 'is_deleted' => 0));
         } else if($this->options['language'] === 'en') {
-            $rangeweight = $entityManager->getRepository(RangeWeight::class)->findOneBy(array('name_en' => $value));       
+            $rangeweight = $entityManager->getRepository(RangeWeight::class)->findOneBy(array('name_en' => $value, 'is_deleted' => 0));       
         }
 
        

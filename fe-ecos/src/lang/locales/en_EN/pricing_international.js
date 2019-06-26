@@ -29,6 +29,7 @@ module.exports = {
   'pri_int.add-zone-title': 'Add Zone International',
   'pri_int.edit-zone-title': 'Edit Zone International',
   'pri_int.view-zone-title': 'View Zone International',
+  'pri_int.zone-exists': 'Zone already exists',
 
   /* RANGE WEIGHT INTERNATIONAL */
   'pri_int.range-weight-title': 'Range Weight International',
@@ -49,6 +50,7 @@ module.exports = {
   'pri_int.add-range-weight-title': 'Add Range Weight International',
   'pri_int.edit-range-weight-title': 'Edit Range Weight International',
   'pri_int.view-range-weight-title': 'View Range Weight International',
+  'pri_int.range-weight-exists': 'Range Weight already exists',
 
   /* PRICING */
   'pri_int.pricing-title': 'Pricing International',
@@ -75,7 +77,7 @@ module.exports = {
   'pri_int.not-ras': 'Provincial',
   'pri_int.edit-range-weight-value': 'Edit Range Weight Value',
   'pri_int.normal': 'Normal',
-  'pri_int.special': 'Special',
+  'pri_int.range': 'Range',
   'pri_int.minimun-value': 'Minimum Value',
   'pri_int.price': 'Price',
   'pri_int.formula': 'Formula',
@@ -86,6 +88,7 @@ module.exports = {
   'pri_int.subtraction': 'Subtraction',
   'pri_int.multiplication': 'Multiplication',
   'pri_int.division': 'Division',
+  'pri_int.transportation': 'Transportation',
 
   //validate
   'pri_int.validate-name-exists': 'Name already exists',

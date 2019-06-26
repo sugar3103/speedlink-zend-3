@@ -35,8 +35,12 @@ const validate = (values) => {
       errors.expired_date = 'pri_int.validate-expired-date-empty';
     }
 
-    if (values.effected_date && values.expired_date && values.effected_date > values.expired_date) {
-      errors.expired_date = 'pri_int.validate-expired-date-lesser';
+    if (values.effected_date && values.expired_date) {
+      const effected_date = new Date(values.effected_date);
+      const expired_date = new Date(values.expired_date);
+      if (effected_date > expired_date) {
+        errors.expired_date = 'pri_int.validate-expired-date-lesser';
+      }
     }
 
     if (!values.origin_country_id) {

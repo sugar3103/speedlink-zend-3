@@ -132,7 +132,7 @@ class ZoneCodeRepository extends EntityRepository
                 'operator' => 'eq'
             ],
             'category_id' => [
-                'alias' => 'jc.category_id',
+                'alias' => 'z.category_id',
                 'operator' => 'contains'
             ],
             'service_id' => [

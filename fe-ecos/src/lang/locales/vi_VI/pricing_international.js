@@ -29,6 +29,7 @@ module.exports = {
     'pri_int.add-zone-title': 'Thêm vùng quốc tế',
     'pri_int.edit-zone-title': 'Cập nhật vùng quốc tế',
     'pri_int.view-zone-title': 'Xem vùng quốc tế',
+    'pri_int.zone-exists': 'Vùng đã tồn tại',
 
     /* RANGE WEIGHT INTERNATIONAL */
     'pri_int.range-weight-title': 'Khoảng trọng lượng quốc tế',
@@ -49,6 +50,7 @@ module.exports = {
     'pri_int.add-range-weight-title': 'Tạo mới khoảng trọng lượng',
     'pri_int.edit-range-weight-title': 'Cập nhật khoảng trọng lượng',
     'pri_int.view-range-weight-title': 'Xem khoảng trọng lượng',
+    'pri_int.range-weight-exists': 'Khoảng trọng lượng đã tồn tại',
 
     /* PRICING */
     'pri_int.pricing-title': 'Bảng giá nội địa',
@@ -75,7 +77,7 @@ module.exports = {
     'pri_int.not-ras': 'Nội Thành',
     'pri_int.edit-range-weight-value': 'Cập nhật giá trị khoảng trọng lượng',
     'pri_int.normal': 'Mặc đinh',
-    'pri_int.special': 'Đặc biệt',
+    'pri_int.range': 'Đặc biệt',
     'pri_int.minimun-value': 'Giá trị nhỏ nhất',
     'pri_int.price': 'Giá',
     'pri_int.formula': 'Công thức tính',
@@ -86,6 +88,7 @@ module.exports = {
     'pri_int.subtraction': 'Trừ',
     'pri_int.multiplication': 'Nhân',
     'pri_int.division': 'Chia',
+    'pri_int.transportation': 'Bảng giá',
 
     //validate
     'pri_int.validate-name-exists': 'Tên đã tồn tại',

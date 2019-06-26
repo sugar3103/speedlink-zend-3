@@ -483,19 +483,19 @@ export function* watchPricingDomesticUpdateItem() {
   yield takeEvery(PRI_DOM_PRICING_UPDATE_ITEM, updatePricingDomesticItem);
 }
 
-export function* watchPricingDomestiDeleteItem() {
+export function* watchPricingDomesticDeleteItem() {
   yield takeEvery(PRI_DOM_PRICING_DELETE_ITEM, deletePricingDomesticItem);
 }
 
-export function* watchPricingDomestiGetData() {
+export function* watchPricingDomesticGetData() {
   yield takeEvery(PRI_DOM_PRICING_GET_DATA, getDataPricingDomesticItems);
 }
 
-export function* watchPricingDomestiAddRangeWeightValue() {
+export function* watchPricingDomesticAddRangeWeightValue() {
   yield takeEvery(PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE, addRangeWeightValueItem);
 }
 
-export function* watchPricingDomestiGetVas() {
+export function* watchPricingDomesticGetVas() {
   yield takeEvery(PRI_DOM_PRICING_GET_VAS, getVasPricingDomesticItems);
 }
 
@@ -503,7 +503,7 @@ export function* watchPricingDomesticUpdateVas() {
   yield takeEvery(PRI_DOM_PRICING_UPDATE_VAS, updatePricingDomesticVasItem);
 }
 
-export function* watchPricingDomestiGetFieldVas() {
+export function* watchPricingDomesticGetFieldVas() {
   yield takeEvery(PRI_DOM_PRICING_GET_FIELD_VAS, getFieldVasPricingDomesticItems);
 }
 
@@ -513,11 +513,11 @@ export default function* rootSaga() {
     fork(watchPricingDomesticAddItem),
     fork(watchRequestPricingDomesticUpdateItem),
     fork(watchPricingDomesticUpdateItem),
-    fork(watchPricingDomestiDeleteItem),
-    fork(watchPricingDomestiGetData),
-    fork(watchPricingDomestiAddRangeWeightValue),
-    fork(watchPricingDomestiGetVas),
+    fork(watchPricingDomesticDeleteItem),
+    fork(watchPricingDomesticGetData),
+    fork(watchPricingDomesticAddRangeWeightValue),
+    fork(watchPricingDomesticGetVas),
     fork(watchPricingDomesticUpdateVas),
-    fork(watchPricingDomestiGetFieldVas),
+    fork(watchPricingDomesticGetFieldVas),
   ]);
 }

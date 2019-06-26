@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import SearchForm from './SearchForm';
 import  { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
-import { getPricingList } from '../../../redux/actions';
+import { getPricingInternationalList } from '../../../redux/actions';
 
 class Search extends Component {
   handleSubmit = values => {
@@ -15,7 +15,7 @@ class Search extends Component {
       },
       query: values
     }
-    this.props.getPricingList(params);
+    this.props.getPricingInternationalList(params);
     
   };
 
@@ -33,9 +33,9 @@ class Search extends Component {
 }
 
 Search.propTypes = {
-  getPricingList: PropTypes.func.isRequired
+  getPricingInternationalList: PropTypes.func.isRequired
 }
 
 export default injectIntl(connect(null, {
-  getPricingList
+  getPricingInternationalList
 })(Search));
