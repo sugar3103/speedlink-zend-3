@@ -22,7 +22,7 @@ const validate = values => {
         dataArrayErrors[index] = dataErrors
       }
       
-      if (!data || !data.type_value) {
+      if (!data || data.type_value  === undefined || data.type_value === '') {
         dataErrors.type_value = 'pri_dom.field-is-required';
         dataArrayErrors[index] = dataErrors
       }
