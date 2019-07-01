@@ -48,7 +48,6 @@ $router = [
                 ]
             ]
         ],
-        
         'domestic_data' => [
             'type' => StaticRoute::class,
             'options' => [

@@ -75,8 +75,10 @@ class DomesticPricingController extends CoreController {
     ];
 
     protected $customerId = [
-        '7fd8ca33-79f5-bb42-af80-5d084da574af' => 12,
-        '2b29a565-8bf0-9ba2-2f43-58353d35278c' => 18
+        '7fd8ca33-79f5-bb42-af80-5d084da574af' => 12, // Shop phong thuy
+        '2b29a565-8bf0-9ba2-2f43-58353d35278c' => 18, // ICT Accounts
+        '98af7ad0-8a56-1bdb-5e3f-5bff710c6291' => 24, // Hoongvan Clothings
+        'ace03c12-c387-5cdb-8845-5d1420f9b606' => 30, // Xưởng Gỗ Thanh Tâm
     ];
 
     public function __construct($entityManager, $domesticPricingManager) {
@@ -207,6 +209,7 @@ class DomesticPricingController extends CoreController {
         return $this->createResponse();
     }
 
+    #region Ecos v1 calculate
     public function getPricingOldAction()
     {
         if ($this->getRequest()->isPost()) {
@@ -254,9 +257,30 @@ class DomesticPricingController extends CoreController {
         return $this->createResponse();
     }
 
-    public function getPricingNewAction()
+    public function getMassPricingAction()
     {
-        //$weight = ($dataList['width'] * $dataList['height'] * $dataList['length']) / $shipmentType->getVolumetricNumber();
+        if ($this->getRequest()->isPost()) {
+            $params = $this->getRequestData();
+            $data = array();
+            if (count($params) > 0) {
+                foreach ($params as $key => $shipment) {
+                    if (isset($shipment['customerId']) && array_key_exists($shipment['customerId'], $this->customerId)) {
+                        $shipment['customerId'] = $this->customerId[$shipment['customerId']];
+                    } else {
+                        $shipment['customerId'] = '';
+                    }
+                    if (array_key_exists($shipment['shipmentType'], $this->shipmentType)) {
+                        $shipment['shipmentType'] = $this->shipmentType[$shipment['shipmentType']];
+                        $result = $this->calculatePricingFromV1($shipment);
+                    } else {
+                        $result = ['error' => true, 'message' => 'Shipment Type is wrong'];
+                    }
+                    $data[$key] = array_merge($shipment, $result);
+                }
+            }
+            $this->apiResponse['data'] = $data;
+        }
+        return $this->createResponse();
     }
 
     private function calculatePricingFromV1($dataList)
@@ -362,10 +386,12 @@ class DomesticPricingController extends CoreController {
                 if ($priceOver[0]['round_up'] > 0) {
                     $whole = floor($weightOver);
                     $fraction = $weightOver - $whole;
-                    if ($fraction <= $priceOver[0]['round_up']) {
-                        $weightOver = $whole + $priceOver[0]['round_up'];
-                    } else {
-                        $weightOver = $whole + 1;
+                    if ($fraction > 0) {
+                        if ($fraction <= $priceOver[0]['round_up']) {
+                            $weightOver = $whole + $priceOver[0]['round_up'];
+                        } else {
+                            $weightOver = $whole + 1;
+                        }
                     }
                 }
                 $feeOver = ($weightOver / $priceOver[0]['unit']) * $priceDataOver->getValue();
@@ -379,10 +405,12 @@ class DomesticPricingController extends CoreController {
             if ($priceNormal[0]['round_up'] > 0) {
                 $whole = floor($dataList['weight']);
                 $fraction = $dataList['weight'] - $whole;
-                if ($fraction <= $priceOver[0]['round_up']) {
-                    $dataList['weight'] = $whole + $priceOver[0]['round_up'];
-                } else {
-                    $dataList['weight'] = $whole + 1;
+                if ($fraction > 0) {
+                    if ($fraction <= $priceOver[0]['round_up']) {
+                        $dataList['weight'] = $whole + $priceOver[0]['round_up'];
+                    } else {
+                        $dataList['weight'] = $whole + 1;
+                    }
                 }
             }
             $feeNormal = $feeOver = ($dataList['weight'] / $priceNormal[0]['unit']) * $priceDataNormal->getValue();
@@ -456,4 +484,5 @@ class DomesticPricingController extends CoreController {
             'fee_pickup_ras' => $feePickUp,
         ];
     }
+    #endregion
 }
