@@ -418,6 +418,15 @@ class DomesticPricingController extends CoreController {
             $feeNormal = $priceDataNormal->getValue();
         }
 
+        //type and value bill R
+        if (!empty($priceDataOver)) {
+            $typeBill = $priceDataOver->getType();
+            $typeValue = $priceDataOver->getTypeValue();
+        } else {
+            $typeBill = $priceDataNormal->getType();
+            $typeValue = $priceDataNormal->getTypeValue();
+        }
+
         // Pick RAS
         if ($dataList['pickupRas'] == 1) {
             $feePickUp = 15000;
@@ -482,6 +491,8 @@ class DomesticPricingController extends CoreController {
             'fee_over' => $feeOver,
             'fee_normal' => $feeNormal,
             'fee_pickup_ras' => $feePickUp,
+            'type_bill' => $typeBill,
+            'type_value' => $typeValue
         ];
     }
     #endregion
