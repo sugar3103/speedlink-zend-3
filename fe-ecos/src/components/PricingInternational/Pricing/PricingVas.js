@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import PricingVasItem from './PricingVasItem';
 import { FieldArray, reduxForm } from 'redux-form';
-import { getPricingInternationalVas, getPricingInternationalFieldVas } from '../../../redux/actions';
+import { getPricingInternationalFieldVas } from '../../../redux/actions';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 import validate from './validateVasForm';
@@ -46,15 +46,6 @@ class PricingVas extends Component {
     }
 
     componentWillMount() {
-        const params = {
-            offset: {
-                limit: 0
-            },
-            query: {
-                pricing_data_id: this.props.pricing_data_id
-            }
-        }
-        this.props.getPricingInternationalVas(params);
         this.props.getPricingInternationalFieldVas();
     }
 
@@ -63,8 +54,8 @@ class PricingVas extends Component {
     }
 
     render() {
-        const { handleSubmit, pricing_data_id, intl: { messages, locale }, fieldVas, loadingFieldVas, loadingVas, type_action } = this.props;
-        return loadingVas ? (
+        const { handleSubmit, pricing_data_id, intl: { messages, locale }, fieldVas, loadingFieldVas, loadingData, type_action } = this.props;
+        return loadingData ? (
             <ReactLoading type="bubbles" className="loading" />
         ) : (
                 <form className="form form_custom pricing-vas" onSubmit={handleSubmit}>
@@ -130,26 +121,24 @@ class PricingVas extends Component {
 }
 
 PricingVas.propTypes = {
-    getPricingInternationalVas: PropTypes.func.isRequired,
     getPricingInternationalFieldVas: PropTypes.func.isRequired,
     loadingFieldVas: PropTypes.bool.isRequired,
     fieldVas: PropTypes.array,
     vas: PropTypes.array
 }
 
-const mapStateToProps = ({ pricingInternational }, { pricing_data_id }) => {
-    const { pricing: { vas, loadingVas, fieldVas, loadingFieldVas } } = pricingInternational;
+const mapStateToProps = ({ pricingInternational }, { pricing_data_id, pricing_vas }) => {
+    const { pricing: { loadingData, fieldVas, loadingFieldVas } } = pricingInternational;
     return {
         form: `pricing_international_vas_action_form_${pricing_data_id}`,
-        initialValues: { vas },
-        loadingVas,
+        initialValues: { vas: pricing_vas },
+        loadingData,
         fieldVas,
         loadingFieldVas
     }
 };
 
 const mapDispatchToProps = {
-    getPricingInternationalVas,
     getPricingInternationalFieldVas
 };
 

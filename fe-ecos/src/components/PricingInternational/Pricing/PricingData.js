@@ -79,7 +79,7 @@ class PricingData extends Component {
     render() {
         const { type_action } = this.props;
         const { messages } = this.props.intl;
-        const { pricing_data: { title }, shipment_type_code, shipment_type_name, id } = this.props.pricing;
+        const { pricing_data: { title }, shipment_type_code, shipment_type_name, id, pricing_vas } = this.props.pricing;
         let columns = Object.keys(title).map((item, index) => {
             if (index === 0) {
                 return (
@@ -127,7 +127,7 @@ class PricingData extends Component {
                 </fieldset>
                 <fieldset className="scheduler-border">
                     <legend className="scheduler-border">{messages['pri_int.vas']}</legend>
-                    <PricingVas pricing_data_id={id} onSubmit={this.onSaveVas} type_action={type_action} />
+                    <PricingVas pricing_data_id={id} pricing_vas={pricing_vas} onSubmit={this.onSaveVas} type_action={type_action} />
                 </fieldset>
             </Fragment>
         )
