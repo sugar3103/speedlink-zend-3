@@ -11,7 +11,13 @@ import {
   PRI_INT_ZONE_ADD_ITEM,
   PRI_INT_ZONE_REQUEST_UPDATE_ITEM,
   PRI_INT_ZONE_UPDATE_ITEM,
-  PRI_INT_ZONE_DELETE_ITEM
+  PRI_INT_ZONE_DELETE_ITEM,
+
+  PRI_INT_ORIGIN_DISTRICT_RESET_STATE,
+  PRI_INT_ORIGIN_WARD_RESET_STATE,
+
+  PRI_INT_DESTINATION_DISTRICT_RESET_STATE,
+  PRI_INT_DESTINATION_WARD_RESET_STATE,
 } from "../../../constants/actionTypes";
 
 import {
@@ -23,6 +29,18 @@ import {
   deleteZoneInternationalItemSuccess,
   getZoneInternationalList,
 } from "./actions";
+
+import {
+  getOriginCityInternationalList,
+  getOriginDistrictInternationalList,
+  getOriginWardInternationalList,
+
+  getDestinationCityInternationalList,
+  getDestinationDistrictInternationalList,
+  getDestinationWardInternationalList,
+
+  removeState
+} from '../../actions';
 
 //validate
 function validateZoneInternational(errors) {
@@ -139,7 +157,63 @@ function* requestZoneInternationalUpdateItems({ payload }) {
     switch (response.error_code) {
       
       case EC_SUCCESS:
-        yield put(requestUpdateZoneInternationalItemSuccess(response.data[0]));
+        const data = response.data[0];
+        let params = {
+          field: ['id', 'name', 'name_en'],
+          offset: {
+            limit: 0
+          }
+        }
+
+        //get options origin address
+        if (data.origin_country_id) {
+          params.query = {
+            country: data.origin_country_id
+          }
+          yield put(getOriginCityInternationalList(params));
+          if (data.origin_city_id) {
+            params.query = {
+              city: data.origin_city_id
+            }
+            yield put(getOriginDistrictInternationalList(params));
+            if (data.origin_district_id) {
+              params.query = {
+                district: data.origin_district_id
+              }
+              yield put(getOriginWardInternationalList(params));
+            } else {
+              yield put(removeState(PRI_INT_ORIGIN_WARD_RESET_STATE));
+            }
+          } else {
+            yield put(removeState(PRI_INT_ORIGIN_DISTRICT_RESET_STATE));
+          }
+        }
+
+        //get options dest address
+        if (data.destination_country_id) {
+          params.query = {
+            country: data.destination_country_id
+          }
+          yield put(getDestinationCityInternationalList(params));
+          if (data.destination_city_id) {
+            params.query = {
+              city: data.destination_city_id
+            }
+            yield put(getDestinationDistrictInternationalList(params));
+            if (data.destination_district_id) {
+              params.query = {
+                district: data.destination_district_id
+              }
+              yield put(getDestinationWardInternationalList(params));
+            } else {
+              yield put(removeState(PRI_INT_DESTINATION_WARD_RESET_STATE));
+            }
+          } else {
+            yield put(removeState(PRI_INT_DESTINATION_DISTRICT_RESET_STATE));
+          }
+        }
+
+        yield put(requestUpdateZoneInternationalItemSuccess(data));
         break;
 
       case EC_FAILURE:

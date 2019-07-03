@@ -97,13 +97,35 @@ class ZoneCodeController extends CoreController
                 }
             }
 
-            $check_exits = $this->entityManager->getRepository(ZoneCode::class)->findOneBy(array(
+            $conditions = array(
                 'carrier_id' => $data['carrier_id'], 
                 'category_id' => $data['category_id'], 
                 'service_id' => $data['service_id'], 
                 'shipment_type_id' => $data['shipment_type_id'],
+                'origin_country_id' => $data['origin_country_id'],
+                'destination_country_id' => $data['destination_country_id'],
                 'is_deleted' => 0
-            ));
+            );
+            if (isset($data['origin_city_id'])) {
+                $conditions['origin_city_id'] = $data['origin_city_id'];
+                if (isset($data['origin_district_id'])) {
+                    $conditions['origin_district_id'] = $data['origin_district_id'];
+                    if (isset($data['origin_ward_id'])) {
+                        $conditions['origin_ward_id'] = $data['origin_ward_id'];
+                    }
+                }
+            }
+            if (isset($data['destination_city_id'])) {
+                $conditions['destination_city_id'] = $data['destination_city_id'];
+                if (isset($data['destination_district_id'])) {
+                    $conditions['destination_district_id'] = $data['destination_district_id'];
+                    if (isset($data['destination_ward_id'])) {
+                        $conditions['destination_ward_id'] = $data['destination_ward_id'];
+                    }
+                }
+            }
+
+            $check_exits = $this->entityManager->getRepository(ZoneCode::class)->findOneBy($conditions);
 
             if ($check_exits) {
                 $this->error_code = 0;
@@ -134,13 +156,36 @@ class ZoneCodeController extends CoreController
             $data = $this->getRequestData();
             $user = $this->tokenPayload;
             if (isset($data['id'])) {
-                $check_exits = $this->entityManager->getRepository(ZoneCode::class)->findOneBy(array(
+                $conditions = array(
                     'carrier_id' => $data['carrier_id'], 
                     'category_id' => $data['category_id'], 
                     'service_id' => $data['service_id'], 
                     'shipment_type_id' => $data['shipment_type_id'],
+                    'origin_country_id' => $data['origin_country_id'],
+                    'destination_country_id' => $data['destination_country_id'],
                     'is_deleted' => 0
-                ));
+                );
+                if (isset($data['origin_city_id'])) {
+                    $conditions['origin_city_id'] = $data['origin_city_id'];
+                    if (isset($data['origin_district_id'])) {
+                        $conditions['origin_district_id'] = $data['origin_district_id'];
+                        if (isset($data['origin_ward_id'])) {
+                            $conditions['origin_ward_id'] = $data['origin_ward_id'];
+                        }
+                    }
+                }
+                if (isset($data['destination_city_id'])) {
+                    $conditions['destination_city_id'] = $data['destination_city_id'];
+                    if (isset($data['destination_district_id'])) {
+                        $conditions['destination_district_id'] = $data['destination_district_id'];
+                        if (isset($data['destination_ward_id'])) {
+                            $conditions['destination_ward_id'] = $data['destination_ward_id'];
+                        }
+                    }
+                }
+    
+                $check_exits = $this->entityManager->getRepository(ZoneCode::class)->findOneBy($conditions);
+                
                 if ($check_exits) {
                     $zonecode_id = $check_exits->getId();
                     if ($zonecode_id != $data['id']) {
