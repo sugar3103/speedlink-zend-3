@@ -100,13 +100,13 @@ class ZoneCodeForm extends Form {
                         'max' => 50
                     ]
                 ],
-                [
-                    'name' => ZoneExistsValidator::class,
-                    'options' => [
-                        'entityManager' => $this->entityManager,
-                        'zone' => $this->zonecode
-                    ]
-                ]
+                // [
+                //     'name' => ZoneExistsValidator::class,
+                //     'options' => [
+                //         'entityManager' => $this->entityManager,
+                //         'zone' => $this->zonecode
+                //     ]
+                // ]
             ]
         ]);
 
@@ -126,14 +126,14 @@ class ZoneCodeForm extends Form {
                         'max' => 50
                     ]
                 ],
-                [
-                    'name' => ZoneExistsValidator::class,
-                    'options' => [
-                        'entityManager' => $this->entityManager,
-                        'zone' => $this->zonecode,
-                        'language' => 'en'
-                    ]
-                ]
+                // [
+                //     'name' => ZoneExistsValidator::class,
+                //     'options' => [
+                //         'entityManager' => $this->entityManager,
+                //         'zone' => $this->zonecode,
+                //         'language' => 'en'
+                //     ]
+                // ]
             ]
         ]);
         $inputFilter->add([

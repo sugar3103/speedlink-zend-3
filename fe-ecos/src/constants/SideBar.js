@@ -104,38 +104,38 @@ export default {
         },
       ]
     },
-    {
-      id: 'pricing_domestic',
-      title: 'menu.pricing_domestic',
-      route: '/pricing-domestic',
-      icon: 'icon-pricing-table',
-      childrens: [
-        {
-          id: 'pricing_index_domestic',
-          title: 'menu.pricing_index_domestic',
-          route: '/pricing-domestic/pricing',
-          icon: 'lnr lnr-map'
-        },
-        {
-          id: 'area_domestic',
-          title: 'menu.area_domestic',
-          route: '/pricing-domestic/area',
-          icon: 'lnr lnr-map'
-        },
-        {
-          id: 'zone_domestic',
-          title: 'menu.zone_domestic',
-          route: '/pricing-domestic/zone',
-          icon: 'lnr lnr-license'
-        },
-        {
-          id: 'range_weight_domestic',
-          title: 'menu.range_weight_domestic',
-          route: '/pricing-domestic/range-weight',
-          icon: 'lnr lnr-map'
-        }
-      ]
-    },
+    // {
+    //   id: 'pricing_domestic',
+    //   title: 'menu.pricing_domestic',
+    //   route: '/pricing-domestic',
+    //   icon: 'icon-pricing-table',
+    //   childrens: [
+    //     {
+    //       id: 'pricing_index_domestic',
+    //       title: 'menu.pricing_index_domestic',
+    //       route: '/pricing-domestic/pricing',
+    //       icon: 'lnr lnr-map'
+    //     },
+    //     {
+    //       id: 'area_domestic',
+    //       title: 'menu.area_domestic',
+    //       route: '/pricing-domestic/area',
+    //       icon: 'lnr lnr-map'
+    //     },
+    //     {
+    //       id: 'zone_domestic',
+    //       title: 'menu.zone_domestic',
+    //       route: '/pricing-domestic/zone',
+    //       icon: 'lnr lnr-license'
+    //     },
+    //     {
+    //       id: 'range_weight_domestic',
+    //       title: 'menu.range_weight_domestic',
+    //       route: '/pricing-domestic/range-weight',
+    //       icon: 'lnr lnr-map'
+    //     }
+    //   ]
+    // },
     {
       id: 'pricing_international',
       title: 'menu.pricing_international',

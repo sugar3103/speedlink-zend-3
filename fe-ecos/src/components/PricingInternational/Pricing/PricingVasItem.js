@@ -226,7 +226,7 @@ class PricingVasItem extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-    const selector = formValueSelector('pricing_international_vas_action_form');
+    const selector = formValueSelector(`pricing_international_vas_action_form_${props.pricing_data_id}`);
     const type = selector(state, `${props.vas}.type`);
     const spec = selector(state, `${props.vas}.spec`);
 
@@ -239,13 +239,13 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch, props) => ({
     changeFormValue: value => {
         if (value === 1) {
-            return dispatch(change("pricing_international_vas_action_form", `vas[${props.index}].min`, null))
+            return dispatch(change(`pricing_international_vas_action_form_${props.pricing_data_id}`, `vas[${props.index}].min`, null))
         } else {
-            return dispatch(change("pricing_international_vas_action_form", `vas[${props.index}].spec`, []))
+            return dispatch(change(`pricing_international_vas_action_form_${props.pricing_data_id}`, `vas[${props.index}].spec`, []))
         }
     },
-    changeSpec: value => dispatch(change('pricing_international_vas_action_form', `vas[${props.index}].spec`, value)),
-    removeFieldVas: () => dispatch(change("pricing_international_vas_action_form", `vas[${props.index}].is_deleted`, true))
+    changeSpec: value => dispatch(change(`pricing_international_vas_action_form_${props.pricing_data_id}`, `vas[${props.index}].spec`, value)),
+    removeFieldVas: () => dispatch(change(`pricing_international_vas_action_form_${props.pricing_data_id}`, `vas[${props.index}].is_deleted`, true))
 });
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(PricingVasItem));

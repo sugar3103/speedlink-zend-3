@@ -300,6 +300,12 @@ class ActionForm extends Component {
     if (id) {
       this.props.requestUpdateZoneInternationalItem({ query: { id: id } })
     } else {
+      this.props.removeState(PRI_INT_ORIGIN_CITY_RESET_STATE);
+      this.props.removeState(PRI_INT_ORIGIN_DISTRICT_RESET_STATE);
+      this.props.removeState(PRI_INT_ORIGIN_WARD_RESET_STATE);
+      this.props.removeState(PRI_INT_DESTINATION_CITY_RESET_STATE);
+      this.props.removeState(PRI_INT_DESTINATION_DISTRICT_RESET_STATE);
+      this.props.removeState(PRI_INT_DESTINATION_WARD_RESET_STATE);
       this.props.initialize();
     }
   }
@@ -308,64 +314,6 @@ class ActionForm extends Component {
     this.setState({ disableField: nextProps.type_action === 'view' ? true : false })
     if (nextProps.is_private) {
       this.setState({ disableCustomerField: true })
-    }
-
-    if (nextProps.origin_country_id && nextProps.origin_country_id !== this.props.origin_country_id) {
-      let params = {
-        field: ['id', 'name', 'name_en'],
-        offset: {
-          limit: 0
-        },
-        query: {
-          country: nextProps.origin_country_id
-        }
-      };
-      this.props.getOriginCityInternationalList(params);
-
-      if (nextProps.origin_city_id && nextProps.origin_city_id !== this.props.origin_city_id) {
-        params.query = {
-          ...params.query,
-          city: nextProps.origin_city_id
-        };
-        this.props.getOriginDistrictInternationalList(params);
-
-        if (nextProps.origin_district_id && nextProps.origin_district_id !== this.props.origin_district_id) {
-          params.query = {
-            ...params.query,
-            district: nextProps.origin_district_id
-          };
-          this.props.getOriginWardInternationalList(params);
-        }
-      }
-    }
-
-    if (nextProps.destination_country_id && nextProps.destination_country_id !== this.props.destination_country_id) {
-      let params = {
-        field: ['id', 'name', 'name_en'],
-        offset: {
-          limit: 0
-        },
-        query: {
-          country: nextProps.destination_country_id
-        }
-      };
-      this.props.getDestinationCityInternationalList(params);
-
-      if (nextProps.destination_city_id && nextProps.destination_city_id !== this.props.destination_city_id) {
-        params.query = {
-          ...params.query,
-          city: nextProps.destination_city_id
-        };
-        this.props.getDestinationDistrictInternationalList(params);
-
-        if (nextProps.destination_district_id && nextProps.destination_district_id !== this.props.destination_district_id) {
-          params.query = {
-            ...params.query,
-            district: nextProps.destination_district_id
-          };
-          this.props.getDestinationWardInternationalList(params);
-        }
-      }
     }
   }
 
@@ -376,7 +324,7 @@ class ActionForm extends Component {
   }
 
   render() {
-    const { handleSubmit, customer, carrier, service, shipmentType, country, city, district, ward, type_action, zone: { loading } } = this.props;
+    const { handleSubmit, customer, carrier, service, shipmentType, country, city, district, ward, type_action, loading } = this.props;
     const { messages } = this.props.intl;
     const { id } = this.props.match.params;
     const { disableField, disableCustomerField } = this.state;
@@ -713,21 +661,15 @@ ActionForm.propTypes = {
 
 const mapStateToProps = (state, props) => {
   const { pricingInternational } = state;
-  const { carrier, service, shipmentType, customer, country, city, district, ward, zone } = pricingInternational;
+  const { carrier, service, shipmentType, customer, country, city, district, ward, zone: { loading, itemEditting } } = pricingInternational;
   const selector = formValueSelector('zone_international_action_form');
   const category_id = selector(state, 'category_id');
   const carrier_id = selector(state, 'carrier_id');
   const service_id = selector(state, 'service_id');
-  const origin_country_id = selector(state, 'origin_country_id');
-  const origin_city_id = selector(state, 'origin_city_id');
-  const origin_district_id = selector(state, 'origin_district_id');
-  const destination_country_id = selector(state, 'destination_country_id');
-  const destination_city_id = selector(state, 'destination_city_id');
-  const destination_district_id = selector(state, 'destination_district_id');
-  const initialValues = zone.itemEditting;
+  const initialValues = itemEditting;
 
   return {
-    zone,
+    loading,
     carrier,
     service,
     shipmentType,
@@ -736,8 +678,6 @@ const mapStateToProps = (state, props) => {
     category_id,
     carrier_id,
     service_id,
-    origin_country_id, origin_city_id, origin_district_id,
-    destination_country_id, destination_city_id, destination_district_id,
     initialValues
   }
 }

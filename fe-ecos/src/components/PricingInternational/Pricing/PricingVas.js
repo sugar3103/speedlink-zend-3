@@ -13,7 +13,7 @@ const renderVasItems = ({ fields, messages, meta: { submitFailed, error }, prici
     <Fragment>
         <ul>
             <li className="group-action mb-2">
-                <Button size="sm" color="info" id="PopoverLeft" onClick={toggleTooltip}><span className="lnr lnr-question-circle"></span></Button>
+                <Button size="sm" color="info" id={`PopoverLeft${pricing_data_id}`} onClick={toggleTooltip}><span className="lnr lnr-question-circle"></span></Button>
                 {type_action === 'edit' &&
                     <Button size="sm" color="success" onClick={() => fields.push({ id: 0, type: 0, pricing_data_id, spec: [] })}><span className="lnr lnr-plus-circle"></span></Button>
                 }
@@ -22,7 +22,7 @@ const renderVasItems = ({ fields, messages, meta: { submitFailed, error }, prici
             </li>
             {fields.map((vas, index) => {
                 if (!fields.get(index).is_deleted) {
-                    return <PricingVasItem vas={vas} fields={fields} index={index} key={index} type_action={type_action} />
+                    return <PricingVasItem vas={vas} fields={fields} index={index} key={index} type_action={type_action} pricing_data_id={pricing_data_id} />
                 }
                 return null;
             })
@@ -64,7 +64,6 @@ class PricingVas extends Component {
 
     render() {
         const { handleSubmit, pricing_data_id, intl: { messages, locale }, fieldVas, loadingFieldVas, loadingVas, type_action } = this.props;
-
         return loadingVas ? (
             <ReactLoading type="bubbles" className="loading" />
         ) : (
@@ -80,7 +79,7 @@ class PricingVas extends Component {
                     <Popover
                         placement="left"
                         isOpen={this.state.toolTipOpen}
-                        target="PopoverLeft"
+                        target={`PopoverLeft${pricing_data_id}`}
                         toggle={this.toggleTooltip}
                         className="tooltip-field-vas"
                     >
@@ -138,15 +137,10 @@ PricingVas.propTypes = {
     vas: PropTypes.array
 }
 
-let PricingVasForm = reduxForm({
-    form: 'pricing_international_vas_action_form',
-    enableReinitialize: true,
-    validate
-})(PricingVas)
-
-const mapStateToProps = ({ pricingInternational }) => {
+const mapStateToProps = ({ pricingInternational }, { pricing_data_id }) => {
     const { pricing: { vas, loadingVas, fieldVas, loadingFieldVas } } = pricingInternational;
     return {
+        form: `pricing_international_vas_action_form_${pricing_data_id}`,
         initialValues: { vas },
         loadingVas,
         fieldVas,
@@ -159,7 +153,10 @@ const mapDispatchToProps = {
     getPricingInternationalFieldVas
 };
 
-PricingVasForm = connect(mapStateToProps, mapDispatchToProps)(injectIntl(PricingVasForm))
+const PricingVasForm = connect(mapStateToProps, mapDispatchToProps)(injectIntl(reduxForm({
+    enableReinitialize: true,
+    validate
+})(PricingVas)))
 
 export default PricingVasForm;
 
