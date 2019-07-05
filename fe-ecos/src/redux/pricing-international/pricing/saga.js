@@ -1,5 +1,5 @@
 import axios from "axios";
-import { all, call, fork, put, takeEvery } from "redux-saga/effects";
+import { all, call, fork, put, takeEvery, take } from "redux-saga/effects";
 import { apiUrl, EC_SUCCESS, EC_FAILURE, EC_FAILURE_AUTHENCATION } from '../../../constants/defaultValues';
 import { authHeader } from '../../../util/auth-header';
 import history from '../../../util/history';
@@ -17,6 +17,7 @@ import {
   PRI_INT_PRICING_GET_VAS,
   PRI_INT_PRICING_UPDATE_VAS,
   PRI_INT_PRICING_GET_FIELD_VAS,
+  PRI_INT_PRICING_GET_DATA_SUCCESS,
 } from "../../../constants/actionTypes";
 
 import {
@@ -123,6 +124,7 @@ function* addPricingInternationalItem({ payload }) {
           }
         }
         yield put(getPricingInternationalData(params));
+        yield take(PRI_INT_PRICING_GET_DATA_SUCCESS);
         yield call(history.push, `/pricing-international/pricing/edit/${response.data}`);
         createNotification({ type: 'success', message: 'pri_int.add-success' });
         break;
