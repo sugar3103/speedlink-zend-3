@@ -35,6 +35,8 @@ class DomesticRangeWeightRepository extends EntityRepository
                 drw.id,
                 drw.name,
                 drw.name_en,
+                drw.is_private,
+                cu.id as customer_id,
                 c.id as category_id,
                 c.name as category,
                 c.name_en as category_en,
@@ -102,6 +104,16 @@ class DomesticRangeWeightRepository extends EntityRepository
                 'alias' => 'drw.name_en',
                 'operator' => 'contains'
             ],
+            'is_private'   => [
+                'alias' => 'drw.is_private',
+                'operator' => 'eq'
+            ],
+
+            'customer_id'   => [
+                'alias' => 'cu.id',
+                'operator' => 'eq'
+            ],
+
             'category_id' => [
                 'alias' => 'c.id',
                 'operator' => 'eq'
@@ -156,7 +168,8 @@ class DomesticRangeWeightRepository extends EntityRepository
         ->leftJoin('drw.shipment_type', 'st')  
         ->leftJoin('drw.zone','z')
         ->leftJoin('drw.join_created', 'cr')
-        ->leftJoin('drw.join_updated', 'up');
+        ->leftJoin('drw.join_updated', 'up')
+        ->leftJoin('drw.customer', 'cu');
             
         if ($sortField != NULL && $sortDirection != NULL) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

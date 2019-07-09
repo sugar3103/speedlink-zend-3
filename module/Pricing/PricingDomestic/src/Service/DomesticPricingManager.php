@@ -226,7 +226,10 @@ class DomesticPricingManager
 
             $domesticPricing->setCustomer($customer);
             $name .= '.' . $customer->getName();
+        } else {
+            $domesticPricing->setCustomer(null);
         }
+        
         if ($mode == 'add') {
             $name = str_replace(' ', '', $name);
 

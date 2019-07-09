@@ -20,15 +20,18 @@ module.exports = {
   'menu.cs_service': 'Service',
   'menu.cs_shipment_type': 'Shipment Type',
   'menu.brancharea' : 'Branch Area',
-  'menu.pricing_international': 'Pricing International',
-  'menu.range_weight' : 'Range Weight',
-  'menu.zone_code' : 'Zone Code',
-  'menu.pricing' : 'Pricing',
+
   'menu.pricing_domestic' : 'Pricing Domestic',
   'menu.area_domestic' : 'Area',
   'menu.zone_domestic' : 'Zone',
   'menu.range_weight_domestic' : 'Range Weight',
   'menu.pricing_index_domestic' : 'Pricing',
+
+  'menu.pricing_international' : 'Pricing International',
+  'menu.zone_international' : 'Zone',
+  'menu.range_weight_international' : 'Range Weight',
+  'menu.pricing_index_international' : 'Pricing',
+
   //Menu Setting
   'menu.setting': 'Setting',
   'menu.system': 'System',

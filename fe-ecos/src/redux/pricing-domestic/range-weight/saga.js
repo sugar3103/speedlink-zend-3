@@ -261,7 +261,7 @@ export function* watchRangeWeightDomesticUpdateItem() {
   yield takeEvery(PRI_DOM_RANGE_WEIGHT_UPDATE_ITEM, updateRangeWeightDomesticItem);
 }
 
-export function* watchRangeWeightDomestiDeleteItem() {
+export function* watchRangeWeightDomesticDeleteItem() {
   yield takeEvery(PRI_DOM_RANGE_WEIGHT_DELETE_ITEM, deleteRangeWeightDomesticItem);
 }
 
@@ -271,6 +271,6 @@ export default function* rootSaga() {
     fork(watchRangeWeightDomesticAddItem),
     fork(watchRequestRangeWeightDomesticUpdateItem),
     fork(watchRangeWeightDomesticUpdateItem),
-    fork(watchRangeWeightDomestiDeleteItem),
+    fork(watchRangeWeightDomesticDeleteItem),
   ]);
 }

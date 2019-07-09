@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   getCarrierDomesticList,
+  getCustomerDomesticList,
   getServiceDomesticList,
   getShipmentTypeDomesticList,
   getZoneDomesticList,
@@ -24,7 +25,18 @@ class ActionForm extends Component {
     super(props);
     this.state = {
       showUnitField: false,
-      disableField: true
+      disableField: true,
+      showField: false
+    }
+  }
+
+  onChangeIsPrivate = value => {
+    this.props.change('get_pricing_dom', '');
+    this.props.change('customer_id', '');
+    if (value) {
+      this.setState({ showField: true });
+    } else {
+      this.setState({ showField: false });
     }
   }
 
@@ -104,6 +116,7 @@ class ActionForm extends Component {
     this.props.getCarrierDomesticList(params);
     this.props.getServiceDomesticList(params);
     this.props.getZoneDomesticList(params);
+    this.props.getCustomerDomesticList(params);
 
     const paramsST = {
       field: ['id', 'name', 'name_en', 'carrier_id', 'service_id'],
@@ -116,10 +129,23 @@ class ActionForm extends Component {
 
     const { id } = this.props.match.params;
     if (id) {
-      this.props.requestUpdateRangeWeightDomesticItem({ query: { id: id }} )
+      this.props.requestUpdateRangeWeightDomesticItem({ query: { id: id } })
     } else {
       this.props.initialize();
     }
+  }
+
+  showOptionCustomer = (items) => {
+    let result = [];
+    if (items.length > 0) {
+      result = items.map(item => {
+        return {
+          value: item.id,
+          label: item.name
+        }
+      })
+    }
+    return result;
   }
 
   componentDidMount() {
@@ -127,246 +153,278 @@ class ActionForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ 
+    if (nextProps.is_private) {
+      this.setState({ showField: true })
+    }
+    this.setState({
       disableField: nextProps.type_action === 'view' ? true : false,
       showUnitField: nextProps.calculate_unit ? true : false
     })
   }
 
   render() {
-    const { handleSubmit, carrier, service, shipmentType, zone, rangeWeight: { loading }, type_action } = this.props;
+    const { handleSubmit, carrier, service, customer,shipmentType, zone, rangeWeight: { loading }, type_action } = this.props;
     const { messages } = this.props.intl;
     const { id } = this.props.match.params;
-    const { disableField } = this.state;
-    
+    const { disableField,showField } = this.state;    
     return loading ? (
-      <ReactLoading type="bubbles" className="loading" /> 
+      <ReactLoading type="bubbles" className="loading" />
     ) : (
-      <form className="form form_custom" onSubmit={handleSubmit}>
-        <Row>
-          <Col md={6} lg={3} xl={3} xs={6}>
-            <div className="form__form-group">
-              <span className="form__form-group-label">{messages['pri_dom.name']}</span>
-              <div className="form__form-group-field">
-                <Field
-                  name='name'
-                  component={CustomField}
-                  disabled={disableField}
-                />
-              </div>
-            </div>
-          </Col>
-          <Col md={6} lg={3} xl={3} xs={6}>
-            <div className="form__form-group">
-              <span className="form__form-group-label">{messages['pri_dom.name-en']}</span>
-              <div className="form__form-group-field">
-                <Field
-                  name='name_en'
-                  component={CustomField}
-                  disabled={disableField}
-                />
-              </div>
-            </div>
-          </Col>
-          <Col md={6} lg={3} xl={3} xs={6}>
-            <div className="form__form-group">
-              <span className="form__form-group-label">{messages['pri_dom.category']}</span>
-              <div className="form__form-group-field">
-                <Field
-                  name="category_id"
-                  component={renderSelectField}
-                  options={this.showOptionsCategory()}
-                  disabled
-                />
-              </div>
-            </div>
-          </Col>
-          <Col md={6} lg={3} xl={3} xs={6}>
-            <div className="form__form-group">
-              <span className="form__form-group-label">{messages['pri_dom.status']}</span>
-              <div className="form__form-group-field">
-                <Field
-                  name="status"
-                  component={renderSelectField}
-                  options={[
-                    { value: 1, label: messages['pri_dom.active'] },
-                    { value: 0, label: messages['pri_dom.inactive'] }
-                  ]}
-                  clearable={false}
-                  disabled={disableField}
-                />
-              </div>
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={6} lg={3} xl={3} xs={6}>
-            <div className="form__form-group">
-              <span className="form__form-group-label">{messages['pri_dom.carrier']}</span>
-              <div className="form__form-group-field">
-                <Field
-                  name="carrier_id"
-                  component={renderSelectField}
-                  options={carrier.items && this.showOptions(carrier.items)}
-                  onChange={this.onChangeCarrier}
-                  clearable={false}
-                  disabled={disableField}
-                />
-              </div>
-            </div>
-          </Col>
-          <Col md={6} lg={3} xl={3} xs={6}>
-            <div className="form__form-group">
-              <span className="form__form-group-label">{messages['pri_dom.service']}</span>
-              <div className="form__form-group-field">
-                <Field
-                  name="service_id"
-                  component={renderSelectField}
-                  options={service.items && this.showOptions(service.items)}
-                  onChange={this.onChangeService}
-                  clearable={false}
-                  disabled={disableField}
-                />
-              </div>
-            </div>
-          </Col>
-          <Col md={6} lg={3} xl={3} xs={6}>
-            <div className="form__form-group">
-              <span className="form__form-group-label">{messages['pri_dom.shipment-type']}</span>
-              <div className="form__form-group-field">
-                <Field
-                  name="shipment_type_id"
-                  component={renderSelectField}
-                  options={shipmentType.items && this.showOptions(shipmentType.items)}
-                  onChange={this.onChangeShipmentType}
-                  clearable={false}
-                  disabled={disableField}
-                />
-              </div>
-            </div>
-          </Col>
-          <Col md={6} lg={3} xl={3} xs={6}>
-            <div className="form__form-group">
-              <span className="form__form-group-label">{messages['pri_dom.zone']}</span>
-              <div className="form__form-group-field">
-                <Field
-                  name="zone_id"
-                  component={renderSelectField}
-                  options={zone.items && this.showOptions(zone.items)}
-                  clearable={false}
-                  disabled={disableField}
-                />
-              </div>
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={6} lg={3} xl={3} xs={6}>
-            <div className="form__form-group">
-              <span className="form__form-group-label">{messages['pri_dom.from']}</span>
-              <div className="form__form-group-field">
-                <Field
-                  name="from"
-                  component={CustomField}
-                  disabled={disableField}
-                />
-              </div>
-            </div>
-          </Col>
-          <Col md={6} lg={3} xl={3} xs={6}>
-            <div className="form__form-group">
-              <span className="form__form-group-label">{messages['pri_dom.to']}</span>
-              <div className="form__form-group-field">
-                <Field
-                  name="to"
-                  component={CustomField}
-                  disabled={disableField}
-                />
-              </div>
-            </div>
-          </Col>
-          <Col md={6} lg={3} xl={3} xs={6}>
-            <div className="form__form-group">
-              <span className="form__form-group-label">{messages['pri_dom.calculate-unit']}</span>
-              <div className="form__form-group-field">
-                <Field
-                  name="calculate_unit"
-                  component={renderSelectField}
-                  options={[
-                    { value: 1, label: messages['pri_dom.yes'] },
-                    { value: 0, label: messages['pri_dom.no'] }
-                  ]}
-                  onChange={this.onChangeCalculateUnit}
-                  clearable={false}
-                  disabled={disableField}
-                />
-              </div>
-            </div>
-          </Col>
-          {this.state.showUnitField &&
+        <form className="form form_custom" onSubmit={handleSubmit}>
+          <Row>
             <Col md={6} lg={3} xl={3} xs={6}>
               <div className="form__form-group">
-                <span className="form__form-group-label">{messages['pri_dom.unit']}</span>
+                <span className="form__form-group-label">{messages['pri_dom.name']}</span>
                 <div className="form__form-group-field">
                   <Field
-                    name="unit"
+                    name='name'
                     component={CustomField}
                     disabled={disableField}
                   />
                 </div>
               </div>
             </Col>
-          }
-        </Row>
-        <Row>
-          <Col md={6} lg={3} xl={3} xs={6}>
-            <div className="form__form-group">
-              <span className="form__form-group-label">{messages['pri_dom.ras']}</span>
-              <div className="form__form-group-field">
-                <Field
-                  name="is_ras"
-                  component={renderSelectField}
-                  options={[
-                    { value: 1, label: messages['pri_dom.on'] },
-                    { value: 0, label: messages['pri_dom.off'] }
-                  ]}
-                  clearable={false}
-                  disabled={disableField}
-                />
+            <Col md={6} lg={3} xl={3} xs={6}>
+              <div className="form__form-group">
+                <span className="form__form-group-label">{messages['pri_dom.name-en']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name='name_en'
+                    component={CustomField}
+                    disabled={disableField}
+                  />
+                </div>
               </div>
-            </div>
-          </Col>
-          <Col md={6} lg={3} xl={3} xs={6}>
-            <div className="form__form-group">
-              <span className="form__form-group-label">{messages['pri_dom.round-up']}</span>
-              <div className="form__form-group-field">
-                <Field
-                  name="round_up"
-                  component={CustomField}
-                  disabled={disableField}
-                />
+            </Col>
+            <Col md={6} lg={3} xl={3} xs={6}>
+              <div className="form__form-group">
+                <span className="form__form-group-label">{messages['pri_dom.type']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="is_private"
+                    component={renderSelectField}
+                    options={[
+                      { value: 0, label: messages['pri_dom.public'] },
+                      { value: 1, label: messages['pri_dom.customer'] }
+                    ]}
+                    onChange={this.onChangeIsPrivate}
+                    clearable={false}
+                    disabled={disableField}
+                  />
+                </div>
               </div>
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={12} className="text-right">
-            <Link to={type_action === 'view' ? '/pricing-domestic/range-weight' : `/pricing-domestic/range-weight/view/${id}`} className="btn btn-outline-secondary btn-sm">
-              {messages['cancel']}
-            </Link>
-            { disableField ? 
+            </Col>
+            <Col md={6} lg={3} xl={3} xs={6}>
+              <div className="form__form-group">
+                <span className="form__form-group-label">{messages['pri_dom.customer']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="customer_id"
+                    component={renderSelectField}
+                    options={customer.items && this.showOptionCustomer(customer.items)}
+                    disabled={!showField}
+                    clearable={false}
+                  />
+                </div>
+              </div>
+            </Col>
+            <Col md={6} lg={3} xl={3} xs={6}>
+              <div className="form__form-group">
+                <span className="form__form-group-label">{messages['pri_dom.category']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="category_id"
+                    component={renderSelectField}
+                    options={this.showOptionsCategory()}
+                    disabled
+                  />
+                </div>
+              </div>
+            </Col>
+            <Col md={6} lg={3} xl={3} xs={6}>
+              <div className="form__form-group">
+                <span className="form__form-group-label">{messages['pri_dom.status']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="status"
+                    component={renderSelectField}
+                    options={[
+                      { value: 1, label: messages['pri_dom.active'] },
+                      { value: 0, label: messages['pri_dom.inactive'] }
+                    ]}
+                    clearable={false}
+                    disabled={disableField}
+                  />
+                </div>
+              </div>
+            </Col>
+            <Col md={6} lg={3} xl={3} xs={6}>
+              <div className="form__form-group">
+                <span className="form__form-group-label">{messages['pri_dom.carrier']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="carrier_id"
+                    component={renderSelectField}
+                    options={carrier.items && this.showOptions(carrier.items)}
+                    onChange={this.onChangeCarrier}
+                    clearable={false}
+                    disabled={disableField}
+                  />
+                </div>
+              </div>
+            </Col>
+            <Col md={6} lg={3} xl={3} xs={6}>
+              <div className="form__form-group">
+                <span className="form__form-group-label">{messages['pri_dom.service']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="service_id"
+                    component={renderSelectField}
+                    options={service.items && this.showOptions(service.items)}
+                    onChange={this.onChangeService}
+                    clearable={false}
+                    disabled={disableField}
+                  />
+                </div>
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={6} lg={3} xl={3} xs={6}>
+              <div className="form__form-group">
+                <span className="form__form-group-label">{messages['pri_dom.shipment-type']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="shipment_type_id"
+                    component={renderSelectField}
+                    options={shipmentType.items && this.showOptions(shipmentType.items)}
+                    onChange={this.onChangeShipmentType}
+                    clearable={false}
+                    disabled={disableField}
+                  />
+                </div>
+              </div>
+            </Col>
+            <Col md={6} lg={3} xl={3} xs={6}>
+              <div className="form__form-group">
+                <span className="form__form-group-label">{messages['pri_dom.zone']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="zone_id"
+                    component={renderSelectField}
+                    options={zone.items && this.showOptions(zone.items)}
+                    clearable={false}
+                    disabled={disableField}
+                  />
+                </div>
+              </div>
+            </Col>
+            <Col md={6} lg={3} xl={3} xs={6}>
+              <div className="form__form-group">
+                <span className="form__form-group-label">{messages['pri_dom.from']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="from"
+                    component={CustomField}
+                    disabled={disableField}
+                  />
+                </div>
+              </div>
+            </Col>
+            <Col md={6} lg={3} xl={3} xs={6}>
+              <div className="form__form-group">
+                <span className="form__form-group-label">{messages['pri_dom.to']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="to"
+                    component={CustomField}
+                    disabled={disableField}
+                  />
+                </div>
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={6} lg={3} xl={3} xs={6}>
+              <div className="form__form-group">
+                <span className="form__form-group-label">{messages['pri_dom.calculate-unit']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="calculate_unit"
+                    component={renderSelectField}
+                    options={[
+                      { value: 1, label: messages['pri_dom.yes'] },
+                      { value: 0, label: messages['pri_dom.no'] }
+                    ]}
+                    onChange={this.onChangeCalculateUnit}
+                    clearable={false}
+                    disabled={disableField}
+                  />
+                </div>
+              </div>
+            </Col>
+            {this.state.showUnitField &&
+              <Col md={6} lg={3} xl={3} xs={6}>
+                <div className="form__form-group">
+                  <span className="form__form-group-label">{messages['pri_dom.unit']}</span>
+                  <div className="form__form-group-field">
+                    <Field
+                      name="unit"
+                      component={CustomField}
+                      disabled={disableField}
+                    />
+                  </div>
+                </div>
+              </Col>
+            }
+            <Col md={6} lg={3} xl={3} xs={6}>
+              <div className="form__form-group">
+                <span className="form__form-group-label">{messages['pri_dom.ras']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="is_ras"
+                    component={renderSelectField}
+                    options={[
+                      { value: 1, label: messages['pri_dom.on'] },
+                      { value: 0, label: messages['pri_dom.off'] }
+                    ]}
+                    clearable={false}
+                    disabled={disableField}
+                  />
+                </div>
+              </div>
+            </Col>
+            <Col md={6} lg={3} xl={3} xs={6}>
+              <div className="form__form-group">
+                <span className="form__form-group-label">{messages['pri_dom.round-up']}</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="round_up"
+                    component={CustomField}
+                    disabled={disableField}
+                  />
+                </div>
+              </div>
+            </Col>
+          </Row>         
+          <Row>
+            <Col md={12} className="text-right">
+              <Link to={type_action === 'edit' ? `/pricing-domestic/range-weight/view/${id}` : '/pricing-domestic/range-weight'} className="btn btn-outline-secondary btn-sm">
+                {messages['cancel']}
+              </Link>
+              {disableField ?
                 <Link to={`/pricing-domestic/range-weight/edit/${id}`} className="btn btn-info btn-sm">
                   {messages['edit']}
                 </Link>
-              :
+                :
                 <Button size="sm" color="primary">
-                {messages['save']}
-              </Button>
-            }
-          </Col>
-        </Row>
-      </form>
-    );
+                  {messages['save']}
+                </Button>
+              }
+            </Col>
+          </Row>
+        </form>
+      );
   }
 }
 
@@ -381,11 +439,12 @@ ActionForm.propTypes = {
 
 const mapStateToProps = (state, props) => {
   const { pricingDomestic } = state;
-  const { carrier, service, shipmentType, zone, rangeWeight } = pricingDomestic;
+  const { carrier, service, shipmentType, zone, rangeWeight,customer } = pricingDomestic;
   const selector = formValueSelector('range_weight_domestic_action_form');
   const carrier_id = selector(state, 'carrier_id');
   const service_id = selector(state, 'service_id');
   const calculate_unit = selector(state, 'calculate_unit');
+  const is_private = selector(state, 'is_private');
   const initialValues = rangeWeight.itemEditting;
   return {
     carrier,
@@ -397,17 +456,20 @@ const mapStateToProps = (state, props) => {
     calculate_unit,
     rangeWeight,
     initialValues,
+    customer,
+    is_private
   }
 }
 
 export default connect(mapStateToProps, {
   getCarrierDomesticList,
+  getCustomerDomesticList,
   getServiceDomesticList,
   getShipmentTypeDomesticList,
   getZoneDomesticList,
   requestUpdateRangeWeightDomesticItem
-})(reduxForm({ 
-  form: 'range_weight_domestic_action_form', 
+})(reduxForm({
+  form: 'range_weight_domestic_action_form',
   enableReinitialize: true,
   validate
 })(withRouter(injectIntl(ActionForm))));
