@@ -104,12 +104,17 @@ class DomesticPricingDataController extends CoreController {
                 $data[$zone->getId()]['ras'][$shipmentType->getId()] = null;
                 $data[$zone->getId()]['not_ras'][$shipmentType->getId()] = null;
                 //Get Range Weight
-                $rangeWeights = $this->entityManager->getRepository(DomesticRangeWeight::class)->findBy([
+                $conditions = array(
                     'service' => $pricing->getService()->getId(),
                     'shipment_type' => $shipmentType->getId(),
                     'zone'       => $zone->getId(),
+                    'is_private' => $pricing->getIsPrivate(),
                     'is_deleted' => 0
-                ]);
+                );
+                if (!empty($pricing->getCustomer())) {
+                    $conditions['customer'] = $pricing->getCustomer();
+                }
+                $rangeWeights = $this->entityManager->getRepository(DomesticRangeWeight::class)->findBy($conditions);
                 
                 if($rangeWeights) {
                     foreach ($rangeWeights as $rangeWeight) {

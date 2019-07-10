@@ -79,6 +79,8 @@ class DomesticPricingController extends CoreController {
         '2b29a565-8bf0-9ba2-2f43-58353d35278c' => 18, // ICT Accounts
         '98af7ad0-8a56-1bdb-5e3f-5bff710c6291' => 24, // Hoongvan Clothings
         'ace03c12-c387-5cdb-8845-5d1420f9b606' => 30, // Xưởng Gỗ Thanh Tâm
+        '64b30e46-6f2d-e981-c14c-5d1ecd99472f' => 40, // ĐỒNG HỒ 888
+        '5c356bc9-7744-b578-968d-5d233fc9fa6a' => 44, // Hàng Thùng RUBI
     ];
 
     public function __construct($entityManager, $domesticPricingManager) {
