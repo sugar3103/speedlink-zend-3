@@ -350,6 +350,9 @@ class DomesticPricingController extends CoreController {
             'shipment_type_id' => $shipmentType->getId(),
             'is_ras' => $dataList['deliveryRas']
         ];
+        if (!empty($wherePrice['customer_id'])) {
+            $whereRange['customer_id'] = $wherePrice['customer_id'];
+        }
         $wherePriceDetail = [
             'is_deleted' => 0,
             'domestic_pricing' => $pricing[0]['id']
