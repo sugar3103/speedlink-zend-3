@@ -159,7 +159,7 @@ class DomesticPricingRepository extends EntityRepository
     public function getPriceId($where) {
         try {
             $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-            $queryBuilder->select('dp.id')
+            $queryBuilder->select('dp.id, dp.total_ras')
                 ->from(DomesticPricing::class, 'dp')
                 ->where('dp.is_deleted = 0')
                 ->andWhere('dp.status = 1')
