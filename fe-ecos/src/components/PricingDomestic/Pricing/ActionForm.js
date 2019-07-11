@@ -113,7 +113,8 @@ class ActionForm extends Component {
           effected_date: data.effected_date,
           expired_date: data.expired_date,
           approval_status: 0,
-          approval_by: data.approval_by
+          approval_by: data.approval_by,
+          total_ras: data.total_ras
         };
         this.props.initialize(initialValues);
       }
