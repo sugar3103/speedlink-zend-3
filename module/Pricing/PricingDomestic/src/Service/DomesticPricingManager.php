@@ -103,7 +103,7 @@ class DomesticPricingManager
     {
 
         $this->entityManager->beginTransaction();
-        // try {
+        try {
         $domesticPricing = new DomesticPricing();
         $domesticPricing->setEffectedDate(date('Y-m-d H:i:s', strtotime($data['effected_date'])));
         $domesticPricing->setExpiredDate(date('Y-m-d H:i:s', strtotime($data['expired_date'])));
@@ -239,10 +239,10 @@ class DomesticPricingManager
 
         return $domesticPricing;
 
-        // } catch (ORMException $e) {
-        //     $this->entityManager->rollback();
-        //     return false;
-        // }
+        } catch (ORMException $e) {
+            $this->entityManager->rollback();
+            return false;
+        }
     }
 
     /**
