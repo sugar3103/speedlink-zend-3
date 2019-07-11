@@ -48,7 +48,7 @@ class DomesticPricingDataManager
                     } else {
                         $pricingData = new DomesticPricingData();
                         $pricingData->setDomesticPricing($this->entityManager->getRepository(DomesticPricing::class)->find($data['id']));
-                        $pricingData->setDomesticRangeWeight($this->entityManager->getRepository(DomesticRangeWeight::class)->find($value['range_weight']));
+                        $pricingData->setDomesticRangeWeight($this->entityManager->getRepository(DomesticRangeWeight::class)->find($value['id']));
                         $pricingData->setValue($value['value']);
                         $pricingData->setType($value['type']);
                         $pricingData->setTypeValue($value['type_value']);
