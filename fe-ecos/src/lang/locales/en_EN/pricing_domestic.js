@@ -23,6 +23,7 @@ module.exports = {
   'pri_dom.add-new-zone': 'Create New Zone',
   'pri_dom.update-zone': 'Update Zone',
   'pri_dom.delete-zone': 'Delete Zone',
+  'pri_dom.total-ras': 'Ras',
 
   /* RANGE WEIGHT DOMESTIC */
   'pri_dom.range-weight-title': 'Range Weight Domestic',
