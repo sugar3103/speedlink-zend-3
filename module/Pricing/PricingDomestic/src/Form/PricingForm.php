@@ -8,6 +8,7 @@ use Zend\Filter\ToInt;
 use Zend\Filter\StringTrim;
 use Zend\Validator\StringLength;
 use Zend\Validator\Date;
+use Zend\Filter\ToFloat;
 
 use Zend\Form\Form;
 
@@ -85,6 +86,23 @@ class PricingForm extends Form {
                     'name' => ToInt::class
                 ]
             ] 
+        ]);
+        $inputFilter->add([
+            'name'  => 'get_pricing_dom',
+            'required'  => false,
+            'filters' => [
+                [
+                    'name' => ToInt::class
+                ]
+            ] 
+        ]);
+        
+        $inputFilter->add([
+            'name' => 'total_ras',
+            'required' => false,
+            'filters' => [
+                [ 'name' => ToFloat::class]
+            ]
         ]);
 
         $inputFilter->add([

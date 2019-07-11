@@ -16,17 +16,21 @@ import {
 import { categoryPricing } from '../../../constants/defaultValues';
 import renderSelectField from '../../../containers/Shared/form/Select';
 import renderDatePickerField from '../../../containers/Shared/form/DatePicker';
+import CustomField from '../../../containers/Shared/form/CustomField';
 import CalendarBlankIcon from 'mdi-react/CalendarBlankIcon';
 import validate from './validateActionForm';
 import ReactLoading from 'react-loading';
-
+import { formatCurrency, normalizeCurrency } from '../../../util/format-field';
 class ActionForm extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       showField: false,
-      disabledAction: true
+      disabledAction: true,
+      disabledType: true,
+      disabledGetPricingDom: true,
+      disabledCustomer: true,
     }
   }
 
@@ -156,7 +160,10 @@ class ActionForm extends Component {
 
   componentDidMount() {
     this.setState({
-      disabledAction: this.props.type === 'view' ? true : false
+      disabledAction: this.props.type === 'view' ? true : false,
+      disabledType: this.props.type === 'edit' ? true : false,
+      disabledGetPricingDom: this.props.type === 'add' ? true : false,
+      disabledCustomer: this.props.type === 'edit' ? true : false
     })
   }
   
@@ -168,7 +175,8 @@ class ActionForm extends Component {
       loading
     } = this.props;
     const { messages } = this.props.intl;
-    const { disabledAction, showField } = this.state;
+    const { disabledAction, disabledType, disabledGetPricingDom, disabledCustomer, showField } = this.state;
+    
     return loading ? (
         <ReactLoading type="bubbles" className="loading" /> 
       ) : (
@@ -187,12 +195,12 @@ class ActionForm extends Component {
                   ]}
                   onChange={this.onChangeIsPrivate}
                   clearable={false}
-                  disabled={disabledAction}
+                  disabled={disabledType}
                 />
               </div>
             </div>
           </Col>
-          <Col md={6} lg={3} xl={3} xs={6}>
+          {disabledGetPricingDom && (<Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
               <span className="form__form-group-label">{messages['pri_dom.get-pricing-dom']}</span>
               <div className="form__form-group-field">
@@ -206,7 +214,7 @@ class ActionForm extends Component {
                 />
               </div>
             </div>
-          </Col>
+          </Col>)}
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
               <span className="form__form-group-label">{messages['pri_dom.customer']}</span>
@@ -215,7 +223,7 @@ class ActionForm extends Component {
                   name="customer_id"
                   component={renderSelectField}
                   options={customer.items && this.showOptionCustomer(customer.items)}
-                  disabled={!showField || disabledAction}
+                  disabled={!showField || disabledCustomer}
                   clearable={false}
                 />
               </div>
@@ -234,8 +242,7 @@ class ActionForm extends Component {
               </div>
             </div>
           </Col>
-        </Row>
-        <Row>
+       
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
               <span className="form__form-group-label">{messages['pri_dom.carrier']}</span>
@@ -294,8 +301,7 @@ class ActionForm extends Component {
               </div>
             </div>
           </Col>
-        </Row>
-        <Row>
+        
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
               <span className="form__form-group-label">{messages['pri_dom.effected-date']}</span>
@@ -354,6 +360,20 @@ class ActionForm extends Component {
                   options={approvedBy.items && this.showOptionUser(approvedBy.items)}
                   clearable={false}
                   disabled={disabledAction || disableApprovalBy}
+                />
+              </div>
+            </div>
+          </Col>
+          <Col md={6} lg={3} xl={3} xs={6}>
+            <div className="form__form-group">
+              <span className="form__form-group-label">{messages['pri_dom.total-ras']}</span>
+              <div className="form__form-group-field">
+                <Field
+                  name="total_ras"
+                  component={CustomField}
+                  format={formatCurrency}
+                  normalize={normalizeCurrency}
+                  disabled={disabledAction}
                 />
               </div>
             </div>
