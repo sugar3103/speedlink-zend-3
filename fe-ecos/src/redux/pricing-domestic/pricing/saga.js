@@ -48,6 +48,11 @@ function validatePricingDomestic(errors) {
       name_en: 'pri_dom.validate-nameEn-exists'
     });
   }
+  if (errors.customer_id && errors.customer_id.domesticPricingCustomerExists) {
+    return stopSubmit('pricing_domestic_action_form', {
+      customer_id: 'pri_dom.validate-customer-exists'
+    });
+  }
 }
 
 /* GET LIST PRICING DOMESTIC */

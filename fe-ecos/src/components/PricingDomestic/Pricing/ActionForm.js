@@ -162,9 +162,9 @@ class ActionForm extends Component {
   componentDidMount() {
     this.setState({
       disabledAction: this.props.type === 'view' ? true : false,
-      disabledType: this.props.type === 'edit' ? true : false,
+      disabledType: (this.props.type === 'view' || this.props.type === 'edit') ? true : false,
       disabledGetPricingDom: this.props.type === 'add' ? true : false,
-      disabledCustomer: this.props.type === 'edit' ? true : false
+      disabledCustomer: (this.props.type === 'view' || this.props.type === 'edit') ? true : false
     })
   }
   

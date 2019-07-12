@@ -400,7 +400,8 @@ class DomesticPricingManager
                 }
             }
 
-            $domesticPricing->setName($name . '.' . $indexPricing);
+            // $domesticPricing->setName($name . '.' . $indexPricing);
+            $domesticPricing->setName($name);
         }
     }
 }

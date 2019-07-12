@@ -130,4 +130,5 @@ module.exports = {
   'pri_dom.validate-vas-formula-required': 'Formula is required',
   'pri_dom.validate-vas-min-required': 'Minimun value is required',
   'pri_dom.validate-vas-spec-required': 'Spec is required',
+  'pri_dom.validate-customer-exists': 'This customer has a price list'
 }
