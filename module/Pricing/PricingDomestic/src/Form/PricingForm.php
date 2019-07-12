@@ -3,6 +3,7 @@ namespace PricingDomestic\Form;
 
 use PricingDomestic\Entity\DomesticPricing;
 use PricingDomestic\Validator\DomesticPricingExistsValidator;
+use PricingDomestic\Validator\DomesticPricingCustomerExistsValidator;
 use Doctrine\ORM\EntityManager;
 use Zend\Filter\ToInt;
 use Zend\Filter\StringTrim;
@@ -112,7 +113,15 @@ class PricingForm extends Form {
                 [
                     'name' => ToInt::class
                 ]
-            ] 
+            ],
+            'validators' => [
+                [
+                    'name' => DomesticPricingCustomerExistsValidator::class,
+                    'options' => [
+                        'entityManager' => $this->entityManager,                        
+                    ]
+                ]
+            ]
         ]);
 
         $inputFilter->add([

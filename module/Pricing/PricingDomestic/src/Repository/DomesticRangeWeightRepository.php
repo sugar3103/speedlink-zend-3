@@ -13,6 +13,7 @@ use Doctrine\ORM\QueryBuilder;
  */
 class DomesticRangeWeightRepository extends EntityRepository
 {
+   
     /**
      * Get list user by condition
      *

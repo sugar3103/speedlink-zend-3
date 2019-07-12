@@ -284,6 +284,28 @@ class DomesticPricingManager
 
         $this->entityManager->beginTransaction();
         try {
+            //Delete RangeWeight
+            $conditions = array(
+                'domestic_pricing' => $domesticPricing->getId(),
+                'is_deleted' => 0,
+            );
+
+            $pricingDataDeletes = $this->entityManager->getRepository(DomesticPricingData::class)->findBy($conditions);
+            if ($pricingDataDeletes) {
+                foreach ($pricingDataDeletes as $pricingDataDelete) {
+
+                    $this->domesticRangeWeightManager->deleteRangeWeight(
+                        $pricingDataDelete->getDomesticRangeWeight(),
+                        $user
+                    );
+                }
+            }
+
+            //Delete Vas And Vas Spec
+            $this->domesticPricingVasManager->deletedPricingVas($domesticPricing);
+            //Delete PricingData
+            $this->domesticPricingDataManager->deletePricingData($domesticPricing, $user);
+
             $domesticPricing->setIsDeleted(1);
             $domesticPricing->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));

@@ -2,10 +2,11 @@
 namespace PricingDomestic\Repository;
 
 use Core\Utils\Utils;
-use PricingDomestic\Entity\DomesticPricingVas;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Query\QueryException;
+use PricingDomestic\Entity\DomesticPricingVas;
+use PricingDomestic\Entity\DomesticPricingVasSpec;
 
 /**
  * This is the custom repository class for User entity.
@@ -16,13 +17,16 @@ class DomesticPricingVasRepository extends EntityRepository
     public function deletedVas($pricing_id)
     {
         $entityManager = $this->getEntityManager();
-        try{
+        try {
             $queryBuilder = $entityManager->createQueryBuilder();
             $queryBuilder->update(DomesticPricingVas::class, 'dpv')->set('dpv.is_deleted', 1)
-                ->where('dpv.domestic_pricing = :domestic_pricing_id')->setParameter("domestic_pricing_id", $pricing_id);            
+                ->where('dpv.domestic_pricing = :domestic_pricing_id')->setParameter("domestic_pricing_id", $pricing_id);
+
+            // $queryBuilder->update(DomesticPricingVasSpec::class, 'dpvs')->set('dpvs.is_deleted', 1)
+            //     ->where('dpvs.domestic_pricing = :domestic_pricing_id')->setParameter("domestic_pricing_id", $pricing_id);
         } catch (QueryException $e) {
             return [];
-        }   
+        }
         return $queryBuilder->getQuery()->execute();
     }
     /**
@@ -38,25 +42,24 @@ class DomesticPricingVasRepository extends EntityRepository
         $sortField = 'dpv.id',
         $sortDirection = 'asc',
         $filters = []
-    )
-    {
+    ) {
         try {
             $queryBuilder = $this->buildCustomerQueryBuilder($sortField, $sortDirection, $filters);
             $queryBuilder->select("
                 dpv.id,
                 dpv.name,
-                dpv.name_en,                
+                dpv.name_en,
                 dpv.created_at,
                 dpv.updated_at,
                 cr.username as created_by,
                 CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
                 CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated,
-                up.username as updpted_by                
+                up.username as updpted_by
             ")->andWhere("dpv.is_deleted = 0")
-            ->andWhere("dp.id = ". $pricing_id)
-            ->groupBy('dpv.id');
-            
-            if($limit) {
+                ->andWhere("dp.id = " . $pricing_id)
+                ->groupBy('dpv.id');
+
+            if ($limit) {
                 $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
             }
 
@@ -80,30 +83,30 @@ class DomesticPricingVasRepository extends EntityRepository
         $operatorsMap = [
             'id' => [
                 'alias' => 'dpv.id',
-                'operator' => 'eq'
+                'operator' => 'eq',
             ],
             'name' => [
                 'alias' => 'dpv.name',
-                'operator' => 'contains'
+                'operator' => 'contains',
             ],
             'name_en' => [
                 'alias' => 'dpv.name_en',
-                'operator' => 'contains'
+                'operator' => 'contains',
             ],
-            
+
             'created_at' => [
                 'alias' => 'dpv.created_at',
-                'operator' => 'contains'
-            ]
+                'operator' => 'contains',
+            ],
         ];
-        
+
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $queryBuilder->from(DomesticPricingVas::class, 'dpv')        
-        ->leftJoin('dpv.domestic_pricing', 'dp')
-        ->leftJoin('dpv.created_by', 'cr')
-        ->leftJoin('dpv.updated_by', 'up');
-            
-        if ($sortField != NULL && $sortDirection != NULL) {
+        $queryBuilder->from(DomesticPricingVas::class, 'dpv')
+            ->leftJoin('dpv.domestic_pricing', 'dp')
+            ->leftJoin('dpv.created_by', 'cr')
+            ->leftJoin('dpv.updated_by', 'up');
+
+        if ($sortField != null && $sortDirection != null) {
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
         } else {
             $queryBuilder->orderBy('dpv.id', 'DESC');
