@@ -3,11 +3,13 @@ namespace PricingDomestic\Form;
 
 use PricingDomestic\Entity\DomesticPricing;
 use PricingDomestic\Validator\DomesticPricingExistsValidator;
+use PricingDomestic\Validator\DomesticPricingCustomerExistsValidator;
 use Doctrine\ORM\EntityManager;
 use Zend\Filter\ToInt;
 use Zend\Filter\StringTrim;
 use Zend\Validator\StringLength;
 use Zend\Validator\Date;
+use Zend\Filter\ToFloat;
 
 use Zend\Form\Form;
 
@@ -86,6 +88,23 @@ class PricingForm extends Form {
                 ]
             ] 
         ]);
+        $inputFilter->add([
+            'name'  => 'get_pricing_dom',
+            'required'  => false,
+            'filters' => [
+                [
+                    'name' => ToInt::class
+                ]
+            ] 
+        ]);
+        
+        $inputFilter->add([
+            'name' => 'total_ras',
+            'required' => false,
+            'filters' => [
+                [ 'name' => ToFloat::class]
+            ]
+        ]);
 
         $inputFilter->add([
             'name'  => 'customer_id',
@@ -94,7 +113,16 @@ class PricingForm extends Form {
                 [
                     'name' => ToInt::class
                 ]
-            ] 
+            ],
+            'validators' => [
+                [
+                    'name' => DomesticPricingCustomerExistsValidator::class,
+                    'options' => [
+                        'entityManager' => $this->entityManager,      
+                        'domesticPricing' => $this->domesticPricing
+                    ]
+                ]
+            ]
         ]);
 
         $inputFilter->add([

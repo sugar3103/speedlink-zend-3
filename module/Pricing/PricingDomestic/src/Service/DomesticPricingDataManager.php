@@ -31,12 +31,12 @@ class DomesticPricingDataManager
 
     public function addPricingData($data, $user)
     {
-        
+
         if (is_array($data)) {
             foreach ($data['data'] as $value) {
                 $this->entityManager->beginTransaction();
                 try {
-                    $pricingData = $this->entityManager->getRepository(DomesticPricingData::class)->findOneBy(['domestic_pricing' => $data['id'],'domestic_range_weight' => $value['id'], 'is_deleted' => 0]);
+                    $pricingData = $this->entityManager->getRepository(DomesticPricingData::class)->findOneBy(['domestic_pricing' => $data['id'], 'domestic_range_weight' => $value['id'], 'is_deleted' => 0]);
                     if ($pricingData) {
                         $pricingData->setValue($value['value']);
                         $pricingData->setType($value['type']);
@@ -48,7 +48,7 @@ class DomesticPricingDataManager
                     } else {
                         $pricingData = new DomesticPricingData();
                         $pricingData->setDomesticPricing($this->entityManager->getRepository(DomesticPricing::class)->find($data['id']));
-                        $pricingData->setDomesticRangeWeight($this->entityManager->getRepository(DomesticRangeWeight::class)->find($value['range_weight']));
+                        $pricingData->setDomesticRangeWeight($this->entityManager->getRepository(DomesticRangeWeight::class)->find($value['id']));
                         $pricingData->setValue($value['value']);
                         $pricingData->setType($value['type']);
                         $pricingData->setTypeValue($value['type_value']);
@@ -60,6 +60,28 @@ class DomesticPricingDataManager
                         $pricingData->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
                     }
 
+                    $this->entityManager->persist($pricingData);
+
+                    // apply changes to database.
+                    $this->entityManager->flush();
+                    $this->entityManager->commit();
+                } catch (ORMException $e) {
+                    $this->entityManager->rollback();
+                    return false;
+                }
+            }
+        }
+    }
+
+    public function deletePricingData(\PricingDomestic\Entity\DomesticPricing $pricing, $user)
+    {
+        $pricingDatas = $this->entityManager->getRepository(DomesticPricingData::class)->findBy(['domestic_pricing' => $pricing->getId(), 'is_deleted' => 0]);
+        if ($pricingDatas) {
+            foreach ($pricingDatas as $pricingData) {
+                $this->entityManager->beginTransaction();
+                try {
+                    $pricingData->setIsDeleted(1);
+                    $pricingData->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
                     $this->entityManager->persist($pricingData);
 
                     // apply changes to database.

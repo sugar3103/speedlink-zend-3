@@ -23,6 +23,7 @@ module.exports = {
   'pri_dom.add-new-zone': 'Create New Zone',
   'pri_dom.update-zone': 'Update Zone',
   'pri_dom.delete-zone': 'Delete Zone',
+  'pri_dom.total-ras': 'Ras',
 
   /* RANGE WEIGHT DOMESTIC */
   'pri_dom.range-weight-title': 'Range Weight Domestic',
@@ -129,4 +130,5 @@ module.exports = {
   'pri_dom.validate-vas-formula-required': 'Formula is required',
   'pri_dom.validate-vas-min-required': 'Minimun value is required',
   'pri_dom.validate-vas-spec-required': 'Spec is required',
+  'pri_dom.validate-customer-exists': 'This customer has a price list'
 }

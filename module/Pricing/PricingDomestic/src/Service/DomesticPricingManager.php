@@ -8,8 +8,13 @@ use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use OAuth\Entity\User;
 use PricingDomestic\Entity\DomesticPricing;
+use PricingDomestic\Entity\DomesticPricingData;
+use PricingDomestic\Entity\DomesticPricingVas;
+use PricingDomestic\Entity\DomesticPricingVasSpec;
+use PricingDomestic\Entity\DomesticRangeWeight;
 use PricingDomestic\Servivce\DomesticPricingDataManager;
 use PricingDomestic\Servivce\DomesticPricingVasManager;
+use PricingDomestic\Servivce\DomesticRangeWeightManager;
 use ServiceShipment\Entity\Carrier;
 use ServiceShipment\Entity\Category;
 use ServiceShipment\Entity\Service;
@@ -31,17 +36,24 @@ class DomesticPricingManager
      * @var DomesticPricingCityManager
      */
     private $domesticPricingDataManager;
+
+    /**
+     * @var DomesticRangeWeightManager
+     */
+    private $domesticRangeWeightManager;
+
     /**
      * BranchManager constructor.
      * @param $entityManager
      * @param $domesticPricingDataManager
      * @param $domesticPricingVasManager
      */
-    public function __construct($entityManager, $domesticPricingDataManager, $domesticPricingVasManager)
+    public function __construct($entityManager, $domesticPricingDataManager, $domesticPricingVasManager, $domesticRangeWeightManager)
     {
         $this->entityManager = $entityManager;
         $this->domesticPricingDataManager = $domesticPricingDataManager;
         $this->domesticPricingVasManager = $domesticPricingVasManager;
+        $this->domesticRangeWeightManager = $domesticRangeWeightManager;
     }
 
     /**
@@ -89,6 +101,7 @@ class DomesticPricingManager
      */
     public function addPricing($data, $user)
     {
+
         $this->entityManager->beginTransaction();
         try {
             $domesticPricing = new DomesticPricing();
@@ -97,6 +110,7 @@ class DomesticPricingManager
             $domesticPricing->setIsPrivate($data['is_private']);
             $domesticPricing->setStatus($data['status']);
             $domesticPricing->setApprovalStatus($data['approval_status']);
+            $domesticPricing->setTotalRas($data['total_ras']);
 
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
 
@@ -109,6 +123,119 @@ class DomesticPricingManager
             $this->entityManager->flush();
 
             $this->entityManager->commit();
+
+            if ($data['get_pricing_dom']) {
+                $conditions = array(
+                    'domestic_pricing' => $data['get_pricing_dom'],
+                    'is_deleted' => 0,
+                );
+
+                $pricingDataClones = $this->entityManager->getRepository(DomesticPricingData::class)->findBy($conditions);
+
+                if ($pricingDataClones) {
+                    foreach ($pricingDataClones as $pricingDataClone) {
+                        //Create New RangeWeight
+                        // $pricingDataClone->getDomesticRangeWeight();
+                        $rangeweight = $this->domesticRangeWeightManager->addRangeWeight([
+                            'name' => $pricingDataClone->getDomesticRangeWeight()->getName(),
+                            'name_en' => $pricingDataClone->getDomesticRangeWeight()->getNameEn(),
+                            'calculate_unit' => $pricingDataClone->getDomesticRangeWeight()->getCalculateUnit(),
+                            'round_up' => $pricingDataClone->getDomesticRangeWeight()->getRoundUp(),
+                            'unit' => $pricingDataClone->getDomesticRangeWeight()->getUnit(),
+                            'is_ras' => $pricingDataClone->getDomesticRangeWeight()->getIsRas(),
+                            'from' => $pricingDataClone->getDomesticRangeWeight()->getFrom(),
+                            'to' => $pricingDataClone->getDomesticRangeWeight()->getTo(),
+                            'status' => $pricingDataClone->getDomesticRangeWeight()->getStatus(),
+                            'description' => $pricingDataClone->getDomesticRangeWeight()->getDescription(),
+                            'description_en' => $pricingDataClone->getDomesticRangeWeight()->getDescriptionEn(),
+                            'is_private' => $data['is_private'],
+                            'carrier_id' => $pricingDataClone->getDomesticRangeWeight()->getCarrier()->getId(),
+                            'category_id' => $pricingDataClone->getDomesticRangeWeight()->getCategory()->getId(),
+                            'service_id' => $pricingDataClone->getDomesticRangeWeight()->getService()->getId(),
+                            'shipment_type_id' => $pricingDataClone->getDomesticRangeWeight()->getShipmentType()->getId(),
+                            'zone_id' => $pricingDataClone->getDomesticRangeWeight()->getZone()->getId(),
+                            'customer_id' => $data['customer_id'],
+                        ],
+                            $user
+                        );
+                        $this->entityManager->beginTransaction();
+
+                        $pricingData = new DomesticPricingData();
+                        $pricingData->setDomesticPricing($domesticPricing);
+                        $pricingData->setDomesticRangeWeight($rangeweight);
+                        $pricingData->setValue($pricingDataClone->getValue());
+                        $pricingData->setType($pricingDataClone->getType());
+                        $pricingData->setTypeValue($pricingDataClone->getTypeValue());
+                        $pricingData->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+                        $pricingData->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+                        $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+                        $pricingData->setCreatedAt($addTime->format('Y-m-d H:i:s'));
+                        $pricingData->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+
+                        $this->entityManager->persist($pricingData);
+                        // apply changes to database.
+                        $this->entityManager->flush();
+                        $this->entityManager->commit();
+                    }
+
+                }
+
+                $pricingVasClones = $this->entityManager->getRepository(DomesticPricingVas::class)->findBy($conditions);
+                if ($pricingVasClones) {
+                    foreach ($pricingVasClones as $pricingVasClone) {
+                        $this->entityManager->beginTransaction();
+                        $pricingVas = new DomesticPricingVas();
+                        $pricingVas->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+                        $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+                        $pricingVas->setCreatedAt($addTime->format('Y-m-d H:i:s'));
+                        $pricingVas->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+                        $pricingVas->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+                        $pricingVas->setDomesticPricing($domesticPricing);
+
+                        $pricingVas->setName($pricingVasClone->getName());
+                        $pricingVas->setNameEn($pricingVasClone->getNameEn());
+                        $pricingVas->setMin($pricingVasClone->getMin());
+                        $pricingVas->setFormula($pricingVasClone->getFormula());
+                        $pricingVas->setType($pricingVasClone->getType());
+
+                        $this->entityManager->persist($pricingVas);
+
+                        // apply changes to database.
+                        $this->entityManager->flush();
+                        $this->entityManager->commit();
+                        $pricingVasSpecClones = $this->entityManager->getRepository(DomesticPricingVasSpec::class)->findBy([
+                            'domestic_pricing_vas' => $pricingVasClone->getId(),
+                        ]);
+
+                        if ($pricingVasSpecClones) {
+                            foreach ($pricingVasSpecClones as $$pricingVasSpecClone) {
+                                $vasSpec = new DomesticPricingVasSpec();
+                                $vasSpec->setDomesticPricing($domesticPricing);
+                                $vasSpec->setDomesticPricingVas($pricingVas);
+                                $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+                                //Created
+                                $vasSpec->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+                                $vasSpec->setCreatedAt($addTime->format('Y-m-d H:i:s'));
+
+                                $vasSpec->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+                                $vasSpec->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+
+                                $vasSpec->setFrom($pricingVasSpecClone->getFrom());
+                                $vasSpec->setTo($pricingVasSpecClone->getTo());
+                                $vasSpec->setValue($pricingVasSpecClone->getValue());
+                                $vasSpec->setIsDeleted(0);
+
+                                $this->entityManager->persist($vasSpec);
+
+                                // // apply changes to database.
+                                $this->entityManager->flush();
+                                $this->entityManager->commit();
+                            }
+                        }
+
+                    }
+                }
+            }
 
             return $domesticPricing;
 
@@ -132,6 +259,7 @@ class DomesticPricingManager
             $domesticPricing->setIsPrivate($data['is_private']);
             $domesticPricing->setStatus($data['status']);
             $domesticPricing->setApprovalStatus($data['approval_status']);
+            $domesticPricing->setTotalRas($data['total_ras']);
 
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $domesticPricing->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
@@ -156,6 +284,28 @@ class DomesticPricingManager
 
         $this->entityManager->beginTransaction();
         try {
+            //Delete RangeWeight
+            $conditions = array(
+                'domestic_pricing' => $domesticPricing->getId(),
+                'is_deleted' => 0,
+            );
+
+            $pricingDataDeletes = $this->entityManager->getRepository(DomesticPricingData::class)->findBy($conditions);
+            if ($pricingDataDeletes) {
+                foreach ($pricingDataDeletes as $pricingDataDelete) {
+
+                    $this->domesticRangeWeightManager->deleteRangeWeight(
+                        $pricingDataDelete->getDomesticRangeWeight(),
+                        $user
+                    );
+                }
+            }
+
+            //Delete Vas And Vas Spec
+            $this->domesticPricingVasManager->deletedPricingVas($domesticPricing);
+            //Delete PricingData
+            $this->domesticPricingDataManager->deletePricingData($domesticPricing, $user);
+
             $domesticPricing->setIsDeleted(1);
             $domesticPricing->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
@@ -229,7 +379,7 @@ class DomesticPricingManager
         } else {
             $domesticPricing->setCustomer(null);
         }
-        
+
         if ($mode == 'add') {
             $name = str_replace(' ', '', $name);
 
@@ -250,7 +400,8 @@ class DomesticPricingManager
                 }
             }
 
-            $domesticPricing->setName($name . '.' . $indexPricing);
+            // $domesticPricing->setName($name . '.' . $indexPricing);
+            $domesticPricing->setName($name);
         }
     }
 }

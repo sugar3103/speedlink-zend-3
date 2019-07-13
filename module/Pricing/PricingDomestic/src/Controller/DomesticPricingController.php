@@ -337,8 +337,16 @@ class DomesticPricingController extends CoreController {
             }
         }
         $pricing = $this->entityManager->getRepository(DomesticPricing::class)->getPriceId($wherePrice);
-        if (empty($pricing))
-            return ['error' => true, 'message' => 'Pricing not found'];
+        // If private unavailable
+        if (empty($pricing)) {
+            $wherePrice = [
+                'carrier_id' => $carrierI,
+                'category_id' => $categoryId,
+                'service_id' => $serviceId,
+                'today' => !empty($dataList['pickupDate']) ? $dataList['pickupDate'] : date('Y-m-d H:i:s'),
+            ];
+            $pricing = $this->entityManager->getRepository(DomesticPricing::class)->getPriceId($wherePrice);
+        }
 
         // Get Range Weight info
         $whereRange = [
@@ -350,6 +358,9 @@ class DomesticPricingController extends CoreController {
             'shipment_type_id' => $shipmentType->getId(),
             'is_ras' => $dataList['deliveryRas']
         ];
+        if (!empty($wherePrice['customer_id'])) {
+            $whereRange['customer_id'] = $wherePrice['customer_id'];
+        }
         $wherePriceDetail = [
             'is_deleted' => 0,
             'domestic_pricing' => $pricing[0]['id']
@@ -431,7 +442,7 @@ class DomesticPricingController extends CoreController {
 
         // Pick RAS
         if ($dataList['pickupRas'] == 1) {
-            $feePickUp = 15000;
+            $feePickUp = $pricing[0]['total_ras'];
         } else {
             $feePickUp = 0;
         }

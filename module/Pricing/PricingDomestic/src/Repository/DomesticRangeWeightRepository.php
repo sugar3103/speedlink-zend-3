@@ -13,6 +13,7 @@ use Doctrine\ORM\QueryBuilder;
  */
 class DomesticRangeWeightRepository extends EntityRepository
 {
+   
     /**
      * Get list user by condition
      *
@@ -200,8 +201,14 @@ class DomesticRangeWeightRepository extends EntityRepository
             ->andWhere('rw.service = :service_id')
             ->andWhere('rw.zone = :zone_id')
             ->andWhere('rw.shipment_type = :shipment_type_id')
-            ->andWhere('rw.is_ras = :is_ras')
-            ->setParameters($where);
+            ->andWhere('rw.is_ras = :is_ras');
+            if (!empty($where['customer_id'])) {
+                $queryBuilder->andWhere('rw.is_private = 1')
+                    ->andWhere('rw.customer = :customer_id');
+            } else {
+                $queryBuilder->andWhere('rw.is_private = 0');
+            }
+            $queryBuilder->setParameters($where);
 
             return $queryBuilder->getQuery()->execute();
         } catch (QueryException $e) {
@@ -230,8 +237,14 @@ class DomesticRangeWeightRepository extends EntityRepository
             ->andWhere('rw.service = :service_id')
             ->andWhere('rw.zone = :zone_id')
             ->andWhere('rw.shipment_type = :shipment_type_id')
-            ->andWhere('rw.is_ras = :is_ras')
-            ->setParameters($where);
+            ->andWhere('rw.is_ras = :is_ras');
+            if (!empty($where['customer_id'])) {
+                $queryBuilder->andWhere('rw.is_private = 1')
+                    ->andWhere('rw.customer = :customer_id');
+            } else {
+                $queryBuilder->andWhere('rw.is_private = 0');
+            }
+            $queryBuilder->setParameters($where);
 
             return $queryBuilder->getQuery()->execute();
         } catch (QueryException $e) {
