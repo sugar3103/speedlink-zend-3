@@ -118,7 +118,8 @@ class PricingForm extends Form {
                 [
                     'name' => DomesticPricingCustomerExistsValidator::class,
                     'options' => [
-                        'entityManager' => $this->entityManager,                        
+                        'entityManager' => $this->entityManager,      
+                        'domesticPricing' => $this->domesticPricing
                     ]
                 ]
             ]
