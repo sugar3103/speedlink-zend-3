@@ -6,7 +6,7 @@ import Layout from '../containers/Layout';
 import Dashboards from './dashboards';
 import MasterData from './master-data';
 import PricingDomestic from './pricing-domestic';
-import PricingInternational from './pricing-management';
+import PricingInternational from './pricing-international';
 import System from './system';
 import CrumbRoute from './crumb-route';
 

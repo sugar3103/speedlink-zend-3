@@ -64,6 +64,14 @@ class DomesticPricing
     private $is_deleted = 0;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="total_ras", type="float", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $total_ras = 0;
+
+
+    /**
      * @var int
      *
      * @ORM\Column(name="approval_status", type="integer", precision=0, scale=0, nullable=false, unique=false)
@@ -581,5 +589,25 @@ class DomesticPricing
     public function getUpdatedBy()
     {
         return $this->updated_by;
+    }
+
+    /**
+     * Set TotalRas
+     * 
+     * @return Float
+     */
+
+    public function setTotalRas($total_ras) {
+        $this->total_ras = $total_ras;
+        return $this;
+    }
+
+    /**
+     * Get TotalRas
+     */
+
+    public function getTotalRas()
+    {
+        return $this->total_ras;
     }
 }

@@ -130,10 +130,10 @@ class DomesticZoneController extends CoreController {
                             $this->apiResponse['message'] = "NOT_FOUND";                        
                         } else {
                             $this->domesticZoneManager->deleteZone($zone, $user);
+                            $this->apiResponse['message'] = "DELETE_SUCCESS_DOMESTIC_ZONE";
                         }  
-                    }
+                    }                    
                     
-                    $this->apiResponse['message'] = "DELETE_SUCCESS_DOMESTIC_ZONE";
                 } catch (\Throwable $th) {
                     $this->error_code = 0;
                     $this->apiResponse['message'] = "DOMESTIC_ZONE_REQUEST_ID";

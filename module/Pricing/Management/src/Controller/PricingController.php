@@ -48,7 +48,7 @@ class PricingController extends CoreController
             $result = ["total" => 0, "data" => []];
             $fieldsMap = [
                 'id', 'is_private', 'customer_id', 'saleman_id', 'status', 
-                'category_code', 'carrier_id', 'effected_date', 'expired_date', 
+                'category_id', 'carrier_id', 'effected_date', 'expired_date', 
                 'origin_country_id', 'origin_city_id', 'origin_district_id', 'origin_ward_id', 
                 'approval_status', 'approved_by'
             ];
@@ -99,7 +99,7 @@ class PricingController extends CoreController
         if ($form->isValid()) {
             try {
                 // add new pricing
-                $pricing = $this->pricingManager->addPricing($data, $user);
+                $pricing = $this->pricingManager->addPricing($data, $user);                
                 $this->error_code = 1;
                 $this->apiResponse['data'] = $pricing->getId();
                 $this->apiResponse['message'] = "Success: You have added a pricing!";
@@ -135,18 +135,25 @@ class PricingController extends CoreController
         if ($form->isValid()) {
             try {
                 // add new pricing
+                $category_id = $pricing->getCategoryId();
+                $carrier_id = $pricing->getCarrierId();
+                $origin_country_id = $pricing->getOriginCountryId();
+                $origin_city_id = $pricing->getOriginCityId();
+                $origin_district_id = $pricing->getOriginDistrictId();
+                $origin_ward_id = $pricing->getOriginWardId();
                 $pricing = $this->pricingManager->updatePricing($pricing, $data, $user);
                 $district_id = empty($data['origin_district_id'])? null : $data['origin_district_id'];
                 $ward_id = empty($data['origin_ward_id'])? null : $data['origin_ward_id'];
-                if ($pricing->getCarrierId() != $data['carrier_id']
-                 || $pricing->getCategoryCode()!= $data['category_code']
-                 || $pricing->getOriginCountryId() != $data['origin_country_id']
-                 || $pricing->getOriginCityId() != $data['origin_city_id']
-                 || $pricing->getOriginDistrictId() != $district_id
-                 || $pricing->getOriginWardId() != $ward_id) {
-                    $this->pricingDataManager->addPricingData($pricing, $user);
+                if ($carrier_id != $data['carrier_id']
+                 || $category_id != $data['category_id']
+                 || $origin_country_id != $data['origin_country_id']
+                 || $origin_city_id != $data['origin_city_id']
+                 || $origin_district_id != $district_id
+                 || $origin_ward_id != $ward_id) {
+                    $this->pricingManager->generatePricingData($pricing, $user);
                 }
                 $this->error_code = 1;
+                $this->apiResponse['data'] = $pricing->getId();
                 $this->apiResponse['message'] = "Success: You have edited a pricing!";
             } catch (\Exception $e) {
                 $this->error_code = -1;
@@ -162,30 +169,31 @@ class PricingController extends CoreController
 
     public function deleteAction()
     {
-        $user = $this->tokenPayload;
-        $data = $this->getRequestData();
-        if (empty($data)) {
-            $this->error_code = -1;
-            $this->apiResponse['message'] = 'Missing data';
-            return $this->createResponse();
-        }
-        //Create New Form Pricing
-        $pricing = $this->entityManager->getRepository(Pricing::class)->find($data['id']);
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequestData();
+            $user = $this->tokenPayload;
+            if(isset($data['ids']) && count($data['ids']) > 0) {
 
-        //validate form
-        if(!empty($pricing)) {
-            try {
-                $this->pricingManager->deletePricing($pricing, $user);
-                $this->error_code = 1;
-                $this->apiResponse['message'] = "Success: You have deleted pricing!";
-            } catch (\Exception $e) {
-                $this->error_code = -1;
-                $this->apiResponse['message'] = "Fail: Please contact System Admin";
+                try {
+                    foreach ($data['ids'] as $id) {
+                        $pricing = $this->entityManager->getRepository(Pricing::class)->find($id);
+                        if ($pricing == null) {
+                            $this->error_code = 0;
+                            $this->apiResponse['message'] = "NOT_FOUND";
+                        } else {
+                            $this->pricingManager->deletePricing($pricing, $user);
+                        }
+                    }
+
+                    $this->apiResponse['message'] = "DELETE_SUCCESS_INTERNATIONAL_PRICING";
+                } catch (\Throwable $th) {
+                    $this->error_code = 0;
+                    $this->apiResponse['message'] = "INTERNATIONA_PRICING_REQUEST_ID";
+                }
+            } else {
+                $this->error_code = 0;
+                $this->apiResponse['message'] = "INTERNATIONA_PRICING_REQUEST_ID";
             }
-        } else {
-            $this->httpStatusCode = 200;
-            $this->error_code = -1;
-            $this->apiResponse['message'] = "Not Found Pricing";
         }
 
         return $this->createResponse();

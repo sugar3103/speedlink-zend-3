@@ -19,7 +19,6 @@ class DomesticPricingControllerFactory implements FactoryInterface {
     {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
         $domesticPricingManager = $container->get(DomesticPricingManager::class);
-
         // instantiate the controller and inject dependencies.
         return new DomesticPricingController($entityManager, $domesticPricingManager);
     }

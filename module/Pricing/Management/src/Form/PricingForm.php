@@ -66,24 +66,11 @@ class PricingForm extends Form {
         ]);
 
         $inputFilter->add([
-            'name' => 'category_code',
+            'name' => 'category_id',
             'required' => true,
             'filters' => [
                 [
-                    'name' => StringTrim::class
-                ]
-            ],
-            'validators' => [
-                [
-                    'name' => StringLength::class,
-                    'options' => [
-                        'validator' => [
-                            'name' => 'InArray',
-                            'options' => [
-                                'haystack' => ['Inbound', 'Outbound', 'Domestic']
-                            ]
-                        ]
-                    ]
+                    'name' => ToInt::class
                 ]
             ]
         ]);
@@ -182,16 +169,6 @@ class PricingForm extends Form {
             'filters' => [
                 [
                     'name' => StringTrim::class
-                ]
-            ]
-        ]);
-
-        $inputFilter->add([
-            'name' => 'origin_city_id',
-            'required'  => $this->data['category_code'] == 'Domestic',
-            'filters' => [
-                [
-                    'name' => ToInt::class
                 ]
             ]
         ]);

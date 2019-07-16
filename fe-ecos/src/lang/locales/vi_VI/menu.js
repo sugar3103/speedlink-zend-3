@@ -20,15 +20,18 @@ module.exports = {
   'menu.branch': 'Chi Nhánh',
   'menu.hub': 'Trung Tâm',
   'menu.brancharea': 'Chi Nhánh Khu Vực',
-  'menu.pricing_international': 'Bảng Giá Quốc Tế',
-  'menu.range_weight' : 'Khoảng Trọng Lượng',
-  'menu.zone_code' : 'Mã Vùng',
-  'menu.pricing' : 'Bảng Giá',
+
   'menu.pricing_domestic' : 'Bảng Giá Nội Địa',
   'menu.area_domestic' : 'Khu Vực',
   'menu.zone_domestic' : 'Vùng',
   'menu.range_weight_domestic' : 'Khoảng Trọng Lượng',
   'menu.pricing_index_domestic' : 'Bảng Giá',
+
+  'menu.pricing_international' : 'Pricing International',
+  'menu.zone_international' : 'Vùng',
+  'menu.range_weight_international' : 'Khoảng Trọng Lượng',
+  'menu.pricing_index_international' : 'Bảng Giá',
+
   //Menu Setting
   'menu.setting': 'Cài đặt',
   'menu.user': 'Người dùng',
