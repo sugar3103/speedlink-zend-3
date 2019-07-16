@@ -4,6 +4,7 @@ namespace PricingDomestic\Factory;
 use PricingDomestic\Service\DomesticPricingManager;
 use PricingDomestic\Service\DomesticPricingDataManager;
 use PricingDomestic\Service\DomesticPricingVasManager;
+use PricingDomestic\Service\DomesticRangeWeightManager;
 use Interop\Container\ContainerInterface;
 use Zend\Config\Config;
 use Zend\ServiceManager\Factory\FactoryInterface;
@@ -24,7 +25,8 @@ class DomesticPricingManagerFactory implements FactoryInterface {
         return new DomesticPricingManager(
             $entityManager,
             $container->get(DomesticPricingDataManager::class),
-            $container->get(DomesticPricingVasManager::class)
+            $container->get(DomesticPricingVasManager::class),
+            $container->get(DomesticRangeWeightManager::class)
         );
     }
 }

@@ -79,6 +79,8 @@ class DomesticPricingController extends CoreController {
         '2b29a565-8bf0-9ba2-2f43-58353d35278c' => 18, // ICT Accounts
         '98af7ad0-8a56-1bdb-5e3f-5bff710c6291' => 24, // Hoongvan Clothings
         'ace03c12-c387-5cdb-8845-5d1420f9b606' => 30, // Xưởng Gỗ Thanh Tâm
+        '64b30e46-6f2d-e981-c14c-5d1ecd99472f' => 40, // ĐỒNG HỒ 888
+        '5c356bc9-7744-b578-968d-5d233fc9fa6a' => 44, // Hàng Thùng RUBI
     ];
 
     public function __construct($entityManager, $domesticPricingManager) {
@@ -221,9 +223,6 @@ class DomesticPricingController extends CoreController {
             }
             if (array_key_exists($data['shipmentType'], $this->shipmentType)) {
                 $data['shipmentType'] = $this->shipmentType[$data['shipmentType']];
-                if (array_key_exists($data['customerId'], $this->customerId)) {
-                    $data['customerId'] = $this->customerId[$data['customerId']];
-                }
                 $result = $this->calculatePricingFromV1($data);
             } else {
                 $result = ['error' => true, 'message' => 'Shipment Type is wrong'];
@@ -338,8 +337,16 @@ class DomesticPricingController extends CoreController {
             }
         }
         $pricing = $this->entityManager->getRepository(DomesticPricing::class)->getPriceId($wherePrice);
-        if (empty($pricing))
-            return ['error' => true, 'message' => 'Pricing not found'];
+        // If private unavailable
+        if (empty($pricing)) {
+            $wherePrice = [
+                'carrier_id' => $carrierI,
+                'category_id' => $categoryId,
+                'service_id' => $serviceId,
+                'today' => !empty($dataList['pickupDate']) ? $dataList['pickupDate'] : date('Y-m-d H:i:s'),
+            ];
+            $pricing = $this->entityManager->getRepository(DomesticPricing::class)->getPriceId($wherePrice);
+        }
 
         // Get Range Weight info
         $whereRange = [
@@ -351,6 +358,9 @@ class DomesticPricingController extends CoreController {
             'shipment_type_id' => $shipmentType->getId(),
             'is_ras' => $dataList['deliveryRas']
         ];
+        if (!empty($wherePrice['customer_id'])) {
+            $whereRange['customer_id'] = $wherePrice['customer_id'];
+        }
         $wherePriceDetail = [
             'is_deleted' => 0,
             'domestic_pricing' => $pricing[0]['id']
@@ -421,9 +431,18 @@ class DomesticPricingController extends CoreController {
             $feeNormal = $priceDataNormal->getValue();
         }
 
+        //type and value bill R
+        if (!empty($priceDataOver)) {
+            $typeBill = $priceDataOver->getType();
+            $typeValue = $priceDataOver->getTypeValue();
+        } else {
+            $typeBill = $priceDataNormal->getType();
+            $typeValue = $priceDataNormal->getTypeValue();
+        }
+
         // Pick RAS
         if ($dataList['pickupRas'] == 1) {
-            $feePickUp = 15000;
+            $feePickUp = $pricing[0]['total_ras'];
         } else {
             $feePickUp = 0;
         }
@@ -485,6 +504,8 @@ class DomesticPricingController extends CoreController {
             'fee_over' => $feeOver,
             'fee_normal' => $feeNormal,
             'fee_pickup_ras' => $feePickUp,
+            'type_bill' => $typeBill,
+            'type_value' => $typeValue
         ];
     }
     #endregion

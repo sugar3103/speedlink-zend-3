@@ -103,14 +103,14 @@ class DomesticAreaManager {
             $this->entityManager->persist($domesticArea);
             $this->entityManager->flush();        
             
-            $this->entityManager->commit();
-
+            
             if(isset($data['cities']) && count($data['cities']) > 0) {
                 foreach ($data['cities'] as $city ) {
                     $this->domesticAreaCityManager->updateAreaCity($domesticArea->getId(), $city, $user);
                 }
             }
-
+            $this->entityManager->commit();
+            
             return $domesticArea;
 
         } catch (ORMException $e) {
@@ -135,17 +135,17 @@ class DomesticAreaManager {
             $this->getReferenced($domesticArea,$user,'update');
             // apply changes to database.
             $this->entityManager->flush();            
-            $this->entityManager->commit();
-
+            
             $this->domesticAreaCityManager->deleteAreaCity($domesticArea->getId());
-
+            
             if(isset($data['cities']) && count($data['cities']) > 0) {                
                 foreach ($data['cities'] as $city ) {
                     $this->domesticAreaCityManager->updateAreaCity($domesticArea->getId(), $city, $user);
                 }
             }
-
-           return $domesticArea;
+            
+            $this->entityManager->commit();
+            return $domesticArea;
         }
         catch (ORMException $e) {
             $this->entityManager->rollback();

@@ -136,32 +136,32 @@ export default {
         }
       ]
     },
-    // {
-    //   id: 'pricing_management',
-    //   title: 'menu.pricing_international',
-    //   route: '/pricing-international',
-    //   icon: 'icon-pricing-table',
-    //   childrens: [
-    //     {
-    //       id: 'pricing',
-    //       title: 'menu.pricing',
-    //       route: '/pricing-international/pricing',
-    //       icon: 'lnr lnr-map'
-    //     },
-    //     {
-    //       id: 'range_weight',
-    //       title: 'menu.range_weight',
-    //       route: '/pricing-international/range-weight',
-    //       icon: 'lnr lnr-license'
-    //     },
-    //     {
-    //       id: 'zone_code',
-    //       title: 'menu.zone_code',
-    //       route: '/pricing-international/zone-code',
-    //       icon: 'lnr lnr-map'
-    //     }
-    //   ]
-    // },
+    {
+      id: 'pricing_international',
+      title: 'menu.pricing_international',
+      route: '/pricing-international',
+      icon: 'icon-pricing-table',
+      childrens: [
+        {
+          id: 'pricing',
+          title: 'menu.pricing_index_international',
+          route: '/pricing-international/pricing',
+          icon: 'lnr lnr-map'
+        },
+        {
+          id: 'range_weight',
+          title: 'menu.range_weight_international',
+          route: '/pricing-international/range-weight',
+          icon: 'lnr lnr-license'
+        },
+        {
+          id: 'zone_code',
+          title: 'menu.zone_international',
+          route: '/pricing-international/zone',
+          icon: 'lnr lnr-map'
+        }
+      ]
+    },
     {
       id: 'system',
       title: 'menu.system',
