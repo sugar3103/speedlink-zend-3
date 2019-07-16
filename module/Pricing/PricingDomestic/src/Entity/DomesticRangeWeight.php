@@ -36,6 +36,23 @@ class DomesticRangeWeight
     private $name_en;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="is_private", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $is_private;
+    
+    /**
+     * @var \Customer\Entity\Customer
+     *
+     * @ORM\ManyToOne(targetEntity="Customer\Entity\Customer")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=true,unique=false)
+     * })
+     */
+    private $customer = null;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="calculate_unit", type="integer", precision=0, scale=0, nullable=false, unique=false)
@@ -764,5 +781,53 @@ class DomesticRangeWeight
     public function getJoinUpdated()
     {
         return $this->join_updated;
+    }
+
+    /**
+     * Set isPrivate.
+     *
+     * @param int $isPrivate
+     *
+     * @return DomesticPricing
+     */
+    public function setIsPrivate($isPrivate)
+    {
+        $this->is_private = $isPrivate;
+
+        return $this;
+    }
+
+    /**
+     * Get isPrivate.
+     *
+     * @return int
+     */
+    public function getIsPrivate()
+    {
+        return $this->is_private;
+    }
+
+     /**
+     * Set customer.
+     *
+     * @param \Customer\Entity\Customer|null $customer
+     *
+     * @return DomesticPricing
+     */
+    public function setCustomer(\Customer\Entity\Customer $customer = null)
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * Get customer.
+     *
+     * @return \Customer\Entity\Customer|null
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
     }
 }

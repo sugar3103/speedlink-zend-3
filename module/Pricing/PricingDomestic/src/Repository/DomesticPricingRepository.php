@@ -57,6 +57,7 @@ class DomesticPricingRepository extends EntityRepository
                 dp.expired_date,
                 dp.created_at,
                 dp.updated_at,
+                dp.total_ras,
                 cr.username as created_by,
                 CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
                 CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated,
@@ -158,7 +159,7 @@ class DomesticPricingRepository extends EntityRepository
     public function getPriceId($where) {
         try {
             $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-            $queryBuilder->select('dp.id')
+            $queryBuilder->select('dp.id, dp.total_ras')
                 ->from(DomesticPricing::class, 'dp')
                 ->where('dp.is_deleted = 0')
                 ->andWhere('dp.status = 1')
@@ -168,7 +169,7 @@ class DomesticPricingRepository extends EntityRepository
                 ->andWhere('dp.carrier = :carrier_id')
                 ->andWhere('dp.category = :category_id')
                 ->andWhere('dp.service = :service_id');
-            if (!empty($dataList['customer_id'])) {
+            if (!empty($where['customer_id'])) {
                 $queryBuilder->andWhere('dp.is_private = 1')
                     ->andWhere('dp.customer = :customer_id');
             } else {

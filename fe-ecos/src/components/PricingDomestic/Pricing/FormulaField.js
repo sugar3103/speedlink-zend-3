@@ -18,9 +18,27 @@ class FormulaField extends Component {
       html: ""
     };
   }
+  
+  componentDidMount() {
+    const { fieldVas, input } = this.props;
+    if (fieldVas) {
+      let suggesttionList = [];
+      fieldVas.forEach(item => {
+        suggesttionList.push({
+          id: `$${item.id}`,
+          name: item.name
+        });
+      })
+      this.setState({ suggesttionList });
 
-  componentWillMount() {
-    this.props.getPricingDomesticFieldVas();
+      if (suggesttionList && input && input.value) {
+        let html = input.value;
+        suggesttionList.forEach(item => {
+          html = html.split(item.id).join(`&nbsp;<span contenteditable="false">${item.name}</span>&nbsp;`);
+        });
+        this.setState({ html });
+      }
+    }
   }
 
   componentWillReceiveProps(nextProps) {

@@ -3,6 +3,7 @@ namespace Management\Form;
 
 use Management\Entity\PricingVas;
 use Doctrine\ORM\EntityManager;
+use Zend\Filter\ToInt;
 use Zend\Form\Form;
 
 class PricingVasForm extends Form {
@@ -43,5 +44,19 @@ class PricingVasForm extends Form {
     private function addInputFilter() {
         // Create main input filter.
         $inputFilter = $this->getInputFilter();
+        $inputFilter->add([
+            'name' => 'id',
+            'required' => true,
+            'filters' => [
+                [
+                    'name' => ToInt::class
+                ]
+            ]
+        ]);
+
+        $inputFilter->add([
+            'name' => 'data',
+            'required' => true
+        ]);
     }
 }

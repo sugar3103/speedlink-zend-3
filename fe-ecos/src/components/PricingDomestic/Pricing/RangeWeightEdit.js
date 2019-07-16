@@ -11,19 +11,7 @@ class RangeWeightEdit extends Component {
   handleSubmit = values => {
     const { toggleModal } = this.props;
     if (values) {
-      let dataPost = {
-        id: values.pricing_id,
-        data: []
-      };
-      delete values.pricing_id;
-      Object.keys(values).forEach(key => {
-        const range_weight_id = key.replace('range_weight_', '');
-        dataPost.data.push({
-          range_weight: range_weight_id,
-          value: values[key]
-        });
-      })
-      this.props.addRangeWeightValue(dataPost, toggleModal);
+      this.props.addRangeWeightValue(values, toggleModal);
     }
   }
 

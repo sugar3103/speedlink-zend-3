@@ -5,6 +5,8 @@ use Core\Controller\CoreController;
 use Management\Form\PricingDataForm;
 use Doctrine\ORM\EntityManager;
 use Management\Service\PricingDataManager;
+use Management\Service\PricingVasManager;
+use Management\Service\PricingVasSpecManager;
 use Zend\Cache\Storage\StorageInterface;
 use Management\Entity\PricingData;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
@@ -23,16 +25,32 @@ class PricingDataController extends CoreController {
     protected $pricingDataManager;
 
     /**
+     * PricingVas Manager.
+     * @var PricingVasManager
+     */
+    protected $pricingVasManager;
+
+    /**
+     * PricingVas Manager.
+     * @var PricingVasSpecManager
+     */
+    protected $pricingVasSpecManager;
+
+    /**
      * PricingDataController constructor.
      * @param $entityManager
      * @param $pricingDataManager
+     * @param $pricingVasManager
+     * @param $pricingVasSpecManager
      */
 
-    public function __construct($entityManager, $pricingDataManager) 
+    public function __construct($entityManager, $pricingDataManager, $pricingVasManager, $pricingVasSpecManager) 
     {
         parent::__construct($entityManager);
         $this->entityManager = $entityManager;
         $this->pricingDataManager = $pricingDataManager;
+        $this->pricingVasManager = $pricingVasManager;
+        $this->pricingVasSpecManager = $pricingVasSpecManager;
     }
 
     public function indexAction()
@@ -48,6 +66,7 @@ class PricingDataController extends CoreController {
             $dataShipmentType = $this->pricingDataManager->getListPricingDataByCondition($start, $limit, $sortField, $sortDirection, $filters);
             foreach ($dataShipmentType['listPricingData'] as $key => $obj) {
                 $dataShipmentType['listPricingData'][$key]['pricing_data'] = json_decode($obj['pricing_data']);
+                $dataShipmentType['listPricingData'][$key]['pricing_vas'] = $this->getPricingVas($obj['id']);
             }
             $result['error_code'] = 1;
             $result['message'] = 'Success';
@@ -58,7 +77,20 @@ class PricingDataController extends CoreController {
         return $this->createResponse();
     }
 
-
+    private function getPricingVas($pricing_data_id) {
+        $filter = array('pricing_data_id' => $pricing_data_id);
+        $dataVas = $this->pricingVasManager->getListVasByCondition(1, 0, '', 'ASC', $filter);
+        foreach ($dataVas as $key => $vas) {
+            if ($vas['type'] == 1) {
+                $param['pricing_vas_id'] = $vas['id'];
+                $dataVasSpec = $this->pricingVasSpecManager->getListVasSpecByCondition($param);
+                $dataVas[$key]['spec'] = !empty($dataVasSpec) ? $dataVasSpec : [];;
+            } else {
+                $dataVas[$key]['spec'] = [];
+            }
+        }
+        return $dataVas;
+    }
 
     public function editAction()
     {

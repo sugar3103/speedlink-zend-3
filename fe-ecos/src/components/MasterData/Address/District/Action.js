@@ -10,8 +10,6 @@ import { MODAL_EDIT, MODAL_ADD, MODAL_VIEW } from '../../../../constants/default
 class Action extends Component {
 
   handleSubmit = values => {
-    console.log(values);
-    
     switch (this.props.modalType) {
       case MODAL_ADD:
         this.props.addDistrictItem(values);

@@ -85,6 +85,11 @@ class List extends Component {
     });
   };
 
+  onEditRangeWeight = (e, id) => {
+    e.stopPropagation();
+    this.props.history.push(`/pricing-domestic/range-weight/edit/${id}`);
+  }
+
   viewRangeWeight = (e, type, rangeWeight) => {
     e.stopPropagation();
     this.props.history.push(`/pricing-domestic/range-weight/view/${rangeWeight.id}`);
@@ -141,17 +146,6 @@ class List extends Component {
           sortable: false,
         },
         {
-          Header: messages['pri_dom.category'],
-          accessor: "category",
-          width: 100,
-          Cell: ({ original }) => {
-            return (
-              locale === 'en-US' ? original.category_en : original.category
-            )
-          },
-          sortable: false,
-        },
-        {
           Header: messages['pri_dom.service'],
           accessor: "service",
           width: 100,
@@ -176,36 +170,13 @@ class List extends Component {
         {
           Header: messages['pri_dom.from'],
           accessor: "from",
-          width: 50,
+          width: 70,
           sortable: false,
         },
         {
           Header: messages['pri_dom.to'],
           accessor: "to",
-          width: 50,
-          sortable: false,
-        },
-        {
-          Header: messages['pri_dom.calculate-unit'],
-          accessor: "calculate_unit",
-          width: 120,
-          Cell: ({ original }) => {
-            return (
-              original.calculate_unit ? messages['pri_dom.yes'] : messages['pri_dom.no']
-            )
-          },
-          sortable: false,
-        },
-        {
-          Header: messages['pri_dom.unit'],
-          accessor: "unit",
-          width: 50,
-          sortable: false,
-        },
-        {
-          Header: messages['pri_dom.round-up'],
-          accessor: "round_up",
-          width: 120,
+          width: 70,
           sortable: false,
         },
         {
@@ -222,7 +193,7 @@ class List extends Component {
         {
           Header: messages['pri_dom.zone'],
           accessor: "zone",
-          width: 100,
+          width: 150,
           Cell: ({ original }) => {
             return (
               locale === 'en-US' ? original.zone_en : original.zone
@@ -250,9 +221,11 @@ class List extends Component {
             return (
               <Fragment>
                 <Can user={this.props.authUser.user} permission="range_weight_domestic" action="edit" own={original.created_at}>
-                  <Link to={`/pricing-domestic/range-weight/edit/${original.id}`} className="btn btn-info btn-sm">
-                    <span className="lnr lnr-pencil" />
-                  </Link>
+                  <Button
+                    color="info"
+                    onClick={(e) => this.onEditRangeWeight(e, original.id)}
+                    size="sm"
+                  ><span className="lnr lnr-pencil" /></Button>
                 </Can>
                 &nbsp;
                 <Can user={this.props.authUser.user} permission="range_weight_domestic" action="delete" own={original.created_at}>

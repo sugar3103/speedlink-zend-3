@@ -7,16 +7,13 @@ import address from './master-data/address/reducers';
 import hub from './master-data/hub/reducer';
 import branch from './master-data/branch/reducer';
 import users from './system/users/reducers';
-import rangeWeight from './pricing-management/range-weight/reducer';
-import zoneCode from './pricing-management/zone-code/reducer';
-import customer from './pricing-management/customer/reducer';
-import pricing from './pricing-management/pricing/reducer';
 import carrier from './master-data/service-shipment/carrier/reducer';
 import service from './master-data/service-shipment/service/reducer';
 import shipment_type from './master-data/service-shipment/shipmnet-type/reducer';
 import setting from './system/setting/reducer';
 import system from './system/reducer';
 import pricingDomestic from './pricing-domestic/reducer';
+import pricingInternational from './pricing-international/reducer';
 import { LOGOUT_USER } from '../constants/actionTypes';
 
 const reducers = combineReducers({
@@ -32,12 +29,9 @@ const reducers = combineReducers({
   shipment_type,
   hub,
   branch,
-  rangeWeight,
-  zoneCode,
-  customer,
-  pricing,
   system,
-  pricingDomestic
+  pricingDomestic,
+  pricingInternational
 });
 
 const initialState = reducers({}, {})

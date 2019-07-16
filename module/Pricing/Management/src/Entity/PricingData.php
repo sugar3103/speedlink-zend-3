@@ -93,7 +93,7 @@ class PricingData
     /**
      *
      * @ORM\OneToOne(targetEntity="\ServiceShipment\Entity\Service")
-     * @ORM\JoinColumn(name="shipment_type_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="service_id", referencedColumnName="id", nullable=true)
      */
     private $join_service;
 
