@@ -85,7 +85,7 @@ final class Version20190218022629 extends AbstractMigration
             (
                 id                         INT(11) AUTO_INCREMENT PRIMARY KEY,
                 pricing_data_id            INT(11) NOT NULL,
-                pricing_vas_spec_id        INT(11) NOT NULL,
+                pricing_vas_id             INT(11) NOT NULL,
                 `from`                     DECIMAL(10, 2) NOT NULL,
                 `to`                       DECIMAL(10, 2) NOT NULL COMMENT '0 == over',
                 `value`                    DECIMAL(10, 2) NOT NULL,

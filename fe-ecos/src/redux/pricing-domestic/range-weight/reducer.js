@@ -19,7 +19,7 @@ import {
 
 const INIT_STATE = {
   errors: null,
-  loading: true,
+  loading: false,
   items: [],
   itemEditting: {},
   total: 0,

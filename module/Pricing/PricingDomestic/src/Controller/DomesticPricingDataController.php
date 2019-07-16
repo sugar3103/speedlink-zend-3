@@ -99,17 +99,22 @@ class DomesticPricingDataController extends CoreController {
             $data[$zone->getId()]['name'] = $zone->getName();
             $data[$zone->getId()]['name_en'] = $zone->getNameEn();
             
-            $shipmentTypes = $this->entityManager->getRepository(ShipmentType::class)->findBy(['is_deleted' => 0, 'status' => 1]);
+            $shipmentTypes = $this->entityManager->getRepository(ShipmentType::class)->findBy(['is_deleted' => 0, 'status' => 1, 'category' => 3]);
             foreach ($shipmentTypes as $shipmentType) {
                 $data[$zone->getId()]['ras'][$shipmentType->getId()] = null;
                 $data[$zone->getId()]['not_ras'][$shipmentType->getId()] = null;
                 //Get Range Weight
-                $rangeWeights = $this->entityManager->getRepository(DomesticRangeWeight::class)->findBy([
+                $conditions = array(
                     'service' => $pricing->getService()->getId(),
                     'shipment_type' => $shipmentType->getId(),
                     'zone'       => $zone->getId(),
+                    'is_private' => $pricing->getIsPrivate(),
                     'is_deleted' => 0
-                ]);
+                );
+                if (!empty($pricing->getCustomer())) {
+                    $conditions['customer'] = $pricing->getCustomer();
+                }
+                $rangeWeights = $this->entityManager->getRepository(DomesticRangeWeight::class)->findBy($conditions);
                 
                 if($rangeWeights) {
                     foreach ($rangeWeights as $rangeWeight) {
@@ -128,6 +133,8 @@ class DomesticPricingDataController extends CoreController {
 
                         if($pricingData) {
                             $valueData['value'] = $pricingData->getValue();
+                            $valueData['type']  = $pricingData->getType();
+                            $valueData['type_value']  = $pricingData->getTypeValue();
                             if($rangeWeight->getIsRas()) {
                                 $data[$zone->getId()]['ras'][$shipmentType->getId()][] = $valueData;
                             } else {
@@ -135,6 +142,8 @@ class DomesticPricingDataController extends CoreController {
                             }                            
                         } else {
                             $valueData['value'] = '';
+                            $valueData['type'] = 0;
+                            $valueData['type_value'] = 0;
                             if($rangeWeight->getIsRas()) {
                                 $data[$zone->getId()]['ras'][$shipmentType->getId()][] = $valueData;
                             } else {
@@ -151,7 +160,12 @@ class DomesticPricingDataController extends CoreController {
 
     private function getShipmentTypeByService($service_id) {
         $data = [];
-        $shipmentTypes = $this->entityManager->getRepository(\ServiceShipment\Entity\ShipmentType::class)->findBy(['service' => $service_id, 'is_deleted' => 0,'status' => 1]);
+        $shipmentTypes = $this->entityManager->getRepository(\ServiceShipment\Entity\ShipmentType::class)->findBy([
+            'service' => $service_id, 
+            'is_deleted' => 0,
+            'status' => 1,
+            'category' => 3
+            ]);
         foreach ($shipmentTypes as $shipmentType) {
             $data[] = [
                 'id' => $shipmentType->getId(),

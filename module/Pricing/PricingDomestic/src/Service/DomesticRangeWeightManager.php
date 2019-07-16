@@ -15,6 +15,7 @@ use ServiceShipment\Entity\Carrier;
 use ServiceShipment\Entity\Service;
 use ServiceShipment\Entity\ShipmentType;
 use PricingDomestic\Entity\DomesticZone;
+use Customer\Entity\Customer;
 /**
  * This service is responsible for adding/editing users
  * and changing user password.
@@ -113,6 +114,18 @@ class DomesticRangeWeightManager {
             throw new \Exception('Not found Zone by ID');
         }
 
+        if($data['is_private'] && $data['customer_id']) {
+            $customer = $this->entityManager->getRepository(Customer::class)->find($data['customer_id']);
+            if($customer == null) {
+                throw new \Exception('Not found Customer by ID');
+            }
+
+            $domesticRangeWeight->setCustomer($customer);
+            
+        } else {
+            $domesticRangeWeight->setCustomer(null);
+        }
+
         $domesticRangeWeight->setCarrier($carrier);
         $domesticRangeWeight->setCategory($category);
         $domesticRangeWeight->setService($service);
@@ -143,6 +156,7 @@ class DomesticRangeWeightManager {
             $domesticRangeWeight->setDescription($data['description']);
             $domesticRangeWeight->setDescriptionEn($data['description_en']);
             $domesticRangeWeight->setCreatedBy($user->id);
+            $domesticRangeWeight->setIsPrivate($data['is_private']);
             
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $domesticRangeWeight->setCreatedAt($addTime->format('Y-m-d H:i:s'));
@@ -181,6 +195,7 @@ class DomesticRangeWeightManager {
             $domesticRangeWeight->setDescription($data['description']);
             $domesticRangeWeight->setDescriptionEn($data['description_en']);
             $domesticRangeWeight->setUpdatedBy($user->id);
+            $domesticRangeWeight->setIsPrivate($data['is_private']);
             
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $domesticRangeWeight->setUpdatedAt($addTime->format('Y-m-d H:i:s'));

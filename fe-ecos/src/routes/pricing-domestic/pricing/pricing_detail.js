@@ -37,7 +37,7 @@ class PricingDetail extends Component {
     return (
       <Container>
         <PageTitle title={title} />
-        {itemEditting && 
+        {itemEditting && this.props.type !== 'add' &&
           <Row>
             <Col md={12}>
               <h3 className="page-title">{itemEditting.name}</h3>

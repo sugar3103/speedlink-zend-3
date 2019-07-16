@@ -1,5 +1,12 @@
 const validate = (values) => {
     const errors = {};
+    if (values.is_private  === undefined || values.is_private === null ) {
+        errors.is_private = 'pri_dom.validate-type-empty';        
+    }
+    if (values.is_private === 1 && !values.customer_id) {
+      errors.customer_id = 'pri_dom.validate-customer-empty';
+    }
+
     if (!values.name) {
       errors.name = 'pri_dom.validate-name-empty';
     } else if (values.name.length < 2) {
@@ -82,4 +89,3 @@ const validate = (values) => {
   };
   
   export default validate;
-  
