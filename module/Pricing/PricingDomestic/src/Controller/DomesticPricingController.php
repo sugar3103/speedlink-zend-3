@@ -299,6 +299,15 @@ class DomesticPricingController extends CoreController {
         $serviceId = $shipmentType->getService()->getId();
         $categoryId = $shipmentType->getCategory()->getId();
 
+        if (!empty($dataList['weight']) && !empty($dataList['length']) && !empty($dataList['height']) && !empty($dataList['width'])) {
+            $volWeight = ($dataList['width'] * $dataList['length'] * $dataList['height']) / $shipmentType->getVolumetricNumber();
+            $conWeight = $dataList['weight'];
+            if ($volWeight > $dataList['weight']) {
+                $dataList['weight'] = $volWeight;
+                $conWeight = $volWeight;
+            }
+        }
+
         // Get City
         $whereMerge = array_merge($where, ['name' => $dataList['pickupCity']]);
         $pickupCity = $this->entityManager->getRepository(City::class)->findOneBy($whereMerge);
@@ -505,7 +514,9 @@ class DomesticPricingController extends CoreController {
             'fee_normal' => $feeNormal,
             'fee_pickup_ras' => $feePickUp,
             'type_bill' => $typeBill,
-            'type_value' => $typeValue
+            'type_value' => $typeValue,
+            'con_weight' => !empty($conWeight) ? $conWeight : 0,
+            'vol_weight' => !empty($volWeight) ? $volWeight : 0,
         ];
     }
     #endregion
