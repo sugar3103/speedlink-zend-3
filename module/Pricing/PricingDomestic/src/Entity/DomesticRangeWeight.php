@@ -47,10 +47,10 @@ class DomesticRangeWeight
      *
      * @ORM\ManyToOne(targetEntity="Customer\Entity\Customer")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=true)
+     *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=true,unique=false)
      * })
      */
-    private $customer = 0;
+    private $customer = null;
 
     /**
      * @var bool

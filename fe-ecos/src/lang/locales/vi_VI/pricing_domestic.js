@@ -129,4 +129,5 @@ module.exports = {
   'pri_dom.validate-vas-formula-required': 'Công thức không được bỏ trống',
   'pri_dom.validate-vas-min-required': 'Giá trị nhỏ nhất không được bỏ trống',
   'pri_dom.validate-vas-spec-required': 'Bảng giá không được bỏ trống',
+  'pri_dom.validate-customer-exists': 'Khách hàng này đã có bảng giá'
 }

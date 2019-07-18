@@ -1,5 +1,5 @@
 import axios from "axios";
-import { all, call, fork, put, takeEvery } from "redux-saga/effects";
+import { all, call, fork, put, take, takeEvery } from "redux-saga/effects";
 import { apiUrl, EC_SUCCESS, EC_FAILURE, EC_FAILURE_AUTHENCATION } from '../../../constants/defaultValues';
 import { authHeader } from '../../../util/auth-header';
 import history from '../../../util/history';
@@ -17,6 +17,7 @@ import {
   PRI_DOM_PRICING_GET_VAS,
   PRI_DOM_PRICING_UPDATE_VAS,
   PRI_DOM_PRICING_GET_FIELD_VAS,
+  PRI_DOM_PRICING_REQUEST_UPDATE_ITEM_SUCCESS,
 } from "../../../constants/actionTypes";
 
 import {
@@ -46,6 +47,11 @@ function validatePricingDomestic(errors) {
   if (errors.name_en && errors.name_en.domesticPricingExists) {
     return stopSubmit('pricing_domestic_action_form', {
       name_en: 'pri_dom.validate-nameEn-exists'
+    });
+  }
+  if (errors.customer_id && errors.customer_id.domesticPricingCustomerExists) {
+    return stopSubmit('pricing_domestic_action_form', {
+      customer_id: 'pri_dom.validate-customer-exists'
     });
   }
 }
@@ -115,6 +121,8 @@ function* addPricingDomesticItem({ payload }) {
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(addPricingDomesticItemSuccess());
+        yield put(requestUpdatePricingDomesticItem({ query: { id: response.data.pricing_id } }));
+        yield take(PRI_DOM_PRICING_REQUEST_UPDATE_ITEM_SUCCESS);
         yield call(history.push, `/pricing-domestic/pricing/edit/${response.data.pricing_id}`);
         createNotification({ type: 'success', message: 'pri_dom.add-success' });
         break;
@@ -148,7 +156,6 @@ function* requestPricingDomesticUpdateItems({ payload }) {
   try {
     const response = yield call(getPricingDomesticUpdateRequest, param);
     switch (response.error_code) {
-      
       case EC_SUCCESS:
         yield put(requestUpdatePricingDomesticItemSuccess(response.data[0]));
         break;
@@ -221,7 +228,7 @@ function deletePricingDomesticApi(ids) {
     method: 'post',
     url: `${apiUrl}pricing/domestic/delete`,
     headers: authHeader(),
-    data: {  ids: ids }
+    data: { ids: ids }
   });
 }
 
@@ -238,7 +245,7 @@ function* deletePricingDomesticItem({ payload }) {
       case EC_SUCCESS:
         yield put(deletePricingDomesticItemSuccess());
         yield put(getPricingDomesticList());
-        createNotification({ type: 'success', message: 'pri_dom.delete-success'});
+        createNotification({ type: 'success', message: 'pri_dom.delete-success' });
         break;
 
       case EC_FAILURE:
@@ -264,7 +271,7 @@ function getDataPricingDomesticApi(pricing_id) {
     method: 'post',
     url: `${apiUrl}pricing/domestic/data`,
     headers: authHeader(),
-    data: {  id: pricing_id }
+    data: { id: pricing_id }
   });
 }
 
@@ -278,7 +285,7 @@ function* getDataPricingDomesticItems({ payload }) {
   try {
     const response = yield call(getPricingDomesticDataRequest, pricing_id);
     switch (response.error_code) {
-      
+
       case EC_SUCCESS:
         yield put(getPricingDomesticDataSuccess(response.data));
         break;
@@ -350,7 +357,7 @@ function getVasPricingDomesticApi(pricing_id) {
     method: 'post',
     url: `${apiUrl}pricing/domestic/vas`,
     headers: authHeader(),
-    data: {  id: pricing_id }
+    data: { id: pricing_id }
   });
 }
 
@@ -364,7 +371,7 @@ function* getVasPricingDomesticItems({ payload }) {
   try {
     const response = yield call(getPricingDomesticVasRequest, pricing_id);
     switch (response.error_code) {
-      
+
       case EC_SUCCESS:
         yield put(getPricingDomesticVasSuccess(response.data));
         break;
@@ -446,7 +453,7 @@ function* getFieldVasPricingDomesticItems({ payload }) {
   try {
     const response = yield call(getPricingDomesticFieldVasRequest);
     switch (response.error_code) {
-      
+
       case EC_SUCCESS:
         yield put(getPricingDomesticFieldVasSuccess(response.data));
         break;

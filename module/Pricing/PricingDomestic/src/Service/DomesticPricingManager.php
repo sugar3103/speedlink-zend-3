@@ -104,140 +104,140 @@ class DomesticPricingManager
 
         $this->entityManager->beginTransaction();
         try {
-        $domesticPricing = new DomesticPricing();
-        $domesticPricing->setEffectedDate(date('Y-m-d H:i:s', strtotime($data['effected_date'])));
-        $domesticPricing->setExpiredDate(date('Y-m-d H:i:s', strtotime($data['expired_date'])));
-        $domesticPricing->setIsPrivate($data['is_private']);
-        $domesticPricing->setStatus($data['status']);
-        $domesticPricing->setApprovalStatus($data['approval_status']);
-        $domesticPricing->setTotalRas($data['total_ras']);
+            $domesticPricing = new DomesticPricing();
+            $domesticPricing->setEffectedDate(date('Y-m-d H:i:s', strtotime($data['effected_date'])));
+            $domesticPricing->setExpiredDate(date('Y-m-d H:i:s', strtotime($data['expired_date'])));
+            $domesticPricing->setIsPrivate($data['is_private']);
+            $domesticPricing->setStatus($data['status']);
+            $domesticPricing->setApprovalStatus($data['approval_status']);
+            $domesticPricing->setTotalRas($data['total_ras']);
 
-        $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
 
-        $domesticPricing->setCreatedAt($addTime->format('Y-m-d H:i:s'));
-        $domesticPricing->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
-        $this->getReferenced($domesticPricing, $user, 'add', $data);
+            $domesticPricing->setCreatedAt($addTime->format('Y-m-d H:i:s'));
+            $domesticPricing->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+            $this->getReferenced($domesticPricing, $user, 'add', $data);
 
-        $this->entityManager->persist($domesticPricing);
+            $this->entityManager->persist($domesticPricing);
 
-        $this->entityManager->flush();
+            $this->entityManager->flush();
 
-        $this->entityManager->commit();
+            $this->entityManager->commit();
 
-        if ($data['get_pricing_dom']) {
-            $conditions = array(
-                'domestic_pricing' => $data['get_pricing_dom'],
-                'is_deleted' => 0,
-            );
+            if ($data['get_pricing_dom']) {
+                $conditions = array(
+                    'domestic_pricing' => $data['get_pricing_dom'],
+                    'is_deleted' => 0,
+                );
 
-            $pricingDataClones = $this->entityManager->getRepository(DomesticPricingData::class)->findBy($conditions);
+                $pricingDataClones = $this->entityManager->getRepository(DomesticPricingData::class)->findBy($conditions);
 
-            if ($pricingDataClones) {
-                foreach ($pricingDataClones as $pricingDataClone) {
-                    //Create New RangeWeight
-                    // $pricingDataClone->getDomesticRangeWeight();
-                    $rangeweight = $this->domesticRangeWeightManager->addRangeWeight([
-                        'name' => $pricingDataClone->getDomesticRangeWeight()->getName(),
-                        'name_en' => $pricingDataClone->getDomesticRangeWeight()->getNameEn(),
-                        'calculate_unit' => $pricingDataClone->getDomesticRangeWeight()->getCalculateUnit(),
-                        'round_up' => $pricingDataClone->getDomesticRangeWeight()->getRoundUp(),
-                        'unit' => $pricingDataClone->getDomesticRangeWeight()->getUnit(),
-                        'is_ras' => $pricingDataClone->getDomesticRangeWeight()->getIsRas(),
-                        'from' => $pricingDataClone->getDomesticRangeWeight()->getFrom(),
-                        'to' => $pricingDataClone->getDomesticRangeWeight()->getTo(),
-                        'status' => $pricingDataClone->getDomesticRangeWeight()->getStatus(),
-                        'description' => $pricingDataClone->getDomesticRangeWeight()->getDescription(),
-                        'description_en' => $pricingDataClone->getDomesticRangeWeight()->getDescriptionEn(),
-                        'is_private' => $data['is_private'],
-                        'carrier_id' => $pricingDataClone->getDomesticRangeWeight()->getCarrier()->getId(),
-                        'category_id' => $pricingDataClone->getDomesticRangeWeight()->getCategory()->getId(),
-                        'service_id' => $pricingDataClone->getDomesticRangeWeight()->getService()->getId(),
-                        'shipment_type_id' => $pricingDataClone->getDomesticRangeWeight()->getShipmentType()->getId(),
-                        'zone_id' => $pricingDataClone->getDomesticRangeWeight()->getZone()->getId(),
-                        'customer_id' => $data['customer_id'],
-                    ],
-                        $user
-                    );
-                    $this->entityManager->beginTransaction();
+                if ($pricingDataClones) {
+                    foreach ($pricingDataClones as $pricingDataClone) {
+                        //Create New RangeWeight
+                        // $pricingDataClone->getDomesticRangeWeight();
+                        $rangeweight = $this->domesticRangeWeightManager->addRangeWeight([
+                            'name' => $pricingDataClone->getDomesticRangeWeight()->getName(),
+                            'name_en' => $pricingDataClone->getDomesticRangeWeight()->getNameEn(),
+                            'calculate_unit' => $pricingDataClone->getDomesticRangeWeight()->getCalculateUnit(),
+                            'round_up' => $pricingDataClone->getDomesticRangeWeight()->getRoundUp(),
+                            'unit' => $pricingDataClone->getDomesticRangeWeight()->getUnit(),
+                            'is_ras' => $pricingDataClone->getDomesticRangeWeight()->getIsRas(),
+                            'from' => $pricingDataClone->getDomesticRangeWeight()->getFrom(),
+                            'to' => $pricingDataClone->getDomesticRangeWeight()->getTo(),
+                            'status' => $pricingDataClone->getDomesticRangeWeight()->getStatus(),
+                            'description' => $pricingDataClone->getDomesticRangeWeight()->getDescription(),
+                            'description_en' => $pricingDataClone->getDomesticRangeWeight()->getDescriptionEn(),
+                            'is_private' => $data['is_private'],
+                            'carrier_id' => $pricingDataClone->getDomesticRangeWeight()->getCarrier()->getId(),
+                            'category_id' => $pricingDataClone->getDomesticRangeWeight()->getCategory()->getId(),
+                            'service_id' => $pricingDataClone->getDomesticRangeWeight()->getService()->getId(),
+                            'shipment_type_id' => $pricingDataClone->getDomesticRangeWeight()->getShipmentType()->getId(),
+                            'zone_id' => $pricingDataClone->getDomesticRangeWeight()->getZone()->getId(),
+                            'customer_id' => $data['customer_id'],
+                        ],
+                            $user
+                        );
+                        $this->entityManager->beginTransaction();
 
-                    $pricingData = new DomesticPricingData();
-                    $pricingData->setDomesticPricing($domesticPricing);
-                    $pricingData->setDomesticRangeWeight($rangeweight);
-                    $pricingData->setValue($pricingDataClone->getValue());
-                    $pricingData->setType($pricingDataClone->getType());
-                    $pricingData->setTypeValue($pricingDataClone->getTypeValue());
-                    $pricingData->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
-                    $pricingData->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
-                    $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
-                    $pricingData->setCreatedAt($addTime->format('Y-m-d H:i:s'));
-                    $pricingData->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+                        $pricingData = new DomesticPricingData();
+                        $pricingData->setDomesticPricing($domesticPricing);
+                        $pricingData->setDomesticRangeWeight($rangeweight);
+                        $pricingData->setValue($pricingDataClone->getValue());
+                        $pricingData->setType($pricingDataClone->getType());
+                        $pricingData->setTypeValue($pricingDataClone->getTypeValue());
+                        $pricingData->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+                        $pricingData->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+                        $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+                        $pricingData->setCreatedAt($addTime->format('Y-m-d H:i:s'));
+                        $pricingData->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
 
-                    $this->entityManager->persist($pricingData);
-                    // apply changes to database.
-                    $this->entityManager->flush();
-                    $this->entityManager->commit();
-                }
-
-            }
-
-            $pricingVasClones = $this->entityManager->getRepository(DomesticPricingVas::class)->findBy($conditions);
-            if ($pricingVasClones) {
-                foreach ($pricingVasClones as $pricingVasClone) {
-                    $this->entityManager->beginTransaction();
-                    $pricingVas = new DomesticPricingVas();
-                    $pricingVas->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
-                    $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
-                    $pricingVas->setCreatedAt($addTime->format('Y-m-d H:i:s'));
-                    $pricingVas->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
-                    $pricingVas->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
-                    $pricingVas->setDomesticPricing($domesticPricing);
-
-                    $pricingVas->setName($pricingVasClone->getName());
-                    $pricingVas->setNameEn($pricingVasClone->getNameEn());
-                    $pricingVas->setMin($pricingVasClone->getMin());
-                    $pricingVas->setFormula($pricingVasClone->getFormula());
-                    $pricingVas->setType($pricingVasClone->getType());
-
-                    $this->entityManager->persist($pricingVas);
-
-                    // apply changes to database.
-                    $this->entityManager->flush();
-                    $this->entityManager->commit();
-                    $pricingVasSpecClones = $this->entityManager->getRepository(DomesticPricingVasSpec::class)->findBy([
-                        'domestic_pricing_vas' => $pricingVasClone->getId(),
-                    ]);
-
-                    if ($pricingVasSpecClones) {
-                        foreach ($pricingVasSpecClones as $$pricingVasSpecClone) {
-                            $vasSpec = new DomesticPricingVasSpec();
-                            $vasSpec->setDomesticPricing($domesticPricing);
-                            $vasSpec->setDomesticPricingVas($pricingVas);
-                            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
-                            //Created
-                            $vasSpec->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
-                            $vasSpec->setCreatedAt($addTime->format('Y-m-d H:i:s'));
-
-                            $vasSpec->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
-                            $vasSpec->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
-
-                            $vasSpec->setFrom($pricingVasSpecClone->getFrom());
-                            $vasSpec->setTo($pricingVasSpecClone->getTo());
-                            $vasSpec->setValue($pricingVasSpecClone->getValue());
-                            $vasSpec->setIsDeleted(0);
-
-                            $this->entityManager->persist($vasSpec);
-
-                            // // apply changes to database.
-                            $this->entityManager->flush();
-                            $this->entityManager->commit();
-                        }
+                        $this->entityManager->persist($pricingData);
+                        // apply changes to database.
+                        $this->entityManager->flush();
+                        $this->entityManager->commit();
                     }
 
                 }
-            }
-        }
 
-        return $domesticPricing;
+                $pricingVasClones = $this->entityManager->getRepository(DomesticPricingVas::class)->findBy($conditions);
+                if ($pricingVasClones) {
+                    foreach ($pricingVasClones as $pricingVasClone) {
+                        $this->entityManager->beginTransaction();
+                        $pricingVas = new DomesticPricingVas();
+                        $pricingVas->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+                        $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+                        $pricingVas->setCreatedAt($addTime->format('Y-m-d H:i:s'));
+                        $pricingVas->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+                        $pricingVas->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+                        $pricingVas->setDomesticPricing($domesticPricing);
+
+                        $pricingVas->setName($pricingVasClone->getName());
+                        $pricingVas->setNameEn($pricingVasClone->getNameEn());
+                        $pricingVas->setMin($pricingVasClone->getMin());
+                        $pricingVas->setFormula($pricingVasClone->getFormula());
+                        $pricingVas->setType($pricingVasClone->getType());
+
+                        $this->entityManager->persist($pricingVas);
+
+                        // apply changes to database.
+                        $this->entityManager->flush();
+                        $this->entityManager->commit();
+                        $pricingVasSpecClones = $this->entityManager->getRepository(DomesticPricingVasSpec::class)->findBy([
+                            'domestic_pricing_vas' => $pricingVasClone->getId(),
+                        ]);
+
+                        if ($pricingVasSpecClones) {
+                            foreach ($pricingVasSpecClones as $$pricingVasSpecClone) {
+                                $vasSpec = new DomesticPricingVasSpec();
+                                $vasSpec->setDomesticPricing($domesticPricing);
+                                $vasSpec->setDomesticPricingVas($pricingVas);
+                                $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+                                //Created
+                                $vasSpec->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+                                $vasSpec->setCreatedAt($addTime->format('Y-m-d H:i:s'));
+
+                                $vasSpec->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+                                $vasSpec->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+
+                                $vasSpec->setFrom($pricingVasSpecClone->getFrom());
+                                $vasSpec->setTo($pricingVasSpecClone->getTo());
+                                $vasSpec->setValue($pricingVasSpecClone->getValue());
+                                $vasSpec->setIsDeleted(0);
+
+                                $this->entityManager->persist($vasSpec);
+
+                                // // apply changes to database.
+                                $this->entityManager->flush();
+                                $this->entityManager->commit();
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            return $domesticPricing;
 
         } catch (ORMException $e) {
             $this->entityManager->rollback();
@@ -260,7 +260,7 @@ class DomesticPricingManager
             $domesticPricing->setStatus($data['status']);
             $domesticPricing->setApprovalStatus($data['approval_status']);
             $domesticPricing->setTotalRas($data['total_ras']);
-            
+
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $domesticPricing->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
             $this->getReferenced($domesticPricing, $user, 'update', $data);
@@ -284,6 +284,28 @@ class DomesticPricingManager
 
         $this->entityManager->beginTransaction();
         try {
+            //Delete RangeWeight
+            $conditions = array(
+                'domestic_pricing' => $domesticPricing->getId(),
+                'is_deleted' => 0,
+            );
+
+            $pricingDataDeletes = $this->entityManager->getRepository(DomesticPricingData::class)->findBy($conditions);
+            if ($pricingDataDeletes) {
+                foreach ($pricingDataDeletes as $pricingDataDelete) {
+
+                    $this->domesticRangeWeightManager->deleteRangeWeight(
+                        $pricingDataDelete->getDomesticRangeWeight(),
+                        $user
+                    );
+                }
+            }
+
+            //Delete Vas And Vas Spec
+            $this->domesticPricingVasManager->deletedPricingVas($domesticPricing);
+            //Delete PricingData
+            $this->domesticPricingDataManager->deletePricingData($domesticPricing, $user);
+
             $domesticPricing->setIsDeleted(1);
             $domesticPricing->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
@@ -378,7 +400,8 @@ class DomesticPricingManager
                 }
             }
 
-            $domesticPricing->setName($name . '.' . $indexPricing);
+            // $domesticPricing->setName($name . '.' . $indexPricing);
+            $domesticPricing->setName($name);
         }
     }
 }
