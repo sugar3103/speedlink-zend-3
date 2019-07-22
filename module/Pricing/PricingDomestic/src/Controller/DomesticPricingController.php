@@ -81,6 +81,7 @@ class DomesticPricingController extends CoreController {
         'ace03c12-c387-5cdb-8845-5d1420f9b606' => 30, // Xưởng Gỗ Thanh Tâm
         '64b30e46-6f2d-e981-c14c-5d1ecd99472f' => 40, // ĐỒNG HỒ 888
         '5c356bc9-7744-b578-968d-5d233fc9fa6a' => 44, // Hàng Thùng RUBI
+        '2480a95a-61b3-9f4a-9568-5d283a10bc31' => 48, // CÔNG TY CỔ PHẦN PROSHIP
     ];
 
     public function __construct($entityManager, $domesticPricingManager) {
@@ -299,13 +300,15 @@ class DomesticPricingController extends CoreController {
         $serviceId = $shipmentType->getService()->getId();
         $categoryId = $shipmentType->getCategory()->getId();
 
+        $volWeight = 0;
+        $conWeight = $dataList['weight'];
         if (!empty($dataList['weight']) && !empty($dataList['length']) && !empty($dataList['height']) && !empty($dataList['width'])) {
             $volWeight = ($dataList['width'] * $dataList['length'] * $dataList['height']) / $shipmentType->getVolumetricNumber();
             $conWeight = $dataList['weight'];
-            if ($volWeight > $dataList['weight']) {
-                $dataList['weight'] = $volWeight;
-                $conWeight = $volWeight;
-            }
+        }
+        if ($volWeight > $dataList['weight']) {
+            $dataList['weight'] = $volWeight;
+            $conWeight = $volWeight;
         }
 
         // Get City
@@ -515,8 +518,8 @@ class DomesticPricingController extends CoreController {
             'fee_pickup_ras' => $feePickUp,
             'type_bill' => $typeBill,
             'type_value' => $typeValue,
-            'con_weight' => !empty($conWeight) ? $conWeight : 0,
-            'vol_weight' => !empty($volWeight) ? $volWeight : 0,
+            'con_weight' => $conWeight,
+            'vol_weight' => $volWeight,
         ];
     }
     #endregion
