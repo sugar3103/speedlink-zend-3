@@ -304,6 +304,8 @@ class DomesticPricingController extends CoreController {
         }
 
         // Get City
+        if (empty($dataList['pickupCity']) || empty($dataList['deliveryCity']))
+            return ['error' => true, 'message' => 'Address incorrect'];
         $whereMerge = array_merge($where, ['name' => $dataList['pickupCity']]);
         $pickupCity = $this->entityManager->getRepository(City::class)->findOneBy($whereMerge);
         $whereMerge = array_merge($where, ['name' => $dataList['deliveryCity']]);
@@ -391,7 +393,7 @@ class DomesticPricingController extends CoreController {
         $wherePriceDetail['domestic_range_weight'] = $priceNormal[0]['id'];
         $priceDataNormal = $this->entityManager->getRepository(DomesticPricingData::class)->findOneBy($wherePriceDetail);
         if (empty($priceDataNormal))
-            return ['error' => true, 'message' => 'Pricing data not found'];
+            return ['error' => true, 'message' => 'Pricing not found'];
 
         // Calculate Price
         // Case Over
