@@ -73,7 +73,8 @@ class DomesticPricingController extends CoreController {
         '5c356bc9-7744-b578-968d-5d233fc9fa6a' => 44, // Hàng Thùng RUBI
         '2480a95a-61b3-9f4a-9568-5d283a10bc31' => 48, // CÔNG TY CỔ PHẦN PROSHIP
         'b95865ab-cfcf-ea27-3b1c-5d367a0bef92' => 56, // Chisu Shop
-        '6dec4604-86e8-9587-a0c3-5d3694734c4f' => 60, // RIO BOOK
+        '6dec4604-86e8-9587-a0c3-5d3694734c4f' => 64, // RIO BOOK
+        '98bf3ae9-d545-4ed3-9cd3-5d2ea3723d28' => 68, // TỔNG KHO QUẢNG CHÂU MAI HỨA
     ];
 
     public function __construct($entityManager, $domesticPricingManager) {
