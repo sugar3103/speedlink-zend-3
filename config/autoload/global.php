@@ -40,23 +40,23 @@ return [
     'session_storage' => ['type' => SessionArrayStorage::class],
     'ldap' => [
         'primary' => [
-            'host'                   => '192.168.0.103',
-            'port' => 389,
+            'host'                   => 'ldap.itlvn.com',
+            'port'                   => 389,
             'username'               => 'monitor@itl.com',
             'password'               => 'Itlus3r@2013',
             'bindRequiresDn'         => false,
             'accountDomainName'      => 'itl.com',
             'baseDn'                 => 'OU=Central Management,DC=itl,DC=com'
         ],
-        'secondary' => [
+        /*'secondary' => [
             'host'                   => '192.168.22.14',
-            'port' => 389,
+            'port'                   => 389,
             'username'               => 'mlc-itl\monitor',
             'password'               => 'Itlus3r@2013',
             'bindRequiresDn'         => false,
             'accountDomainName'      => 'mlc-itl.com',
             'baseDn'                 => 'OU=Users,DC=mlc-itl,DC=local'
-        ],
+        ],*/
     ],
     'default_timezone' => 'Asia/Ho_Chi_Minh',
 ];
