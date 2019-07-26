@@ -56,8 +56,8 @@ class List extends Component {
       }
     }
 
-    if (this.props.rangeWeight.paramSearch) {
-      Object.assign(params, { "query": this.props.rangeWeight.paramSearch })
+    if (this.props.pricing.paramSearch) {
+      Object.assign(params, { "query": this.props.pricing.paramSearch })
     };
     this.props.getPricingDomesticList(params);
 
@@ -75,8 +75,8 @@ class List extends Component {
       }
     }
 
-    if (this.props.rangeWeight.paramSearch) {
-      Object.assign(params, { "query": this.props.rangeWeight.paramSearch })
+    if (this.props.pricing.paramSearch) {
+      Object.assign(params, { "query": this.props.pricing.paramSearch })
     };
     this.props.getPricingDomesticList(params);
 
