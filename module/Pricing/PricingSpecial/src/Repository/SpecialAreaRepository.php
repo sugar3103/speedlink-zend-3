@@ -33,12 +33,15 @@ class SpecialAreaRepository extends EntityRepository
             $queryBuilder->select("
                 sc.id,
                 sc.name,
+                c.id as customer_id,
+                c.name as customer_name,
+                c.name_en as customer_name_en,
                 sc.created_at,
                 sc.updated_at,
                 cr.username as created_by,
                 CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
-                CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_upscted,
-                up.username as upscted_by
+                CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated,
+                up.username as updated_by
             ")->andWhere("sc.is_deleted = 0")
                 ->groupBy('sc.id');
 
@@ -72,7 +75,11 @@ class SpecialAreaRepository extends EntityRepository
                 'alias' => 'sc.name',
                 'operator' => 'contains',
             ],
-           
+            "customer" => [
+                'alias' => 'c.id',
+                'operator' => 'eq',
+            ],
+
             'created_at' => [
                 'alias' => 'sc.created_at',
                 'operator' => 'contains',
@@ -81,6 +88,7 @@ class SpecialAreaRepository extends EntityRepository
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(SpecialArea::class, 'sc')
+            ->leftJoin('sc.customer', 'c')
             ->leftJoin('sc.created_by', 'cr')
             ->leftJoin('sc.updated_by', 'up');
 

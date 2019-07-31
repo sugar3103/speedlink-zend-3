@@ -38,8 +38,8 @@ class SpecialZoneRepository extends EntityRepository
                 sz.updated_at,
                 cr.username as created_by,
                 CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
-                CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_upscted,
-                up.username as upscted_by
+                CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated,
+                up.username as updated_by
             ")->andWhere("sz.is_deleted = 0")
                 ->groupBy('sz.id');
 
