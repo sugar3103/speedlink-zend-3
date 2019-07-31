@@ -54,7 +54,7 @@ class PricingSpecialVasRepository extends EntityRepository
                 cr.username as created_by,
                 CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
                 CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated,
-                up.username as updpted_by
+                up.username as updated_by
             ")->andWhere("spv.is_deleted = 0")
                 ->andWhere("dp.id = " . $pricing_id)
                 ->groupBy('spv.id');
