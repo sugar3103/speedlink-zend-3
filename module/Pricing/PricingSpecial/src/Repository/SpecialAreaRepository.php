@@ -74,7 +74,7 @@ class SpecialAreaRepository extends EntityRepository
                 'alias' => 'sc.name',
                 'operator' => 'contains',
             ],
-            "customer" => [
+            "customer_id" => [
                 'alias' => 'c.id',
                 'operator' => 'eq',
             ],

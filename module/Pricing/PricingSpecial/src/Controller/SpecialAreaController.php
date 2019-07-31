@@ -36,7 +36,7 @@ class SpecialAreaController extends CoreController {
     {
         if ($this->getRequest()->isPost()) {
             // get the filters
-            $fieldsMap = [0 => 'id', 1 => 'name', 2 => 'name_en', 3 => 'created_at'];
+            $fieldsMap = [0 => 'id', 1 => 'name', 2 => 'customer_id', 3 => 'created_at'];
 
             list($start,$limit,$sortField,$sortDirection,$filters, $fields) = $this->getRequestData($fieldsMap);          
             
