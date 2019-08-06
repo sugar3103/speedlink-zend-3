@@ -44,7 +44,9 @@ class SpecialZoneRepository extends EntityRepository
                 tw.name as to_ward_name,
                 sa.id as special_area_id,
                 sa.name as special_area_name,
-
+                ct.id as customer_id,
+                ct.name as customer_name,
+                ct.customer_no as customer_no,
                 sz.created_at,
                 sz.updated_at,
                 cr.username as created_by,
@@ -97,9 +99,10 @@ class SpecialZoneRepository extends EntityRepository
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(SpecialZone::class, 'sz')
+            ->leftJoin('sz.customer','ct')
             ->leftJoin('sz.from_city', 'fc')
             ->leftJoin('sz.to_city', 'tc')
-            ->leftJoin('sz.to_ditrist', 'td')
+            ->leftJoin('sz.to_district', 'td')
             ->leftJoin('sz.to_ward', 'tw')
             ->leftJoin('sz.special_area','sa')
             ->leftJoin('sz.created_by', 'cr')
