@@ -73,7 +73,7 @@ $router = [
                 'defaults' => [
                     'controller' => Controller\SpecialZoneController::class,
                     'action' => 'index',
-                    'isAuthorizationRequired' => true
+                    'isAuthorizationRequired' => false
                 ]               
             ]
         ],

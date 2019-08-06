@@ -13,6 +13,10 @@ class SpecialZoneExistsValidator extends AbstractValidator {
     protected $options = [
         'entityManager' => null,
         'specialZone' => null,
+        'fromCity' => null,
+        'toCity' => null,
+        'toDistrict' => null,
+        'toWard' => null,
         'language' => null
     ];
 
@@ -64,7 +68,8 @@ class SpecialZoneExistsValidator extends AbstractValidator {
             $specialZone = $entityManager->getRepository(SpecialZone::class)->findOneBy(['name' => $value, 'is_deleted' => 0]);
         } else if($this->options['language'] === 'en') {
             $specialZone = $entityManager->getRepository(SpecialZone::class)->findOneBy(array('name_en' => $value, 'is_deleted' => 0));       
-        }
+        }         
+        
 
         //English
         if ($this->options['specialZone'] == null)

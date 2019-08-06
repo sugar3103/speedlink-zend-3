@@ -3,9 +3,12 @@ namespace PricingSpecial\Controller;
 
 use Core\Controller\CoreController;
 use Doctrine\ORM\EntityManager;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use PricingSpecial\Entity\SpecialZone;
 use PricingSpecial\Form\ZoneForm;
 use PricingSpecial\Service\SpecialZoneManager;
+use Zend\Cache\Storage\StorageInterface;
 
 class SpecialZoneController extends CoreController
 {
@@ -22,16 +25,22 @@ class SpecialZoneController extends CoreController
     protected $specialZoneManager;
 
     /**
+     * @var StorageInterface
+     */
+    protected $cache;
+
+    /**
      * CustomerController constructor.
      * @param $entityManager
      * @param $specialZoneManager
      */
 
-    public function __construct($entityManager, $specialZoneManager)
+    public function __construct($entityManager, $specialZoneManager, $cache)
     {
         parent::__construct($entityManager);
         $this->entityManager = $entityManager;
         $this->specialZoneManager = $specialZoneManager;
+        $this->cache = $cache;
     }
 
     public function indexAction()
@@ -146,5 +155,51 @@ class SpecialZoneController extends CoreController
             }
         }
         return $this->createResponse();
+    }
+
+    public function importAction()
+    {
+        //Tạo mảng chứa dữ liệu
+        // $this->cache->removeItem('specialZone');
+        
+        $data = $this->cache->getItem('specialZone', $result);        
+        if (!$result) {
+            // $this->cache->removeItem('rbac_container');
+            $file = __DIR__ . "/data.xlsx";
+            $objFile = IOFactory::identify($file);
+            $objData = IOFactory::createReader($objFile);
+
+            $objData->setReadDataOnly(true);
+            // Load dữ liệu sang dạng đối tượng
+            $objPHPExcel = $objData->load($file);
+
+            //Chọn trang cần truy xuất
+            $sheet = $objPHPExcel->setActiveSheetIndex(0);
+
+            //Lấy ra số dòng cuối cùng
+            $Totalrow = $sheet->getHighestRow();
+            //Lấy ra tên cột cuối cùng
+            $LastColumn = $sheet->getHighestColumn();
+
+            //Chuyển đổi tên cột đó về vị trí thứ, VD: C là 3,D là 4
+            $TotalCol = Coordinate::columnIndexFromString($LastColumn);
+            
+            //Tiến hành lặp qua từng ô dữ liệu
+            //----Lặp dòng, Vì dòng đầu là tiêu đề cột nên chúng ta sẽ lặp giá trị từ dòng 2
+            for ($i = 1; $i <= $Totalrow; $i++) {
+                //----Lặp cột
+                for ($j = 1; $j <= $TotalCol; $j++) {
+                    // Tiến hành lấy giá trị của từng ô đổ vào mảng
+                    $data[$i - 1][$j - 1] = $sheet->getCellByColumnAndRow($j, $i)->getValue();
+                }
+            }
+
+            // Save Data to cache.
+            $this->cache->setItem('specialZone', $data);
+        }
+
+        echo "<pre>";
+        var_dump("Có");
+        die;
     }
 }
