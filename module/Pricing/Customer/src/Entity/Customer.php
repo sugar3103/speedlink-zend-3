@@ -3,7 +3,7 @@ namespace Customer\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
- /**
+/**
  * Customer
  *
  * @ORM\Table(name="customer", uniqueConstraints={@ORM\UniqueConstraint(name="unique_code", columns={"code"})})
@@ -19,6 +19,27 @@ class Customer
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="customer_no", type="string", length=50, nullable=false)
+     */
+    private $customer_no;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tax_no", type="string", length=50, nullable=false)
+     */
+    private $tax_no;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ref_id", type="string", length=50, nullable=false)
+     */
+    private $ref_id;
 
     /**
      * @var string
@@ -69,7 +90,6 @@ class Customer
      */
     private $is_deleted = '0';
 
-
     /**
      * @return int
      */
@@ -103,6 +123,54 @@ class Customer
     }
 
     /**
+     * @return string
+     */
+    public function getCustomerNo()
+    {
+        return $this->customer_no;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setCustomerNo($customer_no)
+    {
+        $this->customer_no = $customer_no;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTaxNo()
+    {
+        return $this->tax_no;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setTaxNo($tax_no)
+    {
+        $this->tax_no = $tax_no;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRefId()
+    {
+        return $this->ref_id;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setRefId($ref_id)
+    {
+        $this->ref_id = $ref_id;
+    }
+
+    /**
      * @return bool
      */
     public function isStatus()
@@ -118,7 +186,6 @@ class Customer
         $this->status = $status;
     }
 
-  
     /**
      * @return int
      */
