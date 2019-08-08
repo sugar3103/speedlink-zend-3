@@ -229,6 +229,7 @@ class SpecialZoneController extends CoreController
             }
             
             $dataResult = array_slice($data, $start, $lenght);
+            
             $customers = [];
             $area = [];
             $fromCity = [];
@@ -294,7 +295,7 @@ class SpecialZoneController extends CoreController
             for ($i = 0; $i < count($dataResult); $i++) {
                 $error = false;
                 $value = $dataResult[$i];
-                $value['id'] = $i;       
+                $value['id'] = $i + $start;       
                 $error = array(
                     'customer' => 'SPECIAL_IMPORT_CUSTOMER_NOT_EXIT',
                     'area' => 'SPECIAL_IMPORT_AREA_NOT_EXIT',
@@ -373,9 +374,15 @@ class SpecialZoneController extends CoreController
                     $value['error'] = $error;
                 }
 
-                $dataResult[$i] = $value;                
-               
+                $dataResult[$i] = $value;
+                $data[$i]['id_customer'] = $idCustomer;
+                $data[$i]['id_special_area'] = $idArea;
+                $data[$i]['id_from_city'] = $idFromCity;
+                $data[$i]['id_to_city'] = $idToCity;
+                $data[$i]['id_to_district'] = $idToDistrict;
+                $data[$i]['id_to_ward'] = $idToWard;
             }
+            
 
             $this->apiResponse = array(
                 'data' => $dataResult,
@@ -397,11 +404,8 @@ class SpecialZoneController extends CoreController
                         unset($data[0]);
                     }
                 }
-                for ($i = 0; $i < count($data); $i++) { 
-                    if(isset($data[$i])) {
-                        $this->specialZoneManager->addZoneImport($data[$i],$this->tokenPayload);
-                    }                    
-                }
+                $this->specialZoneManager->addZoneImport($data,$this->tokenPayload);
+                
                 $this->cache->removeItem('specialZone');
                 $this->apiResponse['message'] = "SPECIAL_IMPORTED";
             } else {
