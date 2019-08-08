@@ -28,6 +28,14 @@ import pricingDomesticCustomer from './pricing-domestic/customer/saga';
 import pricingDomesticApprovedBy from './pricing-domestic/approved-by/saga';
 import pricingDomesticSaleman from './pricing-domestic/saleman/saga';
 
+import pricingSpecialArea from './pricing-special/area/saga';
+import pricingSpecialZone from './pricing-special/zone/saga';
+import pricingSpecialCustomer from './pricing-special/customer/saga';
+import pricingSpecialCity from './pricing-special/city/saga';
+import pricingSpecialDistrict from './pricing-special/district/saga';
+import pricingSpecialWard from './pricing-special/ward/saga';
+import pricingSpecialImport from './pricing-special/import/saga';
+
 import pricingInternational from './pricing-international/pricing/saga';
 import pricingInternationalZone from './pricing-international/zone/saga';
 import pricingInternationalRangeWeight from './pricing-international/range-weight/saga';
@@ -72,6 +80,14 @@ export default function* rootSaga() {
     pricingDomesticCustomer(),
     pricingDomesticApprovedBy(),
     pricingDomesticSaleman(),
+
+    pricingSpecialArea(),
+    pricingSpecialCustomer(),
+    pricingSpecialZone(),
+    pricingSpecialCity(),
+    pricingSpecialDistrict(),
+    pricingSpecialWard(),
+    pricingSpecialImport(),
 
     pricingInternational(),
     pricingInternationalZone(),

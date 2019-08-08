@@ -13,6 +13,7 @@ import shipment_type from './master-data/service-shipment/shipmnet-type/reducer'
 import setting from './system/setting/reducer';
 import system from './system/reducer';
 import pricingDomestic from './pricing-domestic/reducer';
+import pricingSpecial from './pricing-special/reducer';
 import pricingInternational from './pricing-international/reducer';
 import { LOGOUT_USER } from '../constants/actionTypes';
 
@@ -31,6 +32,7 @@ const reducers = combineReducers({
   branch,
   system,
   pricingDomestic,
+  pricingSpecial,
   pricingInternational
 });
 

@@ -137,31 +137,63 @@ export default {
       ]
     },
     {
-      id: 'pricing_international',
-      title: 'menu.pricing_international',
-      route: '/pricing-international',
+      id: 'pricing_special',
+      title: 'menu.pricing_special',
+      route: '/pricing-special',
       icon: 'icon-pricing-table',
       childrens: [
         {
-          id: 'pricing',
-          title: 'menu.pricing_index_international',
-          route: '/pricing-international/pricing',
+          id: 'pricing_index_special',
+          title: 'menu.pricing_index_special',
+          route: '/pricing-special/pricing',
           icon: 'lnr lnr-map'
         },
         {
-          id: 'range_weight',
-          title: 'menu.range_weight_international',
-          route: '/pricing-international/range-weight',
+          id: 'area_special',
+          title: 'menu.area_special',
+          route: '/pricing-special/area',
+          icon: 'lnr lnr-map'
+        },
+        {
+          id: 'range_weight_special',
+          title: 'menu.range_weight_special',
+          route: '/pricing-special/range-weight',
           icon: 'lnr lnr-license'
         },
         {
-          id: 'zone_code',
-          title: 'menu.zone_international',
-          route: '/pricing-international/zone',
+          id: 'zone_special',
+          title: 'menu.zone_special',
+          route: '/pricing-special/zone',
           icon: 'lnr lnr-map'
         }
       ]
     },
+    // {
+    //   id: 'pricing_international',
+    //   title: 'menu.pricing_international',
+    //   route: '/pricing-international',
+    //   icon: 'icon-pricing-table',
+    //   childrens: [
+    //     {
+    //       id: 'pricing',
+    //       title: 'menu.pricing_index_international',
+    //       route: '/pricing-international/pricing',
+    //       icon: 'lnr lnr-map'
+    //     },
+    //     {
+    //       id: 'range_weight',
+    //       title: 'menu.range_weight_international',
+    //       route: '/pricing-international/range-weight',
+    //       icon: 'lnr lnr-license'
+    //     },
+    //     {
+    //       id: 'zone_code',
+    //       title: 'menu.zone_international',
+    //       route: '/pricing-international/zone',
+    //       icon: 'lnr lnr-map'
+    //     }
+    //   ]
+    // },
     {
       id: 'system',
       title: 'menu.system',
