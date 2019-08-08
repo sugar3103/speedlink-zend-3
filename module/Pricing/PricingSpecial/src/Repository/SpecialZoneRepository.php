@@ -13,6 +13,35 @@ use PricingSpecial\Entity\SpecialZone;
  */
 class SpecialZoneRepository extends EntityRepository
 {
+    public function checkExit($data)
+    {
+        $entityManager = $this->getEntityManager();
+        try {
+            $queryBuilder = $entityManager->createQueryBuilder();
+            $queryBuilder->select('sz.id')->from(SpecialZone::class, 'sz')
+                ->where('sz.name = :name 
+                    AND sz.name_en = :name_en 
+                    AND sz.from_city = :from_city_id
+                    AND sz.to_city = :to_city_id
+                    AND sz.to_district = :to_district_id
+                    AND sz.to_ward = :to_ward_id
+                    AND sz.customer = :customer_id
+                    AND sz.special_area = :special_area_id
+                    ')
+                ->setParameter("name", $data['name'])
+                ->setParameter("name_en", $data['name_en'])
+                ->setParameter("from_city_id", $data['from_city'])
+                ->setParameter("to_city_id", $data['to_city'])
+                ->setParameter("to_district_id", $data['to_district'])
+                ->setParameter("to_ward_id", $data['to_ward'])
+                ->setParameter("customer_id", $data['customer'])
+                ->setParameter("special_area_id", $data['special_area']);
+
+        } catch (QueryException $e) {
+            return [];
+        }
+        return $queryBuilder->getQuery()->execute();
+    }
     /**
      * Get list user by condition
      *

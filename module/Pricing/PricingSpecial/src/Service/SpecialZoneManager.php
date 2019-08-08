@@ -204,4 +204,39 @@ class SpecialZoneManager
         $specialZone->setToWard($toWard);
 
     }
+
+    /**
+     * Add Zone Import
+     */
+    public function addZoneImport($data,$user) {
+        $this->entityManager->beginTransaction();
+        try {
+            $specialZone = new SpecialZone();
+            $specialZone->setName($data['name']);
+            $specialZone->setNameEn($data['name_en']);
+            $specialZone->setCustomer($this->entityManager->getRepository(Customer::class)->findOneBy(['customer_no' => $data['account_no']]));
+            $specialZone->setSpecialArea($this->entityManager->getRepository(SpecialArea::class)->findOneBy(['name' => $data['area_name']]));
+            $specialZone->setFromCity($this->entityManager->getRepository(City::class)->findOneBy(['name' => $data['from_city']]));
+            $specialZone->setToCity($this->entityManager->getRepository(City::class)->findOneBy(['name' => $data['to_city']]));
+            $specialZone->setToDistrict($this->entityManager->getRepository(District::class)->findOneBy(['name' => $data['to_district']]));
+            $specialZone->setToWard($this->entityManager->getRepository(Ward::class)->findOneBy(['name' => $data['to_ward']]));
+    
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $specialZone->setCreatedAt($addTime->format('Y-m-d H:i:s'));
+            $specialZone->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+            $specialZone->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+            $specialZone->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+
+            $this->entityManager->persist($specialZone);
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+
+            return $specialZone;
+
+        } catch (ORMException $e) {
+            $this->entityManager->rollback();
+            return false;
+        }
+    }
 }

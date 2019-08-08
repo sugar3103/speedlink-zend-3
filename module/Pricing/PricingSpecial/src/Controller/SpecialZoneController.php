@@ -190,6 +190,7 @@ class SpecialZoneController extends CoreController
             }
 
             $data = $this->cache->getItem('specialZone', $result);
+            
             if (!$result) {
                 // $this->cache->removeItem('rbac_container');
                 $file = __DIR__ . "/data.xlsx";
@@ -226,47 +227,145 @@ class SpecialZoneController extends CoreController
             } else {
                 $LastColumn = count($data);
             }
-
+            
             $dataResult = array_slice($data, $start, $lenght);
+            $customers = [];
+            $area = [];
+            $fromCity = [];
+            $toCity = [];
+            $toDistrict = [];
+            $toWard = [];
 
+            for ($i=0; $i < count($dataResult); $i++) {                 
+                if(!in_array($dataResult[$i]['account_no'], $customers)) {
+                    $customers[] = $data[$i]['account_no'];
+                }
+
+                if(!in_array($dataResult[$i]['area_name'], $area)) {
+                    $area[] = $dataResult[$i]['area_name'];
+                }
+
+                if(!in_array($dataResult[$i]['from_city'], $fromCity)) {
+                    $fromCity[] = $data[$i]['from_city'];
+                }
+
+                if(!in_array($dataResult[$i]['to_city'], $toCity)) {
+                    $toCity[] = $dataResult[$i]['to_city'];
+                }
+
+                if(!in_array($dataResult[$i]['to_district'], $toDistrict)) {
+                    $toDistrict[] = $dataResult[$i]['to_district'];
+                }
+
+                if(!in_array($dataResult[$i]['to_ward'], $toWard)) {
+                    $toWard[] = $dataResult[$i]['to_ward'];
+                }
+            }
+            
+            //Get Custom
+            $customers = $this->entityManager->getRepository(Customer::class)->findBy([
+                'customer_no' => $customers
+            ]);
+            
+            $areas = $this->entityManager->getRepository(SpecialArea::class)->findBy([
+                'name' => $area, 
+                'is_deleted' => 0
+            ]);
+
+            
+            $fromCity = $this->entityManager->getRepository(City::class)->findBy([
+                'name' => $fromCity, 
+                'is_deleted' => 0
+            ]);
+            $toCity = $this->entityManager->getRepository(City::class)->findBy([
+                'name' => $toCity,
+                'is_deleted' => 0
+            ]);
+
+            $toDistrict = $this->entityManager->getRepository(District::class)->findBy([
+                'name' => $toDistrict,
+                'is_deleted' => 0
+            ]);
+            $toWard = $this->entityManager->getRepository(Ward::class)->findBy([
+                'name' => $toWard,
+                'is_deleted' => 0
+            ]);
+            
             for ($i = 0; $i < count($dataResult); $i++) {
                 $error = false;
                 $value = $dataResult[$i];
-                $value['id'] = $i;
-
-                $customer = $this->entityManager->getRepository(Customer::class)->findOneBy(array('customer_no' => $value['account_no'], 'is_deleted' => 0));
-                if (!$customer) {
-                    $error['customer'] = 'SPECIAL_IMPORT_CUSTOMER_NOT_EXIT';
+                $value['id'] = $i;       
+                $error = array(
+                    'customer' => 'SPECIAL_IMPORT_CUSTOMER_NOT_EXIT',
+                    'area' => 'SPECIAL_IMPORT_AREA_NOT_EXIT',
+                    'fromCity' => 'SPECIAL_IMPORT_FROM_CITY_NOT_EXIT',
+                    'toCity' => 'SPECIAL_IMPORT_TO_CITY_NOT_EXIT',
+                    'toDistrict' => 'SPECIAL_IMPORT_TO_DISTRICT_NOT_EXIT',
+                    'toWard' => 'SPECIAL_IMPORT_TO_WARD_NOT_EXIT'
+                );
+                $idCustomer = 0;
+                foreach ($customers as $customer) {
+                    if($customer->getCustomerNo() === strval($value['account_no'])) {
+                        $idCustomer = $customer->getId();
+                        unset($error['customer']);
+                        break;
+                    }
+                }
+                $idArea = 0;
+                foreach ($areas as $area) {
+                    if($area->getName() === $value['area_name']) {
+                        $idArea = $area->getId();
+                        unset($error['area']);
+                        break;
+                    }
                 }
 
-                $area = $this->entityManager->getRepository(SpecialArea::class)->findOneBy(array('name' => $value['area_name'], 'is_deleted' => 0));
-                if (!$area) {
-                    $error['area'] = 'SPECIAL_IMPORT_AREA_NOT_EXIT';
+                $idFromCity = 0;
+                foreach ($fromCity as $frCity) {
+                    if($frCity->getName() === $value['from_city']) {
+                        $idFromCity = $frCity->getId();
+                        unset($error['fromCity']);
+                        break;
+                    }
+                }
+                $idToCity = 0;
+                foreach ($toCity as $tCity) {
+                    if($tCity->getName() === $value['to_city']) {
+                        $idToCity = $tCity->getId();
+                        unset($error['toCity']);
+                        break;
+                    }
+                }
+                $idToDistrict = 0;
+                foreach ($toDistrict as $tDistrict) {
+                    if($tDistrict->getName() === $value['to_district']) {
+                        $idToDistrict = $tDistrict->getId();
+                        unset($error['toDistrict']);
+                        break;
+                    }
+                }
+                $idToWard = 0;
+                foreach ($toWard as $tWard) {
+                    if($tWard->getName() === $value['to_ward']) {
+                        $idToWard = $tWard->getId();
+                        unset($error['toWard']);
+                        break;
+                    }
                 }
 
-                $fromCity = $this->entityManager->getRepository(City::class)->findOneBy(['name' => $value['from_city'], 'is_deleted' => 0]);
-                if (!$fromCity) {$error['fromCity'] = 'SPECIAL_IMPORT_FROM_CITY_NOT_EXIT';}
-                $toCity = $this->entityManager->getRepository(City::class)->findOneBy(['name' => $value['to_city'], 'is_deleted' => 0]);
-                if (!$toCity) {$error['toCity'] = 'SPECIAL_IMPORT_TO_CITY_NOT_EXIT';}
-                $toDistrict = $this->entityManager->getRepository(District::class)->findOneBy(['name' => $value['to_district'], 'is_deleted' => 0]);
-                if (!$toDistrict) {$error['toDistrict'] = 'SPECIAL_IMPORT_TO_DISTRICT_NOT_EXIT';}
-                $toWard = $this->entityManager->getRepository(Ward::class)->findOneBy(['name' => $value['to_ward'], 'is_deleted' => 0]);
-                if (!$toWard) {$error['toWard'] = 'SPECIAL_IMPORT_TO_WARD_NOT_EXIT';}
-
-                //Check Exit
                 if (!$error) {
-                    $specialZone = $this->entityManager->getRepository(SpecialZone::class)->findOneBy([
+                    $specialZone = $this->entityManager->getRepository(SpecialZone::class)->checkExit([
                         'name' => $value['name'],
-                        'name' => $value['name_en'],
-                        'customer' => $customer,
-                        'special_area' => $area,
-                        'from_city' => $fromCity,
-                        'to_city' => $toCity,
-                        'to_district' => $toDistrict,
-                        'to_ward' => $toWard,
+                        'name_en' => $value['name_en'],
+                        'customer' => $idCustomer,
+                        'special_area' => $idArea,
+                        'from_city' => $idFromCity,
+                        'to_city' => $idToCity,
+                        'to_district' => $idToDistrict,
+                        'to_ward' => $idToWard,
                         'is_deleted' => 0,
                     ]);
-
+                    
                     if ($specialZone) {
                         $value['error'] = 'SPECIAL_IMPORT_ZONE_EXIT';
                     }
@@ -274,7 +373,8 @@ class SpecialZoneController extends CoreController
                     $value['error'] = $error;
                 }
 
-                $dataResult[$i] = $value;   
+                $dataResult[$i] = $value;                
+               
             }
 
             $this->apiResponse = array(
@@ -292,7 +392,18 @@ class SpecialZoneController extends CoreController
             $data = $this->cache->getItem('specialZone', $result);
             if($result) {
                 $dataPost = $this->getRequestData();
-
+                if(isset($dataPost['ids']) && is_array($dataPost['ids'])) {
+                    foreach ($dataPost['ids'] as $id) {
+                        unset($data[0]);
+                    }
+                }
+                for ($i = 0; $i < count($data); $i++) { 
+                    if(isset($data[$i])) {
+                        $this->specialZoneManager->addZoneImport($data[$i],$this->tokenPayload);
+                    }                    
+                }
+                $this->cache->removeItem('specialZone');
+                $this->apiResponse['message'] = "SPECIAL_IMPORTED";
             } else {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = "SPECIAL_IMPORT_NONE";
