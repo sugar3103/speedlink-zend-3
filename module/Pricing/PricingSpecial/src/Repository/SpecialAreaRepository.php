@@ -34,8 +34,7 @@ class SpecialAreaRepository extends EntityRepository
                 sc.id,
                 sc.name,
                 c.id as customer_id,
-                c.name as customer_name,
-                c.name_en as customer_name_en,
+                c.name as customer_name,                
                 sc.created_at,
                 sc.updated_at,
                 cr.username as created_by,
@@ -75,7 +74,7 @@ class SpecialAreaRepository extends EntityRepository
                 'alias' => 'sc.name',
                 'operator' => 'contains',
             ],
-            "customer" => [
+            "customer_id" => [
                 'alias' => 'c.id',
                 'operator' => 'eq',
             ],

@@ -19,8 +19,9 @@ class SpecialZoneControllerFactory implements FactoryInterface {
     {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
         $domesticZoneManager = $container->get(SpecialZoneManager::class);
+        $cache = $container->get(FilesystemCache::class);
 
         // instantiate the controller and inject dependencies.
-        return new SpecialZoneController($entityManager,$domesticZoneManager);
+        return new SpecialZoneController($entityManager,$domesticZoneManager,$cache);
     }
 }

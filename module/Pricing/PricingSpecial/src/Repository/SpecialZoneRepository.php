@@ -13,6 +13,35 @@ use PricingSpecial\Entity\SpecialZone;
  */
 class SpecialZoneRepository extends EntityRepository
 {
+    public function checkExit($data)
+    {
+        $entityManager = $this->getEntityManager();
+        try {
+            $queryBuilder = $entityManager->createQueryBuilder();
+            $queryBuilder->select('sz.id')->from(SpecialZone::class, 'sz')
+                ->where('sz.name = :name 
+                    AND sz.name_en = :name_en 
+                    AND sz.from_city = :from_city_id
+                    AND sz.to_city = :to_city_id
+                    AND sz.to_district = :to_district_id
+                    AND sz.to_ward = :to_ward_id
+                    AND sz.customer = :customer_id
+                    AND sz.special_area = :special_area_id
+                    ')
+                ->setParameter("name", $data['name'])
+                ->setParameter("name_en", $data['name_en'])
+                ->setParameter("from_city_id", $data['from_city'])
+                ->setParameter("to_city_id", $data['to_city'])
+                ->setParameter("to_district_id", $data['to_district'])
+                ->setParameter("to_ward_id", $data['to_ward'])
+                ->setParameter("customer_id", $data['customer'])
+                ->setParameter("special_area_id", $data['special_area']);
+
+        } catch (QueryException $e) {
+            return [];
+        }
+        return $queryBuilder->getQuery()->execute();
+    }
     /**
      * Get list user by condition
      *
@@ -34,6 +63,19 @@ class SpecialZoneRepository extends EntityRepository
                 sz.id,
                 sz.name,
                 sz.name_en,
+                fc.id as from_city_id,
+                fc.name as from_city_name,
+                tc.id as to_city_id,
+                tc.name as to_city_name,
+                td.id as to_ditrict_id,
+                td.name as to_district_name,                
+                tw.id as to_ward_id,
+                tw.name as to_ward_name,
+                sa.id as special_area_id,
+                sa.name as special_area_name,
+                ct.id as customer_id,
+                ct.name as customer_name,
+                ct.customer_no as customer_no,
                 sz.created_at,
                 sz.updated_at,
                 cr.username as created_by,
@@ -86,6 +128,12 @@ class SpecialZoneRepository extends EntityRepository
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(SpecialZone::class, 'sz')
+            ->leftJoin('sz.customer','ct')
+            ->leftJoin('sz.from_city', 'fc')
+            ->leftJoin('sz.to_city', 'tc')
+            ->leftJoin('sz.to_district', 'td')
+            ->leftJoin('sz.to_ward', 'tw')
+            ->leftJoin('sz.special_area','sa')
             ->leftJoin('sz.created_by', 'cr')
             ->leftJoin('sz.updated_by', 'up');
 
