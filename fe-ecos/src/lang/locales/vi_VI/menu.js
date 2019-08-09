@@ -1,5 +1,6 @@
 module.exports = {
   //menu
+  'menu.import': 'Nhập',
   'menu.add': 'Thêm',
   'menu.edit': 'Sửa',
   'menu.view': 'Xem',

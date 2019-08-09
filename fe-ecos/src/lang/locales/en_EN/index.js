@@ -8,6 +8,7 @@ import * as shipment from './shipment';
 import * as status from './status';
 import * as setting from './setting';
 import * as pricing_domestic from './pricing_domestic';
+import * as pricing_special from './pricing_special';
 import * as pricing_international from './pricing_international';
 let enMessages = {
     address,
@@ -20,6 +21,7 @@ let enMessages = {
     status,
     setting,
     pricing_domestic,
+    pricing_special,
     pricing_international
 };
 

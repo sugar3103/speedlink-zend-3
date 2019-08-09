@@ -1,0 +1,52 @@
+module.exports = {
+  'pri_special.import': 'Import',
+  'pri_special.active': 'Active',
+  'pri_special.inactive': 'Inactive',
+  'pri_special.yes': 'Yes',
+  'pri_special.no': 'No',
+  'pri_special.on': 'On',
+  'pri_special.off': 'Off',
+  'pri_special.name': 'Name',
+  'pri_special.name-en': 'English Name',
+  'pri_special.add-success': 'Add success',
+  'pri_special.update-success': 'Update success',
+  'pri_special.delete-success': 'Delete success',
+
+  /* AREA SPECIAL */
+  'pri_special.area-title': 'Area Special',
+  'pri_special.add-new-area': 'Create New Area',
+  'pri_special.update-area': 'Update Area',
+  'pri_special.delete-area': 'Delete Area',
+  'pri_special.customer': 'Customer',
+
+  /* ZONE SPECIAL */
+  'pri_special.zone-title': 'Zone Special',
+  'pri_special.zone-import-title': 'Zone Import Special',
+  'pri_special.add-new-zone': 'Create New Zone',
+  'pri_special.update-zone': 'Update Zone',
+  'pri_special.delete-zone': 'Delete Zone',
+  'pri_special.area-name': 'Area Name',
+  'pri_special.zone-name': 'Zone Name',
+  'pri_special.city': 'City',
+  'pri_special.district': 'District',
+  'pri_special.ward': 'Ward',
+  'pri_special.origin-city': 'City (Origin)',
+  'pri_special.dest-city': 'City (Destination)',
+  'pri_special.dest-district': 'District (Destination)',
+  'pri_special.dest-ward': 'Ward (Destination)',
+
+  //validate
+  'pri_special.validate-name-exists': 'Name already exists',
+  'pri_special.validate-nameEn-exists': 'English name already exists',
+  'pri_special.validate-name-empty': 'Name shouldn’t be empty',
+  'pri_special.validate-name-minlength': 'Name must be 2 characters or more',
+  'pri_special.validate-name-maxlength': 'Name must be 60 characters or less',
+  'pri_special.validate-nameEn-empty': 'English name shouldn’t be empty',
+  'pri_special.validate-nameEn-minlength': 'English name must be 2 characters or more',
+  'pri_special.validate-nameEn-maxlength': 'English name must be 60 characters or less',
+  'pri_special.validate-customer-empty': 'Customer shouldn’t be empty',
+  'pri_special.validate-area-empty': 'Area shouldn’t be empty',
+  'pri_special.validate-city-empty': 'City shouldn’t be empty',
+  'pri_special.validate-district-empty': 'District shouldn’t be empty',
+  'pri_special.validate-ward-empty': 'Ward shouldn’t be empty'
+}

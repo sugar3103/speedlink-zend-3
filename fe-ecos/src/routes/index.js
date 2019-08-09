@@ -6,6 +6,7 @@ import Layout from '../containers/Layout';
 import Dashboards from './dashboards';
 import MasterData from './master-data';
 import PricingDomestic from './pricing-domestic';
+import PricingSpecial from './pricing-special';
 import PricingInternational from './pricing-international';
 import System from './system';
 import CrumbRoute from './crumb-route';
@@ -22,6 +23,7 @@ class MainApp extends Component {
             <CrumbRoute title={messages['menu.dashboard']} path={`${match.url}dashboards`} component={ Dashboards } />
             <CrumbRoute title={messages['menu.master-data']} path={`${match.url}master-data`} component={ MasterData } />
             <CrumbRoute title={messages['menu.pricing_domestic']} path={`${match.url}pricing-domestic`} component={ PricingDomestic } />
+            <CrumbRoute title={messages['menu.pricing_special']} path={`${match.url}pricing-special`} component={ PricingSpecial } />
             <CrumbRoute title={messages['menu.pricing_international']} path={`${match.url}pricing-international`} component={ PricingInternational } />
             <CrumbRoute title={messages['menu.system']} path={`${match.url}system`} component={ System } />
             <Redirect to="/page-not-found" />

@@ -3,6 +3,7 @@ module.exports = {
   'menu.add': 'Add',
   'menu.edit': 'Edit',
   'menu.view': 'View',
+  'menu.import': 'Import',
   'menu.dashboard': 'Dashboard',
   'menu.master-data': 'Master Data',
   'menu.status': 'Status',
@@ -31,6 +32,12 @@ module.exports = {
   'menu.zone_international' : 'Zone',
   'menu.range_weight_international' : 'Range Weight',
   'menu.pricing_index_international' : 'Pricing',
+
+  'menu.pricing_special' : 'Pricing Special',
+  'menu.area_special' : 'Area',
+  'menu.zone_special' : 'Zone',
+  'menu.range_weight_special' : 'Range Weight',
+  'menu.pricing_index_special' : 'Pricing',
 
   //Menu Setting
   'menu.setting': 'Setting',
