@@ -24,6 +24,7 @@ export default (state = INIT_STATE, action) => {
         case PRI_SPECIAL_UPLOAD_PROGRESS:
             return {
                 ...state,
+                uploading: true,
                 progress: action.payload
             };
 

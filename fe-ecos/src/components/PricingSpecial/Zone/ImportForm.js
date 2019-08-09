@@ -19,9 +19,7 @@ class ImportForm extends Component {
     }
 
     render() {
-        const { handleSubmit, progress, data } = this.props;
-        console.log(progress);
-        
+        const { handleSubmit, progress, uploading } = this.props;
 
         return (
             <form onSubmit={handleSubmit} className="form">
@@ -46,7 +44,7 @@ class ImportForm extends Component {
                     <Button color="primary" size="sm">Upload</Button>
                     <Button color="secondary" size="sm" onClick={this.handleReset}>Reset</Button>
                 </div>
-                {progress <= 100 && data.length === 0 &&
+                {uploading &&
                     <div className="form__form-group">
                         <div className="progress-wrap progress-wrap--middle">
                             <Progress animated value={progress} />
@@ -59,10 +57,10 @@ class ImportForm extends Component {
 }
 
 const mapStateToProps = ({ pricingSpecial }) => {
-    const { importZone: { progress, data } } = pricingSpecial;
+    const { importZone: { progress, uploading } } = pricingSpecial;
     return {
         progress,
-        data
+        uploading
     }
 }
 
