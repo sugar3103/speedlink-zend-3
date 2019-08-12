@@ -53,7 +53,18 @@ class SpecialZoneController extends CoreController
     {
         if ($this->getRequest()->isPost()) {
             // get the filters
-            $fieldsMap = [0 => 'id', 1 => 'name', 2 => 'name_en', 3 => 'created_at'];
+            $fieldsMap = [
+                0 => 'id', 
+                1 => 'name', 
+                2 => 'name_en', 
+                3 => 'created_at',
+                4 => 'customer_id',
+                5 => 'special_area_id',
+                6 => 'from_city',
+                7 => 'to_city',
+                8 => 'to_district',
+                9 => 'to_ward'
+            ];
 
             list($start, $limit, $sortField, $sortDirection, $filters, $fields) = $this->getRequestData($fieldsMap);
             //get list User by condition

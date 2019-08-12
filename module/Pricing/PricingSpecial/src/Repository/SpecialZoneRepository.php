@@ -119,7 +119,30 @@ class SpecialZoneRepository extends EntityRepository
                 'alias' => 'sz.name_en',
                 'operator' => 'contains',
             ],
-
+            'custom_id' => [
+                'alias' => 'ct.id',
+                'operator' => 'eq',
+            ],
+            'special_area_id' => [
+                'alias' => 'sa.id',
+                'operator' => 'eq',
+            ],
+            'from_city' => [
+                'alias' => 'fc.id',
+                'operator' => 'eq',
+            ],
+            'to_city' => [
+                'alias' => 'tc.id',
+                'operator' => 'eq',
+            ],
+            'to_district' => [
+                'alias' => 'td.id',
+                'operator' => 'eq',
+            ],
+            'to_ward' => [
+                'alias' => 'tw.id',
+                'operator' => 'eq',
+            ],
             'created_at' => [
                 'alias' => 'sz.created_at',
                 'operator' => 'contains',
