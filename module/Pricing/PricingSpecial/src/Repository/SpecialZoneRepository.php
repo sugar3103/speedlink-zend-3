@@ -119,7 +119,7 @@ class SpecialZoneRepository extends EntityRepository
                 'alias' => 'sz.name_en',
                 'operator' => 'contains',
             ],
-            'custom_id' => [
+            'customer_id' => [
                 'alias' => 'ct.id',
                 'operator' => 'eq',
             ],
