@@ -48,6 +48,8 @@ class SpecialRangeWeightRepository extends EntityRepository
                 st.id as shipment_type_id,
                 st.name as shipment_type,
                 st.name_en as shipment_type_en,
+                sa.id as special_area_id,
+                sa.name as special_area_name,
                 srw.calculate_unit,
                 srw.round_up,
                 srw.unit,
@@ -89,6 +91,10 @@ class SpecialRangeWeightRepository extends EntityRepository
         $operatorsMap = [
             'id' => [
                 'alias' => 'srw.id',
+                'operator' => 'eq',
+            ],
+            'special_area_id' => [
+                'alias' => 'sa.id',
                 'operator' => 'eq',
             ],
             'name' => [
@@ -149,6 +155,7 @@ class SpecialRangeWeightRepository extends EntityRepository
             ->leftJoin('srw.service', 's')
             ->leftJoin('srw.carrier', 'ca')
             ->leftJoin('srw.shipment_type', 'st')
+            ->leftJoin('srw.special_area', 'sa')
             ->leftJoin('srw.created_by', 'cr')
             ->leftJoin('srw.updated_by', 'up')
             ->leftJoin('srw.customer', 'cu');
