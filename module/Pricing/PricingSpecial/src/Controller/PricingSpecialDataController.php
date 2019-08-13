@@ -96,7 +96,7 @@ class PricingSpecialDataController extends CoreController {
         //Get All Zone
         $areas = $this->entityManager->getRepository(SpecialArea::class)->findBy(['is_deleted' => 0]);
         foreach ($areas as $area) { 
-            $data[$area->getId()]['name'] = $area->getName();
+            $data[$area->getId()]['data']['name'] = $area->getName();
             $shipmentTypes = $this->entityManager->getRepository(ShipmentType::class)->findBy(['is_deleted' => 0, 'status' => 1, 'category' => 3]);
             foreach ($shipmentTypes as $shipmentType) {
                 $data[$area->getId()][$shipmentType->getId()] = null;
