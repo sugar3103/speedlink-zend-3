@@ -40,7 +40,7 @@ class PricingSpecialDataManager
                     if ($pricingData) {
                         $pricingData->setValue($value['value']);
                         $pricingData->setReturnType($value['type']);
-                        $pricingData->setRetutnValue($value['type_value']);
+                        $pricingData->setReturnValue($value['type_value']);
                         $pricingData->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
 
                         $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
