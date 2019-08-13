@@ -126,12 +126,12 @@ class PricingSpecialDataController extends CoreController {
                             $valueData['value'] = $pricingData->getValue();
                             $valueData['type']  = $pricingData->getReturnType();
                             $valueData['type_value']  = $pricingData->getReturnValue();
-                            $data[$area->getId()][$shipmentType->getId()][] = $valueData;                            
+                            $data[$area->getId()]['data'][$shipmentType->getId()][] = $valueData;                            
                         } else {
                             $valueData['value'] = '';
                             $valueData['type'] = 0;
                             $valueData['type_value'] = 0;
-                            $data[$area->getId()][$shipmentType->getId()][] = $valueData;
+                            $data[$area->getId()]['data'][$shipmentType->getId()][] = $valueData;
                         }
                     }
                 } 
