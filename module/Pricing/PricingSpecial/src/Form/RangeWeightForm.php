@@ -231,8 +231,6 @@ class RangeWeightForm extends Form {
             ]                
         ]);
         
-      
-
         $inputFilter->add([
             'name' => 'from',
             'required' => true,

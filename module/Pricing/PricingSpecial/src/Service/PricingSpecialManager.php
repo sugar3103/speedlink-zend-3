@@ -241,7 +241,7 @@ class PricingSpecialManager
         $specialPricing->setCategory($category);
         $specialPricing->setService($service);
         $specialPricing->setSaleman($saleman);
-        $specialPricing->getApprovedBy($approved);
+        $specialPricing->setApprovedBy($approved);
         $specialPricing->setUpdatedBy($user_data);
         $specialPricing->setCreatedBy($user_data);
 
