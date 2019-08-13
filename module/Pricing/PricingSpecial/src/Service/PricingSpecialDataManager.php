@@ -57,7 +57,7 @@ class PricingSpecialDataManager
 
                         $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
                         $pricingData->setCreatedAt($addTime->format('Y-m-d H:i:s'));
-                        $pricingData->s51etUpdatedAt($addTime->format('Y-m-d H:i:s'));
+                        $pricingData->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
                     }
 
                     $this->entityManager->persist($pricingData);
