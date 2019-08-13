@@ -36,7 +36,7 @@ class PricingSpecialDataManager
             foreach ($data['data'] as $value) {
                 $this->entityManager->beginTransaction();
                 try {
-                    $pricingData = $this->entityManager->getRepository(SpecialPricingData::class)->findOneBy(['special_pricing' => $data['id'], 'special_range_weight' => $value['range_weight'], 'is_deleted' => 0]);
+                    $pricingData = $this->entityManager->getRepository(SpecialPricingData::class)->findOneBy(['special_pricing' => $data['id'], 'special_range_weight' => $value['id'], 'is_deleted' => 0]);
                     if ($pricingData) {
                         $pricingData->setValue($value['value']);
                         $pricingData->setReturnType($value['type']);
@@ -48,7 +48,7 @@ class PricingSpecialDataManager
                     } else {
                         $pricingData = new SpecialPricingData();
                         $pricingData->setSpecialPricing($this->entityManager->getRepository(SpecialPricing::class)->find($data['id']));
-                        $pricingData->setSpecialRangeWeight($this->entityManager->getRepository(SpecialRangeWeight::class)->find($value['range_weight']));
+                        $pricingData->setSpecialRangeWeight($this->entityManager->getRepository(SpecialRangeWeight::class)->find($value['id']));
                         $pricingData->setValue($value['value']);
                         $pricingData->setReturnType($value['type']);
                         $pricingData->setReturnValue($value['type_value']);
@@ -57,7 +57,7 @@ class PricingSpecialDataManager
 
                         $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
                         $pricingData->setCreatedAt($addTime->format('Y-m-d H:i:s'));
-                        $pricingData->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+                        $pricingData->s51etUpdatedAt($addTime->format('Y-m-d H:i:s'));
                     }
 
                     $this->entityManager->persist($pricingData);
