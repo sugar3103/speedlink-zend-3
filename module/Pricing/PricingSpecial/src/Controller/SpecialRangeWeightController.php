@@ -50,7 +50,8 @@ class SpecialRangeWeightController extends CoreController {
                 10 => 'zone_id',
                 12 => 'from',
                 13 => 'to',
-                15 => 'customer_id'
+                15 => 'customer_id',
+                16 => 'special_area_id'
             ];
 
             list($start,$limit,$sortField,$sortDirection,$filters, $fields) = $this->getRequestData($fieldsMap);          
