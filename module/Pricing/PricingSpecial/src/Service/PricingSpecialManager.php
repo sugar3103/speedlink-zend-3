@@ -185,9 +185,9 @@ class PricingSpecialManager
             }
 
             //Delete Vas And Vas Spec
-            $this->specialPricingVasManager->deletedPricingVas($specialPricing);
+            $this->pricingSpecialVasManager->deletedPricingVas($specialPricing);
             //Delete PricingData
-            $this->specialPricingDataManager->deletePricingData($specialPricing, $user);
+            $this->pricingSpecialDataManager->deletePricingData($specialPricing, $user);
 
             $specialPricing->setIsDeleted(1);
             $specialPricing->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
