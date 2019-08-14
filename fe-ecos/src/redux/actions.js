@@ -29,9 +29,16 @@ export * from './pricing-domestic/customer/actions';
 export * from './pricing-domestic/approved-by/actions';
 export * from './pricing-domestic/saleman/actions';
 
+export * from './pricing-special/pricing/actions';
 export * from './pricing-special/area/actions';
 export * from './pricing-special/zone/actions';
+export * from './pricing-special/range-weight/actions';
 export * from './pricing-special/customer/actions';
+export * from './pricing-special/approved-by/actions';
+export * from './pricing-special/saleman/actions';
+export * from './pricing-special/carrier/actions';
+export * from './pricing-special/service/actions';
+export * from './pricing-special/shipment-type/actions';
 export * from './pricing-special/city/actions';
 export * from './pricing-special/district/actions';
 export * from './pricing-special/ward/actions';
