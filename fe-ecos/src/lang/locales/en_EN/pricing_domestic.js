@@ -35,7 +35,7 @@ module.exports = {
   'pri_dom.calculate-unit': 'Calculate Unit',
   'pri_dom.round-up': 'Round Up',
   'pri_dom.zone': 'Zone',
-  'pri_dom.ras': 'RAS',
+  'pri_dom.ras': 'Pickup RAS',
   'pri_dom.from': 'From (>)',
   'pri_dom.to': 'To (=<)',
   'pri_dom.unit': 'Unit (Kg)',

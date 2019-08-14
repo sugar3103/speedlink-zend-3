@@ -95,12 +95,12 @@ export const getPricingDomesticDataSuccess = (data) => ({
   payload: data
 });
 
-export const addRangeWeightValue = (item, toggleModal) => ({
+export const addRangeWeightDomesticValue = (item, toggleModal) => ({
   type: PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE,
   payload: { item, toggleModal }
 });
 
-export const addRangeWeightValueSuccess = () => ({
+export const addRangeWeightDomesticValueSuccess = () => ({
   type: PRI_DOM_PRICING_ADD_RANGE_WEIGHT_VALUE_SUCCESS
 });
 

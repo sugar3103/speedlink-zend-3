@@ -30,7 +30,7 @@ import {
   getPricingDomesticList,
   requestUpdatePricingDomesticItem,
   getPricingDomesticDataSuccess,
-  addRangeWeightValueSuccess,
+  addRangeWeightDomesticValueSuccess,
   getPricingDomesticData,
   getPricingDomesticVasSuccess,
   updatePricingDomesticVasSuccess,
@@ -328,7 +328,7 @@ function* addRangeWeightValueItem({ payload }) {
     const response = yield call(addRangeWeightValueRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
-        yield put(addRangeWeightValueSuccess());
+        yield put(addRangeWeightDomesticValueSuccess());
         yield put(getPricingDomesticData({ id: item.id }));
         yield call(toggleModal);
         createNotification({ type: 'success', message: 'pri_dom.update-success' });
@@ -410,16 +410,19 @@ const updatePricingDomesticVasRequest = async item => {
 function* updatePricingDomesticVasItem({ payload }) {
   const { item } = payload;
   const { pathname } = history.location;
+  yield put(startSubmit('pricing_domestic_vas_action_form'));
   try {
     const response = yield call(updatePricingDomesticVasRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(updatePricingDomesticVasSuccess());
         createNotification({ type: 'success', message: 'pri_dom.update-success' });
+        yield put(stopSubmit('pricing_domestic_vas_action_form'));
         break;
 
       case EC_FAILURE:
         yield put(pricingDomesticError(response.data));
+        yield put(stopSubmit('pricing_domestic_vas_action_form'));
         break;
 
       case EC_FAILURE_AUTHENCATION:

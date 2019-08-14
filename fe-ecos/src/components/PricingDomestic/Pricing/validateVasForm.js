@@ -16,10 +16,6 @@ const validate = values => {
         vasErrors.min = 'pri_dom.validate-vas-min-required';
         vasArrayErrors[vasIndex] = vasErrors
       }
-      if (vas && vas.type && vas.spec.length === 0) {
-        vasErrors.spec = 'pri_dom.validate-vas-spec-required';
-        vasArrayErrors[vasIndex] = vasErrors
-      }
     })
     if (vasArrayErrors.length) {
       errors.vas = vasArrayErrors
