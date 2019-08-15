@@ -1,35 +1,35 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Button, Popover, PopoverBody, PopoverHeader } from 'reactstrap';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import PricingVasItem from './PricingVasItem';
-import { FieldArray, reduxForm } from 'redux-form';
+import { FieldArray, reduxForm, formValueSelector } from 'redux-form';
 import { getPricingDomesticVas, getPricingDomesticFieldVas } from '../../../redux/actions';
 import PropTypes from 'prop-types';
 import validate from './validateVasForm';
 import ReactLoading from 'react-loading';
 
-const renderVasItems = ({ fields, pricing_id, messages, toggleTooltip, type_action }) => (
-  <Fragment>
-    <ul>
-      <li className="group-action">
-        <Button size="sm" color="info" id="PopoverLeft" onClick={toggleTooltip}><span className="lnr lnr-question-circle"></span></Button>
-        {type_action === 'edit' && 
-          <Button size="sm" color="success" onClick={() => fields.push({ id: 0, type: 0, pricing_id, spec: [] })}><span className="lnr lnr-plus-circle"></span></Button>
-        }
-        <div className="clearfix"></div>
-      </li>
-      {fields.map((vas, index) => (
-        <PricingVasItem vas={vas} fields={fields} index={index} key={index} type_action={type_action} />
-      ))}
-    </ul>
-    {fields.length > 0 && type_action === 'edit' &&
-      <div className="text-right">
-        <Button size="sm" color="primary" type="submit">{messages['save']}</Button>
-      </div>
-    }
-  </Fragment>
+const renderVasItems = ({ fields, pricing_id, toggleTooltip, type_action, disableSaveAction }) => (
+  <ul>
+    <li className="group-action">
+      <Button size="sm" color="info" id="PopoverLeft" onClick={toggleTooltip}><span className="lnr lnr-question-circle"></span></Button>
+      {type_action === 'edit' && 
+        <Button size="sm" color="success" onClick={() => fields.push({ id: 0, type: 0, pricing_id, spec: [] })}><span className="lnr lnr-plus-circle"></span></Button>
+      }
+      <div className="clearfix"></div>
+    </li>
+    {fields.map((vas, index) => (
+      <PricingVasItem 
+        vas={vas} 
+        fields={fields} 
+        index={index} 
+        key={index} 
+        type_action={type_action} 
+        disableSaveAction={disableSaveAction}
+      />
+    ))}
+  </ul>
 )
 
 class PricingVasForm extends Component {
@@ -37,7 +37,8 @@ class PricingVasForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      toolTipOpen: false
+      toolTipOpen: false,
+      disableSave: false
     }
   }
 
@@ -51,15 +52,33 @@ class PricingVasForm extends Component {
     this.setState({ toolTipOpen: !this.state.toolTipOpen })
   }
 
+  disableSaveAction = disable => {
+    this.setState({
+      disableSave: disable
+    })
+  }
+
   render() {
     const { messages, locale } = this.props.intl;
     const { id } = this.props.match.params;
-    const { handleSubmit, fieldVas, loadingFieldVas, type_action, loadingVas } = this.props;
+    const { handleSubmit, fieldVas, loadingFieldVas, type_action, loadingVas, submitting, vasForm } = this.props;
     return loadingVas ? (
         <ReactLoading type="bubbles" className="loading" /> 
       ) : (
       <form className="form form_custom pricing-vas" onSubmit={handleSubmit}>
-        <FieldArray name="vas" component={renderVasItems} pricing_id={id} messages={messages} toggleTooltip={this.toggleTooltip} type_action={type_action} />
+        <FieldArray 
+          name="vas"
+          component={renderVasItems} 
+          pricing_id={id} 
+          toggleTooltip={this.toggleTooltip} 
+          type_action={type_action} 
+          disableSaveAction={this.disableSaveAction}
+        />
+        {type_action === 'edit' && vasForm && vasForm.length > 0 &&
+          <div className="text-right">
+            <Button size="sm" color="primary" type="submit" disabled={submitting || this.state.disableSave}>{messages['save']}</Button>
+          </div>
+        }
         <Popover
           placement="left"
           isOpen={this.state.toolTipOpen}
@@ -127,13 +146,18 @@ PricingVasForm = reduxForm({
   validate
 })(PricingVasForm)
 
-const mapStateToProps = ({ pricingDomestic }) => {
+const mapStateToProps = (state, props) => {
+  const { pricingDomestic } = state;
   const { pricing: { vas, loadingVas, fieldVas, loadingFieldVas } } = pricingDomestic;
+  const selector = formValueSelector('pricing_domestic_vas_action_form');
+  const vasForm = selector(state, 'vas');
+
   return {
     initialValues: { vas },
     fieldVas,
     loadingVas,
-    loadingFieldVas
+    loadingFieldVas,
+    vasForm
   }
 };
 

@@ -94,7 +94,7 @@ class PricingSpecialDataController extends CoreController {
     private function createTablePricing($pricing) {
         $data = [];
         //Get All Zone
-        $areas = $this->entityManager->getRepository(SpecialArea::class)->findBy(['is_deleted' => 0]);
+        $areas = $this->entityManager->getRepository(SpecialArea::class)->findBy(['is_deleted' => 0, 'customer' => $pricing->getCustomer()]);
         foreach ($areas as $area) { 
             $data[$area->getId()]['name'] = $area->getName();
             $shipmentTypes = $this->entityManager->getRepository(ShipmentType::class)->findBy(['is_deleted' => 0, 'status' => 1, 'category' => 3]);
@@ -104,7 +104,8 @@ class PricingSpecialDataController extends CoreController {
                     'service' => $pricing->getService()->getId(),
                     'shipment_type' => $shipmentType->getId(),                                    
                     'is_deleted' => 0,
-                    'customer' => $pricing->getCustomer()
+                    'customer' => $pricing->getCustomer(),
+                    'special_area' => $area->getId()
                 );
                 $rangeWeights = $this->entityManager->getRepository(SpecialRangeWeight::class)->findBy($conditions);
                 if($rangeWeights) {

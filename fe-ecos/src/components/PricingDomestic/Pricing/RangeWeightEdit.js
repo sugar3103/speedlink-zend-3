@@ -3,7 +3,7 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import RangeWeightEditForm from './RangeWeightEditForm';
-import { addRangeWeightValue } from '../../../redux/actions';
+import { addRangeWeightDomesticValue } from '../../../redux/actions';
 
 
 class RangeWeightEdit extends Component {
@@ -11,7 +11,7 @@ class RangeWeightEdit extends Component {
   handleSubmit = values => {
     const { toggleModal } = this.props;
     if (values) {
-      this.props.addRangeWeightValue(values, toggleModal);
+      this.props.addRangeWeightDomesticValue(values, toggleModal);
     }
   }
 
@@ -24,9 +24,9 @@ class RangeWeightEdit extends Component {
 RangeWeightEdit.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
-  addRangeWeightValue: PropTypes.func.isRequired
+  addRangeWeightDomesticValue: PropTypes.func.isRequired
 }
 
 export default injectIntl(connect(null, {
-  addRangeWeightValue
+  addRangeWeightDomesticValue
 })(RangeWeightEdit));

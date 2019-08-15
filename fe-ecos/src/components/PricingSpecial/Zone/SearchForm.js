@@ -43,8 +43,10 @@ class SearchForm extends Component {
   }
 
   resetFilter = async () => {
-    const { handleSubmit, reset } = this.props
+    const { handleSubmit, reset } = this.props;
     await reset();
+    this.props.removeState(PRI_SPECIAL_DESTINATION_DISTRICT_RESET_STATE);
+    this.props.removeState(PRI_SPECIAL_DESTINATION_WARD_RESET_STATE);
     handleSubmit();
   }
 

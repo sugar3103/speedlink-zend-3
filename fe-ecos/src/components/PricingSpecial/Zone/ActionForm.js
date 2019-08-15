@@ -3,7 +3,7 @@ import { Button, ButtonToolbar, Col, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { toggleZoneSpecialModal, changeTypeZoneSpecialModal } from '../../../redux/actions';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, formValueSelector } from 'redux-form';
 import CustomField from '../../../containers/Shared/form/CustomField';
 import renderSelectField from '../../../containers/Shared/form/Select';
 import Can from '../../../containers/Shared/Can';
@@ -21,7 +21,10 @@ import {
   getDestinationDistrictCreateSpecialList,
   getDestinationWardCreateSpecialList
 } from "../../../redux/actions";
-import { PRI_SPECIAL_DESTINATION_DISTRICT_CREATE_RESET_STATE, PRI_SPECIAL_DESTINATION_WARD_CREATE_RESET_STATE } from '../../../constants/actionTypes';
+import { 
+  PRI_SPECIAL_DESTINATION_DISTRICT_CREATE_RESET_STATE, 
+  PRI_SPECIAL_DESTINATION_WARD_CREATE_RESET_STATE
+ } from '../../../constants/actionTypes';
 
 
 class ActionForm extends Component {
@@ -61,6 +64,33 @@ class ActionForm extends Component {
 
     if (data) {
       this.props.initialize(data);
+    } else {
+      this.props.removeState(PRI_SPECIAL_DESTINATION_DISTRICT_CREATE_RESET_STATE);
+      this.props.removeState(PRI_SPECIAL_DESTINATION_WARD_CREATE_RESET_STATE);
+      this.props.initialize();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let params = {
+      field: ['id', 'name', 'name_en'],
+      offset: {
+        limit: 0
+      }
+    };
+
+    if (nextProps.to_city && nextProps.to_city !== this.props.to_city) {
+      params.query = {
+        city: nextProps.to_city
+      }
+      this.props.getDestinationDistrictCreateSpecialList(params);
+
+      if (nextProps.to_district && nextProps.to_district !== this.props.to_district) {
+        params.query = {
+          district: nextProps.to_district
+        }
+        this.props.getDestinationWardCreateSpecialList(params);
+      }
     }
   }
 
@@ -188,7 +218,7 @@ class ActionForm extends Component {
                     options={customer.items && this.showOptions(customer.items)}
                     placeholder={messages['pri_special.customer']}
                     clearable={false}
-                    dsiabled={disabled}
+                    disabled={disabled}
                   />
                 </div>
               </div>
@@ -201,7 +231,7 @@ class ActionForm extends Component {
                     options={area.items && this.showOptions(area.items)}
                     placeholder={messages['pri_special.area-name']}
                     clearable={false}
-                    dsiabled={disabled}
+                    disabled={disabled}
                   />
                 </div>
               </div>
@@ -240,7 +270,7 @@ class ActionForm extends Component {
                     options={cityOrigin && this.showOptionsAddress(cityOrigin)}
                     placeholder={messages['pri_special.city']}
                     clearable={false}
-                    dsiabled={disabled}
+                    disabled={disabled}
                   />
                 </div>
               </div>
@@ -254,7 +284,7 @@ class ActionForm extends Component {
                     placeholder={messages['pri_special.city']}
                     onChange={this.onChangeDestinationCity}
                     clearable={false}
-                    dsiabled={disabled}
+                    disabled={disabled}
                   />
                 </div>
               </div>
@@ -268,7 +298,7 @@ class ActionForm extends Component {
                     placeholder={messages['pri_special.district']}
                     onChange={this.onChangeDestinationDistrict}
                     clearable={false}
-                    dsiabled={disabled}
+                    disabled={disabled}
                   />
                 </div>
               </div>
@@ -281,7 +311,7 @@ class ActionForm extends Component {
                     options={wardDestination && this.showOptionsAddress(wardDestination)}
                     placeholder={messages['pri_special.ward']}
                     clearable={false}
-                    dsiabled={disabled}
+                    disabled={disabled}
                   />
                 </div>
               </div>
@@ -341,13 +371,19 @@ ActionForm.propTypes = {
   getDestinationWardCreateSpecialList: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ pricingSpecial, authUser }) => {
+const mapStateToProps = (state, props) => {
+  const { pricingSpecial, authUser } = state;
   const { zone, area, customer, city, district, ward } = pricingSpecial;
   const { modalData, modalType } = zone;
   const cityOrigin = city.origin;
   const cityDestination = city.destination;
   const districtDestination = district.destinationCreate;
   const wardDestination = ward.destinationCreate;
+
+  const selector = formValueSelector('zone_special_action_form');
+  const to_city = selector(state, 'to_city');
+  const to_district = selector(state, 'to_district');
+  
   return {
     modalData,
     modalType,
@@ -356,7 +392,8 @@ const mapStateToProps = ({ pricingSpecial, authUser }) => {
     customer,
     cityOrigin, cityDestination,
     districtDestination,
-    wardDestination
+    wardDestination,
+    to_city, to_district
   }
 }
 

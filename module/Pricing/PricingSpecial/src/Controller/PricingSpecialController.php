@@ -145,7 +145,7 @@ class PricingSpecialController extends CoreController {
                             $this->error_code = 0;
                             $this->apiResponse['message'] = "NOT_FOUND";
                         } else {
-                            $this->SpecialPricingManager->deletePricing($pricing, $user);
+                            $this->pricingSpecialManager->deletePricing($pricing, $user);
                         }
                     }
 

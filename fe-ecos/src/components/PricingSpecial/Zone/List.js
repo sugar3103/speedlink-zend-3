@@ -19,7 +19,6 @@ import {
   deleteZoneSpecialItem
 } from "../../../redux/actions";
 import ConfirmPicker from '../../../containers/Shared/picker/ConfirmPicker';
-import Moment from 'react-moment';
 
 class List extends Component {
   constructor() {
@@ -107,6 +106,14 @@ class List extends Component {
           >{messages['pri_special.add-new-zone']}</Button>
         </Can>
         <Action modalOpen={modalOpen} />
+        <Can user={this.props.authUser.user} permission="zone_special" action="import">
+          <Button
+            color="primary"
+            onClick={() => this.props.history.push('/pricing-special/zone/import')}
+            className="master-data-btn"
+            size="sm"
+          >{messages['pri_special.import']}</Button>
+        </Can>
         <Can user={this.props.authUser.user} permission="zone_special" action="delete">
           {selected.length > 0 &&
             <Button
@@ -116,14 +123,6 @@ class List extends Component {
               size="sm"
             >{messages['pri_special.delete-zone']}</Button>
           }
-        </Can>
-        <Can user={this.props.authUser.user} permission="zone_special" action="import">
-          <Button
-            color="primary"
-            onClick={() => this.props.history.push('/pricing-special/zone/import')}
-            className="master-data-btn"
-            size="sm"
-          >{messages['pri_special.import']}</Button>
         </Can>
       </Fragment>
     )
@@ -138,7 +137,6 @@ class List extends Component {
         {
           Header: messages['name'],
           accessor: "name",
-          width: 150,
           Cell: ({ original }) => {
             return (
               locale === 'en-US' ? original.name_en : original.name
@@ -147,10 +145,28 @@ class List extends Component {
           sortable: false,
         },
         {
-          Header: messages['created-at'],
-          accessor: "created_at",
-          className: "text-center",
-          Cell: ({ original }) => { return (<Moment fromNow format="DD/MM/YYYY" locale={locale}>{new Date(original.created_at)}</Moment>) },
+          Header: messages['pri_special.origin-city'],
+          accessor: "from_city_name",
+          sortable: false,
+        },
+        {
+          Header: messages['pri_special.dest-city'],
+          accessor: "to_city_name",
+          sortable: false,
+        },
+        {
+          Header: messages['pri_special.dest-district'],
+          accessor: "to_district_name",
+          sortable: false,
+        },
+        {
+          Header: messages['pri_special.dest-ward'],
+          accessor: "to_ward_name",
+          sortable: false,
+        },
+        {
+          Header: messages['pri_special.customer'],
+          accessor: "customer_name",
           sortable: false,
         },
         {

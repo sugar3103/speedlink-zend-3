@@ -1,16 +1,17 @@
 import axios from "axios";
-import { all, call, fork, put, takeEvery } from "redux-saga/effects";
+import { eventChannel, END } from 'redux-saga';
+import { all, call, fork, put, take, takeEvery } from "redux-saga/effects";
 import { apiUrl, EC_SUCCESS, EC_FAILURE, EC_FAILURE_AUTHENCATION } from '../../../constants/defaultValues';
 import { authHeader } from '../../../util/auth-header';
 import history from '../../../util/history';
-import { startSubmit, stopSubmit } from 'redux-form';
 import createNotification from '../../../util/notifications';
 
 import {
   PRI_SPECIAL_ZONE_GET_LIST,
   PRI_SPECIAL_ZONE_ADD_ITEM,
   PRI_SPECIAL_ZONE_UPDATE_ITEM,
-  PRI_SPECIAL_ZONE_DELETE_ITEM
+  PRI_SPECIAL_ZONE_DELETE_ITEM,
+  PRI_SPECIAL_ZONE_UPLOAD_REQUEST
 } from "../../../constants/actionTypes";
 
 import {
@@ -20,22 +21,10 @@ import {
   updateZoneSpecialItemSuccess,
   deleteZoneSpecialItemSuccess,
   getZoneSpecialList,
-  toggleZoneSpecialModal
+  toggleZoneSpecialModal,
+  uploadZoneSpecialProgress,
+  uploadZoneSpecialSuccess
 } from "./actions";
-
-//validate
-function validateZoneSpecial(errors) {
-  if (errors.name && errors.name.specialZoneExists) {
-    return stopSubmit('zone_special_action_form', {
-      name: 'pri_special.validate-name-exists'
-    });
-  }
-  if (errors.name_en && errors.name_en.specialZoneExists) {
-    return stopSubmit('zone_special_action_form', {
-      name_en: 'pri_special.validate-nameEn-exists'
-    });
-  }
-}
 
 /* GET LIST ZONE SPECIAL */
 
@@ -96,7 +85,6 @@ const addZoneSpecialItemRequest = async item => {
 function* addZoneSpecialItem({ payload }) {
   const { item } = payload;
   const { pathname } = history.location;
-  yield put(startSubmit('zone_special_action_form'));
   try {
     const response = yield call(addZoneSpecialItemRequest, item);
     switch (response.error_code) {
@@ -109,7 +97,6 @@ function* addZoneSpecialItem({ payload }) {
 
       case EC_FAILURE:
         yield put(zoneSpecialError(response.data));
-        yield put(validateZoneSpecial(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -142,7 +129,6 @@ const updateZoneSpecialItemRequest = async item => {
 function* updateZoneSpecialItem({ payload }) {
   const { item } = payload;
   const { pathname } = history.location;
-  yield put(startSubmit('zone_special_action_form'));
   try {
     const response = yield call(updateZoneSpecialItemRequest, item);
     switch (response.error_code) {
@@ -155,7 +141,6 @@ function* updateZoneSpecialItem({ payload }) {
 
       case EC_FAILURE:
         yield put(zoneSpecialError(response.data));
-        yield put(validateZoneSpecial(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -177,7 +162,7 @@ function deleteZoneSpecialApi(ids) {
     method: 'post',
     url: `${apiUrl}pricing/special/zone/delete`,
     headers: authHeader(),
-    data: {  ids: ids }
+    data: { ids: ids }
   });
 }
 
@@ -194,7 +179,7 @@ function* deleteZoneSpecialItem({ payload }) {
       case EC_SUCCESS:
         yield put(deleteZoneSpecialItemSuccess());
         yield put(getZoneSpecialList());
-        createNotification({ type: 'success', message: 'pri_special.delete-success'});
+        createNotification({ type: 'success', message: 'pri_special.delete-success' });
         break;
 
       case EC_FAILURE:
@@ -210,6 +195,75 @@ function* deleteZoneSpecialItem({ payload }) {
     }
   } catch (error) {
     yield put(zoneSpecialError(error));
+  }
+}
+
+/* SPECIAL ZONE IMPORT */
+
+function uploadZoneApi(file, onProgress) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}pricing/special/zone/import`,
+    headers: authHeader(),
+    data: file,
+    onUploadProgress: onProgress
+  });
+}
+
+const getUploadZoneRequest = async (file, onProgress) => {
+  return await uploadZoneApi(file, onProgress).then(res => res.data).catch(err => err)
+};
+
+function createUploader(payload) {
+  let emit;
+  const chan = eventChannel(emitter => {
+    emit = emitter;
+    return () => { };
+  });
+
+  const uploadPromise = getUploadZoneRequest(payload, (event) => {
+    const percentage = Math.round((event.loaded * 100) / event.total)
+    emit(percentage);
+    if (percentage === 100) {
+      emit(END);
+    }
+  });
+
+  return [uploadPromise, chan];
+}
+
+function* watchOnProgress(chan) {
+  while (true) {
+    const progress = yield take(chan);
+    yield put(uploadZoneSpecialProgress(progress));
+  }
+}
+
+function* uploadZoneSpecial({ payload }) {
+  const { pathname } = history.location;
+  const [uploadPromise, chan] = createUploader(payload);
+  yield fork(watchOnProgress, chan);
+
+  try {
+    const response = yield call(() => uploadPromise);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(uploadZoneSpecialSuccess(response.data, response.total));
+        break;
+
+      case EC_FAILURE:
+        yield put(zoneSpecialError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
+        break;
+      default:
+        break;
+    }
+  } catch (err) {
+    console.log(err);
   }
 }
 
@@ -229,11 +283,16 @@ export function* watchZoneDomestiDeleteItem() {
   yield takeEvery(PRI_SPECIAL_ZONE_DELETE_ITEM, deleteZoneSpecialItem);
 }
 
+export function* watchUploadZoneSpecial() {
+  yield takeEvery(PRI_SPECIAL_ZONE_UPLOAD_REQUEST, uploadZoneSpecial);
+}
+
 export default function* rootSaga() {
   yield all([
     fork(watchZoneSpecialGetList),
     fork(watchZoneSpecialAddItem),
     fork(watchZoneSpecialUpdateItem),
     fork(watchZoneDomestiDeleteItem),
+    fork(watchUploadZoneSpecial)
   ]);
 }

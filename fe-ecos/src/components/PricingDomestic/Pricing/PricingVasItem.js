@@ -56,6 +56,11 @@ class PricingVasItem extends Component {
 
     if (this.props.type !== nextProps.type) {
       this.props.changeFormValue(nextProps.type);
+      if (this.props.type) {
+        this.props.disableSaveAction(true);
+      } else {
+        this.props.disableSaveAction(false);
+      }
     }
   }
 
@@ -84,6 +89,7 @@ class PricingVasItem extends Component {
     this.setState({ rows });
 
     this.props.changeSpec(rows);
+    this.props.disableSaveAction(false);
   }
 
   onRemoveRowPrice = (e, indexRow) => {
@@ -93,6 +99,12 @@ class PricingVasItem extends Component {
     this.setState({ rows });
 
     this.props.changeSpec(rows);
+
+    if (rows.length > 0) {
+      this.props.disableSaveAction(false);
+    } else {
+      this.props.disableSaveAction(true);
+    }
   }
 
   onAfterSaveCell = () => {
@@ -230,6 +242,7 @@ PricingVasItem.propTypes = {
   changeFormValue: PropTypes.func.isRequired,
   changeSpec: PropTypes.func.isRequired,
   changeFormula: PropTypes.func.isRequired,
+  disableSaveAction: PropTypes.func.isRequired,
   type_action: PropTypes.string.isRequired,
 }
 
