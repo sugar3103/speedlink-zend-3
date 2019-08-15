@@ -201,11 +201,20 @@ function* deleteZoneSpecialItem({ payload }) {
 /* SPECIAL ZONE IMPORT */
 
 function uploadZoneApi(file, onProgress) {
+  const data = new FormData();
+  data.append('import_file', file.import_file);
+  
+  let headers = authHeader();
+  headers = {
+    ...headers,
+    'content-type': `multipart/form-data; boundary=${data._boundary}`,
+  }
+
   return axios.request({
     method: 'post',
     url: `${apiUrl}pricing/special/zone/import`,
-    headers: authHeader(),
-    data: file,
+    headers: headers,
+    data: data,
     onUploadProgress: onProgress
   });
 }
