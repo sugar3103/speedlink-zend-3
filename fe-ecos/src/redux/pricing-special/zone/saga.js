@@ -201,10 +201,16 @@ function* deleteZoneSpecialItem({ payload }) {
 /* SPECIAL ZONE IMPORT */
 
 function uploadZoneApi(file, onProgress) {
+  let headers = authHeader();
+  headers = {
+    ...headers,
+    'Content-Type': 'multipart/form-data'
+  }
+
   return axios.request({
     method: 'post',
     url: `${apiUrl}pricing/special/zone/import`,
-    headers: authHeader(),
+    headers: headers,
     data: file,
     onUploadProgress: onProgress
   });

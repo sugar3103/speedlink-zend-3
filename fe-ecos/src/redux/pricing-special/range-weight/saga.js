@@ -233,10 +233,16 @@ function* deleteRangeWeightSpecialItem({ payload }) {
 /* SPECIAL RANGE WEIGHT IMPORT */
 
 function uploadRangeWeightApi(file, onProgress) {
+  let headers = authHeader();
+  headers = {
+    ...headers,
+    'Content-Type': 'multipart/form-data'
+  }
+  
   return axios.request({
     method: 'post',
     url: `${apiUrl}pricing/special/range-weight/import`,
-    headers: authHeader(),
+    headers: headers,
     data: file,
     onUploadProgress: onProgress
   });
