@@ -14,6 +14,11 @@ import {
 
   PRI_SPECIAL_ZONE_DELETE_ITEM,
   PRI_SPECIAL_ZONE_DELETE_ITEM_SUCCESS,
+
+  PRI_SPECIAL_ZONE_UPLOAD_REQUEST,
+  PRI_SPECIAL_ZONE_UPLOAD_PROGRESS,
+  PRI_SPECIAL_ZONE_UPLOAD_SUCCESS,
+
 } from '../../../constants/actionTypes';
 
 export const zoneSpecialError = (error) => ({
@@ -66,4 +71,19 @@ export const deleteZoneSpecialItem = (ids) => ({
 
 export const deleteZoneSpecialItemSuccess = () => ({
   type: PRI_SPECIAL_ZONE_DELETE_ITEM_SUCCESS,
+});
+
+export const uploadZoneSpecialRequest = (file) => ({
+  type: PRI_SPECIAL_ZONE_UPLOAD_REQUEST,
+  payload: file
+});
+
+export const uploadZoneSpecialProgress = (progress) => ({
+  type: PRI_SPECIAL_ZONE_UPLOAD_PROGRESS,
+  payload: progress
+});
+
+export const uploadZoneSpecialSuccess = (dataImport, totalImport) => ({
+  type: PRI_SPECIAL_ZONE_UPLOAD_SUCCESS,
+  payload: { dataImport, totalImport }
 });

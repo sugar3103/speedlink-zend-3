@@ -1,9 +1,9 @@
 import axios from "axios";
-import { all, call, fork, put, takeEvery } from "redux-saga/effects";
+import { eventChannel, END } from 'redux-saga';
+import { all, call, fork, put, take, takeEvery } from "redux-saga/effects";
 import { apiUrl, EC_SUCCESS, EC_FAILURE, EC_FAILURE_AUTHENCATION } from '../../../constants/defaultValues';
 import { authHeader } from '../../../util/auth-header';
 import history from '../../../util/history';
-import { startSubmit, stopSubmit } from 'redux-form';
 import createNotification from '../../../util/notifications';
 
 import {
@@ -11,7 +11,8 @@ import {
   PRI_SPECIAL_RANGE_WEIGHT_ADD_ITEM,
   PRI_SPECIAL_RANGE_WEIGHT_REQUEST_UPDATE_ITEM,
   PRI_SPECIAL_RANGE_WEIGHT_UPDATE_ITEM,
-  PRI_SPECIAL_RANGE_WEIGHT_DELETE_ITEM
+  PRI_SPECIAL_RANGE_WEIGHT_DELETE_ITEM,
+  PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_REQUEST
 } from "../../../constants/actionTypes";
 
 import {
@@ -22,21 +23,9 @@ import {
   updateRangeWeightSpecialItemSuccess,
   deleteRangeWeightSpecialItemSuccess,
   getRangeWeightSpecialList,
+  uploadRangeWeightSpecialProgress,
+  uploadRangeWeightSpecialSuccess
 } from "./actions";
-
-//validate
-function validateRangeWeightSpecial(errors) {
-  if (errors.name && errors.name.specialRangeWeightExists) {
-    return stopSubmit('range_weight_special_action_form', {
-      name: 'pri_special.validate-name-exists'
-    });
-  }
-  if (errors.name_en && errors.name_en.specialRangeWeightExists) {
-    return stopSubmit('range_weight_special_action_form', {
-      name_en: 'pri_special.validate-nameEn-exists'
-    });
-  }
-}
 
 /* GET LIST RANGE_WEIGHT SPECIAL */
 
@@ -97,7 +86,6 @@ const addRangeWeightSpecialItemRequest = async item => {
 function* addRangeWeightSpecialItem({ payload }) {
   const { item } = payload;
   const { pathname } = history.location;
-  yield put(startSubmit('range_weight_special_action_form'));
   try {
     const response = yield call(addRangeWeightSpecialItemRequest, item);
     switch (response.error_code) {
@@ -109,7 +97,6 @@ function* addRangeWeightSpecialItem({ payload }) {
 
       case EC_FAILURE:
         yield put(rangeWeightSpecialError(response.data));
-        yield put(validateRangeWeightSpecial(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -175,7 +162,6 @@ const updateRangeWeightSpecialItemRequest = async item => {
 function* updateRangeWeightSpecialItem({ payload }) {
   const { item } = payload;
   const { pathname } = history.location;
-  yield put(startSubmit('range_weight_special_action_form'));
   try {
     const response = yield call(updateRangeWeightSpecialItemRequest, item);
     switch (response.error_code) {
@@ -187,7 +173,6 @@ function* updateRangeWeightSpecialItem({ payload }) {
 
       case EC_FAILURE:
         yield put(rangeWeightSpecialError(response.data));
-        yield put(validateRangeWeightSpecial(response.data));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -245,6 +230,75 @@ function* deleteRangeWeightSpecialItem({ payload }) {
   }
 }
 
+/* SPECIAL RANGE WEIGHT IMPORT */
+
+function uploadRangeWeightApi(file, onProgress) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}pricing/special/range-weight/import`,
+    headers: authHeader(),
+    data: file,
+    onUploadProgress: onProgress
+  });
+}
+
+const getUploadRangeWeightRequest = async (file, onProgress) => {
+  return await uploadRangeWeightApi(file, onProgress).then(res => res.data).catch(err => err)
+};
+
+function createUploader(payload) {
+  let emit;
+  const chan = eventChannel(emitter => {
+    emit = emitter;
+    return () => { };
+  });
+
+  const uploadPromise = getUploadRangeWeightRequest(payload, (event) => {
+    const percentage = Math.round((event.loaded * 100) / event.total)
+    emit(percentage);
+    if (percentage === 100) {
+      emit(END);
+    }
+  });
+
+  return [uploadPromise, chan];
+}
+
+function* watchOnProgress(chan) {
+  while (true) {
+    const progress = yield take(chan);
+    yield put(uploadRangeWeightSpecialProgress(progress));
+  }
+}
+
+function* uploadRangeWeightSpecial({ payload }) {
+  const { pathname } = history.location;
+  const [uploadPromise, chan] = createUploader(payload);
+  yield fork(watchOnProgress, chan);
+
+  try {
+    const response = yield call(() => uploadPromise);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(uploadRangeWeightSpecialSuccess(response.data, response.total));
+        break;
+
+      case EC_FAILURE:
+        yield put(rangeWeightSpecialError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
+        break;
+      default:
+        break;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 export function* watchRangeWeightSpecialGetList() {
   yield takeEvery(PRI_SPECIAL_RANGE_WEIGHT_GET_LIST, getRangeWeightSpecialListItems);
 }
@@ -265,6 +319,10 @@ export function* watchRangeWeightSpecialDeleteItem() {
   yield takeEvery(PRI_SPECIAL_RANGE_WEIGHT_DELETE_ITEM, deleteRangeWeightSpecialItem);
 }
 
+export function* watchUploadRangeWeightSpecial() {
+  yield takeEvery(PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_REQUEST, uploadRangeWeightSpecial);
+}
+
 export default function* rootSaga() {
   yield all([
     fork(watchRangeWeightSpecialGetList),
@@ -272,5 +330,6 @@ export default function* rootSaga() {
     fork(watchRequestRangeWeightSpecialUpdateItem),
     fork(watchRangeWeightSpecialUpdateItem),
     fork(watchRangeWeightSpecialDeleteItem),
+    fork(watchUploadRangeWeightSpecial)
   ]);
 }

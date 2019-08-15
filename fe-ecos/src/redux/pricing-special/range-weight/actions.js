@@ -15,6 +15,10 @@ import {
 
   PRI_SPECIAL_RANGE_WEIGHT_DELETE_ITEM,
   PRI_SPECIAL_RANGE_WEIGHT_DELETE_ITEM_SUCCESS,
+
+  PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_REQUEST,
+  PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_PROGRESS,
+  PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_SUCCESS,
 } from '../../../constants/actionTypes';
 
 export const rangeWeightSpecialError = (error) => ({
@@ -67,4 +71,19 @@ export const deleteRangeWeightSpecialItem = (ids) => ({
 
 export const deleteRangeWeightSpecialItemSuccess = () => ({
   type: PRI_SPECIAL_RANGE_WEIGHT_DELETE_ITEM_SUCCESS,
+});
+
+export const uploadRangeWeightSpecialRequest = (file) => ({
+  type: PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_REQUEST,
+  payload: file
+});
+
+export const uploadRangeWeightSpecialProgress = (progress) => ({
+  type: PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_PROGRESS,
+  payload: progress
+});
+
+export const uploadRangeWeightSpecialSuccess = (dataImport, totalImport) => ({
+  type: PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_SUCCESS,
+  payload: { dataImport, totalImport }
 });

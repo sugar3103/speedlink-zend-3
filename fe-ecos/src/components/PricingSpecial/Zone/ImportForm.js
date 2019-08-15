@@ -57,7 +57,7 @@ class ImportForm extends Component {
 }
 
 const mapStateToProps = ({ pricingSpecial }) => {
-    const { importZone: { progress, uploading } } = pricingSpecial;
+    const { zone: { progress, uploading } } = pricingSpecial;
     return {
         progress,
         uploading

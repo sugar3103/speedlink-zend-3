@@ -41,7 +41,6 @@ import pricingSpecialShipmentType from './pricing-special/shipment-type/saga';
 import pricingSpecialCity from './pricing-special/city/saga';
 import pricingSpecialDistrict from './pricing-special/district/saga';
 import pricingSpecialWard from './pricing-special/ward/saga';
-import pricingSpecialImport from './pricing-special/import/saga';
 
 import pricingInternational from './pricing-international/pricing/saga';
 import pricingInternationalZone from './pricing-international/zone/saga';
@@ -101,7 +100,6 @@ export default function* rootSaga() {
     pricingSpecialCity(),
     pricingSpecialDistrict(),
     pricingSpecialWard(),
-    pricingSpecialImport(),
 
     pricingInternational(),
     pricingInternationalZone(),

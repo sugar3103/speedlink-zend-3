@@ -12,7 +12,6 @@ import saleman from './saleman/reducer';
 import city from './city/reducer';
 import district from './district/reducer';
 import ward from './ward/reducer';
-import importZone from './import/reducer';
 
 const reducers = combineReducers({
     pricing,
@@ -22,7 +21,6 @@ const reducers = combineReducers({
     carrier, service, shipmentType,
     customer, approvedBy, saleman,
     city, district, ward,
-    importZone
 });
 
 export default reducers;

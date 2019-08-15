@@ -4,14 +4,14 @@ import { connect } from 'react-redux';
 import { Col, Card, CardBody } from 'reactstrap';
 import ImportForm from './ImportForm';
 import PropTypes from 'prop-types';
-import { uploadRequest } from '../../../redux/actions';
+import { uploadRangeWeightSpecialRequest } from '../../../redux/actions';
 
 
 class Import extends Component {
 
     handleSubmit = values => {
         if (values) {
-            this.props.uploadRequest(values);
+            this.props.uploadRangeWeightSpecialRequest(values);
         }
     }
 
@@ -30,11 +30,10 @@ class Import extends Component {
     }
 }
 
-
 Import.propTypes = {
-    uploadRequest: PropTypes.func.isRequired
+    uploadRangeWeightSpecialRequest: PropTypes.func.isRequired
 }
 
 export default injectIntl(connect(null, {
-    uploadRequest
+    uploadRangeWeightSpecialRequest
 })(Import));
