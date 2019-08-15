@@ -56,6 +56,25 @@ class ActionForm extends Component {
     return result;
   }
 
+  onChangeCustomer = value => {
+    const params = {
+      field: ['id', 'name'],
+      offset: { limit: 0 },
+      query: { customer_id: value }
+    }
+    this.props.getAreaSpecialList(params);
+  }
+
+  onChangeArea = value => {
+    const listArea = this.props.area.items;
+    if (listArea.length > 0) {
+      const area = listArea.find(item => item.id === value);
+      if (area) {
+        this.props.change('customer_id', area.customer_id);
+      }
+    }
+  }
+
   onChangeCarrier = value => {
     let paramsST = {
       field: ['id', 'name', 'name_en', 'carrier_id', 'service_id'],
@@ -104,8 +123,15 @@ class ActionForm extends Component {
     };
     this.props.getCarrierSpecialList(params);
     this.props.getServiceSpecialList(params);
-    this.props.getAreaSpecialList(params);
     this.props.getCustomerSpecialList(params);
+
+    const paramsArea = {
+      field: ['id', 'name', 'customer_id'],
+      offset: {
+        limit: 0
+      }
+    }
+    this.props.getAreaSpecialList(paramsArea);
 
     const paramsST = {
       field: ['id', 'name', 'name_en', 'carrier_id', 'service_id'],
@@ -216,6 +242,7 @@ class ActionForm extends Component {
                     name="customer_id"
                     component={renderSelectField}
                     options={customer.items && this.showOptionCustomer(customer.items)}
+                    onChange={this.onChangeCustomer}
                     disabled={disableField}
                     clearable={false}
                   />
@@ -230,6 +257,7 @@ class ActionForm extends Component {
                     name="special_area_id"
                     component={renderSelectField}
                     options={area.items && this.showOptionsArea(area.items)}
+                    onChange={this.onChangeArea}
                     clearable={false}
                     disabled={disableField}
                   />

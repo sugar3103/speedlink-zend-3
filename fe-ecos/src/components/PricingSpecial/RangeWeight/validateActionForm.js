@@ -41,7 +41,7 @@ const validate = (values) => {
       errors.shipment_type_id = 'pri_special.validate-shipment-type-empty';
     }
     
-    if (!values.from) {
+    if (values.from  === undefined || values.from === null) {
       errors.from = 'pri_special.validate-from-empty';
     } else if (isNaN(values.from)) {
       errors.from = 'pri_special.validate-from-not-is-number';

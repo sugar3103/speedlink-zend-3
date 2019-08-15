@@ -56,6 +56,25 @@ class SearchForm extends Component {
     return result;
   }
 
+  onChangeCustomer = value => {
+    const params = {
+      field: ['id', 'name'],
+      offset: { limit: 0 },
+      query: { customer_id: value }
+    }
+    this.props.getAreaSpecialList(params);
+  }
+
+  onChangeArea = value => {
+    const listArea = this.props.area.items;
+    if (listArea.length > 0) {
+      const area = listArea.find(item => item.id === value);
+      if (area) {
+        this.props.change('customer_id', area.customer_id);
+      }
+    }
+  }
+
   onChangeCarrier = value => {
     let paramsST = {
       field: ['id', 'name', 'name_en', 'carrier_id', 'service_id'],
@@ -100,8 +119,15 @@ class SearchForm extends Component {
     };
     this.props.getCarrierSpecialList(params);
     this.props.getServiceSpecialList(params);
-    this.props.getAreaSpecialList(params);
     this.props.getCustomerSpecialList(params);
+
+    const paramsArea = {
+      field: ['id', 'name', 'customer_id'],
+      offset: {
+        limit: 0
+      }
+    }
+    this.props.getAreaSpecialList(paramsArea);
     
     const paramsST = {
       field: ['id', 'name', 'name_en', 'carrier_id', 'service_id'],
@@ -157,18 +183,6 @@ class SearchForm extends Component {
           </Col>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
-              <span className="form__form-group-label">{messages['pri_special.area']}</span>
-              <div className="form__form-group-field">
-                <Field
-                  name="special_area_id"
-                  component={renderSelectField}
-                  options={area.items && this.showOptionsArea(area.items)}
-                />
-              </div>
-            </div>
-          </Col>
-          <Col md={6} lg={3} xl={3} xs={6}>
-            <div className="form__form-group">
               <span className="form__form-group-label">{messages['pri_special.category']}</span>
               <div className="form__form-group-field">
                 <Field
@@ -188,6 +202,20 @@ class SearchForm extends Component {
                   name="customer_id"
                   component={renderSelectField}
                   options={customer.items && this.showOptionCustomer(customer.items)}
+                  onChange={this.onChangeCustomer}
+                />
+              </div>
+            </div>
+          </Col>
+          <Col md={6} lg={3} xl={3} xs={6}>
+            <div className="form__form-group">
+              <span className="form__form-group-label">{messages['pri_special.area']}</span>
+              <div className="form__form-group-field">
+                <Field
+                  name="special_area_id"
+                  component={renderSelectField}
+                  options={area.items && this.showOptionsArea(area.items)}
+                  onChange={this.onChangeArea}
                 />
               </div>
             </div>

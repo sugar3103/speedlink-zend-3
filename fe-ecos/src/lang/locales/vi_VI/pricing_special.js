@@ -138,5 +138,7 @@ module.exports = {
   'pri_special.validate-vas-formula-required': 'Công thức không được bỏ trống',
   'pri_special.validate-vas-min-required': 'Giá trị nhỏ nhất không được bỏ trống',
   'pri_special.validate-vas-spec-required': 'Bảng giá không được bỏ trống',
-  'pri_special.validate-customer-exists': 'Khách hàng này đã có bảng giá'
+  'pri_special.validate-customer-exists': 'Khách hàng này đã có bảng giá',
+  'pri_special.zone-exists': 'Vùng đã tồn tại',
+  'pri_special.range-weight-exists': 'Khoảng trọng lượng đã tồn tại',
 }

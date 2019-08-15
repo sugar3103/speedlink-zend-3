@@ -138,5 +138,7 @@ module.exports = {
   'pri_special.validate-vas-formula-required': 'Formula is required',
   'pri_special.validate-vas-min-required': 'Minimun value is required',
   'pri_special.validate-vas-spec-required': 'Spec is required',
-  'pri_special.validate-customer-exists': 'This customer has a price list'
+  'pri_special.validate-customer-exists': 'This customer has a price list',
+  'pri_special.zone-exists': 'Zone already exists',
+  'pri_special.range-weight-exists': 'Range weight already exists',
 }

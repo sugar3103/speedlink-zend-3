@@ -15,6 +15,10 @@ import {
 
   PRI_SPECIAL_RANGE_WEIGHT_DELETE_ITEM,
   PRI_SPECIAL_RANGE_WEIGHT_DELETE_ITEM_SUCCESS,
+
+  PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_REQUEST,
+  PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_PROGRESS,
+  PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_SUCCESS
 } from '../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -24,6 +28,10 @@ const INIT_STATE = {
   itemEditting: {},
   total: 0,
   paramSearch: null,
+  uploading: false,
+  progress: 0,
+  dataImport: [],
+  totalImport: 0
 };
 
 export default (state = INIT_STATE, action) => {
@@ -45,61 +53,87 @@ export default (state = INIT_STATE, action) => {
 
     case PRI_SPECIAL_RANGE_WEIGHT_GET_LIST_SUCCESS:
       const { items, total } = action.payload;
-      return { 
-        ...state, 
-        loading: false, 
+      return {
+        ...state,
+        loading: false,
         items,
         total
       };
 
     case PRI_SPECIAL_RANGE_WEIGHT_REQUEST_UPDATE_ITEM:
-      return { 
-        ...state, 
-        loading: true 
+      return {
+        ...state,
+        loading: true
       };
 
     case PRI_SPECIAL_RANGE_WEIGHT_REQUEST_UPDATE_ITEM_SUCCESS:
-      return { 
-        ...state, 
+      return {
+        ...state,
         loading: false,
-        itemEditting: action.payload 
+        itemEditting: action.payload
       };
 
     case PRI_SPECIAL_RANGE_WEIGHT_ADD_ITEM:
-			return { 
-        ...state, 
-        loading: false 
+      return {
+        ...state,
+        loading: false
       };
 
-		case PRI_SPECIAL_RANGE_WEIGHT_ADD_ITEM_SUCCESS:
-			return { 
-        ...state, 
-        loading: false, 
+    case PRI_SPECIAL_RANGE_WEIGHT_ADD_ITEM_SUCCESS:
+      return {
+        ...state,
+        loading: false,
         errors: null
       };
 
     case PRI_SPECIAL_RANGE_WEIGHT_UPDATE_ITEM:
-			return { 
-        ...state, 
-        loading: false 
+      return {
+        ...state,
+        loading: false
       };
 
-		case PRI_SPECIAL_RANGE_WEIGHT_UPDATE_ITEM_SUCCESS:
-			return { 
-        ...state, 
-        loading: false, 
+    case PRI_SPECIAL_RANGE_WEIGHT_UPDATE_ITEM_SUCCESS:
+      return {
+        ...state,
+        loading: false,
         errors: null
       };
-      
+
     case PRI_SPECIAL_RANGE_WEIGHT_DELETE_ITEM:
-			return { 
-        ...state, 
-        loading: false 
+      return {
+        ...state,
+        loading: false
       };
 
-		case PRI_SPECIAL_RANGE_WEIGHT_DELETE_ITEM_SUCCESS:
-			return { 
-        ...state, 
+    case PRI_SPECIAL_RANGE_WEIGHT_DELETE_ITEM_SUCCESS:
+      return {
+        ...state,
+      };
+
+    case PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_REQUEST:
+      return {
+        ...state,
+        uploading: true,
+        progress: 0,
+        errors: null
+      };
+
+    case PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_PROGRESS:
+      return {
+        ...state,
+        uploading: true,
+        progress: action.payload
+      };
+
+    case PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_SUCCESS:
+      const { dataImport, totalImport } = action.payload;
+      return {
+        ...state,
+        uploading: false,
+        dataImport,
+        totalImport,
+        progress: 0,
+        errors: null
       };
 
     default:
