@@ -42,6 +42,27 @@ class SpecialZoneRepository extends EntityRepository
         }
         return $queryBuilder->getQuery()->execute();
     }
+    public function checkExitWithAddress($data)
+    {
+        $entityManager = $this->getEntityManager();
+        try {
+            $queryBuilder = $entityManager->createQueryBuilder();
+            $queryBuilder->select('sz.id')->from(SpecialZone::class, 'sz')
+                ->where('sz.from_city = :from_city_id
+                    AND sz.to_city = :to_city_id
+                    AND sz.to_district = :to_district_id
+                    AND sz.to_ward = :to_ward_id')
+                ->setParameter("from_city_id", $data['from_city'])
+                ->setParameter("to_city_id", $data['to_city'])
+                ->setParameter("to_district_id", $data['to_district'])
+                ->setParameter("to_ward_id", $data['to_ward']);
+
+        } catch (QueryException $e) {
+            return [];
+        }
+        
+        return $queryBuilder->getQuery()->execute();
+    }
     /**
      * Get list user by condition
      *

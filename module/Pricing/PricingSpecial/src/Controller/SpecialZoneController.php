@@ -1,5 +1,6 @@
 <?php
 namespace PricingSpecial\Controller;
+
 set_time_limit(300);
 
 use Address\Entity\City;
@@ -54,16 +55,16 @@ class SpecialZoneController extends CoreController
         if ($this->getRequest()->isPost()) {
             // get the filters
             $fieldsMap = [
-                0 => 'id', 
-                1 => 'name', 
-                2 => 'name_en', 
+                0 => 'id',
+                1 => 'name',
+                2 => 'name_en',
                 3 => 'created_at',
                 4 => 'customer_id',
                 5 => 'special_area_id',
                 6 => 'from_city',
                 7 => 'to_city',
                 8 => 'to_district',
-                9 => 'to_ward'
+                9 => 'to_ward',
             ];
 
             list($start, $limit, $sortField, $sortDirection, $filters, $fields) = $this->getRequestData($fieldsMap);
@@ -90,13 +91,19 @@ class SpecialZoneController extends CoreController
             $form = new ZoneForm('create', $this->entityManager);
 
             $form->setData($this->getRequestData());
+
             //validate form
             if ($form->isValid()) {
                 // get filtered and validated data
                 $data = $form->getData();
-                // add Special Zone.
-                $this->specialZoneManager->addZone($data, $user);
-                $this->apiResponse['message'] = "ADD_SUCCESS_SPECIAL_ZONE";
+                if ($this->entityManager->getRepository(SpecialZone::class)->checkExitWithAddress($data)) {
+                    $this->error_code = 0;
+                    $this->apiResponse['message'] = "SPECIAL_ZONE_HAD_BEEN_EXISTED";
+                } else {
+                    // add Special Zone.
+                    $this->specialZoneManager->addZone($data, $user);
+                    $this->apiResponse['message'] = "ADD_SUCCESS_SPECIAL_ZONE";
+                }
             } else {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = "Error";
@@ -184,7 +191,7 @@ class SpecialZoneController extends CoreController
             4 => 'to_district',
             5 => 'to_ward',
             6 => 'account_no',
-            7 => 'area_name'
+            7 => 'area_name',
         ];
         //Tạo mảng chứa dữ liệu
         // $this->cache->removeItem('specialZone');die;
@@ -201,7 +208,7 @@ class SpecialZoneController extends CoreController
             }
 
             $data = $this->cache->getItem('specialZone', $result);
-            
+
             if (!$result) {
                 // $this->cache->removeItem('rbac_container');
                 $file = __DIR__ . "/data.xlsx";
@@ -238,9 +245,9 @@ class SpecialZoneController extends CoreController
             } else {
                 $LastColumn = count($data);
             }
-            
+
             $dataResult = array_slice($data, $start, $lenght);
-            
+
             $customers = [];
             $area = [];
             $fromCity = [];
@@ -248,76 +255,75 @@ class SpecialZoneController extends CoreController
             $toDistrict = [];
             $toWard = [];
 
-            for ($i=0; $i < count($dataResult); $i++) {                 
-                if(!in_array($dataResult[$i]['account_no'], $customers)) {
+            for ($i = 0; $i < count($dataResult); $i++) {
+                if (!in_array($dataResult[$i]['account_no'], $customers)) {
                     $customers[] = $data[$i]['account_no'];
                 }
 
-                if(!in_array($dataResult[$i]['area_name'], $area)) {
+                if (!in_array($dataResult[$i]['area_name'], $area)) {
                     $area[] = $dataResult[$i]['area_name'];
                 }
 
-                if(!in_array($dataResult[$i]['from_city'], $fromCity)) {
+                if (!in_array($dataResult[$i]['from_city'], $fromCity)) {
                     $fromCity[] = $data[$i]['from_city'];
                 }
 
-                if(!in_array($dataResult[$i]['to_city'], $toCity)) {
+                if (!in_array($dataResult[$i]['to_city'], $toCity)) {
                     $toCity[] = $dataResult[$i]['to_city'];
                 }
 
-                if(!in_array($dataResult[$i]['to_district'], $toDistrict)) {
+                if (!in_array($dataResult[$i]['to_district'], $toDistrict)) {
                     $toDistrict[] = $dataResult[$i]['to_district'];
                 }
 
-                if(!in_array($dataResult[$i]['to_ward'], $toWard)) {
+                if (!in_array($dataResult[$i]['to_ward'], $toWard)) {
                     $toWard[] = $dataResult[$i]['to_ward'];
                 }
             }
-            
+
             //Get Custom
             $customers = $this->entityManager->getRepository(Customer::class)->findBy([
-                'customer_no' => $customers
-            ]);
-            
-            $areas = $this->entityManager->getRepository(SpecialArea::class)->findBy([
-                'name' => $area, 
-                'is_deleted' => 0
+                'customer_no' => $customers,
             ]);
 
-            
+            $areas = $this->entityManager->getRepository(SpecialArea::class)->findBy([
+                'name' => $area,
+                'is_deleted' => 0,
+            ]);
+
             $fromCity = $this->entityManager->getRepository(City::class)->findBy([
-                'name' => $fromCity, 
-                'is_deleted' => 0
+                'name' => $fromCity,
+                'is_deleted' => 0,
             ]);
             $toCity = $this->entityManager->getRepository(City::class)->findBy([
                 'name' => $toCity,
-                'is_deleted' => 0
+                'is_deleted' => 0,
             ]);
 
             $toDistrict = $this->entityManager->getRepository(District::class)->findBy([
                 'name' => $toDistrict,
-                'is_deleted' => 0
+                'is_deleted' => 0,
             ]);
             $toWard = $this->entityManager->getRepository(Ward::class)->findBy([
                 'name' => $toWard,
-                'is_deleted' => 0
+                'is_deleted' => 0,
             ]);
-            
+
             for ($i = 0; $i < count($dataResult); $i++) {
                 $error = false;
                 $value = $dataResult[$i];
-                $value['id'] = $i + $start;       
+                $value['id'] = $i + $start;
                 $error = array(
                     'customer' => 'SPECIAL_IMPORT_CUSTOMER_NOT_EXIT',
                     'area' => 'SPECIAL_IMPORT_AREA_NOT_EXIT',
                     'fromCity' => 'SPECIAL_IMPORT_FROM_CITY_NOT_EXIT',
                     'toCity' => 'SPECIAL_IMPORT_TO_CITY_NOT_EXIT',
                     'toDistrict' => 'SPECIAL_IMPORT_TO_DISTRICT_NOT_EXIT',
-                    'toWard' => 'SPECIAL_IMPORT_TO_WARD_NOT_EXIT'
+                    'toWard' => 'SPECIAL_IMPORT_TO_WARD_NOT_EXIT',
                 );
                 $idCustomer = 0;
                 foreach ($customers as $customer) {
-                    if($customer->getCustomerNo() === strval($value['account_no'])) {
+                    if ($customer->getCustomerNo() === strval($value['account_no'])) {
                         $idCustomer = $customer->getId();
                         unset($error['customer']);
                         break;
@@ -325,7 +331,7 @@ class SpecialZoneController extends CoreController
                 }
                 $idArea = 0;
                 foreach ($areas as $area) {
-                    if($area->getName() === $value['area_name']) {
+                    if ($area->getName() === $value['area_name']) {
                         $idArea = $area->getId();
                         unset($error['area']);
                         break;
@@ -334,7 +340,7 @@ class SpecialZoneController extends CoreController
 
                 $idFromCity = 0;
                 foreach ($fromCity as $frCity) {
-                    if($frCity->getName() === $value['from_city']) {
+                    if ($frCity->getName() === $value['from_city']) {
                         $idFromCity = $frCity->getId();
                         unset($error['fromCity']);
                         break;
@@ -342,7 +348,7 @@ class SpecialZoneController extends CoreController
                 }
                 $idToCity = 0;
                 foreach ($toCity as $tCity) {
-                    if($tCity->getName() === $value['to_city']) {
+                    if ($tCity->getName() === $value['to_city']) {
                         $idToCity = $tCity->getId();
                         unset($error['toCity']);
                         break;
@@ -350,7 +356,7 @@ class SpecialZoneController extends CoreController
                 }
                 $idToDistrict = 0;
                 foreach ($toDistrict as $tDistrict) {
-                    if($tDistrict->getName() === $value['to_district']) {
+                    if ($tDistrict->getName() === $value['to_district']) {
                         $idToDistrict = $tDistrict->getId();
                         unset($error['toDistrict']);
                         break;
@@ -358,7 +364,7 @@ class SpecialZoneController extends CoreController
                 }
                 $idToWard = 0;
                 foreach ($toWard as $tWard) {
-                    if($tWard->getName() === $value['to_ward']) {
+                    if ($tWard->getName() === $value['to_ward']) {
                         $idToWard = $tWard->getId();
                         unset($error['toWard']);
                         break;
@@ -377,7 +383,7 @@ class SpecialZoneController extends CoreController
                         'to_ward' => $idToWard,
                         'is_deleted' => 0,
                     ]);
-                    
+
                     if ($specialZone) {
                         $value['error'] = 'SPECIAL_IMPORT_ZONE_EXIT';
                     }
@@ -393,7 +399,6 @@ class SpecialZoneController extends CoreController
                 $data[$i]['id_to_district'] = $idToDistrict;
                 $data[$i]['id_to_ward'] = $idToWard;
             }
-            
 
             $this->apiResponse = array(
                 'data' => $dataResult,
@@ -408,15 +413,15 @@ class SpecialZoneController extends CoreController
     {
         if ($this->getRequest()->isPost()) {
             $data = $this->cache->getItem('specialZone', $result);
-            if($result) {
+            if ($result) {
                 $dataPost = $this->getRequestData();
-                if(isset($dataPost['ids']) && is_array($dataPost['ids'])) {
+                if (isset($dataPost['ids']) && is_array($dataPost['ids'])) {
                     foreach ($dataPost['ids'] as $id) {
                         unset($data[0]);
                     }
                 }
-                $this->specialZoneManager->addZoneImport($data,$this->tokenPayload);
-                
+                $this->specialZoneManager->addZoneImport($data, $this->tokenPayload);
+
                 $this->cache->removeItem('specialZone');
                 $this->apiResponse['message'] = "SPECIAL_IMPORTED";
             } else {
