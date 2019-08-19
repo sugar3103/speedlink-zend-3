@@ -52,7 +52,7 @@ class SpecialZoneRepository extends EntityRepository
                     AND sz.to_city = :to_city_id
                     AND sz.to_district = :to_district_id
                     AND sz.to_ward = :to_ward_id
-                    AND sz.customer_id = :customer_id')
+                    AND sz.customer = :customer_id')
                 ->setParameter("from_city_id", $data['from_city'])
                 ->setParameter("to_city_id", $data['to_city'])
                 ->setParameter("to_district_id", $data['to_district'])
