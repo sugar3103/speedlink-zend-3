@@ -1,8 +1,8 @@
 <?php
 namespace PricingSpecial\Form;
 
-use PricingSpecial\Entity\DomesticRangeWeight;
-use PricingSpecial\Validator\DomesticRangeWeightExistsValidator;
+use PricingSpecial\Entity\SpecialRangeWeight;
+use PricingSpecial\Validator\SpecialRangeWeightExistsValidator;
 use Doctrine\ORM\EntityManager;
 use Zend\Filter\ToInt;
 use Zend\Filter\ToFloat;
@@ -25,20 +25,20 @@ class RangeWeightForm extends Form {
     private $entityManager = null;
 
     /**
-     * Current DomesticRangeWeight.
-     * @var DomesticRangeWeight
+     * Current SpecialRangeWeight.
+     * @var SpecialRangeWeight
      */
-    private $domesticRangeWeight = null;
+    private $specialRangeWeight = null;
 
-    public function __construct($scenario = 'create', $entityManager = null, $domesticRangeWeight = null)
+    public function __construct($scenario = 'create', $entityManager = null, $specialRangeWeight = null)
     {
         // Define form name.
-        parent::__construct('domestic-zone-form');
+        parent::__construct('Special-zone-form');
         
         // Save parameters for internal use.
         $this->scenario = $scenario;
         $this->entityManager = $entityManager;
-        $this->domesticRangeWeight = $domesticRangeWeight;
+        $this->specialRangeWeight = $specialRangeWeight;
 
         $this->addInputFilter();
     }
@@ -66,13 +66,13 @@ class RangeWeightForm extends Form {
                         'max' => 50
                     ]
                 ],
-                // [
-                //     'name' => DomesticRangeWeightExistsValidator::class,
-                //     'options' => [
-                //         'entityManager' => $this->entityManager,
-                //         'domesticRangeWeight' => $this->domesticRangeWeight
-                //     ]
-                // ]
+                [
+                    'name' => SpecialRangeWeightExistsValidator::class,
+                    'options' => [
+                        'entityManager' => $this->entityManager,
+                        'specialRangeWeight' => $this->specialRangeWeight
+                    ]
+                ]
             ]
         ]);
 
@@ -92,14 +92,14 @@ class RangeWeightForm extends Form {
                         'max' => 50
                     ]
                 ],
-                // [
-                //     'name' => DomesticRangeWeightExistsValidator::class,
-                //     'options' => [
-                //         'entityManager' => $this->entityManager,
-                //         'domesticRangeWeight' => $this->domesticRangeWeight,
-                //         'language' => 'en'
-                //     ]
-                // ]
+                [
+                    'name' => SpecialRangeWeightExistsValidator::class,
+                    'options' => [
+                        'entityManager' => $this->entityManager,
+                        'specialRangeWeight' => $this->specialRangeWeight,
+                        'language' => 'en'
+                    ]
+                ]
             ]
         ]);
         

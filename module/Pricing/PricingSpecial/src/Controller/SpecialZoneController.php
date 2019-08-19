@@ -130,7 +130,8 @@ class SpecialZoneController extends CoreController
                     if ($form->isValid()) {
                         // get filtered and validated data
                         $data = $form->getData();
-                        if ($this->entityManager->getRepository(SpecialZone::class)->checkExitWithAddress($data)) {
+                        $preData = $this->entityManager->getRepository(SpecialZone::class)->checkExitWithAddress($data);
+                        if ($preData[0]['id'] != $area->getId()) {
                             $this->error_code = 0;
                             $this->apiResponse['message'] = "SPECIAL_ZONE_HAD_BEEN_EXISTED";
                         } else {
