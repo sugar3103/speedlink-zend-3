@@ -77,6 +77,15 @@ class SearchForm extends Component {
     return result;
   }
 
+  onChangeCustomer = value => {
+    const params = {
+      field: ['id', 'name'],
+      offset: { limit: 0 },
+      query: { customer_id: value }
+    }
+    this.props.getAreaSpecialList(params);
+  }
+
   onChangeDestinationCity = value => {
     this.props.change('to_district', null);
     this.props.change('to_ward', null);
@@ -125,6 +134,20 @@ class SearchForm extends Component {
         <Row>
           <Col md={6} lg={3} xl={3} xs={6}>
             <div className="form__form-group">
+              <span className="form__form-group-label">{messages['pri_special.customer']}</span>
+              <div className="form__form-group-field">
+                <Field
+                  name="customer_id"
+                  component={renderSelectField}
+                  options={customer.items && this.showOptions(customer.items)}
+                  placeholder={messages['pri_special.customer']}
+                  onChange={this.onChangeCustomer}
+                />
+              </div>
+            </div>
+          </Col>
+          <Col md={6} lg={3} xl={3} xs={6}>
+            <div className="form__form-group">
               <span className="form__form-group-label">{messages['pri_special.area-name']}</span>
               <div className="form__form-group-field">
                 <Field
@@ -145,19 +168,6 @@ class SearchForm extends Component {
                   component="input"
                   type="text"
                   placeholder={messages['pri_special.zone-name']}
-                />
-              </div>
-            </div>
-          </Col>
-          <Col md={6} lg={3} xl={3} xs={6}>
-            <div className="form__form-group">
-              <span className="form__form-group-label">{messages['pri_special.customer']}</span>
-              <div className="form__form-group-field">
-                <Field
-                  name="customer_id"
-                  component={renderSelectField}
-                  options={customer.items && this.showOptions(customer.items)}
-                  placeholder={messages['pri_special.customer']}
                 />
               </div>
             </div>
