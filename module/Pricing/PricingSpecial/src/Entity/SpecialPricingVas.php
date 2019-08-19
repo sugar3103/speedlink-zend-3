@@ -256,21 +256,21 @@ class SpecialPricingVas
     }
 
     /**
-     * Set isDeleted.
+     * Set is_deleted.
      *
-     * @param int $isDeleted
+     * @param int $is_deleted
      *
      * @return SpecialPricingVas
      */
-    public function setIsDeleted($isDeleted)
+    public function setIsDeleted($is_deleted)
     {
-        $this->is_deleted = $isDeleted;
+        $this->is_deleted = $is_deleted;
 
         return $this;
     }
 
     /**
-     * Get isDeleted.
+     * Get is_deleted.
      *
      * @return int
      */

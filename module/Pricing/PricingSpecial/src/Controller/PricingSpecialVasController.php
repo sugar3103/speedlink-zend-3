@@ -69,7 +69,7 @@ class PricingSpecialVasController extends CoreController {
                 $data = $form->getData();
                 // add Special Pricing.
                 $this->pricingSpecialVasManager->deletedPricingVas($this->entityManager->getRepository(SpecialPricing::class)->find($data['id']));
-
+                
                 $this->pricingSpecialVasManager->addPricingVas($data,$user);
                 $this->apiResponse['message'] = "ADD_SUCCESS_SPECIAL_VAS_PRICING";
             } else {

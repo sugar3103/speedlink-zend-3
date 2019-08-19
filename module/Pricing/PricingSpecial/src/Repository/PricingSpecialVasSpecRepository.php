@@ -13,14 +13,14 @@ use Doctrine\ORM\QueryBuilder;
  */
 class PricingSpecialVasSpecRepository extends EntityRepository
 {
-    public function deletedPricingVasSpec($pricing_vas_id)
+    public function deletedPricingVasSpec($pricing_id)
     {
        
         $entityManager = $this->getEntityManager();
         try{
             $queryBuilder = $entityManager->createQueryBuilder();
             $queryBuilder->update(SpecialPricingVasSpec::class, 'spvs')->set('spvs.is_deleted', 1)
-                ->where('spvs.special_pricing_vas = :special_pricing_vas_id')->setParameter("special_pricing_vas_id", $pricing_vas_id);            
+                ->where('spvs.special_pricing = :special_pricing_id')->setParameter("special_pricing_id", $pricing_id);            
         } catch (QueryException $e) {
             return [];
         }           

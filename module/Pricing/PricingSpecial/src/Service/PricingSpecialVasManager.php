@@ -83,6 +83,7 @@ class PricingSpecialVasManager
 
     public function addPricingVas($data, $user)
     {
+        
         $userData = $this->entityManager->getRepository((User::class))->find($user->id);
         $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
         $dateNow = $addTime->format('Y-m-d H:i:s');
@@ -113,14 +114,12 @@ class PricingSpecialVasManager
                     $pricingVas->setMin($vas['min']);
                     $pricingVas->setFormula($vas['formula']);
                     $pricingVas->setType($vas['type']);
-
+                    
                     $this->entityManager->persist($pricingVas);
-
+                    
                     $this->entityManager->flush();
-
                     $this->entityManager->commit();
 
-                    $this->entityManager->getRepository(SpecialPricingVasSpec::class)->deletedPricingVasSpec($pricingVas->getId());
                     if (isset($vas['spec']) && is_array($vas['spec'])) {
                         foreach ($vas['spec'] as $spec) {
                             $this->entityManager->beginTransaction();
@@ -171,16 +170,8 @@ class PricingSpecialVasManager
 
     public function deletedPricingVas(\PricingSpecial\Entity\SpecialPricing $pricing)
     {
-        //Deleted Vas Spec
-        $pricingVas = $this->entityManager->getRepository(SpecialPricingVas::class)->findBy([
-            'special_pricing' => $pricing,
-            'is_deleted' => 0
-        ]);
-        if($pricingVas) {
-            foreach ($pricingVas as $vas) {
-                $this->entityManager->getRepository(SpecialPricingVasSpec::class)->deletedPricingVasSpec($vas->getId());
-            }
-        }
+        $this->entityManager->getRepository(SpecialPricingVasSpec::class)->deletedPricingVasSpec($pricing->getId());
+
         $this->entityManager->getRepository(SpecialPricingVas::class)->deletedVas($pricing->getId());
     }
 }
