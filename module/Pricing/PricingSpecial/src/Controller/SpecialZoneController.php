@@ -130,9 +130,15 @@ class SpecialZoneController extends CoreController
                     if ($form->isValid()) {
                         // get filtered and validated data
                         $data = $form->getData();
-                        // update Special Zone.
-                        $this->specialZoneManager->updateZone($area, $data, $user);
-                        $this->apiResponse['message'] = "MODIFIED_SUCCESS_SPECIAL_ZONE";
+                        if ($this->entityManager->getRepository(SpecialZone::class)->checkExitWithAddress($data)) {
+                            $this->error_code = 0;
+                            $this->apiResponse['message'] = "SPECIAL_ZONE_HAD_BEEN_EXISTED";
+                        } else {
+                            // update Special Zone.
+                            $this->specialZoneManager->updateZone($area, $data, $user);
+                            $this->apiResponse['message'] = "MODIFIED_SUCCESS_SPECIAL_ZONE";
+                        }
+
                     } else {
                         $this->error_code = 0;
                         $this->apiResponse['data'] = $form->getMessages();
@@ -185,7 +191,7 @@ class SpecialZoneController extends CoreController
     {
         $files = $this->params()->fromFiles('import_file');
         $this->apiResponse = array(
-            'data' => $files            
+            'data' => $files,
         );
 
         return $this->createResponse();
@@ -218,7 +224,7 @@ class SpecialZoneController extends CoreController
 
             $data = $this->cache->getItem('specialZone', $result);
 
-            if (!$result) {                
+            if (!$result) {
                 $objFile = IOFactory::identify($file);
                 $objData = IOFactory::createReader($objFile);
                 $objData->setReadDataOnly(true);
