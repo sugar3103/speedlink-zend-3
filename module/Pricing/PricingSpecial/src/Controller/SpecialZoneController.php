@@ -183,6 +183,13 @@ class SpecialZoneController extends CoreController
 
     public function importAction()
     {
+        $files = $this->params()->fromFiles('import_file');
+        $this->apiResponse = array(
+            'data' => $files            
+        );
+
+        return $this->createResponse();
+
         $nameField = [
             0 => 'name',
             1 => 'name_en',
@@ -200,6 +207,8 @@ class SpecialZoneController extends CoreController
         $data = [];
 
         if ($this->getRequest()->isPost()) {
+            // $file = __DIR__ . "/data.xlsx";
+            $file = $this->params()->fromFiles('import_file');
             $dataPost = $this->getRequestData();
             $offset = isset($dataPost['offset']) ? $dataPost['offset'] : 0;
             if ($offset) {
@@ -209,12 +218,9 @@ class SpecialZoneController extends CoreController
 
             $data = $this->cache->getItem('specialZone', $result);
 
-            if (!$result) {
-                // $this->cache->removeItem('rbac_container');
-                $file = __DIR__ . "/data.xlsx";
+            if (!$result) {                
                 $objFile = IOFactory::identify($file);
                 $objData = IOFactory::createReader($objFile);
-
                 $objData->setReadDataOnly(true);
                 // Load dữ liệu sang dạng đối tượng
                 $objPHPExcel = $objData->load($file);

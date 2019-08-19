@@ -64,14 +64,7 @@ class ZoneForm extends Form {
                         'min' => 2,
                         'max' => 50
                     ]
-                ],
-                [
-                    'name' => SpecialZoneExistsValidator::class,
-                    'options' => [
-                        'entityManager' => $this->entityManager,
-                        'specialZone' => $this->specialZone
-                    ]
-                ]
+                ]                
             ]
         ]);
 
@@ -90,15 +83,8 @@ class ZoneForm extends Form {
                         'min' => 2,
                         'max' => 50
                     ]
-                ],
-                [
-                    'name' => SpecialZoneExistsValidator::class,
-                    'options' => [
-                        'entityManager' => $this->entityManager,
-                        'specialZone' => $this->specialZone,
-                        'language' => 'en'
-                    ]
                 ]
+                
             ]
         ]);    
         

@@ -207,7 +207,7 @@ function uploadZoneApi(file, onProgress) {
   let headers = authHeader();
   headers = {
     ...headers,
-    'content-type': `multipart/form-data; boundary=${data._boundary}`,
+    'Content-Type': `multipart/form-data`,
   }
 
   return axios.request({
@@ -215,7 +215,7 @@ function uploadZoneApi(file, onProgress) {
     url: `${apiUrl}pricing/special/zone/import`,
     headers: headers,
     data: data,
-    onUploadProgress: onProgress
+    // onUploadProgress: onProgress
   });
 }
 
