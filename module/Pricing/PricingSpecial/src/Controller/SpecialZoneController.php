@@ -190,19 +190,6 @@ class SpecialZoneController extends CoreController
 
     public function importAction()
     {
-        // $files = $this->params()->fromFiles('import_file');
-        $request = $this->getRequest();
-
-        $post = array_merge_recursive(
-            $request->getPost()->toArray(),
-            $request->getFiles()->toArray()
-        );
-
-        $this->apiResponse = array(
-            'data' => $post,
-        );
-
-        return $this->createResponse();
 
         $nameField = [
             0 => 'name',
@@ -221,8 +208,16 @@ class SpecialZoneController extends CoreController
         $data = [];
 
         if ($this->getRequest()->isPost()) {
-            // $file = __DIR__ . "/data.xlsx";
-            $file = $this->params()->fromFiles('import_file');
+            $fileUpdate = $this->params()->fromFiles('import_file');
+            if ($fileUpdate) {
+                $this->cache->removeItem('specialZone');
+                // Upload path
+                $location = dirname(__DIR__, 5) . "/data/files/";        
+                move_uploaded_file($fileUpdate['tmp_name'], $location . $fileUpdate['name']);    
+                $file = $location . $fileUpdate['name'];
+            }
+        
+
             $dataPost = $this->getRequestData();
             $offset = isset($dataPost['offset']) ? $dataPost['offset'] : 0;
             if ($offset) {
@@ -263,7 +258,7 @@ class SpecialZoneController extends CoreController
                 // Save Data to cache.
                 $this->cache->setItem('specialZone', $data);
             } else {
-                $LastColumn = count($data);
+                $Totalrow = count($data);
             }
 
             $dataResult = array_slice($data, $start, $lenght);
@@ -422,7 +417,7 @@ class SpecialZoneController extends CoreController
 
             $this->apiResponse = array(
                 'data' => $dataResult,
-                'total' => $LastColumn,
+                'total' => (int)$Totalrow,
             );
 
             return $this->createResponse();
