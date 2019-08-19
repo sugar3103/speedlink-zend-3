@@ -1,21 +1,20 @@
 <?php
 namespace PricingSpecial\Form;
 
-use PricingSpecial\Entity\SpecialRangeWeight;
-use PricingSpecial\Validator\SpecialRangeWeightExistsValidator;
 use Doctrine\ORM\EntityManager;
-use Zend\Filter\ToInt;
-use Zend\Filter\ToFloat;
+use PricingSpecial\Entity\SpecialRangeWeight;
 use Zend\Filter\StringTrim;
+use Zend\Filter\ToFloat;
+use Zend\Filter\ToInt;
+use Zend\Form\Form;
 use Zend\Validator\StringLength;
 
-use Zend\Form\Form;
-
-class RangeWeightForm extends Form {
+class RangeWeightForm extends Form
+{
 /**
-     * Scenario ('create' or 'update')
-     * @var string
-     */
+ * Scenario ('create' or 'update')
+ * @var string
+ */
     private $scenario;
 
     /**
@@ -34,7 +33,7 @@ class RangeWeightForm extends Form {
     {
         // Define form name.
         parent::__construct('Special-zone-form');
-        
+
         // Save parameters for internal use.
         $this->scenario = $scenario;
         $this->entityManager = $entityManager;
@@ -43,10 +42,11 @@ class RangeWeightForm extends Form {
         $this->addInputFilter();
     }
 
-     /**
+    /**
      * This method creates input filter (used for form filtering/validation).
      */
-    private function addInputFilter() {
+    private function addInputFilter()
+    {
         // Create main input filter.
         $inputFilter = $this->getInputFilter();
 
@@ -55,25 +55,18 @@ class RangeWeightForm extends Form {
             'name' => 'name',
             'required' => true,
             'filters' => [[
-                    'name' => StringTrim::class
-                ]
+                'name' => StringTrim::class,
+            ],
             ],
             'validators' => [
                 [
                     'name' => StringLength::class,
                     'options' => [
                         'min' => 3,
-                        'max' => 50
-                    ]
+                        'max' => 50,
+                    ],
                 ],
-                [
-                    'name' => SpecialRangeWeightExistsValidator::class,
-                    'options' => [
-                        'entityManager' => $this->entityManager,
-                        'specialRangeWeight' => $this->specialRangeWeight
-                    ]
-                ]
-            ]
+            ],
         ]);
 
         $inputFilter->add([
@@ -81,46 +74,37 @@ class RangeWeightForm extends Form {
             'required' => true,
             'filters' => [
                 [
-                    'name' => StringTrim::class
-                ]
+                    'name' => StringTrim::class,
+                ],
             ],
             'validators' => [
                 [
                     'name' => StringLength::class,
                     'options' => [
                         'min' => 3,
-                        'max' => 50
-                    ]
+                        'max' => 50,
+                    ],
                 ],
-                [
-                    'name' => SpecialRangeWeightExistsValidator::class,
-                    'options' => [
-                        'entityManager' => $this->entityManager,
-                        'specialRangeWeight' => $this->specialRangeWeight,
-                        'language' => 'en'
-                    ]
-                ]
-            ]
+            ],
         ]);
-        
-     
+
         $inputFilter->add([
             'name' => 'customer_id',
             'required' => true,
             'filters' => [
                 [
-                    'name' => ToInt::class
-                ]
-            ]                
+                    'name' => ToInt::class,
+                ],
+            ],
         ]);
         $inputFilter->add([
             'name' => 'special_area_id',
             'required' => true,
             'filters' => [
                 [
-                    'name' => ToInt::class
-                ]
-            ]                
+                    'name' => ToInt::class,
+                ],
+            ],
         ]);
 
         // Add input for "description" field.
@@ -129,36 +113,36 @@ class RangeWeightForm extends Form {
             'required' => false,
             'filters' => [
                 [
-                    'name' => StringTrim::class
-                ]
+                    'name' => StringTrim::class,
+                ],
             ],
             'validators' => [
                 [
                     'name' => StringLength::class,
                     'options' => [
                         'min' => 1,
-                        'max' => 1024
-                    ]
-                ]
-            ]
+                        'max' => 1024,
+                    ],
+                ],
+            ],
         ]);
         $inputFilter->add([
             'name' => 'description_en',
             'required' => false,
             'filters' => [
                 [
-                    'name' => StringTrim::class
-                ]
+                    'name' => StringTrim::class,
+                ],
             ],
             'validators' => [
                 [
                     'name' => StringLength::class,
                     'options' => [
                         'min' => 1,
-                        'max' => 1024
-                    ]
-                ]
-            ]
+                        'max' => 1024,
+                    ],
+                ],
+            ],
         ]);
 
         $inputFilter->add([
@@ -166,9 +150,9 @@ class RangeWeightForm extends Form {
             'required' => true,
             'filters' => [
                 [
-                    'name' => ToInt::class
-                ]
-            ]                
+                    'name' => ToInt::class,
+                ],
+            ],
         ]);
 
         $inputFilter->add([
@@ -176,9 +160,9 @@ class RangeWeightForm extends Form {
             'required' => true,
             'filters' => [
                 [
-                    'name' => ToInt::class
-                ]
-            ]                
+                    'name' => ToInt::class,
+                ],
+            ],
         ]);
 
         $inputFilter->add([
@@ -186,9 +170,9 @@ class RangeWeightForm extends Form {
             'required' => true,
             'filters' => [
                 [
-                    'name' => ToInt::class
-                ]
-            ]                
+                    'name' => ToInt::class,
+                ],
+            ],
         ]);
 
         $inputFilter->add([
@@ -196,70 +180,69 @@ class RangeWeightForm extends Form {
             'required' => true,
             'filters' => [
                 [
-                    'name' => ToInt::class
-                ]
-            ]                
+                    'name' => ToInt::class,
+                ],
+            ],
         ]);
-        
+
         $inputFilter->add([
             'name' => 'calculate_unit',
             'required' => true,
             'filters' => [
                 [
-                    'name' => ToInt::class
-                ]
-            ]                
+                    'name' => ToInt::class,
+                ],
+            ],
         ]);
-        
+
         $inputFilter->add([
             'name' => 'round_up',
             'required' => true,
             'filters' => [
                 [
-                    'name' => ToFloat::class
-                ]
-            ]                
+                    'name' => ToFloat::class,
+                ],
+            ],
         ]);
-        
+
         $inputFilter->add([
             'name' => 'unit',
             'required' => false,
             'filters' => [
                 [
-                    'name' => ToFloat::class
-                ]
-            ]                
+                    'name' => ToFloat::class,
+                ],
+            ],
         ]);
-        
+
         $inputFilter->add([
             'name' => 'from',
             'required' => true,
             'filters' => [
                 [
-                    'name' => ToFloat::class
-                ]
-            ]                
+                    'name' => ToFloat::class,
+                ],
+            ],
         ]);
-        
-        
+
         $inputFilter->add([
             'name' => 'to',
             'required' => true,
             'filters' => [
                 [
-                    'name' => ToFloat::class
-                ]
-            ]                
+                    'name' => ToFloat::class,
+                ],
+            ],
         ]);
         $inputFilter->add([
             'name' => 'status',
             'required' => true,
             'filters' => [
                 [
-                    'name' => ToInt::class
-                ]
-            ]                
+                    'name' => ToInt::class,
+                ],
+            ],
         ]);
-        
+
     }
 }

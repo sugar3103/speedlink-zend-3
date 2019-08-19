@@ -190,9 +190,16 @@ class SpecialZoneController extends CoreController
 
     public function importAction()
     {
-        $files = $this->params()->fromFiles('import_file');
+        // $files = $this->params()->fromFiles('import_file');
+        $request = $this->getRequest();
+
+        $post = array_merge_recursive(
+            $request->getPost()->toArray(),
+            $request->getFiles()->toArray()
+        );
+
         $this->apiResponse = array(
-            'data' => $files,
+            'data' => $post,
         );
 
         return $this->createResponse();
