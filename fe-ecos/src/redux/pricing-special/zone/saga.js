@@ -97,6 +97,7 @@ function* addZoneSpecialItem({ payload }) {
 
       case EC_FAILURE:
         yield put(zoneSpecialError(response.data));
+        createNotification({ type: 'error', message: 'pri_special.zone-exists' });
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -141,6 +142,7 @@ function* updateZoneSpecialItem({ payload }) {
 
       case EC_FAILURE:
         yield put(zoneSpecialError(response.data));
+        createNotification({ type: 'error', message: 'pri_special.zone-exists' });
         break;
 
       case EC_FAILURE_AUTHENCATION:

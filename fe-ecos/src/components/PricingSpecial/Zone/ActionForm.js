@@ -102,6 +102,15 @@ class ActionForm extends Component {
     }
   }
 
+  onChangeCustomer = value => {
+    const params = {
+      field: ['id', 'name'],
+      offset: { limit: 0 },
+      query: { customer_id: value }
+    }
+    this.props.getAreaSpecialList(params);
+  }
+
   onChangeDestinationCity = value => {
     this.props.change('to_district', null);
     this.props.change('to_ward', null);
@@ -216,6 +225,7 @@ class ActionForm extends Component {
                     name="customer_id"
                     component={renderSelectField}
                     options={customer.items && this.showOptions(customer.items)}
+                    onChange={this.onChangeCustomer}
                     placeholder={messages['pri_special.customer']}
                     clearable={false}
                     disabled={disabled}
