@@ -171,6 +171,16 @@ class PricingSpecialVasManager
 
     public function deletedPricingVas(\PricingSpecial\Entity\SpecialPricing $pricing)
     {
+        //Deleted Vas Spec
+        $pricingVas = $this->entityManager->getRepository(SpecialPricingVas::class)->findBy([
+            'special_pricing' => $pricing,
+            'is_deleted' => 0
+        ]);
+        if($pricingVas) {
+            foreach ($pricingVas as $vas) {
+                $this->entityManager->getRepository(SpecialPricingVasSpec::class)->deletedPricingVasSpec($vas->getId());
+            }
+        }
         $this->entityManager->getRepository(SpecialPricingVas::class)->deletedVas($pricing->getId());
     }
 }
