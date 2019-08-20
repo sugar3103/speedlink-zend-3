@@ -33,6 +33,12 @@ module.exports = {
   'menu.range_weight_international' : 'Khoảng Trọng Lượng',
   'menu.pricing_index_international' : 'Bảng Giá',
 
+  'menu.pricing_special' : 'Bảng giá đặc biệt',
+  'menu.area_special' : 'Khu Vực',
+  'menu.zone_special' : 'Vùng',
+  'menu.range_weight_special' : 'Khoảng trọng lượng',
+  'menu.pricing_index_special' : 'Bảng giá',
+
   //Menu Setting
   'menu.setting': 'Cài đặt',
   'menu.user': 'Người dùng',

@@ -34,6 +34,9 @@ module.exports = {
   'pri_special.dest-city': 'Thành phố (Đích)',
   'pri_special.dest-district': 'Quận/Huyện (Đích)',
   'pri_special.dest-ward': 'Phường/Xã (Đích)',
+  'pri_special.zone-waiting-import': `Hệ thống đang xử lý dữ liệu vừa import. Vui lòng không đóng cửa sổ hay trình duyệt để đảm bảo quá trình lưu trữ được thực hiện đầy đủ! <br /> Nếu đóng cửa sổ hay trình duyệt đang hoạt động sẽ ngừng quá trình import. Khi import thành công sẽ hiển thị thông báo kết quả`,
+  'pri_special.import-zone-error': 'Lưu dữ liệu không thành công!',
+  'pri_special.import-zone-success': 'Lưu dữ liệu thành công!',
 
   /* RANGE WEIGHT SPECIAL */
   'pri_special.range-weight-title': 'Khoảng trọng lượng',
@@ -91,6 +94,7 @@ module.exports = {
   'pri_special.fixed': 'Tiền mặt',
   'pri_special.percentage': 'Phần trăm',
   'pri_special.return-value': 'Giá trị trả về',
+  'pri_special.import-data': 'Lưu Dữ Liệu',
 
   //validate
   'pri_special.validate-name-exists': 'Tên đã tồn tại',
@@ -141,4 +145,7 @@ module.exports = {
   'pri_special.validate-customer-exists': 'Khách hàng này đã có bảng giá',
   'pri_special.zone-exists': 'Vùng đã tồn tại',
   'pri_special.range-weight-exists': 'Khoảng trọng lượng đã tồn tại',
+  'pri_special.validate-file-requied': 'Tập tin không được bỏ trống',
+  'pri_special.validate-file-must-be-excel': 'Tập tin bắt buộc phải là .xlsx hoặc xls',
+  'pri_special.validate-file-exceed-max-size': 'Tập tin không được vượt quá 20MB',
 }

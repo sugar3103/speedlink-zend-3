@@ -34,6 +34,9 @@ module.exports = {
   'pri_special.dest-city': 'City (Destination)',
   'pri_special.dest-district': 'District (Destination)',
   'pri_special.dest-ward': 'Ward (Destination)',
+  'pri_special.zone-waiting-import': `The system is importing. Please DON'T close the tab or browser to ensure the storage process is fully implemented! <br /> If you close the tab or browser, it will stop the importing process. When successfully imported, the result will be displayed`,
+  'pri_special.import-zone-error': 'Save Data Error!',
+  'pri_special.import-zone-success': 'Save Data Successs!',
 
   /* RANGE WEIGHT SPECIAL */
   'pri_special.range-weight-title': 'Range Weight Special',
@@ -91,6 +94,7 @@ module.exports = {
   'pri_special.fixed': 'Fixed',
   'pri_special.percentage': 'Percentage',
   'pri_special.return-value': 'Return Value',
+  'pri_special.import-data': 'Import Data',
 
   //validate
   'pri_special.validate-name-exists': 'Name already exists',
@@ -141,4 +145,7 @@ module.exports = {
   'pri_special.validate-customer-exists': 'This customer has a price list',
   'pri_special.zone-exists': 'Zone already exists',
   'pri_special.range-weight-exists': 'Range weight already exists',
+  'pri_special.validate-file-requied': 'File is required',
+  'pri_special.validate-file-must-be-excel': 'File must be an .XLSX or .XLS file',
+  'pri_special.validate-file-exceed-max-size': 'File cannot exceed 20MB size',
 }

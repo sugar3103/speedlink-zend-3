@@ -18,7 +18,10 @@ import {
 
   PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_REQUEST,
   PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_PROGRESS,
-  PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_SUCCESS
+  PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_SUCCESS,
+  PRI_SPECIAL_RANGE_WEIGHT_RESET_DATA_IMPORT,
+  PRI_SPECIAL_RANGE_WEIGHT_GET_DATA_IMPORT,
+  PRI_SPECIAL_RANGE_WEIGHT_GET_DATA_IMPORT_SUCCESS
 } from '../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -31,15 +34,24 @@ const INIT_STATE = {
   uploading: false,
   progress: 0,
   dataImport: [],
-  totalImport: 0
+  totalImport: 0,
+  loadingDataImport: false
 };
 
 export default (state = INIT_STATE, action) => {
   switch (action.type) {
     case PRI_SPECIAL_RANGE_WEIGHT_ERROR:
       return {
-        ...state,
         loading: false,
+        items: [],
+        itemEditting: {},
+        total: 0,
+        paramSearch: null,
+        uploading: false,
+        progress: 0,
+        dataImport: [],
+        totalImport: 0,
+        loadingDataImport: false,
         errors: action.payload
       };
 
@@ -115,7 +127,8 @@ export default (state = INIT_STATE, action) => {
         ...state,
         uploading: true,
         progress: 0,
-        errors: null
+        errors: null,
+        loadingDataImport: true
       };
 
     case PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_PROGRESS:
@@ -133,7 +146,33 @@ export default (state = INIT_STATE, action) => {
         dataImport,
         totalImport,
         progress: 0,
-        errors: null
+        errors: null,
+        loadingDataImport: false
+      };
+
+    case PRI_SPECIAL_RANGE_WEIGHT_RESET_DATA_IMPORT:
+      return {
+        ...state,
+        uploading: false,
+        progress: 0,
+        dataImport: [],
+        totalImport: 0,
+        loadingDataImport: false
+      };
+
+    case PRI_SPECIAL_RANGE_WEIGHT_GET_DATA_IMPORT:
+      return {
+        ...state,
+        loadingDataImport: true,
+      };
+
+    case PRI_SPECIAL_RANGE_WEIGHT_GET_DATA_IMPORT_SUCCESS:
+      const { dataImportGet, totalImportGet } = action.payload;
+      return {
+        ...state,
+        loadingDataImport: false,
+        dataImport: dataImportGet,
+        totalImport: totalImportGet
       };
 
     default:

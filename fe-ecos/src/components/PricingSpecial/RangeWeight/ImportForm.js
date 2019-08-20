@@ -5,6 +5,8 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import FileInput from '../../../containers/Shared/form/FileInput';
 import bsCustomFileInput from 'bs-custom-file-input';
+import PropTypes from 'prop-types';
+import { resetDataImportRangeWeightSpecial } from '../../../redux/actions';
 
 class ImportForm extends Component {
 
@@ -14,12 +16,13 @@ class ImportForm extends Component {
 
     handleReset = () => {
         this.props.reset();
-        document.getElementById('inputImport').value = ''
-        document.getElementById('inputImport').dispatchEvent(new Event('change'))
+        document.getElementById('inputImport').value = '';
+        document.getElementById('inputImport').dispatchEvent(new Event('change'));
+        this.props.resetDataImportRangeWeightSpecial();
     }
 
     render() {
-        const { handleSubmit, progress, uploading } = this.props;
+        const { handleSubmit, progress, uploading, totalImport } = this.props;
 
         return (
             <form onSubmit={handleSubmit} className="form">
@@ -43,6 +46,9 @@ class ImportForm extends Component {
                 <div className="form__form-group">
                     <Button color="primary" size="sm">Upload</Button>
                     <Button color="secondary" size="sm" onClick={this.handleReset}>Reset</Button>
+                    {!uploading && totalImport > 0 &&
+                        <Button color="success float-right" size="sm">Import Data</Button>
+                    }
                 </div>
                 {uploading &&
                     <div className="form__form-group">
@@ -56,14 +62,21 @@ class ImportForm extends Component {
     }
 }
 
+ImportForm.propTypes = {
+    resetDataImportRangeWeightSpecial: PropTypes.func.isRequired
+}
+
 const mapStateToProps = ({ pricingSpecial }) => {
-    const { rangeWeight: { progress, uploading } } = pricingSpecial;
+    const { rangeWeight: { progress, uploading, totalImport } } = pricingSpecial;
     return {
         progress,
-        uploading
+        uploading,
+        totalImport
     }
 }
 
-export default connect(mapStateToProps, null)(reduxForm({
+export default connect(mapStateToProps, {
+    resetDataImportRangeWeightSpecial
+})(reduxForm({
     form: 'import_zone_special_form',
 })(injectIntl(ImportForm)));

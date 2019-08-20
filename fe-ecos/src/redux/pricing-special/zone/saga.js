@@ -11,7 +11,9 @@ import {
   PRI_SPECIAL_ZONE_ADD_ITEM,
   PRI_SPECIAL_ZONE_UPDATE_ITEM,
   PRI_SPECIAL_ZONE_DELETE_ITEM,
-  PRI_SPECIAL_ZONE_UPLOAD_REQUEST
+  PRI_SPECIAL_ZONE_UPLOAD_REQUEST,
+  PRI_SPECIAL_ZONE_GET_DATA_IMPORT,
+  PRI_SPECIAL_ZONE_SAVE_DATA_IMPORT
 } from "../../../constants/actionTypes";
 
 import {
@@ -23,7 +25,9 @@ import {
   getZoneSpecialList,
   toggleZoneSpecialModal,
   uploadZoneSpecialProgress,
-  uploadZoneSpecialSuccess
+  uploadZoneSpecialSuccess,
+  getDataImportZoneSpecialListSuccess,
+  saveDataImportZoneSpecialSuccess
 } from "./actions";
 
 /* GET LIST ZONE SPECIAL */
@@ -217,7 +221,7 @@ function uploadZoneApi(file, onProgress) {
     url: `${apiUrl}pricing/special/zone/import`,
     headers: headers,
     data: data,
-    // onUploadProgress: onProgress
+    onUploadProgress: onProgress
   });
 }
 
@@ -278,6 +282,86 @@ function* uploadZoneSpecial({ payload }) {
   }
 }
 
+/* GET DATA IMPORT ZONE SPECIAL */
+
+function getDataImportZoneSpecialApi(params) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}pricing/special/zone/import`,
+    headers: authHeader(),
+    data: JSON.stringify(params)
+  });
+}
+
+const getDataImportZoneSpecialListRequest = async (params) => {
+  return await getDataImportZoneSpecialApi(params).then(res => res.data).catch(err => err)
+};
+
+function* getDataImportZoneSpecialListItems({ payload }) {
+  const { params } = payload;
+  const { pathname } = history.location;
+  try {
+    const response = yield call(getDataImportZoneSpecialListRequest, params);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(getDataImportZoneSpecialListSuccess(response.data, response.total));
+        break;
+
+      case EC_FAILURE:
+        yield put(zoneSpecialError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(zoneSpecialError(error));
+  }
+}
+
+/* SAVE DATA IMPORT ZONE SPECIAL */
+
+function saveDataImportZoneSpecialApi() {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}pricing/special/zone/saveImport`,
+    headers: authHeader(),
+  });
+}
+
+const saveDataImportZoneSpecialListRequest = async () => {
+  return await saveDataImportZoneSpecialApi().then(res => res.data).catch(err => err)
+};
+
+function* saveDataImportZoneSpecialItems() {
+  const { pathname } = history.location;
+  try {
+    const response = yield call(saveDataImportZoneSpecialListRequest);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(saveDataImportZoneSpecialSuccess());
+        break;
+
+      case EC_FAILURE:
+        yield put(zoneSpecialError());
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(zoneSpecialError(error));
+  }
+}
+
 export function* watchZoneSpecialGetList() {
   yield takeEvery(PRI_SPECIAL_ZONE_GET_LIST, getZoneSpecialListItems);
 }
@@ -298,12 +382,22 @@ export function* watchUploadZoneSpecial() {
   yield takeEvery(PRI_SPECIAL_ZONE_UPLOAD_REQUEST, uploadZoneSpecial);
 }
 
+export function* watchGetDataImportZoneSpecial() {
+  yield takeEvery(PRI_SPECIAL_ZONE_GET_DATA_IMPORT, getDataImportZoneSpecialListItems);
+}
+
+export function* watchSaveDataImportZoneSpecial() {
+  yield takeEvery(PRI_SPECIAL_ZONE_SAVE_DATA_IMPORT, saveDataImportZoneSpecialItems);
+}
+
 export default function* rootSaga() {
   yield all([
     fork(watchZoneSpecialGetList),
     fork(watchZoneSpecialAddItem),
     fork(watchZoneSpecialUpdateItem),
     fork(watchZoneDomestiDeleteItem),
-    fork(watchUploadZoneSpecial)
+    fork(watchUploadZoneSpecial),
+    fork(watchGetDataImportZoneSpecial),
+    fork(watchSaveDataImportZoneSpecial)
   ]);
 }

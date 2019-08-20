@@ -11,7 +11,9 @@ class ItemPerPage extends Component {
   }
 
   showPageOption = () => {
-    return PAGE_SIZE.map((size, index) => {
+    const { optionPage } = this.props;
+    const pageSize = optionPage ? optionPage : PAGE_SIZE;
+    return pageSize.map((size, index) => {
       return (
         <option value={size} key={index}>{size}</option>
       )

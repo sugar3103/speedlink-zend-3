@@ -48,5 +48,11 @@ module.exports = {
     'inbound': 'Nhập khẩu',
     'outbound': 'Xuất khẩu',
     'domestic': 'Nội địa',
-    'ACCESS_DENIED': 'Từ chối truy cập'
+
+    'ACCESS_DENIED': 'Từ chối truy cập',
+
+    //upload
+    'choose-file': 'Chọn tập tin',
+    'reset': 'Chọn lại',
+    'upload': 'Tải lên'
 }

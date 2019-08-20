@@ -19,6 +19,9 @@ import {
   PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_REQUEST,
   PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_PROGRESS,
   PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_SUCCESS,
+  PRI_SPECIAL_RANGE_WEIGHT_RESET_DATA_IMPORT,
+  PRI_SPECIAL_RANGE_WEIGHT_GET_DATA_IMPORT,
+  PRI_SPECIAL_RANGE_WEIGHT_GET_DATA_IMPORT_SUCCESS
 } from '../../../constants/actionTypes';
 
 export const rangeWeightSpecialError = (error) => ({
@@ -86,4 +89,18 @@ export const uploadRangeWeightSpecialProgress = (progress) => ({
 export const uploadRangeWeightSpecialSuccess = (dataImport, totalImport) => ({
   type: PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_SUCCESS,
   payload: { dataImport, totalImport }
+});
+
+export const resetDataImportRangeWeightSpecial = () => ({
+  type: PRI_SPECIAL_RANGE_WEIGHT_RESET_DATA_IMPORT,
+});
+
+export const getDataImportRangeWeightSpecial = (params) => ({
+  type: PRI_SPECIAL_RANGE_WEIGHT_GET_DATA_IMPORT,
+  payload: { params }
+});
+
+export const getDataImportRangeWeightSpecialListSuccess = (dataImportGet, totalImportGet) => ({
+  type: PRI_SPECIAL_RANGE_WEIGHT_GET_DATA_IMPORT_SUCCESS,
+  payload: { dataImportGet, totalImportGet }
 });
