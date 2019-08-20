@@ -219,11 +219,11 @@ class SpecialZoneManager
                     $specialZone->setName($data[$i]['name']);
                     $specialZone->setNameEn($data[$i]['name_en']);
                     $specialZone->setCustomer($this->entityManager->getRepository(Customer::class)->findOneBy(['customer_no' => $data[$i]['account_no']]));
-                    // $specialZone->setSpecialArea($this->entityManager->getRepository(SpecialArea::class)->findOneBy(['name' => $data[$i]['area_name']]));
-                    // $specialZone->setFromCity($this->entityManager->getRepository(City::class)->findOneBy(['name' => $data[$i]['from_city']]));
-                    // $specialZone->setToCity($this->entityManager->getRepository(City::class)->findOneBy(['name' => $data[$i]['to_city']]));
-                    // $specialZone->setToDistrict($this->entityManager->getRepository(District::class)->findOneBy(['name' => $data[$i]['to_district']]));
-                    // $specialZone->setToWard($this->entityManager->getRepository(Ward::class)->findOneBy(['name' => $data[$i]['to_ward']]));
+                    $specialZone->setSpecialArea($this->entityManager->getRepository(SpecialArea::class)->findOneBy(['name' => $data[$i]['area_name']]));
+                    $specialZone->setFromCity($this->entityManager->getRepository(City::class)->findOneBy(['name' => $data[$i]['from_city']]));
+                    $specialZone->setToCity($this->entityManager->getRepository(City::class)->findOneBy(['name' => $data[$i]['to_city']]));
+                    $specialZone->setToDistrict($this->entityManager->getRepository(District::class)->findOneBy(['name' => $data[$i]['to_district']]));
+                    $specialZone->setToWard($this->entityManager->getRepository(Ward::class)->findOneBy(['name' => $data[$i]['to_ward']]));
 
                     $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
                     $specialZone->setCreatedAt($addTime->format('Y-m-d H:i:s'));

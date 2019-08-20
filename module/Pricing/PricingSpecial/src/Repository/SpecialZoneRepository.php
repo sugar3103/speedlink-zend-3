@@ -6,6 +6,8 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\QueryException;
 use PricingSpecial\Entity\SpecialZone;
+use Address\Entity\AddressCode;
+
 
 /**
  * This is the custom repository class for User entity.
@@ -63,6 +65,34 @@ class SpecialZoneRepository extends EntityRepository
             return [];
         }
         
+        return $queryBuilder->getQuery()->execute();
+    }
+
+    public function vertifyAddress($city, $district, $ward)
+    {
+        $entityManager = $this->getEntityManager();
+        try {
+            $queryBuilder = $entityManager->createQueryBuilder();
+            $queryBuilder->select('
+                c.id as city_id,
+                d.id as district_id,
+                w.id as ward_id
+            ')->from(AddressCode::class, 'ac')
+                ->leftJoin('ac.city', 'c')
+                ->leftJoin('ac.district', 'd')
+                ->leftJoin('ac.ward', 'w')
+                ->where('c.name = :name_city 
+                    AND d.name = :name_district
+                    AND w.name = :name_ward
+                    ')
+                ->setParameter("name_city", $city)
+                ->setParameter("name_district", $district)
+                ->setParameter("name_ward", $ward)
+                ->setMaxResults(1);
+
+        } catch (QueryException $e) {
+            return [];
+        }
         return $queryBuilder->getQuery()->execute();
     }
     /**

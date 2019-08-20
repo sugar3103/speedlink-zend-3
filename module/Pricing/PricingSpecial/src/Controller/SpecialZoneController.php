@@ -279,21 +279,6 @@ class SpecialZoneController extends CoreController
                     $area[] = $dataResult[$i]['area_name'];
                 }
 
-                if (!in_array($dataResult[$i]['from_city'], $fromCity)) {
-                    $fromCity[] = $data[$i]['from_city'];
-                }
-
-                if (!in_array($dataResult[$i]['to_city'], $toCity)) {
-                    $toCity[] = $dataResult[$i]['to_city'];
-                }
-
-                if (!in_array($dataResult[$i]['to_district'], $toDistrict)) {
-                    $toDistrict[] = $dataResult[$i]['to_district'];
-                }
-
-                if (!in_array($dataResult[$i]['to_ward'], $toWard)) {
-                    $toWard[] = $dataResult[$i]['to_ward'];
-                }
             }
 
             //Get Custom
@@ -306,23 +291,24 @@ class SpecialZoneController extends CoreController
                 'is_deleted' => 0,
             ]);
 
-            $fromCity = $this->entityManager->getRepository(City::class)->findBy([
-                'name' => $fromCity,
-                'is_deleted' => 0,
-            ]);
-            $toCity = $this->entityManager->getRepository(City::class)->findBy([
-                'name' => $toCity,
-                'is_deleted' => 0,
-            ]);
+            // $fromCity = $this->entityManager->getRepository(City::class)->findBy([
+            //     'name' => $fromCity,
+            //     'is_deleted' => 0,
+            // ]);
+            
+            // $toCity = $this->entityManager->getRepository(City::class)->findBy([
+            //     'name' => $toCity,
+            //     'is_deleted' => 0,
+            // ]);
 
-            $toDistrict = $this->entityManager->getRepository(District::class)->findBy([
-                'name' => $toDistrict,
-                'is_deleted' => 0,
-            ]);
-            $toWard = $this->entityManager->getRepository(Ward::class)->findBy([
-                'name' => $toWard,
-                'is_deleted' => 0,
-            ]);
+            // $toDistrict = $this->entityManager->getRepository(District::class)->findBy([
+            //     'name' => $toDistrict,
+            //     'is_deleted' => 0,
+            // ]);
+            // $toWard = $this->entityManager->getRepository(Ward::class)->findBy([
+            //     'name' => $toWard,
+            //     'is_deleted' => 0,
+            // ]);
 
             for ($i = 0; $i < count($dataResult); $i++) {
                 $error = false;
@@ -332,9 +318,7 @@ class SpecialZoneController extends CoreController
                     'customer' => 'SPECIAL_IMPORT_CUSTOMER_NOT_EXIT',
                     'area' => 'SPECIAL_IMPORT_AREA_NOT_EXIT',
                     'fromCity' => 'SPECIAL_IMPORT_FROM_CITY_NOT_EXIT',
-                    'toCity' => 'SPECIAL_IMPORT_TO_CITY_NOT_EXIT',
-                    'toDistrict' => 'SPECIAL_IMPORT_TO_DISTRICT_NOT_EXIT',
-                    'toWard' => 'SPECIAL_IMPORT_TO_WARD_NOT_EXIT',
+                    'toAddress' => 'SPECIAL_IMPORT_TO_ADDRESS_NOT_EXIT',
                 );
                 $idCustomer = 0;
                 foreach ($customers as $customer) {
@@ -354,36 +338,21 @@ class SpecialZoneController extends CoreController
                 }
 
                 $idFromCity = 0;
-                foreach ($fromCity as $frCity) {
-                    if ($frCity->getName() === $value['from_city']) {
-                        $idFromCity = $frCity->getId();
-                        unset($error['fromCity']);
-                        break;
-                    }
+                $fromCity = $this->entityManager->getRepository(City::class)->findOneBy([
+                    'name' =>  $value['from_city'],
+                    'is_deleted' => 0,
+                ]);
+                if($fromCity) {
+                    $idFromCity = $fromCity->getId();
+                    unset($error['fromCity']);
                 }
-                $idToCity = 0;
-                foreach ($toCity as $tCity) {
-                    if ($tCity->getName() === $value['to_city']) {
-                        $idToCity = $tCity->getId();
-                        unset($error['toCity']);
-                        break;
-                    }
-                }
-                $idToDistrict = 0;
-                foreach ($toDistrict as $tDistrict) {
-                    if ($tDistrict->getName() === $value['to_district']) {
-                        $idToDistrict = $tDistrict->getId();
-                        unset($error['toDistrict']);
-                        break;
-                    }
-                }
-                $idToWard = 0;
-                foreach ($toWard as $tWard) {
-                    if ($tWard->getName() === $value['to_ward']) {
-                        $idToWard = $tWard->getId();
-                        unset($error['toWard']);
-                        break;
-                    }
+
+                $toAddress = $this->entityManager->getRepository(SpecialZone::class)->vertifyAddress($value['to_city'], $value['to_district'],$value['to_ward']);
+                if($toAddress) {
+                    $idToCity = $toAddress[0]['city_id'];
+                    $idToDistrict = $toAddress[0]['district_id'];
+                    $idToWard = $toAddress[0]['ward_id'];
+                    unset($error['toAddress']);
                 }
 
                 if (!$error) {
