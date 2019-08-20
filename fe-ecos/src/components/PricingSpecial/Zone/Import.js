@@ -1,21 +1,32 @@
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { Col, Card, CardBody } from 'reactstrap';
+import { Col, Card, CardBody, Modal, ButtonToolbar, Button } from 'reactstrap';
 import ImportForm from './ImportForm';
 import PropTypes from 'prop-types';
-import { uploadZoneSpecialRequest } from '../../../redux/actions';
-import { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
+import { uploadZoneSpecialRequest, getDataImportZoneSpecial } from '../../../redux/actions';
 import Table from '../../../containers/Shared/table/Table';
+import ReactLoading from "react-loading";
 
 class Import extends Component {
 
     constructor() {
         super();
         this.state = {
-            selectedPageSize: SELECTED_PAGE_SIZE,
+            selectedPageSize: 1000,
             currentPage: 1,
+            modal: false
         };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (!nextProps.savingDataImport && this.props.savingDataImport !== nextProps.savingDataImport) {
+            this.setState({ modal: false });
+            window.removeEventListener("beforeunload", (ev) => {
+                ev.preventDefault();
+                return ev.returnValue = 'Are you sure you want to close?';
+            });
+        }
     }
 
     onChangePageSize = (size) => {
@@ -27,12 +38,18 @@ class Import extends Component {
             }
         }
 
-        this.props.getZoneSpecialList(params);
+        this.props.getDataImportZoneSpecial(params);
 
         this.setState({
             currentPage: 1,
             selectedPageSize: size
         });
+    }
+
+    toggleModal = () => {
+        this.setState({
+            modal: !this.state.modal
+        })
     }
 
     onChangePage = (page) => {
@@ -43,7 +60,7 @@ class Import extends Component {
             }
         }
 
-        this.props.getZoneSpecialList(params);
+        this.props.getDataImportZoneSpecial(params);
 
         this.setState({
             currentPage: page
@@ -56,8 +73,23 @@ class Import extends Component {
         }
     }
 
+    createMarkup = (messages) => {
+        return { __html: messages };
+    }
+
+    renderTitleModal = () => {
+        const { savingDataImport, error, intl: { messages } } = this.props;
+        if (savingDataImport) {
+            return <ReactLoading type="bars" className="loading" />;
+        } else if (!savingDataImport && error) {
+            return messages['pri_special.import-zone-error'];
+        } else {
+            return messages['pri_special.import-zone-success'];
+        }
+    }
+
     render() {
-        const { dataImport, totalImport } = this.props;
+        const { dataImport, totalImport, loadingDataImport, savingDataImport, error } = this.props;
         const { messages } = this.props.intl;
         const columnTable = {
             checkbox: false,
@@ -105,16 +137,26 @@ class Import extends Component {
 
             ]
         };
+
+        let color = '';
+        if (savingDataImport) {
+            color = 'primary';
+        } else if (!savingDataImport && error) {
+            color = 'danger';
+        } else {
+            color = 'success';
+        }
+        
         return (
             <Col md={12} lg={12}>
                 <Card>
                     <CardBody className="master-data-list">
                         <div className="upload-card mb-3">
-                            <ImportForm onSubmit={this.handleSubmit} />
+                            <ImportForm onSubmit={this.handleSubmit} toggleModal={this.toggleModal} />
                         </div>
                         <Table
                             renderHeader={() => (null)}
-                            loading={false}
+                            loading={loadingDataImport}
                             columnTable={columnTable}
                             pages={{
                                 pagination: this.state,
@@ -126,8 +168,25 @@ class Import extends Component {
                                 changePageSize: this.onChangePageSize
                             }}
                             data={dataImport}
+                            optionPage={[1000, 2000, 5000, 10000]}
                             onRowClick={(e) => e.preventDefault()}
                         />
+                        <Modal
+                            isOpen={this.state.modal}
+                            toggle={this.toggleModal}
+                            className={`modal-dialog--${color} modal-dialog--colored`}
+                        >
+                            <div className="modal__header">
+                                <button className="lnr lnr-cross modal__close-btn" onClick={this.toggleModal} />
+                                <h4 className="bold-text  modal__title">
+                                    {this.renderTitleModal()}
+                                </h4>
+                            </div>
+                            <div className="modal__body" dangerouslySetInnerHTML={this.createMarkup(messages['pri_special.zone-waiting-import'])} />
+                            <ButtonToolbar className="modal__footer mt-3">
+                                <Button color="success" onClick={this.toggleModal}>{messages['ok']}</Button>
+                            </ButtonToolbar>
+                        </Modal>
                     </CardBody>
                 </Card>
             </Col>
@@ -137,16 +196,18 @@ class Import extends Component {
 
 
 Import.propTypes = {
-    uploadZoneSpecialRequest: PropTypes.func.isRequired
+    uploadZoneSpecialRequest: PropTypes.func.isRequired,
+    getDataImportZoneSpecial: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ pricingSpecial }) => {
-    const { zone: { dataImport, totalImport } } = pricingSpecial;
+    const { zone: { dataImport, totalImport, loadingDataImport, savingDataImport, error } } = pricingSpecial;
     return {
-        dataImport, totalImport
+        dataImport, totalImport, loadingDataImport, savingDataImport, error
     }
 }
 
 export default injectIntl(connect(mapStateToProps, {
-    uploadZoneSpecialRequest
+    uploadZoneSpecialRequest,
+    getDataImportZoneSpecial
 })(Import));

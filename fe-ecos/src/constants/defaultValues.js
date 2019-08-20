@@ -37,3 +37,6 @@ export const categoryPricing = {
     2: 'Outbound',
     3: 'Domestic'
 }
+
+//max size upload
+export const MAX_SIZE_UPLOAD = 20; //MB

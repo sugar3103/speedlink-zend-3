@@ -90,7 +90,7 @@ class RenderTable extends PureComponent {
     }
 
     render() {
-        const { columnTable, pages, size, data, loading, onRowClick } = this.props;
+        const { columnTable, pages, size, data, loading, optionPage, onRowClick } = this.props;
         let columns = columnTable.columns;
         if (columnTable.checkbox && data && data.length > 0) {
             columns.unshift({
@@ -140,11 +140,12 @@ class RenderTable extends PureComponent {
             <Fragment>
                 <div className="mb-2">
                     {this.renderHeader(this.state.selected)}
-                    <ItemPerPage selectedPageSize={size.selectedPageSize} changePageSize={size.changePageSize} />
+                    <ItemPerPage selectedPageSize={size.selectedPageSize} changePageSize={size.changePageSize} optionPage={optionPage} />
                     <div className="clearfix"></div>
                 </div>
                 <ReactTable
                     data={!loading && data && data.length > 0 ? data : []}
+                    pageSize={data && data.length}
                     columns={columns}
                     showPagination={false}
                     minRows={0}
@@ -166,12 +167,12 @@ class RenderTable extends PureComponent {
 const Table = props => (
     <RenderTable
         {...props}
-        columns={props.columns}
         loading={props.loading}
         pages={props.pages}
         size={props.size}
         children={props.children}
         header={props.header}
+        optionPage={props.optionPage}
     />
 );
 
@@ -191,7 +192,8 @@ Table.propTypes = {
         changePageSize: PropTypes.func.isRequired
     }),
     data: PropTypes.array,
-    loading: PropTypes.bool.isRequired
+    loading: PropTypes.bool.isRequired,
+    optionPage: PropTypes.array
 }
 
 export default Table;

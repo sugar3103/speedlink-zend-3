@@ -12,7 +12,8 @@ import {
   PRI_SPECIAL_RANGE_WEIGHT_REQUEST_UPDATE_ITEM,
   PRI_SPECIAL_RANGE_WEIGHT_UPDATE_ITEM,
   PRI_SPECIAL_RANGE_WEIGHT_DELETE_ITEM,
-  PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_REQUEST
+  PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_REQUEST,
+  PRI_SPECIAL_RANGE_WEIGHT_GET_DATA_IMPORT
 } from "../../../constants/actionTypes";
 
 import {
@@ -24,7 +25,8 @@ import {
   deleteRangeWeightSpecialItemSuccess,
   getRangeWeightSpecialList,
   uploadRangeWeightSpecialProgress,
-  uploadRangeWeightSpecialSuccess
+  uploadRangeWeightSpecialSuccess,
+  getDataImportRangeWeightSpecialListSuccess
 } from "./actions";
 
 /* GET LIST RANGE_WEIGHT SPECIAL */
@@ -308,6 +310,47 @@ function* uploadRangeWeightSpecial({ payload }) {
   }
 }
 
+/* GET DATA IMPORT RANGE WEIGHT SPECIAL */
+
+function getDataImportRangeWeightSpecialApi(params) {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}pricing/special/range-weight/import`,
+    headers: authHeader(),
+    data: JSON.stringify(params)
+  });
+}
+
+const getDataImportRangeWeightSpecialListRequest = async (params) => {
+  return await getDataImportRangeWeightSpecialApi(params).then(res => res.data).catch(err => err)
+};
+
+function* getDataImportRangeWeightSpecialListItems({ payload }) {
+  const { params } = payload;
+  const { pathname } = history.location;
+  try {
+    const response = yield call(getDataImportRangeWeightSpecialListRequest, params);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(getDataImportRangeWeightSpecialListSuccess(response.data, response.total));
+        break;
+
+      case EC_FAILURE:
+        yield put(rangeWeightSpecialError(response.data));
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(rangeWeightSpecialError(error));
+  }
+}
+
 export function* watchRangeWeightSpecialGetList() {
   yield takeEvery(PRI_SPECIAL_RANGE_WEIGHT_GET_LIST, getRangeWeightSpecialListItems);
 }
@@ -332,6 +375,10 @@ export function* watchUploadRangeWeightSpecial() {
   yield takeEvery(PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_REQUEST, uploadRangeWeightSpecial);
 }
 
+export function* watchgetDataImportRangeWeightSpecial() {
+  yield takeEvery(PRI_SPECIAL_RANGE_WEIGHT_GET_DATA_IMPORT, getDataImportRangeWeightSpecialListItems);
+}
+
 export default function* rootSaga() {
   yield all([
     fork(watchRangeWeightSpecialGetList),
@@ -339,6 +386,7 @@ export default function* rootSaga() {
     fork(watchRequestRangeWeightSpecialUpdateItem),
     fork(watchRangeWeightSpecialUpdateItem),
     fork(watchRangeWeightSpecialDeleteItem),
-    fork(watchUploadRangeWeightSpecial)
+    fork(watchUploadRangeWeightSpecial),
+    fork(watchgetDataImportRangeWeightSpecial)
   ]);
 }

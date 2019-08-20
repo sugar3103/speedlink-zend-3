@@ -49,7 +49,7 @@ const validate = (values) => {
       errors.from = 'pri_special.validate-from-not-negative';
     }
 
-    if (!values.to) {
+    if (values.to  === undefined || values.to === null) {
       errors.to = 'pri_special.validate-to-empty';
     } else if (isNaN(values.to)) {
       errors.to = 'pri_special.validate-to-not-is-number';

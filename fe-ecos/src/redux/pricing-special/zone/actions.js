@@ -18,6 +18,11 @@ import {
   PRI_SPECIAL_ZONE_UPLOAD_REQUEST,
   PRI_SPECIAL_ZONE_UPLOAD_PROGRESS,
   PRI_SPECIAL_ZONE_UPLOAD_SUCCESS,
+  PRI_SPECIAL_ZONE_RESET_DATA_IMPORT,
+  PRI_SPECIAL_ZONE_GET_DATA_IMPORT,
+  PRI_SPECIAL_ZONE_GET_DATA_IMPORT_SUCCESS,
+  PRI_SPECIAL_ZONE_SAVE_DATA_IMPORT,
+  PRI_SPECIAL_ZONE_SAVE_DATA_IMPORT_SUCCESS
 
 } from '../../../constants/actionTypes';
 
@@ -86,4 +91,26 @@ export const uploadZoneSpecialProgress = (progress) => ({
 export const uploadZoneSpecialSuccess = (dataImport, totalImport) => ({
   type: PRI_SPECIAL_ZONE_UPLOAD_SUCCESS,
   payload: { dataImport, totalImport }
+});
+
+export const resetDataImportZoneSpecial = () => ({
+  type: PRI_SPECIAL_ZONE_RESET_DATA_IMPORT,
+});
+
+export const getDataImportZoneSpecial = (params) => ({
+  type: PRI_SPECIAL_ZONE_GET_DATA_IMPORT,
+  payload: { params }
+});
+
+export const getDataImportZoneSpecialListSuccess = (dataImportGet, totalImportGet) => ({
+  type: PRI_SPECIAL_ZONE_GET_DATA_IMPORT_SUCCESS,
+  payload: { dataImportGet, totalImportGet }
+});
+
+export const saveDataImportZoneSpecial = () => ({
+  type: PRI_SPECIAL_ZONE_SAVE_DATA_IMPORT
+});
+
+export const saveDataImportZoneSpecialSuccess = () => ({
+  type: PRI_SPECIAL_ZONE_SAVE_DATA_IMPORT_SUCCESS
 });

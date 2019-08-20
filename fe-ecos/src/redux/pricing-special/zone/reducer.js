@@ -17,7 +17,13 @@ import {
 
   PRI_SPECIAL_ZONE_UPLOAD_REQUEST,
   PRI_SPECIAL_ZONE_UPLOAD_PROGRESS,
-  PRI_SPECIAL_ZONE_UPLOAD_SUCCESS
+  PRI_SPECIAL_ZONE_UPLOAD_SUCCESS,
+  PRI_SPECIAL_ZONE_RESET_DATA_IMPORT,
+  PRI_SPECIAL_ZONE_GET_DATA_IMPORT,
+  PRI_SPECIAL_ZONE_GET_DATA_IMPORT_SUCCESS,
+  PRI_SPECIAL_ZONE_SAVE_DATA_IMPORT,
+  PRI_SPECIAL_ZONE_SAVE_DATA_IMPORT_SUCCESS
+
 } from '../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -32,7 +38,9 @@ const INIT_STATE = {
   uploading: false,
   progress: 0,
   dataImport: [],
-  totalImport: 0
+  totalImport: 0,
+  loadingDataImport: false,
+  savingDataImport: false,
 };
 
 export default (state = INIT_STATE, action) => {
@@ -55,8 +63,20 @@ export default (state = INIT_STATE, action) => {
     case PRI_SPECIAL_ZONE_ERROR:
       return {
         ...state,
-        loading: false,
+        loading: true,
+        items: [],
+        total: 0,
+        modalOpen: false,
+        modalData: null,
+        modalType: null,
+        paramSearch: null,
+        uploading: false,
         progress: 0,
+        dataImport: [],
+        totalImport: 0,
+        loadingDataImport: false,
+        savingDataImport: false,
+        savedDataImport: false,
         errors: action.payload
       };
 
@@ -119,7 +139,8 @@ export default (state = INIT_STATE, action) => {
         ...state,
         uploading: true,
         progress: 0,
-        errors: null
+        errors: null,
+        loadingDataImport: true
       };
 
     case PRI_SPECIAL_ZONE_UPLOAD_PROGRESS:
@@ -137,8 +158,48 @@ export default (state = INIT_STATE, action) => {
         dataImport,
         totalImport,
         progress: 0,
-        errors: null
+        errors: null,
+        loadingDataImport: false
       };
+
+    case PRI_SPECIAL_ZONE_RESET_DATA_IMPORT:
+      return {
+        ...state,
+        uploading: false,
+        progress: 0,
+        dataImport: [],
+        totalImport: 0,
+        loadingDataImport: false,
+        savingDataImport: false
+      };
+
+    case PRI_SPECIAL_ZONE_GET_DATA_IMPORT:
+      return {
+        ...state,
+        loadingDataImport: true,
+      };
+
+
+    case PRI_SPECIAL_ZONE_GET_DATA_IMPORT_SUCCESS:
+      const { dataImportGet, totalImportGet } = action.payload;
+      return {
+        ...state,
+        loadingDataImport: false,
+        dataImport: dataImportGet,
+        totalImport: totalImportGet
+      };
+    
+    case PRI_SPECIAL_ZONE_SAVE_DATA_IMPORT:
+      return {
+        ...state,
+        savingDataImport: true
+      }
+    case PRI_SPECIAL_ZONE_SAVE_DATA_IMPORT_SUCCESS:
+      return {
+        ...state,
+        savingDataImport: false,
+        error: null
+      }
 
     default:
       return { ...state };

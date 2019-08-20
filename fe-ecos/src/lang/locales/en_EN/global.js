@@ -48,5 +48,10 @@ module.exports = {
     'inbound': 'Inbound',
     'outbound': 'Outbound',
     'domestic': 'Domestic',
-    'ACCESS_DENIED': 'Access Denied'
+    'ACCESS_DENIED': 'Access Denied',
+
+    //upload
+    'choose-file': 'Choose file',
+    'reset': 'Reset',
+    'upload': 'Upload'
 }
