@@ -76,7 +76,6 @@ export default (state = INIT_STATE, action) => {
         totalImport: 0,
         loadingDataImport: false,
         savingDataImport: false,
-        savedDataImport: false,
         errors: action.payload
       };
 

@@ -21,7 +21,9 @@ import {
   PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_SUCCESS,
   PRI_SPECIAL_RANGE_WEIGHT_RESET_DATA_IMPORT,
   PRI_SPECIAL_RANGE_WEIGHT_GET_DATA_IMPORT,
-  PRI_SPECIAL_RANGE_WEIGHT_GET_DATA_IMPORT_SUCCESS
+  PRI_SPECIAL_RANGE_WEIGHT_GET_DATA_IMPORT_SUCCESS,
+  PRI_SPECIAL_RANGE_WEIGHT_SAVE_DATA_IMPORT,
+  PRI_SPECIAL_RANGE_WEIGHT_SAVE_DATA_IMPORT_SUCCESS
 } from '../../../constants/actionTypes';
 
 const INIT_STATE = {
@@ -35,7 +37,8 @@ const INIT_STATE = {
   progress: 0,
   dataImport: [],
   totalImport: 0,
-  loadingDataImport: false
+  loadingDataImport: false,
+  savingDataImport: false
 };
 
 export default (state = INIT_STATE, action) => {
@@ -52,6 +55,7 @@ export default (state = INIT_STATE, action) => {
         dataImport: [],
         totalImport: 0,
         loadingDataImport: false,
+        savingDataImport: false,
         errors: action.payload
       };
 
@@ -157,7 +161,8 @@ export default (state = INIT_STATE, action) => {
         progress: 0,
         dataImport: [],
         totalImport: 0,
-        loadingDataImport: false
+        loadingDataImport: false,
+        savingDataImport: false
       };
 
     case PRI_SPECIAL_RANGE_WEIGHT_GET_DATA_IMPORT:
@@ -174,6 +179,18 @@ export default (state = INIT_STATE, action) => {
         dataImport: dataImportGet,
         totalImport: totalImportGet
       };
+
+    case PRI_SPECIAL_RANGE_WEIGHT_SAVE_DATA_IMPORT:
+      return {
+        ...state,
+        savingDataImport: true
+      }
+    case PRI_SPECIAL_RANGE_WEIGHT_SAVE_DATA_IMPORT_SUCCESS:
+      return {
+        ...state,
+        savingDataImport: false,
+        error: null
+      }
 
     default:
       return { ...state };
