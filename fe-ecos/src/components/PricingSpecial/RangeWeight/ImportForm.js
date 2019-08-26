@@ -20,16 +20,24 @@ class ImportForm extends Component {
         document.getElementById('inputImport').value = '';
         document.getElementById('inputImport').dispatchEvent(new Event('change'));
         this.props.resetDataImportRangeWeightSpecial();
+        window.removeEventListener('beforeunload', this.handleBeforeUnload);
     }
 
     hanldeSaveData = (e) => {
         e.preventDefault();
-        window.addEventListener("beforeunload", (ev) => {
-            ev.preventDefault();
-            return ev.returnValue = 'Are you sure you want to close?';
-        });
+        window.addEventListener("beforeunload", this.handleBeforeUnload);
         this.props.toggleModal();
         this.props.saveDataImportRangeWeightSpecial();
+    }
+
+    handleBeforeUnload(event) {
+        event.returnValue = '';
+    };
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.savingDataImport === false && nextProps.savingDataImport !== this.props.savingDataImport) {
+            this.handleReset();
+        }
     }
 
     render() {
