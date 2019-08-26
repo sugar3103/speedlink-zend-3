@@ -19,16 +19,6 @@ class Import extends Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (!nextProps.savingDataImport && this.props.savingDataImport !== nextProps.savingDataImport) {
-            this.setState({ modal: false });
-            window.removeEventListener("beforeunload", (ev) => {
-                ev.preventDefault();
-                return ev.returnValue = 'Are you sure you want to close?';
-            });
-        }
-    }
-
     onChangePageSize = (size) => {
         size = parseInt(size, 10);
         let params = {
@@ -182,7 +172,9 @@ class Import extends Component {
                                     {this.renderTitleModal()}
                                 </h4>
                             </div>
-                            <div className="modal__body" dangerouslySetInnerHTML={this.createMarkup(messages['pri_special.waiting-import'])} />
+                            {savingDataImport &&
+                                <div className="modal__body" dangerouslySetInnerHTML={this.createMarkup(messages['pri_special.waiting-import'])} />
+                            }
                             <ButtonToolbar className="modal__footer mt-3">
                                 <Button color="success" onClick={this.toggleModal}>{messages['ok']}</Button>
                             </ButtonToolbar>
