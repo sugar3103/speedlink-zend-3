@@ -65,13 +65,13 @@ class AreaForm extends Form {
                         'max' => 50
                     ]
                 ],
-                [
-                    'name' => SpecialAreaExistsValidator::class,
-                    'options' => [
-                        'entityManager' => $this->entityManager,
-                        'specialArea' => $this->specialArea
-                    ]
-                ]
+                // [
+                //     'name' => SpecialAreaExistsValidator::class,
+                //     'options' => [
+                //         'entityManager' => $this->entityManager,
+                //         'specialArea' => $this->specialArea
+                //     ]
+                // ]
             ]
         ]);
         
