@@ -45,17 +45,7 @@ export default (state = INIT_STATE, action) => {
   switch (action.type) {
     case PRI_SPECIAL_RANGE_WEIGHT_ERROR:
       return {
-        loading: false,
-        items: [],
-        itemEditting: {},
-        total: 0,
-        paramSearch: null,
-        uploading: false,
-        progress: 0,
-        dataImport: [],
-        totalImport: 0,
-        loadingDataImport: false,
-        savingDataImport: false,
+        ...state,
         errors: action.payload
       };
 

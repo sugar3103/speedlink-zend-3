@@ -63,19 +63,6 @@ export default (state = INIT_STATE, action) => {
     case PRI_SPECIAL_ZONE_ERROR:
       return {
         ...state,
-        loading: true,
-        items: [],
-        total: 0,
-        modalOpen: false,
-        modalData: null,
-        modalType: null,
-        paramSearch: null,
-        uploading: false,
-        progress: 0,
-        dataImport: [],
-        totalImport: 0,
-        loadingDataImport: false,
-        savingDataImport: false,
         errors: action.payload
       };
 
