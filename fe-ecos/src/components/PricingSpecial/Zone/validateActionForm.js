@@ -8,7 +8,7 @@ const validate = (values) => {
       errors.special_area_id = 'pri_special.validate-area-empty';
     }
 
-    if (!values.name) {
+    if (!values.name || !(values.name.toString().trim())) {
       errors.name = 'pri_special.validate-name-empty';
     } else if (values.name.length < 2) {
       errors.name = 'pri_special.validate-name-minlength';
@@ -16,7 +16,7 @@ const validate = (values) => {
       errors.name = 'pri_special.validate-name-maxlength';
     }
 
-    if (!values.name_en) {
+    if (!values.name_en || !(values.name_en.toString().trim())) {
       errors.name_en = 'pri_special.validate-nameEn-empty';
     } else if (values.name_en.length < 2) {
       errors.name_en = 'pri_special.validate-nameEn-minlength';
