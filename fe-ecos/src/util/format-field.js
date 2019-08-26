@@ -1,5 +1,5 @@
 export function formatCurrency(input) {
-    if (input) {
+    if (input !== undefined && input !== '') {
         if (isNaN(input)) {
             return input;
         } else {

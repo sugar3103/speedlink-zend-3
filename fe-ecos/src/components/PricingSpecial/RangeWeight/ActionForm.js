@@ -62,6 +62,7 @@ class ActionForm extends Component {
       offset: { limit: 0 },
       query: { customer_id: value }
     }
+    this.props.change('special_area_id', '');
     this.props.getAreaSpecialList(params);
   }
 
