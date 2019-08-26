@@ -11,6 +11,9 @@ module.exports = {
   'pri_special.add-success': 'Add success',
   'pri_special.update-success': 'Update success',
   'pri_special.delete-success': 'Delete success',
+  'pri_special.waiting-import': `The system is importing. Please DON'T close the tab or browser to ensure the storage process is fully implemented! <br /> If you close the tab or browser, it will stop the importing process. When successfully imported, the result will be displayed`,
+  'pri_special.import-error': 'Save Data Error!',
+  'pri_special.import-success': 'Save Data Successs!',
 
   /* AREA SPECIAL */
   'pri_special.area-title': 'Area Special',
@@ -34,9 +37,6 @@ module.exports = {
   'pri_special.dest-city': 'City (Destination)',
   'pri_special.dest-district': 'District (Destination)',
   'pri_special.dest-ward': 'Ward (Destination)',
-  'pri_special.zone-waiting-import': `The system is importing. Please DON'T close the tab or browser to ensure the storage process is fully implemented! <br /> If you close the tab or browser, it will stop the importing process. When successfully imported, the result will be displayed`,
-  'pri_special.import-zone-error': 'Save Data Error!',
-  'pri_special.import-zone-success': 'Save Data Successs!',
 
   /* RANGE WEIGHT SPECIAL */
   'pri_special.range-weight-title': 'Range Weight Special',
@@ -45,6 +45,7 @@ module.exports = {
   'pri_special.category': 'Category',
   'pri_special.service': 'Service',
   'pri_special.shipment-type': 'Shipment Type',
+  'pri_special.zone': 'Zone',
   'pri_special.status': 'Status',
   'pri_special.calculate-unit': 'Calculate Unit',
   'pri_special.round-up': 'Round Up',

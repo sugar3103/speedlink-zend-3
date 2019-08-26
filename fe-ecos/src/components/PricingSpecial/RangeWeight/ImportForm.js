@@ -6,7 +6,8 @@ import { connect } from 'react-redux';
 import FileInput from '../../../containers/Shared/form/FileInput';
 import bsCustomFileInput from 'bs-custom-file-input';
 import PropTypes from 'prop-types';
-import { resetDataImportRangeWeightSpecial } from '../../../redux/actions';
+import { resetDataImportRangeWeightSpecial, saveDataImportRangeWeightSpecial } from '../../../redux/actions';
+import validate from './validateImportForm';
 
 class ImportForm extends Component {
 
@@ -21,33 +22,36 @@ class ImportForm extends Component {
         this.props.resetDataImportRangeWeightSpecial();
     }
 
+    hanldeSaveData = (e) => {
+        e.preventDefault();
+        window.addEventListener("beforeunload", (ev) => {
+            ev.preventDefault();
+            return ev.returnValue = 'Are you sure you want to close?';
+        });
+        this.props.toggleModal();
+        this.props.saveDataImportRangeWeightSpecial();
+    }
+
     render() {
-        const { handleSubmit, progress, uploading, totalImport } = this.props;
+        const { handleSubmit, progress, uploading, totalImport, intl: { messages }, savingDataImport } = this.props;
 
         return (
             <form onSubmit={handleSubmit} className="form">
                 <div className="form__form-group">
-                    <div className="form__form-group-field">
-                        <div className="input-group">
-                            <div className="custom-file">
-                                <Field
-                                    name="import_file"
-                                    component={FileInput}
-                                    type="file"
-                                    accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                                    className="custom-file-input"
-                                    id="inputImport"
-                                />
-                                <label className="custom-file-label" htmlFor="inputImport">Choose file</label>
-                            </div>
-                        </div>
-                    </div>
+                    <Field
+                        name="import_file"
+                        component={FileInput}
+                        type="file"
+                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                        className="custom-file-input"
+                        id="inputImport"
+                    />
                 </div>
                 <div className="form__form-group">
-                    <Button color="primary" size="sm">Upload</Button>
-                    <Button color="secondary" size="sm" onClick={this.handleReset}>Reset</Button>
+                    <Button color="primary" size="sm">{messages['upload']}</Button>
+                    <Button color="secondary" size="sm" onClick={this.handleReset}>{messages['reset']}</Button>
                     {!uploading && totalImport > 0 &&
-                        <Button color="success float-right" size="sm">Import Data</Button>
+                        <Button color="success float-right" size="sm" disabled={savingDataImport} onClick={this.hanldeSaveData}>{messages['pri_special.import-data']}</Button>
                     }
                 </div>
                 {uploading &&
@@ -63,20 +67,24 @@ class ImportForm extends Component {
 }
 
 ImportForm.propTypes = {
-    resetDataImportRangeWeightSpecial: PropTypes.func.isRequired
+    resetDataImportRangeWeightSpecial: PropTypes.func.isRequired,
+    saveDataImportRangeWeightSpecial: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ pricingSpecial }) => {
-    const { rangeWeight: { progress, uploading, totalImport } } = pricingSpecial;
+    const { rangeWeight: { progress, uploading, totalImport, savingDataImport } } = pricingSpecial;
     return {
         progress,
         uploading,
-        totalImport
+        totalImport,
+        savingDataImport
     }
 }
 
 export default connect(mapStateToProps, {
-    resetDataImportRangeWeightSpecial
+    resetDataImportRangeWeightSpecial,
+    saveDataImportRangeWeightSpecial
 })(reduxForm({
-    form: 'import_zone_special_form',
+    form: 'import_range_weight_special_form',
+    validate
 })(injectIntl(ImportForm)));

@@ -82,9 +82,9 @@ class Import extends Component {
         if (savingDataImport) {
             return <ReactLoading type="bars" className="loading" />;
         } else if (!savingDataImport && error) {
-            return messages['pri_special.import-zone-error'];
+            return messages['pri_special.import-error'];
         } else {
-            return messages['pri_special.import-zone-success'];
+            return messages['pri_special.import-success'];
         }
     }
 
@@ -182,7 +182,7 @@ class Import extends Component {
                                     {this.renderTitleModal()}
                                 </h4>
                             </div>
-                            <div className="modal__body" dangerouslySetInnerHTML={this.createMarkup(messages['pri_special.zone-waiting-import'])} />
+                            <div className="modal__body" dangerouslySetInnerHTML={this.createMarkup(messages['pri_special.waiting-import'])} />
                             <ButtonToolbar className="modal__footer mt-3">
                                 <Button color="success" onClick={this.toggleModal}>{messages['ok']}</Button>
                             </ButtonToolbar>

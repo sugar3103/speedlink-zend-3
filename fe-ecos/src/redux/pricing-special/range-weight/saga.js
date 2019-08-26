@@ -14,7 +14,8 @@ import {
   PRI_SPECIAL_RANGE_WEIGHT_UPDATE_ITEM,
   PRI_SPECIAL_RANGE_WEIGHT_DELETE_ITEM,
   PRI_SPECIAL_RANGE_WEIGHT_UPLOAD_REQUEST,
-  PRI_SPECIAL_RANGE_WEIGHT_GET_DATA_IMPORT
+  PRI_SPECIAL_RANGE_WEIGHT_GET_DATA_IMPORT,
+  PRI_SPECIAL_RANGE_WEIGHT_SAVE_DATA_IMPORT
 } from "../../../constants/actionTypes";
 
 import {
@@ -27,7 +28,8 @@ import {
   getRangeWeightSpecialList,
   uploadRangeWeightSpecialProgress,
   uploadRangeWeightSpecialSuccess,
-  getDataImportRangeWeightSpecialListSuccess
+  getDataImportRangeWeightSpecialListSuccess,
+  saveDataImportRangeWeightSpecialSuccess
 } from "./actions";
 
 /* GET LIST RANGE_WEIGHT SPECIAL */
@@ -248,7 +250,7 @@ function uploadRangeWeightApi(file, onProgress) {
   let headers = authHeader();
   headers = {
     ...headers,
-    'content-type': `multipart/form-data; boundary=${data._boundary}`,
+    'Content-Type': `multipart/form-data`
   }
 
   return axios.request({
@@ -358,6 +360,45 @@ function* getDataImportRangeWeightSpecialListItems({ payload }) {
   }
 }
 
+/* SAVE DATA IMPORT RANGE WEIGHT SPECIAL */
+
+function saveDataImportRangeWeightSpecialApi() {
+  return axios.request({
+    method: 'post',
+    url: `${apiUrl}pricing/special/range-weight/saveImport`,
+    headers: authHeader(),
+  });
+}
+
+const saveDataImportRangeWeightSpecialListRequest = async () => {
+  return await saveDataImportRangeWeightSpecialApi().then(res => res.data).catch(err => err)
+};
+
+function* saveDataImportRangeWeightSpecialItems() {
+  const { pathname } = history.location;
+  try {
+    const response = yield call(saveDataImportRangeWeightSpecialListRequest);
+    switch (response.error_code) {
+      case EC_SUCCESS:
+        yield put(saveDataImportRangeWeightSpecialSuccess());
+        break;
+
+      case EC_FAILURE:
+        yield put(rangeWeightSpecialError());
+        break;
+
+      case EC_FAILURE_AUTHENCATION:
+        localStorage.removeItem('authUser');
+        yield call(history.push, '/login', { from: pathname });
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    yield put(rangeWeightSpecialError(error));
+  }
+}
+
 export function* watchRangeWeightSpecialGetList() {
   yield takeEvery(PRI_SPECIAL_RANGE_WEIGHT_GET_LIST, getRangeWeightSpecialListItems);
 }
@@ -386,6 +427,10 @@ export function* watchgetDataImportRangeWeightSpecial() {
   yield takeEvery(PRI_SPECIAL_RANGE_WEIGHT_GET_DATA_IMPORT, getDataImportRangeWeightSpecialListItems);
 }
 
+export function* watchSaveDataImportRangeWeightSpecial() {
+  yield takeEvery(PRI_SPECIAL_RANGE_WEIGHT_SAVE_DATA_IMPORT, saveDataImportRangeWeightSpecialItems);
+}
+
 export default function* rootSaga() {
   yield all([
     fork(watchRangeWeightSpecialGetList),
@@ -394,6 +439,7 @@ export default function* rootSaga() {
     fork(watchRangeWeightSpecialUpdateItem),
     fork(watchRangeWeightSpecialDeleteItem),
     fork(watchUploadRangeWeightSpecial),
-    fork(watchgetDataImportRangeWeightSpecial)
+    fork(watchgetDataImportRangeWeightSpecial),
+    fork(watchSaveDataImportRangeWeightSpecial)
   ]);
 }

@@ -11,6 +11,9 @@ module.exports = {
   'pri_special.add-success': 'Thêm thành công',
   'pri_special.update-success': 'Cập nhật thành công',
   'pri_special.delete-success': 'Xóa thành công',
+  'pri_special-waiting-import': `Hệ thống đang xử lý dữ liệu vừa import. Vui lòng không đóng cửa sổ hay trình duyệt để đảm bảo quá trình lưu trữ được thực hiện đầy đủ! <br /> Nếu đóng cửa sổ hay trình duyệt đang hoạt động sẽ ngừng quá trình import. Khi import thành công sẽ hiển thị thông báo kết quả`,
+  'pri_special.import-error': 'Lưu dữ liệu không thành công!',
+  'pri_special.import-success': 'Lưu dữ liệu thành công!',
 
   /* AREA SPECIAL */
   'pri_special.area-title': 'Miền',
@@ -34,9 +37,6 @@ module.exports = {
   'pri_special.dest-city': 'Thành phố (Đích)',
   'pri_special.dest-district': 'Quận/Huyện (Đích)',
   'pri_special.dest-ward': 'Phường/Xã (Đích)',
-  'pri_special.zone-waiting-import': `Hệ thống đang xử lý dữ liệu vừa import. Vui lòng không đóng cửa sổ hay trình duyệt để đảm bảo quá trình lưu trữ được thực hiện đầy đủ! <br /> Nếu đóng cửa sổ hay trình duyệt đang hoạt động sẽ ngừng quá trình import. Khi import thành công sẽ hiển thị thông báo kết quả`,
-  'pri_special.import-zone-error': 'Lưu dữ liệu không thành công!',
-  'pri_special.import-zone-success': 'Lưu dữ liệu thành công!',
 
   /* RANGE WEIGHT SPECIAL */
   'pri_special.range-weight-title': 'Khoảng trọng lượng',
@@ -45,6 +45,7 @@ module.exports = {
   'pri_special.category': 'Danh mục',
   'pri_special.service': 'Dịch vụ',
   'pri_special.shipment-type': 'Loại dịch vụ',
+  'pri_special.zone': 'Vùng',
   'pri_special.status': 'Trạng thái',
   'pri_special.calculate-unit': 'Đơn vị tính',
   'pri_special.round-up': 'Làm tròn',
