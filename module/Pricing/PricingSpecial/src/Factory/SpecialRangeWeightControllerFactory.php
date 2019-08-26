@@ -19,8 +19,8 @@ class SpecialRangeWeightControllerFactory implements FactoryInterface {
     {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
         $specialRangeWeightManager = $container->get(SpecialRangeWeightManager::class);
-
+        $cache = $container->get(FilesystemCache::class);
         // instantiate the controller and inject dependencies.
-        return new SpecialRangeWeightController($entityManager, $specialRangeWeightManager);
+        return new SpecialRangeWeightController($entityManager, $specialRangeWeightManager,$cache);
     }
 }

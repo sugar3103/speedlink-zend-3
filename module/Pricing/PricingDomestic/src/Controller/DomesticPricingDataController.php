@@ -109,7 +109,8 @@ class DomesticPricingDataController extends CoreController {
                     'shipment_type' => $shipmentType->getId(),
                     'zone'       => $zone->getId(),
                     'is_private' => $pricing->getIsPrivate(),
-                    'is_deleted' => 0
+                    'is_deleted' => 0,
+                    'status' => 1
                 );
                 if (!empty($pricing->getCustomer())) {
                     $conditions['customer'] = $pricing->getCustomer();

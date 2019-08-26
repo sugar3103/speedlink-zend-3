@@ -104,6 +104,7 @@ class PricingSpecialDataController extends CoreController {
                     'service' => $pricing->getService()->getId(),
                     'shipment_type' => $shipmentType->getId(),                                    
                     'is_deleted' => 0,
+                    'status' => 1,
                     'customer' => $pricing->getCustomer(),
                     'special_area' => $area->getId()
                 );
