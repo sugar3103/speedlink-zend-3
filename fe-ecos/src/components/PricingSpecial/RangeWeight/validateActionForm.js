@@ -1,7 +1,7 @@
 const validate = (values) => {
     const errors = {};
 
-    if (!values.name) {
+    if (!(values.name) || !(values.name.toString().trim())) {
       errors.name = 'pri_special.validate-name-empty';
     } else if (values.name.length < 2) {
       errors.name = 'pri_special.validate-name-minlength';
@@ -9,7 +9,7 @@ const validate = (values) => {
       errors.name = 'pri_special.validate-name-maxlength';
     }
 
-    if (!values.name_en) {
+    if (!(values.name_en) || !(values.name_en.toString().trim())) {
       errors.name_en = 'pri_special.validate-nameEn-empty';
     } else if (values.name_en.length < 2) {
       errors.name_en = 'pri_special.validate-nameEn-minlength';
@@ -41,7 +41,7 @@ const validate = (values) => {
       errors.shipment_type_id = 'pri_special.validate-shipment-type-empty';
     }
     
-    if (values.from  === undefined || values.from === null) {
+    if (values.from  === undefined || values.from === null || !(values.from.toString().trim())) {
       errors.from = 'pri_special.validate-from-empty';
     } else if (isNaN(values.from)) {
       errors.from = 'pri_special.validate-from-not-is-number';
@@ -49,7 +49,7 @@ const validate = (values) => {
       errors.from = 'pri_special.validate-from-not-negative';
     }
 
-    if (values.to  === undefined || values.to === null) {
+    if (values.to  === undefined || values.to === null || !(values.to.toString().trim())) {
       errors.to = 'pri_special.validate-to-empty';
     } else if (isNaN(values.to)) {
       errors.to = 'pri_special.validate-to-not-is-number';
@@ -63,7 +63,7 @@ const validate = (values) => {
       errors.calculate_unit = 'pri_special.validate-calculate-unit-empty';
     }
 
-    if (values.calculate_unit && !values.unit) {
+    if (values.calculate_unit && (!values.unit || !(values.unit.toString().trim()))) {
       errors.unit = 'pri_special.validate-unit-empty';
     } else if (isNaN(values.unit)) {
       errors.unit = 'pri_special.validate-unit-not-is-number';
@@ -71,7 +71,7 @@ const validate = (values) => {
       errors.unit = 'pri_special.validate-unit-must-be-greater-than-0';
     }
 
-    if (!values.round_up) {
+    if (!values.round_up || !(values.round_up.toString().trim())) {
       errors.round_up = 'pri_special.validate-round-up-empty';
     } else if (isNaN(values.round_up)) {
       errors.round_up = 'pri_special.validate-round-up-not-is-number';

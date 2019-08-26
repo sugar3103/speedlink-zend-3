@@ -33,8 +33,12 @@ const validate = (values) => {
       errors.status = 'pri_special.validate-status-empty';
     }
 
-    if (!values.approval_by) {
-      errors.approval_by = 'pri_special.validate-approval-by-empty';
+    if (!values.approved_by) {
+      errors.approved_by = 'pri_special.validate-approval-by-empty';
+    }
+
+    if (values.total_ras  === undefined || values.total_ras === null ) {
+      errors.total_ras = 'pri_special.validate-ras-empty';
     }
     
     return errors;

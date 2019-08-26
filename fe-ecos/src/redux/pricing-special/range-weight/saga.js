@@ -5,6 +5,7 @@ import { apiUrl, EC_SUCCESS, EC_FAILURE, EC_FAILURE_AUTHENCATION } from '../../.
 import { authHeader } from '../../../util/auth-header';
 import history from '../../../util/history';
 import createNotification from '../../../util/notifications';
+import { startSubmit, stopSubmit } from 'redux-form';
 
 import {
   PRI_SPECIAL_RANGE_WEIGHT_GET_LIST,
@@ -88,6 +89,7 @@ const addRangeWeightSpecialItemRequest = async item => {
 function* addRangeWeightSpecialItem({ payload }) {
   const { item } = payload;
   const { pathname } = history.location;
+  yield put(startSubmit('range_weight_special_action_form'));
   try {
     const response = yield call(addRangeWeightSpecialItemRequest, item);
     switch (response.error_code) {
@@ -95,10 +97,12 @@ function* addRangeWeightSpecialItem({ payload }) {
         yield put(addRangeWeightSpecialItemSuccess());
         yield call(history.push, '/pricing-special/range-weight');
         createNotification({ type: 'success', message: 'pri_special.add-success' });
+        yield put(stopSubmit('range_weight_special_action_form'));
         break;
 
       case EC_FAILURE:
         yield put(rangeWeightSpecialError(response.data));
+        yield put(stopSubmit('range_weight_special_action_form'));
         break;
 
       case EC_FAILURE_AUTHENCATION:
@@ -164,6 +168,7 @@ const updateRangeWeightSpecialItemRequest = async item => {
 function* updateRangeWeightSpecialItem({ payload }) {
   const { item } = payload;
   const { pathname } = history.location;
+  yield put(startSubmit('range_weight_special_action_form'));
   try {
     const response = yield call(updateRangeWeightSpecialItemRequest, item);
     switch (response.error_code) {
@@ -171,10 +176,12 @@ function* updateRangeWeightSpecialItem({ payload }) {
         yield put(updateRangeWeightSpecialItemSuccess());
         yield call(history.push, '/pricing-special/range-weight');
         createNotification({ type: 'success', message: 'pri_special.update-success' });
+        yield put(stopSubmit('range_weight_special_action_form'));
         break;
 
       case EC_FAILURE:
         yield put(rangeWeightSpecialError(response.data));
+        yield put(stopSubmit('range_weight_special_action_form'));
         break;
 
       case EC_FAILURE_AUTHENCATION:

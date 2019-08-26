@@ -184,14 +184,27 @@ class ActionForm extends Component {
     this.setState({
       disableField: nextProps.type_action === 'view' ? true : false,
       showUnitField: nextProps.calculate_unit ? true : false
-    })
+    });
+
+    if (nextProps.customer_id && nextProps.customer_id !== this.props.customer_id) {
+      const paramsArea = {
+        field: ['id', 'name', 'customer_id'],
+        offset: {
+          limit: 0
+        },
+        query: {
+          customer_id: nextProps.customer_id
+        }
+      }
+      this.props.getAreaSpecialList(paramsArea);
+    }
   }
 
   render() {
-    const { handleSubmit, carrier, service, customer,shipmentType, area, rangeWeight: { loading }, type_action } = this.props;
+    const { handleSubmit, carrier, service, customer, shipmentType, area, rangeWeight: { loading }, type_action, submitting } = this.props;
     const { messages } = this.props.intl;
     const { id } = this.props.match.params;
-    const { disableField } = this.state;    
+    const { disableField } = this.state;
     return loading ? (
       <ReactLoading type="bubbles" className="loading" />
     ) : (
@@ -398,7 +411,7 @@ class ActionForm extends Component {
                 </div>
               </Col>
             }
-          </Row>         
+          </Row>
           <Row>
             <Col md={12} className="text-right">
               <Link to={type_action === 'edit' ? `/pricing-special/range-weight/view/${id}` : '/pricing-special/range-weight'} className="btn btn-outline-secondary btn-sm">
@@ -409,7 +422,7 @@ class ActionForm extends Component {
                   {messages['edit']}
                 </Link>
                 :
-                <Button size="sm" color="primary">
+                <Button size="sm" color="primary" disabled={submitting}>
                   {messages['save']}
                 </Button>
               }
@@ -431,11 +444,12 @@ ActionForm.propTypes = {
 
 const mapStateToProps = (state, props) => {
   const { pricingSpecial } = state;
-  const { carrier, service, shipmentType, area, rangeWeight,customer } = pricingSpecial;
+  const { carrier, service, shipmentType, area, rangeWeight, customer } = pricingSpecial;
   const selector = formValueSelector('range_weight_special_action_form');
   const carrier_id = selector(state, 'carrier_id');
   const service_id = selector(state, 'service_id');
   const calculate_unit = selector(state, 'calculate_unit');
+  const customer_id = selector(state, 'customer_id');
   const initialValues = rangeWeight.itemEditting;
 
   return {
@@ -446,6 +460,7 @@ const mapStateToProps = (state, props) => {
     carrier_id,
     service_id,
     calculate_unit,
+    customer_id,
     rangeWeight,
     customer,
     initialValues
