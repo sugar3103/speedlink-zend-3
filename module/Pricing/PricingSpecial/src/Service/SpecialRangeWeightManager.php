@@ -7,12 +7,12 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use OAuth\Entity\User;
+use PricingSpecial\Entity\SpecialArea;
 use PricingSpecial\Entity\SpecialRangeWeight;
 use ServiceShipment\Entity\Carrier;
 use ServiceShipment\Entity\Category;
 use ServiceShipment\Entity\Service;
 use ServiceShipment\Entity\ShipmentType;
-use PricingSpecial\Entity\SpecialArea;
 
 /**
  * This service is responsible for adding/editing users
@@ -110,8 +110,8 @@ class SpecialRangeWeightManager
             throw new \Exception('Not found Customer by ID');
         }
 
-        $special_area = $this->entityManager->getRepository(SpecialArea::class)->find($data['special_area_id']); 
-        
+        $special_area = $this->entityManager->getRepository(SpecialArea::class)->find($data['special_area_id']);
+
         if ($special_area == null) {
             throw new \Exception('Not found Special Area by ID');
         }
@@ -145,7 +145,7 @@ class SpecialRangeWeightManager
             $specialRangeWeight->setStatus($data['status']);
             $specialRangeWeight->setDescription($data['description']);
             $specialRangeWeight->setDescriptionEn($data['description_en']);
-         
+
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $specialRangeWeight->setCreatedAt($addTime->format('Y-m-d H:i:s'));
             $specialRangeWeight->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
@@ -182,7 +182,7 @@ class SpecialRangeWeightManager
             $specialRangeWeight->setStatus($data['status']);
             $specialRangeWeight->setDescription($data['description']);
             $specialRangeWeight->setDescriptionEn($data['description_en']);
-        
+
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $specialRangeWeight->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
 
@@ -205,10 +205,10 @@ class SpecialRangeWeightManager
      */
     public function deleteRangeWeight($specialRangeWeight, $user)
     {
-        
+
         $this->entityManager->beginTransaction();
         try {
-            
+
             $specialRangeWeight->setIsDeleted(1);
             $specialRangeWeight->setUpdatedBy($this->entityManager->getRepository(\OAuth\Entity\User::class)->find($user->id));
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
@@ -218,6 +218,62 @@ class SpecialRangeWeightManager
             $this->entityManager->flush();
             // $last_id = $rangeweight->getBranchId();
             $this->entityManager->commit();
+
+        } catch (ORMException $e) {
+            $this->entityManager->rollback();
+            return false;
+        }
+    }
+
+    /**
+     * Add Range Weight Import
+     */
+    public function addRangeWeightImport($data, $user)
+    {
+        $this->entityManager->beginTransaction();
+        try {
+            $countRow = 0;
+            for ($i = 0; $i < count($data); $i++) {
+                if (isset($data[$i])) {
+                    $specialRangeWeight = $this->entityManager->getRepository(SpecialRangeWeight::class)->findOneBy(
+                        [
+                            'customer' => $this->entityManager->getRepository(Customer::class)->findOneBy(['customer_no' => $data[$i]['account_no']]),
+                            'name' => $data[$i]['name'],
+                            'is_deleted' => 0,
+                        ]
+                    );
+                    if (!$specialRangeWeight) {
+                        $specialRangeWeight = new SpecialRangeWeight();
+                        $specialRangeWeight->setName($data[$i]['name']);
+                        $specialRangeWeight->setNameEn($data[$i]['name']);
+                        $specialRangeWeight->setCustomer($this->entityManager->getRepository(Customer::class)->findOneBy(['customer_no' => $data[$i]['account_no']]));
+                        $specialRangeWeight->setSpecialArea($this->entityManager->getRepository(SpecialArea::class)->findOneBy(['name' => $data[$i]['special_area_name']]));
+                        $specialRangeWeight->setCalculateUnit($data[$i]['calculate_unit']);
+                        $specialRangeWeight->setRoundUp($data[$i]['round_up']);
+                        $specialRangeWeight->setUnit($data[$i]['unit']);
+                        $specialRangeWeight->setFrom($data[$i]['from']);
+                        $specialRangeWeight->setTo($data[$i]['to']);
+                        $specialRangeWeight->setStatus($data[$i]['status']);
+
+                        $specialRangeWeight->setCarrier($this->entityManager->getRepository(Carrier::class)->findOneBy(['code' => $data[$i]['carrier']]));
+                        $specialRangeWeight->setService($this->entityManager->getRepository(Service::class)->findOneBy(['name' => $data[$i]['service']]));
+                        $specialRangeWeight->setShipmentType($this->entityManager->getRepository(ShipmentType::class)->findOneBy(['name' => $data[$i]['shipment_type']]));
+                        $specialRangeWeight->setCategory($this->entityManager->getRepository(Category::class)->find(3));
+
+                        $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+                        $specialRangeWeight->setCreatedAt($addTime->format('Y-m-d H:i:s'));
+                        $specialRangeWeight->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+                        $specialRangeWeight->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+                        $specialRangeWeight->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+
+                        $this->entityManager->persist($specialRangeWeight);
+                    }
+
+                }
+            }
+            $this->entityManager->flush();
+            $this->entityManager->commit();
+            $this->entityManager->clear();
 
         } catch (ORMException $e) {
             $this->entityManager->rollback();

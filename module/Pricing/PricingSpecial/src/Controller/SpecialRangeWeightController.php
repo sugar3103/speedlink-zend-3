@@ -177,6 +177,20 @@ class SpecialRangeWeightController extends CoreController
 
     public function importAction()
     {
+        $nameField = [
+            0 => 'name',
+            1 => 'account_no',
+            2 => 'from',
+            3 => 'to',
+            4 => 'carrier',
+            5 => 'service',
+            6 => 'shipment_type',
+            7 => 'special_area_name',
+            8 => 'calculate_unit',
+            9 => 'unit',
+            10 => 'round_up',
+            11 => 'status',
+        ];
         $start = 0;
         $lenght = 1000;
         $data = [];
@@ -187,8 +201,8 @@ class SpecialRangeWeightController extends CoreController
                 $this->cache->removeItem('specialRangeWeight');
                 // Upload path
                 $location = dirname(__DIR__, 5) . "/data/files/";
-                move_uploaded_file($fileUpdate['tmp_name'], $location . $fileUpdate['name']);
-                $file = $location . $fileUpdate['name'];
+                move_uploaded_file($fileUpdate['tmp_name'], $location . str_replace(" ", "_", $fileUpdate['name']));
+                $file = $location . str_replace(" ", "_", $fileUpdate['name']);
             }
 
             $dataPost = $this->getRequestData();
@@ -220,14 +234,13 @@ class SpecialRangeWeightController extends CoreController
 
                 //Tiến hành lặp qua từng ô dữ liệu
                 //----Lặp dòng, Vì dòng đầu là tiêu đề cột nên chúng ta sẽ lặp giá trị từ dòng 2
-                for ($i = 1; $i <= $Totalrow; $i++) {
+                for ($i = 3; $i <= $Totalrow; $i++) {
                     //----Lặp cột
                     for ($j = 1; $j <= $TotalCol; $j++) {
                         // Tiến hành lấy giá trị của từng ô đổ vào mảng
                         $data[$i - 1][$nameField[$j - 1]] = $sheet->getCellByColumnAndRow($j, $i)->getValue();
                     }
                 }
-
                 // Save Data to cache.
                 $this->cache->setItem('specialRangeWeight', $data);
 
@@ -237,12 +250,122 @@ class SpecialRangeWeightController extends CoreController
 
             $dataResult = array_slice($data, $start, $lenght);
 
+            for ($i = 0; $i < count($dataResult); $i++) {
+                $error = false;
+                $value = $dataResult[$i];
+                $value['id'] = $i + $start;
+                $error = array(
+                    'customer' => 'SPECIAL_IMPORT_CUSTOMER_NOT_EXIT',
+                    'area' => 'SPECIAL_IMPORT_AREA_NOT_EXIT',
+                    'carrier' => 'SPECIAL_IMPORT_CARRIER_NOT_EXIT',
+                    'service' => 'SPECIAL_IMPORT_SERVICE_NOT_EXIT',
+                    'shipment_type' => 'SPECIAL_IMPORT_SHIPMENT_TYPE_NOT_EXIT',
+                );
+
+                $accountNo = $this->entityManager->getRepository(\Customer\Entity\Customer::class)->findOneBy([
+                    'customer_no' => $value['account_no'],
+                    'is_deleted' => 0]);
+
+                if ($accountNo) {
+                    unset($error['customer']);
+                    $value['customer_id'] = $accountNo->getId();
+                }
+
+                $carrier = $this->entityManager->getRepository(\ServiceShipment\Entity\Carrier::class)->findOneBy([
+                    'code' => $value['carrier'],
+                    'is_deleted' => 0,
+                    'status' => 1,
+                ]);
+                if ($carrier) {
+                    unset($error['carrier']);
+                    $value['carrier_id'] = $carrier->getId();
+                    $value['carrier'] = $carrier->getName();
+                    $value['carrier_en'] = $carrier->getNameEn();
+                }
+                $service = $this->entityManager->getRepository(\ServiceShipment\Entity\Service::class)->findOneBy([
+                    'name' => $value['service'],
+                    'is_deleted' => 0,
+                    'status' => 1,
+                ]);
+
+                if ($service) {
+                    unset($error['service']);
+                    $value['service_id'] = $service->getId();
+                    $value['service'] = $service->getName();
+                    $value['service_en'] = $service->getNameEn();
+                }
+
+                $shipment_type = $this->entityManager->getRepository(\ServiceShipment\Entity\ShipmentType::class)->findOneBy([
+                    'name' => $value['shipment_type'],
+                    'is_deleted' => 0,
+                    'status' => 1,
+                ]);
+
+                if ($shipment_type) {
+                    unset($error['shipment_type']);
+                    $value['shipment_type_id'] = $shipment_type->getId();
+                    $value['shipment_type'] = $shipment_type->getName();
+                    $value['shipment_type_en'] = $shipment_type->getNameEn();
+                }
+
+                $special_area_name = $this->entityManager->getRepository(\PricingSpecial\Entity\SpecialArea::class)->findOneBy([
+                    'name' => $value['special_area_name'],
+                    'is_deleted' => 0,
+                ]);
+
+                if ($special_area_name) {
+                    unset($error['area']);
+                }
+
+                if (!$error) {
+                    $value['status'] = ($value['status'] == 'Active') ? 1 : 0;
+                    $value['calculate_unit'] = ($value['calculate_unit'] == 'Yes') ? 1 : 0;
+                    $specialRangeWeight = $this->entityManager->getRepository(SpecialRangeWeight::class)->findOneBy(
+                        [
+                            'customer' => $accountNo,
+                            'name' => $value['name'],
+                            'is_deleted' => 0,
+                        ]
+                    );
+                    if ($specialRangeWeight) {
+                        $value['error'] = 'SPECIAL_IMPORT_RANGE_WEIGHT_EXIT';
+                    }
+                } else {
+                    $value['error'] = $error;
+                }
+
+                $dataResult[$i] = $value;
+            }
+
             $this->apiResponse = array(
                 'data' => $dataResult,
-                'total' => (int) $Totalrow,
+                'total' => (int) $Totalrow - 2,
             );
 
             return $this->createResponse();
         }
+    }
+
+    public function saveImportAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            $data = $this->cache->getItem('specialRangeWeight', $result);
+            if ($result) {
+                $dataPost = $this->getRequestData();
+                if (isset($dataPost['ids']) && is_array($dataPost['ids'])) {
+                    foreach ($dataPost['ids'] as $id) {
+                        unset($data[0]);
+                    }
+                }
+                $this->specialRangeWeightManager->addRangeWeightImport($data, $this->tokenPayload);
+
+                $this->cache->removeItem('specialRangeWeight');
+                $this->apiResponse['message'] = "SPECIAL_IMPORTED";
+            } else {
+                $this->error_code = 0;
+                $this->apiResponse['message'] = "SPECIAL_IMPORT_NONE";
+            }
+        }
+        return $this->createResponse();
     }
 }
