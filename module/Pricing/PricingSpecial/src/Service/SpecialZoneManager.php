@@ -234,8 +234,7 @@ class SpecialZoneManager
                     $this->entityManager->persist($specialZone);
                     
                     if($countRow == 999) {
-                        $countRow = 0;
-                        die;
+                        $countRow = 0;                        
                         $this->entityManager->flush();
                         $this->entityManager->commit();            
                         $this->entityManager->clear();                        

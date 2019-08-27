@@ -255,11 +255,11 @@ class SpecialRangeWeightController extends CoreController
                 $value = $dataResult[$i];
                 $value['id'] = $i + $start;
                 $error = array(
-                    'customer' => 'SPECIAL_IMPORT_CUSTOMER_NOT_EXIT',
-                    'area' => 'SPECIAL_IMPORT_AREA_NOT_EXIT',
-                    'carrier' => 'SPECIAL_IMPORT_CARRIER_NOT_EXIT',
-                    'service' => 'SPECIAL_IMPORT_SERVICE_NOT_EXIT',
-                    'shipment_type' => 'SPECIAL_IMPORT_SHIPMENT_TYPE_NOT_EXIT',
+                    'customer' => 'SPECIAL_IMPORT_CUSTOMER_NOT_EXITS',
+                    'area' => 'SPECIAL_IMPORT_AREA_NOT_EXITS',
+                    'carrier' => 'SPECIAL_IMPORT_CARRIER_NOT_EXITS',
+                    'service' => 'SPECIAL_IMPORT_SERVICE_NOT_EXITS',
+                    'shipment_type' => 'SPECIAL_IMPORT_SHIPMENT_TYPE_NOT_EXITS',
                 );
 
                 $accountNo = $this->entityManager->getRepository(\Customer\Entity\Customer::class)->findOneBy([
