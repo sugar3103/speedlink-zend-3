@@ -230,30 +230,30 @@ class SpecialRangeWeightManager
      */
     public function addRangeWeightImport($data, $user)
     {
-        $this->entityManager->beginTransaction();
-        try {
-            $countRow = 0;
-            for ($i = 0; $i < count($data); $i++) {
-                if (isset($data[$i])) {
-                    $specialRangeWeight = $this->entityManager->getRepository(SpecialRangeWeight::class)->findOneBy(
-                        [
-                            'customer' => $this->entityManager->getRepository(Customer::class)->findOneBy(['customer_no' => $data[$i]['account_no']]),
-                            'name' => $data[$i]['name'],
-                            'is_deleted' => 0,
-                        ]
-                    );
-                    if (!$specialRangeWeight) {
+        for ($i = 1; $i <= count($data); $i++) {
+            if (isset($data[$i])) {
+                $specialRangeWeight = $this->entityManager->getRepository(SpecialRangeWeight::class)->findOneBy(
+                    [
+                        'customer' => $this->entityManager->getRepository(Customer::class)->findOneBy(['customer_no' => $data[$i]['account_no']]),
+                        'name' => $data[$i]['name'],
+                        'carrier' => $this->entityManager->getRepository(Carrier::class)->findOneBy(['code' => $data[$i]['carrier']]),
+                        'is_deleted' => 0,
+                    ]
+                );
+                if (!$specialRangeWeight) {
+                    $this->entityManager->beginTransaction();
+                    try {
                         $specialRangeWeight = new SpecialRangeWeight();
                         $specialRangeWeight->setName($data[$i]['name']);
                         $specialRangeWeight->setNameEn($data[$i]['name']);
                         $specialRangeWeight->setCustomer($this->entityManager->getRepository(Customer::class)->findOneBy(['customer_no' => $data[$i]['account_no']]));
                         $specialRangeWeight->setSpecialArea($this->entityManager->getRepository(SpecialArea::class)->findOneBy(['name' => $data[$i]['special_area_name']]));
-                        $specialRangeWeight->setCalculateUnit($data[$i]['calculate_unit']);
+                        $specialRangeWeight->setCalculateUnit(($data[$i]['calculate_unit'] == 'Yes') ? 1 : 0);
                         $specialRangeWeight->setRoundUp($data[$i]['round_up']);
                         $specialRangeWeight->setUnit($data[$i]['unit']);
                         $specialRangeWeight->setFrom($data[$i]['from']);
                         $specialRangeWeight->setTo($data[$i]['to']);
-                        $specialRangeWeight->setStatus($data[$i]['status']);
+                        $specialRangeWeight->setStatus(($data[$i]['status'] == 'Active') ? 1 : 0);
 
                         $specialRangeWeight->setCarrier($this->entityManager->getRepository(Carrier::class)->findOneBy(['code' => $data[$i]['carrier']]));
                         $specialRangeWeight->setService($this->entityManager->getRepository(Service::class)->findOneBy(['name' => $data[$i]['service']]));
@@ -267,17 +267,16 @@ class SpecialRangeWeightManager
                         $specialRangeWeight->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
 
                         $this->entityManager->persist($specialRangeWeight);
+                        $this->entityManager->flush();
+                        $this->entityManager->commit();
+                    } catch (ORMException $e) {
+                        $this->entityManager->rollback();
+                        return false;
                     }
-
                 }
-            }
-            $this->entityManager->flush();
-            $this->entityManager->commit();
-            $this->entityManager->clear();
 
-        } catch (ORMException $e) {
-            $this->entityManager->rollback();
-            return false;
+            }
         }
+
     }
 }

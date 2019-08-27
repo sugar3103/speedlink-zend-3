@@ -178,18 +178,19 @@ class SpecialRangeWeightController extends CoreController
     public function importAction()
     {
         $nameField = [
-            0 => 'name',
-            1 => 'account_no',
-            2 => 'from',
-            3 => 'to',
-            4 => 'carrier',
-            5 => 'service',
-            6 => 'shipment_type',
-            7 => 'special_area_name',
-            8 => 'calculate_unit',
-            9 => 'unit',
-            10 => 'round_up',
-            11 => 'status',
+            0 => 'id',
+            1 => 'name',
+            2 => 'account_no',
+            3 => 'from',
+            4 => 'to',
+            5 => 'carrier',
+            6 => 'service',
+            7 => 'shipment_type',
+            8 => 'special_area_name',
+            9 => 'calculate_unit',
+            10 => 'unit',
+            11 => 'round_up',
+            12 => 'status',
         ];
         $start = 0;
         $lenght = 1000;
@@ -238,7 +239,7 @@ class SpecialRangeWeightController extends CoreController
                     //----Lặp cột
                     for ($j = 1; $j <= $TotalCol; $j++) {
                         // Tiến hành lấy giá trị của từng ô đổ vào mảng
-                        $data[$i - 1][$nameField[$j - 1]] = $sheet->getCellByColumnAndRow($j, $i)->getValue();
+                        $data[$i - 2][$nameField[$j - 1]] = $sheet->getCellByColumnAndRow($j, $i)->getValue();
                     }
                 }
                 // Save Data to cache.
@@ -252,8 +253,7 @@ class SpecialRangeWeightController extends CoreController
 
             for ($i = 0; $i < count($dataResult); $i++) {
                 $error = false;
-                $value = $dataResult[$i];
-                $value['id'] = $i + $start;
+                $value = $dataResult[$i];                
                 $error = array(
                     'customer' => 'SPECIAL_IMPORT_CUSTOMER_NOT_EXITS',
                     'area' => 'SPECIAL_IMPORT_AREA_NOT_EXITS',
@@ -354,7 +354,7 @@ class SpecialRangeWeightController extends CoreController
                 $dataPost = $this->getRequestData();
                 if (isset($dataPost['ids']) && is_array($dataPost['ids'])) {
                     foreach ($dataPost['ids'] as $id) {
-                        unset($data[0]);
+                        unset($data[$id]);
                     }
                 }
                 $this->specialRangeWeightManager->addRangeWeightImport($data, $this->tokenPayload);
