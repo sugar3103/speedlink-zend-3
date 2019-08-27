@@ -37,7 +37,7 @@ const validate = (values) => {
       errors.approved_by = 'pri_special.validate-approval-by-empty';
     }
 
-    if (values.total_ras  === undefined || values.total_ras === null ) {
+    if (values.total_ras  === undefined || values.total_ras === null || values.total_ras === '' ) {
       errors.total_ras = 'pri_special.validate-ras-empty';
     }
     
