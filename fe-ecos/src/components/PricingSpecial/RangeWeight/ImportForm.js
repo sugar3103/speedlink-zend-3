@@ -8,6 +8,7 @@ import bsCustomFileInput from 'bs-custom-file-input';
 import PropTypes from 'prop-types';
 import { resetDataImportRangeWeightSpecial, saveDataImportRangeWeightSpecial } from '../../../redux/actions';
 import validate from './validateImportForm';
+import { apiUrl } from '../../../constants/defaultValues';
 
 class ImportForm extends Component {
 
@@ -16,7 +17,7 @@ class ImportForm extends Component {
     }
 
     handleReset = () => {
-        this.props.reset();
+        this.props.initialize();
         document.getElementById('inputImport').value = '';
         document.getElementById('inputImport').dispatchEvent(new Event('change'));
         this.props.resetDataImportRangeWeightSpecial();
@@ -56,10 +57,12 @@ class ImportForm extends Component {
                     />
                 </div>
                 <div className="form__form-group">
-                    <Button color="primary" size="sm">{messages['upload']}</Button>
+                    <Button color="primary" size="sm" type="submit">{messages['upload']}</Button>
                     <Button color="secondary" size="sm" onClick={this.handleReset}>{messages['reset']}</Button>
-                    {!uploading && totalImport > 0 &&
+                    {!uploading && totalImport > 0 ?
                         <Button color="success float-right" size="sm" disabled={savingDataImport} onClick={this.hanldeSaveData}>{messages['pri_special.import-data']}</Button>
+                    :
+                        <a className="btn btn-success btn-sm float-right" download href={`${apiUrl}pricing/special/range-weight/download`}>{messages['pri_special.download-sample']}</a> 
                     }
                 </div>
                 {uploading &&

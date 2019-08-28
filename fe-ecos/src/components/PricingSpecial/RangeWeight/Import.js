@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { Col, Card, CardBody, Modal, ButtonToolbar, Button, Badge } from 'reactstrap';
+import { Col, Card, CardBody, Modal, ButtonToolbar, Button, Badge, UncontrolledTooltip } from 'reactstrap';
 import ImportForm from './ImportForm';
 import PropTypes from 'prop-types';
 import { uploadRangeWeightSpecialRequest, getDataImportRangeWeightSpecial } from '../../../redux/actions';
 import Table from '../../../containers/Shared/table/Table';
 import ReactLoading from "react-loading";
+import AlertOutlineIcon from 'mdi-react/AlertOutlineIcon';
 
 class Import extends Component {
 
@@ -58,7 +59,7 @@ class Import extends Component {
     };
 
     handleSubmit = values => {
-        if (values) {
+        if (Object.entries(values).length > 0) {
             this.props.uploadRangeWeightSpecialRequest(values);
         }
     }
@@ -85,65 +86,137 @@ class Import extends Component {
             checkbox: false,
             columns: [
                 {
+                    Header: messages['pri_special.id'],
+                    accessor: "id",
+                    sortable: false,
+                    width: 50,
+                },
+                {
                     Header: messages['pri_special.name'],
                     accessor: "name",
                     sortable: false,
+                    width: 100
                 },
                 {
                     Header: messages['pri_special.customer'],
                     accessor: "account_no",
+                    width: 120,
                     sortable: false,
+                    Cell: ({ original }) => {
+                        return (
+                            <Fragment>
+                                {original.account_no}
+                                {original.error && original.error.account_no && 
+                                    <div className="float-right">
+                                        <AlertOutlineIcon id={`errorCustomer${original.id}`} />
+                                        <UncontrolledTooltip placement="right" target={`errorCustomer${original.id}`}>{messages['pri_special.customer-does-not-exist']}</UncontrolledTooltip>
+                                    </div>
+                                }
+                            </Fragment>
+                        )
+                    },
                 },
                 {
                     Header: messages['pri_special.from'],
                     accessor: "from",
                     sortable: false,
+                    width: 70
                 },
                 {
                     Header: messages['pri_special.to'],
                     accessor: "to",
                     sortable: false,
+                    width: 70
                 },
                 {
                     Header: messages['pri_special.carrier'],
                     sortable: false,
+                    accessor: "carrier",
+                    width: 150,
                     Cell: ({ original }) => {
+                        let content = locale === 'en-US' ? original.carrier_en : original.carrier;
                         return (
-                            locale === 'en-US' ? original.carrier_en : original.carrier
+                            <Fragment>
+                                {content}
+                                {original.error && original.error.carrier && 
+                                    <div className="float-right">
+                                        <AlertOutlineIcon id={`errorCarrier${original.id}`} />
+                                        <UncontrolledTooltip placement="right" target={`errorCarrier${original.id}`}>{messages['pri_special.carrier-does-not-exist']}</UncontrolledTooltip>
+                                    </div>
+                                }
+                            </Fragment>
                         )
                     },
                 },
                 {
                     Header: messages['pri_special.service'],
                     sortable: false,
+                    accessor: "service",
+                    width: 150,
                     Cell: ({ original }) => {
+                        let content = locale === 'en-US' ? original.service_en : original.service;
                         return (
-                            locale === 'en-US' ? original.service_en : original.service
+                            <Fragment>
+                                {content}
+                                {original.error && original.error.service && 
+                                    <div className="float-right">
+                                        <AlertOutlineIcon id={`errorService${original.id}`} />
+                                        <UncontrolledTooltip placement="right" target={`errorService${original.id}`}>{messages['pri_special.service-does-not-exist']}</UncontrolledTooltip>
+                                    </div>
+                                }
+                            </Fragment>
                         )
                     },
                 },
                 {
                     Header: messages['pri_special.shipment-type'],
                     sortable: false,
+                    accessor: "shipment_type",
+                    width: 150,
                     Cell: ({ original }) => {
+                        let content = locale === 'en-US' ? original.shipment_type_en : original.shipment_type;
                         return (
-                            locale === 'en-US' ? original.shipment_type_en : original.shipment_type
+                            <Fragment>
+                                {content}
+                                {original.error && original.error.shipment_type && 
+                                    <div className="float-right">
+                                        <AlertOutlineIcon id={`errorShipmentType${original.id}`} />
+                                        <UncontrolledTooltip placement="right" target={`errorShipmentType${original.id}`}>{messages['pri_special.shipment-type-does-not-exist']}</UncontrolledTooltip>
+                                    </div>
+                                }
+                            </Fragment>
                         )
-                    },
+                    }
                 },
                 {
                     Header: messages['pri_special.area'],
                     accessor: "special_area_name",
                     sortable: false,
+                    width: 150,
+                    Cell: ({ original }) => {
+                        return (
+                            <Fragment>
+                                {original.special_area_name}
+                                {original.error && original.error.special_area_name && 
+                                    <div className="float-right">
+                                        <AlertOutlineIcon id={`errorArea${original.id}`} />
+                                        <UncontrolledTooltip placement="right" target={`errorArea${original.id}`}>{messages['pri_special.area-does-not-exist']}</UncontrolledTooltip>
+                                    </div>
+                                }
+                            </Fragment>
+                        )
+                    },
                 },
                 {
                     Header: messages['pri_special.calculate-unit'],
                     sortable: false,
+                    accessor: "calculate_unit",
                     Cell: ({ original }) => {
                         return (
                             original.calculate_unit === 1 ? <Badge color="success">{messages['yes']}</Badge> : <Badge color="dark">{messages['no']}</Badge>
                         )
                     },
+                    width: 120
                 },
                 {
                     Header: messages['pri_special.unit'],
@@ -158,7 +231,6 @@ class Import extends Component {
                 {
                     Header: messages['status'],
                     accessor: "status",
-
                     Cell: ({ original }) => {
                         return (
                             original.status === 1 ? <Badge color="success">{messages['active']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>
@@ -180,7 +252,7 @@ class Import extends Component {
         return (
             <Col md={12} lg={12}>
                 <Card>
-                    <CardBody className="master-data-list">
+                    <CardBody className="master-data-list pri-dom">
                         <div className="upload-card mb-3">
                             <ImportForm onSubmit={this.handleSubmit} toggleModal={this.toggleModal} />
                         </div>
@@ -199,7 +271,6 @@ class Import extends Component {
                             }}
                             data={dataImport}
                             optionPage={[1000, 2000, 5000, 10000]}
-                            onRowClick={(e) => e.preventDefault()}
                         />
                         <Modal
                             isOpen={this.state.modal}

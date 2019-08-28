@@ -149,14 +149,17 @@ class RenderTable extends PureComponent {
                     columns={columns}
                     showPagination={false}
                     minRows={0}
-                    className="-highlight -striped"
+                    className="-striped"
                     loading={loading}
                     LoadingComponent={Loading}
                     NoDataComponent={NoData}
                     getNoDataProps={this.getNoDataProps}
-                    getTrProps={(state, rowInfo) => ({
-                        onClick: (e) => onRowClick(e, MODAL_VIEW, rowInfo.original)
-                    })}
+                    getTrProps={(state, rowInfo) => {
+                        return ({
+                            onClick: (e) => onRowClick ? onRowClick(e, MODAL_VIEW, rowInfo.original) : e.preventDefault(),
+                            className: rowInfo.original.error ? 'row-error' : '',
+                        })}
+                    }
                 />
                 <Pagination pagination={pages.pagination} total={pages.total} onChangePage={pages.onChangePage} />
             </Fragment>
@@ -193,7 +196,8 @@ Table.propTypes = {
     }),
     data: PropTypes.array,
     loading: PropTypes.bool.isRequired,
-    optionPage: PropTypes.array
+    optionPage: PropTypes.array,
+    onRowClick: PropTypes.func,
 }
 
 export default Table;
