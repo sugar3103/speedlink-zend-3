@@ -19,8 +19,6 @@
   }
 
   .rt-tbody {
-    margin-top: 5px;
-
     .rt-tr-group {
       &:hover {
         cursor: pointer;
@@ -29,6 +27,7 @@
 
     .rt-td {
       border: none;
+      padding: 5px 5px;
       @include themify($themes) {
         color: themed('colorTextAdditional');
       }

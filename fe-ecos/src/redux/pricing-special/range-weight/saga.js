@@ -131,7 +131,6 @@ function* requestRangeWeightSpecialUpdateItems({ payload }) {
   try {
     const response = yield call(getRangeWeightSpecialUpdateRequest, param);
     switch (response.error_code) {
-      
       case EC_SUCCESS:
         yield put(requestUpdateRangeWeightSpecialItemSuccess(response.data[0]));
         break;
@@ -205,7 +204,7 @@ function deleteRangeWeightSpecialApi(ids) {
     method: 'post',
     url: `${apiUrl}pricing/special/range-weight/delete`,
     headers: authHeader(),
-    data: {  ids: ids }
+    data: { ids: ids }
   });
 }
 
@@ -222,7 +221,7 @@ function* deleteRangeWeightSpecialItem({ payload }) {
       case EC_SUCCESS:
         yield put(deleteRangeWeightSpecialItemSuccess());
         yield put(getRangeWeightSpecialList());
-        createNotification({ type: 'success', message: 'pri_special.delete-success'});
+        createNotification({ type: 'success', message: 'pri_special.delete-success' });
         break;
 
       case EC_FAILURE:
@@ -246,7 +245,6 @@ function* deleteRangeWeightSpecialItem({ payload }) {
 function uploadRangeWeightApi(file, onProgress) {
   const data = new FormData();
   data.append('import_file', file.import_file);
-  
   let headers = authHeader();
   headers = {
     ...headers,
@@ -295,7 +293,6 @@ function* uploadRangeWeightSpecial({ payload }) {
   const { pathname } = history.location;
   const [uploadPromise, chan] = createUploader(payload);
   yield fork(watchOnProgress, chan);
-
   try {
     const response = yield call(() => uploadPromise);
     switch (response.error_code) {

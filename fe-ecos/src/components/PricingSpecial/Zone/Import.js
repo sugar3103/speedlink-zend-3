@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { Col, Card, CardBody, Modal, ButtonToolbar, Button } from 'reactstrap';
+import { Col, Card, CardBody, Modal, ButtonToolbar, Button, UncontrolledTooltip } from 'reactstrap';
 import ImportForm from './ImportForm';
 import PropTypes from 'prop-types';
 import { uploadZoneSpecialRequest, getDataImportZoneSpecial } from '../../../redux/actions';
 import Table from '../../../containers/Shared/table/Table';
 import ReactLoading from "react-loading";
+import AlertOutlineIcon from 'mdi-react/AlertOutlineIcon';
 
 class Import extends Component {
 
@@ -85,44 +86,134 @@ class Import extends Component {
             checkbox: false,
             columns: [
                 {
+                    Header: messages['pri_special.id'],
+                    accessor: "id",
+                    sortable: false,
+                    width: 50,
+                },
+                {
                     Header: messages['pri_special.name'],
                     accessor: "name",
                     sortable: false,
+                    width: 120,
                 },
                 {
                     Header: messages['pri_special.name-en'],
                     accessor: "name_en",
                     sortable: false,
+                    width: 120,
                 },
                 {
                     Header: messages['pri_special.origin-city'],
                     accessor: "from_city",
                     sortable: false,
+                    width: 150,
+                    Cell: ({ original }) => {
+                        return (
+                            <Fragment>
+                                {original.from_city}
+                                {original.error && original.error.fromCity && 
+                                    <div className="float-right">
+                                        <AlertOutlineIcon id={`errorFromCity${original.id}`} />
+                                        <UncontrolledTooltip placement="right" target={`errorFromCity${original.id}`}>{messages['pri_special.city-does-not-exist']}</UncontrolledTooltip>
+                                    </div>
+                                }
+                            </Fragment>
+                        )
+                    },
                 },
                 {
                     Header: messages['pri_special.dest-city'],
                     accessor: "to_city",
                     sortable: false,
+                    width: 150,
+                    Cell: ({ original }) => {
+                        return (
+                            <Fragment>
+                                {original.to_city}
+                                {original.error && original.error.toAddress && 
+                                    <div className="float-right">
+                                        <AlertOutlineIcon id={`errorToAddress${original.id}`} />
+                                        <UncontrolledTooltip placement="right" target={`errorToAddress${original.id}`}>{messages['pri_special.to-address-does-not-exist']}</UncontrolledTooltip>
+                                    </div>
+                                }
+                            </Fragment>
+                        )
+                    },
                 },
                 {
                     Header: messages['pri_special.dest-district'],
                     accessor: "to_district",
                     sortable: false,
+                    width: 150,
+                    Cell: ({ original }) => {
+                        return (
+                            <Fragment>
+                                {original.to_district}
+                                {original.error && original.error.toAddress && 
+                                    <div className="float-right">
+                                        <AlertOutlineIcon />
+                                    </div>
+                                }
+                            </Fragment>
+                        )
+                    },
                 },
                 {
                     Header: messages['pri_special.dest-ward'],
                     accessor: "to_ward",
                     sortable: false,
+                    width: 150,
+                    Cell: ({ original }) => {
+                        return (
+                            <Fragment>
+                                {original.to_ward}
+                                {original.error && original.error.toAddress && 
+                                    <div className="float-right">
+                                        <AlertOutlineIcon />
+                                    </div>
+                                }
+                            </Fragment>
+                        )
+                    },
                 },
                 {
                     Header: messages['pri_special.area'],
                     accessor: "area_name",
                     sortable: false,
+                    width: 150,
+                    Cell: ({ original }) => {
+                        return (
+                            <Fragment>
+                                {original.area_name}
+                                {original.error && original.error.area && 
+                                    <div className="float-right">
+                                        <AlertOutlineIcon id={`errorArea${original.id}`} />
+                                        <UncontrolledTooltip placement="right" target={`errorArea${original.id}`}>{messages['pri_special.area-does-not-exist']}</UncontrolledTooltip>
+                                    </div>
+                                }
+                            </Fragment>
+                        )
+                    },
                 },
                 {
                     Header: messages['pri_special.customer'],
                     accessor: "account_no",
                     sortable: false,
+                    width: 120,
+                    Cell: ({ original }) => {
+                        return (
+                            <Fragment>
+                                {original.account_no}
+                                {original.error && original.error.customer && 
+                                    <div className="float-right">
+                                        <AlertOutlineIcon id={`errorCustomer${original.id}`} />
+                                        <UncontrolledTooltip placement="right" target={`errorCustomer${original.id}`}>{messages['pri_special.customer-does-not-exist']}</UncontrolledTooltip>
+                                    </div>
+                                }
+                            </Fragment>
+                        )
+                    },
                 },
 
             ]
@@ -140,7 +231,7 @@ class Import extends Component {
         return (
             <Col md={12} lg={12}>
                 <Card>
-                    <CardBody className="master-data-list">
+                    <CardBody className="master-data-list pri-dom">
                         <div className="upload-card mb-3">
                             <ImportForm onSubmit={this.handleSubmit} toggleModal={this.toggleModal} />
                         </div>
@@ -159,7 +250,6 @@ class Import extends Component {
                             }}
                             data={dataImport}
                             optionPage={[1000, 2000, 5000, 10000]}
-                            onRowClick={(e) => e.preventDefault()}
                         />
                         <Modal
                             isOpen={this.state.modal}
