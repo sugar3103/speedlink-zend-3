@@ -106,6 +106,18 @@ $router = [
                     'isAuthorizationRequired' => true
                 ]               
             ]
+        ],
+        'special_range_weight_download' => [
+            'type' => StaticRoute::class,
+            'options' => [
+                'verb' => 'GET',
+                'route' => '/pricing/special/range-weight/download',
+                'defaults' => [
+                    'controller' => Controller\SpecialRangeWeightController::class,
+                    'action' => 'download',
+                    'isAuthorizationRequired' => false
+                ]               
+            ]
         ]
     ]
 ];
