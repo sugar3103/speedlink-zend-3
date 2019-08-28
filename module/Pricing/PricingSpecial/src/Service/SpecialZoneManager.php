@@ -210,11 +210,13 @@ class SpecialZoneManager
      */
     public function addZoneImport($data, $user)
     {
+        
         $this->entityManager->beginTransaction();
         try {
             $countRow = 0;
             for ($i = 0; $i < count($data); $i++) {
                 if (isset($data[$i])) {
+                    $this->entityManager->beginTransaction();
                     $specialZone = new SpecialZone();
                     $specialZone->setName($data[$i]['name']);
                     $specialZone->setNameEn($data[$i]['name_en']);
@@ -232,13 +234,12 @@ class SpecialZoneManager
                     $specialZone->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
 
                     $this->entityManager->persist($specialZone);
-                    
-                    if($countRow == 999) {
-                        $countRow = 0;                        
+
+                    if ($countRow == 999) {
+                        $countRow = 0;
                         $this->entityManager->flush();
-                        $this->entityManager->commit();            
-                        $this->entityManager->clear();                        
-                        
+                        $this->entityManager->commit();                       
+
                     } else {
                         $countRow++;
                     }
@@ -246,7 +247,7 @@ class SpecialZoneManager
             }
             $this->entityManager->flush();
             $this->entityManager->commit();
-            $this->entityManager->clear();                        
+            $this->entityManager->clear();
 
         } catch (ORMException $e) {
             $this->entityManager->rollback();

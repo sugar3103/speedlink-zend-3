@@ -1,13 +1,12 @@
 <?php
 namespace PricingSpecial\Repository;
 
+use Address\Entity\AddressCode;
 use Core\Utils\Utils;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\QueryException;
 use PricingSpecial\Entity\SpecialZone;
-use Address\Entity\AddressCode;
-
 
 /**
  * This is the custom repository class for User entity.
@@ -21,8 +20,8 @@ class SpecialZoneRepository extends EntityRepository
         try {
             $queryBuilder = $entityManager->createQueryBuilder();
             $queryBuilder->select('sz.id')->from(SpecialZone::class, 'sz')
-                ->where('sz.name = :name 
-                    AND sz.name_en = :name_en 
+                ->where('sz.name = :name
+                    AND sz.name_en = :name_en
                     AND sz.from_city = :from_city_id
                     AND sz.to_city = :to_city_id
                     AND sz.to_district = :to_district_id
@@ -64,36 +63,49 @@ class SpecialZoneRepository extends EntityRepository
         } catch (QueryException $e) {
             return [];
         }
-        
+
         return $queryBuilder->getQuery()->execute();
     }
 
     public function vertifyAddress($city, $district, $ward)
     {
-        $entityManager = $this->getEntityManager();
+        $operatorsMap = [
+            'name_city' => [
+                'alias' => 'c.name',
+                'operator' => 'eq',
+            ],
+            'name_district' => [
+                'alias' => 'd.name',
+                'operator' => 'eq',
+            ],
+            'name_ward' => [
+                'alias' => 'w.name',
+                'operator' => 'eq',
+            ],
+        ];
+
         try {
-            $queryBuilder = $entityManager->createQueryBuilder();
-            $queryBuilder->select('
-                c.id as city_id,
-                d.id as district_id,
-                w.id as ward_id
-            ')->from(AddressCode::class, 'ac')
+            $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+            $queryBuilder->from(AddressCode::class, 'ac')
                 ->leftJoin('ac.city', 'c')
                 ->leftJoin('ac.district', 'd')
-                ->leftJoin('ac.ward', 'w')
-                ->where('c.name = :name_city 
-                    AND d.name = :name_district
-                    AND w.name = :name_ward
-                    ')
-                ->setParameter("name_city", $city)
-                ->setParameter("name_district", $district)
-                ->setParameter("name_ward", $ward)
-                ->setMaxResults(1);
+                ->leftJoin('ac.ward', 'w');
+            $queryBuilder->orderBy('ac.id', 'DESC');
 
+            $queryBuilder = Utils::setCriteriaByFilters([
+                'name_city' => $city,
+                'name_district' => $district,
+                'name_ward' => $ward,
+            ], $operatorsMap, $queryBuilder);
+
+            $queryBuilder->select("c.id AS city_id, d.id AS district_id, w.id AS ward_id");
+            // var_dump($queryBuilder->getQuery()->getSql());
+            // die;
+            return $queryBuilder;
         } catch (QueryException $e) {
             return [];
         }
-        return $queryBuilder->getQuery()->execute();
+        
     }
     /**
      * Get list user by condition
@@ -121,7 +133,7 @@ class SpecialZoneRepository extends EntityRepository
                 tc.id as to_city,
                 tc.name as to_city_name,
                 td.id as to_district,
-                td.name as to_district_name,                
+                td.name as to_district_name,
                 tw.id as to_ward,
                 tw.name as to_ward_name,
                 sa.id as special_area_id,
@@ -204,12 +216,12 @@ class SpecialZoneRepository extends EntityRepository
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(SpecialZone::class, 'sz')
-            ->leftJoin('sz.customer','ct')
+            ->leftJoin('sz.customer', 'ct')
             ->leftJoin('sz.from_city', 'fc')
             ->leftJoin('sz.to_city', 'tc')
             ->leftJoin('sz.to_district', 'td')
             ->leftJoin('sz.to_ward', 'tw')
-            ->leftJoin('sz.special_area','sa')
+            ->leftJoin('sz.special_area', 'sa')
             ->leftJoin('sz.created_by', 'cr')
             ->leftJoin('sz.updated_by', 'up');
 

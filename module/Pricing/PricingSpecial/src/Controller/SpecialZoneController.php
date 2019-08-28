@@ -4,11 +4,10 @@ namespace PricingSpecial\Controller;
 set_time_limit(300);
 
 use Address\Entity\City;
-use Address\Entity\District;
-use Address\Entity\Ward;
 use Core\Controller\CoreController;
 use Customer\Entity\Customer;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PricingSpecial\Entity\SpecialArea;
@@ -192,14 +191,15 @@ class SpecialZoneController extends CoreController
     {
 
         $nameField = [
-            0 => 'name',
-            1 => 'name_en',
-            2 => 'from_city',
-            3 => 'to_city',
-            4 => 'to_district',
-            5 => 'to_ward',
-            6 => 'account_no',
-            7 => 'area_name',
+            0 => 'id',
+            1 => 'name',
+            2 => 'name_en',
+            3 => 'from_city',
+            4 => 'to_city',
+            5 => 'to_district',
+            6 => 'to_ward',
+            7 => 'account_no',
+            8 => 'area_name',
         ];
         //Tạo mảng chứa dữ liệu
         // $this->cache->removeItem('specialZone');die;
@@ -212,11 +212,10 @@ class SpecialZoneController extends CoreController
             if ($fileUpdate) {
                 $this->cache->removeItem('specialZone');
                 // Upload path
-                $location = dirname(__DIR__, 5) . "/data/files/";        
-                move_uploaded_file($fileUpdate['tmp_name'], $location . $fileUpdate['name']);    
+                $location = dirname(__DIR__, 5) . "/data/files/";
+                move_uploaded_file($fileUpdate['tmp_name'], $location . $fileUpdate['name']);
                 $file = $location . $fileUpdate['name'];
             }
-        
 
             $dataPost = $this->getRequestData();
             $offset = isset($dataPost['offset']) ? $dataPost['offset'] : 0;
@@ -291,34 +290,16 @@ class SpecialZoneController extends CoreController
                 'is_deleted' => 0,
             ]);
 
-            // $fromCity = $this->entityManager->getRepository(City::class)->findBy([
-            //     'name' => $fromCity,
-            //     'is_deleted' => 0,
-            // ]);
-            
-            // $toCity = $this->entityManager->getRepository(City::class)->findBy([
-            //     'name' => $toCity,
-            //     'is_deleted' => 0,
-            // ]);
-
-            // $toDistrict = $this->entityManager->getRepository(District::class)->findBy([
-            //     'name' => $toDistrict,
-            //     'is_deleted' => 0,
-            // ]);
-            // $toWard = $this->entityManager->getRepository(Ward::class)->findBy([
-            //     'name' => $toWard,
-            //     'is_deleted' => 0,
-            // ]);
+          
 
             for ($i = 0; $i < count($dataResult); $i++) {
                 $error = false;
                 $value = $dataResult[$i];
-                $value['id'] = $i + $start;
                 $error = array(
-                    'customer' => 'SPECIAL_IMPORT_CUSTOMER_NOT_EXIT',
-                    'area' => 'SPECIAL_IMPORT_AREA_NOT_EXIT',
-                    'fromCity' => 'SPECIAL_IMPORT_FROM_CITY_NOT_EXIT',
-                    'toAddress' => 'SPECIAL_IMPORT_TO_ADDRESS_NOT_EXIT',
+                    'customer' => 'SPECIAL_IMPORT_CUSTOMER_NOT_EXITS',
+                    'area' => 'SPECIAL_IMPORT_AREA_NOT_EXITS',
+                    'fromCity' => 'SPECIAL_IMPORT_FROM_CITY_NOT_EXITS',
+                    'toAddress' => 'SPECIAL_IMPORT_TO_ADDRESS_NOT_EXITS',
                 );
                 $idCustomer = 0;
                 foreach ($customers as $customer) {
@@ -339,20 +320,34 @@ class SpecialZoneController extends CoreController
 
                 $idFromCity = 0;
                 $fromCity = $this->entityManager->getRepository(City::class)->findOneBy([
-                    'name' =>  $value['from_city'],
+                    'name' => $value['from_city'],
                     'is_deleted' => 0,
                 ]);
-                if($fromCity) {
+                if ($fromCity) {
                     $idFromCity = $fromCity->getId();
                     unset($error['fromCity']);
                 }
 
-                $toAddress = $this->entityManager->getRepository(SpecialZone::class)->vertifyAddress($value['to_city'], $value['to_district'],$value['to_ward']);
-                if($toAddress) {
-                    $idToCity = $toAddress[0]['city_id'];
-                    $idToDistrict = $toAddress[0]['district_id'];
-                    $idToWard = $toAddress[0]['ward_id'];
-                    unset($error['toAddress']);
+                $toAddress = $this->entityManager->getRepository(SpecialZone::class)->vertifyAddress(
+                    $value['to_city'],
+                    $value['to_district'],
+                    $value['to_ward']
+                );
+
+                if ($toAddress) {
+                    $ormPaginator = new ORMPaginator($toAddress, true);
+
+                    $ormPaginator->setUseOutputWalkers(false);
+                    //get special area list
+
+                    $toAddresses = $ormPaginator->getIterator()->getArrayCopy();
+                    if (isset($toAddresses[0])) {
+                        $idToCity = $toAddresses[0]['city_id'];
+                        $idToDistrict = $toAddresses[0]['district_id'];
+                        $idToWard = $toAddresses[0]['ward_id'];
+                        unset($error['toAddress']);
+                    }
+
                 }
 
                 if (!$error) {
@@ -386,7 +381,7 @@ class SpecialZoneController extends CoreController
 
             $this->apiResponse = array(
                 'data' => $dataResult,
-                'total' => (int)$Totalrow,
+                'total' => (int) $Totalrow,
             );
 
             return $this->createResponse();
@@ -412,6 +407,41 @@ class SpecialZoneController extends CoreController
                 $this->error_code = 0;
                 $this->apiResponse['message'] = "SPECIAL_IMPORT_NONE";
             }
+        }
+        return $this->createResponse();
+    }
+
+    public function checkAction()
+    {
+        $city = "Đắk Lắk";
+        $district = "Huyện Ea H'leo";
+        $ward = "Xã Ea Khal";
+        // $city = "An Giang";
+        // $district = "Huyện An Phú";
+        // $ward = "Thị trấn An Phú";
+
+        $toAddress = $this->entityManager->getRepository(SpecialZone::class)->vertifyAddress(
+            $city,
+            $district,
+            $ward
+        );
+
+        if ($toAddress) {
+            $ormPaginator = new ORMPaginator($toAddress, true);
+
+            $ormPaginator->setUseOutputWalkers(false);
+            //get special area list
+
+            $toAddresses = $ormPaginator->getIterator()->getArrayCopy();
+            $this->apiResponse['message'] = $toAddresses;
+            // if (isset($toAddresses[0])) {
+            //     $idToCity = $toAddresses[0]['city_id'];
+            //     $idToDistrict = $toAddresses[0]['district_id'];
+            //     $idToWard = $toAddresses[0]['ward_id'];
+            //     unset($error['toAddress']);
+            // }
+        } else {
+            $this->apiResponse['message'] = "None";
         }
         return $this->createResponse();
     }
