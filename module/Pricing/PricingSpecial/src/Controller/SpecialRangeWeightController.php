@@ -378,7 +378,7 @@ class SpecialRangeWeightController extends CoreController
     
         $headers = new \Zend\Http\Headers();
         $headers->addHeaderLine('Content-Type', 'whatever your content type is')
-                ->addHeaderLine('Content-Disposition', 'attachment; filename="' . $fileName . '"')
+                ->addHeaderLine('Content-Disposition', 'attachment; filename="special_range_weight.xlsx"')
                 ->addHeaderLine('Content-Length', filesize($fileName));
     
         $response->setHeaders($headers);
