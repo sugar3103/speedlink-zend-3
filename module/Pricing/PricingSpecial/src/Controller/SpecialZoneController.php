@@ -1,7 +1,7 @@
 <?php
 namespace PricingSpecial\Controller;
 
-set_time_limit(300);
+set_time_limit(3000);
 
 use Address\Entity\City;
 use Core\Controller\CoreController;
@@ -246,11 +246,11 @@ class SpecialZoneController extends CoreController
 
                 //Tiến hành lặp qua từng ô dữ liệu
                 //----Lặp dòng, Vì dòng đầu là tiêu đề cột nên chúng ta sẽ lặp giá trị từ dòng 2
-                for ($i = 1; $i <= $Totalrow; $i++) {
+                for ($i = 2; $i <= $Totalrow; $i++) {
                     //----Lặp cột
-                    for ($j = 1; $j <= $TotalCol; $j++) {
+                    for ($j = 1; $j < $TotalCol; $j++) {
                         // Tiến hành lấy giá trị của từng ô đổ vào mảng
-                        $data[$i - 1][$nameField[$j - 1]] = $sheet->getCellByColumnAndRow($j, $i)->getValue();
+                        $data[$i - 2][$nameField[$j - 1]] = $sheet->getCellByColumnAndRow($j, $i)->getValue();
                     }
                 }
 
@@ -392,6 +392,7 @@ class SpecialZoneController extends CoreController
     {
         if ($this->getRequest()->isPost()) {
             $data = $this->cache->getItem('specialZone', $result);
+            
             if ($result) {
                 $dataPost = $this->getRequestData();
                 if (isset($dataPost['ids']) && is_array($dataPost['ids'])) {

@@ -210,48 +210,66 @@ class SpecialZoneManager
      */
     public function addZoneImport($data, $user)
     {
+
         
-        $this->entityManager->beginTransaction();
-        try {
-            $countRow = 0;
-            for ($i = 0; $i < count($data); $i++) {
-                if (isset($data[$i])) {
-                    $this->entityManager->beginTransaction();
-                    $specialZone = new SpecialZone();
-                    $specialZone->setName($data[$i]['name']);
-                    $specialZone->setNameEn($data[$i]['name_en']);
-                    $specialZone->setCustomer($this->entityManager->getRepository(Customer::class)->findOneBy(['customer_no' => $data[$i]['account_no']]));
-                    $specialZone->setSpecialArea($this->entityManager->getRepository(SpecialArea::class)->findOneBy(['name' => $data[$i]['area_name']]));
-                    $specialZone->setFromCity($this->entityManager->getRepository(City::class)->findOneBy(['name' => $data[$i]['from_city']]));
-                    $specialZone->setToCity($this->entityManager->getRepository(City::class)->findOneBy(['name' => $data[$i]['to_city']]));
-                    $specialZone->setToDistrict($this->entityManager->getRepository(District::class)->findOneBy(['name' => $data[$i]['to_district']]));
-                    $specialZone->setToWard($this->entityManager->getRepository(Ward::class)->findOneBy(['name' => $data[$i]['to_ward']]));
+        // try {
+        $countRow = 0;
+        for ($i = 0; $i < count($data); $i++) {
+            $toAddress = $this->entityManager->getRepository(SpecialZone::class)->vertifyAddress(
+                $data[$i]['to_city'],
+                $data[$i]['to_district'],
+                $data[$i]['to_ward']
+            );
+            if (isset($data[$i]) && $toAddress) {
+                $this->entityManager->beginTransaction();
+                $specialZone = new SpecialZone();
+                $specialZone->setName($data[$i]['name']);
+                $specialZone->setNameEn($data[$i]['name_en']);
+                $specialZone->setCustomer($this->entityManager->getRepository(Customer::class)->findOneBy(['customer_no' => $data[$i]['account_no']]));
+                $specialZone->setSpecialArea($this->entityManager->getRepository(SpecialArea::class)->findOneBy(['name' => $data[$i]['area_name']]));
+                $specialZone->setFromCity($this->entityManager->getRepository(City::class)->findOneBy(['name' => $data[$i]['from_city']]));
 
-                    $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
-                    $specialZone->setCreatedAt($addTime->format('Y-m-d H:i:s'));
-                    $specialZone->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
-                    $specialZone->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
-                    $specialZone->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+                $ormPaginator = new ORMPaginator($toAddress, true);
 
-                    $this->entityManager->persist($specialZone);
+                $ormPaginator->setUseOutputWalkers(false);
+                //get special area list
 
-                    if ($countRow == 999) {
-                        $countRow = 0;
-                        $this->entityManager->flush();
-                        $this->entityManager->commit();                       
-
-                    } else {
-                        $countRow++;
-                    }
+                $toAddresses = $ormPaginator->getIterator()->getArrayCopy();
+                if (isset($toAddresses[0])) {
+                    $idToCity = $toAddresses[0]['city_id'];
+                    $idToDistrict = $toAddresses[0]['district_id'];
+                    $idToWard = $toAddresses[0]['ward_id'];
                 }
-            }
-            $this->entityManager->flush();
-            $this->entityManager->commit();
-            $this->entityManager->clear();
 
-        } catch (ORMException $e) {
-            $this->entityManager->rollback();
-            return false;
+                $specialZone->setToCity($this->entityManager->getRepository(City::class)->find($idToCity));
+                $specialZone->setToDistrict($this->entityManager->getRepository(District::class)->find($idToDistrict));
+                $specialZone->setToWard($this->entityManager->getRepository(Ward::class)->find($idToWard));
+
+                $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+                $specialZone->setCreatedAt($addTime->format('Y-m-d H:i:s'));
+                $specialZone->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+                $specialZone->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+                $specialZone->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+
+                $this->entityManager->persist($specialZone);
+
+                // if ($countRow == 999) {
+                //     $countRow = 0;
+                    $this->entityManager->flush();
+                    $this->entityManager->commit();
+                    // $this->entityManager->clear();
+                // } else {
+                //     $countRow++;
+                // }
+            }
         }
+        // $this->entityManager->flush();
+        // $this->entityManager->commit();
+        // $this->entityManager->clear();
+
+        // } catch (ORMException $e) {
+        //     $this->entityManager->rollback();
+        //     return false;
+        // }
     }
 }
