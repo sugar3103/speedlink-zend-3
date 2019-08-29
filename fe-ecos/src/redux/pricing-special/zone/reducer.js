@@ -63,6 +63,7 @@ export default (state = INIT_STATE, action) => {
     case PRI_SPECIAL_ZONE_ERROR:
       return {
         ...state,
+        savingDataImport: false,
         errors: action.payload
       };
 

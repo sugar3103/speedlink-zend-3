@@ -46,6 +46,7 @@ export default (state = INIT_STATE, action) => {
     case PRI_SPECIAL_RANGE_WEIGHT_ERROR:
       return {
         ...state,
+        savingDataImport: false,
         errors: action.payload
       };
 

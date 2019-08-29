@@ -13,7 +13,8 @@ import { apiUrl } from '../../../constants/defaultValues';
 class ImportForm extends Component {
 
     componentDidMount() {
-        bsCustomFileInput.init()
+        bsCustomFileInput.init();
+        this.handleReset();
     }
 
     handleReset = () => {
