@@ -106,7 +106,7 @@ class Import extends Component {
                         return (
                             <Fragment>
                                 {original.account_no}
-                                {original.error && original.error.account_no && 
+                                {original.error && original.error.customer && 
                                     <div className="float-right">
                                         <AlertOutlineIcon id={`errorCustomer${original.id}`} />
                                         <UncontrolledTooltip placement="right" target={`errorCustomer${original.id}`}>{messages['pri_special.customer-does-not-exist']}</UncontrolledTooltip>
@@ -197,7 +197,7 @@ class Import extends Component {
                         return (
                             <Fragment>
                                 {original.special_area_name}
-                                {original.error && original.error.special_area_name && 
+                                {original.error && original.error.area && 
                                     <div className="float-right">
                                         <AlertOutlineIcon id={`errorArea${original.id}`} />
                                         <UncontrolledTooltip placement="right" target={`errorArea${original.id}`}>{messages['pri_special.area-does-not-exist']}</UncontrolledTooltip>
