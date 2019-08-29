@@ -255,12 +255,26 @@ class SpecialRangeWeightController extends CoreController
                 $error = false;
                 $value = $dataResult[$i];                
                 $error = array(
+                    'name'  => 'SPECIAL_IMPORT_NAME_NOT_NULL',
+                    'from'  => 'SPECIAL_IMPORT_FROM_NOT_NULL_OR_NOT_NUMBER',
+                    'to'  => 'SPECIAL_IMPORT_TO_NOT_NULL_OR_NOT_NUMBER',
                     'customer' => 'SPECIAL_IMPORT_CUSTOMER_NOT_EXITS',
                     'area' => 'SPECIAL_IMPORT_AREA_NOT_EXITS',
                     'carrier' => 'SPECIAL_IMPORT_CARRIER_NOT_EXITS',
                     'service' => 'SPECIAL_IMPORT_SERVICE_NOT_EXITS',
                     'shipment_type' => 'SPECIAL_IMPORT_SHIPMENT_TYPE_NOT_EXITS',
                 );
+                if($value['name']) {
+                    unset($error['name']);
+                }
+
+                if($value['from'] && is_numeric($value['from'])) {
+                    unset($error['from']);
+                }
+
+                if($value['to'] && is_numeric($value['to'])) {
+                    unset($error['to']);
+                }
 
                 $accountNo = $this->entityManager->getRepository(\Customer\Entity\Customer::class)->findOneBy([
                     'customer_no' => $value['account_no'],

@@ -233,13 +233,39 @@ class SpecialRangeWeightManager
         $errors = [];
         for ($i = 1; $i <= count($data); $i++) {
             if (isset($data[$i])) {
-                $customer = $this->entityManager->getRepository(Customer::class)->findOneBy(['customer_no' => $data[$i]['account_no'], 'status' => 1]);
-                $special_area = $this->entityManager->getRepository(SpecialArea::class)->findOneBy(['name' => $data[$i]['special_area_name']]);
-                $carrier = $this->entityManager->getRepository(Carrier::class)->findOneBy(['code' => $data[$i]['carrier'], 'status' => 1]);
-                $service = $this->entityManager->getRepository(Service::class)->findOneBy(['name' => $data[$i]['service'], 'status' => 1]);
-                $shipment_type = $this->entityManager->getRepository(ShipmentType::class)->findOneBy(['name' => $data[$i]['shipment_type'], 'status' => 1]);
+                $customer = $this->entityManager->getRepository(Customer::class)->findOneBy([
+                    'customer_no' => $data[$i]['account_no'], 
+                    'status' => 1,
+                    'is_deleted' => 0
+                ]);
+                $special_area = $this->entityManager->getRepository(SpecialArea::class)->findOneBy([
+                    'name' => $data[$i]['special_area_name'],
+                    'is_deleted' => 0
+                ]);
+                $carrier = $this->entityManager->getRepository(Carrier::class)->findOneBy([
+                    'code' => $data[$i]['carrier'],
+                    'status' => 1,
+                    'is_deleted' => 0]);
+                $service = $this->entityManager->getRepository(Service::class)->findOneBy([
+                    'name' => $data[$i]['service'],
+                    'status' => 1,
+                    'is_deleted' => 0
+                ]);
+                $shipment_type = $this->entityManager->getRepository(ShipmentType::class)->findOneBy([
+                    'name' => $data[$i]['shipment_type'], 
+                    'status' => 1,
+                    'is_deleted' => 0
+                ]);
 
-                if($customer && $special_area && $carrier && $service && $shipment_type) {
+                if($customer 
+                        && $special_area 
+                        && $carrier 
+                        && $service 
+                        && $shipment_type 
+                        && ($data[$i]['name'] != "")
+                        && ($data[$i]['from'] != "" && is_numeric($data[$i]['from']))
+                        && ($data[$i]['to'] != "" && is_numeric($data[$i]['to']))
+                ) {
                     $specialRangeWeight = $this->entityManager->getRepository(SpecialRangeWeight::class)->findOneBy(
                         [
                             'customer' => $customer,
