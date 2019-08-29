@@ -230,53 +230,74 @@ class SpecialRangeWeightManager
      */
     public function addRangeWeightImport($data, $user)
     {
+        $errors = [];
         for ($i = 1; $i <= count($data); $i++) {
             if (isset($data[$i])) {
-                $specialRangeWeight = $this->entityManager->getRepository(SpecialRangeWeight::class)->findOneBy(
-                    [
-                        'customer' => $this->entityManager->getRepository(Customer::class)->findOneBy(['customer_no' => $data[$i]['account_no']]),
-                        'name' => $data[$i]['name'],
-                        'carrier' => $this->entityManager->getRepository(Carrier::class)->findOneBy(['code' => $data[$i]['carrier']]),
-                        'is_deleted' => 0,
-                    ]
-                );
-                if (!$specialRangeWeight) {
-                    $this->entityManager->beginTransaction();
-                    try {
-                        $specialRangeWeight = new SpecialRangeWeight();
-                        $specialRangeWeight->setName($data[$i]['name']);
-                        $specialRangeWeight->setNameEn($data[$i]['name']);
-                        $specialRangeWeight->setCustomer($this->entityManager->getRepository(Customer::class)->findOneBy(['customer_no' => $data[$i]['account_no']]));
-                        $specialRangeWeight->setSpecialArea($this->entityManager->getRepository(SpecialArea::class)->findOneBy(['name' => $data[$i]['special_area_name']]));
-                        $specialRangeWeight->setCalculateUnit(($data[$i]['calculate_unit'] == 'Yes') ? 1 : 0);
-                        $specialRangeWeight->setRoundUp($data[$i]['round_up']);
-                        $specialRangeWeight->setUnit($data[$i]['unit']);
-                        $specialRangeWeight->setFrom($data[$i]['from']);
-                        $specialRangeWeight->setTo($data[$i]['to']);
-                        $specialRangeWeight->setStatus(($data[$i]['status'] == 'Active') ? 1 : 0);
+                $customer = $this->entityManager->getRepository(Customer::class)->findOneBy(['customer_no' => $data[$i]['account_no'], 'status' => 1]);
+                $special_area = $this->entityManager->getRepository(SpecialArea::class)->findOneBy(['name' => $data[$i]['special_area_name']]);
+                $carrier = $this->entityManager->getRepository(Carrier::class)->findOneBy(['code' => $data[$i]['carrier'], 'status' => 1]);
+                $service = $this->entityManager->getRepository(Service::class)->findOneBy(['name' => $data[$i]['service'], 'status' => 1]);
+                $shipment_type = $this->entityManager->getRepository(ShipmentType::class)->findOneBy(['name' => $data[$i]['shipment_type'], 'status' => 1]);
 
-                        $specialRangeWeight->setCarrier($this->entityManager->getRepository(Carrier::class)->findOneBy(['code' => $data[$i]['carrier']]));
-                        $specialRangeWeight->setService($this->entityManager->getRepository(Service::class)->findOneBy(['name' => $data[$i]['service']]));
-                        $specialRangeWeight->setShipmentType($this->entityManager->getRepository(ShipmentType::class)->findOneBy(['name' => $data[$i]['shipment_type']]));
-                        $specialRangeWeight->setCategory($this->entityManager->getRepository(Category::class)->find(3));
-
-                        $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
-                        $specialRangeWeight->setCreatedAt($addTime->format('Y-m-d H:i:s'));
-                        $specialRangeWeight->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
-                        $specialRangeWeight->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
-                        $specialRangeWeight->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
-
-                        $this->entityManager->persist($specialRangeWeight);
-                        $this->entityManager->flush();
-                        $this->entityManager->commit();
-                    } catch (ORMException $e) {
-                        $this->entityManager->rollback();
-                        return false;
+                if($customer && $special_area && $carrier && $service && $shipment_type) {
+                    $specialRangeWeight = $this->entityManager->getRepository(SpecialRangeWeight::class)->findOneBy(
+                        [
+                            'customer' => $customer,
+                            'name' => $data[$i]['name'],
+                            'name_en' => $data[$i]['name'],
+                            'carrier' => $carrier,
+                            'special_area' => $special_area,
+                            'shipment_type' => $shipment_type,
+                            'service'=> $service,
+                            'is_deleted' => 0,
+                        ]
+                    );
+    
+                    if (!$specialRangeWeight) {
+                        $this->entityManager->beginTransaction();
+                        try {
+                            $specialRangeWeight = new SpecialRangeWeight();
+                            $specialRangeWeight->setName($data[$i]['name']);
+                            $specialRangeWeight->setNameEn($data[$i]['name']);
+                            $specialRangeWeight->setCustomer($customer);
+                            $specialRangeWeight->setSpecialArea($special_area);
+                            $specialRangeWeight->setCalculateUnit(($data[$i]['calculate_unit'] == 'Yes') ? 1 : 0);
+                            $specialRangeWeight->setRoundUp($data[$i]['round_up']);
+                            $specialRangeWeight->setUnit($data[$i]['unit']);
+                            $specialRangeWeight->setFrom($data[$i]['from']);
+                            $specialRangeWeight->setTo($data[$i]['to']);
+                            $specialRangeWeight->setStatus(($data[$i]['status'] == 'Active') ? 1 : 0);
+    
+                            $specialRangeWeight->setCarrier($carrier);
+                            $specialRangeWeight->setService($service);
+                            $specialRangeWeight->setShipmentType($shipment_type);
+                            $specialRangeWeight->setCategory($this->entityManager->getRepository(Category::class)->find(3));
+    
+                            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+                            $specialRangeWeight->setCreatedAt($addTime->format('Y-m-d H:i:s'));
+                            $specialRangeWeight->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+                            $specialRangeWeight->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+                            $specialRangeWeight->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+    
+                            $this->entityManager->persist($specialRangeWeight);
+                            $this->entityManager->flush();
+                            $this->entityManager->commit();
+                        } catch (ORMException $e) {
+                            $this->entityManager->rollback();
+                            return false;
+                        }
+                    } else {
+                        $errors[] = $data[$i];
                     }
+                } else {
+                    $errors[] = $data[$i];
                 }
+                
 
             }
         }
+
+        return $errors;
 
     }
 }
