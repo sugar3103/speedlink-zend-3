@@ -269,6 +269,8 @@ class SpecialRangeWeightController extends CoreController
                 if ($accountNo) {
                     unset($error['customer']);
                     $value['customer_id'] = $accountNo->getId();
+                } else {
+                    $value['customer_id'] = 0;
                 }
 
                 $carrier = $this->entityManager->getRepository(\ServiceShipment\Entity\Carrier::class)->findOneBy([
@@ -281,7 +283,12 @@ class SpecialRangeWeightController extends CoreController
                     $value['carrier_id'] = $carrier->getId();
                     $value['carrier'] = $carrier->getName();
                     $value['carrier_en'] = $carrier->getNameEn();
+                } else {
+                    $value['carrier_id'] = 0;
+                    $value['carrier'] = $value['carrier'];
+                    $value['carrier_en'] = $value['carrier'];
                 }
+
                 $service = $this->entityManager->getRepository(\ServiceShipment\Entity\Service::class)->findOneBy([
                     'name' => $value['service'],
                     'is_deleted' => 0,
@@ -293,6 +300,10 @@ class SpecialRangeWeightController extends CoreController
                     $value['service_id'] = $service->getId();
                     $value['service'] = $service->getName();
                     $value['service_en'] = $service->getNameEn();
+                } else {
+                    $value['service_id'] = 0;
+                    $value['service'] = $value['service'];
+                    $value['service_en'] = $value['service'];
                 }
 
                 $shipment_type = $this->entityManager->getRepository(\ServiceShipment\Entity\ShipmentType::class)->findOneBy([
@@ -306,6 +317,10 @@ class SpecialRangeWeightController extends CoreController
                     $value['shipment_type_id'] = $shipment_type->getId();
                     $value['shipment_type'] = $shipment_type->getName();
                     $value['shipment_type_en'] = $shipment_type->getNameEn();
+                } else {
+                    $value['shipment_type_id'] = 0;
+                    $value['shipment_type'] = $value['shipment_type'];
+                    $value['shipment_type_en'] = $value['shipment_type'];
                 }
 
                 $special_area_name = $this->entityManager->getRepository(\PricingSpecial\Entity\SpecialArea::class)->findOneBy([

@@ -43,6 +43,8 @@ class SpecialZoneRepository extends EntityRepository
         }
         return $queryBuilder->getQuery()->execute();
     }
+
+    
     public function checkExitWithAddress($data)
     {
         $entityManager = $this->getEntityManager();

@@ -208,68 +208,84 @@ class SpecialZoneManager
     /**
      * Add Zone Import
      */
-    public function addZoneImport($data, $user)
+    public function addZoneImport($datas, $user)
     {
-
-        
-        // try {
-        $countRow = 0;
-        for ($i = 0; $i < count($data); $i++) {
-            $toAddress = $this->entityManager->getRepository(SpecialZone::class)->vertifyAddress(
-                $data[$i]['to_city'],
-                $data[$i]['to_district'],
-                $data[$i]['to_ward']
-            );
-            if (isset($data[$i]) && $toAddress) {
-                $this->entityManager->beginTransaction();
-                $specialZone = new SpecialZone();
-                $specialZone->setName($data[$i]['name']);
-                $specialZone->setNameEn($data[$i]['name_en']);
-                $specialZone->setCustomer($this->entityManager->getRepository(Customer::class)->findOneBy(['customer_no' => $data[$i]['account_no']]));
-                $specialZone->setSpecialArea($this->entityManager->getRepository(SpecialArea::class)->findOneBy(['name' => $data[$i]['area_name']]));
-                $specialZone->setFromCity($this->entityManager->getRepository(City::class)->findOneBy(['name' => $data[$i]['from_city']]));
-
+        $this->entityManager->beginTransaction();
+        $this->entityManager->getConnection()->setAutoCommit(false);
+        $batchSize = 3000;
+        $i = 0;
+        $errors = [];
+        try {
+            foreach ($datas as $data) {
+                $toAddress = $this->entityManager->getRepository(SpecialZone::class)->vertifyAddress(
+                    $data['to_city'],
+                    $data['to_district'],
+                    $data['to_ward']
+                );
                 $ormPaginator = new ORMPaginator($toAddress, true);
-
                 $ormPaginator->setUseOutputWalkers(false);
                 //get special area list
-
                 $toAddresses = $ormPaginator->getIterator()->getArrayCopy();
                 if (isset($toAddresses[0])) {
                     $idToCity = $toAddresses[0]['city_id'];
                     $idToDistrict = $toAddresses[0]['district_id'];
                     $idToWard = $toAddresses[0]['ward_id'];
+                    $customer = $this->entityManager->getRepository(Customer::class)->findOneBy(['customer_no' => $data['account_no']]);
+                    $special_area = $this->entityManager->getRepository(SpecialArea::class)->findOneBy(['name' => $data['area_name']]);
+                    $fromCity = $this->entityManager->getRepository(City::class)->findOneBy(['name' => $data['from_city']]);
+                    $specialZone = $this->entityManager->getRepository(SpecialZone::class)->checkExit([
+                        'name' => $data['name'],
+                        'name_en' => $data['name_en'],
+                        'customer' => $customer->getId(),
+                        'special_area' => $special_area->getId(),
+                        'from_city' => $fromCity->getId(),
+                        'to_city' => $idToCity,
+                        'to_district' => $idToDistrict,
+                        'to_ward' => $idToWard,
+                        'is_deleted' => 0,
+                    ]);
+                    if (!$specialZone) {
+                        $specialZone = new SpecialZone();
+                        $specialZone->setName($data['name']);
+                        $specialZone->setNameEn($data['name_en']);
+                        $specialZone->setCustomer($customer);
+                        $specialZone->setSpecialArea($special_area);
+
+                        $specialZone->setFromCity($fromCity);
+                        $specialZone->setToCity($this->entityManager->getRepository(City::class)->find($idToCity));
+                        $specialZone->setToDistrict($this->entityManager->getRepository(District::class)->find($idToDistrict));
+                        $specialZone->setToWard($this->entityManager->getRepository(Ward::class)->find($idToWard));
+
+                        $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+                        $specialZone->setCreatedAt($addTime->format('Y-m-d H:i:s'));
+                        $specialZone->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+                        $specialZone->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+                        $specialZone->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+
+                        $this->entityManager->persist($specialZone);
+
+                        $i++;
+                        if (($i % $batchSize) === 0) {
+                            $this->entityManager->flush();
+                            $this->entityManager->commit();
+                            $this->entityManager->clear();
+                        }
+                    } else {
+                        $errors[] = $data;
+                    }
+                } else {
+                    $errors[] = $data;
                 }
-
-                $specialZone->setToCity($this->entityManager->getRepository(City::class)->find($idToCity));
-                $specialZone->setToDistrict($this->entityManager->getRepository(District::class)->find($idToDistrict));
-                $specialZone->setToWard($this->entityManager->getRepository(Ward::class)->find($idToWard));
-
-                $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
-                $specialZone->setCreatedAt($addTime->format('Y-m-d H:i:s'));
-                $specialZone->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
-                $specialZone->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
-                $specialZone->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
-
-                $this->entityManager->persist($specialZone);
-
-                // if ($countRow == 999) {
-                //     $countRow = 0;
-                    $this->entityManager->flush();
-                    $this->entityManager->commit();
-                    // $this->entityManager->clear();
-                // } else {
-                //     $countRow++;
-                // }
             }
-        }
-        // $this->entityManager->flush();
-        // $this->entityManager->commit();
-        // $this->entityManager->clear();
 
-        // } catch (ORMException $e) {
-        //     $this->entityManager->rollback();
-        //     return false;
-        // }
+            $this->entityManager->flush();
+            $this->entityManager->commit();
+            $this->entityManager->clear();
+        } catch (ORMException $e) {
+            $this->entityManager->rollback();
+            return false;
+        }
+
+        return $errors;
     }
 }

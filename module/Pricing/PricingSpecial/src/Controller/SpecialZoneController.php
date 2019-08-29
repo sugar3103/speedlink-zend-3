@@ -391,6 +391,7 @@ class SpecialZoneController extends CoreController
     public function saveImportAction()
     {
         if ($this->getRequest()->isPost()) {
+            
             $data = $this->cache->getItem('specialZone', $result);
             
             if ($result) {
@@ -400,49 +401,18 @@ class SpecialZoneController extends CoreController
                         unset($data[0]);
                     }
                 }
-                $this->specialZoneManager->addZoneImport($data, $this->tokenPayload);
+                $errors = $this->specialZoneManager->addZoneImport($data, $this->tokenPayload);
 
                 $this->cache->removeItem('specialZone');
                 $this->apiResponse['message'] = "SPECIAL_IMPORTED";
+                if($errors) {
+                    $this->apiResponse['errors'] = $errors;
+                }                
+                
             } else {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = "SPECIAL_IMPORT_NONE";
             }
-        }
-        return $this->createResponse();
-    }
-
-    public function checkAction()
-    {
-        $city = "Đắk Lắk";
-        $district = "Huyện Ea H'leo";
-        $ward = "Xã Ea Khal";
-        // $city = "An Giang";
-        // $district = "Huyện An Phú";
-        // $ward = "Thị trấn An Phú";
-
-        $toAddress = $this->entityManager->getRepository(SpecialZone::class)->vertifyAddress(
-            $city,
-            $district,
-            $ward
-        );
-
-        if ($toAddress) {
-            $ormPaginator = new ORMPaginator($toAddress, true);
-
-            $ormPaginator->setUseOutputWalkers(false);
-            //get special area list
-
-            $toAddresses = $ormPaginator->getIterator()->getArrayCopy();
-            $this->apiResponse['message'] = $toAddresses;
-            // if (isset($toAddresses[0])) {
-            //     $idToCity = $toAddresses[0]['city_id'];
-            //     $idToDistrict = $toAddresses[0]['district_id'];
-            //     $idToWard = $toAddresses[0]['ward_id'];
-            //     unset($error['toAddress']);
-            // }
-        } else {
-            $this->apiResponse['message'] = "None";
         }
         return $this->createResponse();
     }
