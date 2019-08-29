@@ -19,7 +19,7 @@ class SettingRepository extends EntityRepository
      * @return array
      */
     public function getListSettingByCondition(
-        $sortField = 'p.id',
+        $sortField = 's.id',
         $sortDirection = 'asc',
         $filters = []
     )
@@ -32,7 +32,7 @@ class SettingRepository extends EntityRepository
                  s.key,
                  s.value,
                  s.serialized"
-            ])->groupBy('s.id');
+            ]);
             
             return $queryBuilder;
 

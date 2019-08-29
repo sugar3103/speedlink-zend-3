@@ -416,4 +416,20 @@ class SpecialZoneController extends CoreController
         }
         return $this->createResponse();
     }
+
+    public function downloadAction() {
+        $fileName = dirname(__DIR__, 5) . "/data/files/special_zone_sample.xlsx";
+        
+        $response = new \Zend\Http\Response\Stream();
+        $response->setStream(fopen($fileName, 'r'));
+        $response->setStatusCode(200);
+    
+        $headers = new \Zend\Http\Headers();
+        $headers->addHeaderLine('Content-Type', 'whatever your content type is')
+                ->addHeaderLine('Content-Disposition', 'attachment; filename="special_zone.xlsx"')
+                ->addHeaderLine('Content-Length', filesize($fileName));
+    
+        $response->setHeaders($headers);
+        return $response;
+    }
 }

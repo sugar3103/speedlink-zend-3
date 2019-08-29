@@ -77,6 +77,18 @@ $router = [
                 ]               
             ]
         ],
+        'special_range_weight_download' => [
+            'type' => StaticRoute::class,
+            'options' => [
+                'verb' => 'GET',
+                'route' => '/pricing/special/zone/download',
+                'defaults' => [
+                    'controller' => Controller\SpecialZoneController::class,
+                    'action' => 'download',
+                    'isAuthorizationRequired' => false
+                ]               
+            ]
+                ],
         'special_vas' => [
             'type' => StaticRoute::class,
             'options' => [
