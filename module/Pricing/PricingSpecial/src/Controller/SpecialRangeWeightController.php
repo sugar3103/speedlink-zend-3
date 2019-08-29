@@ -385,7 +385,7 @@ class SpecialRangeWeightController extends CoreController
     }
 
     public function downloadAction() {
-        $fileName = dirname(__DIR__, 5) . "/data/files/special_range_weight.xlsx";
+        $fileName = dirname(__DIR__, 5) . "/data/files/special_range_weight_sample.xlsx";
         
         $response = new \Zend\Http\Response\Stream();
         $response->setStream(fopen($fileName, 'r'));
