@@ -77,7 +77,7 @@ $router = [
                 ]               
             ]
         ],
-        'special_range_weight_download' => [
+        'special_zone_download' => [
             'type' => StaticRoute::class,
             'options' => [
                 'verb' => 'GET',
