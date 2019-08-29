@@ -347,11 +347,9 @@ class SpecialRangeWeightController extends CoreController
                     $value['shipment_type_en'] = $value['shipment_type'];
                 }
 
-               
-
+                $value['status'] = ($value['status'] == 'Active') ? 1 : 0;
+                $value['calculate_unit'] = ($value['calculate_unit'] == 'Yes') ? 1 : 0;
                 if (!$error) {
-                    $value['status'] = ($value['status'] == 'Active') ? 1 : 0;
-                    $value['calculate_unit'] = ($value['calculate_unit'] == 'Yes') ? 1 : 0;
                     $specialRangeWeight = $this->entityManager->getRepository(SpecialRangeWeight::class)->findOneBy(
                         [
                             'customer' => $accountNo,
