@@ -21,10 +21,10 @@ import {
   getDestinationDistrictCreateSpecialList,
   getDestinationWardCreateSpecialList
 } from "../../../redux/actions";
-import { 
-  PRI_SPECIAL_DESTINATION_DISTRICT_CREATE_RESET_STATE, 
+import {
+  PRI_SPECIAL_DESTINATION_DISTRICT_CREATE_RESET_STATE,
   PRI_SPECIAL_DESTINATION_WARD_CREATE_RESET_STATE
- } from '../../../constants/actionTypes';
+} from '../../../constants/actionTypes';
 
 
 class ActionForm extends Component {
@@ -92,6 +92,15 @@ class ActionForm extends Component {
         this.props.getDestinationWardCreateSpecialList(params);
       }
     }
+
+    if (nextProps.customer_id && nextProps.customer_id !== this.props.customer_id) {
+      const paramsArea = {
+        field: ['id', 'name', 'customer_id'],
+        offset: { limit: 0 },
+        query: { customer_id: nextProps.customer_id }
+      }
+      this.props.getAreaSpecialList(paramsArea);
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -104,10 +113,11 @@ class ActionForm extends Component {
 
   onChangeCustomer = value => {
     const params = {
-      field: ['id', 'name'],
+      field: ['id', 'name', 'customer_id'],
       offset: { limit: 0 },
       query: { customer_id: value }
     }
+    this.props.change('special_area_id', '');
     this.props.getAreaSpecialList(params);
   }
 
@@ -393,7 +403,8 @@ const mapStateToProps = (state, props) => {
   const selector = formValueSelector('zone_special_action_form');
   const to_city = selector(state, 'to_city');
   const to_district = selector(state, 'to_district');
-  
+  const customer_id = selector(state, 'customer_id');
+
   return {
     modalData,
     modalType,
@@ -403,7 +414,8 @@ const mapStateToProps = (state, props) => {
     cityOrigin, cityDestination,
     districtDestination,
     wardDestination,
-    to_city, to_district
+    to_city, to_district,
+    customer_id
   }
 }
 
