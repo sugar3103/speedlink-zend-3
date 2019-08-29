@@ -275,7 +275,7 @@ class SpecialRangeWeightController extends CoreController
                 if($value['to'] && is_numeric($value['to'])) {
                     unset($error['to']);
                 }
-
+               
                 $accountNo = $this->entityManager->getRepository(\Customer\Entity\Customer::class)->findOneBy([
                     'customer_no' => $value['account_no'],
                     'is_deleted' => 0]);
@@ -285,6 +285,16 @@ class SpecialRangeWeightController extends CoreController
                     $value['customer_id'] = $accountNo->getId();
                 } else {
                     $value['customer_id'] = 0;
+                }
+
+                $special_area_name = $this->entityManager->getRepository(\PricingSpecial\Entity\SpecialArea::class)->findOneBy([
+                    'name' => $value['special_area_name'],
+                    'customer' => $accountNo,
+                    'is_deleted' => 0,
+                ]);
+
+                if ($special_area_name) {
+                    unset($error['area']);
                 }
 
                 $carrier = $this->entityManager->getRepository(\ServiceShipment\Entity\Carrier::class)->findOneBy([
@@ -337,14 +347,7 @@ class SpecialRangeWeightController extends CoreController
                     $value['shipment_type_en'] = $value['shipment_type'];
                 }
 
-                $special_area_name = $this->entityManager->getRepository(\PricingSpecial\Entity\SpecialArea::class)->findOneBy([
-                    'name' => $value['special_area_name'],
-                    'is_deleted' => 0,
-                ]);
-
-                if ($special_area_name) {
-                    unset($error['area']);
-                }
+               
 
                 if (!$error) {
                     $value['status'] = ($value['status'] == 'Active') ? 1 : 0;
