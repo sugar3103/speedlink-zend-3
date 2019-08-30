@@ -32,7 +32,6 @@ fe-ecos/package-lock.json
 fe-ecos/node_modules
 fe-ecos/package-lock.json
 
-public/msql
-public/msd
-NodeServer
+data/files
 fe-ecos/src/constants/defaultValues.js
+fe-ecos/package.json
