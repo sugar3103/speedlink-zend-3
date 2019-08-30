@@ -186,12 +186,14 @@ class SpecialRangeWeightController extends CoreController
             5 => 'carrier',
             6 => 'service',
             7 => 'shipment_type',
-            8 => 'special_area_name',
+            8 => 'area_name',
             9 => 'calculate_unit',
             10 => 'unit',
             11 => 'round_up',
             12 => 'status',
         ];
+
+        $headers = [];
         $start = 0;
         $lenght = 1000;
         $data = [];
@@ -239,43 +241,57 @@ class SpecialRangeWeightController extends CoreController
                     //----Lặp cột
                     for ($j = 1; $j <= $TotalCol; $j++) {
                         // Tiến hành lấy giá trị của từng ô đổ vào mảng
-                        $data[$i - 2][$nameField[$j - 1]] = $sheet->getCellByColumnAndRow($j, $i)->getValue();
+                        $data[$i - 3][$nameField[$j - 1]] = $sheet->getCellByColumnAndRow($j, $i)->getValue();
                     }
+                    if (isset($data[$i - 3]) && ($data[$i - 3]['id'] == null)) {
+                        unset($data[$i - 3]);
+                    }
+                }
+                //Get Headers
+                for ($j = 1; $j <= $TotalCol; $j++) {
+                    // Tiến hành lấy giá trị của từng ô đổ vào mảng
+                    $headers[] = $sheet->getCellByColumnAndRow($j, 2)->getValue();
+                }
+                if (!$this->checkFormatFile($headers, $nameField)) {
+                    $this->error_code = 0;
+                    $this->apiResponse['message'] = "SPECIAL_IMPORT_FILE_INCORRECT";
+
+                    return $this->createResponse();
                 }
                 // Save Data to cache.
                 $this->cache->setItem('specialRangeWeight', $data);
 
-            } else {
-                $Totalrow = count($data);
             }
+
+            $Totalrow = count($data);
 
             $dataResult = array_slice($data, $start, $lenght);
 
             for ($i = 0; $i < count($dataResult); $i++) {
                 $error = false;
-                $value = $dataResult[$i];                
+                $value = $dataResult[$i];
                 $error = array(
-                    'name'  => 'SPECIAL_IMPORT_NAME_NOT_NULL',
-                    'from'  => 'SPECIAL_IMPORT_FROM_NOT_NULL_OR_NOT_NUMBER',
-                    'to'  => 'SPECIAL_IMPORT_TO_NOT_NULL_OR_NOT_NUMBER',
+                    'name' => 'SPECIAL_IMPORT_NAME_NOT_NULL',
+                    'from' => 'SPECIAL_IMPORT_FROM_NOT_NULL_OR_NOT_NUMBER',
+                    'to' => 'SPECIAL_IMPORT_TO_NOT_NULL_OR_NOT_NUMBER',
                     'customer' => 'SPECIAL_IMPORT_CUSTOMER_NOT_EXITS',
                     'area' => 'SPECIAL_IMPORT_AREA_NOT_EXITS',
                     'carrier' => 'SPECIAL_IMPORT_CARRIER_NOT_EXITS',
                     'service' => 'SPECIAL_IMPORT_SERVICE_NOT_EXITS',
                     'shipment_type' => 'SPECIAL_IMPORT_SHIPMENT_TYPE_NOT_EXITS',
                 );
-                if($value['name']) {
+                if ($value['name']) {
                     unset($error['name']);
                 }
 
-                if($value['from'] && is_numeric($value['from'])) {
+                if ($value['from'] && is_numeric($value['from'])) {
                     unset($error['from']);
                 }
 
-                if($value['to'] && is_numeric($value['to'])) {
+                if ($value['to'] && is_numeric($value['to'])) {
                     unset($error['to']);
                 }
-               
+
                 $accountNo = $this->entityManager->getRepository(\Customer\Entity\Customer::class)->findOneBy([
                     'customer_no' => $value['account_no'],
                     'is_deleted' => 0]);
@@ -288,7 +304,7 @@ class SpecialRangeWeightController extends CoreController
                 }
 
                 $special_area_name = $this->entityManager->getRepository(\PricingSpecial\Entity\SpecialArea::class)->findOneBy([
-                    'name' => $value['special_area_name'],
+                    'name' => $value['area_name'],
                     'customer' => $accountNo,
                     'is_deleted' => 0,
                 ]);
@@ -369,11 +385,31 @@ class SpecialRangeWeightController extends CoreController
 
             $this->apiResponse = array(
                 'data' => $dataResult,
-                'total' => (int) $Totalrow - 2,
+                'total' => (int) $Totalrow,
             );
 
             return $this->createResponse();
         }
+    }
+
+    private function checkFormatFile($headers, $nameField)
+    {
+
+        if (!$headers) {
+            return false;
+        } else {
+            foreach ($headers as $header) {
+                if ($header == 'STT') {
+                    $header = 'id';
+                }
+
+                $header = strtolower(str_replace(" ", "_", $header));
+                if (!in_array($header, $nameField)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public function saveImportAction()
@@ -390,8 +426,8 @@ class SpecialRangeWeightController extends CoreController
                 $errors = $this->specialRangeWeightManager->addRangeWeightImport($data, $this->tokenPayload);
 
                 $this->cache->removeItem('specialRangeWeight');
-                if($errors) {
-                    $this->apiResponse['errors'] = $errors;    
+                if ($errors) {
+                    $this->apiResponse['errors'] = $errors;
                 }
                 $this->apiResponse['message'] = "SPECIAL_IMPORTED";
             } else {
@@ -402,18 +438,19 @@ class SpecialRangeWeightController extends CoreController
         return $this->createResponse();
     }
 
-    public function downloadAction() {
-        $fileName = dirname(__DIR__, 5) . "/data/files/special_range_weight_sample.xlsx";
-        
+    public function downloadAction()
+    {
+        $fileName = dirname(__DIR__, 5) . "/data/files/sample/special_range_weight_sample.xlsx";
+
         $response = new \Zend\Http\Response\Stream();
         $response->setStream(fopen($fileName, 'r'));
         $response->setStatusCode(200);
-    
+
         $headers = new \Zend\Http\Headers();
         $headers->addHeaderLine('Content-Type', 'whatever your content type is')
-                ->addHeaderLine('Content-Disposition', 'attachment; filename="special_range_weight.xlsx"')
-                ->addHeaderLine('Content-Length', filesize($fileName));
-    
+            ->addHeaderLine('Content-Disposition', 'attachment; filename="special_range_weight.xlsx"')
+            ->addHeaderLine('Content-Length', filesize($fileName));
+
         $response->setHeaders($headers);
         return $response;
     }

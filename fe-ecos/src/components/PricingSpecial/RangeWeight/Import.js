@@ -81,6 +81,7 @@ class Import extends Component {
 
     render() {
         const { dataImport, totalImport, loadingDataImport, savingDataImport, error } = this.props;
+        
         const { messages, locale } = this.props.intl;
         const columnTable = {
             checkbox: false,

@@ -201,6 +201,7 @@ class SpecialZoneController extends CoreController
             7 => 'account_no',
             8 => 'area_name',
         ];
+        $headers = [];
         //Tạo mảng chứa dữ liệu
         // $this->cache->removeItem('specialZone');die;
         $start = 0;
@@ -246,20 +247,34 @@ class SpecialZoneController extends CoreController
 
                 //Tiến hành lặp qua từng ô dữ liệu
                 //----Lặp dòng, Vì dòng đầu là tiêu đề cột nên chúng ta sẽ lặp giá trị từ dòng 2
-                for ($i = 2; $i <= $Totalrow; $i++) {
+                for ($i = 3; $i <= $Totalrow; $i++) {
                     //----Lặp cột
                     for ($j = 1; $j < $TotalCol; $j++) {
                         // Tiến hành lấy giá trị của từng ô đổ vào mảng
-                        $data[$i - 2][$nameField[$j - 1]] = $sheet->getCellByColumnAndRow($j, $i)->getValue();
+                        $data[$i - 3][$nameField[$j - 1]] = $sheet->getCellByColumnAndRow($j, $i)->getValue();                        
+                    }
+                    
+                    if(isset($data[$i - 3]) && ($data[$i - 3]['id'] == null)) {
+                        unset($data[$i - 3]);                        
                     }
                 }
+                //Get Headers
+                for ($j = 1; $j <= $TotalCol; $j++) {
+                    // Tiến hành lấy giá trị của từng ô đổ vào mảng
+                    $headers[] = $sheet->getCellByColumnAndRow($j, 2)->getValue();
+                }
 
+                if(!$this->checkFormatFile($headers, $nameField)) {
+                    $this->error_code = 0;
+                    $this->apiResponse['message'] = "SPECIAL_IMPORT_FILE_INCORRECT";
+                    
+                    return $this->createResponse();
+                }
                 // Save Data to cache.
                 $this->cache->setItem('specialZone', $data);
-            } else {
-                $Totalrow = count($data);
-            }
+            } 
 
+            $Totalrow = count($data);
             $dataResult = array_slice($data, $start, $lenght);
 
             $customers = [];
@@ -270,27 +285,30 @@ class SpecialZoneController extends CoreController
             $toWard = [];
 
             for ($i = 0; $i < count($dataResult); $i++) {
-                if (!in_array($dataResult[$i]['account_no'], $customers)) {
-                    $customers[] = $data[$i]['account_no'];
+                if($dataResult[$i]['id']) {
+                    if (!in_array($dataResult[$i]['account_no'], $customers)) {
+                        $customers[] = $data[$i]['account_no'];
+                    }
+    
+                    if (!in_array($dataResult[$i]['area_name'], $area)) {
+                        $area[] = $dataResult[$i]['area_name'];
+                    }
                 }
-
-                if (!in_array($dataResult[$i]['area_name'], $area)) {
-                    $area[] = $dataResult[$i]['area_name'];
-                }
-
             }
 
             //Get Custom
-            $customers = $this->entityManager->getRepository(Customer::class)->findBy([
-                'customer_no' => $customers,
-            ]);
-
-            $areas = $this->entityManager->getRepository(SpecialArea::class)->findBy([
-                'name' => $area,
-                'is_deleted' => 0,
-            ]);
-
-          
+            if($customers) {
+                $customers = $this->entityManager->getRepository(Customer::class)->findBy([
+                    'customer_no' => $customers,
+                ]);
+            }
+            
+            if($area) {
+                $areas = $this->entityManager->getRepository(SpecialArea::class)->findBy([
+                    'name' => $area,
+                    'is_deleted' => 0,
+                ]);
+            }
 
             for ($i = 0; $i < count($dataResult); $i++) {
                 $error = false;
@@ -388,6 +406,27 @@ class SpecialZoneController extends CoreController
         }
     }
 
+    private function checkFormatFile($headers, $nameField)
+    {
+        
+        if(!$headers) {
+            return false;
+        } else {
+            foreach ($headers as $header) {
+                if($header == 'STT') {
+                    $header = 'id';
+                }
+
+                $header = strtolower(str_replace(" ","_", $header));
+                if(!in_array($header, $nameField)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
     public function saveImportAction()
     {
         if ($this->getRequest()->isPost()) {
@@ -418,7 +457,7 @@ class SpecialZoneController extends CoreController
     }
 
     public function downloadAction() {
-        $fileName = dirname(__DIR__, 5) . "/data/files/special_zone_sample.xlsx";
+        $fileName = dirname(__DIR__, 5) . "/data/files/sample/special_zone_sample.xlsx";
         
         $response = new \Zend\Http\Response\Stream();
         $response->setStream(fopen($fileName, 'r'));
