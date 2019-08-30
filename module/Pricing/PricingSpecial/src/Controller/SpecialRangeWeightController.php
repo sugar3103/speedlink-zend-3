@@ -235,6 +235,17 @@ class SpecialRangeWeightController extends CoreController
                 //Chuyển đổi tên cột đó về vị trí thứ, VD: C là 3,D là 4
                 $TotalCol = Coordinate::columnIndexFromString($LastColumn);
 
+                //Get Headers
+                for ($j = 1; $j <= $TotalCol; $j++) {
+                    // Tiến hành lấy giá trị của từng ô đổ vào mảng
+                    $headers[] = $sheet->getCellByColumnAndRow($j, 2)->getValue();
+                }
+                if (!$this->checkFormatFile($headers, $nameField)) {
+                    $this->error_code = 0;
+                    $this->apiResponse['message'] = "SPECIAL_IMPORT_FILE_INCORRECT";
+
+                    return $this->createResponse();
+                }
                 //Tiến hành lặp qua từng ô dữ liệu
                 //----Lặp dòng, Vì dòng đầu là tiêu đề cột nên chúng ta sẽ lặp giá trị từ dòng 2
                 for ($i = 3; $i <= $Totalrow; $i++) {
@@ -246,17 +257,6 @@ class SpecialRangeWeightController extends CoreController
                     if (isset($data[$i - 3]) && ($data[$i - 3]['id'] == null)) {
                         unset($data[$i - 3]);
                     }
-                }
-                //Get Headers
-                for ($j = 1; $j <= $TotalCol; $j++) {
-                    // Tiến hành lấy giá trị của từng ô đổ vào mảng
-                    $headers[] = $sheet->getCellByColumnAndRow($j, 2)->getValue();
-                }
-                if (!$this->checkFormatFile($headers, $nameField)) {
-                    $this->error_code = 0;
-                    $this->apiResponse['message'] = "SPECIAL_IMPORT_FILE_INCORRECT";
-
-                    return $this->createResponse();
                 }
                 // Save Data to cache.
                 $this->cache->setItem('specialRangeWeight', $data);

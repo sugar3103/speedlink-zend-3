@@ -244,35 +244,36 @@ class SpecialZoneController extends CoreController
 
                 //Chuyển đổi tên cột đó về vị trí thứ, VD: C là 3,D là 4
                 $TotalCol = Coordinate::columnIndexFromString($LastColumn);
-
-                //Tiến hành lặp qua từng ô dữ liệu
-                //----Lặp dòng, Vì dòng đầu là tiêu đề cột nên chúng ta sẽ lặp giá trị từ dòng 2
-                for ($i = 3; $i <= $Totalrow; $i++) {
-                    //----Lặp cột
-                    for ($j = 1; $j < $TotalCol; $j++) {
-                        // Tiến hành lấy giá trị của từng ô đổ vào mảng
-                        $data[$i - 3][$nameField[$j - 1]] = $sheet->getCellByColumnAndRow($j, $i)->getValue();                        
-                    }
-                    
-                    if(isset($data[$i - 3]) && ($data[$i - 3]['id'] == null)) {
-                        unset($data[$i - 3]);                        
-                    }
-                }
+                
                 //Get Headers
                 for ($j = 1; $j <= $TotalCol; $j++) {
                     // Tiến hành lấy giá trị của từng ô đổ vào mảng
                     $headers[] = $sheet->getCellByColumnAndRow($j, 2)->getValue();
                 }
 
-                if(!$this->checkFormatFile($headers, $nameField)) {
+                if (!$this->checkFormatFile($headers, $nameField)) {
                     $this->error_code = 0;
                     $this->apiResponse['message'] = "SPECIAL_IMPORT_FILE_INCORRECT";
-                    
+
                     return $this->createResponse();
                 }
+                //Tiến hành lặp qua từng ô dữ liệu
+                //----Lặp dòng, Vì dòng đầu là tiêu đề cột nên chúng ta sẽ lặp giá trị từ dòng 2
+                for ($i = 3; $i <= $Totalrow; $i++) {
+                    //----Lặp cột
+                    for ($j = 1; $j < $TotalCol; $j++) {
+                        // Tiến hành lấy giá trị của từng ô đổ vào mảng
+                        $data[$i - 3][$nameField[$j - 1]] = $sheet->getCellByColumnAndRow($j, $i)->getValue();
+                    }
+
+                    if (isset($data[$i - 3]) && ($data[$i - 3]['id'] == null)) {
+                        unset($data[$i - 3]);
+                    }
+                }
+
                 // Save Data to cache.
                 $this->cache->setItem('specialZone', $data);
-            } 
+            }
 
             $Totalrow = count($data);
             $dataResult = array_slice($data, $start, $lenght);
@@ -285,11 +286,11 @@ class SpecialZoneController extends CoreController
             $toWard = [];
 
             for ($i = 0; $i < count($dataResult); $i++) {
-                if($dataResult[$i]['id']) {
+                if ($dataResult[$i]['id']) {
                     if (!in_array($dataResult[$i]['account_no'], $customers)) {
                         $customers[] = $data[$i]['account_no'];
                     }
-    
+
                     if (!in_array($dataResult[$i]['area_name'], $area)) {
                         $area[] = $dataResult[$i]['area_name'];
                     }
@@ -297,13 +298,13 @@ class SpecialZoneController extends CoreController
             }
 
             //Get Custom
-            if($customers) {
+            if ($customers) {
                 $customers = $this->entityManager->getRepository(Customer::class)->findBy([
                     'customer_no' => $customers,
                 ]);
             }
-            
-            if($area) {
+
+            if ($area) {
                 $areas = $this->entityManager->getRepository(SpecialArea::class)->findBy([
                     'name' => $area,
                     'is_deleted' => 0,
@@ -408,17 +409,17 @@ class SpecialZoneController extends CoreController
 
     private function checkFormatFile($headers, $nameField)
     {
-        
-        if(!$headers) {
+
+        if (!$headers) {
             return false;
         } else {
             foreach ($headers as $header) {
-                if($header == 'STT') {
+                if ($header == 'STT') {
                     $header = 'id';
                 }
 
-                $header = strtolower(str_replace(" ","_", $header));
-                if(!in_array($header, $nameField)) {
+                $header = strtolower(str_replace(" ", "_", $header));
+                if (!in_array($header, $nameField)) {
                     return false;
                 }
             }
@@ -426,13 +427,12 @@ class SpecialZoneController extends CoreController
         return true;
     }
 
-
     public function saveImportAction()
     {
         if ($this->getRequest()->isPost()) {
-            
+
             $data = $this->cache->getItem('specialZone', $result);
-            
+
             if ($result) {
                 $dataPost = $this->getRequestData();
                 if (isset($dataPost['ids']) && is_array($dataPost['ids'])) {
@@ -444,10 +444,10 @@ class SpecialZoneController extends CoreController
 
                 $this->cache->removeItem('specialZone');
                 $this->apiResponse['message'] = "SPECIAL_IMPORTED";
-                if($errors) {
+                if ($errors) {
                     $this->apiResponse['errors'] = $errors;
-                }                
-                
+                }
+
             } else {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = "SPECIAL_IMPORT_NONE";
@@ -456,18 +456,19 @@ class SpecialZoneController extends CoreController
         return $this->createResponse();
     }
 
-    public function downloadAction() {
+    public function downloadAction()
+    {
         $fileName = dirname(__DIR__, 5) . "/data/files/sample/special_zone_sample.xlsx";
-        
+
         $response = new \Zend\Http\Response\Stream();
         $response->setStream(fopen($fileName, 'r'));
         $response->setStatusCode(200);
-    
+
         $headers = new \Zend\Http\Headers();
         $headers->addHeaderLine('Content-Type', 'whatever your content type is')
-                ->addHeaderLine('Content-Disposition', 'attachment; filename="special_zone.xlsx"')
-                ->addHeaderLine('Content-Length', filesize($fileName));
-    
+            ->addHeaderLine('Content-Disposition', 'attachment; filename="special_zone.xlsx"')
+            ->addHeaderLine('Content-Length', filesize($fileName));
+
         $response->setHeaders($headers);
         return $response;
     }
