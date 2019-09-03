@@ -121,13 +121,39 @@ class Import extends Component {
                     Header: messages['pri_special.from'],
                     accessor: "from",
                     sortable: false,
-                    width: 70
+                    width: 70,
+                    Cell: ({ original }) => {
+                        return (
+                            <Fragment>
+                                {original.from}
+                                {original.error && original.error.from && 
+                                    <div className="float-right">
+                                        <AlertOutlineIcon id={`errorService${original.id}`} />
+                                        <UncontrolledTooltip placement="right" target={`errorService${original.id}`}>{messages['pri_special.from-is-not-number']}</UncontrolledTooltip>
+                                    </div>
+                                }
+                            </Fragment>
+                        )
+                    },
                 },
                 {
                     Header: messages['pri_special.to'],
                     accessor: "to",
                     sortable: false,
-                    width: 70
+                    width: 70,
+                    Cell: ({ original }) => {
+                        return (
+                            <Fragment>
+                                {original.to}
+                                {original.error && original.error.to && 
+                                    <div className="float-right">
+                                        <AlertOutlineIcon id={`errorService${original.id}`} />
+                                        <UncontrolledTooltip placement="right" target={`errorService${original.id}`}>{messages['pri_special.to-is-not-number']}</UncontrolledTooltip>
+                                    </div>
+                                }
+                            </Fragment>
+                        )
+                    },
                 },
                 {
                     Header: messages['pri_special.carrier'],
@@ -191,13 +217,13 @@ class Import extends Component {
                 },
                 {
                     Header: messages['pri_special.area'],
-                    accessor: "special_area_name",
+                    accessor: "area_name",
                     sortable: false,
                     width: 150,
                     Cell: ({ original }) => {
                         return (
                             <Fragment>
-                                {original.special_area_name}
+                                {original.area_name}
                                 {original.error && original.error.area && 
                                     <div className="float-right">
                                         <AlertOutlineIcon id={`errorArea${original.id}`} />

@@ -158,4 +158,6 @@ module.exports = {
   'pri_special.area-does-not-exist': 'Area doesn’t exist',
   'pri_special.city-does-not-exist': 'City doesn’t exist',
   'pri_special.to-address-does-not-exist': 'To Address doesn’t exist',
+  'pri_special.to-is-not-number' : 'To is not number or less than 0',
+  'pri_special.from-is-not-number' : 'From is not number or less than 0',
 }

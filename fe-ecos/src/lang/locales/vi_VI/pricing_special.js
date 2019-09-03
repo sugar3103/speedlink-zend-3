@@ -158,4 +158,6 @@ module.exports = {
   'pri_special.area-does-not-exist': 'Miền không tồn tại',
   'pri_special.city-does-not-exist': 'Thành phố không tồn tại',
   'pri_special.to-address-does-not-exist': 'Địa chỉ đến không tồn tại',
+  'pri_special.to-is-not-number' : 'To không phải là số hoặc nhỏ hơn 0',
+  'pri_special.from-is-not-number' : 'From không phải là số hoặc nhỏ hơn 0',
 }
