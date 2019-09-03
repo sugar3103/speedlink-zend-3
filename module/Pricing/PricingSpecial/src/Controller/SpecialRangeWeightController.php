@@ -294,24 +294,28 @@ class SpecialRangeWeightController extends CoreController
 
                 $accountNo = $this->entityManager->getRepository(\Customer\Entity\Customer::class)->findOneBy([
                     'customer_no' => $value['account_no'],
+                    'status' => 1,
                     'is_deleted' => 0]);
 
                 if ($accountNo) {
                     unset($error['customer']);
                     $value['customer_id'] = $accountNo->getId();
+                    $value['account_no'] = $accountNo->getName();
+                    $special_area_name = $this->entityManager->getRepository(\PricingSpecial\Entity\SpecialArea::class)->findOneBy([
+                        'name' => $value['area_name'],
+                        'customer' => $accountNo,
+                        'is_deleted' => 0,
+                    ]);
+    
+                    if ($special_area_name) {
+                        unset($error['area']);
+                    }
                 } else {
                     $value['customer_id'] = 0;
                 }
 
-                $special_area_name = $this->entityManager->getRepository(\PricingSpecial\Entity\SpecialArea::class)->findOneBy([
-                    'name' => $value['area_name'],
-                    'customer' => $accountNo,
-                    'is_deleted' => 0,
-                ]);
-
-                if ($special_area_name) {
-                    unset($error['area']);
-                }
+                
+                
 
                 $carrier = $this->entityManager->getRepository(\ServiceShipment\Entity\Carrier::class)->findOneBy([
                     'code' => $value['carrier'],
