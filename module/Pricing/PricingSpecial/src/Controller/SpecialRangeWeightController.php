@@ -284,11 +284,11 @@ class SpecialRangeWeightController extends CoreController
                     unset($error['name']);
                 }
 
-                if (is_numeric($value['from']) && $value['from'] < -1) {
+                if (is_numeric($value['from']) && $value['from'] > -1) {
                     unset($error['from']);
                 }
 
-                if (is_numeric($value['to']) && $value['to'] < -1) {
+                if (is_numeric($value['to']) && $value['to'] > -1) {
                     unset($error['to']);
                 }
 
