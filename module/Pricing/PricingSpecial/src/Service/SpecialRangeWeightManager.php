@@ -239,7 +239,7 @@ class SpecialRangeWeightManager
                     'is_deleted' => 0
                 ]);
                 $special_area = $this->entityManager->getRepository(SpecialArea::class)->findOneBy([
-                    'name' => $data[$i]['special_area_name'],
+                    'name' => $data[$i]['area_name'],
                     'is_deleted' => 0
                 ]);
                 $carrier = $this->entityManager->getRepository(Carrier::class)->findOneBy([
