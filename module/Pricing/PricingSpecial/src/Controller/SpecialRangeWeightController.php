@@ -376,7 +376,7 @@ class SpecialRangeWeightController extends CoreController
                             'carrier' => $carrier,
                             'shipment_type' => $shipment_type,
                             'service'   => $service,
-                            'special_area_name' => $special_area_name,
+                            'special_area' => $special_area_name,
                             'is_deleted' => 0,
                         ]
                     );
