@@ -240,6 +240,7 @@ class SpecialRangeWeightManager
                 ]);
                 $special_area = $this->entityManager->getRepository(SpecialArea::class)->findOneBy([
                     'name' => $data[$i]['area_name'],
+                    'customer' => $customer,
                     'is_deleted' => 0
                 ]);
                 $carrier = $this->entityManager->getRepository(Carrier::class)->findOneBy([
