@@ -315,9 +315,6 @@ class SpecialRangeWeightController extends CoreController
                     $value['customer_name'] = $value['account_no'];
                 }
 
-                
-                
-
                 $carrier = $this->entityManager->getRepository(\ServiceShipment\Entity\Carrier::class)->findOneBy([
                     'code' => $value['carrier'],
                     'is_deleted' => 0,
@@ -335,7 +332,7 @@ class SpecialRangeWeightController extends CoreController
                 }
 
                 $service = $this->entityManager->getRepository(\ServiceShipment\Entity\Service::class)->findOneBy([
-                    'name' => $value['service'],
+                    'name' => $value['service'],                    
                     'is_deleted' => 0,
                     'status' => 1,
                 ]);
@@ -375,6 +372,11 @@ class SpecialRangeWeightController extends CoreController
                         [
                             'customer' => $accountNo,
                             'name' => $value['name'],
+                            'name_en' => $value['name'],
+                            'carrier' => $carrier,
+                            'shipment_type' => $shipment_type,
+                            'service'   => $service,
+                            'special_area_name' => $special_area_name,
                             'is_deleted' => 0,
                         ]
                     );
