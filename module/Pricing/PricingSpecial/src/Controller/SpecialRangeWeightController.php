@@ -300,7 +300,7 @@ class SpecialRangeWeightController extends CoreController
                 if ($accountNo) {
                     unset($error['customer']);
                     $value['customer_id'] = $accountNo->getId();
-                    $value['account_no'] = $accountNo->getName();
+                    $value['customer_name'] = $accountNo->getName();
                     $special_area_name = $this->entityManager->getRepository(\PricingSpecial\Entity\SpecialArea::class)->findOneBy([
                         'name' => $value['area_name'],
                         'customer' => $accountNo,
@@ -312,6 +312,7 @@ class SpecialRangeWeightController extends CoreController
                     }
                 } else {
                     $value['customer_id'] = 0;
+                    $value['customer_name'] = $value['account_no'];
                 }
 
                 

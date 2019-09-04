@@ -231,7 +231,7 @@ class SpecialRangeWeightManager
     public function addRangeWeightImport($data, $user)
     {
         $errors = [];
-        for ($i = 1; $i <= count($data); $i++) {
+        for ($i = 0; $i < count($data); $i++) {
             if (isset($data[$i])) {
                 $customer = $this->entityManager->getRepository(Customer::class)->findOneBy([
                     'customer_no' => $data[$i]['account_no'], 
@@ -263,8 +263,8 @@ class SpecialRangeWeightManager
                         && $service 
                         && $shipment_type 
                         && ($data[$i]['name'] != "")
-                        && ($data[$i]['from'] != "" && is_numeric($data[$i]['from']))
-                        && ($data[$i]['to'] != "" && is_numeric($data[$i]['to']))
+                        && (is_numeric($data[$i]['from']))
+                        && (is_numeric($data[$i]['to']))
                 ) {
                     $specialRangeWeight = $this->entityManager->getRepository(SpecialRangeWeight::class)->findOneBy(
                         [

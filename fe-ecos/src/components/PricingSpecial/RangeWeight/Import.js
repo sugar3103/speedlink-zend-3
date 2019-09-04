@@ -100,13 +100,13 @@ class Import extends Component {
                 },
                 {
                     Header: messages['pri_special.customer'],
-                    accessor: "account_no",
+                    accessor: "customer_name",
                     width: 120,
                     sortable: false,
                     Cell: ({ original }) => {
                         return (
                             <Fragment>
-                                {original.account_no}
+                                {original.customer_name}
                                 {original.error && original.error.customer && 
                                     <div className="float-right">
                                         <AlertOutlineIcon id={`errorCustomer${original.id}`} />
