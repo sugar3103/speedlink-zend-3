@@ -309,6 +309,7 @@ class SpecialRangeWeightController extends CoreController
     
                     if ($special_area_name) {
                         unset($error['area']);
+                        $value['area_id'] = $special_area_name->getId();
                     }
                 } else {
                     $value['customer_id'] = 0;
