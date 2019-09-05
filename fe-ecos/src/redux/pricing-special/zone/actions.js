@@ -111,6 +111,7 @@ export const saveDataImportZoneSpecial = () => ({
   type: PRI_SPECIAL_ZONE_SAVE_DATA_IMPORT
 });
 
-export const saveDataImportZoneSpecialSuccess = () => ({
-  type: PRI_SPECIAL_ZONE_SAVE_DATA_IMPORT_SUCCESS
+export const saveDataImportZoneSpecialSuccess = (totalImportSuccess, totalRecord) => ({
+  type: PRI_SPECIAL_ZONE_SAVE_DATA_IMPORT_SUCCESS,
+  payload: { totalImportSuccess, totalRecord }
 });

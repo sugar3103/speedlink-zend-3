@@ -37,6 +37,8 @@ const INIT_STATE = {
   progress: 0,
   dataImport: [],
   totalImport: 0,
+  totalImportSuccess: 0,
+  totalRecord: 0,
   loadingDataImport: false,
   savingDataImport: false
 };
@@ -46,6 +48,13 @@ export default (state = INIT_STATE, action) => {
     case PRI_SPECIAL_RANGE_WEIGHT_ERROR:
       return {
         ...state,
+        uploading: false,
+        progress: 0,
+        dataImport: [],
+        totalImport: 0,
+        totalImportSuccess: 0,
+        totalRecord: 0,
+        loadingDataImport: false,
         savingDataImport: false,
         errors: action.payload
       };
@@ -177,9 +186,12 @@ export default (state = INIT_STATE, action) => {
         savingDataImport: true
       }
     case PRI_SPECIAL_RANGE_WEIGHT_SAVE_DATA_IMPORT_SUCCESS:
+      const { totalImportSuccess, totalRecord } = action.payload;
       return {
         ...state,
         savingDataImport: false,
+        totalImportSuccess,
+        totalRecord,
         error: null
       }
 

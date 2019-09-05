@@ -209,7 +209,7 @@ function* deleteZoneSpecialItem({ payload }) {
 function uploadZoneApi(file, onProgress) {
   const data = new FormData();
   data.append('import_file', file.import_file);
-  
+
   let headers = authHeader();
   headers = {
     ...headers,
@@ -267,6 +267,9 @@ function* uploadZoneSpecial({ payload }) {
         break;
 
       case EC_FAILURE:
+        if (response.message === 'SPECIAL_IMPORT_FILE_INCORRECT') {
+          createNotification({ type: 'error', message: 'pri_special.file-incorrect' });
+        }
         yield put(zoneSpecialError(response.data));
         break;
 
@@ -343,7 +346,7 @@ function* saveDataImportZoneSpecialItems() {
     const response = yield call(saveDataImportZoneSpecialListRequest);
     switch (response.error_code) {
       case EC_SUCCESS:
-        yield put(saveDataImportZoneSpecialSuccess());
+        yield put(saveDataImportZoneSpecialSuccess(response.total_success, response.total));
         break;
 
       case EC_FAILURE:
