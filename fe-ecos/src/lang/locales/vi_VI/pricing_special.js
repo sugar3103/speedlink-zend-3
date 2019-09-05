@@ -16,6 +16,10 @@ module.exports = {
   'pri_special-waiting-import': `Hệ thống đang xử lý dữ liệu vừa import. Vui lòng không đóng cửa sổ hay trình duyệt để đảm bảo quá trình lưu trữ được thực hiện đầy đủ! <br /> Nếu đóng cửa sổ hay trình duyệt đang hoạt động sẽ ngừng quá trình import. Khi import thành công sẽ hiển thị thông báo kết quả`,
   'pri_special.import-error': 'Lưu dữ liệu không thành công!',
   'pri_special.import-success': 'Lưu dữ liệu thành công!',
+  'pri_special.file-incorrect': 'Tệp tải lên không đúng định dạng',
+  'pri_special.imported-success': 'Đã nhập vào thành công',
+  'pri_special.of-a-total': 'trên tổng số',
+  'pri_special.record': 'dòng',
 
   /* AREA SPECIAL */
   'pri_special.area-title': 'Miền',
