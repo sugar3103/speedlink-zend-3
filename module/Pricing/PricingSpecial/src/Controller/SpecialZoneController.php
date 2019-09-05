@@ -447,6 +447,7 @@ class SpecialZoneController extends CoreController
                 // if ($errors) {
                 //     $this->apiResponse['errors'] = $errors;
                 // }
+                $this->apiResponse['total'] = count($data);
                 $this->apiResponse['total_success'] = ($errors) ? (count($data) - count($errors)) : count($data);
             } else {
                 $this->error_code = 0;
