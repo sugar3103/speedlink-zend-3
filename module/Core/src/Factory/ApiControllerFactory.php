@@ -18,7 +18,6 @@ class ApiControllerFactory implements FactoryInterface {
     {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');  
         $documentManager = $container->get('doctrine.documentmanager.odm_default');
-
         return new ApiController($entityManager,$documentManager);
     }
 }

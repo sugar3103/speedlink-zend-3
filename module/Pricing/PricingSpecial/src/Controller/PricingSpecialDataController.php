@@ -101,12 +101,13 @@ class PricingSpecialDataController extends CoreController {
             foreach ($shipmentTypes as $shipmentType) {
                 $data[$area->getId()]['data'][$shipmentType->getId()] = null;
                 $conditions = array(
-                    'service' => $pricing->getService()->getId(),
+                    'service' => $pricing->getService(),
                     'shipment_type' => $shipmentType->getId(),                                    
                     'is_deleted' => 0,
                     'status' => 1,
                     'customer' => $pricing->getCustomer(),
-                    'special_area' => $area->getId()
+                    'special_area' => $area->getId(),
+                    'carrier' => $pricing->getCarrier()
                 );
                 $rangeWeights = $this->entityManager->getRepository(SpecialRangeWeight::class)->findBy($conditions);
                 if($rangeWeights) {
