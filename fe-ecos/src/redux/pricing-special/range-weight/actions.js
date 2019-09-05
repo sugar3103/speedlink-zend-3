@@ -111,6 +111,7 @@ export const saveDataImportRangeWeightSpecial = () => ({
   type: PRI_SPECIAL_RANGE_WEIGHT_SAVE_DATA_IMPORT
 });
 
-export const saveDataImportRangeWeightSpecialSuccess = () => ({
-  type: PRI_SPECIAL_RANGE_WEIGHT_SAVE_DATA_IMPORT_SUCCESS
+export const saveDataImportRangeWeightSpecialSuccess = (totalImportSuccess, totalRecord) => ({
+  type: PRI_SPECIAL_RANGE_WEIGHT_SAVE_DATA_IMPORT_SUCCESS,
+  payload: { totalImportSuccess, totalRecord }
 });

@@ -80,7 +80,7 @@ class Import extends Component {
     }
 
     render() {
-        const { dataImport, totalImport, loadingDataImport, savingDataImport, error } = this.props;
+        const { dataImport, totalImport, loadingDataImport, savingDataImport, error, totalImportSuccess, totalRecord } = this.props;
         
         const { messages, locale } = this.props.intl;
         const columnTable = {
@@ -96,7 +96,20 @@ class Import extends Component {
                     Header: messages['pri_special.name'],
                     accessor: "name",
                     sortable: false,
-                    width: 100
+                    width: 100,
+                    Cell: ({ original }) => {
+                        return (
+                            <Fragment>
+                                {original.name}
+                                {original.error && original.error.name && 
+                                    <div className="float-right">
+                                        <AlertOutlineIcon id={`errorName${original.id}`} />
+                                        <UncontrolledTooltip placement="right" target={`errorName${original.id}`}>{messages['pri_special.name-not-empty']}</UncontrolledTooltip>
+                                    </div>
+                                }
+                            </Fragment>
+                        )
+                    },
                 },
                 {
                     Header: messages['pri_special.customer'],
@@ -128,8 +141,8 @@ class Import extends Component {
                                 {original.from}
                                 {original.error && original.error.from && 
                                     <div className="float-right">
-                                        <AlertOutlineIcon id={`errorService${original.id}`} />
-                                        <UncontrolledTooltip placement="right" target={`errorService${original.id}`}>{messages['pri_special.from-is-not-number']}</UncontrolledTooltip>
+                                        <AlertOutlineIcon id={`errorFrom${original.id}`} />
+                                        <UncontrolledTooltip placement="right" target={`errorFrom${original.id}`}>{messages['pri_special.from-is-not-number']}</UncontrolledTooltip>
                                     </div>
                                 }
                             </Fragment>
@@ -147,8 +160,8 @@ class Import extends Component {
                                 {original.to}
                                 {original.error && original.error.to && 
                                     <div className="float-right">
-                                        <AlertOutlineIcon id={`errorService${original.id}`} />
-                                        <UncontrolledTooltip placement="right" target={`errorService${original.id}`}>{messages['pri_special.to-is-not-number']}</UncontrolledTooltip>
+                                        <AlertOutlineIcon id={`errorTo${original.id}`} />
+                                        <UncontrolledTooltip placement="right" target={`errorTo${original.id}`}>{messages['pri_special.to-is-not-number']}</UncontrolledTooltip>
                                     </div>
                                 }
                             </Fragment>
@@ -313,6 +326,11 @@ class Import extends Component {
                             {savingDataImport &&
                                 <div className="modal__body" dangerouslySetInnerHTML={this.createMarkup(messages['pri_special.waiting-import'])} />
                             }
+                            {totalImportSuccess &&
+                                <div className="modal__body">
+                                    {`${messages['pri_special.imported-success']} ${totalImportSuccess} ${messages['pri_special.of-a-total']} ${totalRecord} ${messages['pri_special.record']}`}
+                                </div>
+                            }
                             <ButtonToolbar className="modal__footer mt-3">
                                 <Button color="success" onClick={this.toggleModal}>{messages['ok']}</Button>
                             </ButtonToolbar>
@@ -330,9 +348,10 @@ Import.propTypes = {
 }
 
 const mapStateToProps = ({ pricingSpecial }) => {
-    const { rangeWeight: { dataImport, totalImport, loadingDataImport, savingDataImport, error } } = pricingSpecial;
+    const { rangeWeight: { dataImport, totalImport, loadingDataImport, savingDataImport, error, totalImportSuccess, totalRecord } } = pricingSpecial;
+    
     return {
-        dataImport, totalImport, loadingDataImport, savingDataImport, error
+        dataImport, totalImport, loadingDataImport, savingDataImport, error, totalImportSuccess, totalRecord
     }
 }
 

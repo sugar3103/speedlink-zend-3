@@ -80,7 +80,7 @@ class Import extends Component {
     }
 
     render() {
-        const { dataImport, totalImport, loadingDataImport, savingDataImport, error } = this.props;
+        const { dataImport, totalImport, loadingDataImport, savingDataImport, error, totalImportSuccess, totalRecord } = this.props;
         const { messages } = this.props.intl;
         const columnTable = {
             checkbox: false,
@@ -265,6 +265,11 @@ class Import extends Component {
                             {savingDataImport &&
                                 <div className="modal__body" dangerouslySetInnerHTML={this.createMarkup(messages['pri_special.waiting-import'])} />
                             }
+                            {totalImportSuccess &&
+                                <div className="modal__body">
+                                    {`${messages['pri_special.imported-success']} ${totalImportSuccess} ${messages['pri_special.of-a-total']} ${totalRecord} ${messages['pri_special.record']}`}
+                                </div>
+                            }
                             <ButtonToolbar className="modal__footer mt-3">
                                 <Button color="success" onClick={this.toggleModal}>{messages['ok']}</Button>
                             </ButtonToolbar>
@@ -283,9 +288,9 @@ Import.propTypes = {
 }
 
 const mapStateToProps = ({ pricingSpecial }) => {
-    const { zone: { dataImport, totalImport, loadingDataImport, savingDataImport, error } } = pricingSpecial;
+    const { zone: { dataImport, totalImport, loadingDataImport, savingDataImport, error, totalImportSuccess, totalRecord } } = pricingSpecial;
     return {
-        dataImport, totalImport, loadingDataImport, savingDataImport, error
+        dataImport, totalImport, loadingDataImport, savingDataImport, error, totalImportSuccess, totalRecord
     }
 }
 

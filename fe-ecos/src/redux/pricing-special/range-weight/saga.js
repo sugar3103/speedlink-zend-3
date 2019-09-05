@@ -301,6 +301,9 @@ function* uploadRangeWeightSpecial({ payload }) {
         break;
 
       case EC_FAILURE:
+        if (response.message === 'SPECIAL_IMPORT_FILE_INCORRECT') {
+          createNotification({ type: 'error', message: 'pri_special.file-incorrect' });
+        }
         yield put(rangeWeightSpecialError(response.data));
         break;
 
@@ -377,7 +380,7 @@ function* saveDataImportRangeWeightSpecialItems() {
     const response = yield call(saveDataImportRangeWeightSpecialListRequest);
     switch (response.error_code) {
       case EC_SUCCESS:
-        yield put(saveDataImportRangeWeightSpecialSuccess());
+        yield put(saveDataImportRangeWeightSpecialSuccess(response.total_success, response.total));
         break;
 
       case EC_FAILURE:

@@ -16,6 +16,10 @@ module.exports = {
   'pri_special.waiting-import': `The system is importing. Please DON'T close the tab or browser to ensure the storage process is fully implemented! <br /> If you close the tab or browser, it will stop the importing process. When successfully imported, the result will be displayed`,
   'pri_special.import-error': 'Save Data Error!',
   'pri_special.import-success': 'Save Data Successs!',
+  'pri_special.file-incorrect': 'File import incorrect format',
+  'pri_special.imported-success': 'Imported successfully',
+  'pri_special.of-a-total': 'of a total of',
+  'pri_special.record': 'records',
 
   /* AREA SPECIAL */
   'pri_special.area-title': 'Area Special',
@@ -160,4 +164,5 @@ module.exports = {
   'pri_special.to-address-does-not-exist': 'To Address doesn’t exist',
   'pri_special.to-is-not-number' : 'To is not number or less than 0',
   'pri_special.from-is-not-number' : 'From is not number or less than 0',
+  'pri_special.name-not-empty': 'Name mustn’t be empty'
 }
