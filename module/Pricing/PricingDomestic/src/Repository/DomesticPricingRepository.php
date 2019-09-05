@@ -2,6 +2,7 @@
 namespace PricingDomestic\Repository;
 
 use Core\Utils\Utils;
+use Doctrine\ORM\NonUniqueResultException;
 use PricingDomestic\Entity\DomesticPricing;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
@@ -159,7 +160,7 @@ class DomesticPricingRepository extends EntityRepository
     public function getPriceId($where) {
         try {
             $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-            $queryBuilder->select('dp.id, dp.total_ras')
+            $queryBuilder->select('dp.id, dp.total_ras, dp.is_private')
                 ->from(DomesticPricing::class, 'dp')
                 ->where('dp.is_deleted = 0')
                 ->andWhere('dp.status = 1')
@@ -178,8 +179,10 @@ class DomesticPricingRepository extends EntityRepository
             $queryBuilder->orderBy('dp.name', 'desc')
                 ->setParameters($where);
 
-            return $queryBuilder->getQuery()->execute();
+            return $queryBuilder->getQuery()->getOneOrNullResult();
         } catch (QueryException $e) {
+            return [];
+        } catch (NonUniqueResultException $e) {
             return [];
         }
     }
