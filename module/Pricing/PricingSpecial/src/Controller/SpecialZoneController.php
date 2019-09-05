@@ -261,7 +261,7 @@ class SpecialZoneController extends CoreController
                 //----Lặp dòng, Vì dòng đầu là tiêu đề cột nên chúng ta sẽ lặp giá trị từ dòng 2
                 for ($i = 3; $i <= $Totalrow; $i++) {
                     //----Lặp cột
-                    for ($j = 1; $j < $TotalCol; $j++) {
+                    for ($j = 1; $j <= $TotalCol; $j++) {
                         // Tiến hành lấy giá trị của từng ô đổ vào mảng
                         $data[$i - 3][$nameField[$j - 1]] = $sheet->getCellByColumnAndRow($j, $i)->getValue();
                     }
