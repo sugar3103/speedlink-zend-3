@@ -164,4 +164,5 @@ module.exports = {
   'pri_special.to-address-does-not-exist': 'To Address doesn’t exist',
   'pri_special.to-is-not-number' : 'To is not number or less than 0',
   'pri_special.from-is-not-number' : 'From is not number or less than 0',
+  'pri_special.name-not-empty': 'Name mustn’t be empty'
 }
