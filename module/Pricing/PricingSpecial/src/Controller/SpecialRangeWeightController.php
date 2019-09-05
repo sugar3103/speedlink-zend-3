@@ -434,11 +434,11 @@ class SpecialRangeWeightController extends CoreController
                 $errors = $this->specialRangeWeightManager->addRangeWeightImport($data, $this->tokenPayload);
 
                 $this->cache->removeItem('specialRangeWeight');
-                if ($errors) {
-                    $this->apiResponse['errors'] = $errors;
-                }
+                // if ($errors) {
+                //     $this->apiResponse['errors'] = $errors;
+                // }
 
-                $this->apiResponse['total'] = count($data);
+                // $this->apiResponse['total'] = count($data);
                 $this->apiResponse['total_success'] = ($errors) ? (count($data) - count($errors)) : count($data);
                 $this->apiResponse['message'] = "SPECIAL_IMPORTED";
             } else {

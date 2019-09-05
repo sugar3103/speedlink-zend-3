@@ -444,10 +444,10 @@ class SpecialZoneController extends CoreController
 
                 $this->cache->removeItem('specialZone');
                 $this->apiResponse['message'] = "SPECIAL_IMPORTED";
-                if ($errors) {
-                    $this->apiResponse['errors'] = $errors;
-                }
-
+                // if ($errors) {
+                //     $this->apiResponse['errors'] = $errors;
+                // }
+                $this->apiResponse['total_success'] = ($errors) ? (count($data) - count($errors)) : count($data);
             } else {
                 $this->error_code = 0;
                 $this->apiResponse['message'] = "SPECIAL_IMPORT_NONE";
