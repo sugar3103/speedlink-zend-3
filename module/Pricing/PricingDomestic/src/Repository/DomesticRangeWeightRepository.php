@@ -2,6 +2,7 @@
 namespace PricingDomestic\Repository;
 
 use Core\Utils\Utils;
+use Doctrine\ORM\NonUniqueResultException;
 use PricingDomestic\Entity\DomesticRangeWeight;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\QueryException;
@@ -210,8 +211,10 @@ class DomesticRangeWeightRepository extends EntityRepository
             }
             $queryBuilder->setParameters($where);
 
-            return $queryBuilder->getQuery()->execute();
+            return $queryBuilder->getQuery()->getOneOrNullResult();
         } catch (QueryException $e) {
+            return [];
+        } catch (NonUniqueResultException $e) {
             return [];
         }
     }
@@ -246,8 +249,10 @@ class DomesticRangeWeightRepository extends EntityRepository
             }
             $queryBuilder->setParameters($where);
 
-            return $queryBuilder->getQuery()->execute();
+            return $queryBuilder->getQuery()->getOneOrNullResult();
         } catch (QueryException $e) {
+            return [];
+        } catch (NonUniqueResultException $e) {
             return [];
         }
     }

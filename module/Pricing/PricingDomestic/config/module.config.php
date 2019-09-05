@@ -42,7 +42,7 @@ $router = [
                     'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
                 ],
                 'defaults' => [
-                    'controller' => Controller\DomesticPricingController::class,
+                    'controller' => Controller\CalculatePricingController::class,
                     'action' => 'getPricingOld',
                     'isAuthorizationRequired' => false
                 ]
@@ -144,6 +144,7 @@ $router = [
 $controllers = [
     'factories' => [
         Controller\DomesticPricingController::class => Factory\DomesticPricingControllerFactory::class,
+        Controller\CalculatePricingController::class => Factory\CalculatePricingControllerFactory::class,
         Controller\DomesticPricingDataController::class => Factory\DomesticPricingDataControllerFactory::class,
         Controller\DomesticPricingVasController::class => Factory\DomesticPricingVasControllerFactory::class,
 
@@ -156,7 +157,7 @@ $controllers = [
 
 $service_manager = [
     'factories' => [
-        Service\DomesticPricingManager::class => Factory\DomesticPricingManagerFactory::class,   
+        Service\DomesticPricingManager::class => Factory\DomesticPricingManagerFactory::class,
         Service\DomesticPricingDataManager::class => Factory\DomesticPricingDataManagerFactory::class,   
         Service\DomesticPricingVasManager::class => Factory\DomesticPricingVasManagerFactory::class,   
 
