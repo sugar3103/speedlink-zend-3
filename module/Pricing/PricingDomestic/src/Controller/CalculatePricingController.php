@@ -184,9 +184,9 @@ class CalculatePricingController extends CoreController {
         }
 
 
-        if (empty($priceNormal) && empty($priceOver))
+        if (empty($pricingOver['info']) && empty($pricingNormal['info']))
             return ['error' => true, 'message' => "Range weight not found"];
-        if (empty($priceDataNormal) && empty($priceDataOver))
+        if (empty($pricingOver['data']) && empty($pricingNormal['data']))
             return ['error' => true, 'message' => 'Pricing incorrect'];
 
         /* Calculate Price */
