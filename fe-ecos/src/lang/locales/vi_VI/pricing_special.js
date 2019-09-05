@@ -164,4 +164,5 @@ module.exports = {
   'pri_special.to-address-does-not-exist': 'Địa chỉ đến không tồn tại',
   'pri_special.to-is-not-number' : 'To không phải là số hoặc nhỏ hơn 0',
   'pri_special.from-is-not-number' : 'From không phải là số hoặc nhỏ hơn 0',
+  'pri_special.name-not-empty': 'Tên không được trống'
 }

@@ -96,7 +96,20 @@ class Import extends Component {
                     Header: messages['pri_special.name'],
                     accessor: "name",
                     sortable: false,
-                    width: 100
+                    width: 100,
+                    Cell: ({ original }) => {
+                        return (
+                            <Fragment>
+                                {original.name}
+                                {original.error && original.error.name && 
+                                    <div className="float-right">
+                                        <AlertOutlineIcon id={`errorName${original.id}`} />
+                                        <UncontrolledTooltip placement="right" target={`errorName${original.id}`}>{messages['pri_special.name-not-empty']}</UncontrolledTooltip>
+                                    </div>
+                                }
+                            </Fragment>
+                        )
+                    },
                 },
                 {
                     Header: messages['pri_special.customer'],
@@ -128,8 +141,8 @@ class Import extends Component {
                                 {original.from}
                                 {original.error && original.error.from && 
                                     <div className="float-right">
-                                        <AlertOutlineIcon id={`errorService${original.id}`} />
-                                        <UncontrolledTooltip placement="right" target={`errorService${original.id}`}>{messages['pri_special.from-is-not-number']}</UncontrolledTooltip>
+                                        <AlertOutlineIcon id={`errorFrom${original.id}`} />
+                                        <UncontrolledTooltip placement="right" target={`errorFrom${original.id}`}>{messages['pri_special.from-is-not-number']}</UncontrolledTooltip>
                                     </div>
                                 }
                             </Fragment>
@@ -147,8 +160,8 @@ class Import extends Component {
                                 {original.to}
                                 {original.error && original.error.to && 
                                     <div className="float-right">
-                                        <AlertOutlineIcon id={`errorService${original.id}`} />
-                                        <UncontrolledTooltip placement="right" target={`errorService${original.id}`}>{messages['pri_special.to-is-not-number']}</UncontrolledTooltip>
+                                        <AlertOutlineIcon id={`errorTo${original.id}`} />
+                                        <UncontrolledTooltip placement="right" target={`errorTo${original.id}`}>{messages['pri_special.to-is-not-number']}</UncontrolledTooltip>
                                     </div>
                                 }
                             </Fragment>
