@@ -3,6 +3,7 @@ namespace PricingSpecial\Repository;
 
 use Core\Utils\Utils;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\QueryException;
 use PricingSpecial\Entity\SpecialPricing;
@@ -172,8 +173,10 @@ class PricingSpecialRepository extends EntityRepository
             $queryBuilder->orderBy('sp.name', 'desc')
                 ->setParameters($where);
 
-            return $queryBuilder->getQuery()->execute();
+            return $queryBuilder->getQuery()->getOneOrNullResult();
         } catch (QueryException $e) {
+            return [];
+        } catch (NonUniqueResultException $e) {
             return [];
         }
     }
