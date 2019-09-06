@@ -289,7 +289,13 @@ class SpecialZoneController extends CoreController
                     'fromCity' => 'SPECIAL_IMPORT_FROM_CITY_NOT_EXITS',
                     'toAddress' => 'SPECIAL_IMPORT_TO_ADDRESS_NOT_EXITS',
                 );
-
+                if($value['name'] != "") {
+                    unset($error['name']);
+                }
+                if($value['name_en'] != "") {
+                    unset($error['name_en']);
+                }
+                
                 $accountNo = $this->entityManager->getRepository(\Customer\Entity\Customer::class)->findOneBy([
                     'customer_no' => $value['account_no'],
                     'status' => 1,
