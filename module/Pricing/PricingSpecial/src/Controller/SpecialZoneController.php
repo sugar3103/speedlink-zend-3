@@ -121,7 +121,7 @@ class SpecialZoneController extends CoreController
             if (isset($data['id'])) {
                 // Find existing Special Zone in the database.
                 $zone = $this->entityManager->getRepository(SpecialZone::class)->findOneBy(array('id' => $data['id']));
-                if ($area) {
+                if ($zone) {
                     //Create Form Zone
                     $form = new ZoneForm('update', $this->entityManager, $zone);
                     $form->setData($data);
