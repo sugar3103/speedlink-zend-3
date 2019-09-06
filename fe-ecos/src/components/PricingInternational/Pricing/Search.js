@@ -3,7 +3,6 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import SearchForm from './SearchForm';
-import  { SELECTED_PAGE_SIZE } from '../../../constants/defaultValues';
 import { getPricingInternationalList } from '../../../redux/actions';
 
 class Search extends Component {
@@ -11,7 +10,7 @@ class Search extends Component {
     const params = {
       offset: {
         start: 1,
-        limit: SELECTED_PAGE_SIZE
+        limit: this.props.pageSize
       },
       query: values
     }
@@ -33,7 +32,8 @@ class Search extends Component {
 }
 
 Search.propTypes = {
-  getPricingInternationalList: PropTypes.func.isRequired
+  getPricingInternationalList: PropTypes.func.isRequired,
+  pageSize: PropTypes.number.isRequired
 }
 
 export default injectIntl(connect(null, {

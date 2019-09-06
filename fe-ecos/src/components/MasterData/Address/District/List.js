@@ -28,6 +28,17 @@ class List extends Component {
       currentPage: 1,
     };
   }
+  
+  componentDidMount() {
+    this.props.getDistrictList();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.district.items.length !== this.props.district.items.length) {
+      this.setState({ selectedPageSize: nextProps.district.items.length < SELECTED_PAGE_SIZE ? SELECTED_PAGE_SIZE : nextProps.district.items.length })
+    }
+  }
+  
   toggleModal = (e, type, status) => {
     e.stopPropagation();
     this.props.toggleDistrictModal(type, status);
@@ -190,7 +201,7 @@ class List extends Component {
       <Col md={12} lg={12}>
         <Card>
           <CardBody className="master-data-list">
-            <Search />
+            <Search pageSize={this.state.selectedPageSize} />
             <Table
               renderHeader={this.renderHeader}
               loading={loading}

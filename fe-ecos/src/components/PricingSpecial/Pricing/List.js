@@ -27,8 +27,14 @@ class List extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.getPricingSpecialList();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.pricing.items.length !== this.props.pricing.items.length) {
+      this.setState({ selectedPageSize: nextProps.pricing.items.length < SELECTED_PAGE_SIZE ? SELECTED_PAGE_SIZE : nextProps.pricing.items.length })
+    }
   }
 
   onDelete = (e, ids) => {
@@ -220,7 +226,7 @@ class List extends Component {
       <Col md={12} lg={12}>
         <Card>
           <CardBody className="master-data-list">
-            <Search />
+            <Search pageSize={this.state.selectedPageSize} />
             <Table
               renderHeader={this.renderHeader}
               loading={loading}

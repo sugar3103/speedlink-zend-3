@@ -28,7 +28,7 @@ import {
 } from '../../../../constants/actionTypes';
 
 const INIT_STATE = {
-  items: null,
+  items: [],
   total: 0,
   errors: null,
   loading: true,

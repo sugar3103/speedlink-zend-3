@@ -28,6 +28,17 @@ class List extends Component {
       currentPage: 1,
     };
   }
+  
+  componentDidMount() {
+    this.props.getWardList();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.ward.items.length !== this.props.ward.items.length) {
+      this.setState({ selectedPageSize: nextProps.ward.items.length < SELECTED_PAGE_SIZE ? SELECTED_PAGE_SIZE : nextProps.ward.items.length })
+    }
+  }
+  
   toggleModal = (e, type, status) => {
     e.stopPropagation();
     this.props.toggleWardModal(type, status);
@@ -197,7 +208,7 @@ class List extends Component {
       <Col md={12} lg={12}>
         <Card>
           <CardBody className="master-data-list">
-            <Search />
+            <Search pageSize={this.state.selectedPageSize} />
             <Table
               renderHeader={this.renderHeader}
               loading={loading}

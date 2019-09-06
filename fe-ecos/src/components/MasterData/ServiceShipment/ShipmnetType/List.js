@@ -23,6 +23,16 @@ class List extends Component {
       currentPage: 1,
     };
   }
+  
+  componentDidMount() {
+    this.props.getShipmentTypeList();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.shipment_type.items.length !== this.props.shipment_type.items.length) {
+      this.setState({ selectedPageSize: nextProps.shipment_type.items.length < SELECTED_PAGE_SIZE ? SELECTED_PAGE_SIZE : nextProps.shipment_type.items.length })
+    }
+  }
 
   toggleModal = (e, type, status) => {
     e.stopPropagation();
@@ -229,7 +239,7 @@ class List extends Component {
       <Col md={12} lg={12}>
         <Card>
           <CardBody className="master-data-list">
-            <Search />
+            <Search pageSize={this.state.selectedPageSize} />
             <Table
               renderHeader={this.renderHeader}
               loading={loading}
