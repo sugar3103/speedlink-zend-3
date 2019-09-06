@@ -120,23 +120,23 @@ class SpecialZoneController extends CoreController
             $data = $this->getRequestData();
             if (isset($data['id'])) {
                 // Find existing Special Zone in the database.
-                $area = $this->entityManager->getRepository(SpecialZone::class)->findOneBy(array('id' => $data['id']));
+                $zone = $this->entityManager->getRepository(SpecialZone::class)->findOneBy(array('id' => $data['id']));
                 if ($area) {
                     //Create Form Zone
-                    $form = new ZoneForm('update', $this->entityManager, $area);
+                    $form = new ZoneForm('update', $this->entityManager, $zone);
                     $form->setData($data);
                     //validate form
                     if ($form->isValid()) {
                         // get filtered and validated data
                         $data = $form->getData();
-                        $data['id'] = $area->getId();
+                        $data['id'] = $zone->getId();
                         $preData = $this->entityManager->getRepository(SpecialZone::class)->checkExitWithAddress($data);
-                        if (isset($preData[0]) && ($preData[0]['id'] != $area->getId())) {
+                        if (isset($preData[0]) && ($preData[0]['id'] != $zone->getId())) {
                             $this->error_code = 0;
                             $this->apiResponse['message'] = "SPECIAL_ZONE_HAD_BEEN_EXISTED";
                         } else {
                             // update Special Zone.
-                            $this->specialZoneManager->updateZone($area, $data, $user);
+                            $this->specialZoneManager->updateZone($zone, $data, $user);
                             $this->apiResponse['message'] = "MODIFIED_SUCCESS_SPECIAL_ZONE";
                         }
 

@@ -48,7 +48,7 @@ class SpecialZoneRepository extends EntityRepository
     public function checkExitWithAddress($data)
     {
         $entityManager = $this->getEntityManager();
-        var_dump($data);die;
+        
         try {
             $queryBuilder = $entityManager->createQueryBuilder();
             $queryBuilder->select('sz.id')->from(SpecialZone::class, 'sz')
@@ -56,7 +56,8 @@ class SpecialZoneRepository extends EntityRepository
                     AND sz.to_city = :to_city_id
                     AND sz.to_district = :to_district_id
                     AND sz.to_ward = :to_ward_id
-                    AND sz.customer = :customer_id
+                    AND sz.customer = :customer_id,
+                    AND sz.special_area_id = :special_area_id
                     AND sz.id <> :id');
             if (isset($data['id'])) {
                 $queryBuilder->setParameter("id", $data['id']);
@@ -68,7 +69,8 @@ class SpecialZoneRepository extends EntityRepository
                 ->setParameter("to_city_id", $data['to_city'])
                 ->setParameter("to_district_id", $data['to_district'])
                 ->setParameter("to_ward_id", $data['to_ward'])
-                ->setParameter("customer_id", $data['customer_id']);
+                ->setParameter("customer_id", $data['customer_id'])
+                ->setParameter("special_area_id", $data['special_area_id']);
 
         } catch (QueryException $e) {
             return [];
