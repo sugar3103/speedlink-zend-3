@@ -29,6 +29,16 @@ class List extends Component {
     };
   }
 
+  componentDidMount() {
+    this.props.getCountryList();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.country.items.length !== this.props.country.items.length) {
+      this.setState({ selectedPageSize: nextProps.country.items.length < SELECTED_PAGE_SIZE ? SELECTED_PAGE_SIZE : nextProps.country.items.length })
+    }
+  }
+  
   toggleModal = (e, type, status) => {
     e.stopPropagation();
     this.props.toggleCountryModal(type, status);
@@ -196,7 +206,7 @@ class List extends Component {
       <Col md={12} lg={12}>
         <Card>
           <CardBody className="master-data-list">
-            <Search />
+            <Search pageSize={this.state.selectedPageSize} />
             <Table
               renderHeader={this.renderHeader}
               loading={loading}

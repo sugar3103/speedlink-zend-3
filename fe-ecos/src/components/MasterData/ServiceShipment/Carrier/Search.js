@@ -4,14 +4,13 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { getCarrierList } from '../../../../redux/actions';
 import SearchForm from './SearchForm';
-import  { SELECTED_PAGE_SIZE } from '../../../../constants/defaultValues';
 
 class Search extends Component {
   handleSubmit = values => {
     const params = {
       offset: {
         start: 1,
-        limit: SELECTED_PAGE_SIZE
+        limit: this.props.pageSize
       },
       query: values
     };
@@ -32,7 +31,8 @@ class Search extends Component {
 }
 
 Search.propTypes = {
-  getCarrierList: PropTypes.func.isRequired
+  getCarrierList: PropTypes.func.isRequired,
+  pageSize: PropTypes.number.isRequired
 };
 
 export default injectIntl(connect(null, {

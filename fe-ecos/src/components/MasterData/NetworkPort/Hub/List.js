@@ -39,6 +39,16 @@ class List extends Component {
       currentPage: 1,
     };
   }
+  
+  componentDidMount() {
+    this.props.getHubList();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.hub.items.length !== this.props.hub.items.length) {
+      this.setState({ selectedPageSize: nextProps.hub.items.length < SELECTED_PAGE_SIZE ? SELECTED_PAGE_SIZE : nextProps.hub.items.length })
+    }
+  }
 
   toggleModal = (e, type, hub) => {
     e.stopPropagation();
@@ -98,10 +108,6 @@ class List extends Component {
       currentPage: page
     });
   };
-
-  componentDidMount() {
-    this.props.getHubList();
-  }
 
   renderHeader = (selected) => {
     const { messages } = this.props.intl;
@@ -214,7 +220,7 @@ class List extends Component {
       <Col md={12} lg={12}>
         <Card>
           <CardBody className="master-data-list">
-            <Search />
+            <Search pageSize={this.state.selectedPageSize} />
             <Table
               renderHeader={this.renderHeader}
               loading={loading}

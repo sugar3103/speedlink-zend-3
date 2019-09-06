@@ -21,6 +21,16 @@ class List extends Component {
     };
   }
 
+  componentDidMount() {
+    this.props.getCodeList();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.code.items.length !== this.props.code.items.length) {
+      this.setState({ selectedPageSize: nextProps.code.items.length < SELECTED_PAGE_SIZE ? SELECTED_PAGE_SIZE : nextProps.code.items.length })
+    }
+  }
+
   onChangePageSize = (size) => {
     size = parseInt(size, 10);
     let params = {
@@ -59,10 +69,6 @@ class List extends Component {
     });
   };
 
-  componentDidMount() {
-    this.props.getCodeList();
-  }
-
   showCodeItem = (items) => {
     const { messages } = this.props.intl;
     let result = null;
@@ -90,7 +96,7 @@ class List extends Component {
       <Col md={12} lg={12}>
         <Card>
           <CardBody className="master-data-list">
-            <Search />
+            <Search pageSize={this.state.selectedPageSize} />
             <div className="mb-2">
               <ItemPerPage selectedPageSize={this.state.selectedPageSize} changePageSize={this.onChangePageSize} />
             </div>

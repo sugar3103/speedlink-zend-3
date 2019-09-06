@@ -13,7 +13,7 @@ module.exports = {
   'pri_special.add-success': 'Thêm thành công',
   'pri_special.update-success': 'Cập nhật thành công',
   'pri_special.delete-success': 'Xóa thành công',
-  'pri_special-waiting-import': `Hệ thống đang xử lý dữ liệu vừa import. Vui lòng không đóng cửa sổ hay trình duyệt để đảm bảo quá trình lưu trữ được thực hiện đầy đủ! <br /> Nếu đóng cửa sổ hay trình duyệt đang hoạt động sẽ ngừng quá trình import. Khi import thành công sẽ hiển thị thông báo kết quả`,
+  'pri_special.waiting-import': `Hệ thống đang xử lý dữ liệu vừa import. Vui lòng không đóng cửa sổ hay trình duyệt để đảm bảo quá trình lưu trữ được thực hiện đầy đủ! <br /> Nếu đóng cửa sổ hay trình duyệt đang hoạt động sẽ ngừng quá trình import. Khi import thành công sẽ hiển thị thông báo kết quả`,
   'pri_special.import-error': 'Lưu dữ liệu không thành công!',
   'pri_special.import-success': 'Lưu dữ liệu thành công!',
   'pri_special.file-incorrect': 'Tệp tải lên không đúng định dạng',

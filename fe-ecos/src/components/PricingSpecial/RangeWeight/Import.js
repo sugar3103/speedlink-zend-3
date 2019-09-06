@@ -326,7 +326,7 @@ class Import extends Component {
                             {savingDataImport &&
                                 <div className="modal__body" dangerouslySetInnerHTML={this.createMarkup(messages['pri_special.waiting-import'])} />
                             }
-                            {totalImportSuccess &&
+                            {!savingDataImport && totalImportSuccess &&
                                 <div className="modal__body">
                                     {`${messages['pri_special.imported-success']} ${totalImportSuccess} ${messages['pri_special.of-a-total']} ${totalRecord} ${messages['pri_special.record']}`}
                                 </div>
