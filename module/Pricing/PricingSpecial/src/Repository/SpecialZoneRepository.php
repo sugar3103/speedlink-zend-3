@@ -58,7 +58,8 @@ class SpecialZoneRepository extends EntityRepository
                     AND sz.to_ward = :to_ward_id
                     AND sz.customer = :customer_id
                     AND sz.special_area = :special_area_id
-                    AND sz.id <> :id');
+                    AND sz.id <> :id
+                    AND sz.is_deleted = 0');
             if (isset($data['id'])) {
                 $queryBuilder->setParameter("id", $data['id']);
             } else {
@@ -75,7 +76,7 @@ class SpecialZoneRepository extends EntityRepository
         } catch (QueryException $e) {
             return [];
         }
-        var_dump($queryBuilder->getQuery()->getSql()); die;
+        
         return $queryBuilder->getQuery()->execute();
     }
 
