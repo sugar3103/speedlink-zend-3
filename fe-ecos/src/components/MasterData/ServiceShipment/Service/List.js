@@ -27,12 +27,6 @@ class List extends Component {
   componentDidMount() {
     this.props.getServiceList();
   }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.service.items.length !== this.props.service.items.length) {
-      this.setState({ selectedPageSize: nextProps.service.items.length < SELECTED_PAGE_SIZE ? SELECTED_PAGE_SIZE : nextProps.service.items.length })
-    }
-  }
   
   toggleModal = (e, type, status) => {
     e.stopPropagation();

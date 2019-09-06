@@ -3,7 +3,6 @@ import { Container, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { List } from '../../../components/MasterData/ServiceShipment/ShipmnetType';
 import { connect } from "react-redux";
-import { getShipmentTypeList } from '../../../redux/actions';
 import AccessDenied from '../../../containers/Layout/accessDenied';
 import PageTitle from '../../../containers/Shared/PageTitle';
 class ShipmentType extends Component {
@@ -12,10 +11,6 @@ class ShipmentType extends Component {
     this.state = {
       loadPage: true
     }
-  }
-
-  componentDidMount() {
-    this.props.getShipmentTypeList()
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -46,11 +41,5 @@ const mapStateToProps = ({ shipment_type }) => {
   };
 };
 
-
-export default injectIntl(connect(
-  mapStateToProps,
-  {
-    getShipmentTypeList    
-  }
-)(ShipmentType));
+export default injectIntl(connect(mapStateToProps, null)(ShipmentType));
 

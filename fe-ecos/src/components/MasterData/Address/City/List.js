@@ -33,12 +33,6 @@ class List extends Component {
     this.props.getCityList();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.city.items.length !== this.props.city.items.length) {
-      this.setState({ selectedPageSize: nextProps.city.items.length < SELECTED_PAGE_SIZE ? SELECTED_PAGE_SIZE : nextProps.city.items.length })
-    }
-  }
-
   toggleModal = (e, type, status) => {
     e.stopPropagation();
     this.props.toggleCityModal(type, status);

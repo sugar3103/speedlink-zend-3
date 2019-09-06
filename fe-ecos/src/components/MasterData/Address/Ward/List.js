@@ -32,12 +32,6 @@ class List extends Component {
   componentDidMount() {
     this.props.getWardList();
   }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.ward.items.length !== this.props.ward.items.length) {
-      this.setState({ selectedPageSize: nextProps.ward.items.length < SELECTED_PAGE_SIZE ? SELECTED_PAGE_SIZE : nextProps.ward.items.length })
-    }
-  }
   
   toggleModal = (e, type, status) => {
     e.stopPropagation();

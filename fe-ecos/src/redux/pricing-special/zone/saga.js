@@ -87,14 +87,14 @@ const addZoneSpecialItemRequest = async item => {
 };
 
 function* addZoneSpecialItem({ payload }) {
-  const { item } = payload;
+  const { item, pageSize } = payload;
   const { pathname } = history.location;
   try {
     const response = yield call(addZoneSpecialItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(addZoneSpecialItemSuccess());
-        yield put(getZoneSpecialList());
+        yield put(getZoneSpecialList({ offset: { start: 1, limit: pageSize } }));
         yield put(toggleZoneSpecialModal());
         createNotification({ type: 'success', message: 'pri_special.add-success' });
         break;
@@ -132,14 +132,14 @@ const updateZoneSpecialItemRequest = async item => {
 };
 
 function* updateZoneSpecialItem({ payload }) {
-  const { item } = payload;
+  const { item, pageSize } = payload;
   const { pathname } = history.location;
   try {
     const response = yield call(updateZoneSpecialItemRequest, item);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(updateZoneSpecialItemSuccess());
-        yield put(getZoneSpecialList());
+        yield put(getZoneSpecialList({ offset: { start: 1, limit: pageSize } }));
         yield put(toggleZoneSpecialModal());
         createNotification({ type: 'success', message: 'pri_special.update-success' });
         break;
@@ -177,14 +177,14 @@ const deleteZoneSpecialItemRequest = async ids => {
 };
 
 function* deleteZoneSpecialItem({ payload }) {
-  const { ids } = payload;
+  const { ids, pageSize } = payload;
   const { pathname } = history.location;
   try {
     const response = yield call(deleteZoneSpecialItemRequest, ids);
     switch (response.error_code) {
       case EC_SUCCESS:
         yield put(deleteZoneSpecialItemSuccess());
-        yield put(getZoneSpecialList());
+        yield put(getZoneSpecialList({ offset: { start: 1, limit: pageSize } }));
         createNotification({ type: 'success', message: 'pri_special.delete-success' });
         break;
 

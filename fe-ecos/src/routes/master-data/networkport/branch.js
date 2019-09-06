@@ -3,7 +3,6 @@ import { Container, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import {List} from '../../../components/MasterData/NetworkPort/Branch';
 import { connect } from "react-redux";
-import { getBranchList } from '../../../redux/actions';
 import AccessDenied from '../../../containers/Layout/accessDenied';
 
 class Branch extends Component {
@@ -12,9 +11,6 @@ class Branch extends Component {
     this.state = {
       loadPage: true
     }
-  }
-  componentDidMount() {
-    this.props.getBranchList();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -43,9 +39,4 @@ const mapStateToProps = ({ branch }) => {
   };
 };
 
-export default injectIntl(connect(
-  mapStateToProps,
-  {
-    getBranchList    
-  }
-)(Branch));
+export default injectIntl(connect(mapStateToProps, null)(Branch));

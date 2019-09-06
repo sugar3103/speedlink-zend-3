@@ -30,12 +30,6 @@ class List extends Component {
     this.props.getRangeWeightInternationalList();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.rangeWeight.items.length !== this.props.rangeWeight.items.length) {
-      this.setState({ selectedPageSize: nextProps.rangeWeight.items.length < SELECTED_PAGE_SIZE ? SELECTED_PAGE_SIZE : nextProps.rangeWeight.items.length })
-    }
-  }
-
   onDelete = (e, ids) => {
     e.stopPropagation();
     const { messages } = this.props.intl;

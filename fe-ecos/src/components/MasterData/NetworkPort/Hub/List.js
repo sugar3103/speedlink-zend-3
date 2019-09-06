@@ -44,12 +44,6 @@ class List extends Component {
     this.props.getHubList();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.hub.items.length !== this.props.hub.items.length) {
-      this.setState({ selectedPageSize: nextProps.hub.items.length < SELECTED_PAGE_SIZE ? SELECTED_PAGE_SIZE : nextProps.hub.items.length })
-    }
-  }
-
   toggleModal = (e, type, hub) => {
     e.stopPropagation();
     this.props.toggleHubModal(type, hub);

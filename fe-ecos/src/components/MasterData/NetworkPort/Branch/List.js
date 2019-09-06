@@ -43,12 +43,6 @@ class List extends Component {
     this.props.getBranchList();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.branch.items.length !== this.props.branch.items.length) {
-      this.setState({ selectedPageSize: nextProps.branch.items.length < SELECTED_PAGE_SIZE ? SELECTED_PAGE_SIZE : nextProps.branch.items.length })
-    }
-  }
-
   toggleModal = (e, type, branch) => {
     e.stopPropagation();
     this.props.toggleBranchModal(type, branch);

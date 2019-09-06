@@ -51,27 +51,27 @@ export const getZoneSpecialListSuccess = (items, total) => ({
   payload: { items, total }
 });
 
-export const addZoneSpecialItem = (item) => ({
+export const addZoneSpecialItem = (item, pageSize) => ({
   type: PRI_SPECIAL_ZONE_ADD_ITEM,
-  payload: { item }
+  payload: { item, pageSize }
 });
 
 export const addZoneSpecialItemSuccess = () => ({
   type: PRI_SPECIAL_ZONE_ADD_ITEM_SUCCESS
 });
 
-export const updateZoneSpecialItem = (item) => ({
+export const updateZoneSpecialItem = (item, pageSize) => ({
   type: PRI_SPECIAL_ZONE_UPDATE_ITEM,
-  payload: { item }
+  payload: { item, pageSize }
 });
 
 export const updateZoneSpecialItemSuccess = () => ({
   type: PRI_SPECIAL_ZONE_UPDATE_ITEM_SUCCESS
 });
 
-export const deleteZoneSpecialItem = (ids) => ({
+export const deleteZoneSpecialItem = (ids, pageSize) => ({
   type: PRI_SPECIAL_ZONE_DELETE_ITEM,
-  payload: { ids }
+  payload: { ids, pageSize }
 });
 
 export const deleteZoneSpecialItemSuccess = () => ({

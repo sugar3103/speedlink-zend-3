@@ -33,12 +33,6 @@ class List extends Component {
     this.props.getStatusList();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.status.items.length !== this.props.status.items.length) {
-      this.setState({ selectedPageSize: nextProps.status.items.length < SELECTED_PAGE_SIZE ? SELECTED_PAGE_SIZE : nextProps.status.items.length })
-    }
-  }
-
   toggleModal = (e, type, status) => {
     e.stopPropagation();
     this.props.toggleStatusModal(type, status);
