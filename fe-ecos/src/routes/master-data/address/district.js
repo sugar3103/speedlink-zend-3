@@ -3,7 +3,6 @@ import { Container, Row } from 'reactstrap';
 import { List } from '../../../components/MasterData/Address/District';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
-import { getDistrictList } from '../../../redux/actions';
 import AccessDenied from '../../../containers/Layout/accessDenied';
 import PageTitle from '../../../containers/Shared/PageTitle';
 
@@ -13,10 +12,6 @@ class District extends Component {
     this.state = {
       loadPage: true
     }
-  }
-
-  componentDidMount() {
-    this.props.getDistrictList();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -49,11 +44,5 @@ const mapStateToProps = ({ address }) => {
   };
 };
 
-
-export default injectIntl(connect(
-  mapStateToProps,
-  {
-    getDistrictList    
-  }
-)(District));
+export default injectIntl(connect(mapStateToProps, null)(District));
 

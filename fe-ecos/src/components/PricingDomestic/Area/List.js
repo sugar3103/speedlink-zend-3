@@ -34,12 +34,6 @@ class List extends Component {
     this.props.getAreaDomesticList();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.area.items.length !== this.props.area.items.length) {
-      this.setState({ selectedPageSize: nextProps.area.items.length < SELECTED_PAGE_SIZE ? SELECTED_PAGE_SIZE : nextProps.area.items.length })
-    }
-  }
-
   toggleModal = (e, type, status) => {
     e.stopPropagation();
     this.props.toggleAreaDomesticModal(type, status);

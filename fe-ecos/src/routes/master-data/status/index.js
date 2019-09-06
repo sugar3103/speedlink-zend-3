@@ -3,7 +3,6 @@ import { Container, Row } from 'reactstrap';
 import { List } from '../../../components/MasterData/Status';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
-import { getStatusList } from '../../../redux/actions';
 import AccessDenied from '../../../containers/Layout/accessDenied';
 import PageTitle from '../../../containers/Shared/PageTitle';
 class Status extends Component {
@@ -12,10 +11,6 @@ class Status extends Component {
     this.state = {
       loadPage: true
     }
-  }
-
-  componentDidMount() {
-    this.props.getStatusList();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -48,10 +43,5 @@ const mapStateToProps = ({ status }) => {
 };
 
 
-export default injectIntl(connect(
-  mapStateToProps,
-  {
-    getStatusList    
-  }
-)(Status));
+export default injectIntl(connect(mapStateToProps, null)(Status));
 

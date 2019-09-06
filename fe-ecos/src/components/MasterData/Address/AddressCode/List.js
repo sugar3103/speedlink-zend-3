@@ -25,12 +25,6 @@ class List extends Component {
     this.props.getCodeList();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.code.items.length !== this.props.code.items.length) {
-      this.setState({ selectedPageSize: nextProps.code.items.length < SELECTED_PAGE_SIZE ? SELECTED_PAGE_SIZE : nextProps.code.items.length })
-    }
-  }
-
   onChangePageSize = (size) => {
     size = parseInt(size, 10);
     let params = {

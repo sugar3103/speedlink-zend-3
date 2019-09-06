@@ -12,10 +12,10 @@ class Action extends Component {
   handleSubmit = values => {
     switch (this.props.modalType) {
       case MODAL_ADD:
-        this.props.addZoneSpecialItem(values);
+        this.props.addZoneSpecialItem(values, this.props.pageSize);
         break;
       case MODAL_EDIT:
-        this.props.updateZoneSpecialItem(values);
+        this.props.updateZoneSpecialItem(values, this.props.pageSize);
         break;
       case MODAL_VIEW:
         this.props.changeTypeZoneSpecialModal(MODAL_EDIT);
@@ -64,6 +64,7 @@ Action.propTypes = {
   toggleZoneSpecialModal: PropTypes.func.isRequired,
   addZoneSpecialItem: PropTypes.func.isRequired,
   changeTypeZoneSpecialModal: PropTypes.func.isRequired,
+  pageSize: PropTypes.number.isRequired,
 }
 
 const mapStateToProps = ({ pricingSpecial }) => {

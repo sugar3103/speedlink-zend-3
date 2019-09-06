@@ -28,12 +28,6 @@ class List extends Component {
     this.props.getShipmentTypeList();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.shipment_type.items.length !== this.props.shipment_type.items.length) {
-      this.setState({ selectedPageSize: nextProps.shipment_type.items.length < SELECTED_PAGE_SIZE ? SELECTED_PAGE_SIZE : nextProps.shipment_type.items.length })
-    }
-  }
-
   toggleModal = (e, type, status) => {
     e.stopPropagation();
     this.props.toggleShipmentTypeModal(type, status);

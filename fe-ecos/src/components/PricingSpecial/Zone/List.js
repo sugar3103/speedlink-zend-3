@@ -32,12 +32,6 @@ class List extends Component {
   componentDidMount() {
     this.props.getZoneSpecialList();
   }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.zone.items.length !== this.props.zone.items.length) {
-      this.setState({ selectedPageSize: nextProps.zone.items.length < SELECTED_PAGE_SIZE ? SELECTED_PAGE_SIZE : nextProps.zone.items.length })
-    }
-  }
   
   toggleModal = (e, type, status) => {
     e.stopPropagation();
@@ -52,7 +46,7 @@ class List extends Component {
         return (
           <ConfirmPicker
             onClose={onClose}
-            onDelete={() => this.props.deleteZoneSpecialItem(ids)}
+            onDelete={() => this.props.deleteZoneSpecialItem(ids, this.state.selectedPageSize)}
             messages={messages}
           />
         )
@@ -111,7 +105,7 @@ class List extends Component {
             size="sm"
           >{messages['pri_special.add-new-zone']}</Button>
         </Can>
-        <Action modalOpen={modalOpen} />
+        <Action modalOpen={modalOpen} pageSize={this.state.selectedPageSize}/>
         <Can user={this.props.authUser.user} permission="zone_special" action="import">
           <Button
             color="primary"

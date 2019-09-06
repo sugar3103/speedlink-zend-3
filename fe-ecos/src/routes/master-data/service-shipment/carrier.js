@@ -3,7 +3,6 @@ import { Container, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { List } from '../../../components/MasterData/ServiceShipment/Carrier';
 import { connect } from "react-redux";
-import { getCarrierList } from '../../../redux/actions';
 import AccessDenied from '../../../containers/Layout/accessDenied';
 import PageTitle from '../../../containers/Shared/PageTitle';
 
@@ -16,9 +15,6 @@ class Carrier extends Component {
     }
   }
 
-  componentDidMount() {
-    this.props.getCarrierList()
-  }
   componentDidUpdate(prevProps, prevState) {
 
     if (this.state.loadPage) {
@@ -47,9 +43,4 @@ const mapStateToProps = ({ carrier }) => {
 };
 
 
-export default injectIntl(connect(
-  mapStateToProps,
-  {
-    getCarrierList
-  }
-)(Carrier));
+export default injectIntl(connect(mapStateToProps, null)(Carrier));

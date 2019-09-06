@@ -3,7 +3,6 @@ import { Container, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import {List} from '../../../components/MasterData/NetworkPort/Hub';
 import { connect } from "react-redux";
-import { getHubList } from '../../../redux/actions';
 import AccessDenied from '../../../containers/Layout/accessDenied';
 
 class Hub extends Component {
@@ -12,9 +11,6 @@ class Hub extends Component {
     this.state = {
       loadPage: true
     }
-  }
-  componentDidMount() {
-    this.props.getHubList();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -43,9 +39,4 @@ const mapStateToProps = ({ hub }) => {
   };
 };
 
-export default injectIntl(connect(
-  mapStateToProps,
-  {
-    getHubList    
-  }
-)(Hub));
+export default injectIntl(connect(mapStateToProps, null)(Hub));

@@ -28,12 +28,6 @@ class List extends Component {
     this.props.getCarrierList();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.carrier.items.length !== this.props.carrier.items.length) {
-      this.setState({ selectedPageSize: nextProps.carrier.items.length < SELECTED_PAGE_SIZE ? SELECTED_PAGE_SIZE : nextProps.carrier.items.length })
-    }
-  }
-
   toggleModal = (e, type, status) => {
     e.stopPropagation();
     this.props.toggleCarrierModal(type, status);

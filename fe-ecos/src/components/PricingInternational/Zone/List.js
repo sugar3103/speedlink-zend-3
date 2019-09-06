@@ -31,12 +31,6 @@ class List extends Component {
     this.props.getZoneInternationalList();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.zone.items.length !== this.props.zone.items.length) {
-      this.setState({ selectedPageSize: nextProps.zone.items.length < SELECTED_PAGE_SIZE ? SELECTED_PAGE_SIZE : nextProps.zone.items.length })
-    }
-  }
-
   onDelete = (e, ids) => {
     e.stopPropagation();
     const { messages } = this.props.intl;

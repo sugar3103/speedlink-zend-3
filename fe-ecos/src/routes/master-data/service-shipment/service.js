@@ -3,7 +3,6 @@ import { Container, Row } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import { List } from '../../../components/MasterData/ServiceShipment/Service';
-import { getServiceList } from '../../../redux/actions';
 import AccessDenied from '../../../containers/Layout/accessDenied';
 import PageTitle from '../../../containers/Shared/PageTitle';
 class Service extends Component {
@@ -12,10 +11,6 @@ class Service extends Component {
     this.state = {
       loadPage: true
     }
-  }
-
-  componentDidMount() {
-    this.props.getServiceList()
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -46,11 +41,5 @@ const mapStateToProps = ({ service }) => {
   };
 };
 
-
-export default injectIntl(connect(
-  mapStateToProps,
-  {
-    getServiceList    
-  }
-)(Service));
+export default injectIntl(connect(mapStateToProps, null)(Service));
 
