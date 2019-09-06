@@ -75,7 +75,7 @@ class SpecialZoneRepository extends EntityRepository
         } catch (QueryException $e) {
             return [];
         }
-
+        var_dump($queryBuilder->getQuery()->getSql()); die;
         return $queryBuilder->getQuery()->execute();
     }
 
