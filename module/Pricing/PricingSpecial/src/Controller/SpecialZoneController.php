@@ -129,6 +129,7 @@ class SpecialZoneController extends CoreController
                     if ($form->isValid()) {
                         // get filtered and validated data
                         $data = $form->getData();
+                        $data['id'] = $area->getId();
                         $preData = $this->entityManager->getRepository(SpecialZone::class)->checkExitWithAddress($data);
                         if (isset($preData[0]) && ($preData[0]['id'] != $area->getId())) {
                             $this->error_code = 0;
