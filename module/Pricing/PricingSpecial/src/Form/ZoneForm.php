@@ -1,20 +1,19 @@
 <?php
 namespace PricingSpecial\Form;
 
-use PricingSpecial\Entity\SpecialZone;
-use PricingSpecial\Validator\SpecialZoneExistsValidator;
 use Doctrine\ORM\EntityManager;
-use Zend\Filter\ToInt;
+use PricingSpecial\Entity\SpecialZone;
 use Zend\Filter\StringTrim;
+use Zend\Filter\ToInt;
+use Zend\Form\Form;
 use Zend\Validator\StringLength;
 
-use Zend\Form\Form;
-
-class ZoneForm extends Form {
+class ZoneForm extends Form
+{
 /**
-     * Scenario ('create' or 'update')
-     * @var string
-     */
+ * Scenario ('create' or 'update')
+ * @var string
+ */
     private $scenario;
 
     /**
@@ -33,7 +32,7 @@ class ZoneForm extends Form {
     {
         // Define form name.
         parent::__construct('domestic-zone-form');
-        
+
         // Save parameters for internal use.
         $this->scenario = $scenario;
         $this->entityManager = $entityManager;
@@ -42,10 +41,11 @@ class ZoneForm extends Form {
         $this->addInputFilter();
     }
 
-     /**
+    /**
      * This method creates input filter (used for form filtering/validation).
      */
-    private function addInputFilter() {
+    private function addInputFilter()
+    {
         // Create main input filter.
         $inputFilter = $this->getInputFilter();
         // Add input for "username" field.
@@ -54,18 +54,18 @@ class ZoneForm extends Form {
             'required' => true,
             'filters' => [
                 [
-                    'name' => StringTrim::class
-                ]
+                    'name' => StringTrim::class,
+                ],
             ],
             'validators' => [
                 [
                     'name' => StringLength::class,
                     'options' => [
                         'min' => 2,
-                        'max' => 50
-                    ]
-                ]                
-            ]
+                        'max' => 50,
+                    ],
+                ],
+            ],
         ]);
 
         $inputFilter->add([
@@ -73,77 +73,76 @@ class ZoneForm extends Form {
             'required' => true,
             'filters' => [
                 [
-                    'name' => StringTrim::class
-                ]
+                    'name' => StringTrim::class,
+                ],
             ],
             'validators' => [
                 [
                     'name' => StringLength::class,
                     'options' => [
                         'min' => 2,
-                        'max' => 50
-                    ]
-                ]
-                
-            ]
-        ]);    
-        
-        $inputFilter->add([
-            'name'  => 'customer_id',
-            'required'  => true,
-            'filters' => [
-                [
-                    'name' => ToInt::class
-                ]
-            ] 
-        ]);
-        $inputFilter->add([
-            'name'  => 'special_area_id',
-            'required'  => true,
-            'filters' => [
-                [
-                    'name' => ToInt::class
-                ]
-            ] 
+                        'max' => 50,
+                    ],
+                ],
+
+            ],
         ]);
 
         $inputFilter->add([
-            'name'  => 'from_city',
-            'required'  => true,
+            'name' => 'customer_id',
+            'required' => true,
             'filters' => [
                 [
-                    'name' => ToInt::class
-                ]
-            ] 
+                    'name' => ToInt::class,
+                ],
+            ],
+        ]);
+        $inputFilter->add([
+            'name' => 'special_area_id',
+            'required' => true,
+            'filters' => [
+                [
+                    'name' => ToInt::class,
+                ],
+            ],
         ]);
 
-        
         $inputFilter->add([
-            'name'  => 'to_city',
-            'required'  => true,
+            'name' => 'from_city',
+            'required' => true,
             'filters' => [
                 [
-                    'name' => ToInt::class
-                ]
-            ] 
+                    'name' => ToInt::class,
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name' => 'to_city',
+            'required' => true,
+            'filters' => [
+                [
+                    'name' => ToInt::class,
+                ],
+            ],
         ]);
         $inputFilter->add([
-            'name'  => 'to_district',
-            'required'  => true,
+            'name' => 'to_district',
+            'required' => true,
             'filters' => [
                 [
-                    'name' => ToInt::class
-                ]
-            ] 
+                    'name' => ToInt::class,
+                ],
+            ],
         ]);
         $inputFilter->add([
-            'name'  => 'to_ward',
-            'required'  => true,
+            'name' => 'to_ward',
+            'required' => true,
             'filters' => [
                 [
-                    'name' => ToInt::class
-                ]
-            ] 
+                    'name' => ToInt::class,
+                ],
+            ],
         ]);
     }
 }

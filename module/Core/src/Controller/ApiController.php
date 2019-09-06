@@ -108,6 +108,7 @@ class ApiController extends AbstractRestfulController
 
             return $response;
         }
+        
         if (!$isAuthorizationRequired) {
             return;
         }
@@ -161,7 +162,7 @@ class ApiController extends AbstractRestfulController
             $response->setStatusCode(400);
             $jsonModelArr = ['status' => 'NOK', 'result' => ['error' => 'Require copy this file vender\multidots\zf3-rest-api\config\restapi.global.php and paste to root config\autoload\restapi.global.php']];
         }
-
+        
         $response->getHeaders()->addHeaderLine('Content-Type', 'application/json');
         $view = new JsonModel($jsonModelArr);
         $response->setContent($view->serialize());
