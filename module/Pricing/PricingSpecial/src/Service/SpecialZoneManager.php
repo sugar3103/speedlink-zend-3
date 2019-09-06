@@ -218,6 +218,21 @@ class SpecialZoneManager
         try {
             foreach ($datas as $data) {
                 $fromCity = $this->entityManager->getRepository(City::class)->findOneBy(['name' => $data['from_city']]);
+                $customer = $this->entityManager->getRepository(Customer::class)->findOneBy([
+                    'customer_no' => $data['account_no'],
+                    'status' => 1,
+                    'is_deleted' => 0
+                ]);
+                $special_area = null;
+                if($customer) {
+                    $special_area = $this->entityManager->getRepository(SpecialArea::class)->findOneBy([
+                        'name' => $data['area_name'],
+                        'customer' => $customer,
+                        'is_deleted' => 0
+                    ]);    
+                }
+                
+                
                 $toAddress = $this->entityManager->getRepository(SpecialZone::class)->vertifyAddress(
                     $data['to_city'],
                     $data['to_district'],
@@ -227,12 +242,10 @@ class SpecialZoneManager
                 $ormPaginator->setUseOutputWalkers(false);
                 //get special area list
                 $toAddresses = $ormPaginator->getIterator()->getArrayCopy();
-                if (isset($toAddresses[0]) && $fromCity) {
+                if (isset($toAddresses[0]) && $fromCity && $customer && $special_area) {
                     $idToCity = $toAddresses[0]['city_id'];
                     $idToDistrict = $toAddresses[0]['district_id'];
                     $idToWard = $toAddresses[0]['ward_id'];
-                    $customer = $this->entityManager->getRepository(Customer::class)->findOneBy(['customer_no' => $data['account_no']]);
-                    $special_area = $this->entityManager->getRepository(SpecialArea::class)->findOneBy(['name' => $data['area_name']]);
                     
                     $specialZone = $this->entityManager->getRepository(SpecialZone::class)->checkExit([
                         'name' => $data['name'],
