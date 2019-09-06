@@ -332,7 +332,7 @@ const mapStateToProps = (state, props) => {
 
   let disableApprovalStatus = true;
   let disableApprovalBy = false;
-  if (currentUser && itemEditting && currentUser.id === itemEditting.approval_by) {
+  if (currentUser && itemEditting && currentUser.id === itemEditting.approved_by) {
     disableApprovalStatus = false;
   }
   if (itemEditting && itemEditting.approval_status === 1) {
