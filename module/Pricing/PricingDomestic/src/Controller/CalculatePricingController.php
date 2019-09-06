@@ -310,7 +310,7 @@ class CalculatePricingController extends CoreController {
         // Price Over
         $priceOver = $this->entityManager->getRepository(DomesticRangeWeight::class)->getRangeWeightOver($whereRange);
         $priceDataOver = [];
-        if (count($priceOver) > 0) {
+        if (!empty($priceOver)) {
             $priceDataOver = $this->entityManager->getRepository(DomesticPricingData::class)->findOneBy([
                 'is_deleted' => 0,
                 'domestic_pricing' => $pricing['id'],
@@ -339,7 +339,7 @@ class CalculatePricingController extends CoreController {
         // Price Normal
         $priceNormal = $this->entityManager->getRepository(DomesticRangeWeight::class)->getRangeWeightNormal($whereRange);
         $priceDataNormal = [];
-        if (count($priceNormal) > 0) {
+        if (!empty($priceNormal)) {
             $priceDataNormal = $this->entityManager->getRepository(DomesticPricingData::class)->findOneBy([
                 'is_deleted' => 0,
                 'domestic_pricing' => $pricing['id'],
