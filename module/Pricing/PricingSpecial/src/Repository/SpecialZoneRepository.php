@@ -56,7 +56,7 @@ class SpecialZoneRepository extends EntityRepository
                     AND sz.to_city = :to_city_id
                     AND sz.to_district = :to_district_id
                     AND sz.to_ward = :to_ward_id
-                    AND sz.customer = :customer_id,
+                    AND sz.customer = :customer_id
                     AND sz.special_area_id = :special_area_id
                     AND sz.id <> :id');
             if (isset($data['id'])) {
