@@ -242,7 +242,7 @@ class SpecialZoneManager
                 $ormPaginator->setUseOutputWalkers(false);
                 //get special area list
                 $toAddresses = $ormPaginator->getIterator()->getArrayCopy();
-                if (isset($toAddresses[0]) && $fromCity && $customer && $special_area) {
+                if (isset($toAddresses[0]) && $fromCity && $customer && $special_area && $data['name'] && $data['name_en']) {
                     $idToCity = $toAddresses[0]['city_id'];
                     $idToDistrict = $toAddresses[0]['district_id'];
                     $idToWard = $toAddresses[0]['ward_id'];
