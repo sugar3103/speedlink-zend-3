@@ -48,6 +48,7 @@ class SpecialZoneRepository extends EntityRepository
     public function checkExitWithAddress($data)
     {
         $entityManager = $this->getEntityManager();
+        var_dump($data);die;
         try {
             $queryBuilder = $entityManager->createQueryBuilder();
             $queryBuilder->select('sz.id')->from(SpecialZone::class, 'sz')
