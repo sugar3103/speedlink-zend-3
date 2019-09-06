@@ -55,11 +55,14 @@ class SpecialZoneRepository extends EntityRepository
                     AND sz.to_city = :to_city_id
                     AND sz.to_district = :to_district_id
                     AND sz.to_ward = :to_ward_id
-                    AND sz.customer = :customer_id');
+                    AND sz.customer = :customer_id
+                    AND sz.id IS NOT :id');
             if (isset($data['id'])) {
-                $queryBuilder->where('AND sz.id IS NOT :id')->setParameter("id", $data['id']);
+                $queryBuilder->setParameter("id", $data['id']);
+            } else {
+                $queryBuilder->setParameter("id", 0);
             }
-            
+
             $queryBuilder->setParameter("from_city_id", $data['from_city'])
                 ->setParameter("to_city_id", $data['to_city'])
                 ->setParameter("to_district_id", $data['to_district'])
