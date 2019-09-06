@@ -295,7 +295,8 @@ class SpecialZoneController extends CoreController
                 if($value['name_en'] != "") {
                     unset($error['name_en']);
                 }
-                
+                $idCustomer = 0;
+                $idArea = 0;
                 $accountNo = $this->entityManager->getRepository(\Customer\Entity\Customer::class)->findOneBy([
                     'customer_no' => $value['account_no'],
                     'status' => 1,
@@ -303,6 +304,7 @@ class SpecialZoneController extends CoreController
 
                 if ($accountNo) {
                     unset($error['customer']);
+                    $idCustomer = $accountNo->getId();
                     $value['customer_id'] = $accountNo->getId();
                     $value['customer_name'] = $accountNo->getName();
                     $special_area_name = $this->entityManager->getRepository(\PricingSpecial\Entity\SpecialArea::class)->findOneBy([
@@ -314,19 +316,21 @@ class SpecialZoneController extends CoreController
                     if ($special_area_name) {
                         unset($error['area']);
                         $value['area_id'] = $special_area_name->getId();
+                        $idArea = $special_area_name->getId();
                     }
                 } else {
                     $value['customer_id'] = 0;
                     $value['customer_name'] = $value['account_no'];
                 }
-
-
                 
+                $idFromCity = 0;
                 $fromCity = $this->entityManager->getRepository(City::class)->findOneBy([
                     'name' => $value['from_city'],
                     'is_deleted' => 0,
                 ]);
+
                 if ($fromCity) {
+                    $idFromCity = $fromCity->getId();
                     unset($error['fromCity']);
                 }
 
@@ -336,6 +340,10 @@ class SpecialZoneController extends CoreController
                     $value['to_ward']
                 );
 
+                $idToCity = 0;
+                $idToDistrict = 0;
+                $idToWard = 0;
+
                 if ($toAddress) {
                     $ormPaginator = new ORMPaginator($toAddress, true);
 
@@ -344,6 +352,9 @@ class SpecialZoneController extends CoreController
 
                     $toAddresses = $ormPaginator->getIterator()->getArrayCopy();
                     if (isset($toAddresses[0])) {
+                        $idToCity = $toAddresses[0]['city_id'];
+                        $idToDistrict = $toAddresses[0]['district_id'];
+                        $idToWard = $toAddresses[0]['ward_id'];
                         unset($error['toAddress']);
                     }
 
