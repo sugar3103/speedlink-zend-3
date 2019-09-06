@@ -130,7 +130,7 @@ class SpecialZoneController extends CoreController
                         // get filtered and validated data
                         $data = $form->getData();
                         $preData = $this->entityManager->getRepository(SpecialZone::class)->checkExitWithAddress($data);
-                        if ($preData[0]['id'] != $area->getId()) {
+                        if (isset($preData[0]) && ($preData[0]['id'] != $area->getId())) {
                             $this->error_code = 0;
                             $this->apiResponse['message'] = "SPECIAL_ZONE_HAD_BEEN_EXISTED";
                         } else {
@@ -278,72 +278,49 @@ class SpecialZoneController extends CoreController
             $Totalrow = count($data);
             $dataResult = array_slice($data, $start, $lenght);
 
-            $customers = [];
-            $area = [];
-            $fromCity = [];
-            $toCity = [];
-            $toDistrict = [];
-            $toWard = [];
-
-            for ($i = 0; $i < count($dataResult); $i++) {
-                if ($dataResult[$i]['id']) {
-                    if (!in_array($dataResult[$i]['account_no'], $customers)) {
-                        $customers[] = $data[$i]['account_no'];
-                    }
-
-                    if (!in_array($dataResult[$i]['area_name'], $area)) {
-                        $area[] = $dataResult[$i]['area_name'];
-                    }
-                }
-            }
-
-            //Get Custom
-            if ($customers) {
-                $customers = $this->entityManager->getRepository(Customer::class)->findBy([
-                    'customer_no' => $customers,
-                ]);
-            }
-
-            if ($area) {
-                $areas = $this->entityManager->getRepository(SpecialArea::class)->findBy([
-                    'name' => $area,
-                    'is_deleted' => 0,
-                ]);
-            }
-
             for ($i = 0; $i < count($dataResult); $i++) {
                 $error = false;
                 $value = $dataResult[$i];
                 $error = array(
+                    'name' => 'SPECIAL_IMPORT_NAME_NOT_NULL',
+                    'name_en' => 'SPECIAL_IMPORT_NAME_EN_NOT_NULL',                    
                     'customer' => 'SPECIAL_IMPORT_CUSTOMER_NOT_EXITS',
                     'area' => 'SPECIAL_IMPORT_AREA_NOT_EXITS',
                     'fromCity' => 'SPECIAL_IMPORT_FROM_CITY_NOT_EXITS',
                     'toAddress' => 'SPECIAL_IMPORT_TO_ADDRESS_NOT_EXITS',
                 );
-                $idCustomer = 0;
-                foreach ($customers as $customer) {
-                    if ($customer->getCustomerNo() === strval($value['account_no'])) {
-                        $idCustomer = $customer->getId();
-                        unset($error['customer']);
-                        break;
-                    }
-                }
-                $idArea = 0;
-                foreach ($areas as $area) {
-                    if ($area->getName() === $value['area_name']) {
-                        $idArea = $area->getId();
+
+                $accountNo = $this->entityManager->getRepository(\Customer\Entity\Customer::class)->findOneBy([
+                    'customer_no' => $value['account_no'],
+                    'status' => 1,
+                    'is_deleted' => 0]);
+
+                if ($accountNo) {
+                    unset($error['customer']);
+                    $value['customer_id'] = $accountNo->getId();
+                    $value['customer_name'] = $accountNo->getName();
+                    $special_area_name = $this->entityManager->getRepository(\PricingSpecial\Entity\SpecialArea::class)->findOneBy([
+                        'name' => $value['area_name'],
+                        'customer' => $accountNo,
+                        'is_deleted' => 0,
+                    ]);
+    
+                    if ($special_area_name) {
                         unset($error['area']);
-                        break;
+                        $value['area_id'] = $special_area_name->getId();
                     }
+                } else {
+                    $value['customer_id'] = 0;
+                    $value['customer_name'] = $value['account_no'];
                 }
 
-                $idFromCity = 0;
+
+                
                 $fromCity = $this->entityManager->getRepository(City::class)->findOneBy([
                     'name' => $value['from_city'],
                     'is_deleted' => 0,
                 ]);
                 if ($fromCity) {
-                    $idFromCity = $fromCity->getId();
                     unset($error['fromCity']);
                 }
 
@@ -361,9 +338,6 @@ class SpecialZoneController extends CoreController
 
                     $toAddresses = $ormPaginator->getIterator()->getArrayCopy();
                     if (isset($toAddresses[0])) {
-                        $idToCity = $toAddresses[0]['city_id'];
-                        $idToDistrict = $toAddresses[0]['district_id'];
-                        $idToWard = $toAddresses[0]['ward_id'];
                         unset($error['toAddress']);
                     }
 
@@ -389,13 +363,7 @@ class SpecialZoneController extends CoreController
                     $value['error'] = $error;
                 }
 
-                $dataResult[$i] = $value;
-                $data[$i]['id_customer'] = $idCustomer;
-                $data[$i]['id_special_area'] = $idArea;
-                $data[$i]['id_from_city'] = $idFromCity;
-                $data[$i]['id_to_city'] = $idToCity;
-                $data[$i]['id_to_district'] = $idToDistrict;
-                $data[$i]['id_to_ward'] = $idToWard;
+                $dataResult[$i] = $value;            
             }
 
             $this->apiResponse = array(
