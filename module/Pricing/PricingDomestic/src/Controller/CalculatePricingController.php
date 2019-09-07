@@ -269,7 +269,7 @@ class CalculatePricingController extends CoreController {
             ]);
             if (!empty($customer)) {
                 $wherePricePrivate = $wherePrice;
-                $wherePricePrivate['customer_id'] = $customerId;
+                $wherePricePrivate['customer_id'] = $customer->getId();
                 $pricing = $this->entityManager->getRepository(SpecialPricing::class)->getPriceId($wherePricePrivate);
                 if (empty($pricing)) {
                     $pricing = $this->entityManager->getRepository(DomesticPricing::class)->getPriceId($wherePricePrivate);
