@@ -188,16 +188,16 @@ class SpecialRangeWeightRepository extends EntityRepository
                 ->andWhere('rw.carrier = :carrier_id')
                 ->andWhere('rw.category = :category_id')
                 ->andWhere('rw.service = :service_id')
-                ->andWhere('rw.special_area_id = :special_area_id')
+                ->andWhere('rw.special_area = :special_area_id')
                 ->andWhere('rw.shipment_type = :shipment_type_id')
                 ->andWhere('rw.customer = :customer_id');
             $queryBuilder->setParameters($where);
 
             return $queryBuilder->getQuery()->getOneOrNullResult();
         } catch (QueryException $e) {
-            return [];
+            return null;
         } catch (NonUniqueResultException $e) {
-            return [];
+            return null;
         }
     }
 
@@ -217,20 +217,19 @@ class SpecialRangeWeightRepository extends EntityRepository
                 ->andWhere('rw.status = 1')
                 ->andWhere('rw.from < :weight')
                 ->andWhere('rw.to >= :weight')
-                ->andWhere('rw.to = 0')
                 ->andWhere('rw.carrier = :carrier_id')
                 ->andWhere('rw.category = :category_id')
                 ->andWhere('rw.service = :service_id')
-                ->andWhere('rw.special_area_id = :special_area_id')
+                ->andWhere('rw.special_area = :special_area_id')
                 ->andWhere('rw.shipment_type = :shipment_type_id')
                 ->andWhere('rw.customer = :customer_id');
             $queryBuilder->setParameters($where);
 
             return $queryBuilder->getQuery()->getOneOrNullResult();
         } catch (QueryException $e) {
-            return [];
+            return null;
         } catch (NonUniqueResultException $e) {
-            return [];
+            return null;
         }
     }
 }

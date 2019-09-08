@@ -196,6 +196,7 @@ class CalculatePricingController extends CoreController {
             'totalRas' => $pricing['total_ras'],
             'conWeight' => $conWeight,
             'volWeight' => $volWeight,
+            'isPrivate' => $pricing['is_private'],
         ];
         $result = $this->calculatePrice($pricingOver, $pricingNormal, $where);
         return $result;
@@ -274,11 +275,11 @@ class CalculatePricingController extends CoreController {
                 if (empty($pricing)) {
                     $pricing = $this->entityManager->getRepository(DomesticPricing::class)->getPriceId($wherePricePrivate);
                     if (!empty($pricing)) {
-                        $pricing['customer_id'] = $customerId;
+                        $pricing['customer_id'] = $customer->getId();
                     }
                 } else {
                     $pricing['is_private'] = 2;
-                    $pricing['customer_id'] = $customerId;
+                    $pricing['customer_id'] = $customer->getId();
                 }
             }
         }
@@ -399,13 +400,24 @@ class CalculatePricingController extends CoreController {
         }
 
         // Type and Value bill Return
-        if (!empty($priceDataOver)) {
-            $typeBill = $priceDataOver->getType();
-            $typeValue = $priceDataOver->getTypeValue();
+        if ($param['isPrivate'] === 2) {
+            if (!empty($priceDataOver)) {
+                $typeBill = $priceDataOver->getReturnType();
+                $typeValue = $priceDataOver->getReturnValue();
+            } else {
+                $typeBill = $priceDataNormal->getReturnType();
+                $typeValue = $priceDataNormal->getReturnValue();
+            }
         } else {
-            $typeBill = $priceDataNormal->getType();
-            $typeValue = $priceDataNormal->getTypeValue();
+            if (!empty($priceDataOver)) {
+                $typeBill = $priceDataOver->getType();
+                $typeValue = $priceDataOver->getTypeValue();
+            } else {
+                $typeBill = $priceDataNormal->getType();
+                $typeValue = $priceDataNormal->getTypeValue();
+            }
         }
+
 
         // Pick RAS
         if ($param['pickupRas'] == 1) {
@@ -475,8 +487,8 @@ class CalculatePricingController extends CoreController {
 
         // Price Over
         $priceOver = $this->entityManager->getRepository(SpecialRangeWeight::class)->getRangeWeightOver($whereRange);
-        $priceDataOver = [];
-        if (count($priceOver) > 0) {
+        $priceDataOver = null;
+        if (!empty($priceOver)) {
             $priceDataOver = $this->entityManager->getRepository(SpecialPricingData::class)->findOneBy([
                 'is_deleted' => 0,
                 'special_pricing' => $pricing['id'],
@@ -501,8 +513,8 @@ class CalculatePricingController extends CoreController {
 
         // Price Normal
         $priceNormal = $this->entityManager->getRepository(SpecialRangeWeight::class)->getRangeWeightNormal($whereRange);
-        $priceDataNormal = [];
-        if (count($priceNormal) > 0) {
+        $priceDataNormal = null;
+        if (!empty($priceNormal)) {
             $priceDataNormal = $this->entityManager->getRepository(SpecialPricingData::class)->findOneBy([
                 'is_deleted' => 0,
                 'special_pricing' => $pricing['id'],
