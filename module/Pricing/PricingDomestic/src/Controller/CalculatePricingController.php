@@ -445,7 +445,6 @@ class CalculatePricingController extends CoreController {
     }
 
     /* Special Pricing */
-
     private function getAreaSpecial($pickupCity, $deliveryCity, $deliveryDistrict, $deliveryWard)
     {
         $where = [ 'is_deleted' => 0,  'status' => 1, 'name' => $pickupCity ];
