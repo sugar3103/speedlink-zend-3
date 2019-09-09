@@ -158,15 +158,16 @@ class CalculatePricingController extends CoreController {
          */
         if ($pricing['is_private'] === 2) {
             $areaType = $this->getAreaSpecial($dataList['pickupCity'], $dataList['deliveryCity'], $dataList['deliveryDistrict'], $dataList['deliveryWard']);
+            $where = $dataList['weight'];
 
             // Pricing Over
             $pricingOver = $this->getOverSpecialRangeWeight($shipmentType, $pricing, $areaType, $dataList['weight']);
             if (!empty($pricingOver['info'])) {
-                $where['weight'] = $pricingOver['info']['from'];
+                $where = $pricingOver['info']['from'];
             }
 
             // Pricing Normal
-            $pricingNormal = $this->getNormalSpecialRangeWeight($shipmentType, $pricing, $areaType, $dataList['weight']);
+            $pricingNormal = $this->getNormalSpecialRangeWeight($shipmentType, $pricing, $areaType, $where);
         } else {
             $areaType = $this->getAreaStandard($dataList['pickupCity'], $dataList['deliveryCity']);
 
