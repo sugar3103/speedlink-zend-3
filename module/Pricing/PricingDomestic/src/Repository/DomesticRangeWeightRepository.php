@@ -213,9 +213,9 @@ class DomesticRangeWeightRepository extends EntityRepository
 
             return $queryBuilder->getQuery()->getOneOrNullResult();
         } catch (QueryException $e) {
-            return [];
+            return null;
         } catch (NonUniqueResultException $e) {
-            return [];
+            return null;
         }
     }
 
@@ -251,9 +251,9 @@ class DomesticRangeWeightRepository extends EntityRepository
 
             return $queryBuilder->getQuery()->getOneOrNullResult();
         } catch (QueryException $e) {
-            return [];
+            return null;
         } catch (NonUniqueResultException $e) {
-            return [];
+            return null;
         }
     }
 }
