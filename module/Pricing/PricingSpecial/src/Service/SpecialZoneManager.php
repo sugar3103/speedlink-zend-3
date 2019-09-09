@@ -250,8 +250,7 @@ class SpecialZoneManager
                     $specialZone = $this->entityManager->getRepository(SpecialZone::class)->checkExit([
                         'name' => $data['name'],
                         'name_en' => $data['name_en'],
-                        'customer' => $customer->getId(),
-                        'special_area' => $special_area->getId(),
+                        'customer' => $customer->getId(),                        
                         'from_city' => $fromCity->getId(),
                         'to_city' => $idToCity,
                         'to_district' => $idToDistrict,
