@@ -26,8 +26,7 @@ class SpecialZoneRepository extends EntityRepository
                     AND sz.to_city = :to_city_id
                     AND sz.to_district = :to_district_id
                     AND sz.to_ward = :to_ward_id
-                    AND sz.customer = :customer_id
-                    AND sz.special_area = :special_area_id
+                    AND sz.customer = :customer_id                    
                     AND sz.is_deleted = 0
                     ')
                 ->setParameter("name", $data['name'])
@@ -36,8 +35,7 @@ class SpecialZoneRepository extends EntityRepository
                 ->setParameter("to_city_id", $data['to_city'])
                 ->setParameter("to_district_id", $data['to_district'])
                 ->setParameter("to_ward_id", $data['to_ward'])
-                ->setParameter("customer_id", $data['customer'])
-                ->setParameter("special_area_id", $data['special_area']);
+                ->setParameter("customer_id", $data['customer']);
 
         } catch (QueryException $e) {
             return [];
