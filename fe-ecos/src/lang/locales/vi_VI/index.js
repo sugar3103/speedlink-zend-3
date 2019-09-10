@@ -1,5 +1,6 @@
 import * as address from './address';
 import * as auth from './auth';
+import * as customer from './customer';
 import * as dashboard from './dashboard';
 import * as global from './global';
 import * as menu from './menu';
@@ -13,6 +14,7 @@ import * as pricing_international from './pricing_international';
 let viMessages = {
   address,
   auth,
+  customer,
   dashboard,
   global,
   menu,

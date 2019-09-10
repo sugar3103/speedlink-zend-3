@@ -19,6 +19,12 @@ export default {
           icon: 'lnr lnr-dice',
         },
         {
+          id: 'customer',
+          title: 'menu.customer',
+          route: '/master-data/customer',
+          icon: 'lnr lnr-dice',
+        },
+        {
           id: 'address',
           title: 'menu.address',
           route: '/master-data/address',
