@@ -161,7 +161,7 @@ class CalculatePricingController extends CoreController {
             $where = $dataList['weight'];
 
             // Pricing Over
-            $pricingOver = $this->getOverSpecialRangeWeight($shipmentType, $pricing, $areaType, $dataList['weight']);
+            $pricingOver = $this->getOverSpecialRangeWeight($shipmentType, $pricing, $areaType, $where);
             if (!empty($pricingOver['info'])) {
                 $where = $pricingOver['info']['from'];
             }
@@ -185,9 +185,9 @@ class CalculatePricingController extends CoreController {
         }
 
 
-        if (empty($pricingOver['info']) && empty($pricingNormal['info']))
+        if (empty($pricingNormal['info']))
             return ['error' => true, 'message' => "Range weight not found"];
-        if (empty($pricingOver['data']) && empty($pricingNormal['data']))
+        if (empty($pricingNormal['data']))
             return ['error' => true, 'message' => 'Pricing incorrect'];
 
         /* Calculate Price */
@@ -334,7 +334,7 @@ class CalculatePricingController extends CoreController {
             'shipment_type_id' => $shipmentType->getId(),
             'is_ras' => $where['is_ras']
         ];
-        if ($pricing['customer_id'] === 1) {
+        if ($pricing['is_private'] === 1) {
             $whereRange['customer_id'] = $pricing['customer_id'];
         }
 
