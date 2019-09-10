@@ -77,8 +77,8 @@ class PricingSpecialManager
             $pricings = $ormPaginator->getIterator()->getArrayCopy();
 
             foreach ($pricings as &$pricing) {
-                // $pricing['effected_date'] = ($pricing['effected_date']) ? Utils::checkDateFormat($pricing['effected_date'], 'D M d Y H:i:s \G\M\T+0700') : '';
-                // $pricing['expired_date'] = ($pricing['expired_date']) ? Utils::checkDateFormat($pricing['expired_date'], 'D M d Y H:i:s \G\M\T+0700') : '';
+                $pricing['effected_date'] = ($pricing['effected_date']) ? Utils::checkDateFormat($pricing['effected_date'], 'D M d Y H:i:s \G\M\T+0700') : '';
+                $pricing['expired_date'] = ($pricing['expired_date']) ? Utils::checkDateFormat($pricing['expired_date'], 'D M d Y H:i:s \G\M\T+0700') : '';
 
                 $pricing['created_at'] = ($pricing['created_at']) ? Utils::checkDateFormat($pricing['created_at'], 'D M d Y H:i:s \G\M\T+0700') : '';
                 $pricing['updated_at'] = ($pricing['updated_at']) ? Utils::checkDateFormat($pricing['updated_at'], 'D M d Y H:i:s \G\M\T+0700') : '';
