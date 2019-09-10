@@ -31,14 +31,14 @@ class SpecialPricing
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="effected_date", type="datetime", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="effected_date", type="date", precision=0, scale=0, nullable=true, unique=false)
      */
     private $effected_date;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="expired_date", type="datetime", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="expired_date", type="date", precision=0, scale=0, nullable=true, unique=false)
      */
     private $expired_date;
 
