@@ -361,7 +361,6 @@ class CalculatePricingController extends CoreController {
 
         // Case Over
         $feeOver = 0;
-        var_dump($priceOver);
         if (!empty($priceDataOver)) {
             $weightOver = $param['weight'] - $priceOver['from'];
             $param['weight'] = $priceOver['from'];
