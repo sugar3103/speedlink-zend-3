@@ -21,12 +21,12 @@ class Utils {
         $dateLast = '';
         $dateCheck = ! empty($dateAction) ? $dateAction->format('Y-m-d H:i:s') : '';
         if ($dateCheck) {
-            // $datetime = new \DateTime($dateCheck, new \DateTimeZone('UTC'));
-            // $laTime = new \DateTimeZone('Asia/Ho_Chi_Minh');
-            // $datetime->setTimezone($laTime);
-            // $dateLast = $datetime->format($dateFormat);
+            $datetime = new \DateTime($dateCheck, new \DateTimeZone('UTC'));
+            $laTime = new \DateTimeZone('Asia/Ho_Chi_Minh');
+            $datetime->setTimezone($laTime);
+            $dateLast = $datetime->format($dateFormat);
         }
-        return $dateAction;
+        return $dateLast;
     }
 
     /**
