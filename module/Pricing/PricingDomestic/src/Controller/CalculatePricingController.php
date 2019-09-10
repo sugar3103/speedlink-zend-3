@@ -382,10 +382,8 @@ class CalculatePricingController extends CoreController {
                 $feeOver = $priceDataOver->getValue();
             }
         }
-        var_dump($param);
 
         // Case Normal
-        var_dump($priceNormal);
         if ($priceNormal['calculate_unit'] === 1) {
             if ($priceNormal['round_up'] > 0) {
                 $whole = floor($param['weight']);
@@ -433,20 +431,6 @@ class CalculatePricingController extends CoreController {
         $feeService = $feePickUp + $feeOver + $feeNormal;
         $total = $feeService * 1.1;
 
-        var_dump([
-            'error' => false,
-            'message' => '',
-            'total' => $total,
-            'fee_service' => $feeService,
-            'fee_over' => $feeOver,
-            'fee_normal' => $feeNormal,
-            'fee_pickup_ras' => $feePickUp,
-            'type_bill' => $typeBill,
-            'type_value' => $typeValue,
-            'con_weight' => $param['conWeight'],
-            'vol_weight' => $param['volWeight'],
-        ]);
-exit();
         return [
             'error' => false,
             'message' => '',
