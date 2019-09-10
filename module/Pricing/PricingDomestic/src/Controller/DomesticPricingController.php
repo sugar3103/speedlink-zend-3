@@ -433,7 +433,7 @@ class DomesticPricingController extends CoreController {
                     }
                 }
             }
-            $feeNormal = $feeOver = ($dataList['weight'] / $priceNormal[0]['unit']) * $priceDataNormal->getValue();
+            $feeNormal = ($dataList['weight'] / $priceNormal[0]['unit']) * $priceDataNormal->getValue();
         } else {
             $feeNormal = $priceDataNormal->getValue();
         }

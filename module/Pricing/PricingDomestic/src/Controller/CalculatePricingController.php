@@ -361,6 +361,7 @@ class CalculatePricingController extends CoreController {
 
         // Case Over
         $feeOver = 0;
+        var_dump($priceOver);
         if (!empty($priceDataOver)) {
             $weightOver = $param['weight'] - $priceOver['from'];
             $param['weight'] = $priceOver['from'];
@@ -381,21 +382,23 @@ class CalculatePricingController extends CoreController {
                 $feeOver = $priceDataOver->getValue();
             }
         }
+        var_dump($param);
 
         // Case Normal
+        var_dump($priceNormal);
         if ($priceNormal['calculate_unit'] === 1) {
             if ($priceNormal['round_up'] > 0) {
                 $whole = floor($param['weight']);
                 $fraction = $param['weight'] - $whole;
                 if ($fraction > 0) {
-                    if ($fraction <= $priceOver['round_up']) {
-                        $param['weight'] = $whole + $priceOver['round_up'];
+                    if ($fraction <= $priceNormal['round_up']) {
+                        $param['weight'] = $whole + $priceNormal['round_up'];
                     } else {
                         $param['weight'] = $whole + 1;
                     }
                 }
             }
-            $feeNormal = $feeOver = ($param['weight'] / $priceNormal['unit']) * $priceDataNormal->getValue();
+            $feeNormal = ($param['weight'] / $priceNormal['unit']) * $priceDataNormal->getValue();
         } else {
             $feeNormal = $priceDataNormal->getValue();
         }
@@ -430,6 +433,20 @@ class CalculatePricingController extends CoreController {
         $feeService = $feePickUp + $feeOver + $feeNormal;
         $total = $feeService * 1.1;
 
+        var_dump([
+            'error' => false,
+            'message' => '',
+            'total' => $total,
+            'fee_service' => $feeService,
+            'fee_over' => $feeOver,
+            'fee_normal' => $feeNormal,
+            'fee_pickup_ras' => $feePickUp,
+            'type_bill' => $typeBill,
+            'type_value' => $typeValue,
+            'con_weight' => $param['conWeight'],
+            'vol_weight' => $param['volWeight'],
+        ]);
+exit();
         return [
             'error' => false,
             'message' => '',
