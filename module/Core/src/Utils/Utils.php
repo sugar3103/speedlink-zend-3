@@ -24,7 +24,7 @@ class Utils {
             // $datetime = new \DateTime($dateCheck, new \DateTimeZone('UTC'));
             // $laTime = new \DateTimeZone('Asia/Ho_Chi_Minh');
             // $datetime->setTimezone($laTime);
-            $dateLast = $datetime->format($dateFormat);
+            // $dateLast = $datetime->format($dateFormat);
         }
         return $dateAction;
     }
