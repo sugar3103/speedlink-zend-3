@@ -131,8 +131,7 @@ class UserController extends CoreController {
         if ($this->getRequest()->isPost()) {
               $data = $this->getRequestData(); 
               $user = $this->tokenPayload;
-              $_user = $this->entityManager->getRepository(User::class)
-                 ->findOneById($data['id']);
+              $_user = $this->entityManager->getRepository(User::class)->findOneById($data['id']);
             if($_user) {
                 $this->userManager->deleteUser($_user);
                 $this->error_code = 1;

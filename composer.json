@@ -43,7 +43,7 @@
                         "ServiceShipment\\": "module\/MasterData\/ServiceShipment\/src\/",
                         "NetworkPort\\": "module\/MasterData\/NetworkPort\/src\/",
                         "Status\\": "module\/MasterData\/Status\/src\/",
-                        "Customer\\": "module\/Pricing\/Customer\/src\/",
+                        "Customer\\": "module\/MasterData\/Customer\/src\/",
                         "RangeWeight\\": "module\/Pricing\/RangeWeight\/src\/",
                         "ZoneCode\\": "module\/Pricing\/ZoneCode\/src\/",
                         "Management\\": "module\/Pricing\/Management\/src\/",
