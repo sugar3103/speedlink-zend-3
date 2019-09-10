@@ -158,15 +158,16 @@ class CalculatePricingController extends CoreController {
          */
         if ($pricing['is_private'] === 2) {
             $areaType = $this->getAreaSpecial($dataList['pickupCity'], $dataList['deliveryCity'], $dataList['deliveryDistrict'], $dataList['deliveryWard']);
+            $where = $dataList['weight'];
 
             // Pricing Over
-            $pricingOver = $this->getOverSpecialRangeWeight($shipmentType, $pricing, $areaType, $dataList['weight']);
+            $pricingOver = $this->getOverSpecialRangeWeight($shipmentType, $pricing, $areaType, $where);
             if (!empty($pricingOver['info'])) {
-                $where['weight'] = $pricingOver['info']['from'];
+                $where = $pricingOver['info']['from'];
             }
 
             // Pricing Normal
-            $pricingNormal = $this->getNormalSpecialRangeWeight($shipmentType, $pricing, $areaType, $dataList['weight']);
+            $pricingNormal = $this->getNormalSpecialRangeWeight($shipmentType, $pricing, $areaType, $where);
         } else {
             $areaType = $this->getAreaStandard($dataList['pickupCity'], $dataList['deliveryCity']);
 
@@ -184,9 +185,9 @@ class CalculatePricingController extends CoreController {
         }
 
 
-        if (empty($pricingOver['info']) && empty($pricingNormal['info']))
+        if (empty($pricingNormal['info']))
             return ['error' => true, 'message' => "Range weight not found"];
-        if (empty($pricingOver['data']) && empty($pricingNormal['data']))
+        if (empty($pricingNormal['data']))
             return ['error' => true, 'message' => 'Pricing incorrect'];
 
         /* Calculate Price */
@@ -333,7 +334,7 @@ class CalculatePricingController extends CoreController {
             'shipment_type_id' => $shipmentType->getId(),
             'is_ras' => $where['is_ras']
         ];
-        if ($pricing['customer_id'] === 1) {
+        if ($pricing['is_private'] === 1) {
             $whereRange['customer_id'] = $pricing['customer_id'];
         }
 
@@ -387,14 +388,14 @@ class CalculatePricingController extends CoreController {
                 $whole = floor($param['weight']);
                 $fraction = $param['weight'] - $whole;
                 if ($fraction > 0) {
-                    if ($fraction <= $priceOver['round_up']) {
-                        $param['weight'] = $whole + $priceOver['round_up'];
+                    if ($fraction <= $priceNormal['round_up']) {
+                        $param['weight'] = $whole + $priceNormal['round_up'];
                     } else {
                         $param['weight'] = $whole + 1;
                     }
                 }
             }
-            $feeNormal = $feeOver = ($param['weight'] / $priceNormal['unit']) * $priceDataNormal->getValue();
+            $feeNormal = ($param['weight'] / $priceNormal['unit']) * $priceDataNormal->getValue();
         } else {
             $feeNormal = $priceDataNormal->getValue();
         }
@@ -445,7 +446,6 @@ class CalculatePricingController extends CoreController {
     }
 
     /* Special Pricing */
-
     private function getAreaSpecial($pickupCity, $deliveryCity, $deliveryDistrict, $deliveryWard)
     {
         $where = [ 'is_deleted' => 0,  'status' => 1, 'name' => $pickupCity ];
