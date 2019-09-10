@@ -38,7 +38,7 @@ class SpecialRangeWeight
     /**
      * @var float
      *
-     * @ORM\Column(name="calculate_unit", type="float", precision=10, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="calculate_unit", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $calculate_unit;
 
