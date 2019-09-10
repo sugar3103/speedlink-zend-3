@@ -1,6 +1,7 @@
 import { all } from 'redux-saga/effects';
 import authSagas from './auth/saga';
 import statusSagas from './master-data/status/saga';
+import customerSagas from './master-data/customer/saga';
 import hubSagas from './master-data/hub/saga';
 import branchSagas from './master-data/branch/saga';
 import codeSagas from './master-data/address/code/saga';
@@ -60,6 +61,7 @@ export default function* rootSaga() {
   yield all([
     authSagas(),
     statusSagas(),
+    customerSagas(),
     hubSagas(),
     branchSagas(),
     codeSagas(),

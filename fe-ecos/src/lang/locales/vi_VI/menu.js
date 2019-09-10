@@ -7,6 +7,7 @@ module.exports = {
   'menu.dashboard': 'Bảng Điều Khiển',
   'menu.master-data': 'Dữ Liệu Chung',
   'menu.status': 'Trạng Thái',
+  'menu.customer': 'Khách Hàng',
   'menu.address': 'Địa Chỉ',
   'menu.address_code': 'Mã Địa Chỉ',
   'menu.address_country': 'Đất Nước',

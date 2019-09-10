@@ -7,6 +7,7 @@ module.exports = {
   'menu.dashboard': 'Dashboard',
   'menu.master-data': 'Master Data',
   'menu.status': 'Status',
+  'menu.customer': 'Customer',
   'menu.address': 'Address',
   'menu.address_code': 'Code',
   'menu.address_country': 'Country',

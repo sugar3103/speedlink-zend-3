@@ -1,10 +1,12 @@
 <?php
+
 namespace Customer\Validator;
 
 
 use Zend\Validator\AbstractValidator;
 
-class CustomerExistsValidator extends AbstractValidator {
+class CustomerExistsValidator extends AbstractValidator
+{
 
     /**
      * Available validator options.
@@ -12,7 +14,7 @@ class CustomerExistsValidator extends AbstractValidator {
      */
     protected $options = [
         'entityManager' => null,
-        'branch' => null,
+        'customer' => null,
         'language' => null
     ];
 
@@ -20,14 +22,14 @@ class CustomerExistsValidator extends AbstractValidator {
      * Validation failure message IDs.
      */
     const NOT_SCALAR = 'notScalar';
-    const BRANCH_EXISTS = 'branchExists';
+    const CUSTOMER_EXISTS = 'customerExists';
 
     /**
      * Validation failure messages.
      */
     protected $messageTemplates = [
         self::NOT_SCALAR => 'The name must be a scalar value',
-        self::BRANCH_EXISTS => 'Another a name already exists'
+        self::CUSTOMER_EXISTS => 'Another a name already exists'
     ];
 
     /**
@@ -40,15 +42,15 @@ class CustomerExistsValidator extends AbstractValidator {
         if (is_array($options) && isset($options['entityManager']))
             $this->options['entityManager'] = $options['entityManager'];
 
-        if (is_array($options) && isset($options['branch']))
-            $this->options['branch'] = $options['branch'];
+        if (is_array($options) && isset($options['customer']))
+            $this->options['customer'] = $options['customer'];
 
         // call the parent class constructor
         parent::__construct($options);
     }
 
     /**
-     * Check if branch exists.
+     * Check if customer exists.
      * @param mixed $value
      * @return bool
      */
@@ -60,34 +62,25 @@ class CustomerExistsValidator extends AbstractValidator {
         }
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
-        if($this->options['language'] === NULL) {
-            $branch = $entityManager->getRepository(Branch::class)->findOneByName($value);
-        } else if($this->options['language'] === 'en') {
-            $branch = $entityManager->getRepository(Branch::class)->findOneBy(array('name_en' => $value));       
+        if ($this->options['language'] === NULL) {
+            $customer = $entityManager->getRepository(Branch::class)->findOneBy(array('name' => $value, 'is_deleted' => 0));
         }
 
         //English
-        if ($this->options['branch'] == null)
-            $isValid = ($branch == null);
+        if ($this->options['customer'] == null)
+            $isValid = ($customer == null);
         else {
-            if($this->options['language'] === 'en') {
-                if ($this->options['branch']->getNameEn() != $value && $branch != null)
-                    $isValid = false;
-                else
-                    $isValid = true;
-            } else {
-                if ($this->options['branch']->getName() != $value && $branch != null)
-                    $isValid = false;
-                else
-                    $isValid = true;
-            }
+            if ($this->options['customer']->getName() != $value && $customer != null)
+                $isValid = false;
+            else
+                $isValid = true;
         }
 
         // if there were an error, set error message.
         if (!$isValid) {
-            $this->error(self::BRANCH_EXISTS);
+            $this->error(self::CUSTOMER_EXISTS);
         }
-          
+
         // return validation result
         return $isValid;
     }
