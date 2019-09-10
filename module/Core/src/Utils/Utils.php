@@ -26,7 +26,7 @@ class Utils {
             // $datetime->setTimezone($laTime);
             $dateLast = $datetime->format($dateFormat);
         }
-        return $dateLast;
+        return $dateAction;
     }
 
     /**
