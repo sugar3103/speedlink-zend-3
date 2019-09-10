@@ -157,7 +157,7 @@ class CalculatePricingController extends CoreController {
          * is_private == 2 => Special pricing
          */
         if ($pricing['is_private'] === 2) {
-            $areaType = $this->getAreaSpecial($dataList['pickupCity'], $dataList['deliveryCity'], $dataList['deliveryDistrict'], $dataList['deliveryWard']);
+            $areaType = $this->getAreaSpecial($dataList['pickupCity'], $dataList['deliveryCity'], $dataList['deliveryDistrict'], $dataList['deliveryWard'], $pricing['customer_id']);
             $where = $dataList['weight'];
 
             // Pricing Over
@@ -446,29 +446,34 @@ class CalculatePricingController extends CoreController {
     }
 
     /* Special Pricing */
-    private function getAreaSpecial($pickupCity, $deliveryCity, $deliveryDistrict, $deliveryWard)
+    private function getAreaSpecial($pickupCity, $deliveryCity, $deliveryDistrict, $deliveryWard, $customerId)
     {
         $where = [ 'is_deleted' => 0,  'status' => 1, 'name' => $pickupCity ];
         $pickupCity = $this->entityManager->getRepository(City::class)->findOneBy($where);
 
-        $where['name'] = $deliveryCity;
-        $deliveryCity = $this->entityManager->getRepository(City::class)->findOneBy($where);
+        $whereCity = $where;
+        $whereCity['name'] = $deliveryCity;
+        $deliveryCity = $this->entityManager->getRepository(City::class)->findOneBy($whereCity);
 
-        $where['name'] = $deliveryDistrict;
-        $deliveryDistrict = $this->entityManager->getRepository(District::class)->findOneBy($where);
+        $whereDistrict = $where;
+        $whereDistrict['name'] = $deliveryDistrict;
+        $whereDistrict['city_id'] = $deliveryCity->getId();
+        $deliveryDistrict = $this->entityManager->getRepository(District::class)->findOneBy($whereDistrict);
 
-        $where['name'] = $deliveryWard;
-        $deliveryWard = $this->entityManager->getRepository(Ward::class)->findOneBy($where);
+        $whereWard = $where;
+        $whereWard['name'] = $deliveryWard;
+        $whereWard['district_id'] = $deliveryDistrict->getId();
+        $deliveryWard = $this->entityManager->getRepository(Ward::class)->findOneBy($whereWard);
 
         // Check Area Type shipment
         $zone = $this->entityManager->getRepository(SpecialZone::class)->findOneBy([
             'is_deleted' => 0,
+            'customer' => $customerId,
             'from_city' => $pickupCity->getId(),
             'to_city' => $deliveryCity->getId(),
             'to_district' => $deliveryDistrict->getId(),
             'to_ward' => $deliveryWard->getId(),
         ]);
-
         return $zone->getSpecialArea()->getId();
     }
 
