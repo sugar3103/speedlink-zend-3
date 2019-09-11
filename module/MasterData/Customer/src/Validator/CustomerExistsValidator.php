@@ -4,6 +4,7 @@ namespace Customer\Validator;
 
 
 use Zend\Validator\AbstractValidator;
+use Customer\Entity\Customer;
 
 class CustomerExistsValidator extends AbstractValidator
 {
@@ -63,7 +64,7 @@ class CustomerExistsValidator extends AbstractValidator
         // Get Doctrine entity manager.
         $entityManager = $this->options['entityManager'];
         if ($this->options['language'] === NULL) {
-            $customer = $entityManager->getRepository(Branch::class)->findOneBy(array('name' => $value, 'is_deleted' => 0));
+            $customer = $entityManager->getRepository(Customer::class)->findOneBy(array('name' => $value, 'is_deleted' => 0));
         }
 
         //English
