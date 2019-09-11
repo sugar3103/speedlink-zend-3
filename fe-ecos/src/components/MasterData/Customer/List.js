@@ -129,7 +129,21 @@ class List extends Component {
         {
           Header: messages['name'],
           accessor: "name",
-          width: 150,
+          sortable: false,
+        },
+        {
+          Header: messages['customer.customer_no'],
+          accessor: "customer_no",
+          sortable: false,
+        },
+        {
+          Header: messages['customer.ref_id'],
+          accessor: "ref_id",
+          sortable: false,
+        },
+        {
+          Header: messages['customer.tax_no'],
+          accessor: "tax_no",
           sortable: false,
         },
         {
@@ -138,7 +152,7 @@ class List extends Component {
 
           Cell: ({ original }) => {
             return (
-              original.status ? <Badge color="success">{messages['active']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>
+              original.status === 1 ? <Badge color="success">{messages['active']}</Badge> : <Badge color="dark">{messages['inactive']}</Badge>
             )
           },
           className: "text-center",

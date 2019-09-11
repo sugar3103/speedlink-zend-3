@@ -81,9 +81,6 @@ class ActionForm extends Component {
           <div className="form__form-group">
             <span className="form__form-group-label">{messages['name']}</span>
             <div className="form__form-group-field">
-              <div className="form__form-group-icon">
-                <div className="flag vn"></div>
-              </div>
               <Field
                 name="name"
                 component={CustomField}
@@ -92,42 +89,39 @@ class ActionForm extends Component {
                 disabled={disabled}
               />
             </div>
+          </div>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['customer.customer_no']}</span>
             <div className="form__form-group-field">
-              <div className="form__form-group-icon">
-                <div className="flag us"></div>
-              </div>
               <Field
-                name="name_en"
+                name="customer_no"
                 component={CustomField}
                 type="text"
-                placeholder={messages['name']}
+                placeholder={messages['customer.customer_no']}
                 disabled={disabled}
               />
             </div>
           </div>
           <div className="form__form-group">
-            <span className="form__form-group-label">{messages['description']}</span>
+            <span className="form__form-group-label">{messages['customer.ref_id']}</span>
             <div className="form__form-group-field">
-              <div className="form__form-group-icon">
-                <div className="flag vn"></div>
-              </div>
               <Field
-                name="description"
-                component="textarea"
+                name="ref_id"
+                component={CustomField}
                 type="text"
-                placeholder={messages['description']}
+                placeholder={messages['customer.ref_id']}
                 disabled={disabled}
               />
             </div>
+          </div>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['customer.tax_no']}</span>
             <div className="form__form-group-field">
-              <div className="form__form-group-icon">
-                <div className="flag us"></div>
-              </div>
               <Field
-                name="description_en"
-                component="textarea"
+                name="tax_no"
+                component={CustomField}
                 type="text"
-                placeholder={messages['description']}
+                placeholder={messages['customer.tax_no']}
                 disabled={disabled}
               />
             </div>
@@ -209,7 +203,7 @@ const mapStateToProps = ({ customer, authUser }) => {
 export default connect(mapStateToProps, {
   toggleCustomerModal,
   changeTypeCustomerModal
-})(reduxForm({ 
-  form: 'customer_action_form', 
+})(reduxForm({
+  form: 'customer_action_form',
   validate
 })(injectIntl(ActionForm)));

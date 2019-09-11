@@ -16,6 +16,18 @@ const validate = (values) => {
       errors.name_en = 'customer.validate-nameEn-maxlength';
     }
 
+    if (!values.customer_no) {
+      errors.customer_no = 'customer.validate-customer-no-empty';
+    }
+
+    if (!values.ref_id) {
+      errors.ref_id = 'customer.validate-ref-id-empty';
+    }
+
+    if (!values.tax_no) {
+      errors.tax_no = 'customer.validate-tax-no-empty';
+    }
+
     return errors;
   };
   
