@@ -45,9 +45,11 @@ class StatusRepository extends EntityRepository {
                  CONCAT(COALESCE(cr.first_name,''), ' ', COALESCE(cr.last_name,'')) as full_name_created,
                  CONCAT(COALESCE(up.first_name,''), ' ', COALESCE(up.last_name,'')) as full_name_updated"                 
             )->andWhere('s.is_deleted = 0')
-            ->groupBy('s.id')
-            ->setMaxResults($limit)
-            ->setFirstResult(($start - 1) * $limit);
+            ->groupBy('s.id');
+            
+            if ($limit) {
+                $queryBuilder->setMaxResults($limit)->setFirstResult(($start - 1) * $limit);
+            }
                 
             return $queryBuilder;
 
