@@ -83,6 +83,26 @@ class CustomerForm extends Form {
                     'name' => ToInt::class
                 ]
             ] 
-        ]);      
+        ]); 
+        
+        $inputFilter->add([
+            'name'  => 'customer_no',
+            'required'  => true,
+            'filters' => [
+                [
+                    'name' => StringTrim::class
+                ]
+            ] 
+        ]); 
+
+        $inputFilter->add([
+            'name'  => 'ref_id',
+            'required'  => true,
+            'filters' => [
+                [
+                    'name' => StringTrim::class
+                ]
+            ] 
+        ]); 
     }
 }
