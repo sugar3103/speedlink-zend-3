@@ -1,6 +1,9 @@
 module.exports = {
     //master-data --- Customer
   'customer.list-title': 'Customer',
+  'customer.customer_no': 'Customer No',
+  'customer.ref_id': 'Ref ID',
+  'customer.tax_no': 'Tax No',
   'customer.add-new': 'Add New Customer',
   'customer.update': 'Update Customer',
   'customer.delete': 'Delete Customer',
@@ -16,4 +19,7 @@ module.exports = {
   'customer.validate-nameEn-minlength': 'English name must be 2 characters or more',
   'customer.validate-nameEn-maxlength': 'English name must be 60 characters or less',
   'customer.validate-nameEn-exists': 'English name already exists',
+  'customer.validate-customer-no-empty': 'Customer No shouldn’t be empty',
+  'customer.validate-ref-id-empty': 'Ref ID shouldn’t be empty',
+  'customer.validate-tax-no-empty': 'Tax No shouldn’t be empty'
 }

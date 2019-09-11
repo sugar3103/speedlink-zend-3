@@ -22,10 +22,10 @@ class Customer extends Component {
 
   render() {
     const { messages } = this.props.intl;
-    const { errors } = this.props.status;
+    const { errors } = this.props.customer;
     return (
       <Container>
-        <PageTitle title={messages['status.list-title']} />
+        <PageTitle title={messages['customer.list-title']} />
         <Row>
           {!this.state.loadPage ? (
             (errors && errors === 'ACCESS_DENIED') ? (<AccessDenied />) : (<List />)
@@ -36,9 +36,9 @@ class Customer extends Component {
   }
 }
 
-const mapStateToProps = ({ status }) => {  
+const mapStateToProps = ({ customer }) => {  
   return {
-    status
+    customer
   };
 };
 
