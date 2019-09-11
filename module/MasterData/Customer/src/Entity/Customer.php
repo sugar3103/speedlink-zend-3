@@ -56,9 +56,12 @@ class Customer
     private $status = '0';
 
     /**
-     * @var int
+     * @var \OAuth\Entity\User
      *
-     * @ORM\Column(name="created_by", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="OAuth\Entity\User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
+     * })
      */
     private $created_by;
 
@@ -70,9 +73,12 @@ class Customer
     private $created_at = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var int|null
+     * @var \OAuth\Entity\User
      *
-     * @ORM\Column(name="updated_by", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="OAuth\Entity\User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="updated_by", referencedColumnName="id", nullable=true)
+     * })
      */
     private $updated_by;
 
@@ -187,23 +193,23 @@ class Customer
     }
 
     /**
-     * @return int
+     * Set createdAt.
+     *
+     * @param \DateTime $createdAt
+     *
+     * @return SpecialArea
      */
-    public function getCreatedBy()
+    public function setCreatedAt($createdAt)
     {
-        return $this->created_by;
+        $this->created_at = $createdAt;
+
+        return $this;
     }
 
     /**
-     * @param int $created_by
-     */
-    public function setCreatedBy($created_by)
-    {
-        $this->created_by = $created_by;
-    }
-
-    /**
-     * @return DateTime
+     * Get createdAt.
+     *
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -211,31 +217,23 @@ class Customer
     }
 
     /**
-     * @param DateTime $created_at
+     * Set updatedAt.
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return SpecialArea
      */
-    public function setCreatedAt($created_at)
+    public function setUpdatedAt($updatedAt)
     {
-        $this->created_at = $created_at;
+        $this->updated_at = $updatedAt;
+
+        return $this;
     }
 
     /**
-     * @return int|null
-     */
-    public function getUpdatedBy()
-    {
-        return $this->updated_by;
-    }
-
-    /**
-     * @param int|null $updated_by
-     */
-    public function setUpdatedBy($updated_by)
-    {
-        $this->updated_by = $updated_by;
-    }
-
-    /**
-     * @return DateTime|null
+     * Get updatedAt.
+     *
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -243,11 +241,51 @@ class Customer
     }
 
     /**
-     * @param DateTime|null $updated_at
+     * Set createdBy.
+     *
+     * @param \OAuth\Entity\User|null $createdBy
+     *
+     * @return SpecialArea
      */
-    public function setUpdatedAt($updated_at)
+    public function setCreatedBy(\OAuth\Entity\User $createdBy = null)
     {
-        $this->updated_at = $updated_at;
+        $this->created_by = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get createdBy.
+     *
+     * @return \OAuth\Entity\User|null
+     */
+    public function getCreatedBy()
+    {
+        return $this->created_by;
+    }
+
+    /**
+     * Set updatedBy.
+     *
+     * @param \OAuth\Entity\User|null $updatedBy
+     *
+     * @return SpecialArea
+     */
+    public function setUpdatedBy(\OAuth\Entity\User $updatedBy = null)
+    {
+        $this->updated_by = $updatedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedBy.
+     *
+     * @return \OAuth\Entity\User|null
+     */
+    public function getUpdatedBy()
+    {
+        return $this->updated_by;
     }
 
     /**
