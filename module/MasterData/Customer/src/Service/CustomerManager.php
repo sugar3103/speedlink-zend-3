@@ -52,10 +52,11 @@ class CustomerManager {
 
             $customer = new Customer();
             $customer->setName($data['name']);
-            $customer->setCustomerNo($data['status']);
+            $customer->setCustomerNo($data['customer_no']);
             $customer->setTaxNo($data['tax_no']);
             $customer->setRefId($data['ref_id']);
             $customer->setStatus($data['status']);
+            
 
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $customer->setCreatedAt($addTime->format('Y-m-d H:i:s'));
@@ -90,10 +91,11 @@ class CustomerManager {
      */
     public function updateCustomer($customer, $data,$user) {
         // begin transaction
+        var_dump($data); die;
         $this->entityManager->beginTransaction();
         try {
             $customer->setName($data['name']);
-            $customer->setCustomerNo($data['status']);
+            $customer->setCustomerNo($data['customer_no']);
             $customer->setTaxNo($data['tax_no']);
             $customer->setRefId($data['ref_id']);
             $customer->setStatus($data['status']);
