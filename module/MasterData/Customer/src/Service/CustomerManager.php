@@ -91,7 +91,7 @@ class CustomerManager {
      */
     public function updateCustomer($customer, $data,$user) {
         // begin transaction
-        var_dump($data); die;
+        
         $this->entityManager->beginTransaction();
         try {
             $customer->setName($data['name']);
