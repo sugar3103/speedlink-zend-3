@@ -93,8 +93,8 @@ class CustomerRepository extends EntityRepository {
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(Customer::class, 'c')
-            ->leftJoin('s.created_by', 'cr')
-            ->leftJoin('s.updated_by', 'up');
+            ->leftJoin('c.created_by', 'cr')
+            ->leftJoin('c.updated_by', 'up');
 
         if ($sortField != NULL && $sortDirection != NULL)
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);
