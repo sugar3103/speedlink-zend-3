@@ -104,5 +104,15 @@ class CustomerForm extends Form {
                 ]
             ] 
         ]); 
+
+        $inputFilter->add([
+            'name'  => 'tax_no',
+            'required'  => true,
+            'filters' => [
+                [
+                    'name' => StringTrim::class
+                ]
+            ] 
+        ]); 
     }
 }
