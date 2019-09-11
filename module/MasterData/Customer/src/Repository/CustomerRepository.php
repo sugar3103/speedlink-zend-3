@@ -69,9 +69,21 @@ class CustomerRepository extends EntityRepository {
                 'alias' => 'c.name',
                 'operator' => 'contains'
             ],
+            'customer_no' => [
+                'alias' => 'c.customer_no',
+                'operator' => 'contains'
+            ],
+            'tax_no' => [
+                'alias' => 'c.tax_no',
+                'operator' => 'contains'
+            ],
+            'ref_id' => [
+                'alias' => 'c.ref_id',
+                'operator' => 'contains'
+            ],
             'created_at' => [
                 'alias' => 'c.created_at',
-                'operator' => 'contains'
+                'operator' => 'eq'
             ],
             'status' => [
                 'alias' => 'c.status',
@@ -81,8 +93,8 @@ class CustomerRepository extends EntityRepository {
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->from(Customer::class, 'c')
-            ->leftJoin('s.join_created', 'cr')
-            ->leftJoin('s.join_updated', 'up');
+            ->leftJoin('s.created_by', 'cr')
+            ->leftJoin('s.updated_by', 'up');
 
         if ($sortField != NULL && $sortDirection != NULL)
             $queryBuilder->orderBy($operatorsMap[$sortField]['alias'], $sortDirection);

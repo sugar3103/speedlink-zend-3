@@ -31,9 +31,9 @@ class CustomerManager {
         }
 
         if ($mode == 'add') {
-            $customer->setJoinCreated($user_data);
+            $customer->setCreatedBy($user_data);
         }
-        $customer->setJoinUpdated($user_data);
+        $customer->setUpdatedBy($user_data);
 
     }
 
@@ -59,8 +59,6 @@ class CustomerManager {
 
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $customer->setCreatedAt($addTime->format('Y-m-d H:i:s'));
-            
-            $customer->setCreatedBy($user->id);
             $this->getReferenced($customer, $data, $user, 'add');
            
             // add the entity to the entity manager.
@@ -102,8 +100,6 @@ class CustomerManager {
             
             $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
             $customer->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
-                        
-            $customer->setUpdatedBy($user->id);
             $this->getReferenced($customer, $data, $user);
 
             // apply changes to database.
@@ -177,6 +173,7 @@ class CustomerManager {
                 //set created_at
                 $customer['created_at'] =  ($customer['created_at']) ? Utils::checkDateFormat($customer['created_at'],'D M d Y H:i:s \G\M\T+0700') : '';
                 $customer['updated_at'] =  ($customer['updated_at']) ? Utils::checkDateFormat($customer['updated_at'],'D M d Y H:i:s \G\M\T+0700') : '';
+                
                 $customer['full_name_created'] = trim($customer['full_name_created']);
                 $customer['full_name_updated'] = trim($customer['full_name_updated']);
             }           

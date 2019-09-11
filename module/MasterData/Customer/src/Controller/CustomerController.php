@@ -38,8 +38,10 @@ class CustomerController extends CoreController {
             // get the filters
             $fieldsMap = [
                 0 => 'name',
-                2 => 'name_en',                
-                1 => 'status'
+                1 => 'status',
+                2 => 'customer_no',
+                3 => 'tax_no',
+                4 => 'ref_id',
             ];
 
             list($start,$limit,$sortField,$sortDirection,$filters,$fields) = $this->getRequestData($fieldsMap);                        
