@@ -131,7 +131,12 @@ class CustomerManager {
         $this->entityManager->beginTransaction();
         try {
 
-            $this->entityManager->remove($customer);
+            $customer->setIsDeleted(1);
+            $customer->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
+
+            $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
+            $customer->setUpdatedAt($addTime->format('Y-m-d H:i:s'));
+;
         
             $this->entityManager->flush();
 
