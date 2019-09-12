@@ -136,7 +136,7 @@ class CustomerController extends CoreController {
                             $this->error_code = 0;
                             $this->apiResponse['message'] = "NOT_FOUND";                        
                         } else {
-                            $this->customerManager->removeCustomer($customer);
+                            $this->customerManager->removeCustomer($customer, $this->tokenPayload);
                         }  
                     }
                     

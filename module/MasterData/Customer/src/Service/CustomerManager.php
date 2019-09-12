@@ -126,7 +126,7 @@ class CustomerManager {
      * @return Customer|bool
      * @throws \Exception
      */
-    public function removeCustomer($customer) {
+    public function removeCustomer($customer, $user) {
         // begin transaction
         $this->entityManager->beginTransaction();
         try {
