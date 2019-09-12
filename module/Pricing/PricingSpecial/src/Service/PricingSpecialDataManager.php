@@ -41,6 +41,9 @@ class PricingSpecialDataManager
                         $pricingData->setValue($value['value']);
                         $pricingData->setReturnType($value['type']);
                         $pricingData->setReturnValue($value['type_value']);
+                        $pricingData->setLeadTimeFrom($value['lead_time_from']);
+                        $pricingData->setLeadTimeTo($value['lead_time_to']);
+                        
                         $pricingData->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
 
                         $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
@@ -52,6 +55,9 @@ class PricingSpecialDataManager
                         $pricingData->setValue($value['value']);
                         $pricingData->setReturnType($value['type']);
                         $pricingData->setReturnValue($value['type_value']);
+                        $pricingData->setLeadTimeFrom($value['lead_time_from']);
+                        $pricingData->setLeadTimeTo($value['lead_time_to']);
+                        
                         $pricingData->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
                         $pricingData->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
 

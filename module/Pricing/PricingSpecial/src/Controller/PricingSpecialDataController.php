@@ -129,11 +129,15 @@ class PricingSpecialDataController extends CoreController {
                             $valueData['value'] = $pricingData->getValue();
                             $valueData['type']  = $pricingData->getReturnType();
                             $valueData['type_value']  = $pricingData->getReturnValue();
+                            $valueData['lead_time_from'] = $pricingData->getLeadTimeFrom();
+                            $valueData['lead_time_to'] = $pricingData->getLeadTimeTo();
                             $data[$area->getId()]['data'][$shipmentType->getId()][] = $valueData;                            
                         } else {
                             $valueData['value'] = '';
                             $valueData['type'] = 0;
                             $valueData['type_value'] = 0;
+                            $valueData['lead_time_from'] = 0;
+                            $valueData['lead_time_to'] = 0;
                             $data[$area->getId()]['data'][$shipmentType->getId()][] = $valueData;
                         }
                     }

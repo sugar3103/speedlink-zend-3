@@ -64,6 +64,20 @@ class SpecialPricingData
     private $is_deleted = 0;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="lead_time_from", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $lead_time_from = 0;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="lead_time_to", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $lead_time_to = 0;
+
+    /**
      * @var \OAuth\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="OAuth\Entity\User")
@@ -102,7 +116,6 @@ class SpecialPricingData
      * })
      */
     private $updated_by;
-
 
     /**
      * Get id.
@@ -256,6 +269,53 @@ class SpecialPricingData
     public function getIsDeleted()
     {
         return $this->is_deleted;
+    }
+/**
+ * Set lead_time_from.
+ *
+ * @param int $lead_time_from
+ *
+ * @return SpecialPricingData
+ */
+    public function setLeadTimeFrom($lead_time_from)
+    {
+        $this->lead_time_from = $lead_time_from;
+
+        return $this;
+    }
+
+    /**
+     * Get lead_time_from.
+     *
+     * @return int
+     */
+    public function getLeadTimeFrom()
+    {
+        return $this->lead_time_from;
+    }
+
+    /**
+     * Set lead_time_to.
+     *
+     * @param int $lead_time_to
+     *
+     * @return SpecialPricingData
+     */
+    public function setLeadTimeTo($lead_time_to)
+    {
+        $this->lead_time_to = $lead_time_to;
+
+        return $this;
+    }
+
+    /**
+     * Get lead_time_to.
+     *
+     * @return int
+     */
+    public function getLeadTimeTo()
+    {
+        return $this->lead_time_to;
     }
 
     /**

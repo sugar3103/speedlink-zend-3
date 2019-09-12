@@ -41,6 +41,8 @@ class DomesticPricingDataManager
                         $pricingData->setValue($value['value']);
                         $pricingData->setType($value['type']);
                         $pricingData->setTypeValue($value['type_value']);
+                        $pricingData->setLeadTimeFrom($value['lead_time_from']);
+                        $pricingData->setLeadTimeTo($value['lead_time_to']);
                         $pricingData->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
 
                         $addTime = new \DateTime('now', new \DateTimeZone('UTC'));
@@ -52,6 +54,8 @@ class DomesticPricingDataManager
                         $pricingData->setValue($value['value']);
                         $pricingData->setType($value['type']);
                         $pricingData->setTypeValue($value['type_value']);
+                        $pricingData->setLeadTimeFrom($value['lead_time_from']);
+                        $pricingData->setLeadTimeTo($value['lead_time_to']);
                         $pricingData->setCreatedBy($this->entityManager->getRepository(User::class)->find($user->id));
                         $pricingData->setUpdatedBy($this->entityManager->getRepository(User::class)->find($user->id));
 

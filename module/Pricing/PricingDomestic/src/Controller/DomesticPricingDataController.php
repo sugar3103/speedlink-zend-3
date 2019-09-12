@@ -136,6 +136,8 @@ class DomesticPricingDataController extends CoreController {
                             $valueData['value'] = $pricingData->getValue();
                             $valueData['type']  = $pricingData->getType();
                             $valueData['type_value']  = $pricingData->getTypeValue();
+                            $valueData['lead_time_from'] = $pricingData->getLeadTimeFrom();
+                            $valueData['lead_time_to'] = $pricingData->getLeadTimeTo();
                             if($rangeWeight->getIsRas()) {
                                 $data[$zone->getId()]['ras'][$shipmentType->getId()][] = $valueData;
                             } else {
@@ -145,6 +147,8 @@ class DomesticPricingDataController extends CoreController {
                             $valueData['value'] = '';
                             $valueData['type'] = 0;
                             $valueData['type_value'] = 0;
+                            $valueData['lead_time_from'] = 0;
+                            $valueData['lead_time_to'] = 0;
                             if($rangeWeight->getIsRas()) {
                                 $data[$zone->getId()]['ras'][$shipmentType->getId()][] = $valueData;
                             } else {
