@@ -16,6 +16,8 @@ module.exports = {
     'unselect-all': 'Bỏ chọn hết',
     'show': 'Hiển thị',
     'entries': 'Entries',
+    'from': 'Từ',
+    'to': 'Đến',
 
     'action': 'Hành động',
     'active': 'Kích hoạt',

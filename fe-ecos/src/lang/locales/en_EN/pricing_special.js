@@ -65,6 +65,7 @@ module.exports = {
   'pri_special.add-range-weight-title': 'Add Range Weight Special',
   'pri_special.edit-range-weight-title': 'Edit Range Weight Special',
   'pri_special.view-range-weight-title': 'View Range Weight Special',
+  'pri_special.lead-time': 'Leadtime',
 
   /* PRICING */
   'pri_special.pricing-title': 'Pricing Special',

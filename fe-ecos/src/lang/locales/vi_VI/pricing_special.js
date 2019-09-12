@@ -65,6 +65,7 @@ module.exports = {
   'pri_special.add-range-weight-title': 'Tạo mới khoảng trọng lượng',
   'pri_special.edit-range-weight-title': 'Cập nhật khoảng trọng lượng',
   'pri_special.view-range-weight-title': 'Xem khoảng trọng lượng',
+  'pri_special.lead-time': 'Giờ dự kiến',
 
   /* PRICING */
   'pri_special.pricing-title': 'Bảng giá đặc biệt',

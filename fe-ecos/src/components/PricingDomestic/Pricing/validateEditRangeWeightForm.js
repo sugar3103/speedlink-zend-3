@@ -38,6 +38,24 @@ const validate = values => {
         dataErrors.type_value = 'pri_dom.field-must-not-be-larger-than-100';
         dataArrayErrors[index] = dataErrors
       }
+
+      if (data && data.lead_time_from && isNaN(data.lead_time_from)) {
+        dataErrors.lead_time_from = 'pri_dom.field-is-number';
+        dataArrayErrors[index] = dataErrors
+      }
+      if (data && data.lead_time_from && parseInt(data.lead_time_from) < 0) {
+        dataErrors.lead_time_from = 'pri_dom.field-not-negative';
+        dataArrayErrors[index] = dataErrors
+      }
+
+      if (data && data.lead_time_to && isNaN(data.lead_time_to)) {
+        dataErrors.lead_time_to = 'pri_dom.field-is-number';
+        dataArrayErrors[index] = dataErrors
+      }
+      if (data && data.lead_time_to && parseInt(data.lead_time_to) < 0) {
+        dataErrors.lead_time_to = 'pri_dom.field-not-negative';
+        dataArrayErrors[index] = dataErrors
+      }
     })
     if (dataArrayErrors.length) {
       errors.data = dataArrayErrors

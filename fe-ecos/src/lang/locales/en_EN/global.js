@@ -16,6 +16,8 @@ module.exports = {
     'unselect-all': 'Unselect All',
     'show': 'Show',
     'entries': 'Entries',
+    'from': 'From',
+    'to': 'To',
 
     'action': 'Action',
     'active': 'Enable',

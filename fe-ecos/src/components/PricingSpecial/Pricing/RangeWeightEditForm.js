@@ -53,6 +53,32 @@ const renderRangeWeight = ({ fields, meta: { error }, intl: { locale, messages }
             </div>
           </div>
         </Col>
+        <Col md={{ size: 4, offset: 4 }}>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['from']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name={`${item}.lead_time_from`}
+                component={CustomField}
+                type="number"
+                placeholder={messages['pri_special.lead-time']}
+              />
+            </div>
+          </div>
+        </Col>
+        <Col md={4}>
+          <div className="form__form-group">
+            <span className="form__form-group-label">{messages['to']}</span>
+            <div className="form__form-group-field">
+              <Field
+                name={`${item}.lead_time_to`}
+                component={CustomField}
+                type="number"
+                placeholder={messages['pri_special.lead-time']}
+              />
+            </div>
+          </div>
+        </Col>
         <Col md={12}><hr /></Col>
       </Row>
     ))}

@@ -45,6 +45,7 @@ module.exports = {
   'pri_dom.add-range-weight-title': 'Add Range Weight Domestic',
   'pri_dom.edit-range-weight-title': 'Edit Range Weight Domestic',
   'pri_dom.view-range-weight-title': 'View Range Weight Domestic',
+  'pri_dom.lead-time': 'Leadtime',
 
   /* PRICING */
   'pri_dom.pricing-title': 'Pricing Domestic',
