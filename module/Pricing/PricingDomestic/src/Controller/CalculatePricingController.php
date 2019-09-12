@@ -400,7 +400,7 @@ class CalculatePricingController extends CoreController {
             $feeNormal = $priceDataNormal->getValue();
         }
 
-        // Type and Value bill Return
+        // Type and Value bill Return and Lead time
         if ($param['isPrivate'] === 2) {
             if (!empty($priceDataOver)) {
                 $typeBill = $priceDataOver->getReturnType();
@@ -417,6 +417,15 @@ class CalculatePricingController extends CoreController {
                 $typeBill = $priceDataNormal->getType();
                 $typeValue = $priceDataNormal->getTypeValue();
             }
+        }
+
+        // Get Lead Time
+        if (!empty($priceDataOver)) {
+            $lead_time_from = $priceDataOver->getLeadTimeFrom() / 24;
+            $lead_time_to = $priceDataOver->getLeadTimeTo() / 24;
+        } else {
+            $lead_time_from = $priceDataNormal->getLeadTimeFrom() / 24;
+            $lead_time_to = $priceDataNormal->getLeadTimeTo() / 24;
         }
 
 
@@ -442,6 +451,8 @@ class CalculatePricingController extends CoreController {
             'type_value' => $typeValue,
             'con_weight' => $param['conWeight'],
             'vol_weight' => $param['volWeight'],
+            'estimate_from' => $lead_time_from,
+            'estimate_to' => $lead_time_to,
         ];
     }
 
