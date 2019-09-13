@@ -56,6 +56,10 @@ const validate = values => {
         dataErrors.lead_time_to = 'pri_special.field-not-negative';
         dataArrayErrors[index] = dataErrors
       }
+      if (data && data.lead_time_to && data.lead_time_from && parseInt(data.lead_time_to) !== 0 && parseInt(data.lead_time_to) < parseInt(data.lead_time_from)) {
+        dataErrors.lead_time_to = 'pri_special.validate-to-not-less-than-from';
+        dataArrayErrors[index] = dataErrors
+      }
     })
     if (dataArrayErrors.length) {
       errors.data = dataArrayErrors
