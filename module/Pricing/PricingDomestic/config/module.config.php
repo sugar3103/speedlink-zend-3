@@ -28,7 +28,7 @@ $router = [
                 'defaults' => [
                     'controller' => Controller\DomesticPricingController::class,
                     'action' => 'index',
-                    'isAuthorizationRequired' => true
+                    'isAuthorizationRequired' => false
                 ]               
             ]         
         ],
