@@ -5,6 +5,7 @@ import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 class SearchForm extends Component {
+
   render() {
     const { handleSubmit, reset } = this.props;
     const { messages,locale } = this.props.intl;    
@@ -19,6 +20,12 @@ class SearchForm extends Component {
                 component="input"
                 type="text"
                 placeholder={messages['name']}
+              />
+               <Field
+                name={locale === 'en-US' ? 'name_en' : 'name'}
+                component="input"
+                type="text"
+                placeholder={messages['name2']}
               />
             </div>
           </div>

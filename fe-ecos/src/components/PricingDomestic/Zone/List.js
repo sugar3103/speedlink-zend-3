@@ -98,9 +98,9 @@ class List extends Component {
     axios
       .post("http://api-pricing-int.local/api/v1/pricing/domestic")
       .then(function(respone) {
-        console.log("the respone from API", respone.data.data);
+        // console.log("the respone from API", respone.data.data);
       });
-      console.log("props from pricing domestic", this.props)
+      // console.log("props from pricing domestic", this.props)
     const { messages } = this.props.intl;
     const { modalOpen } = this.props.zone;
     return (

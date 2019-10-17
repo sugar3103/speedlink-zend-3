@@ -49,7 +49,7 @@ class TopbarProfile extends PureComponent {
             <TopbarMenuLink title="Account Settings" icon="cog" path="/system/user/profile" />
             <TopbarMenuLink title="Lock Screen" icon="lock" path="/lock_screen" />
             {/* eslint-disable-next-line */}
-            <a className="topbar__link" href="javascript:void(0)" onClick={this.hanldeLogOut}>
+            <a className="topbar__link" href="_blank" onClick={this.hanldeLogOut}>
               <span className={`topbar__link-icon lnr lnr-exit`} />
               <p className="topbar__link-title">Log Out</p>
             </a>
