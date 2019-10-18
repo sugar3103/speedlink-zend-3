@@ -20,7 +20,7 @@ import {
   deleteZoneDomesticItem
 } from "../../../redux/actions";
 import ConfirmPicker from "../../../containers/Shared/picker/ConfirmPicker";
-import Moment from "react-moment";
+// import Moment from "react-moment";
 
 class List extends Component {
   constructor() {
@@ -100,7 +100,7 @@ class List extends Component {
       .then(function(respone) {
         // console.log("the respone from API", respone.data.data);
       });
-      // console.log("props from pricing domestic", this.props)
+    // console.log("props from pricing domestic", this.props)
     const { messages } = this.props.intl;
     const { modalOpen } = this.props.zone;
     return (
@@ -147,24 +147,71 @@ class List extends Component {
       checkbox: true,
       columns: [
         {
-          Header: messages["name"],
+          Header: "Zone Name",
           accessor: "name",
-          width: 150,
+          width: 130,
           Cell: ({ original }) => {
             return locale === "en-US" ? original.name_en : original.name;
           },
           sortable: false
         },
         {
-          Header: messages["created-at"],
-          accessor: "created_at",
-          className: "text-center",
+          Header: "Type Zone",
+          accessor: "type_zone",
+          width: 130,
           Cell: ({ original }) => {
-            return (
-              <Moment fromNow format="DD/MM/YYYY" locale={locale}>
-                {new Date(original.created_at)}
-              </Moment>
-            );
+            return locale === "en-US" ? original.type_en : original.type;
+          },
+          sortable: false
+        },
+        {
+          Header: "Customer",
+          accessor: "customer",
+          width: 130,
+          Cell: ({ original }) => {
+            return locale === "en-US"
+              ? original.customer_en
+              : original.customer;
+          },
+          sortable: false
+        },
+        {
+          Header: "Category",
+          accessor: "category",
+          width: 130,
+          Cell: ({ original }) => {
+            return locale === "en-US"
+              ? original.category_en
+              : original.category;
+          },
+          sortable: false
+        },
+        {
+          Header: "Carrier",
+          accessor: "carrier",
+          width: 130,
+          Cell: ({ original }) => {
+            return locale === "en-US" ? original.carrier_en : original.carrier;
+          },
+          sortable: false
+        },
+        {
+          Header: "Service",
+          accessor: "service",
+          width: 130,
+          Cell: ({ original }) => {
+            return locale === "en-US" ? original.service_en : original.service;
+          },
+          sortable: false
+        },
+        {
+          Header: "Line Quantity",
+          accessor: "line_quantity",
+          width: 130,
+          Cell: ({ original }) => {
+            return locale === "en-US"
+              ? original.line_quantity
+              : original.line_quantity;
           },
           sortable: false
         },
@@ -176,7 +223,7 @@ class List extends Component {
           Cell: ({ original }) => {
             return (
               <Fragment>
-                <Can
+                {/* <Can
                   user={this.props.authUser.user}
                   permission="zone_domestic"
                   action="edit"
@@ -188,10 +235,19 @@ class List extends Component {
                     onClick={e => this.toggleModal(e, "edit", original)}
                   >
                     <span className="lnr lnr-pencil" />
+                    Edit btn
                   </Button>{" "}
                   &nbsp;
-                </Can>
-                <Can
+                </Can> */}
+                <Button
+                  color="info"
+                  size="sm"
+                  onClick={e => this.toggleModal(e, "edit", original)}
+                >
+                  {" "}
+                  <span className="lnr lnr-pencil" />
+                </Button>
+                {/* <Can
                   user={this.props.authUser.user}
                   permission="zone_domestic"
                   action="delete"
@@ -204,7 +260,14 @@ class List extends Component {
                   >
                     <span className="lnr lnr-trash" />
                   </Button>
-                </Can>
+                </Can> */}{" "}
+                <Button
+                  color="danger"
+                  size="sm"
+                  onClick={e => this.onDelete(e, [original.id])}
+                >
+                  <span className="lnr lnr-trash" />
+                </Button>
               </Fragment>
             );
           },
