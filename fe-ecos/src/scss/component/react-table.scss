@@ -1,0 +1,109 @@
+.ReactTable {
+  border: none !important;
+
+  .rt-table .rt-thead {
+      font-weight: bold;
+      padding: 5px 0px;
+      box-shadow: none !important;
+
+      @include themify($themes) {
+          color: themed('colorText');
+          border-bottom: 2px solid themed('colorText');
+      }
+      
+      .checkbox-btn__checkbox-custom {
+          svg {
+              margin-top: -3px;
+          }
+      }
+  }
+
+  .rt-tbody {
+    .rt-tr-group {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .rt-td {
+      border: none;
+      padding: 5px 5px;
+      @include themify($themes) {
+        color: themed('colorTextAdditional');
+      }
+    } 
+  }
+
+  .badge {
+      color: #ffffff;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 12px;
+      font-weight: 400;
+  
+      &.badge-success {
+        background-color: $color-accent;
+      }
+  
+      &.badge-warning {
+        background-color: $color-yellow;
+      }
+  
+      &.badge-primary {
+        background-color: $color-blue;
+      }
+  
+      &.badge-danger {
+        background-color: $color-red;
+      }
+  
+      &.badge-disabled {
+        background-color: #dddddd;
+      }
+  }
+
+  .btn {
+      margin: 0px;
+      &.btn-sm {
+        padding: 2px 6px;
+      }
+  }
+
+  .checkbox-btn {
+    margin-bottom: 0;
+  }
+
+  .checkbox-btn__checkbox-custom {
+    position: relative;
+  }
+
+
+  .no-result {
+    @include themify($themes) {
+      color: themed('colorText');
+    }
+  }
+  
+  .loading-table {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    -webkit-animation: spCircRot .6s infinite linear;
+    animation: spCircRot .6s infinite linear;
+
+    @include themify($themes) {
+      border: 4px rgba(themed('colorText'),0.25) solid;
+      border-top: 4px rgba(themed('colorText'),1) solid;
+    }
+  }
+  
+  @-webkit-keyframes spCircRot {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(359deg); }
+  }
+  @keyframes spCircRot {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(359deg); }
+  }
+}

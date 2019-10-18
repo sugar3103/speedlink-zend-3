@@ -1,0 +1,726 @@
+fieldset {
+    &.scheduler-border {
+        padding: 0 1.4em 0.4em 1.4em !important;
+        -webkit-box-shadow:  0px 0px 0px 0px #000;
+        box-shadow:  0px 0px 0px 0px #000;
+        @include themify($themes) {
+            border: 1px solid themed('colorFieldsBorder');
+        }
+    }
+
+    legend {
+        &.scheduler-border {
+            font-size: 1.2em !important;
+            font-weight: bold !important;
+            text-align: left !important;
+            width:auto;
+            padding:0 10px;
+            border-bottom:none;
+            @include themify($themes) {
+                color: themed('colorFitness');
+            }
+        }
+    }
+}
+
+.loading {
+    @include themify($themes) {
+        fill: themed('colorFitness') !important;
+    }
+    margin: auto;
+}
+
+.notification-message {
+    .title {
+        color: #fff !important;
+    }
+}
+  
+.react-confirm-alert-overlay {
+    background: rgba(0, 0, 0, 0.5) !important;
+}
+.custom-ui-confirm {
+    text-align: center;
+    width: 100%;
+    padding: 15px 50px;
+
+    .card__title {
+        margin-bottom: 0px;
+
+        .title-icon {
+            color: $color-red;
+            font-size: 40px;
+        }
+    }
+
+    @include themify($themes) {
+        background-color: themed('colorBackground');
+        color: themed('colorText');
+    }
+}
+
+.search-group-button {
+    margin-left: auto;
+    .btn {
+        margin-bottom: 10px;
+        margin-top: 25px;
+    }
+}
+
+.master-data-list {
+    .btn-toolbar {
+        .form__form-group {
+            margin-bottom: 0px;
+        }    
+    }
+    .form__form-group {
+        margin-bottom: 10px;
+    }
+    .products-list__search {
+        svg {
+            position: absolute;
+            right: 5px;
+            top: 9px;
+            fill: #999;
+            height: 14px;
+            width: 14px;
+        }
+    }
+    .master-data-btn {
+        margin-bottom: 0;
+    }
+    .master-data-perpage {
+        float: right;
+        margin: 0;
+    }
+}
+
+//Flag
+.flag {
+    width: 25px;
+    height: 17px;
+    &.vn {
+        background: url('images/flag/vn.png');
+        background-size: cover;
+    }
+    &.us {
+        background: url('images/flag/us.png');
+        background-size: cover;
+    }
+}
+.form__form-group-field {
+    margin-bottom: 5px;
+}
+
+    .form__form-group-icon {
+        background: #f2f4f7;
+        border: 1px solid #f2f4f7;
+    }
+
+#setting {
+    .form {
+        display: block;
+        &.form--horizontal {
+            .form__form-group-label {
+                width: 155px;
+            }
+            .form__form-group-field {
+                width: calc(100% - 155px);                
+                padding-left: 20px;
+            }
+        }
+    }
+    .tabs {
+        overflow: inherit;
+    }
+}
+
+table {
+    .checkbox-btn {
+        height: 10px;
+    }
+}
+
+form {
+    .label-info-data {
+        margin-right: 15px;
+    }
+    .form__form-group-select {
+        height: max-content !important;
+    }
+}
+.form_custom { 
+    display: block;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
+
+  .lds-dual-ring {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    &:after {
+        content: " ";
+        display: block;
+        width: 20px;
+        height: 20px;
+        margin: 1px;
+        border-radius: 50%;
+        border: 3px solid #fff;
+        border-color: #fff transparent #fff transparent;
+        animation: lds-dual-ring 1.2s linear infinite;
+    }
+}
+@keyframes lds-dual-ring {
+0% {
+    transform: rotate(0deg);
+}
+100% {
+    transform: rotate(360deg);
+}
+}
+
+.access_denied {
+    text-align: center;
+    margin: 50px;
+    h1 { color: red; }
+  }
+
+  .toggle-theme {
+    .form__form-group {
+        margin-bottom: 0;
+    }
+  }
+
+.theme-dark-blue {    
+    legend {
+        color: #fff
+    }
+    .form input:focus, .form input:active, .form textarea:focus, .form textarea:active {
+        outline: none;
+        border: none
+    }
+    .form{
+         input, textarea { 
+            border: none;
+            background-color: rgba(250, 250, 250, 0.1);
+            color: #fff;
+            font-size: 13px;
+            &:disabled {
+                background-color: rgba(250, 250, 250, 0.1);
+            }
+        }
+        .form__form-group-select {
+            input{ background-color: transparent}
+            .Select-control{
+                border: none;
+                background-color: rgba(250, 250, 250, 0.1);
+            }
+        }
+    }
+    .sidebar {
+        box-shadow: none;
+        .sidebar__link-active {
+            li { background: #495762}
+        }
+    }
+    .sidebar__submenu {
+        background: none;
+        .sidebar__link {
+            &:hover{
+                background-color: #434f5a
+            }
+            .sidebar__link-icon { font-size: 15px}
+        }
+        
+    }
+    .card-body {
+        background: none;
+        padding: 0
+    }
+
+    .ReactTable{
+        .rt-tbody{
+          .rt-td{
+              color: #fff
+          }
+        }
+        .rt-table{
+            .rt-thead{
+                color: #fff
+            }
+        }
+    }   
+    
+    #setting {
+        .card-body { padding: 5px 0 !important}
+        .form.form--horizontal {
+            .form__form-group-label { width: 200px;}
+            .form__form-group-field {
+                width: calc(100% - 200px);
+            }
+        }        
+    }
+    .products-list__img-wrap {
+        &.icon-avatar {
+            border: none;            
+            font-size: 30px;
+            line-height: 1;
+        }
+    }
+}
+
+.topbar__avatar-img {
+    &.icon-avatar {
+        font-size: 25px;        
+        @include themify($themes) {            
+            color: themed('colorText');
+        }
+    }
+}
+
+/* PRICING PAGE */
+
+.pricing {
+    .nav {
+        display: block;
+    }
+
+    .pricing-title {
+        h4 {
+            float: left;
+        }
+        button {
+            float: right;
+            margin: 0;
+        }
+    }
+
+    .react-bs-table-bordered {
+        @include themify($themes) {
+            border: 1px solid themed('colorFieldsBorder');
+        }
+        border-radius: 0;
+        .form-control {
+            border-radius: 0;
+            height: 25px;
+            color: #343d45;
+        }
+        th, td {
+            @include themify($themes) {
+                border-left: 1px solid themed('colorFieldsBorder');
+            }
+        }
+    }
+
+    .pricing-vas {
+        ul {
+            padding-left: 0;
+        }
+
+        li {
+            list-style-type: none;
+        }
+
+        .group-action {
+            .btn {
+                float: right;
+                padding: 4px 8px;
+                margin-right: 0;
+                margin-left: 15px;
+                margin-bottom: 0;
+            }
+        }
+
+        .vas-item {
+            display: flex;
+            
+            .btn {
+                padding: 4px 8px;
+            }
+
+            .group-input {
+                flex-grow: 1;
+                justify-content: space-between;
+            }
+
+            .table-price {
+                .btn {
+                    margin: 0;
+                }
+            }
+
+        }
+
+        .price-vas {
+            .btn {
+                margin-bottom: 0;
+                padding: 2px 6px;
+            }
+        }
+
+        .input-suggestion {
+            position: relative;
+            .formula {
+                line-height: 21px;
+                min-height: 27px !important;
+                padding: 2px 6px;
+                @include themify($themes) {
+                    border: 1px solid themed('colorFieldsBorder');
+                    color: themed('colorText');
+                }
+          
+                &:focus, &:active {
+                    outline: none;
+                    border-color: $color-accent;
+                }
+          
+                span {
+                    @include themify($themes) {
+                        background: themed('colorFieldsBorder');
+                        color: themed('colorText');
+                    }
+                    padding: 1px 4px;
+                    margin: 0 2px;
+                }
+
+                &:empty::before {
+                    content: attr(placeholder);
+                    @include themify($themes) {
+                        color: themed('colorTextAdditional');
+                    }
+                }
+                
+                &:empty:focus::before {
+                    content: "";
+                }
+
+                &[disabled] {
+                    @include themify($themes) {
+                        background: themed('colorBackgroundBody');
+                    }
+                }
+            }
+            .suggestion-list {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+            
+                ul {
+                    position: relative;
+                    z-index: 1;
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+                    @include themify($themes) {
+                        background: themed('colorBackground');
+                        color: themed('colorText');
+                        border: 1px solid themed('colorFieldsBorder');
+                    }
+                    li {
+                        padding: 5px;
+                        cursor: pointer;
+                        &:focus, &:hover, &.active {
+                            @include themify($themes) {
+                                background: themed('colorBackgroundBody');
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .pricing-cod {
+        .group-action {
+            .btn {
+                float: right;
+                padding: 4px 8px;
+                margin-right: 0;
+                margin-left: 15px;
+            }
+        }
+    }
+}
+
+/* END PRICING PAGE */
+
+.modal-content {
+    .form__form-group {
+        margin-bottom: 10px;
+    }
+    .footer {
+        hr {
+            margin: 2px
+        }
+        span {
+            font-size: 13px;
+        }
+    }
+}
+
+.topbar__title {
+    display: flex;
+    left: 240px;
+    position: absolute;
+    font-weight: 300;
+    text-transform: capitalize;
+    font-size: 15px;
+    line-height: 2.5;
+    color: #fff;
+
+    a {
+        @include themify($themes) {            
+            color: themed('colorText');
+        }
+    }
+
+    .breadcrumbs__separator {
+        @include themify($themes) {            
+            color: themed('colorText');
+        }
+        margin: 0 5px;
+    }
+
+    @media screen and (max-width: 576px) {
+        left: 45px;
+        font-size: 13px;
+        line-height: 3;
+    }
+}
+
+/* PRICING DOMESTIC */
+
+.tooltip-field-vas {
+    top: 10% !important;
+    width: 250px !important;
+
+    .arrow {
+        top: 45px !important;
+        &::before {
+            @include themify($themes) {            
+                border-left-color: themed('colorFitness');
+            }
+        }
+    }
+
+    ul {
+        padding-left: 10px;
+        li {
+            list-style-type: none;
+            
+            b {
+                margin-right: 5px;
+                font-size: 13px;
+            }
+            label {
+                margin-left: 5px;
+                margin-bottom: 0;
+            }
+        }
+
+        &.list-field-vas {
+            b {
+                font-size: 11px;
+            }
+        }
+    }
+
+
+}
+
+.form-edit-range-weight-value {
+    .form__form-group {
+        margin-bottom: 0 !important;
+        .form__form-group-label {
+            margin: 5px 0 !important;
+            width: 80px !important;
+        }
+        .form__form-group-field {
+            width: calc(100% - 80px) !important;
+        }
+    }
+}
+.row-error {
+    background: $color-error !important;
+    .rt-td {
+        color: #fff !important;
+    }
+}
+
+.pri-dom {
+    ul {
+        list-style: none;
+    }
+    .table {
+        th, td {
+            @include themify($themes) {
+                border: 1px solid themed('colorFitness');
+                color:  themed('colorText') !important;
+            }
+            vertical-align: middle;
+            text-align: center;
+        }
+        .cell-value {
+            cursor: pointer;
+        }
+        .cell-not-value {
+            @include themify($themes) {
+                background:  themed('colorBackgroundBody');
+            }
+        }
+    }
+    .pricing-vas {
+        ul {
+            padding-left: 0;
+        }
+
+        .group-action {
+            margin-bottom: 5px;
+            .btn {
+                float: right;
+                padding: 4px 8px;
+                margin-right: 0;
+                margin-left: 15px;
+                margin-bottom: 0;
+            }
+        }
+
+        .vas-item {
+            display: flex;
+            
+            .btn {
+                padding: 3px 7px;
+            }
+
+            .group-input {
+                flex-grow: 1;
+                justify-content: space-between;
+            }
+
+            .table-price {
+                .btn {
+                    margin: 0;
+                }
+            }
+
+        }
+
+        .price-vas {
+            .btn {
+                margin-bottom: 0;
+                padding: 2px 6px;
+            }
+        }
+
+        .table-price {
+            th, td {
+                padding: 5px;
+                border-bottom-width: 0px;
+            }
+        }
+
+        .react-bs-table-bordered {
+            @include themify($themes) {
+                border: 1px solid themed('colorFieldsBorder');
+                border-radius: 0;
+            }
+            .form-control {
+                height: 25px;
+                color: #343d45;
+            }
+        }
+
+        .input-suggestion {
+            position: relative;
+            .formula {
+                line-height: 21px;
+                min-height: 27px !important;
+                padding: 2px 6px;
+                @include themify($themes) {
+                    border: 1px solid themed('colorFieldsBorder');
+                    color: themed('colorText');
+                }
+          
+                &:focus, &:active {
+                    outline: none;
+                    border-color: $color-accent;
+                }
+          
+                span {
+                    @include themify($themes) {
+                        background: themed('colorFieldsBorder');
+                        color: themed('colorText');
+                    }
+                    padding: 1px 4px;
+                    margin: 0 2px;
+                }
+
+                &:empty::before {
+                    content: attr(placeholder);
+                    @include themify($themes) {
+                        color: themed('colorTextAdditional');
+                    }
+                }
+                
+                &:empty:focus::before {
+                    content: "";
+                }
+
+                &[disabled] {
+                    @include themify($themes) {
+                        background: themed('colorBackgroundBody');
+                    }
+                }
+            }
+            .suggestion-list {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+            
+                ul {
+                    position: relative;
+                    z-index: 1;
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+                    @include themify($themes) {
+                        background: themed('colorBackground');
+                        color: themed('colorText');
+                        border: 1px solid themed('colorFieldsBorder');
+                    }
+                    li {
+                        padding: 5px;
+                        cursor: pointer;
+                        &:focus, &:hover, &.active {
+                            @include themify($themes) {
+                                background: themed('colorBackgroundBody');
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+/* END PRICING DOMESTIC */
